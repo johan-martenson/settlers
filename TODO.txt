@@ -1,0 +1,4 @@
+ 1 Add that construction requires material
+ 2 Add Barracks as an initial military building
+ 3 Add several players
+ 4 Add graphical UI
