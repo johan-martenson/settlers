@@ -37,7 +37,7 @@ public class TestProduction {
 		Sawmill sawmill = Sawmill.createSawmill();
 		assertTrue(sawmill.getConstructionState() == UNDER_CONSTRUCTION);
 		
-		Utils.fastForward(1000, sawmill);
+		Utils.constructMediumHouse(sawmill);
 
 		assertTrue(sawmill.getConstructionState() == DONE);
 		assertFalse(sawmill.outputAvailable());
@@ -60,9 +60,7 @@ public class TestProduction {
 	public void testWrongMaterialToSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Sawmill sawmill = Sawmill.createSawmill();
 		
-		assertTrue(sawmill.getConstructionState() == UNDER_CONSTRUCTION);
-		
-		Utils.fastForward(1000, sawmill);
+		Utils.constructMediumHouse(sawmill);
 		
 		assertTrue(DONE == sawmill.getConstructionState());
 		
@@ -70,12 +68,16 @@ public class TestProduction {
 	}
 	
 	@Test
-	public void testProduceWood() throws InvalidStateForProduction, InvalidLogicException {
+	public void testProduceWood() throws InvalidStateForProduction, InvalidLogicException, InvalidMaterialException, DeliveryNotPossibleException {
 		Building woodcutter = Woodcutter.createWoodcutter();
 		
-		Utils.fastForward(1000, woodcutter);
-		
+                Utils.constructSmallHouse(woodcutter);
+                
 		assertTrue(woodcutter.getConstructionState() == DONE);
+                assertTrue(woodcutter.cargoIsReady() == false);
+                
+                Utils.fastForward(100, woodcutter);
+                
 		assertFalse(woodcutter.cargoIsReady());
 
 		Cargo result = woodcutter.retrieveCargo();
@@ -84,20 +86,24 @@ public class TestProduction {
 		assertTrue(result.getMaterial() == WOOD);
 	}
 	
-	@Test(expected=InvalidStateForProduction.class)
+	@Test(expected=DeliveryNotPossibleException.class)
 	public void testDeliverMaterialToWoodcutter() throws DeliveryNotPossibleException, InvalidMaterialException, InvalidStateForProduction {
 		Building woodcutter = Woodcutter.createWoodcutter();
 		
+                Utils.constructSmallHouse(woodcutter);
+                
 		woodcutter.deliver(Cargo.createCargo(WOOD));
 	}
 	
 	@Test
-	public void testProduceStone() throws InvalidStateForProduction {
+	public void testProduceStone() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 		Quarry quarry = Quarry.createQuarry();
 		Cargo result;
 		
-		Utils.fastForward(210, quarry);
+		Utils.constructSmallHouse(quarry);
 		
+                Utils.fastForward(100, quarry);
+                
 		result= quarry.retrieveCargo();
 
 		assertTrue(STONE == result.getMaterial());
@@ -113,10 +119,12 @@ public class TestProduction {
 		assertNull(result);
 	}
 	
-	@Test(expected=InvalidStateForProduction.class)
+	@Test(expected=DeliveryNotPossibleException.class)
 	public void testDeliveryMaterialToQuarry() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Quarry quarry = Quarry.createQuarry();
 		
+                Utils.constructSmallHouse(quarry);
+                
 		quarry.deliver(Cargo.createCargo(BEER));
 	}
 }

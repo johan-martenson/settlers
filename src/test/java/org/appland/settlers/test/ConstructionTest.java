@@ -4,7 +4,12 @@ import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
+
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.PLANCK;
+
 import static org.junit.Assert.assertTrue;
 
 import org.appland.settlers.model.Building;
@@ -13,6 +18,7 @@ import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
@@ -20,23 +26,38 @@ import org.junit.Test;
 public class ConstructionTest {
 
 	@Test
-	public void testCreateNewWoodcutter() {
+	public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Building wc = Woodcutter.createWoodcutter();
 		
 		assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
 		
-		int i = 0;
-		for (i = 0; i < 100; i++) {
-			assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
-			wc.stepTime();
-		}
+		/* Verify that construction doesn't finish before material is delivered */
+                Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
 		
+		Cargo planckCargo = Cargo.createCargo(PLANCK);
+                Cargo stoneCargo = Cargo.createCargo(STONE);
+		wc.deliver(planckCargo);
+                wc.deliver(planckCargo);
+                wc.deliver(stoneCargo);
+                
+                Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
+                
+                /* Verify that construction can finish when all material is delivered */
+                wc.deliver(stoneCargo);
+                wc.stepTime();
+                
 		assertTrue(wc.getConstructionState() == DONE);
 		
+                /* Verify that all material was consumed by the construction */
+                
+                assertTrue(wc.getQueue(PLANCK) == 0);
+                assertTrue(wc.getQueue(STONE) == 0);
+                
 		wc.tearDown();
 		
 		assertTrue(wc.getConstructionState() == BURNING);
 		
+                int i;
 		for (i = 0; i < 50; i++) {
 			assertTrue(wc.getConstructionState() == BURNING);
 			wc.stepTime();
@@ -46,43 +67,54 @@ public class ConstructionTest {
 	}
 	
 	@Test
-	public void testCreateNewSawmill() {
+	public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Sawmill sm = Sawmill.createSawmill();
 		
 		assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
 		
-		int i = 0;
-		for (i = 0; i < 150; i++) {
-			assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
-			sm.stepTime();
-		}
+		/* Verify that construction doesn't finish before material is delivered */
+                Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
 		
-		assertTrue(sm.getConstructionState() == DONE);
+		Cargo planckCargo = Cargo.createCargo(PLANCK);
+                Cargo stoneCargo = Cargo.createCargo(STONE);
+		sm.deliver(planckCargo);
+                sm.deliver(planckCargo);
+                sm.deliver(planckCargo);
+                sm.deliver(planckCargo);
+                sm.deliver(stoneCargo);
+                sm.deliver(stoneCargo);
+                
+                Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
+
+                /* Verify that construction can finish when all material is delivered */
+                sm.deliver(stoneCargo);
+                sm.stepTime();
 		
+                assertTrue(sm.getConstructionState() == DONE);
+                
+                 /* Verify that all material was consumed by the construction */
+                assertTrue(sm.getQueue(PLANCK) == 0);
+                assertTrue(sm.getQueue(STONE) == 0);
+                
 		sm.tearDown();
 		
-		assertTrue(sm.getConstructionState() == BURNING);
-		
-		for (i = 0; i < 50; i++) {
-			assertTrue(sm.getConstructionState() == BURNING);
-			sm.stepTime();
-		}
+		Utils.assertConstructionStateDuringFastForward(50, sm, BURNING);
 		
 		assertTrue(sm.getConstructionState() == DESTROYED);
 	}
 
-	@Test(expected=InvalidStateForProduction.class)
-	public void testDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+	@Test(expected=InvalidMaterialException.class)
+	public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 		Sawmill sw = Sawmill.createSawmill();
 
-		sw.deliver(Cargo.createCargo(WOOD));
+		sw.deliver(Cargo.createCargo(SWORD));
 	}
 
 	@Test(expected=InvalidStateForProduction.class)
 	public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 		Sawmill sm = Sawmill.createSawmill();
 		
-		Utils.fastForward(1000, sm);
+                Utils.constructMediumHouse(sm);
 		
 		assertTrue(sm.getConstructionState() == DONE);
 		
@@ -95,8 +127,8 @@ public class ConstructionTest {
 	public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 		Sawmill sm = Sawmill.createSawmill();
 		
-		Utils.fastForward(1000, sm);
-		
+                Utils.constructMediumHouse(sm);
+                
 		assertTrue(sm.getConstructionState() == DONE);
 		
 		sm.tearDown();
@@ -109,5 +141,7 @@ public class ConstructionTest {
 	@Test
 	public void testCreateHeadquarter() {
 		Headquarter.createHeadquarter();
+                
+                // TODO: test creation of headquarter
 	}
 }

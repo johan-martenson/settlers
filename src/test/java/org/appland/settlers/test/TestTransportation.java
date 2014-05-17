@@ -12,8 +12,10 @@ import java.util.List;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidEndPointException;
+import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
@@ -327,7 +329,7 @@ public class TestTransportation {
 	}
 	
 	@Test
-	public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException {
+	public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException {
 		GameMap map = GameMap.createGameMap();
 		
 		Quarry qry = Quarry.createQuarry();
@@ -344,9 +346,9 @@ public class TestTransportation {
 		Worker worker = Worker.createWorker(map);
 		
 		worker.setPosition(start);
-		
-		
-		Utils.fastForward(100, qry, stge, worker);
+
+		Utils.constructSmallHouse(qry);
+                Utils.constructMediumHouse(stge);
 		
 		assertTrue(qry.getConstructionState() == DONE);
 		

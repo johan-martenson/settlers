@@ -85,17 +85,14 @@ public class GameFlowTest {
 		// TODO: add that workers need to move to roads to populate them
 		
 		/* Move forward in time until the small buildings are done */
-		fastForward(100, actors);
-		
-		assertTrue(wc.getConstructionState() == DONE);
-		assertTrue(qry.getConstructionState() == DONE);
-		
-		assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
-		
-		/* Continue forward in time until sawmill is done */
-		fastForward(100, actors);
+                // TODO: Change to deliver required material for construction
+		Utils.constructSmallHouse(wc);
+                Utils.constructSmallHouse(qry);
+		Utils.constructMediumHouse(sm);
 
-		assertTrue(sm.getConstructionState() == DONE);
+                assertTrue(wc.getConstructionState() == DONE);
+                assertTrue(qry.getConstructionState() == DONE);
+                assertTrue(sm.getConstructionState() == DONE);
 		
 		/* Fast forward until the woodcutter has cut some wood */
 		fastForward(100, actors);
@@ -130,13 +127,14 @@ public class GameFlowTest {
 		hq.deposit(c);
 		
 		/* Find out who needs the wood */
-		List<Building> buildings = new ArrayList<Building>();
+		List<Building> buildings = new ArrayList<>();
 		
 		buildings.add(wc);
 		buildings.add(sm);
 		buildings.add(qry);
 		
 		List<Building> woodRecipients = Utils.getNeedForMaterial(WOOD, buildings);
+                System.out.println(woodRecipients);
 		assertTrue(woodRecipients.size() == 1);
 		assertTrue(woodRecipients.get(0).equals(sm));
 		
