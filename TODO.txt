@@ -1,4 +1,23 @@
- 1 Add that construction requires material
+FIXES
+ - Make sure house building consumes materials in the queue
+ - Use or remove cargoIsReady
+ - Change building to use plancks instead of wood for construction
+
+TODO
+
+ 1 Increase test coverage
+  - Test way finding with longer roads
+  - Test getClosestStorage
+  - Test getMaterialsToBuildHouse
+  - Test getQueue
+  - Test deliver to ready house that can't accept deliveries
+  - Test deliver something invalid to a ready house 
+  - Test building a LARGE house
+  - Test looking for a building that needs a material and has nothing in its queue
+  - Test that construction material is consumed
+  - Test that too much material can't be delivered to a house under construction
  2 Add Barracks as an initial military building
  3 Add several players
  4 Add graphical UI
+ 5 Finetune cost for production and construction
+
