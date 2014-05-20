@@ -4,6 +4,7 @@ FIXES
 TODO
 
  1 Increase test coverage
+  - Test to find house that needs a material while the house has more in the queue than it needs
   - Test getClosestStorage
   - Test getMaterialsToBuildHouse
   - Test getQueue
