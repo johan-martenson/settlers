@@ -1,26 +1,26 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
-
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.SWORD;
-import static org.appland.settlers.model.Material.PLANCK;
-
-import static org.junit.Assert.assertTrue;
-
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
-import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
+import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class ConstructionTest {
@@ -103,6 +103,43 @@ public class ConstructionTest {
 		assertTrue(sm.getConstructionState() == DESTROYED);
 	}
 
+        @Test
+        public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+            Farm farm = Farm.createFarm();
+            assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
+            
+            /* Verify that construction doesn't finish before material is delivered */
+                Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+		
+		Cargo planckCargo = Cargo.createCargo(PLANCK);
+                Cargo stoneCargo = Cargo.createCargo(STONE);
+		farm.deliver(planckCargo);
+                farm.deliver(planckCargo);
+                farm.deliver(planckCargo);
+                farm.deliver(planckCargo);
+                farm.deliver(stoneCargo);
+                farm.deliver(stoneCargo);
+                farm.deliver(stoneCargo);
+                
+                Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+            
+                /* Verify that construction can finish when all material is delivered */
+                farm.deliver(stoneCargo);
+                farm.stepTime();
+		
+                assertTrue(farm.getConstructionState() == DONE);
+                
+                 /* Verify that all material was consumed by the construction */
+                assertTrue(farm.getQueue(PLANCK) == 0);
+                assertTrue(farm.getQueue(STONE) == 0);
+                
+		farm.tearDown();
+		
+		Utils.assertConstructionStateDuringFastForward(50, farm, BURNING);
+		
+		assertTrue(farm.getConstructionState() == DESTROYED);
+        }
+        
 	@Test(expected=InvalidMaterialException.class)
 	public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 		Sawmill sw = Sawmill.createSawmill();
