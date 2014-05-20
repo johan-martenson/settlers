@@ -1,26 +1,29 @@
 package org.appland.settlers.test;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Arrays;
-
 import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Worker;
-
-import static org.appland.settlers.model.Building.ConstructionState.*;
+import org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState;
-
-import static org.appland.settlers.model.Material.*;
-
+import static org.appland.settlers.model.Building.ConstructionState.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
+import org.appland.settlers.model.Material;
+
+import static org.appland.settlers.model.Material.*;
+
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Worker;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertTrue;
 
@@ -97,5 +100,15 @@ public class Utils {
         wc.deliver(stoneCargo);
         
         Utils.fastForward(100, wc);
+    }
+    
+    static boolean roadEqualsPoints(Road r, Point p1, Point p2) {
+        if (r.start.equals(p1) && r.end.equals(p2)) {
+            return true;
+        } else if (r.start.equals(p2) && r.end.equals(p1)) {
+            return true;
+        }
+        
+        return false;
     }
 }

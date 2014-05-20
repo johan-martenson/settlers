@@ -10,12 +10,13 @@ import static org.appland.settlers.model.Material.SWORD;
 
 import static org.appland.settlers.model.Size.MEDIUM;
 
+import static org.appland.settlers.model.Utils.createEmptyMaterialIntMap;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.appland.settlers.policy.InitialState;
 import org.appland.settlers.policy.ProductionDelays;
 
 @HouseSize(size=MEDIUM)
@@ -28,21 +29,11 @@ public class Storage extends Building implements Actor {
 	private Logger log = Logger.getLogger(Storage.class.getName());
 	
 	protected Storage() {
-	    inventory = createEmptyInventory();
+	    inventory = createEmptyMaterialIntMap();
 		
 	    promotionCountdown = -1;
 	    draftCountdown = -1;
 	}
-
-    private Map<Material, Integer> createEmptyInventory() {
-	Map<Material, Integer> inventory = new HashMap<Material, Integer>();
-	
-	for (Material m : Material.values()) {
-	    inventory.put(m, 0);
-	}	
-
-	return inventory;
-    }
 
 	public Map<Material, Integer> getInventory() {
 		return inventory;
@@ -66,6 +57,7 @@ public class Storage extends Building implements Actor {
 		inventory.put(SWORD, swords - privatesToAdd);
 	}
 
+    @Override
 	public void stepTime() {
 		
 		/* Handle promotion with delay */
@@ -97,24 +89,16 @@ public class Storage extends Building implements Actor {
 
 	/* TODO: Write unit tests */
 	public boolean isDraftPossible(Map<Material, Integer> inventory) {
-		if (inventory.get(BEER) > 0 && 
-			inventory.get(SWORD) > 0 &&
-			inventory.get(SHIELD) > 0) {
-			return true;
-		} else {
-			return false;
-		}
+            return inventory.get(BEER) > 0 && 
+                    inventory.get(SWORD) > 0 &&
+                    inventory.get(SHIELD) > 0;
 	}
 	
 	/* TODO: Write unit tests */
 	public boolean isPromotionPossible(Map<Material, Integer> inventory) {
-		if (inventory.get(GOLD) > 0 &&
-				(inventory.get(PRIVATE) > 0 ||
-				inventory.get(SERGEANT) > 0)) {
-			return true;
-		} else {
-			return false;
-		}
+            return inventory.get(GOLD) > 0 &&
+                    (inventory.get(PRIVATE) > 0 ||
+                    inventory.get(SERGEANT) > 0);
 	}
 	
 	private void doPromoteMilitary() {	

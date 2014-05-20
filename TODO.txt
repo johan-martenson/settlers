@@ -1,12 +1,10 @@
 FIXES
  - Make sure house building consumes materials in the queue
  - Use or remove cargoIsReady
- - Change building to use plancks instead of wood for construction
 
 TODO
 
  1 Increase test coverage
-  - Test way finding with longer roads
   - Test getClosestStorage
   - Test getMaterialsToBuildHouse
   - Test getQueue

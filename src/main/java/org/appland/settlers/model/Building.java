@@ -8,6 +8,8 @@ import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTR
 
 import static org.appland.settlers.model.Material.*;
 
+import static org.appland.settlers.model.Utils.createEmptyMaterialIntMap;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -46,7 +48,7 @@ public class Building implements Actor {
 	
 	public Building() {
 		constructionState = ConstructionState.UNDER_CONSTRUCTION;
-		queue = createEmptyQueue();
+		queue = createEmptyMaterialIntMap();
 		constructionCountdown = getConstructionCountdown(this);
 		outputCargo = null;
 		flag = Flag.createFlag(null);
@@ -57,15 +59,6 @@ public class Building implements Actor {
 		return flag;
 	}
 
-    private Map<Material, Integer> createEmptyQueue() {
-	Map<Material, Integer> result = new HashMap<Material, Integer>();
-
-	for (Material m : Material.values()) {
-	    result.put(m, 0);
-	}
-
-	return result;
-    }
 	
     private Map<Material, Integer> getMaterialsToBuildHouse(Building b) {
         Map<Material, Integer> materials = new EnumMap<>(Material.class);
@@ -261,10 +254,6 @@ public class Building implements Actor {
 	}
 
 	public int getQueue(Material material) throws InvalidMaterialException {
-		if (!queue.containsKey(material)) {
-			return 0;
-		}
-		
 		return queue.get(material);
 	}
 

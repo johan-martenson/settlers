@@ -244,7 +244,7 @@ public class GameMap {
 		log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[] {position, flag});
 		
 		List<Point> points = findWay(position, flag.getPosition());
-		List<Road> roads = new ArrayList<Road>();
+		List<Road> roads = new ArrayList<>();
 		
 		if (points.size() == 2) {
 			log.log(Level.FINE, "Route found has only one road segment");
@@ -254,15 +254,15 @@ public class GameMap {
 			return roads;
 		}
 		
-		Point start = points.get(0);
+		Point next = points.get(0);
 		
 		int i;
-		for (i = 1; i < points.size() - 1; i++) {
-			roads.add(Road.createRoad(start, points.get(i)));
+		for (i = 1; i < points.size(); i++) {
+			roads.add(Road.createRoad(next, points.get(i)));
 			System.out.println(" -- " + i + ", " + points.size());
+                        
+                        next = points.get(i);
 		}
-		
-		roads.add(Road.createRoad(points.get(i), points.get(i + 1)));
 		
 		log.log(Level.FINE, "Returning route {0}", roads);
 		return roads;
