@@ -135,7 +135,7 @@ public class GameMap {
 		}
 		
 		for (Point otherEnd : connectingRoads) {
-			List<Point> result = new ArrayList<Point>();
+			List<Point> result = new ArrayList<>();
 			
 			if (visited.contains(otherEnd)) {
 				continue;

@@ -30,6 +30,41 @@ import org.junit.Test;
  * @author johan
  */
 public class TestRoads {
+    
+        @Test(expected=InvalidRouteException.class)
+        public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException {
+            GameMap map = GameMap.createGameMap();
+            
+            Flag f1 = Flag.createFlag(new Point(1, 1));
+            Flag f2 = Flag.createFlag(new Point(2, 2));
+            
+            map.placeFlag(f1);
+            map.placeFlag(f2);
+            
+            map.placeRoad(f1.getPosition(), f2.getPosition());
+            
+            map.findWay(f1.getPosition(), new Point(3, 3));
+        }
+    
+        @Test
+        public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException {
+            GameMap map = GameMap.createGameMap();
+            
+            Flag f1 = Flag.createFlag(new Point(1, 1));
+            Flag f2 = Flag.createFlag(new Point(2, 2));
+            
+            map.placeFlag(f1);
+            map.placeFlag(f2);
+            
+            map.placeRoad(f1.getPosition(), f2.getPosition());
+            
+            List<Point> way = map.findWay(f1.getPosition(), f2.getPosition());
+            
+            assertTrue(way.size() == 2);
+            assertTrue(way.get(0).equals(new Point(1, 1)));
+            assertTrue(way.get(1).equals(new Point(2,2)));
+        }
+        
     	@Test
 	public void testFindRoute() throws InvalidEndPointException, InvalidRouteException {
 		/*
