@@ -330,12 +330,6 @@ public class Building implements Actor {
 			return false;
 		}
 		
-		if (!queue.containsKey(wood)) {
-			/* Building does not have any cargos of the material in its queue */
-			log.log(Level.FINE, "This building requires {0} and has no {0} in its queue", wood);
-			return true;
-		}
-		
 		int neededAmount = requiredGoods.get(wood);
 		
 		if (queue.get(wood) >= neededAmount) {
