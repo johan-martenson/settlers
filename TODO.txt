@@ -1,5 +1,4 @@
 FIXES
- - Make sure house building consumes materials in the queue
  - Use or remove cargoIsReady
 
 TODO
