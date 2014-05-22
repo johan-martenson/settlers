@@ -14,7 +14,7 @@ public class Game {
 			throw new InvalidNumberOfPlayersException(nrPlayers);
 		}
 		
-		players = new ArrayList<Player>();
+		players = new ArrayList<>();
 		
 		/* Create initial players */
 		int i;
