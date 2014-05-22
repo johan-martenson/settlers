@@ -129,10 +129,6 @@ public class GameMap {
 		
 		List<Point> connectingRoads = roadNetwork.get(start);
 		
-		if (connectingRoads == null || connectingRoads.isEmpty()) {
-			throw new InvalidRouteException(start + " has no connecting roads.");
-		}
-		
 		for (Point otherEnd : connectingRoads) {
 			List<Point> result = new ArrayList<>();
 			

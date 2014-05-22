@@ -11,15 +11,18 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Point;
-
 import static org.appland.settlers.test.Utils.roadEqualsPoints;
+import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -29,6 +32,13 @@ import org.junit.Test;
  * @author johan
  */
 public class TestRoads {
+    
+    @Test
+    public void testGetNotExistingRoad() {
+        GameMap map = GameMap.createGameMap();
+        
+        assertNull(map.getRoad(new Point(1, 1), new Point(2, 2)));
+    }
     
         @Test(expected=InvalidRouteException.class)
         public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException {

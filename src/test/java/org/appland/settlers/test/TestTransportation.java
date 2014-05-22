@@ -1,15 +1,8 @@
 package org.appland.settlers.test;
 
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import static org.appland.settlers.model.Material.STONE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
-
 import org.appland.settlers.model.Building;
+import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.GameMap;
@@ -18,12 +11,21 @@ import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.STONE;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
-import org.appland.settlers.model.Point;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -304,4 +306,11 @@ public class TestTransportation {
 		
 		
 	}
+        
+        @Test
+        public void testGetNonExistingFlag() {
+            GameMap map = GameMap.createGameMap();
+            
+            assertNull(map.getFlagForPosition(new Point(2, 2)));
+        }
 }
