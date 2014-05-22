@@ -17,7 +17,6 @@ import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
-import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertTrue;
 

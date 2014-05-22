@@ -132,7 +132,7 @@ public class Building implements Actor {
                     }
 	
                         if (isConstructionReady(constructionCountdown)) {
-                            System.out.println(" --> Construction is READY!!");
+                            log.log(Level.INFO, "Construction of {0} done", this);
                             
                             consumeConstructionMaterial();
                             
@@ -157,8 +157,6 @@ public class Building implements Actor {
 	
 	private Cargo produce() {
 		Cargo result = null;
-
-		System.out.println("Production countdown is " + productionCountdown);
 		
 		/* Construction hasn't started */
 		if (productionCountdown == -1) {
@@ -166,16 +164,16 @@ public class Building implements Actor {
 			productionCountdown = getProductionTime(this) - 2;
 		    }
 
-		/* Construction ongoing and not finished */
+		/* Production ongoing and not finished */
 		} else if (productionCountdown > 0) {
 		    productionCountdown--;
 
-		/* Construction just finished */
+		/* Production just finished */
 		} else if (productionCountdown == 0) {
-		    System.out.println("Creating cargo");
-		    
 		    result = Cargo.createCargo(getProductionMaterial(this));
-		    
+
+                    log.log(Level.INFO, "{0} produced {1}", new Object[] {this, result});
+                    
 		    productionCountdown = -1;
 		    consumeResources(this);
 		}
@@ -285,7 +283,6 @@ public class Building implements Actor {
 	    
 	    int existingQuantity = queue.get(material);
 	    queue.put(material, existingQuantity + 1);
-            System.out.println("  -----    QUANTITY OF " + material + " is " + (existingQuantity + 1));
 	}
 
 	private boolean canAcceptGoods(Building building) {
@@ -295,13 +292,7 @@ public class Building implements Actor {
 	}
 
 	public boolean outputAvailable() {
-		System.out.println("Output cargo is " + outputCargo);
-		
-		if (outputCargo == null) {
-			return false;
-		} else {
-			return true;
-		}
+            return outputCargo != null;
 	}
 
 	public Cargo retrieveCargo() {
@@ -311,8 +302,6 @@ public class Building implements Actor {
 	    if (result == null) {
 		return null;
 	    }
-		
-	    System.out.println("Cargo created of type " + result.getMaterial());
 		
 	    result.setPosition(this.getFlag().getPosition());
 		

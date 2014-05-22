@@ -10,4 +10,9 @@ public class Quarry extends Building {
 	public static Quarry createQuarry() {
 		return new Quarry();
 	}
+        
+        @Override
+        public String toString() {
+            return "Quarry";
+        }
 }

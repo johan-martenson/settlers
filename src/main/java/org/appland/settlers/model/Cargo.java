@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.awt.Point;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;

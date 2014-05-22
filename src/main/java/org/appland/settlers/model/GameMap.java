@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +19,11 @@ public class GameMap {
 	private static Logger log = Logger.getLogger(GameMap.class.getName());
 	
 	private GameMap() {
-		buildings = new HashMap<Building, Point>();
-		roads = new ArrayList<Road>();
-		flags = new ArrayList<Flag>();
-		roadNetwork = new HashMap<Point, List<Point>>();
-		roadToWorkerMap = new HashMap<Road, Worker>();
+		buildings = new HashMap<>();
+		roads = new ArrayList<>();
+		flags = new ArrayList<>();
+		roadNetwork = new HashMap<>();
+		roadToWorkerMap = new HashMap<>();
 		
 		/* Increase the log level */
 		log.setLevel(Level.FINEST);
@@ -191,26 +190,23 @@ public class GameMap {
 	}
 
 	public Worker getNextWorkerForCargo(Cargo c) {
-		System.out.println("Next worker for " + c + " of type " + c.getMaterial());
+		log.log(Level.FINE, "Get next worker for {0}", c);
 		
-		List<Road> roads = c.getPlannedRoads();
+		List<Road> plannedRoads = c.getPlannedRoads();
 		
-		Road nextRoad = roads.get(0);
+		Road nextRoad = plannedRoads.get(0);
 		
-		System.out.println("In getNextWorkerForCargo, with road " + nextRoad);
+		log.log(Level.FINER, "Next road is {0}", nextRoad);
 		
 		Worker w = getWorkerForRoad(nextRoad);
 		
 		if (w == null) {
 			nextRoad = reverseRoad(nextRoad);
-			System.out.println("Reversed road: "  + nextRoad);
 			
 			w = getWorkerForRoad(nextRoad);
 		}
 		
-		System.out.println("Got worker " + w);
-		
-		System.out.println(roadToWorkerMap.toString());
+		log.log(Level.FINEST, "Found worker {0}", w);
 		
 		return w;
 	}
@@ -225,47 +221,36 @@ public class GameMap {
 	}
 
 	private Worker getWorkerForRoad(Road nextRoad) {
-		System.out.println("In getWorkerForRoad");
-		System.out.println(roadToWorkerMap.keySet());
+            log.log(Level.FINE, "Getting worker for {0}", nextRoad);
 		
-		
-		for (Road r : roadToWorkerMap.keySet()) {
-			if (!nextRoad.equals(r)) {
-				System.out.println(" Not equals: " + nextRoad + " and " + r);
-			} else {
-				System.out.println("Equal! " + nextRoad + " equals " + r);
-			}
-		}
-		
-		return roadToWorkerMap.get(nextRoad);
+            return roadToWorkerMap.get(nextRoad);
 	}
 
 	public List<Road> findWayInRoads(Point position, Flag flag) throws InvalidRouteException {
 		log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[] {position, flag});
 		
 		List<Point> points = findWay(position, flag.getPosition());
-		List<Road> roads = new ArrayList<>();
+		List<Road> nextRoads = new ArrayList<>();
 		
 		if (points.size() == 2) {
 			log.log(Level.FINE, "Route found has only one road segment");
-			roads.add(Road.createRoad(points.get(0), points.get(1)));
+			nextRoads.add(Road.createRoad(points.get(0), points.get(1)));
 			
-			log.log(Level.FINE, "Returning route {0}", roads);
-			return roads;
+			log.log(Level.FINE, "Returning route {0}", nextRoads);
+			return nextRoads;
 		}
 		
 		Point next = points.get(0);
 		
 		int i;
 		for (i = 1; i < points.size(); i++) {
-			roads.add(Road.createRoad(next, points.get(i)));
-			System.out.println(" -- " + i + ", " + points.size());
+			nextRoads.add(Road.createRoad(next, points.get(i)));
                         
                         next = points.get(i);
 		}
 		
-		log.log(Level.FINE, "Returning route {0}", roads);
-		return roads;
+		log.log(Level.FINE, "Returning route {0}", nextRoads);
+		return nextRoads;
 	}
 
 	public Flag getFlagForPosition(Point position) {

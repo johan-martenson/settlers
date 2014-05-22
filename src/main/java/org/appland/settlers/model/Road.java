@@ -1,7 +1,5 @@
 package org.appland.settlers.model;
 
-import java.awt.Point;
-
 public class Road {
 
 	public Point start;

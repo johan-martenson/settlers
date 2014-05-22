@@ -9,7 +9,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertEquals;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.appland.settlers.model.Actor;
+import org.appland.settlers.model.Point;
 
 import org.junit.Test;
 

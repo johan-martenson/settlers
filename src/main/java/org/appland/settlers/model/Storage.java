@@ -12,7 +12,6 @@ import static org.appland.settlers.model.Size.MEDIUM;
 
 import static org.appland.settlers.model.Utils.createEmptyMaterialIntMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;

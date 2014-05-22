@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class Flag {
 
 	private Flag(Point p) {
 		this.position = p;
-		stackedCargo = new ArrayList<Cargo>();
+		stackedCargo = new ArrayList<>();
 	}
 	
 	public static Flag createFlag(Point p) {
@@ -44,11 +43,12 @@ public class Flag {
 		return c;
 	}
 	
+        @Override
 	public String toString() {
 		if (stackedCargo.isEmpty()) {
-			return "Flag at " + position.x + ", " + position.y;
+			return "Flag at " + position;
 		} else {
-			String s = "Flag at " + position.x + ", " + position.y + " (stacked cargo:";
+			String s = "Flag at " + position + " (stacked cargo:";
 			
 			for (Cargo c : stackedCargo) {
 				s += " " + c.getMaterial().name();

@@ -10,4 +10,9 @@ public class Woodcutter extends Building {
 	public static Building createWoodcutter() {
 		return new Woodcutter();
 	}
+        
+        @Override
+        public String toString() {
+            return "Woodcutter";
+        }
 }

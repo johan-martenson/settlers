@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.awt.Point;
 import java.util.List;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -14,10 +13,10 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.Point;
 
 import static org.appland.settlers.test.Utils.roadEqualsPoints;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
