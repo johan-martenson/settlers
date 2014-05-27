@@ -14,7 +14,8 @@ import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
-import static org.appland.settlers.test.Utils.roadEqualsPoints;
+import static org.appland.settlers.test.Utils.roadEqualsFlags;
+
 import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 /**
@@ -37,7 +39,7 @@ public class TestRoads {
     public void testGetNotExistingRoad() {
         GameMap map = GameMap.createGameMap();
         
-        assertNull(map.getRoad(new Point(1, 1), new Point(2, 2)));
+        assertNull(map.getRoad(Flag.createFlag(new Point(1, 1)), Flag.createFlag(new Point(2, 2))));
     }
     
         @Test(expected=InvalidRouteException.class)
@@ -50,9 +52,9 @@ public class TestRoads {
             map.placeFlag(f1);
             map.placeFlag(f2);
             
-            map.placeRoad(f1.getPosition(), f2.getPosition());
+            map.placeRoad(f1, f2);
             
-            map.findWay(f1.getPosition(), new Point(3, 3));
+            map.findWay(f1, Flag.createFlag(new Point(3, 3)));
         }
     
         @Test
@@ -65,13 +67,13 @@ public class TestRoads {
             map.placeFlag(f1);
             map.placeFlag(f2);
             
-            map.placeRoad(f1.getPosition(), f2.getPosition());
+            map.placeRoad(f1, f2);
             
-            List<Point> way = map.findWay(f1.getPosition(), f2.getPosition());
+            List<Flag> way = map.findWay(f1, f2);
             
             assertTrue(way.size() == 2);
-            assertTrue(way.get(0).equals(new Point(1, 1)));
-            assertTrue(way.get(1).equals(new Point(2,2)));
+            assertTrue(way.get(0).equals(f1));
+            assertTrue(way.get(1).equals(f2));
         }
         
     	@Test
@@ -89,29 +91,28 @@ public class TestRoads {
 		
 		GameMap map = GameMap.createGameMap();
 		
-		Point[] points = new Point[] {
-		new Point(1,1),    // F
-		new Point(2, 1),   // F1
-		new Point (3, 1),  // F2
-		new Point(4, 1),   // F3
-		new Point(5, 1),   // F4
-		new Point(2, 4),   // F5
-		new Point(3, 4),   // F6
-		new Point(2, 6),   // F7
-		new Point(3, 6),   // F8
-		new Point(4, 2),   // F9
-                new Point(6, 1)};  // F10
-		
-		Point target = new Point(6, 2);
+		Flag[] points = new Flag[] {
+		new Flag(1,1),    // F
+		new Flag(2, 1),   // F1
+		new Flag(3, 1),  // F2
+		new Flag(4, 1),   // F3
+		new Flag(5, 1),   // F4
+		new Flag(2, 4),   // F5
+		new Flag(3, 4),   // F6
+		new Flag(2, 6),   // F7
+		new Flag(3, 6),   // F8
+		new Flag(4, 2),   // F9
+                new Flag(6, 1)};  // F10
 		
 		int i;
 		for (i = 0; i < points.length; i++) {
 			map.placeFlag(points[i]);
 		}
 
-		map.placeFlag(target);
-		
-		map.placeBuilding(Woodcutter.createWoodcutter(), target);
+                Woodcutter wc = Woodcutter.createWoodcutter();
+		map.placeBuilding(wc, new Point(6, 2));
+                
+                Flag target = wc.getFlag();
 		
 		map.placeRoad(points[0], points[1]);
 		map.placeRoad(points[1], points[2]);
@@ -127,7 +128,7 @@ public class TestRoads {
 		map.placeRoad(points[7], points[8]);
 		
                 /* Test route with List<Point> */
-		List<Point> route = map.findWay(points[0], target);
+		List<Flag> route = map.findWay(points[0], target);
 		
 		assertNotNull(route);
 		assertTrue(!route.isEmpty());
@@ -152,27 +153,27 @@ public class TestRoads {
 		assertEquals(route.get(1), points[2]);
                 
                 /* Test route with List<Road> */
-                List<Road> roadsRoute = map.findWayInRoads(points[0], Flag.createFlag(target));
+                List<Road> roadsRoute = map.findWayInRoads(points[0], target);
 
                 System.out.println(roadsRoute);
                 
 		assertNotNull(roadsRoute);
 		assertTrue(!roadsRoute.isEmpty());
 		
-		assertTrue(roadEqualsPoints(roadsRoute.get(0), points[0], points[1]));
-                assertTrue(roadEqualsPoints(roadsRoute.get(1), points[1], points[2]));
-                assertTrue(roadEqualsPoints(roadsRoute.get(2), points[2], points[9]));
-                assertTrue(roadEqualsPoints(roadsRoute.get(3), points[9], target));
+		assertTrue(roadEqualsFlags(roadsRoute.get(0), points[0], points[1]));
+                assertTrue(roadEqualsFlags(roadsRoute.get(1), points[1], points[2]));
+                assertTrue(roadEqualsFlags(roadsRoute.get(2), points[2], points[9]));
+                assertTrue(roadEqualsFlags(roadsRoute.get(3), points[9], target));
 
                 
-                roadsRoute = map.findWayInRoads(target, Flag.createFlag(points[0]));
+                roadsRoute = map.findWayInRoads(target, (points[0]));
 		
 		assertNotNull(roadsRoute);
 		assertTrue(!roadsRoute.isEmpty());
 		
-                assertTrue(roadEqualsPoints(roadsRoute.get(0), points[9], target));
-                assertTrue(roadEqualsPoints(roadsRoute.get(1), points[2], points[9]));
-                assertTrue(roadEqualsPoints(roadsRoute.get(2), points[1], points[2]));
-		assertTrue(roadEqualsPoints(roadsRoute.get(3), points[0], points[1]));
+                assertTrue(roadEqualsFlags(roadsRoute.get(0), points[9], target));
+                assertTrue(roadEqualsFlags(roadsRoute.get(1), points[2], points[9]));
+                assertTrue(roadEqualsFlags(roadsRoute.get(2), points[1], points[2]));
+		assertTrue(roadEqualsFlags(roadsRoute.get(3), points[0], points[1]));
         }
 }

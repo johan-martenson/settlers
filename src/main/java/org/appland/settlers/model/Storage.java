@@ -10,7 +10,7 @@ import static org.appland.settlers.model.Material.SWORD;
 
 import static org.appland.settlers.model.Size.MEDIUM;
 
-import static org.appland.settlers.model.Utils.createEmptyMaterialIntMap;
+import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -142,7 +142,7 @@ public class Storage extends Building implements Actor {
 		
 		Cargo c = Cargo.createCargo(wood);
 		
-		c.setPosition(getFlag().getPosition());
+		c.setPosition(getFlag());
 		
 		return c;
 	}
@@ -150,4 +150,8 @@ public class Storage extends Building implements Actor {
 	public static Storage createStorage() {
 		return new Storage();
 	}
+        
+        public boolean isInStock(Material m) {
+            return inventory.containsKey(m);
+        }
 }

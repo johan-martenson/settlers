@@ -11,8 +11,4 @@ public class Sawmill extends Building {
 	public static Sawmill createSawmill() {
 		return new Sawmill();
 	}
-	
-	public String toString() {
-		return "Sawmill with " + buildingToString();
-	}
 }

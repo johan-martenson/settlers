@@ -11,7 +11,7 @@ public class Cargo {
 	private Material material;
 	private List<Road> plannedRoads;
 	private Building target;
-	private Point position;
+	private Flag position;
 
 	private static Logger log = Logger.getLogger(GameMap.class.getName());
 	
@@ -45,7 +45,7 @@ public class Cargo {
 	public boolean isAtTarget() {
 		log.log(Level.INFO, "Checking if target ({0}) equals position ({1})", new Object[] {target.getFlag(), position}); 
 		
-		if (position.equals(target.getFlag().getPosition())) {
+		if (position.equals(target.getFlag())) {
 			return true;
 		} else {
 			return false;
@@ -70,12 +70,17 @@ public class Cargo {
 		return plannedRoads;
 	}
 
-	public void setPosition(Point p) {
+	public void setPosition(Flag p) {
 		log.log(Level.INFO, "Setting position to {0}", p);
 		this.position = p;
 	}
 	
+        @Override
 	public String toString() {
-		return "Cargo of type " + material.name();
+		return material.name() + " cargo to " + target;
 	}
+
+    public Flag getPosition() {
+        return position;
+    }
 }

@@ -7,7 +7,7 @@ import static org.appland.settlers.model.Size.SMALL;
 @HouseSize(size=SMALL)
 public class Woodcutter extends Building {
 
-	public static Building createWoodcutter() {
+	public static Woodcutter createWoodcutter() {
 		return new Woodcutter();
 	}
         

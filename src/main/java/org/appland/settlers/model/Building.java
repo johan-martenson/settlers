@@ -1,67 +1,260 @@
 package org.appland.settlers.model;
 
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
+import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 
 import static org.appland.settlers.model.Material.*;
 
-import static org.appland.settlers.model.Utils.createEmptyMaterialIntMap;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Building implements Actor {
 
-    private void consumeConstructionMaterial() {
-        Map<Material, Integer> materialToConsume = this.getMaterialsToBuildHouse(this);
-        
-        for (Material m : materialToConsume.keySet()) {
-            int cost = materialToConsume.get(m);
-            int before = queue.get(m);
-            
-            queue.put(m, before - cost);
-        }
+
+    public enum ConstructionState {
+            UNDER_CONSTRUCTION,
+            DONE,
+            BURNING,
+            DESTROYED
     }
 
-	public enum ConstructionState {
-		UNDER_CONSTRUCTION,
-		DONE,
-		BURNING,
-		DESTROYED
-	}
-
-	protected ConstructionState constructionState;
-	protected int constructionCountdown;
-	protected Map<Material, Integer> queue;
+    protected ConstructionState      constructionState;
+    protected int                    constructionCountdown;
+    protected Map<Material, Integer> receivedMaterial;
 	
-	private int destructionCountdown;
-	private int productionCountdown;
-	private Flag flag;
-	private Cargo outputCargo; 
-	
-	private Logger log = Logger.getLogger(Building.class.getName());
-	
-	public Building() {
-		constructionState = ConstructionState.UNDER_CONSTRUCTION;
-		queue = createEmptyMaterialIntMap();
-		constructionCountdown = getConstructionCountdown(this);
-		outputCargo = null;
-		flag = Flag.createFlag(null);
-		productionCountdown = -1;
-	}
+    private Map<Material, Integer> promisedDeliveries;
+    private int                    destructionCountdown;
+    private int                    productionCountdown;
+    private Flag                   flag;
+    private Cargo                  outputCargo; 
 
-	public Flag getFlag() {
-		return flag;
-	}
+    private Logger log = Logger.getLogger(Building.class.getName());
 
+    public Building() {
+            constructionState     = ConstructionState.UNDER_CONSTRUCTION;
+            receivedMaterial      = createEmptyMaterialIntMap();
+            promisedDeliveries    = createEmptyMaterialIntMap();
+            constructionCountdown = getConstructionCountdown(this);
+            outputCargo           = null;
+            flag                  = Flag.createFlag(null);
+            productionCountdown   = -1;
+    }
+    
+    public Map<Material, Integer> getInQueue() {
+        return receivedMaterial;
+    }
+    
+    public boolean isCargoReady() {
+        return outputCargo != null;
+    }
+
+    public void deliver(Cargo c)
+        throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        log.log(Level.INFO, "Adding cargo {0} to queue ({1})", new Object[] {c, receivedMaterial});
+
+        Material material = c.getMaterial();
+
+        /* Wood and stone can be delivered during construction */
+        if (underConstruction() && (material != PLANCK && material != STONE)) {
+            throw new InvalidMaterialException(material);
+        /* Can't accept delivery when building is burning or destroyed */
+        } else if (burningDown() || destroyed()) {
+            throw new InvalidStateForProduction(this);
+        } else if (ready() && !canAcceptGoods(this)) {
+            throw new DeliveryNotPossibleException();
+        } else if (ready() && !isAccepted(material, this)) {
+            throw new InvalidMaterialException(material);
+        }
+
+        int existingQuantity = receivedMaterial.get(material);
+        receivedMaterial.put(material, existingQuantity + 1);
+        
+        existingQuantity = promisedDeliveries.get(material);
+        promisedDeliveries.put(material, existingQuantity - 1);
+    }
+    
+    public Cargo retrieveCargo() {
+        Cargo result = outputCargo;
+        outputCargo = null;
+
+        if (result == null) {
+            return null;
+        }
+
+        result.setPosition(getFlag());
+
+        return result;
+    }
+
+    public boolean needsMaterial(Material material) {
+            log.log(Level.INFO, "Does {0} require {1}", new Object[] {this, material});
+
+            if (underConstruction()) {
+                return moreMaterialNeededForConstruction(material);
+            } else {
+                Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(this);
+
+                if (!requiredGoods.containsKey(material)) {
+                        /* Building does not accept the material */
+                        log.log(Level.FINE, "This building does not accept {0}", material);
+                        return false;
+                }
+
+                int neededAmount = requiredGoods.get(material);
+
+                if (receivedMaterial.get(material) >= neededAmount) {
+                        /* Building has all the cargos it needs of the material */
+                        log.log(Level.FINE, "This building has all the {0} it needs", material);
+                        return false;
+                }
+            }
+            
+            
+            log.log(Level.FINE, "This building requires {0}", material);
+            return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + buildingToString();
+    }
+    
+    public String buildingToString() {
+        String str = " at " + flag + " with ";
+        
+        if (GameUtils.isQueueEmpty(receivedMaterial)) {
+            str += "nothing in queue and ";
+        } else {
+            for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
+                if (pair.getValue() != 0) {
+                    str = str + pair.getKey() + ": " + pair.getValue();
+                }
+            }
+            
+            str += "in queue and ";
+        }
+        
+        str += outputCargo + " waiting to be picked up";
+        
+        return str;
+    }
+
+    public void promiseDelivery(Material m) {
+        int amount = promisedDeliveries.get(m);
+        
+        promisedDeliveries.put(m, amount + 1);
+    }
+
+    @Override
+    public void stepTime() {
+            if (underConstruction()) {
+
+                if (constructionCountdown > 0) {
+                    constructionCountdown--;
+                }
+
+                if (isConstructionReady(constructionCountdown)) {
+                    log.log(Level.INFO, "Construction of {0} done", this);
+
+                    consumeConstructionMaterial();
+
+                    constructionState = DONE;
+                }
+            } else if (burningDown()) {
+                    destructionCountdown--;
+
+                    if (destructionCountdown == 0) {
+                            constructionState = DESTROYED;
+                    }
+            } else if (ready() && !isCargoReady()) {
+                    log.log(Level.INFO, "Calling produce");
+                    outputCargo = produce();
+            }
+    }
+    
+    public Flag getFlag() {
+            return flag;
+    }
+
+    public Object getConstructionState() {
+            return constructionState;
+    }
+
+    public void tearDown() {
+            constructionState = ConstructionState.BURNING;
+            destructionCountdown = 50;
+    }
+
+    public int getProductionTime(Building building) {
+            Production p = building.getClass().getAnnotation(Production.class);
+
+            return p.productionTime();
+    }
+
+    public Material getProductionMaterial(Building building) {
+            Production p = building.getClass().getAnnotation(Production.class);
+
+            return p.output();
+    }
+
+    public Size getHouseSize(Building b) {
+        HouseSize hs = b.getClass().getAnnotation(HouseSize.class);
+
+        return hs.size();
+    }
+
+    public Map<Material, Integer> getRequiredGoodsForProduction(Building building) {
+            log.log(Level.INFO, "Getting the required goods for this building");
+
+            Production p = building.getClass().getAnnotation(Production.class);
+            Map<Material, Integer> requiredGoods = new HashMap<>();
+            
+            log.log(Level.FINE, "Found annotations for {0} in class", requiredGoods);
+
+            /* Return empty map if the annotation isn't there */
+            if (p == null) {
+                return requiredGoods;
+            }
+            
+            Material[] goods = p.requiredGoods();
+
+            for (Material m : goods) {
+                    if (!requiredGoods.containsKey(m)) {
+                            requiredGoods.put(m, 0);
+                    }
+
+                    requiredGoods.put(m, 1);
+            }
+
+            return requiredGoods;
+    }
+
+    public int getMaterialInQueue(Material material) throws InvalidMaterialException {
+            return receivedMaterial.get(material);
+    }
+
+    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  */
+    
+    private void consumeConstructionMaterial() {
+        Map<Material, Integer> materialToConsume = this.getMaterialsToBuildHouse(this);
+
+        for (Entry<Material, Integer> pair : materialToConsume.entrySet()) {
+            int cost = pair.getValue();
+            int before = receivedMaterial.get(pair.getKey());
+            
+            receivedMaterial.put(pair.getKey(), before - cost);
+        }
+    }	
 	
     private Map<Material, Integer> getMaterialsToBuildHouse(Building b) {
-        Map<Material, Integer> materials = new EnumMap<>(Material.class);
+        Map<Material, Integer> materials = createEmptyMaterialIntMap();
         
         switch(getHouseSize(b)) {
             case SMALL:
@@ -81,262 +274,150 @@ public class Building implements Actor {
         return materials;
     }
     
-	private int getConstructionCountdown(Building building) {
-		HouseSize sizeAnnotation = building.getClass().getAnnotation(HouseSize.class);
-		int constructionTime = 100;
-		
-		switch (sizeAnnotation.size()) {
-		case SMALL:
-			constructionTime = 100;
-			break;
-		case MEDIUM:
-			constructionTime = 150;
-			break;
-		case LARGE:
-			constructionTime = 200;
-			break;
-		}
-		
-		return constructionTime;
-	}
+    private int getConstructionCountdown(Building building) {
+            HouseSize sizeAnnotation = building.getClass().getAnnotation(HouseSize.class);
+            int constructionTime = 100;
 
-	public Object getConstructionState() {
-		return constructionState;
-	}
-
-        private boolean isConstructionReady(int countdown) {
-            boolean timeOk = false;
-            
-            if (countdown == 0) {
-                timeOk = true;
+            switch (sizeAnnotation.size()) {
+            case SMALL:
+                    constructionTime = 100;
+                    break;
+            case MEDIUM:
+                    constructionTime = 150;
+                    break;
+            case LARGE:
+                    constructionTime = 200;
+                    break;
             }
+
+            return constructionTime;
+    }
+
+    private boolean isConstructionReady(int countdown) {
+        boolean timeOk = false;
+
+        if (countdown == 0) {
+            timeOk = true;
+        }
+
+        Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse(this);
+        boolean materialAvailable = true;
+
+        for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
+            Material m = entry.getKey();
             
-            Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse(this);
-            boolean materialAvailable = true;
-            
-            for (Material m : materialsToBuild.keySet()) {
-                if (queue.get(m) < materialsToBuild.get(m)) {
-                    materialAvailable = false;
+            if (receivedMaterial.get(m) < entry.getValue()) {
+                materialAvailable = false;
+            }
+        }
+
+        return materialAvailable && timeOk;
+    }
+
+    private Cargo produce() {
+            Cargo result = null;
+
+            /* Construction hasn't started */
+            if (productionCountdown == -1) {
+                if (productionCanStart(this)) {
+                    productionCountdown = getProductionTime(this) - 2;
+                }
+
+            /* Production ongoing and not finished */
+            } else if (productionCountdown > 0) {
+                productionCountdown--;
+
+            /* Production just finished */
+            } else if (productionCountdown == 0) {
+                result = Cargo.createCargo(getProductionMaterial(this));
+
+                log.log(Level.INFO, "{0} produced {1}", new Object[] {this, result});
+
+                productionCountdown = -1;
+                consumeResources(this);
+            }
+
+            log.log(Level.FINE, "Result from produce is {0}", result);
+            return result;
+    }
+
+    private void consumeResources(Building building) {
+            Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+
+            for (Entry<Material, Integer> entry : requiredGoods.entrySet()) {
+                Material m = entry.getKey();
+                int cost = entry.getValue();
+                
+                int before = receivedMaterial.get(m);
+                receivedMaterial.put(m, before - cost);
+            }
+    }
+
+    private boolean productionCanStart(Building building) {
+            Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+
+            if (requiredGoods.keySet().isEmpty()) {
+                    return true;
+            }
+
+            boolean resourcesPresent = true;
+
+            for (Entry<Material, Integer> entry : requiredGoods.entrySet()) {
+                Material m = entry.getKey();
+                int amount = entry.getValue();
+
+                if (building.receivedMaterial.get(m) < amount) {
+                    resourcesPresent = false;
                 }
             }
-            
-            return materialAvailable && timeOk;
-        }
+
+            return resourcesPresent;
+    }
+
+    private boolean isAccepted(Material material, Building building) {
+            Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+
+        return requiredGoods.containsKey(material);
+    }
+
+
+
+    private boolean canAcceptGoods(Building building) {
+            Map<Material, Integer> requiredGoods = building.getRequiredGoodsForProduction(building);
+
+        return !requiredGoods.keySet().isEmpty();
+    }
+
+    private boolean underConstruction() {
+        return constructionState == UNDER_CONSTRUCTION;
+    }
+
+    private boolean ready() {
+        return constructionState == DONE;
+    }
+    
+    private boolean burningDown() {
+        return constructionState == BURNING;
+    }
+    
+    private boolean destroyed() {
+        return constructionState == DESTROYED;
+    }
+    
+    protected void setConstructionReady() {
+        constructionState = DONE;
+    }
+
+    private boolean moreMaterialNeededForConstruction(Material material) {
+        Map<Material, Integer> allMaterialNeededForConstruction = getMaterialsToBuildHouse(this);
+
+        int promised = promisedDeliveries.get(material);
+        int delivered = receivedMaterial.get(material);
+        int required = allMaterialNeededForConstruction.get(material);
+
+        log.log(Level.INFO, "Is more {0} needed for construction: {1} > {2} + {3}",
+                new Object[] {material, required, promised, delivered});
         
-        @Override
-        public void stepTime() {
-		if (constructionState == UNDER_CONSTRUCTION) {
-			
-                    if (constructionCountdown > 0) {
-                        constructionCountdown--;
-                    }
-	
-                        if (isConstructionReady(constructionCountdown)) {
-                            log.log(Level.INFO, "Construction of {0} done", this);
-                            
-                            consumeConstructionMaterial();
-                            
-                            constructionState = DONE;
-                        }
-		} else if (constructionState == BURNING) {
-			destructionCountdown--;
-	
-			if (destructionCountdown == 0) {
-				constructionState = DESTROYED;
-			}
-		} else if (constructionState == DONE && outputCargo == null) {
-			log.log(Level.INFO, "Calling produce");
-			outputCargo = produce();
-		}
-	}
-
-	public void tearDown() {
-		constructionState = ConstructionState.BURNING;
-		destructionCountdown = 50;
-	}
-	
-	private Cargo produce() {
-		Cargo result = null;
-		
-		/* Construction hasn't started */
-		if (productionCountdown == -1) {
-		    if (productionCanStart(this)) {
-			productionCountdown = getProductionTime(this) - 2;
-		    }
-
-		/* Production ongoing and not finished */
-		} else if (productionCountdown > 0) {
-		    productionCountdown--;
-
-		/* Production just finished */
-		} else if (productionCountdown == 0) {
-		    result = Cargo.createCargo(getProductionMaterial(this));
-
-                    log.log(Level.INFO, "{0} produced {1}", new Object[] {this, result});
-                    
-		    productionCountdown = -1;
-		    consumeResources(this);
-		}
-		
-                log.log(Level.FINE, "Result from produce is {0}", outputCargo);
-		return result;
-	}
-
-	private void consumeResources(Building building) {
-		Map<Material, Integer> requiredGoods = getRequiredGoods(building);
-		
-		for (Material m : requiredGoods.keySet()) {
-			int before = queue.get(m);
-			int cost = requiredGoods.get(m);
-			queue.put(m, before - cost);
-		}
-	}
-
-	private boolean productionCanStart(Building building) {
-		Map<Material, Integer> requiredGoods = getRequiredGoods(building);
-		
-		if (requiredGoods.keySet().isEmpty()) {
-			return true;
-		}
-		
-		boolean resourcesPresent = true;
-		
-		for (Material m : requiredGoods.keySet()) {
-			int amount = requiredGoods.get(m);
-			
-			if (building.queue.get(m) < amount) {
-				resourcesPresent = false;
-			}
-		}
-		
-		return resourcesPresent;
-	}
-
-	public int getProductionTime(Building building) {
-		Production p = building.getClass().getAnnotation(Production.class);
-		
-		return p.productionTime();
-	}
-	
-	public Material getProductionMaterial(Building building) {
-		Production p = building.getClass().getAnnotation(Production.class);
-		
-		return p.output();
-	}
-	
-        public Size getHouseSize(Building b) {
-            HouseSize hs = b.getClass().getAnnotation(HouseSize.class);
-            
-            return hs.size();
-        }
-        
-	public Map<Material, Integer> getRequiredGoods(Building building) {
-		log.log(Level.INFO, "Getting the required goods for this building");
-		
-		Production p = building.getClass().getAnnotation(Production.class);
-		Map<Material, Integer> requiredGoods = new HashMap<>();
-
-		log.log(Level.FINE, "Found annotations for {0} in class", requiredGoods);
-		
-		Material[] goods = p.requiredGoods();
-		
-		for (Material m : goods) {
-			if (!requiredGoods.containsKey(m)) {
-				requiredGoods.put(m, 0);
-			}
-			
-			requiredGoods.put(m, 1);
-		}
-		
-		return requiredGoods;
-	}
-
-	public int getQueue(Material material) throws InvalidMaterialException {
-		return queue.get(material);
-	}
-
-	private boolean isAccepted(Material material, Building building) {
-		Map<Material, Integer> requiredGoods = getRequiredGoods(building);
-		
-            return requiredGoods.containsKey(material);
-	}
-
-	public void deliver(Cargo c)
-	    throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-	    log.log(Level.INFO, "Adding cargo {0} to queue ({1})", new Object[] {c, queue});
-
-            Material material = c.getMaterial();
-            
-            /* Wood and stone can be delivered during construction */
-            if (constructionState == UNDER_CONSTRUCTION && (
-                material != PLANCK &&
-                material != STONE)) {
-                throw new InvalidMaterialException(material);
-            /* Can't accept delivery when building is burning or destroyed */
-            } else if (constructionState == BURNING || constructionState == DESTROYED) {
-		throw new InvalidStateForProduction(this);
-	    } else if (constructionState == DONE && !canAcceptGoods(this)) {
-		throw new DeliveryNotPossibleException();
-	    } else if (constructionState == DONE && !isAccepted(material, this)) {
-		throw new InvalidMaterialException(material);
-	    }
-	    
-	    int existingQuantity = queue.get(material);
-	    queue.put(material, existingQuantity + 1);
-	}
-
-	private boolean canAcceptGoods(Building building) {
-		Map<Material, Integer> requiredGoods = building.getRequiredGoods(building);
-		
-            return !requiredGoods.keySet().isEmpty();
-	}
-
-	public boolean outputAvailable() {
-            return outputCargo != null;
-	}
-
-	public Cargo retrieveCargo() {
-	    Cargo result = outputCargo;
-	    outputCargo = null;
-
-	    if (result == null) {
-		return null;
-	    }
-		
-	    result.setPosition(this.getFlag().getPosition());
-		
-	    return result;
-	}
-
-	public boolean needsMaterial(Material wood) {
-		log.log(Level.INFO, "Does {0} require {1}", new Object[] {this, wood});
-		
-		Map<Material, Integer> requiredGoods = getRequiredGoods(this);
-		
-		if (!requiredGoods.containsKey(wood)) {
-			/* Building does not accept the material */
-			log.log(Level.FINE, "This building does not accept {0}", wood);
-			return false;
-		}
-		
-		int neededAmount = requiredGoods.get(wood);
-		
-		if (queue.get(wood) >= neededAmount) {
-			/* Building has all the cargos it needs of the material */
-			log.log(Level.FINE, "This building has all the {0} it needs", wood);
-			return false;
-		}
-		
-		log.log(Level.FINE, "This building requires {0}", wood);
-		return true;
-	}
-	
-	public String buildingToString() {
-		return " at " + flag + " with " + queue + " in queue and " + outputCargo + " waiting to be picked up";
-	}
-
-	public boolean cargoIsReady() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+        return (required > promised + delivered);
+    }
 }

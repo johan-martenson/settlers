@@ -1,37 +1,29 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GameMap {
 
-	private Map<Building, Point> buildings;
-	private List<Road> roads;
-	private List<Flag> flags;
-	private Map<Point, List<Point>> roadNetwork;
-	private Map<Road, Worker> roadToWorkerMap;
+	private List<Building>        buildings;
+	private List<Road>            roads;
+	private List<Flag>            flags;
+	private Map<Flag, List<Flag>> roadNetwork;
+	private Map<Road, Worker>     roadToWorkerMap;
 
 	private static Logger log = Logger.getLogger(GameMap.class.getName());
 	
 	private GameMap() {
-		buildings = new HashMap<>();
-		roads = new ArrayList<>();
-		flags = new ArrayList<>();
-		roadNetwork = new HashMap<>();
+		buildings       = new ArrayList<>();
+		roads           = new ArrayList<>();
+		flags           = new ArrayList<>();
+		roadNetwork     = new HashMap<>();
 		roadToWorkerMap = new HashMap<>();
-		
-		/* Increase the log level */
-		log.setLevel(Level.FINEST);
-		
-		Handler[] handlers = log.getHandlers();
-		for(Handler h: handlers) {
-		    h.setLevel(Level.FINEST);
-		}
 	}
 	
 	public static GameMap createGameMap() {
@@ -39,22 +31,27 @@ public class GameMap {
 	}
 
 	public void placeBuilding(Building hq, Point p) {
-		buildings.put(hq, p);
+            buildings.add(hq);
 		
-		Flag flag = hq.getFlag();
-		
-		flag.setPosition(p);
-		
-		placeFlag(flag);
+            Flag flag = hq.getFlag();
+
+            flag.setPosition(p);
+            placeFlag(flag);
 	}
 	
-	public void placeRoad(Point start, Point end) throws InvalidEndPointException {
-	
+        public void placeRoad(Road r) throws InvalidEndPointException {
+            placeRoad(r.start, r.end);
+        }
+        
+	public void placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
 		boolean validStart = false;
 		boolean validEnd = false;
+                
+                Point start = startFlag.getPosition();
+                Point end   = endFlag.getPosition();
 		
-		for (Building b : buildings.keySet()) {
-			Point place = buildings.get(b);
+		for (Building b : buildings) {
+                        Point place = b.getFlag().getPosition();
 			
 			if (place.equals(start)) {
 				validStart = true;
@@ -74,19 +71,19 @@ public class GameMap {
 		}
 		
 		if (validStart && validEnd) {
-			Road r = Road.createRoad(start, end);
+			Road r = Road.createRoad(startFlag, endFlag);
 			roads.add(r);
 			
-			if (!roadNetwork.containsKey(start)) {
-				roadNetwork.put(start, new ArrayList<Point>());
+			if (!roadNetwork.containsKey(startFlag)) {
+				roadNetwork.put(startFlag, new ArrayList<Flag>());
 			}
 			
-			if (!roadNetwork.containsKey(end)) {
-				roadNetwork.put(end, new ArrayList<Point>());
+			if (!roadNetwork.containsKey(endFlag)) {
+				roadNetwork.put(endFlag, new ArrayList<Flag>());
 			}
 			
-			roadNetwork.get(start).add(end);
-			roadNetwork.get(end).add(start);
+			roadNetwork.get(startFlag).add(endFlag);
+			roadNetwork.get(endFlag).add(startFlag);
 			
 		} else {
 			throw new InvalidEndPointException();
@@ -102,13 +99,13 @@ public class GameMap {
 		flags.add(Flag.createFlag(p));
 	}
 
-	public List<Point> findWay(Point start, Point end) throws InvalidRouteException {
+	public List<Flag> findWay(Flag start, Flag end) throws InvalidRouteException {
 		log.log(Level.INFO, "Finding way from {0} to {1}", new Object[] {start, end});
-		
-		List<Point> result = findWayWithMemory(start, end, new ArrayList<Point>());
+                
+		List<Flag> result = findWayWithMemory(start, end, new ArrayList<Flag>());
 		
 		if (result == null) {
-			log.log(Level.WARNING, "Failed to find a way from {0} to {1}");
+			log.log(Level.WARNING, "Failed to find a way from {0} to {1}", new Object[] {start, end});
 			throw new InvalidRouteException("No route found from " + start + " to " + end + ".");
 		}
 		
@@ -116,7 +113,7 @@ public class GameMap {
 		return result;
 	}
 	
-	private List<Point> findWayWithMemory(Point start, Point end, List<Point> visited) throws InvalidRouteException {
+	private List<Flag> findWayWithMemory(Flag start, Flag end, List<Flag> visited) throws InvalidRouteException {
 		log.log(Level.INFO, "Finding way from {0} to {1}, already visited {2}", new Object[] {start, end, visited});
 		
 		if (start.equals(end)) {
@@ -127,10 +124,10 @@ public class GameMap {
 			throw new InvalidRouteException(start + " has no connecting roads.");
 		}
 		
-		List<Point> connectingRoads = roadNetwork.get(start);
+		List<Flag> connectingRoads = roadNetwork.get(start);
 		
-		for (Point otherEnd : connectingRoads) {
-			List<Point> result = new ArrayList<>();
+		for (Flag otherEnd : connectingRoads) {
+			List<Flag> result = new ArrayList<>();
 			
 			if (visited.contains(otherEnd)) {
 				continue;
@@ -140,11 +137,11 @@ public class GameMap {
 				result.add(start);
 				result.add(end);
 				return result;
-			}
+			} else
 			
 			visited.add(start);
 			
-			List<Point> tmp = findWayWithMemory(otherEnd, end, visited);
+			List<Flag> tmp = findWayWithMemory(otherEnd, end, visited);
 			
 			if (tmp != null) {
 				result.add(start);
@@ -158,8 +155,7 @@ public class GameMap {
 		return null;
 	}
 
-	public boolean routeExist(Point point, Point point2) throws InvalidRouteException {
-		
+	public boolean routeExist(Flag point, Flag point2) throws InvalidRouteException {
 		try {
 			findWay(point, point2);
 		} catch (InvalidRouteException e) {
@@ -169,7 +165,7 @@ public class GameMap {
 		return true;
 	}
 
-	public Road getRoad(Point startPosition, Point wcSpot) {
+	public Road getRoad(Flag startPosition, Flag wcSpot) {
 		for (Road r : roads) {
 			if ((r.start.equals(startPosition) && r.end.equals(wcSpot)) ||
 				(r.end.equals(startPosition) && r.start.equals(wcSpot))) {
@@ -208,7 +204,7 @@ public class GameMap {
 	}
 
 	private Road reverseRoad(Road nextRoad) {
-		Point start, end;
+		Flag start, end;
 		
 		start = nextRoad.start;
 		end = nextRoad.end;
@@ -222,10 +218,10 @@ public class GameMap {
             return roadToWorkerMap.get(nextRoad);
 	}
 
-	public List<Road> findWayInRoads(Point position, Flag flag) throws InvalidRouteException {
+	public List<Road> findWayInRoads(Flag position, Flag flag) throws InvalidRouteException {
 		log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[] {position, flag});
 		
-		List<Point> points = findWay(position, flag.getPosition());
+		List<Flag> points = findWay(position, flag);
 		List<Road> nextRoads = new ArrayList<>();
 		
 		if (points.size() == 2) {
@@ -236,7 +232,7 @@ public class GameMap {
 			return nextRoads;
 		}
 		
-		Point next = points.get(0);
+		Flag next = points.get(0);
 		
 		int i;
 		for (i = 1; i < points.size(); i++) {
@@ -273,12 +269,57 @@ public class GameMap {
 
 	// TODO: Change to find the closest storage
 	
-	for (Building b : buildings.keySet()) {
+	for (Building b : buildings) {
 	    if (b instanceof Storage || b instanceof Headquarter) {
 		stg = (Storage) b;
 	    }
 	}
 
 	return stg;
+    }
+
+    public List<Worker> getIdleWorkers() {
+        List<Worker> result = new ArrayList<>();
+
+        for (Worker w : roadToWorkerMap.values()) {
+            if (w.getCargo() == null) {
+                result.add(w);
+            }
+        }
+        
+        return result;
+    }
+    
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    public List<Worker> getWorkersAtTarget() {
+        List<Worker> result = new ArrayList<>();
+        
+        for (Worker w : roadToWorkerMap.values()) {
+            if (w.isArrived()) {
+                result.add(w);
+            }
+        }
+        
+        return result;
+    }
+
+    public List<Building> getBuildingsWithNewProduce() {
+        List<Building> result = new ArrayList<>();
+        
+        for (Building b : buildings) {
+            if (b.isCargoReady()) {
+                result.add(b);
+            }
+        }
+    
+        return result;
+    }
+
+    public Collection<Worker> getAllWorkers() {
+        return roadToWorkerMap.values();
+        
     }
 }

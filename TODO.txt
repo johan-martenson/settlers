@@ -18,4 +18,5 @@ TODO
  3 Add several players
  4 Add graphical UI
  5 Finetune cost for production and construction
-
+ 6 Add ORM mappings to DAOs
+ 7 Add functionality to store and load DAOs from a database store

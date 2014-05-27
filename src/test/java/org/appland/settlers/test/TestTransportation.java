@@ -14,6 +14,7 @@ import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
@@ -53,7 +54,10 @@ public class TestTransportation {
 		map.placeBuilding(hq, new Point(1, 2));
 		map.placeBuilding(wc, new Point(3, 4));
 		
-		map.placeRoad(new Point(1, 2), new Point(3, 4));
+                Flag f1 = hq.getFlag();
+                Flag f2 = wc.getFlag();
+                
+		map.placeRoad(f1, f2);
 		
 		List<Road> roads = map.getRoads();
 		
@@ -61,11 +65,11 @@ public class TestTransportation {
 		
 		Road r = roads.get(0);
 		
-		assertTrue(r.start.x == 1);
-		assertTrue(r.start.y == 2);
+		assertTrue(r.start.getPosition().x == 1);
+		assertTrue(r.start.getPosition().y == 2);
 		
-		assertTrue(r.end.x == 3);
-		assertTrue(r.end.y == 4);
+		assertTrue(r.end.getPosition().x == 3);
+		assertTrue(r.end.getPosition().y == 4);
 	}
 	
 	@Test(expected=InvalidEndPointException.class)
@@ -76,7 +80,7 @@ public class TestTransportation {
 		
 		map.placeBuilding(s, new Point(5, 6));
 		
-		map.placeRoad(new Point(6, 7), new Point(5, 6));
+		map.placeRoad(Flag.createFlag(6, 7), Flag.createFlag(5, 6));
 	}
 	
 	@Test(expected=InvalidEndPointException.class)
@@ -87,14 +91,14 @@ public class TestTransportation {
 		
 		map.placeBuilding(wc, new Point(8, 9));
 		
-		map.placeRoad(new Point(8, 9), new Point(3, 4));
+		map.placeRoad(Flag.createFlag(8, 9), Flag.createFlag(3, 4));
 	}
 
 	@Test(expected=InvalidEndPointException.class) 
 	public void testCreateRoadWithoutAnyValidEndpoints() throws InvalidEndPointException {
 		GameMap map = GameMap.createGameMap();
 		
-		map.placeRoad(new Point(1, 2), new Point(3, 4));
+		map.placeRoad(Flag.createFlag(1, 2), Flag.createFlag(3, 4));
 	}
 	
 	@Test
@@ -104,21 +108,21 @@ public class TestTransportation {
 		Building wc = Woodcutter.createWoodcutter();
 		
 		map.placeBuilding(wc, new Point(3, 4));
-		map.placeFlag(new Point(7, 8));
+		map.placeFlag(Flag.createFlag(7, 8));
 		
-		map.placeRoad(new Point(3, 4), new Point(7, 8));
+		map.placeRoad(Flag.createFlag(3, 4), Flag.createFlag(7, 8));
 		
-		map.placeFlag(new Point(10, 11));
+		map.placeFlag(Flag.createFlag(10, 11));
 		
-		map.placeRoad(new Point(7, 8), new Point(10, 11));
+		map.placeRoad(Flag.createFlag(7, 8), Flag.createFlag(10, 11));
 	}
 	
 	@Test(expected=InvalidEndPointException.class)
 	public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException {
 		GameMap map = GameMap.createGameMap();
 		
-		map.placeFlag(new Point(3, 3));
-		map.placeRoad(new Point(3, 3), new Point(3, 3));	
+		map.placeFlag(Flag.createFlag(3, 3));
+		map.placeRoad(Flag.createFlag(3, 3), Flag.createFlag(3, 3));	
 	}
 
 	@Test
@@ -126,10 +130,10 @@ public class TestTransportation {
 
 		GameMap map = GameMap.createGameMap();
 		
-		Point[] points = new Point[] {
-				new Point(1,1),
-				new Point(2,2)
-		};
+                Flag[] points = new Flag[] {
+                    new Flag(1, 1),
+                    new Flag(2, 2)
+                };
 
 		int i;
 		for (i = 0; i < points.length; i++) {
@@ -145,10 +149,10 @@ public class TestTransportation {
 	public void testDoesRouteExistNo() throws InvalidEndPointException, InvalidRouteException {
 		GameMap map = GameMap.createGameMap();
 		
-		Point[] points = new Point[] {
-				new Point(1,1),
-				new Point(2,2),
-				new Point(3,3)
+		Flag[] points = new Flag[] {
+				new Flag(1,1),
+				new Flag(2,2),
+				new Flag(3,3)
 		};
 
 		int i;
@@ -165,7 +169,7 @@ public class TestTransportation {
 	public void testFindRouteWithSameStartAndEnd() throws InvalidRouteException {
 		GameMap map = GameMap.createGameMap();
 		
-		map.findWay(new Point(1, 1), new Point(1,1));
+		map.findWay(Flag.createFlag(1, 1), Flag.createFlag(1,1));
 	}
 	
 	@Test
@@ -183,28 +187,28 @@ public class TestTransportation {
 		
 		GameMap map = GameMap.createGameMap();
 		
-		Point[] points = new Point[] {
-		new Point(1,1),
-		new Point(2, 1),
-		new Point (3, 1),
-		new Point(4, 1),
-		new Point(5, 1),
-		new Point(2, 4),
-		new Point(3, 4),
-		new Point(2, 6),
-		new Point(3, 6),
-		new Point(4, 2)};
-		
-		Point target = new Point(6, 2);
+		Flag[] points = new Flag[] {
+		new Flag(1,1),
+		new Flag(2, 1),
+		new Flag (3, 1),
+		new Flag(4, 1),
+		new Flag(5, 1),
+		new Flag(2, 4),
+		new Flag(3, 4),
+		new Flag(2, 6),
+		new Flag(3, 6),
+		new Flag(4, 2)};
 		
 		int i;
 		for (i = 0; i < points.length; i++) {
 			map.placeFlag(points[i]);
 		}
 
-		map.placeFlag(target);
-		
-		map.placeBuilding(Woodcutter.createWoodcutter(), target);
+                Woodcutter wc = Woodcutter.createWoodcutter();
+                
+		map.placeBuilding(wc, new Point(6, 2));
+                
+                Flag target = wc.getFlag();
 		
 		map.placeRoad(points[0], points[1]);
 		map.placeRoad(points[1], points[2]);
@@ -245,8 +249,8 @@ public class TestTransportation {
 	public void testWorkerUnreachableTarget() throws InvalidRouteException {
 		GameMap map = GameMap.createGameMap();
 		
-		Point target = new Point(6, 2);
-		Point start = new Point(2, 2);
+		Flag target = Flag.createFlag(6, 2);
+		Flag start = Flag.createFlag(2, 2);
 
 		map.placeFlag(start);
 		map.placeFlag(target);
@@ -264,12 +268,12 @@ public class TestTransportation {
 		Quarry qry = Quarry.createQuarry();
 		Storage stge = Storage.createStorage();
 		
-		Point target = new Point(6, 2);
-		Point start = new Point(2, 2);
+		map.placeBuilding(qry, new Point(2, 2));
+		map.placeBuilding(stge, new Point(6, 2));
 
-		map.placeBuilding(qry, start);
-		map.placeBuilding(stge, target);
-		
+                Flag target = stge.getFlag();
+		Flag start = qry.getFlag();
+                
 		map.placeRoad(start, target);
 		
 		Worker worker = Worker.createWorker(map);
@@ -284,10 +288,14 @@ public class TestTransportation {
 		/* Production starts, wait for it to finish */
 		Utils.fastForward(100, qry, stge, worker);
 		
-		assertTrue(qry.outputAvailable());
+		assertTrue(qry.isCargoReady());
 		
 		Cargo c = qry.retrieveCargo();
-		
+		assertTrue(c.getPosition().equals(qry.getFlag()));
+                
+                
+                map.findWay(qry.getFlag(), stge.getFlag());
+                
 		c.setTarget(stge, map);
 		
 		qry.getFlag().putCargo(c);

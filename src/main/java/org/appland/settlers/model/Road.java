@@ -2,20 +2,21 @@ package org.appland.settlers.model;
 
 public class Road {
 
-	public Point start;
-	public Point end;
+	public Flag start;
+	public Flag end;
 
-	private Road(Point start, Point end) {
+	private Road(Flag start, Flag end) {
 		this.start = start;
 		this.end = end;
 	}
 	
-	public static Road createRoad(Point start, Point end) {
+	public static Road createRoad(Flag start, Flag end) {
 		return new Road(start, end);
 	}
 
+        @Override
 	public String toString() {
-		return "Road " + start.x + ", " + start.y + " to " + end.x + ", " + end.y + " ";
+		return "Road " + start + " to " + end + " ";
 	}
 
 	@Override
@@ -48,6 +49,8 @@ public class Road {
 			return false;
 		return true;
 	}
-	
 
+    public Flag[] getFlags() {
+        return new Flag[] {start, end};
+    }
 }

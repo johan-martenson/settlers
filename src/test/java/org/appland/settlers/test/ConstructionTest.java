@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import java.util.Map;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
@@ -11,12 +12,20 @@ import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
+import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertTrue;
 
@@ -28,7 +37,33 @@ public class ConstructionTest {
 	public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Building wc = Woodcutter.createWoodcutter();
 		
+                assertTrue(Utils.materialIntMapIsEmpty(wc.getInQueue()));
 		assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
+                assertFalse(wc.isCargoReady());
+                
+                assertTrue(wc.needsMaterial(PLANCK));
+                assertTrue(wc.needsMaterial(STONE));
+                
+                assertFalse(wc.needsMaterial(SERGEANT));
+                
+                assertTrue(wc.needsMaterial(PLANCK));
+                assertTrue(wc.needsMaterial(STONE));
+                
+                wc.promiseDelivery(PLANCK);
+                assertTrue(wc.needsMaterial(PLANCK));
+                assertTrue(wc.needsMaterial(STONE));
+                
+                wc.promiseDelivery(PLANCK);
+                assertFalse(wc.needsMaterial(PLANCK));
+                assertTrue(wc.needsMaterial(STONE));
+                
+                wc.promiseDelivery(STONE);
+                assertFalse(wc.needsMaterial(PLANCK));
+                assertTrue(wc.needsMaterial(STONE));
+                
+                wc.promiseDelivery(STONE);
+                assertFalse(wc.needsMaterial(PLANCK));
+                assertFalse(wc.needsMaterial(STONE));
 		
 		/* Verify that construction doesn't finish before material is delivered */
                 Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
@@ -49,8 +84,8 @@ public class ConstructionTest {
 		
                 /* Verify that all material was consumed by the construction */
                 
-                assertTrue(wc.getQueue(PLANCK) == 0);
-                assertTrue(wc.getQueue(STONE) == 0);
+                assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
+                assertTrue(wc.getMaterialInQueue(STONE) == 0);
                 
 		wc.tearDown();
 		
@@ -92,8 +127,8 @@ public class ConstructionTest {
                 assertTrue(sm.getConstructionState() == DONE);
                 
                  /* Verify that all material was consumed by the construction */
-                assertTrue(sm.getQueue(PLANCK) == 0);
-                assertTrue(sm.getQueue(STONE) == 0);
+                assertTrue(sm.getMaterialInQueue(PLANCK) == 0);
+                assertTrue(sm.getMaterialInQueue(STONE) == 0);
                 
 		sm.tearDown();
 		
@@ -129,8 +164,8 @@ public class ConstructionTest {
                 assertTrue(farm.getConstructionState() == DONE);
                 
                  /* Verify that all material was consumed by the construction */
-                assertTrue(farm.getQueue(PLANCK) == 0);
-                assertTrue(farm.getQueue(STONE) == 0);
+                assertTrue(farm.getMaterialInQueue(PLANCK) == 0);
+                assertTrue(farm.getMaterialInQueue(STONE) == 0);
                 
 		farm.tearDown();
 		
@@ -180,4 +215,20 @@ public class ConstructionTest {
                 
                 // TODO: test creation of headquarter
 	}
+
+    private boolean matchesRequiredMaterialForSmallHouse(Map<Material, Integer> requiredMaterialToFinish) {
+        boolean matches = true;
+        
+        for (Material m : Material.values()) {
+            if (m == PLANCK && requiredMaterialToFinish.get(m) != 2) {
+                matches = false;
+            } else if (m == STONE && requiredMaterialToFinish.get(m) != 2) {
+                matches = false;
+            } else if (requiredMaterialToFinish.get(m) != 0) {
+                matches = false;
+            }
+        }
+
+        return matches;
+    }
 }

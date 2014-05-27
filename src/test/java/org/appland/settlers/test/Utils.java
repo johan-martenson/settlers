@@ -3,7 +3,9 @@ package org.appland.settlers.test;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
@@ -13,6 +15,7 @@ import static org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
@@ -21,7 +24,11 @@ import static org.appland.settlers.model.Material.*;
 
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
@@ -92,7 +99,7 @@ public class Utils {
         Cargo woodCargo = Cargo.createCargo(PLANCK);
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
-        /* Deliver 4 wood and 3 stone */
+        /* Deliver 2 wood and 2 stone */
         wc.deliver(woodCargo);
         wc.deliver(woodCargo);
         
@@ -102,7 +109,7 @@ public class Utils {
         Utils.fastForward(100, wc);
     }
     
-    static boolean roadEqualsPoints(Road r, Point p1, Point p2) {
+    static boolean roadEqualsFlags(Road r, Flag p1, Flag p2) {
         if (r.start.equals(p1) && r.end.equals(p2)) {
             return true;
         } else if (r.start.equals(p2) && r.end.equals(p1)) {
@@ -110,5 +117,64 @@ public class Utils {
         }
         
         return false;
+    }
+
+    static void stepTime(List<Actor> actors) {
+
+        for (Actor a : actors) {
+            a.stepTime();
+        }
+    }
+
+    static Map<Building, Material> getNeedForDelivery(List<Building> buildings) {
+        
+        Map<Building, Material> result = new HashMap<>();
+        
+        for (Building b : buildings) {
+            Map<Material, Integer> neededMaterial = b.getRequiredGoodsForProduction(b);
+            
+            for (Material m : neededMaterial.keySet()) {
+                result.put(b, m);
+            }
+        }
+        
+        return result;
+    }
+
+    static void fillUpInventory(Storage hq, Material material, int amount) {
+        Cargo c = Cargo.createCargo(material);
+        
+        int i;
+        for (i = 0; i < amount; i++) {
+            hq.deposit(c);
+        }
+    }
+
+    static boolean materialIntMapIsEmpty(Map<Material, Integer> inQueue) {
+        boolean isEmpty = true;
+        
+        for (Material m : Material.values()) {
+            if (inQueue.get(m) != 0) {
+                isEmpty = false;
+            }
+        }
+        
+        return isEmpty;
+    }
+
+    static void constructLargeHouse(Storage hq) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Cargo planckCargo = Cargo.createCargo(PLANCK);
+        Cargo stoneCargo = Cargo.createCargo(STONE);
+        
+        /* Deliver 4 wood and 3 stone */
+        hq.deliver(planckCargo);
+        hq.deliver(planckCargo);
+        hq.deliver(planckCargo);
+        hq.deliver(planckCargo);
+
+        hq.deliver(stoneCargo);
+        hq.deliver(stoneCargo);        
+        hq.deliver(stoneCargo);
+        hq.deliver(stoneCargo);
     }
 }

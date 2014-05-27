@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author johan
  */
-public class Utils {
+public class GameUtils {
 
     static Map createEmptyMaterialIntMap() {
         Map<Material, Integer> result = new HashMap<>();
@@ -22,5 +22,16 @@ public class Utils {
         }
         return result;
     }
-    
+
+    static boolean isQueueEmpty(Map<Material, Integer> queue) {
+        boolean isEmpty = true;
+        
+        for (Integer amount : queue.values()) {
+            if (amount != 0) {
+                isEmpty = false;
+            }
+        }
+        
+        return isEmpty;
+    }
 }

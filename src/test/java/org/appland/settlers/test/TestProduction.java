@@ -40,20 +40,20 @@ public class TestProduction {
 		Utils.constructMediumHouse(sawmill);
 
 		assertTrue(sawmill.getConstructionState() == DONE);
-		assertFalse(sawmill.outputAvailable());
+		assertFalse(sawmill.isCargoReady());
 
 		sawmill.deliver(Cargo.createCargo(WOOD));
 		
-		assertTrue(1 == sawmill.getQueue(WOOD));
+		assertTrue(1 == sawmill.getMaterialInQueue(WOOD));
 		
 		Utils.fastForward(100, sawmill);
-		assertTrue(sawmill.outputAvailable());
+		assertTrue(sawmill.isCargoReady());
 
 		Cargo result = sawmill.retrieveCargo();
 		
 		assertNotNull(result);
 		assertTrue(result.getMaterial() == PLANCK);
-		assertTrue(0 == sawmill.getQueue(WOOD));
+		assertTrue(0 == sawmill.getMaterialInQueue(WOOD));
 	}
 
 	@Test(expected=InvalidMaterialException.class)
@@ -74,15 +74,14 @@ public class TestProduction {
                 Utils.constructSmallHouse(woodcutter);
                 
 		assertTrue(woodcutter.getConstructionState() == DONE);
-                assertTrue(woodcutter.cargoIsReady() == false);
+                assertFalse(woodcutter.isCargoReady());
                 
                 Utils.fastForward(100, woodcutter);
-                
-		assertFalse(woodcutter.cargoIsReady());
+		assertTrue(woodcutter.isCargoReady());
 
 		Cargo result = woodcutter.retrieveCargo();
-		
-		assertNotNull(result);
+                assertFalse(woodcutter.isCargoReady());
+                assertNotNull(result);
 		assertTrue(result.getMaterial() == WOOD);
 	}
 	
@@ -101,11 +100,13 @@ public class TestProduction {
 		Cargo result;
 		
 		Utils.constructSmallHouse(quarry);
-		
+		assertFalse(quarry.isCargoReady());
+                
                 Utils.fastForward(100, quarry);
+                assertTrue(quarry.isCargoReady());
                 
 		result= quarry.retrieveCargo();
-
+                assertFalse(quarry.isCargoReady());
 		assertTrue(STONE == result.getMaterial());
 	}
 	

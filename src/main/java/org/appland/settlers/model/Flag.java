@@ -6,13 +6,21 @@ import java.util.List;
 public class Flag {
 
 	private Point position;
-	private List<Cargo> stackedCargo;
+	private final List<Cargo> stackedCargo;
 
-	private Flag(Point p) {
+        public Flag(int x, int y) {
+            this(new Point(x, y));
+        }
+        
+	public Flag(Point p) {
 		this.position = p;
 		stackedCargo = new ArrayList<>();
 	}
 	
+        public static Flag createFlag(int x, int y) {
+            return createFlag(new Point(x, y));
+        }
+        
 	public static Flag createFlag(Point p) {
 		Flag f = new Flag(p);
 		
@@ -59,4 +67,27 @@ public class Flag {
 			return s;
 		}
 	}
+
+    public boolean hasCargoWaitingForRoad(Road r) {
+        for (Cargo c : stackedCargo) {
+            Road nextRoad = c.getPlannedRoads().get(0);
+            
+            if (nextRoad.equals(r)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    Cargo retrieveCargo(Cargo c) {
+        if (stackedCargo.contains(c)) {
+
+            stackedCargo.remove(c);
+            
+            return c;
+        }
+        
+        return null;
+    }
 }

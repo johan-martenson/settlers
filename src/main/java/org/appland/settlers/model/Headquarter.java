@@ -15,7 +15,7 @@ public class Headquarter extends Storage {
 	setHeadquarterDefaultInventory(inventory);
     }
     
-    public static Storage createHeadquarter() {
+    public static Headquarter createHeadquarter() {
 	return new Headquarter();
     }
 
@@ -24,12 +24,23 @@ public class Headquarter extends Storage {
 	inventory.put(SWORD, InitialState.STORAGE_INIITAL_SWORDS);
 	inventory.put(BEER, InitialState.STORAGE_INITIAL_BEER);
 	inventory.put(GOLD, InitialState.STORAGE_INITIAL_GOLD);
+        
 	inventory.put(PRIVATE, InitialState.STORAGE_INITIAL_PRIVATE);
 	inventory.put(SERGEANT, InitialState.STORAGE_INITIAL_SERGEANT);
 	inventory.put(GENERAL, InitialState.STORAGE_INITIAL_GENERAL);
+        
+        inventory.put(WOOD, InitialState.STORAGE_INITIAL_WOOD);
+        inventory.put(PLANCK, InitialState.STORAGE_INITIAL_PLANCKS);
+        inventory.put(STONE, InitialState.STORAGE_INITIAL_STONES);
     }
 
+    @Override
 	public String toString() {
 		return "Headquarter with inventory " + this.inventory; 
 	}
+
+
+    public void setReady() {
+        setConstructionReady();
+    }
 }
