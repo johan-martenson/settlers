@@ -12,15 +12,11 @@ import java.util.List;
  */
 public class Player {
 	
-	List<Military> army;
-	List<Road> roads;
-	List<Flag> flags;
-	
 	/* Buildings */
 	List<Storage> storages;
 	
 	public Player() {
-		storages = new ArrayList<Storage>();
+		storages = new ArrayList<>();
 		
 		storages.add(Storage.createStorage());
 	}

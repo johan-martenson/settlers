@@ -33,6 +33,8 @@ public class Worker implements Actor {
         walkCountdown = -1;
         road          = null;
         state         = IDLE;
+        position      = null;
+        cargo         = null;
     }
 
     public static Worker createWorker(GameMap map) {
