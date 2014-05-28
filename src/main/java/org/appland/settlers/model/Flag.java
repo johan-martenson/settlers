@@ -32,7 +32,8 @@ public class Flag {
 	}
 
 	public void putCargo(Cargo c) {
-		stackedCargo.add(c);
+            c.setPosition(this);
+            stackedCargo.add(c);
 	}
 
 	public Point getPosition() {

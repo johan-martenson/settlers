@@ -21,12 +21,6 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -83,9 +77,13 @@ public class ConstructionTest {
 		assertTrue(wc.getConstructionState() == DONE);
 		
                 /* Verify that all material was consumed by the construction */
-                
                 assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
                 assertTrue(wc.getMaterialInQueue(STONE) == 0);
+
+                /* Verify that the woodcutter doesn't need any material when it's finished */
+                for (Material m : Material.values()) {
+                    assertFalse(wc.needsMaterial(m));
+                }
                 
 		wc.tearDown();
 		
@@ -129,6 +127,12 @@ public class ConstructionTest {
                  /* Verify that all material was consumed by the construction */
                 assertTrue(sm.getMaterialInQueue(PLANCK) == 0);
                 assertTrue(sm.getMaterialInQueue(STONE) == 0);
+                
+                /* Verify that the sawmill needs only WOOD when it's finished */
+                assertTrue(sm.needsMaterial(WOOD));
+                assertFalse(sm.needsMaterial(PLANCK));
+                assertFalse(sm.needsMaterial(STONE));
+                
                 
 		sm.tearDown();
 		

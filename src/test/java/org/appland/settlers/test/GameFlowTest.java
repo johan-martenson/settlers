@@ -368,6 +368,171 @@ public class GameFlowTest {
         
     }
 
+    @Test
+    public void testInitiateCollectionOfNewProduce() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidRouteException {
+        GameMap map    = GameMap.createGameMap();
+        Woodcutter wc  = Woodcutter.createWoodcutter();
+        Storage stg    = Storage.createStorage();
+        Point stgPoint = new Point(1, 1);
+        Point wcPoint  = new Point(2, 2);
+        Road r;
+        Worker w       = Worker.createWorker(map);
+        
+        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(stg, stgPoint);
+        
+        r = Road.createRoad(stg.getFlag(), wc.getFlag());
+        
+        map.placeRoad(r);
+        map.assignWorkerToRoad(w, r);
+        
+        Utils.constructSmallHouse(wc);
+        
+        /* Fast forward until the woodcutter has produced a cargo with WOOD */
+        fastForward(100, wc, w);
+        assertTrue(wc.isCargoReady());
+        assertNull(w.getCargo());
+        
+        /* Verify that the worker doesn't pick up the cargo by himself as time passes */
+        fastForward(100, wc, w);
+        assertTrue(wc.isCargoReady());
+        assertNull(w.getCargo());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        
+        /* Verify that initiateCollectionOfNewProduce gets the worker to pick up the cargo */
+        initiateCollectionOfNewProduce(map);
+        assertFalse(wc.isCargoReady());
+        assertNull(w.getCargo());
+        assertFalse(wc.getFlag().getStackedCargo().isEmpty());
+        
+        Cargo c = wc.getFlag().getStackedCargo().get(0);
+        assertTrue(c.getTarget().equals(stg));
+        assertTrue(c.getMaterial() == WOOD);
+    }
+    
+    @Test
+    public void testInitiateNewDeliveries() throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidEndPointException {
+        GameMap map = GameMap.createGameMap();
+        
+        Headquarter hq = Headquarter.createHeadquarter();
+        Woodcutter wc = Woodcutter.createWoodcutter();
+        
+        hq.setReady();
+        
+        Point hqPoint = new Point(1, 1);
+        Point wcPoint = new Point(2, 2);
+        
+        map.placeBuilding(hq, hqPoint);
+        map.placeBuilding(wc, wcPoint);
+        
+        map.placeRoad(hq.getFlag(), wc.getFlag());
+        
+        Utils.constructSmallHouse(wc);
+        
+        /* Since the woodcutter is finished it does not need any deliveries
+         * Verify that no new deliveries are initiated
+        */
+        assertTrue(hq.getFlag().getStackedCargo().isEmpty());
+        initiateNewDeliveries(hq, map);
+        assertTrue(hq.getFlag().getStackedCargo().isEmpty());
+        
+        /* Place an unfinished sawmill on the map and verify that it needs deliveries */
+        Sawmill sm = Sawmill.createSawmill();
+        
+        Point smPoint = new Point(1, 2);
+        
+        map.placeBuilding(sm, smPoint);
+        
+        map.placeRoad(hq.getFlag(), sm.getFlag());
+        
+        /* Verify that a new delivery is initiated for the sawmill */
+        assertTrue(sm.needsMaterial(PLANCK));
+        assertTrue(sm.needsMaterial(STONE));
+        assertTrue(hq.getFlag().getStackedCargo().isEmpty());
+        
+        initiateNewDeliveries(hq, map);
+        assertFalse(hq.getFlag().getStackedCargo().isEmpty());
+    }
+    
+    @Test
+    public void testAssignWorkToIdleWorkers() throws InvalidEndPointException, InvalidRouteException {
+        GameMap map   = GameMap.createGameMap();
+        Sawmill sm    = Sawmill.createSawmill();
+        Point smPoint = new Point(1, 1);
+        Flag f        = new Flag(2, 2);
+        Road r        = Road.createRoad(f, sm.getFlag());
+        Worker w      = Worker.createWorker(map);
+        
+        map.placeFlag(f);
+        map.placeBuilding(sm, smPoint);
+        map.placeRoad(r);
+        map.assignWorkerToRoad(w, r);
+        
+        Cargo c = Cargo.createCargo(PLANCK);
+        
+        c.setPosition(f);
+        c.setTarget(sm, map);
+        f.putCargo(c);
+        
+        /* Verify that the worker is idle */
+        assertNull(w.getCargo());
+        assertNull(w.getTarget());
+        
+        Utils.fastForward(100, w);
+        assertNull(w.getCargo());
+        assertNull(w.getTarget());
+        
+        /* Verify that the worker picks up the cargo and has the sawmill as target */
+        assignWorkToIdleWorkers(map);
+        assertNotNull(w.getCargo());
+        
+        Cargo tmp = w.getCargo();
+        assertEquals(c, tmp);
+        assertEquals(w.getTarget(), sm.getFlag());
+    }
+
+    @Test
+    public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        GameMap map   = GameMap.createGameMap();
+        Woodcutter wc = Woodcutter.createWoodcutter();
+        Flag src      = new Flag(1, 1);
+        Point wcPoint = new Point(2, 2);
+        Worker w      = Worker.createWorker(map);
+        Cargo c;
+        
+        map.placeFlag(src);
+        map.placeBuilding(wc, wcPoint);        
+        
+        Road r = Road.createRoad(src, wc.getFlag());
+        
+        map.placeRoad(r);
+        
+        map.assignWorkerToRoad(w, r);
+        
+        c = Cargo.createCargo(PLANCK);
+        
+        src.putCargo(c);
+        c.setTarget(wc, map);
+        
+        w.pickUpCargoForRoad(src, r);
+        
+        /* Move worker to the sawmill */
+        fastForward(10, w, wc);
+        assertTrue(w.getLocation().equals(wc.getFlag()));
+        
+        /* Verify that fast forwarding does not get the worker to deliver the cargo */
+        fastForward(100, w, wc);
+        assertEquals(w.getCargo(), c);
+        assertTrue(w.getLocation().equals(wc.getFlag()));
+        assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
+        
+        /* Verify that deliverForWorkersAtTarget gets the worker to deliver the cargo */
+        deliverForWorkersAtTarget(map);
+        
+        assertNull(w.getCargo());
+        assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
+    }
+    
     private void gameLoop(Storage hq, List<Actor> actors, GameMap map) throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
        /* Start collection of newly produced goods */
         initiateCollectionOfNewProduce(map);
@@ -385,6 +550,10 @@ public class GameFlowTest {
         Utils.stepTime(actors);        
     }
     
+    /*
+     * Finds all houses that needs a delivery and picks out a cargo from the HQ.
+     * The cargo gets the house as its target and is put at the HQ's flag
+    */
     private void initiateNewDeliveries(Storage hq, GameMap map) throws InvalidRouteException {
         Map<Material, Integer> inventory = hq.getInventory();
         Building targetBuilding = null;
