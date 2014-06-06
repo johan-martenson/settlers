@@ -5,10 +5,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Actor;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -21,6 +23,8 @@ import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -31,12 +35,24 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForward;
 
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
@@ -45,10 +61,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
@@ -119,9 +147,9 @@ public class GameFlowTest {
         map.placeRoad(r3);
 
         /* Assign workers to the roads */
-        Worker wr1 = Worker.createWorker(map);
-        Worker wr2 = Worker.createWorker(map);
-        Worker wr3 = Worker.createWorker(map);
+        Courier wr1 = Courier.createWorker(map);
+        Courier wr2 = Courier.createWorker(map);
+        Courier wr3 = Courier.createWorker(map);
 
         actors.add(wr1);
         actors.add(wr2);
@@ -156,11 +184,11 @@ public class GameFlowTest {
 
         wc.getFlag().putCargo(c);
 
-        Worker nextWorker = map.getNextWorkerForCargo(c);
+        Courier nextWorker = map.getNextWorkerForCargo(c);
 
         /* Transport cargo one hop */
         nextWorker.pickUpCargo(wc.getFlag());
-        assertTrue(nextWorker.getLocation().equals(wc.getFlag()));
+        assertTrue(nextWorker.getPosition().equals(wc.getFlag()));
         assertTrue(nextWorker.getTarget().equals(hq.getFlag()));
 
         fastForward(100, actors);
@@ -225,7 +253,7 @@ public class GameFlowTest {
         targetSawmill.getFlag().putCargo(c);
 
         /* Transport plancks to nearest storage */
-        Storage closestStorage = map.getClosestStorage();
+        Storage closestStorage = map.getClosestStorage(targetSawmill);
         assertNotNull(closestStorage);
 
         c.setTarget(closestStorage, map);
@@ -240,7 +268,7 @@ public class GameFlowTest {
     }
 
     @Test
-    public void gameFlowWithProperGameLoopTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+    public void gameFlowWithProperGameLoopTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 
         List<Actor> actors = new ArrayList<>();
 
@@ -282,9 +310,9 @@ public class GameFlowTest {
         map.placeRoad(hq.getFlag(), qry.getFlag());
 
         /* Assign workers to the roads */
-        Worker wr1 = Worker.createWorker(map);
-        Worker wr2 = Worker.createWorker(map);
-        Worker wr3 = Worker.createWorker(map);
+        Courier wr1 = Courier.createWorker(map);
+        Courier wr2 = Courier.createWorker(map);
+        Courier wr3 = Courier.createWorker(map);
 
         actors.add(wr1);
         actors.add(wr2);
@@ -315,9 +343,9 @@ public class GameFlowTest {
         Utils.fillUpInventory(hq, STONE, 10);
         
         /* -- Assert that all workers are idle */
-        Collection<Worker> workers = map.getAllWorkers();
+        Collection<Courier> workers = map.getCourierAssignedToRoads();
         
-        for (Worker w : workers) {
+        for (Courier w : workers) {
             assertNull(w.getCargo());
             assertNull(w.getTarget());
         }
@@ -338,13 +366,12 @@ public class GameFlowTest {
 
         
         /* -- Assert that delivery is started for one cargo */
-        workers = map.getAllWorkers();
+        workers = map.getCourierAssignedToRoads();
         
         int busyWorkers = 0;
-        for (Worker w : workers) {
+        for (Courier w : workers) {
             if (w.getCargo() != null) {
                 busyWorkers++;
-                System.out.println(w);
             }
         }
         
@@ -376,7 +403,7 @@ public class GameFlowTest {
         Point stgPoint = new Point(1, 1);
         Point wcPoint  = new Point(2, 2);
         Road r;
-        Worker w       = Worker.createWorker(map);
+        Courier w       = Courier.createWorker(map);
         
         map.placeBuilding(wc, wcPoint);
         map.placeBuilding(stg, stgPoint);
@@ -461,7 +488,7 @@ public class GameFlowTest {
         Point smPoint = new Point(1, 1);
         Flag f        = new Flag(2, 2);
         Road r        = Road.createRoad(f, sm.getFlag());
-        Worker w      = Worker.createWorker(map);
+        Courier w      = Courier.createWorker(map);
         
         map.placeFlag(f);
         map.placeBuilding(sm, smPoint);
@@ -497,7 +524,7 @@ public class GameFlowTest {
         Woodcutter wc = Woodcutter.createWoodcutter();
         Flag src      = new Flag(1, 1);
         Point wcPoint = new Point(2, 2);
-        Worker w      = Worker.createWorker(map);
+        Courier w      = Courier.createWorker(map);
         Cargo c;
         
         map.placeFlag(src);
@@ -518,12 +545,12 @@ public class GameFlowTest {
         
         /* Move worker to the sawmill */
         fastForward(10, w, wc);
-        assertTrue(w.getLocation().equals(wc.getFlag()));
+        assertTrue(w.getPosition().equals(wc.getFlag()));
         
         /* Verify that fast forwarding does not get the worker to deliver the cargo */
         fastForward(100, w, wc);
         assertEquals(w.getCargo(), c);
-        assertTrue(w.getLocation().equals(wc.getFlag()));
+        assertTrue(w.getPosition().equals(wc.getFlag()));
         assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
         
         /* Verify that deliverForWorkersAtTarget gets the worker to deliver the cargo */
@@ -533,7 +560,141 @@ public class GameFlowTest {
         assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
     }
     
-    private void gameLoop(Storage hq, List<Actor> actors, GameMap map) throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    @Test
+    public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
+        GameMap map = new GameMap();
+        
+        Headquarter hq = new Headquarter();
+        Barracks bk = new Barracks();
+        
+        Point hqPoint = new Point(1, 1);
+        Point wcPoint = new Point(2, 2);
+        
+        map.placeBuilding(hq, hqPoint);
+        map.placeBuilding(bk, wcPoint);
+        
+        Road r = new Road(hq.getFlag(), bk.getFlag());
+        
+        map.placeRoad(r);
+        
+        assertTrue(map.getAllWorkers().isEmpty());
+
+        /* Prep the headquarter with militaryies */
+        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
+        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
+        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
+        
+        /* Assign new workers to unoccupied places and verify that there is a 
+         * worker designated for the road. There should be no worker for the 
+         * barracks as it's not finished yet
+        */
+        assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertTrue(map.getAllWorkers().size() == 1);
+        Worker w1 = map.getAllWorkers().get(0);
+
+        assertTrue(w1.getPosition().equals(hq.getFlag()));
+        assertTrue(w1.getTargetRoad().equals(r));
+
+        /* Fast forward to let the courier reach its road */
+        fastForward(100, w1);
+        
+        assertTrue(map.getTravelingWorkers().size() == 1);
+        assertTrue(map.getTravelingWorkers().get(0).equals(w1));
+        assertTrue(w1.isArrived());
+        
+        /* Assign arrived workers to tasks */
+        assertTrue(w1.isArrived());
+        assertTrue(map.getTravelingWorkers().contains(w1));
+        assertTrue(w1.getTargetRoad().equals(r));
+
+        assignTravelingWorkersThatHaveArrived(map);
+        
+        assertTrue(map.getRoadsWithoutWorker().isEmpty());
+        assertEquals(map.getRoad(hq.getFlag(), bk.getFlag()), r);
+        assertNotNull(r.getCourier().getRoad());
+        
+        assertTrue(r.getCourier().equals(w1));
+        assertTrue(r.getCourier().getRoad().equals(r));
+        
+        /* Finish the construction of the barracks and assign new workers to 
+         * unoccupied places and verify that there is a military assigned
+         * to occupy the barracks
+        */
+        Utils.constructSmallHouse(bk);
+        
+        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(bk.isMilitaryBuilding());
+        assertTrue(bk.needMilitaryManning());
+        assertTrue(bk.getHostedMilitary() == 0);
+        assertTrue(hq.getInventory().get(Material.PRIVATE) == 3);
+        assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().get(1) instanceof Military);
+        assertFalse(map.getAllWorkers().get(1).isArrived());
+        assertTrue(map.getAllWorkers().get(1).isTraveling());
+        assertTrue(map.getTravelingWorkers().size() == 1);
+        
+        assertTrue(hq.getInventory().get(Material.PRIVATE) == 2);
+        
+        /* Let the military reach the barracks */
+        Utils.fastForward(100, map);
+        
+        assertTrue(map.getTravelingWorkers().size() == 1);
+        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().get(1).isArrived());
+        assertTrue(map.getAllWorkers().get(1).isTraveling());
+        
+        /* Make traveling workers that have arrived enter their building or road */
+        assignTravelingWorkersThatHaveArrived(map);
+
+        assertTrue(map.getTravelingWorkers().isEmpty());
+        assertTrue(bk.needMilitaryManning());
+        assertTrue(bk.getHostedMilitary() == 1);
+        
+        /* Assign new workers again to see that a second military is dispatched
+         * for the barracks
+        */
+        assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getAllWorkers().get(2) instanceof Military);
+        assertFalse(map.getAllWorkers().get(2).isArrived());
+        assertTrue(map.getAllWorkers().get(2).isTraveling());
+        assertTrue(map.getTravelingWorkers().size() == 1);
+        
+        assertFalse(bk.needMilitaryManning());
+        
+        assertTrue(hq.getInventory().get(Material.PRIVATE) == 2);
+
+        /* Let the military reach the barracks */
+        Utils.fastForward(100, map);
+
+        assertTrue(map.getTravelingWorkers().size() == 1);
+        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getAllWorkers().get(2).isArrived());
+        assertTrue(map.getAllWorkers().get(2).isTraveling());
+        assertTrue(bk.getHostedMilitary() == 1);
+        
+        /* Make traveling workers that have arrived at their assigned
+         * buildings or roads enter
+        */
+        assignTravelingWorkersThatHaveArrived(map);
+        
+        assertTrue(bk.getHostedMilitary() == 2);
+        assertTrue(map.getTravelingWorkers().isEmpty());
+    }
+    
+    private void gameLoop(Storage hq, List<Actor> actors, GameMap map) throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+       /* Assign workers to unoccupied streets and buildings, and military to 
+        * unoccupied military buildings
+        */
+        assignNewWorkerToUnoccupiedPlaces(map);
+        
+        /* Assign traveling workers who reached their target to their task */
+        assignTravelingWorkersThatHaveArrived(map);
+        
        /* Start collection of newly produced goods */
         initiateCollectionOfNewProduce(map);
         
@@ -548,6 +709,81 @@ public class GameFlowTest {
         
         /* Step time */
         Utils.stepTime(actors);        
+    }
+    
+    private void assignTravelingWorkersThatHaveArrived(GameMap map) {
+        List<Worker> travelingWorkers = map.getTravelingWorkers();
+        
+        for (Worker w : travelingWorkers) {
+            if (w.isArrived()) {
+                
+                /* Handle couriers separately */
+                if (w.getTargetRoad() != null) {
+                    map.assignWorkerToRoad((Courier)w, w.getTargetRoad());
+                } else {
+                    Flag targetFlag   = w.getTarget();
+                    Building building = map.getBuildingByFlag(targetFlag);
+                    
+                    if (building.isMilitaryBuilding()) {
+                        ((Military)w).enterBuilding(building);
+                    } else {
+                        building.assignWorker(w);
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    private void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
+        /* Handle unoccupied roads */
+        List<Road> roads = map.getRoadsWithoutWorker();
+        
+        for (Road r : roads) {
+            Storage stg = map.getClosestStorage(r);
+            
+            Courier w = stg.retrieveCourier();
+            
+            w.setTargetRoad(r);
+
+            map.placeWorker(w, stg.getFlag());
+            
+            r.promiseCourier();
+        }
+        
+        /* Handle unoccupied regular buildings and military buildings*/
+        List<Building> buildings = map.getBuildings();
+
+        for (Building b : buildings) {
+            if (b.isMilitaryBuilding()) {
+                if (b.needMilitaryManning()) {
+                    Storage stg = map.getClosestStorage(b);
+                    
+                    Military m = stg.retrieveMilitary();
+
+                    m.setMap(map);
+                    m.setTarget(b.getFlag());
+                    
+                    map.placeWorker(m, stg.getFlag());
+                    
+                    b.promiseMilitary(m);
+                }
+            } else {
+                if (b.needsWorker()) {
+                    Material m = b.getWorkerType();
+                    
+                    Storage stg = map.getClosestStorage(b);
+                    
+                    Worker w = stg.retrieveWorker(m);
+                    
+                    w.setTargetBuilding(b);
+
+                    map.placeWorker(w, stg.getFlag());
+                    
+                    b.promiseWorker();
+                }
+            }
+        }
     }
     
     /*
@@ -586,9 +822,9 @@ public class GameFlowTest {
     }
 
     private void assignWorkToIdleWorkers(GameMap map) throws InvalidRouteException {
-        List<Worker> idleWorkers = map.getIdleWorkers();
+        List<Courier> idleWorkers = map.getIdleWorkers();
         
-        for (Worker w : idleWorkers) {
+        for (Courier w : idleWorkers) {
             assertNull(w.getCargo());
             
             Road r = w.getRoad();
@@ -600,20 +836,20 @@ public class GameFlowTest {
             
             if (flags[0].hasCargoWaitingForRoad(r)) {
                 w.pickUpCargoForRoad(flags[0], r);
-                assertTrue(w.getLocation().equals(flags[0]));
+                assertTrue(w.getPosition().equals(flags[0]));
                 assertTrue(w.getTarget().equals(w.getCargo().getTarget().getFlag()));
             } else if (flags[1].hasCargoWaitingForRoad(r)) {
                 w.pickUpCargoForRoad(flags[1], r);
-                assertTrue(w.getLocation().equals(flags[1]));
+                assertTrue(w.getPosition().equals(flags[1]));
                 assertTrue(w.getTarget().equals(w.getCargo().getTarget().getFlag()));
             }
         }
     }
 
     private void deliverForWorkersAtTarget(GameMap map) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        List<Worker> workersAtTarget = map.getWorkersAtTarget();
+        List<Courier> workersAtTarget = map.getWorkersAtTarget();
         
-        for (Worker w : workersAtTarget) {
+        for (Courier w : workersAtTarget) {
             assertTrue(w.isArrived());
             
             Cargo c = w.getCargo();
@@ -628,7 +864,7 @@ public class GameFlowTest {
             assertTrue(b.isCargoReady());
             
             Cargo c = b.retrieveCargo();
-            Storage stg = map.getClosestStorage();
+            Storage stg = map.getClosestStorage(b);
             
             c.setTarget(stg, map);
             assertTrue(c.getTarget().equals(stg));

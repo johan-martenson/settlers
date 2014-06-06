@@ -14,8 +14,10 @@ import org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState.*;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
@@ -25,7 +27,7 @@ import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Worker;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +38,7 @@ import static org.junit.Assert.assertTrue;
 
 public class Utils {
 	
-	private static Logger log = Logger.getLogger(Worker.class.getName());
+	private static Logger log = Logger.getLogger(Courier.class.getName());
 	
 	public static void fastForward(int time, Actor b) {
 		int i = 0;
@@ -55,8 +57,15 @@ public class Utils {
 	}
     }
 
+    public static void fastForward(int time, GameMap map) {
+        int i;
+        for (i = 0; i < time; i++) {
+            map.stepTime();
+        }
+    }
+    
     public static void assertConstructionStateDuringFastForward(int time, Building b, ConstructionState state) {
-        int i = 0;
+        int i;
         for (i = 0; i < time; i++) {
             assertTrue(b.getConstructionState() == state);
             b.stepTime();
@@ -83,11 +92,18 @@ public class Utils {
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
         /* Deliver 4 wood and 3 stone */
+        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANCK);
         sm.deliver(woodCargo);
         sm.deliver(woodCargo);
         sm.deliver(woodCargo);
         sm.deliver(woodCargo);
         
+        sm.promiseDelivery(STONE);
+        sm.promiseDelivery(STONE);
+        sm.promiseDelivery(STONE);
         sm.deliver(stoneCargo);
         sm.deliver(stoneCargo);
         sm.deliver(stoneCargo);
@@ -100,9 +116,13 @@ public class Utils {
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
         /* Deliver 2 wood and 2 stone */
+        wc.promiseDelivery(PLANCK);
+        wc.promiseDelivery(PLANCK);
         wc.deliver(woodCargo);
         wc.deliver(woodCargo);
         
+        wc.promiseDelivery(STONE);
+        wc.promiseDelivery(STONE);
         wc.deliver(stoneCargo);
         wc.deliver(stoneCargo);
         
@@ -167,11 +187,19 @@ public class Utils {
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
         /* Deliver 4 wood and 3 stone */
+        hq.promiseDelivery(PLANCK);
+        hq.promiseDelivery(PLANCK);
+        hq.promiseDelivery(PLANCK);
+        hq.promiseDelivery(PLANCK);
         hq.deliver(planckCargo);
         hq.deliver(planckCargo);
         hq.deliver(planckCargo);
         hq.deliver(planckCargo);
 
+        hq.promiseDelivery(STONE);
+        hq.promiseDelivery(STONE);
+        hq.promiseDelivery(STONE);
+        hq.promiseDelivery(STONE);
         hq.deliver(stoneCargo);
         hq.deliver(stoneCargo);        
         hq.deliver(stoneCargo);

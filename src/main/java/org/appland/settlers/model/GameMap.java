@@ -14,14 +14,18 @@ public class GameMap {
 	private List<Road>            roads;
 	private List<Flag>            flags;
 	private Map<Flag, List<Flag>> roadNetwork;
-	private Map<Road, Worker>     roadToWorkerMap;
+	private Map<Road, Courier>     roadToWorkerMap;
+        
+        private String theLeader = "Mai Thi Van Anh";
 
 	private static Logger log = Logger.getLogger(GameMap.class.getName());
+    private List<Worker> allWorkers;
 	
-	private GameMap() {
+	public GameMap() {
 		buildings       = new ArrayList<>();
 		roads           = new ArrayList<>();
 		flags           = new ArrayList<>();
+                allWorkers      = new ArrayList<>();
 		roadNetwork     = new HashMap<>();
 		roadToWorkerMap = new HashMap<>();
 	}
@@ -30,7 +34,17 @@ public class GameMap {
 		return new GameMap();
 	}
 
-	public void placeBuilding(Building hq, Point p) {
+        public void stepTime() {
+            for (Worker w : allWorkers) {
+                w.stepTime();
+            }
+            
+            for (Building b : buildings) {
+                b.stepTime();
+            }
+        }
+        
+        public void placeBuilding(Building hq, Point p) {
             buildings.add(hq);
 		
             Flag flag = hq.getFlag();
@@ -39,11 +53,10 @@ public class GameMap {
             placeFlag(flag);
 	}
 	
-        public void placeRoad(Road r) throws InvalidEndPointException {
-            placeRoad(r.start, r.end);
-        }
-        
-	public void placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
+        public void placeRoad(Road roadToPlace) throws InvalidEndPointException {
+            Flag startFlag = roadToPlace.start;
+            Flag endFlag = roadToPlace.end;
+            
 		boolean validStart = false;
 		boolean validEnd = false;
                 
@@ -71,8 +84,7 @@ public class GameMap {
 		}
 		
 		if (validStart && validEnd) {
-			Road r = Road.createRoad(startFlag, endFlag);
-			roads.add(r);
+			roads.add(roadToPlace);
 			
 			if (!roadNetwork.containsKey(startFlag)) {
 				roadNetwork.put(startFlag, new ArrayList<Flag>());
@@ -87,8 +99,11 @@ public class GameMap {
 			
 		} else {
 			throw new InvalidEndPointException();
-		}
-		
+		}		
+        }
+        
+	public void placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
+            placeRoad(Road.createRoad(startFlag, endFlag));
 	}
 
 	public List<Road> getRoads() {
@@ -176,12 +191,13 @@ public class GameMap {
 		return null;
 	}
 
-	public void assignWorkerToRoad(Worker wr, Road road) {
-		roadToWorkerMap.put(road, wr);
-		wr.setRoad(road);
+	public void assignWorkerToRoad(Courier wr, Road road) {
+            road.setCourier(wr);
+            wr.setRoad(road);
+            roadToWorkerMap.put(road, wr);
 	}
 
-	public Worker getNextWorkerForCargo(Cargo c) {
+	public Courier getNextWorkerForCargo(Cargo c) {
 		log.log(Level.FINE, "Get next worker for {0}", c);
 		
 		List<Road> plannedRoads = c.getPlannedRoads();
@@ -190,7 +206,7 @@ public class GameMap {
 		
 		log.log(Level.FINER, "Next road is {0}", nextRoad);
 		
-		Worker w = getWorkerForRoad(nextRoad);
+		Courier w = getWorkerForRoad(nextRoad);
 		
 		if (w == null) {
 			nextRoad = reverseRoad(nextRoad);
@@ -212,7 +228,7 @@ public class GameMap {
 		return Road.createRoad(end, start);
 	}
 
-	private Worker getWorkerForRoad(Road nextRoad) {
+	private Courier getWorkerForRoad(Road nextRoad) {
             log.log(Level.FINE, "Getting worker for {0}", nextRoad);
 		
             return roadToWorkerMap.get(nextRoad);
@@ -264,7 +280,21 @@ public class GameMap {
 		this.flags.add(f);
 	}
 
-    public Storage getClosestStorage() {
+    public Storage getClosestStorage(Road r) {
+	Storage stg = null;
+
+	// TODO: Change to find the closest storage
+	
+	for (Building b : buildings) {
+	    if (b instanceof Storage || b instanceof Headquarter) {
+		stg = (Storage) b;
+	    }
+	}
+
+	return stg;
+    }
+        
+    public Storage getClosestStorage(Actor a) {
 	Storage stg = null;
 
 	// TODO: Change to find the closest storage
@@ -278,10 +308,10 @@ public class GameMap {
 	return stg;
     }
 
-    public List<Worker> getIdleWorkers() {
-        List<Worker> result = new ArrayList<>();
+    public List<Courier> getIdleWorkers() {
+        List<Courier> result = new ArrayList<>();
 
-        for (Worker w : roadToWorkerMap.values()) {
+        for (Courier w : roadToWorkerMap.values()) {
             if (w.getCargo() == null) {
                 result.add(w);
             }
@@ -294,10 +324,10 @@ public class GameMap {
         return buildings;
     }
 
-    public List<Worker> getWorkersAtTarget() {
-        List<Worker> result = new ArrayList<>();
+    public List<Courier> getWorkersAtTarget() {
+        List<Courier> result = new ArrayList<>();
         
-        for (Worker w : roadToWorkerMap.values()) {
+        for (Courier w : roadToWorkerMap.values()) {
             if (w.isArrived()) {
                 result.add(w);
             }
@@ -318,8 +348,50 @@ public class GameMap {
         return result;
     }
 
-    public Collection<Worker> getAllWorkers() {
+    public Collection<Courier> getCourierAssignedToRoads() {
         return roadToWorkerMap.values();
         
+    }
+
+    public List<Road> getRoadsWithoutWorker() {
+        List<Road> result = new ArrayList<>();
+        Collection<Road> roadsWithWorkers = roadToWorkerMap.keySet();
+        
+        for (Road r : roads) {
+            if (!roadsWithWorkers.contains(r)) {
+                result.add(r);
+            }
+        }
+        
+        return result;
+    }
+
+    public List<Flag> getFlags() {
+        return flags;
+    }
+
+    public void placeWorker(Worker w, Flag f) {
+        w.setPosition(f);
+        allWorkers.add(w);
+    }
+
+    public List<Worker> getAllWorkers() {
+        return allWorkers;
+    }
+
+    public List<Worker> getTravelingWorkers() {
+        List<Worker> result = new ArrayList<>();
+        
+        for (Worker w : getAllWorkers()) {
+            if (w.isTraveling()) {
+                result.add(w);
+            }
+        }
+        
+        return result;
+    }
+
+    public Building getBuildingByFlag(Flag targetFlag) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

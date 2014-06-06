@@ -2,12 +2,17 @@ package org.appland.settlers.model;
 
 public class Road {
 
-	public Flag start;
-	public Flag end;
+    public Flag start;
+    public Flag end;
+    private boolean promisedCourier;
+    private Courier courier;
 
-	private Road(Flag start, Flag end) {
+	public Road(Flag start, Flag end) {
 		this.start = start;
 		this.end = end;
+                
+                promisedCourier = false;
+                courier = null;
 	}
 	
 	public static Road createRoad(Flag start, Flag end) {
@@ -16,7 +21,11 @@ public class Road {
 
         @Override
 	public String toString() {
-		return "Road " + start + " to " + end + " ";
+            if (courier == null) {
+                return "Road " + start + " to " + end + " with no courier";
+            } else {
+                return "Road " + start + " to " + end + " with courier";
+            }
 	}
 
 	@Override
@@ -52,5 +61,25 @@ public class Road {
 
     public Flag[] getFlags() {
         return new Flag[] {start, end};
+    }
+
+    public boolean needsCourier() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void promiseCourier() throws Exception {
+        if (promisedCourier) {
+            throw new Exception("Road " + this + " already has a courier promised");
+        }
+        
+        promisedCourier = true;
+    }
+
+    public Courier getCourier() {
+        return courier;
+    }
+
+    void setCourier(Courier wr) {
+        courier = wr;
     }
 }

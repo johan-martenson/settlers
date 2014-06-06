@@ -1,5 +1,9 @@
 package org.appland.settlers.model;
 
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
@@ -7,15 +11,8 @@ import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.SWORD;
-
+import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Size.MEDIUM;
-
-import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
-
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.appland.settlers.policy.ProductionDelays;
 
 @HouseSize(size=MEDIUM)
@@ -154,4 +151,86 @@ public class Storage extends Building implements Actor {
         public boolean isInStock(Material m) {
             return inventory.containsKey(m);
         }
+
+    public void depositWorker(Worker w) throws Exception {
+        if (w instanceof Military) {
+            Military m = (Military)w;
+            Material material;
+            
+            switch (m.getRank()) {
+            case PRIVATE_RANK:
+                material = Material.PRIVATE;
+                break;
+            case SERGEANT_RANK:
+                material = Material.SERGEANT;
+                break;
+            case GENERAL_RANK:
+                material = Material.GENERAL;
+                break;
+            default:
+                throw new Exception("Can't handle military with rank " + m.getRank());
+            }
+            
+            int amount = inventory.get(material);
+            inventory.put(material, amount + 1);
+        }
+        
+    }
+
+    public Military retrieveWorker(Material material) throws Exception {
+        Military.Rank r = Military.Rank.PRIVATE_RANK;
+        
+        switch(material) {
+        case GENERAL:
+            r = Military.Rank.GENERAL_RANK;
+            break;
+        case SERGEANT:
+            r = Military.Rank.SERGEANT_RANK;
+            break;
+        case PRIVATE:
+            r = Military.Rank.PRIVATE_RANK;
+            break;
+        default:
+            throw new Exception("Can't retrieve worker of type " + material);
+        }
+        
+        return new Military(r);
+    }
+
+    public Courier retrieveCourier() {
+        /* The storage never runs out of couriers */
+        
+        return new Courier();
+    }
+
+    public Military retrieveMilitary() throws Exception {
+        Military m = null;
+        
+        if (hasAtLeastOne(PRIVATE)) {
+            retrieveOneFromInventory(PRIVATE);
+            m = new Military(Rank.PRIVATE_RANK);
+        } else if (hasAtLeastOne(SERGEANT)) {
+            retrieveOneFromInventory(SERGEANT);
+            m = new Military(Rank.SERGEANT_RANK);
+        } else if (hasAtLeastOne(GENERAL)) {
+            retrieveOneFromInventory(GENERAL);
+            m = new Military(Rank.GENERAL_RANK);
+        } else {
+            throw new Exception("No militaries available");
+        }
+        
+        m.setPosition(getFlag());
+        
+        return m;
+    }
+    
+    private boolean hasAtLeastOne(Material m) {
+        return inventory.get(m) > 0;
+    }
+    
+    private void retrieveOneFromInventory(Material m) {
+        int amount = inventory.get(m);
+        
+        inventory.put(m, amount - 1);
+    }
 }

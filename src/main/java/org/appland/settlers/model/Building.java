@@ -1,11 +1,12 @@
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
@@ -16,13 +17,77 @@ import static org.appland.settlers.model.Material.*;
 
 
 public class Building implements Actor {
+    private List<Military> hostedMilitary;
+    private List<Military> promisedMilitary;
 
+    public boolean isMilitaryBuilding() {
+        MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
+        
+        return a != null;
+    }
+
+    public int getMaxHostedMilitary() {
+        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        
+        return mb.maxHostedMilitary();
+    }
+
+    public int getHostedMilitary() {
+        return hostedMilitary.size();
+    }
+
+    public boolean needsWorker() {
+        return false;
+    }
+
+    public Material getWorkerType() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void promiseMilitary(Military m) {
+        promisedMilitary.add(m);
+    }
+
+    public void promiseWorker() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean needMilitaryManning() {
+        
+        if (ready()) {
+            int promised = promisedMilitary.size();
+            int actual   = hostedMilitary.size();
+            int maxHost  = getMaxHostedMilitary();
+
+            return maxHost > promised + actual;
+        } else {
+            return false;
+        }
+    }
+
+    public int getHostedSoldiers() {
+        return hostedMilitary.size();
+    }
+
+    public int getPromisedMilitary() {
+        return promisedMilitary.size();
+    }
+
+    public void assignWorker(Worker w) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private boolean isProducer() {
+        Production p = getClass().getAnnotation(Production.class);
+        
+        return p != null;
+    }
 
     public enum ConstructionState {
-            UNDER_CONSTRUCTION,
-            DONE,
-            BURNING,
-            DESTROYED
+        UNDER_CONSTRUCTION,
+        DONE,
+        BURNING,
+        DESTROYED
     }
 
     protected ConstructionState      constructionState;
@@ -42,6 +107,8 @@ public class Building implements Actor {
             receivedMaterial      = createEmptyMaterialIntMap();
             promisedDeliveries    = createEmptyMaterialIntMap();
             constructionCountdown = getConstructionCountdown(this);
+            hostedMilitary        = new ArrayList<>();
+            promisedMilitary      = new ArrayList<>();
             outputCargo           = null;
             flag                  = Flag.createFlag(null);
             productionCountdown   = -1;
@@ -49,6 +116,10 @@ public class Building implements Actor {
     
     public Map<Material, Integer> getInQueue() {
         return receivedMaterial;
+    }
+    
+    public boolean needsWorker(Material material) {
+        return false;
     }
     
     public boolean isCargoReady() {
@@ -94,31 +165,13 @@ public class Building implements Actor {
     }
 
     public boolean needsMaterial(Material material) {
-            log.log(Level.INFO, "Does {0} require {1}", new Object[] {this, material});
+        log.log(Level.INFO, "Does {0} require {1}", new Object[] {this, material});
 
-            if (underConstruction()) {
-                return moreMaterialNeededForConstruction(material);
-            } else {
-                Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(this);
-
-                if (!requiredGoods.containsKey(material)) {
-                        /* Building does not accept the material */
-                        log.log(Level.FINE, "This building does not accept {0}", material);
-                        return false;
-                }
-
-                int neededAmount = requiredGoods.get(material);
-
-                if (receivedMaterial.get(material) >= neededAmount) {
-                        /* Building has all the cargos it needs of the material */
-                        log.log(Level.FINE, "This building has all the {0} it needs", material);
-                        return false;
-                }
-            }
-            
-            
-            log.log(Level.FINE, "This building requires {0}", material);
-            return true;
+        if (underConstruction()) {
+            return moreMaterialNeededForConstruction(material);
+        } else {
+            return needsMaterialForProduction(material);
+        }
     }
 
     @Override
@@ -173,9 +226,11 @@ public class Building implements Actor {
                     if (destructionCountdown == 0) {
                             constructionState = DESTROYED;
                     }
-            } else if (ready() && !isCargoReady()) {
+            } else if (ready()) {
+                if (isProducer() && !isCargoReady()) {
                     log.log(Level.INFO, "Calling produce");
                     outputCargo = produce();
+                }
             }
     }
     
@@ -419,5 +474,27 @@ public class Building implements Actor {
                 new Object[] {material, required, promised, delivered});
         
         return (required > promised + delivered);
+    }
+    
+    private boolean needsMaterialForProduction(Material material) {
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(this);
+
+        if (!requiredGoods.containsKey(material)) {
+                /* Building does not accept the material */
+                log.log(Level.FINE, "This building does not accept {0}", material);
+                return false;
+        }
+
+        int neededAmount = requiredGoods.get(material);
+
+        if (receivedMaterial.get(material) >= neededAmount) {
+                /* Building has all the cargos it needs of the material */
+                log.log(Level.FINE, "This building has all the {0} it needs", material);
+                return false;
+        }
+
+            
+        log.log(Level.FINE, "This building requires {0}", material);
+        return true;        
     }
 }

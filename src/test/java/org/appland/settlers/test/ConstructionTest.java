@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import java.util.Map;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
@@ -13,7 +14,9 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -21,6 +24,10 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -31,6 +38,8 @@ public class ConstructionTest {
 	public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Building wc = Woodcutter.createWoodcutter();
 		
+                assertFalse(wc.isMilitaryBuilding());
+                
                 assertTrue(Utils.materialIntMapIsEmpty(wc.getInQueue()));
 		assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
                 assertFalse(wc.isCargoReady());
@@ -75,6 +84,8 @@ public class ConstructionTest {
                 wc.stepTime();
                 
 		assertTrue(wc.getConstructionState() == DONE);
+                
+                assertFalse(wc.isMilitaryBuilding());
 		
                 /* Verify that all material was consumed by the construction */
                 assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
@@ -98,6 +109,30 @@ public class ConstructionTest {
 		assertTrue(wc.getConstructionState() == DESTROYED);
 	}
 	
+        @Test
+        public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+            Barracks brks = new Barracks();
+            
+            assertTrue(brks.getConstructionState() == UNDER_CONSTRUCTION);
+            
+            assertTrue(brks.isMilitaryBuilding());
+            assertTrue(brks.getMaxHostedMilitary() == 2);
+            assertTrue(brks.getHostedMilitary() == 0);
+            assertTrue(brks.getPromisedMilitary() == 0);
+            
+            assertFalse(brks.needMilitaryManning());
+            
+            Utils.constructSmallHouse(brks);
+            
+            assertTrue(brks.isMilitaryBuilding());
+            assertTrue(brks.getConstructionState() == DONE);
+            assertTrue(brks.getHostedSoldiers() == 0);
+            assertTrue(brks.getMaxHostedMilitary() == 2);
+            assertTrue(brks.needMilitaryManning());
+
+            assertTrue(brks.isMilitaryBuilding());
+        }
+        
 	@Test
 	public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
 		Sawmill sm = Sawmill.createSawmill();

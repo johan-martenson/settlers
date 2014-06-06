@@ -12,11 +12,17 @@ TODO
   - Test deliver something invalid to a ready house 
   - Test looking for a building that needs a material and has nothing in its queue
   - Test that too much material can't be delivered to a house under construction
+  - Add tests for inventory management
+    - Separate method to withdraw workers
  2 Add Barracks as an initial military building
- 3 Add additional constraints
+ 3 Create text view that can show snapshots of the game map
+ 3.5 Clean up
+  - Remove duplicate getHostedSoliders() method
+ 4 Add additional constraints
   - A flag can only stack a certain number of cargos
- 3 Add several players
- 4 Add graphical UI
- 5 Finetune cost for production and construction
- 6 Add ORM mappings to DAOs
- 7 Add functionality to store and load DAOs from a database store
+ 5 Add that houses are unoccupied before a worker populates them
+ 6 Add several players
+ 7 Add graphical UI
+ 8 Finetune cost for production and construction
+ 9 Add ORM mappings to DAOs
+ 10 Add functionality to store and load DAOs from a database store

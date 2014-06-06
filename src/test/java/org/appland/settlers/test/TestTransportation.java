@@ -1,30 +1,47 @@
 package org.appland.settlers.test;
 
 import java.util.List;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.STONE;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.Worker;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
@@ -221,28 +238,28 @@ public class TestTransportation {
 		map.placeRoad(points[1], points[7]);
 		map.placeRoad(points[7], points[8]);
 
-		Worker worker = Worker.createWorker(map);
+		Courier worker = Courier.createWorker(map);
 		
 		assertNotNull(worker);
 		
 		worker.setPosition(points[0]);
 		worker.setTarget(target);
 		
-		assertTrue(worker.getLocation().equals(points[0]));
+		assertTrue(worker.getPosition().equals(points[0]));
 		
 		Utils.fastForward(10, worker);
 		
-		assertTrue(worker.getLocation().equals(points[1]));
+		assertTrue(worker.getPosition().equals(points[1]));
 		
 		Utils.fastForward(10, worker);
-		assertTrue(worker.getLocation().equals(points[2]));
+		assertTrue(worker.getPosition().equals(points[2]));
 		
 		Utils.fastForward(10, worker);
-		assertTrue(worker.getLocation().equals(points[9]));
+		assertTrue(worker.getPosition().equals(points[9]));
 		
 		Utils.fastForward(10, worker);
 		
-		assertTrue(worker.getLocation().equals(target));
+		assertTrue(worker.getPosition().equals(target));
 	}
 	
 	@Test(expected=InvalidRouteException.class)
@@ -255,7 +272,7 @@ public class TestTransportation {
 		map.placeFlag(start);
 		map.placeFlag(target);
 
-		Worker worker = Worker.createWorker(map);
+		Courier worker = Courier.createWorker(map);
 		
 		worker.setPosition(start);
 		worker.setTarget(target);
@@ -276,7 +293,7 @@ public class TestTransportation {
                 
 		map.placeRoad(start, target);
 		
-		Worker worker = Worker.createWorker(map);
+		Courier worker = Courier.createWorker(map);
 		
 		worker.setPosition(start);
 
@@ -320,5 +337,60 @@ public class TestTransportation {
             GameMap map = GameMap.createGameMap();
             
             assertNull(map.getFlagForPosition(new Point(2, 2)));
+        }
+
+        @Test
+        public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+            GameMap map    = GameMap.createGameMap();
+            Headquarter hq = Headquarter.createHeadquarter();
+            Barracks b     = new Barracks();
+            Point bSpot    = new Point(3, 3);
+            Point hqSpot   = new Point(1, 1);
+            Road r;
+            Courier w      = Courier.createWorker(map);
+            
+            map.placeBuilding(hq, hqSpot);
+            map.placeBuilding(b, bSpot);
+            
+            r = Road.createRoad(hq.getFlag(), b.getFlag());
+            
+            map.placeRoad(r);
+            map.assignWorkerToRoad(w, r);
+            
+            /* Construct barracks */
+            Utils.constructSmallHouse(b);
+            
+            /* Add a private to the hq */
+            Military m = new Military(Rank.PRIVATE_RANK);
+            hq.depositWorker(m);
+            
+            /* Check that the barracks needs a military */
+            assertTrue(b.isMilitaryBuilding());
+            int hostedMilitary = b.getHostedMilitary();
+            int maxHostedMilitary = b.getMaxHostedMilitary();
+            assertTrue(hostedMilitary == 0);
+            assertTrue(maxHostedMilitary == 2);
+        
+            /* Get military from the headquarter
+             * - retrieve should set location of the worker
+            */
+            m = hq.retrieveMilitary();
+            
+            /* Tell military to go to the barracks */
+            m.setMap(map);
+            m.setPosition(hq.getFlag());
+            m.setTarget(b.getFlag());
+            assertEquals(m.getTarget(), b.getFlag());
+        
+            /* Verify that the military reaches the barracks */
+            Utils.fastForward(10, m);
+            assertTrue(m.getPosition().equals(b.getFlag()));
+            assertTrue(m.isArrived());
+            
+            /* Make the military enter the barracks */
+            assertTrue(b.getHostedSoldiers() == 0);
+            
+            m.enterBuilding(b);
+            assertTrue(b.getHostedSoldiers() == 1);
         }
 }

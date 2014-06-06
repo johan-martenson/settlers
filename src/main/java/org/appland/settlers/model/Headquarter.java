@@ -2,14 +2,14 @@ package org.appland.settlers.model;
 
 import java.util.Map;
 
-import org.appland.settlers.policy.InitialState;
-
 import static org.appland.settlers.model.Material.*;
+import org.appland.settlers.model.Military.Rank;
+import org.appland.settlers.policy.InitialState;
 
 @HouseSize(size=Size.LARGE)
 public class Headquarter extends Storage {
 
-    private Headquarter() {
+    public Headquarter() {
 	super();
 	
 	setHeadquarterDefaultInventory(inventory);
