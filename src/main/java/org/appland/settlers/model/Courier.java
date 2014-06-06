@@ -80,9 +80,9 @@ public class Courier extends Worker {
         this.position = flag;
 
         if (flag.equals(road.start)) {
-            setTarget(road.end);
+            setTargetFlag(road.end);
         } else {
-            setTarget(road.start);
+            setTargetFlag(road.start);
         }
 
         log.log(Level.FINE, "Target is {0}", target);
@@ -106,9 +106,9 @@ public class Courier extends Worker {
         cargo = position.retrieveCargo(cargo);
 
         if (flag.equals(road.start)) {
-            setTarget(road.end);
+            setTargetFlag(road.end);
         } else {
-            setTarget(road.start);
+            setTargetFlag(road.start);
         }
         
         state = BUSY;

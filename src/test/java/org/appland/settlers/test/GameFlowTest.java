@@ -602,14 +602,15 @@ public class GameFlowTest {
         assertTrue(map.getTravelingWorkers().size() == 1);
         assertTrue(map.getTravelingWorkers().get(0).equals(w1));
         assertTrue(w1.isArrived());
+        assertTrue(w1.isTraveling());
         
         /* Assign arrived workers to tasks */
-        assertTrue(w1.isArrived());
         assertTrue(map.getTravelingWorkers().contains(w1));
         assertTrue(w1.getTargetRoad().equals(r));
 
         assignTravelingWorkersThatHaveArrived(map);
         
+        assertFalse(w1.isTraveling());
         assertTrue(map.getRoadsWithoutWorker().isEmpty());
         assertEquals(map.getRoad(hq.getFlag(), bk.getFlag()), r);
         assertNotNull(r.getCourier().getRoad());
@@ -634,6 +635,7 @@ public class GameFlowTest {
         assertTrue(map.getAllWorkers().get(1) instanceof Military);
         assertFalse(map.getAllWorkers().get(1).isArrived());
         assertTrue(map.getAllWorkers().get(1).isTraveling());
+        System.out.println(map.getTravelingWorkers());
         assertTrue(map.getTravelingWorkers().size() == 1);
         
         assertTrue(hq.getInventory().get(Material.PRIVATE) == 2);
@@ -666,7 +668,7 @@ public class GameFlowTest {
         
         assertFalse(bk.needMilitaryManning());
         
-        assertTrue(hq.getInventory().get(Material.PRIVATE) == 2);
+        assertTrue(hq.getInventory().get(Material.PRIVATE) == 1);
 
         /* Let the military reach the barracks */
         Utils.fastForward(100, map);
@@ -720,14 +722,17 @@ public class GameFlowTest {
                 /* Handle couriers separately */
                 if (w.getTargetRoad() != null) {
                     map.assignWorkerToRoad((Courier)w, w.getTargetRoad());
+                    w.stopTraveling();
                 } else {
                     Flag targetFlag   = w.getTarget();
                     Building building = map.getBuildingByFlag(targetFlag);
                     
                     if (building.isMilitaryBuilding()) {
-                        ((Military)w).enterBuilding(building);
+                        building.hostMilitary((Military)w);
+                        w.stopTraveling();
                     } else {
                         building.assignWorker(w);
+                        w.stopTraveling();
                     }
                 }
                 
@@ -762,7 +767,7 @@ public class GameFlowTest {
                     Military m = stg.retrieveMilitary();
 
                     m.setMap(map);
-                    m.setTarget(b.getFlag());
+                    m.setTargetBuilding(b);
                     
                     map.placeWorker(m, stg.getFlag());
                     

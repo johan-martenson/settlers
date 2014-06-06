@@ -11,10 +11,6 @@ package org.appland.settlers.model;
 @Walker(speed = 10)
 public class Military extends Worker {
 
-    public void enterBuilding(Building b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     Rank getRank() {
         return rank;
     }
@@ -29,11 +25,6 @@ public class Military extends Worker {
 
     public Military(Rank r) {
         rank = r;
-    }
-    
-    @Override
-    public void stepTime() {
-        super.stepTime();
     }
     
     @Override

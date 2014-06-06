@@ -243,7 +243,7 @@ public class TestTransportation {
 		assertNotNull(worker);
 		
 		worker.setPosition(points[0]);
-		worker.setTarget(target);
+		worker.setTargetFlag(target);
 		
 		assertTrue(worker.getPosition().equals(points[0]));
 		
@@ -275,7 +275,7 @@ public class TestTransportation {
 		Courier worker = Courier.createWorker(map);
 		
 		worker.setPosition(start);
-		worker.setTarget(target);
+		worker.setTargetFlag(target);
 	}
 	
 	@Test
@@ -379,7 +379,7 @@ public class TestTransportation {
             /* Tell military to go to the barracks */
             m.setMap(map);
             m.setPosition(hq.getFlag());
-            m.setTarget(b.getFlag());
+            m.setTargetFlag(b.getFlag());
             assertEquals(m.getTarget(), b.getFlag());
         
             /* Verify that the military reaches the barracks */
@@ -388,9 +388,9 @@ public class TestTransportation {
             assertTrue(m.isArrived());
             
             /* Make the military enter the barracks */
-            assertTrue(b.getHostedSoldiers() == 0);
+            assertTrue(b.getHostedMilitary()== 0);
             
-            m.enterBuilding(b);
-            assertTrue(b.getHostedSoldiers() == 1);
+            b.hostMilitary(m);
+            assertTrue(b.getHostedMilitary()== 1);
         }
 }

@@ -126,7 +126,7 @@ public class ConstructionTest {
             
             assertTrue(brks.isMilitaryBuilding());
             assertTrue(brks.getConstructionState() == DONE);
-            assertTrue(brks.getHostedSoldiers() == 0);
+            assertTrue(brks.getHostedMilitary()== 0);
             assertTrue(brks.getMaxHostedMilitary() == 2);
             assertTrue(brks.needMilitaryManning());
 

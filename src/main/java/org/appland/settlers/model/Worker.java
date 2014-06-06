@@ -24,14 +24,16 @@ public class Worker implements Actor {
     protected Flag  target;
     private boolean traveling;
     private int     walkCountdown;
+    private Building targetBuilding;
     
     public Worker() {
-        traveling  = false;
-        target     = null;
-        position   = null;
-        path       = null;
-        map        = null;
-        targetRoad = null;
+        traveling      = false;
+        target         = null;
+        position       = null;
+        path           = null;
+        map            = null;
+        targetRoad     = null;
+        targetBuilding = null;
         
         walkCountdown = -1;
     }
@@ -85,10 +87,6 @@ public class Worker implements Actor {
         position = flag;
     }
 
-    public void setTargetBuilding(Building b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public Flag getPosition() {
         return position;
     }
@@ -130,7 +128,7 @@ public class Worker implements Actor {
         this.map = map;
     }
     
-    public void setTarget(Flag t) throws InvalidRouteException {
+    public void setTargetFlag(Flag t) throws InvalidRouteException {
         log.log(Level.INFO, "Setting target to {0}, previous target was {1}", new Object[]{t, target});
 
         target = t;
@@ -159,5 +157,10 @@ public class Worker implements Actor {
         Walker w = this.getClass().getAnnotation(Walker.class);
 
         return w.speed();
+    }
+
+    public void setTargetBuilding(Building b) throws InvalidRouteException {
+        targetBuilding = b;
+        setTargetFlag(b.getFlag());
     }
 }

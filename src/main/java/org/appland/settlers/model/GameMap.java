@@ -392,6 +392,16 @@ public class GameMap {
     }
 
     public Building getBuildingByFlag(Flag targetFlag) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Building result = null;
+        
+        for (Building b : buildings) {
+            if (b.getFlag().equals(targetFlag)) {
+                result = b;
+                
+                break;
+            }
+        }
+        
+        return result;
     }
 }

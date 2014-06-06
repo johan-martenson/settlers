@@ -65,10 +65,6 @@ public class Building implements Actor {
         }
     }
 
-    public int getHostedSoldiers() {
-        return hostedMilitary.size();
-    }
-
     public int getPromisedMilitary() {
         return promisedMilitary.size();
     }
@@ -81,6 +77,11 @@ public class Building implements Actor {
         Production p = getClass().getAnnotation(Production.class);
         
         return p != null;
+    }
+
+    public void hostMilitary(Military military) {
+        hostedMilitary.add(military);
+        promisedMilitary.remove(military);
     }
 
     public enum ConstructionState {
