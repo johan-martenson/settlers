@@ -49,7 +49,17 @@ public class TestForesterHut {
     }
 
     @Test(expected=Exception.class)
-    public void testAssignWorkerToUnfinishedForrester() throws Exception {
+    public void testPromiseWorkerToUnfinishedForester() throws Exception {
+        GameMap map = new GameMap();
+        ForesterHut f = new ForesterHut();
+        
+        assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        
+        f.promiseWorker(new Forester());
+    }
+    
+    @Test(expected=Exception.class)
+    public void testAssignWorkerToUnfinishedForester() throws Exception {
         GameMap map = new GameMap();
         ForesterHut f = new ForesterHut();
         
@@ -68,5 +78,29 @@ public class TestForesterHut {
         f.assignWorker(new Forester());
         
         f.assignWorker(new Forester());
+    }
+    
+    @Test(expected=Exception.class)
+    public void testPromiseWorkerTwice() throws Exception {
+        GameMap map = new GameMap();
+        ForesterHut f = new ForesterHut();
+        
+        Utils.constructSmallHouse(f);
+        
+        f.promiseWorker(new Forester());
+        
+        f.promiseWorker(new Forester());
+    }
+    
+    @Test
+    public void testForesterHutIsNotMilitary() throws Exception {
+        GameMap map = new GameMap();
+        ForesterHut f = new ForesterHut();
+        
+        Utils.constructSmallHouse(f);
+
+        assertFalse(f.isMilitaryBuilding());
+        assertTrue(f.getHostedMilitary() == 0);
+        assertTrue(f.getMaxHostedMilitary() == 0);
     }
 }
