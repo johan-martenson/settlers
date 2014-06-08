@@ -21,6 +21,7 @@ TODO
  3 Create text view that can show snapshots of the game map
  3.5 Clean up
   - Remove duplicate getHostedSoliders() method
+  - Look over state handling in Courier. Is it needed in addition to state handling in Worker?
  4 Add additional constraints
   - A flag can only stack a certain number of cargos
  5 Add that houses are unoccupied before a worker populates them

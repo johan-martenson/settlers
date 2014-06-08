@@ -106,10 +106,6 @@ public class GameMap {
 		return roads;
 	}
 
-	public void placeFlag(Point p) {
-		flags.add(new Flag(p));
-	}
-
 	public List<Flag> findWay(Flag start, Flag end) throws InvalidRouteException {
 		log.log(Level.INFO, "Finding way from {0} to {1}", new Object[] {start, end});
                 
@@ -257,21 +253,6 @@ public class GameMap {
 		return nextRoads;
 	}
 
-	public Flag getFlagForPosition(Point position) {
-		log.log(Level.INFO, "Getting flag for position {0}", position);
-		
-		for (Flag f : flags) {
-			log.log(Level.FINEST, "Matching against {0}", f);
-			
-			if (f.getPosition().equals(position)) {
-				log.log(Level.FINE, "Found match {0} for position {1}", new Object[] {f, position});
-				return f;
-			}
-		}
-
-		return null;
-	}
-	
 	public void placeFlag(Flag f) {
 		this.flags.add(f);
 	}

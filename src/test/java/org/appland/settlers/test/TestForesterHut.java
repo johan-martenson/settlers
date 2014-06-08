@@ -63,7 +63,7 @@ public class TestForesterHut {
         GameMap map = new GameMap();
         ForesterHut f = new ForesterHut();
         
-        assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        Utils.constructSmallHouse(f);
         
         f.assignWorker(new Forester());
         

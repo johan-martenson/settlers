@@ -333,13 +333,6 @@ public class TestTransportation {
 	}
         
         @Test
-        public void testGetNonExistingFlag() {
-            GameMap map = new GameMap();
-            
-            assertNull(map.getFlagForPosition(new Point(2, 2)));
-        }
-
-        @Test
         public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
             GameMap map    = new GameMap();
             Headquarter hq = new Headquarter();
