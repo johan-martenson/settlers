@@ -117,8 +117,6 @@ public class GameFlowTest {
     @Test
     public void gameFlowTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
 
-        List<Actor> actors = new ArrayList<>();
-
         /* Create starting position */
         GameMap map = new GameMap();
         Headquarter hq = new Headquarter();
@@ -126,7 +124,6 @@ public class GameFlowTest {
         Point startPosition = new Point(6, 6);
 
         map.placeBuilding(hq, startPosition);
-        actors.add(hq);
 
         hq.setReady();
         
@@ -145,16 +142,12 @@ public class GameFlowTest {
         deliverForWorkersAtTarget(map);
         
         /* Step time */
-        Utils.stepTime(actors);
+        map.stepTime();
 
         /* Player creates woodcutter, sawmill and quarry */
         Building wc = new Woodcutter();
         Sawmill sm = new Sawmill();
         Quarry qry = new Quarry();
-
-        actors.add(wc);
-        actors.add(sm);
-        actors.add(qry);
 
         Point wcSpot = new Point(6, 8);
         Point smSpot = new Point(8, 6);
@@ -179,10 +172,6 @@ public class GameFlowTest {
         Courier wr2 = new Courier(map);
         Courier wr3 = new Courier(map);
 
-        actors.add(wr1);
-        actors.add(wr2);
-        actors.add(wr3);
-
         map.assignWorkerToRoad(wr1, r1);
         map.assignWorkerToRoad(wr2, r2);
         map.assignWorkerToRoad(wr3, r3);
@@ -200,7 +189,7 @@ public class GameFlowTest {
         assertTrue(sm.getConstructionState() == DONE);
 
         /* Fast forward until the woodcutter has cut some wood */
-        fastForward(100, actors);
+        fastForward(100, map);
 
         /* Retrieve cargo from woodcutter and put it on the flag */
         assertTrue(wc.isCargoReady());
@@ -219,7 +208,7 @@ public class GameFlowTest {
         assertTrue(nextWorker.getPosition().equals(wc.getFlag()));
         assertTrue(nextWorker.getTarget().equals(hq.getFlag()));
 
-        fastForward(100, actors);
+        fastForward(100, map);
 
         assertTrue(nextWorker.isArrived());
 
@@ -254,7 +243,7 @@ public class GameFlowTest {
 
         nextWorker.pickUpCargo(hq.getFlag());
 
-        fastForward(100, actors);
+        fastForward(100, map);
 
         assertTrue(nextWorker.isArrived());
 
@@ -269,7 +258,7 @@ public class GameFlowTest {
         /* Produce plancks in sawmill */
         assertFalse(targetSawmill.isCargoReady());
 
-        fastForward(100, actors);
+        fastForward(100, map);
 
         assertTrue(targetSawmill.isCargoReady());
         assertTrue(targetSawmill.getMaterialInQueue(WOOD) == 0);
@@ -290,15 +279,13 @@ public class GameFlowTest {
 
         nextWorker.pickUpCargo(targetSawmill.getFlag());
 
-        fastForward(10, actors);
+        fastForward(10, map);
 
         assertTrue(c.isAtTarget());
     }
 
     @Test
     public void gameFlowWithProperGameLoopTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
-
-        List<Actor> actors = new ArrayList<>();
 
         /* Create Initial Game Setup */
         GameMap map = new GameMap();
@@ -307,21 +294,16 @@ public class GameFlowTest {
         Point startPosition = new Point(6, 6);
 
         map.placeBuilding(hq, startPosition);
-        actors.add(hq);
 
         hq.setReady();
         
         /* Game loop */
-        gameLoop(hq, actors, map);
+        gameLoop(hq, map);
  
         /* Player creates woodcutter, sawmill and quarry */
         Building wc = new Woodcutter();
         Sawmill sm = new Sawmill();
         Quarry qry = new Quarry();
-
-        actors.add(wc);
-        actors.add(sm);
-        actors.add(qry);
 
         Point wcSpot = new Point(6, 8);
         Point smSpot = new Point(8, 6);
@@ -341,10 +323,6 @@ public class GameFlowTest {
         Courier wr1 = new Courier(map);
         Courier wr2 = new Courier(map);
         Courier wr3 = new Courier(map);
-
-        actors.add(wr1);
-        actors.add(wr2);
-        actors.add(wr3);
 
         Road r = map.getRoad(hq.getFlag(), wc.getFlag());
         assertNotNull(r);
@@ -379,7 +357,7 @@ public class GameFlowTest {
         }
         
         /* Gameloop */
-        gameLoop(hq, actors, map);
+        gameLoop(hq, map);
         
         List<Cargo> hqOutCargos = hq.getFlag().getStackedCargo();
         assertTrue(hqOutCargos.size() == 1);
@@ -389,8 +367,8 @@ public class GameFlowTest {
 
         
         /* Gameloop */
-        fastForward(10, actors);
-        gameLoop(hq, actors, map);
+        fastForward(10, map);
+        gameLoop(hq, map);
 
         
         /* -- Assert that delivery is started for one cargo */
@@ -407,8 +385,8 @@ public class GameFlowTest {
         assertTrue(busyWorkers == 1);
         
         /* Gameloop */
-        fastForward(10, actors);
-        gameLoop(hq, actors, map);
+        fastForward(10, map);
+        gameLoop(hq, map);
 
         /* Ensure first cargo is delivered to house */
         /* Ensure next cargo is started */
@@ -780,7 +758,7 @@ public class GameFlowTest {
         assertTrue(map.getTravelingWorkers().isEmpty());
     }
     
-    private void gameLoop(Storage hq, List<Actor> actors, GameMap map) throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    private void gameLoop(Storage hq, GameMap map) throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
        /* Assign workers to unoccupied streets and buildings, and military to 
         * unoccupied military buildings
         */
@@ -802,7 +780,7 @@ public class GameFlowTest {
         deliverForWorkersAtTarget(map);
         
         /* Step time */
-        Utils.stepTime(actors);        
+        map.stepTime();
     }
     
     private void assignTravelingWorkersThatHaveArrived(GameMap map) throws Exception {
