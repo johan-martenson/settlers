@@ -14,6 +14,9 @@ TODO
   - Test that too much material can't be delivered to a house under construction
   - Add tests for inventory management
     - Separate method to withdraw workers
+    - Ensure that retrieveWorker and retrieveMilitary:
+      - Makes the inventory go down
+      - Only succeeds if the worker or military is available
  2 Add Barracks as an initial military building
  3 Create text view that can show snapshots of the game map
  3.5 Clean up
