@@ -17,10 +17,6 @@ public class Headquarter extends Storage {
         
         constructionState = DONE;
     }
-    
-    public static Headquarter createHeadquarter() {
-	return new Headquarter();
-    }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
 	inventory.put(SHIELD, InitialState.STORAGE_INITIAL_SHIELDS);

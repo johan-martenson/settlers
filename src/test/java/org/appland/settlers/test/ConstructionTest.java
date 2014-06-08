@@ -24,10 +24,6 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -36,7 +32,7 @@ public class ConstructionTest {
 
 	@Test
 	public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Building wc = Woodcutter.createWoodcutter();
+		Woodcutter wc = new Woodcutter();
 		
                 assertFalse(wc.isMilitaryBuilding());
                 
@@ -71,8 +67,8 @@ public class ConstructionTest {
 		/* Verify that construction doesn't finish before material is delivered */
                 Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
 		
-		Cargo planckCargo = Cargo.createCargo(PLANCK);
-                Cargo stoneCargo = Cargo.createCargo(STONE);
+		Cargo planckCargo = new Cargo(PLANCK);
+                Cargo stoneCargo = new Cargo(STONE);
 		wc.deliver(planckCargo);
                 wc.deliver(planckCargo);
                 wc.deliver(stoneCargo);
@@ -135,15 +131,15 @@ public class ConstructionTest {
         
 	@Test
 	public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Sawmill sm = Sawmill.createSawmill();
+		Sawmill sm = new Sawmill();
 		
 		assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
 		
 		/* Verify that construction doesn't finish before material is delivered */
                 Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
 		
-		Cargo planckCargo = Cargo.createCargo(PLANCK);
-                Cargo stoneCargo = Cargo.createCargo(STONE);
+		Cargo planckCargo = new Cargo(PLANCK);
+                Cargo stoneCargo = new Cargo(STONE);
 		sm.deliver(planckCargo);
                 sm.deliver(planckCargo);
                 sm.deliver(planckCargo);
@@ -178,14 +174,14 @@ public class ConstructionTest {
 
         @Test
         public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-            Farm farm = Farm.createFarm();
+            Farm farm = new Farm();
             assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
             
             /* Verify that construction doesn't finish before material is delivered */
                 Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
 		
-		Cargo planckCargo = Cargo.createCargo(PLANCK);
-                Cargo stoneCargo = Cargo.createCargo(STONE);
+		Cargo planckCargo = new Cargo(PLANCK);
+                Cargo stoneCargo = new Cargo(STONE);
 		farm.deliver(planckCargo);
                 farm.deliver(planckCargo);
                 farm.deliver(planckCargo);
@@ -215,14 +211,14 @@ public class ConstructionTest {
         
 	@Test(expected=InvalidMaterialException.class)
 	public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sw = Sawmill.createSawmill();
+		Sawmill sw = new Sawmill();
 
-		sw.deliver(Cargo.createCargo(SWORD));
+		sw.deliver(new Cargo(SWORD));
 	}
 
 	@Test(expected=InvalidStateForProduction.class)
 	public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sm = Sawmill.createSawmill();
+		Sawmill sm = new Sawmill();
 		
                 Utils.constructMediumHouse(sm);
 		
@@ -230,12 +226,12 @@ public class ConstructionTest {
 		
 		sm.tearDown();
 		
-		sm.deliver(Cargo.createCargo(WOOD));
+		sm.deliver(new Cargo(WOOD));
 	}
 	
 	@Test (expected=InvalidStateForProduction.class)
 	public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sm = Sawmill.createSawmill();
+		Sawmill sm = new Sawmill();
 		
                 Utils.constructMediumHouse(sm);
                 
@@ -245,16 +241,9 @@ public class ConstructionTest {
 		
 		Utils.fastForward(1000, sm);
 		
-		sm.deliver(Cargo.createCargo(WOOD));
+		sm.deliver(new Cargo(WOOD));
 	}
 	
-	@Test
-	public void testCreateHeadquarter() {
-		Headquarter.createHeadquarter();
-                
-                // TODO: test creation of headquarter
-	}
-
     private boolean matchesRequiredMaterialForSmallHouse(Map<Material, Integer> requiredMaterialToFinish) {
         boolean matches = true;
         

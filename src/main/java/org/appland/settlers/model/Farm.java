@@ -16,9 +16,4 @@ import static org.appland.settlers.model.Size.LARGE;
 @HouseSize(size=LARGE)
 @Production(output=WHEAT, productionTime=100, requiredGoods={})
 public class Farm extends Building{
-
-    public static Farm createFarm() {
-        return new Farm();
-    }
-    
 }

@@ -20,21 +20,14 @@ public class Courier extends Worker {
 
     private static Logger log = Logger.getLogger(Courier.class.getName());
 
-    public Courier() {
-        log.info("Default Worker constructor");
-
-        path          = null;
-        road          = null;
-        state         = IDLE;
-        position      = null;
-        cargo         = null;
-    }
-
-    public static Courier createWorker(GameMap map) {
+    public Courier(GameMap gm) {
         log.info("Creating new worker");
-        Courier w = new Courier();
-        w.setMap(map);
-        return w;
+        path     = null;
+        road     = null;
+        state    = IDLE;
+        position = null;
+        cargo    = null;
+        map      = gm;
     }
 
     public void setRoad(Road road) {

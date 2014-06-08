@@ -120,8 +120,8 @@ public class GameFlowTest {
         List<Actor> actors = new ArrayList<>();
 
         /* Create starting position */
-        GameMap map = GameMap.createGameMap();
-        Headquarter hq = Headquarter.createHeadquarter();
+        GameMap map = new GameMap();
+        Headquarter hq = new Headquarter();
 
         Point startPosition = new Point(6, 6);
 
@@ -148,9 +148,9 @@ public class GameFlowTest {
         Utils.stepTime(actors);
 
         /* Player creates woodcutter, sawmill and quarry */
-        Building wc = Woodcutter.createWoodcutter();
-        Sawmill sm = Sawmill.createSawmill();
-        Quarry qry = Quarry.createQuarry();
+        Building wc = new Woodcutter();
+        Sawmill sm = new Sawmill();
+        Quarry qry = new Quarry();
 
         actors.add(wc);
         actors.add(sm);
@@ -166,18 +166,18 @@ public class GameFlowTest {
         map.placeBuilding(hq, startPosition);
 
         /* Create roads */
-        Road r1 = Road.createRoad(hq.getFlag(), wc.getFlag());
-        Road r2 = Road.createRoad(hq.getFlag(), sm.getFlag());
-        Road r3 = Road.createRoad(hq.getFlag(), qry.getFlag());
+        Road r1 = new Road(hq.getFlag(), wc.getFlag());
+        Road r2 = new Road(hq.getFlag(), sm.getFlag());
+        Road r3 = new Road(hq.getFlag(), qry.getFlag());
         
         map.placeRoad(r1);
         map.placeRoad(r2);
         map.placeRoad(r3);
 
         /* Assign workers to the roads */
-        Courier wr1 = Courier.createWorker(map);
-        Courier wr2 = Courier.createWorker(map);
-        Courier wr3 = Courier.createWorker(map);
+        Courier wr1 = new Courier(map);
+        Courier wr2 = new Courier(map);
+        Courier wr3 = new Courier(map);
 
         actors.add(wr1);
         actors.add(wr2);
@@ -301,8 +301,8 @@ public class GameFlowTest {
         List<Actor> actors = new ArrayList<>();
 
         /* Create Initial Game Setup */
-        GameMap map = GameMap.createGameMap();
-        Headquarter hq = Headquarter.createHeadquarter();
+        GameMap map = new GameMap();
+        Headquarter hq = new Headquarter();
 
         Point startPosition = new Point(6, 6);
 
@@ -315,9 +315,9 @@ public class GameFlowTest {
         gameLoop(hq, actors, map);
  
         /* Player creates woodcutter, sawmill and quarry */
-        Building wc = Woodcutter.createWoodcutter();
-        Sawmill sm = Sawmill.createSawmill();
-        Quarry qry = Quarry.createQuarry();
+        Building wc = new Woodcutter();
+        Sawmill sm = new Sawmill();
+        Quarry qry = new Quarry();
 
         actors.add(wc);
         actors.add(sm);
@@ -338,9 +338,9 @@ public class GameFlowTest {
         map.placeRoad(hq.getFlag(), qry.getFlag());
 
         /* Assign workers to the roads */
-        Courier wr1 = Courier.createWorker(map);
-        Courier wr2 = Courier.createWorker(map);
-        Courier wr3 = Courier.createWorker(map);
+        Courier wr1 = new Courier(map);
+        Courier wr2 = new Courier(map);
+        Courier wr3 = new Courier(map);
 
         actors.add(wr1);
         actors.add(wr2);
@@ -425,18 +425,18 @@ public class GameFlowTest {
 
     @Test
     public void testInitiateCollectionOfNewProduce() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidRouteException {
-        GameMap map    = GameMap.createGameMap();
-        Woodcutter wc  = Woodcutter.createWoodcutter();
-        Storage stg    = Storage.createStorage();
+        GameMap map    = new GameMap();
+        Woodcutter wc  = new Woodcutter();
+        Storage stg    = new Storage();
         Point stgPoint = new Point(1, 1);
         Point wcPoint  = new Point(2, 2);
         Road r;
-        Courier w       = Courier.createWorker(map);
+        Courier w      = new Courier(map);
         
         map.placeBuilding(wc, wcPoint);
         map.placeBuilding(stg, stgPoint);
         
-        r = Road.createRoad(stg.getFlag(), wc.getFlag());
+        r = new Road(stg.getFlag(), wc.getFlag());
         
         map.placeRoad(r);
         map.assignWorkerToRoad(w, r);
@@ -467,10 +467,10 @@ public class GameFlowTest {
     
     @Test
     public void testInitiateNewDeliveries() throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidEndPointException {
-        GameMap map = GameMap.createGameMap();
+        GameMap map = new GameMap();
         
-        Headquarter hq = Headquarter.createHeadquarter();
-        Woodcutter wc = Woodcutter.createWoodcutter();
+        Headquarter hq = new Headquarter();
+        Woodcutter wc = new Woodcutter();
         
         hq.setReady();
         
@@ -492,7 +492,7 @@ public class GameFlowTest {
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
         
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */
-        Sawmill sm = Sawmill.createSawmill();
+        Sawmill sm = new Sawmill();
         
         Point smPoint = new Point(1, 2);
         
@@ -511,19 +511,19 @@ public class GameFlowTest {
     
     @Test
     public void testAssignWorkToIdleCouriers() throws InvalidEndPointException, InvalidRouteException {
-        GameMap map   = GameMap.createGameMap();
-        Sawmill sm    = Sawmill.createSawmill();
+        GameMap map   = new GameMap();
+        Sawmill sm    = new Sawmill();
         Point smPoint = new Point(1, 1);
         Flag f        = new Flag(2, 2);
-        Road r        = Road.createRoad(f, sm.getFlag());
-        Courier w      = Courier.createWorker(map);
+        Road r        = new Road(f, sm.getFlag());
+        Courier w     = new Courier(map);
         
         map.placeFlag(f);
         map.placeBuilding(sm, smPoint);
         map.placeRoad(r);
         map.assignWorkerToRoad(w, r);
         
-        Cargo c = Cargo.createCargo(PLANCK);
+        Cargo c = new Cargo(PLANCK);
         
         c.setPosition(f);
         c.setTarget(sm, map);
@@ -548,23 +548,23 @@ public class GameFlowTest {
 
     @Test
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        GameMap map   = GameMap.createGameMap();
-        Woodcutter wc = Woodcutter.createWoodcutter();
+        GameMap map   = new GameMap();
+        Woodcutter wc = new Woodcutter();
         Flag src      = new Flag(1, 1);
         Point wcPoint = new Point(2, 2);
-        Courier w      = Courier.createWorker(map);
+        Courier w     = new Courier(map);
         Cargo c;
         
         map.placeFlag(src);
         map.placeBuilding(wc, wcPoint);        
         
-        Road r = Road.createRoad(src, wc.getFlag());
+        Road r = new Road(src, wc.getFlag());
         
         map.placeRoad(r);
         
         map.assignWorkerToRoad(w, r);
         
-        c = Cargo.createCargo(PLANCK);
+        c = new Cargo(PLANCK);
         
         src.putCargo(c);
         c.setTarget(wc, map);

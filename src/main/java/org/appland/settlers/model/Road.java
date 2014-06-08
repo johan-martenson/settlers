@@ -14,10 +14,6 @@ public class Road {
                 promisedCourier = false;
                 courier = null;
 	}
-	
-	public static Road createRoad(Flag start, Flag end) {
-		return new Road(start, end);
-	}
 
         @Override
 	public String toString() {

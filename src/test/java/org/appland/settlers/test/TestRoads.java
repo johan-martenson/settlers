@@ -37,32 +37,32 @@ public class TestRoads {
     
     @Test
     public void testGetNotExistingRoad() {
-        GameMap map = GameMap.createGameMap();
+        GameMap map = new GameMap();
         
-        assertNull(map.getRoad(Flag.createFlag(new Point(1, 1)), Flag.createFlag(new Point(2, 2))));
+        assertNull(map.getRoad(new Flag(new Point(1, 1)), new Flag(new Point(2, 2))));
     }
     
         @Test(expected=InvalidRouteException.class)
         public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException {
-            GameMap map = GameMap.createGameMap();
+            GameMap map = new GameMap();
             
-            Flag f1 = Flag.createFlag(new Point(1, 1));
-            Flag f2 = Flag.createFlag(new Point(2, 2));
+            Flag f1 = new Flag(new Point(1, 1));
+            Flag f2 = new Flag(new Point(2, 2));
             
             map.placeFlag(f1);
             map.placeFlag(f2);
             
             map.placeRoad(f1, f2);
             
-            map.findWay(f1, Flag.createFlag(new Point(3, 3)));
+            map.findWay(f1, new Flag(new Point(3, 3)));
         }
     
         @Test
         public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException {
-            GameMap map = GameMap.createGameMap();
+            GameMap map = new GameMap();
             
-            Flag f1 = Flag.createFlag(new Point(1, 1));
-            Flag f2 = Flag.createFlag(new Point(2, 2));
+            Flag f1 = new Flag(new Point(1, 1));
+            Flag f2 = new Flag(new Point(2, 2));
             
             map.placeFlag(f1);
             map.placeFlag(f2);
@@ -89,7 +89,7 @@ public class TestRoads {
 		 *    |---F7---F8
 		 */
 		
-		GameMap map = GameMap.createGameMap();
+		GameMap map = new GameMap();
 		
 		Flag[] points = new Flag[] {
 		new Flag(1,1),    // F
@@ -109,7 +109,7 @@ public class TestRoads {
 			map.placeFlag(points[i]);
 		}
 
-                Woodcutter wc = Woodcutter.createWoodcutter();
+                Woodcutter wc = new Woodcutter();
 		map.placeBuilding(wc, new Point(6, 2));
                 
                 Flag target = wc.getFlag();

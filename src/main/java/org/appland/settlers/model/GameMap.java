@@ -29,10 +29,6 @@ public class GameMap {
 		roadNetwork     = new HashMap<>();
 		roadToWorkerMap = new HashMap<>();
 	}
-	
-	public static GameMap createGameMap() {
-		return new GameMap();
-	}
 
         public void stepTime() {
             for (Worker w : allWorkers) {
@@ -103,7 +99,7 @@ public class GameMap {
         }
         
 	public void placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
-            placeRoad(Road.createRoad(startFlag, endFlag));
+            placeRoad(new Road(startFlag, endFlag));
 	}
 
 	public List<Road> getRoads() {
@@ -111,7 +107,7 @@ public class GameMap {
 	}
 
 	public void placeFlag(Point p) {
-		flags.add(Flag.createFlag(p));
+		flags.add(new Flag(p));
 	}
 
 	public List<Flag> findWay(Flag start, Flag end) throws InvalidRouteException {
@@ -225,7 +221,7 @@ public class GameMap {
 		start = nextRoad.start;
 		end = nextRoad.end;
 		
-		return Road.createRoad(end, start);
+		return new Road(end, start);
 	}
 
 	private Courier getWorkerForRoad(Road nextRoad) {
@@ -242,7 +238,7 @@ public class GameMap {
 		
 		if (points.size() == 2) {
 			log.log(Level.FINE, "Route found has only one road segment");
-			nextRoads.add(Road.createRoad(points.get(0), points.get(1)));
+			nextRoads.add(new Road(points.get(0), points.get(1)));
 			
 			log.log(Level.FINE, "Returning route {0}", nextRoads);
 			return nextRoads;
@@ -252,7 +248,7 @@ public class GameMap {
 		
 		int i;
 		for (i = 1; i < points.size(); i++) {
-			nextRoads.add(Road.createRoad(next, points.get(i)));
+			nextRoads.add(new Road(next, points.get(i)));
                         
                         next = points.get(i);
 		}

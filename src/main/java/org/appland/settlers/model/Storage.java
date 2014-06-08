@@ -25,7 +25,7 @@ public class Storage extends Building implements Actor {
 	
 	private Logger log = Logger.getLogger(Storage.class.getName());
 	
-	protected Storage() {
+	public Storage() {
 	    inventory = createEmptyMaterialIntMap();
 		
 	    promotionCountdown = -1;
@@ -136,15 +136,11 @@ public class Storage extends Building implements Actor {
 		int amount = inventory.get(wood);
 		inventory.put(wood, amount - 1);
 		
-		Cargo c = Cargo.createCargo(wood);
+		Cargo c = new Cargo(wood);
 		
 		c.setPosition(getFlag());
 		
 		return c;
-	}
-
-	public static Storage createStorage() {
-		return new Storage();
 	}
         
         public boolean isInStock(Material m) {
@@ -220,7 +216,7 @@ public class Storage extends Building implements Actor {
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
         
-        Courier c = new Courier();
+        Courier c = new Courier(null);
         
         c.setPosition(getFlag());
         

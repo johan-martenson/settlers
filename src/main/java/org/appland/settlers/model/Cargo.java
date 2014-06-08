@@ -15,8 +15,10 @@ public class Cargo {
 
 	private static Logger log = Logger.getLogger(GameMap.class.getName());
 	
-	private Cargo(Material m) {
-		this.material = m;
+	public Cargo(Material m) {
+		log.log(Level.INFO, "Creating cargo of {0}", m);
+                
+                material = m;
 
 		/* Increase the log level */
 		log.setLevel(Level.FINEST);
@@ -54,11 +56,6 @@ public class Cargo {
 
 	public Building getTarget() {
 		return target;
-	}
-
-	public static Cargo createCargo(Material productionMaterial) {
-		log.log(Level.INFO, "Creating cargo of {0}", productionMaterial);
-		return new Cargo(productionMaterial);
 	}
 
 	public void setPlannedRoads(List<Road> roads) {

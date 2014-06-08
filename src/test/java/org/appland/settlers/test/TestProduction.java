@@ -34,7 +34,7 @@ public class TestProduction {
 	
 	@Test
 	public void testProducePlancks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Sawmill sawmill = Sawmill.createSawmill();
+		Sawmill sawmill = new Sawmill();
 		assertTrue(sawmill.getConstructionState() == UNDER_CONSTRUCTION);
 		
 		Utils.constructMediumHouse(sawmill);
@@ -42,7 +42,7 @@ public class TestProduction {
 		assertTrue(sawmill.getConstructionState() == DONE);
 		assertFalse(sawmill.isCargoReady());
 
-		sawmill.deliver(Cargo.createCargo(WOOD));
+		sawmill.deliver(new Cargo(WOOD));
 		
 		assertTrue(1 == sawmill.getMaterialInQueue(WOOD));
 		
@@ -58,18 +58,18 @@ public class TestProduction {
 
 	@Test(expected=InvalidMaterialException.class)
 	public void testWrongMaterialToSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Sawmill sawmill = Sawmill.createSawmill();
+		Sawmill sawmill = new Sawmill();
 		
 		Utils.constructMediumHouse(sawmill);
 		
 		assertTrue(DONE == sawmill.getConstructionState());
 		
-		sawmill.deliver(Cargo.createCargo(GOLD));
+		sawmill.deliver(new Cargo(GOLD));
 	}
 	
 	@Test
 	public void testProduceWood() throws InvalidStateForProduction, InvalidLogicException, InvalidMaterialException, DeliveryNotPossibleException {
-		Building woodcutter = Woodcutter.createWoodcutter();
+		Building woodcutter = new Woodcutter();
 		
                 Utils.constructSmallHouse(woodcutter);
                 
@@ -87,16 +87,16 @@ public class TestProduction {
 	
 	@Test(expected=DeliveryNotPossibleException.class)
 	public void testDeliverMaterialToWoodcutter() throws DeliveryNotPossibleException, InvalidMaterialException, InvalidStateForProduction {
-		Building woodcutter = Woodcutter.createWoodcutter();
+		Building woodcutter = new Woodcutter();
 		
                 Utils.constructSmallHouse(woodcutter);
                 
-		woodcutter.deliver(Cargo.createCargo(WOOD));
+		woodcutter.deliver(new Cargo(WOOD));
 	}
 	
 	@Test
 	public void testProduceStone() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Quarry quarry = Quarry.createQuarry();
+		Quarry quarry = new Quarry();
 		Cargo result;
 		
 		Utils.constructSmallHouse(quarry);
@@ -112,7 +112,7 @@ public class TestProduction {
 	
 	@Test
 	public void testRetrieveStoneDuringConstruction() throws InvalidStateForProduction {
-		Quarry quarry = Quarry.createQuarry();
+		Quarry quarry = new Quarry();
 		
 		quarry.stepTime();
 		Cargo result = quarry.retrieveCargo();
@@ -122,10 +122,10 @@ public class TestProduction {
 	
 	@Test(expected=DeliveryNotPossibleException.class)
 	public void testDeliveryMaterialToQuarry() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Quarry quarry = Quarry.createQuarry();
+		Quarry quarry = new Quarry();
 		
                 Utils.constructSmallHouse(quarry);
                 
-		quarry.deliver(Cargo.createCargo(BEER));
+		quarry.deliver(new Cargo(BEER));
 	}
 }

@@ -17,16 +17,6 @@ public class Flag {
 		stackedCargo = new ArrayList<>();
 	}
 	
-        public static Flag createFlag(int x, int y) {
-            return createFlag(new Point(x, y));
-        }
-        
-	public static Flag createFlag(Point p) {
-		Flag f = new Flag(p);
-		
-		return f;
-	}
-	
 	public List<Cargo> getStackedCargo() {
 		return stackedCargo;
 	}

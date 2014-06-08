@@ -90,8 +90,8 @@ public class Utils {
     static void constructMediumHouse(Building sm) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
         
-        Cargo woodCargo = Cargo.createCargo(PLANCK);
-        Cargo stoneCargo = Cargo.createCargo(STONE);
+        Cargo woodCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
         
         /* Deliver 4 wood and 3 stone */
         sm.promiseDelivery(PLANCK);
@@ -116,8 +116,8 @@ public class Utils {
     static void constructSmallHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
 
-        Cargo woodCargo = Cargo.createCargo(PLANCK);
-        Cargo stoneCargo = Cargo.createCargo(STONE);
+        Cargo woodCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
         
         /* Deliver 2 wood and 2 stone */
         house.promiseDelivery(PLANCK);
@@ -166,7 +166,7 @@ public class Utils {
     }
 
     static void fillUpInventory(Storage hq, Material material, int amount) {
-        Cargo c = Cargo.createCargo(material);
+        Cargo c = new Cargo(material);
         
         int i;
         for (i = 0; i < amount; i++) {
@@ -189,8 +189,8 @@ public class Utils {
     static void constructLargeHouse(Storage house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
 
-        Cargo planckCargo = Cargo.createCargo(PLANCK);
-        Cargo stoneCargo = Cargo.createCargo(STONE);
+        Cargo planckCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
         
         /* Deliver 4 wood and 3 stone */
         house.promiseDelivery(PLANCK);

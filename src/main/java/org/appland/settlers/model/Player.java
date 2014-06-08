@@ -18,15 +18,10 @@ public class Player {
 	public Player() {
 		storages = new ArrayList<>();
 		
-		storages.add(Storage.createStorage());
+		storages.add(new Storage());
 	}
 	
 	public List<Storage> getStorages() {
 		return storages;
-	}
-
-	public static Player createInitialPlayer() {
-
-		return new Player();
 	}
 }

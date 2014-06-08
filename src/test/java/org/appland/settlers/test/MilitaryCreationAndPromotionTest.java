@@ -17,7 +17,7 @@ public class MilitaryCreationAndPromotionTest {
 	
 	@Before
 	public void setupTest() throws InvalidNumberOfPlayersException {
-		storage = Storage.createStorage();
+		storage = new Storage();
 		inventory = storage.getInventory();
 	}
 	

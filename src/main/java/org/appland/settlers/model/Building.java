@@ -152,7 +152,7 @@ public class Building implements Actor {
             hostedMilitary        = new ArrayList<>();
             promisedMilitary      = new ArrayList<>();
             outputCargo           = null;
-            flag                  = Flag.createFlag(null);
+            flag                  = new Flag(null);
             productionCountdown   = -1;
             worker                = null;
             promisedWorker        = null;
@@ -435,7 +435,7 @@ public class Building implements Actor {
 
             /* Production just finished */
             } else if (productionCountdown == 0) {
-                result = Cargo.createCargo(getProductionMaterial(this));
+                result = new Cargo(getProductionMaterial(this));
 
                 log.log(Level.INFO, "{0} produced {1}", new Object[] {this, result});
 
