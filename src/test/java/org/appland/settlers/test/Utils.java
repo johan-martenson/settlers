@@ -88,6 +88,8 @@ public class Utils {
 	}
 
     static void constructMediumHouse(Building sm) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
+        
         Cargo woodCargo = Cargo.createCargo(PLANCK);
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
@@ -111,22 +113,24 @@ public class Utils {
         Utils.fastForward(150, sm);
     }
 
-    static void constructSmallHouse(Building wc) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructSmallHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
+
         Cargo woodCargo = Cargo.createCargo(PLANCK);
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
         /* Deliver 2 wood and 2 stone */
-        wc.promiseDelivery(PLANCK);
-        wc.promiseDelivery(PLANCK);
-        wc.deliver(woodCargo);
-        wc.deliver(woodCargo);
+        house.promiseDelivery(PLANCK);
+        house.promiseDelivery(PLANCK);
+        house.deliver(woodCargo);
+        house.deliver(woodCargo);
         
-        wc.promiseDelivery(STONE);
-        wc.promiseDelivery(STONE);
-        wc.deliver(stoneCargo);
-        wc.deliver(stoneCargo);
+        house.promiseDelivery(STONE);
+        house.promiseDelivery(STONE);
+        house.deliver(stoneCargo);
+        house.deliver(stoneCargo);
         
-        Utils.fastForward(100, wc);
+        Utils.fastForward(100, house);
     }
     
     static boolean roadEqualsFlags(Road r, Flag p1, Flag p2) {
@@ -182,27 +186,29 @@ public class Utils {
         return isEmpty;
     }
 
-    static void constructLargeHouse(Storage hq) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructLargeHouse(Storage house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
+
         Cargo planckCargo = Cargo.createCargo(PLANCK);
         Cargo stoneCargo = Cargo.createCargo(STONE);
         
         /* Deliver 4 wood and 3 stone */
-        hq.promiseDelivery(PLANCK);
-        hq.promiseDelivery(PLANCK);
-        hq.promiseDelivery(PLANCK);
-        hq.promiseDelivery(PLANCK);
-        hq.deliver(planckCargo);
-        hq.deliver(planckCargo);
-        hq.deliver(planckCargo);
-        hq.deliver(planckCargo);
+        house.promiseDelivery(PLANCK);
+        house.promiseDelivery(PLANCK);
+        house.promiseDelivery(PLANCK);
+        house.promiseDelivery(PLANCK);
+        house.deliver(planckCargo);
+        house.deliver(planckCargo);
+        house.deliver(planckCargo);
+        house.deliver(planckCargo);
 
-        hq.promiseDelivery(STONE);
-        hq.promiseDelivery(STONE);
-        hq.promiseDelivery(STONE);
-        hq.promiseDelivery(STONE);
-        hq.deliver(stoneCargo);
-        hq.deliver(stoneCargo);        
-        hq.deliver(stoneCargo);
-        hq.deliver(stoneCargo);
+        house.promiseDelivery(STONE);
+        house.promiseDelivery(STONE);
+        house.promiseDelivery(STONE);
+        house.promiseDelivery(STONE);
+        house.deliver(stoneCargo);
+        house.deliver(stoneCargo);        
+        house.deliver(stoneCargo);
+        house.deliver(stoneCargo);
     }
 }

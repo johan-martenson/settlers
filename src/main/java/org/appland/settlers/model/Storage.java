@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.PRIVATE;
@@ -124,10 +125,8 @@ public class Storage extends Building implements Actor {
 	public void deposit(Cargo c) {
 		log.log(Level.INFO, "Depositing cargo {0}", c);
 		
-		int amount = inventory.get(c.getMaterial());
-		
-		inventory.put(c.getMaterial(), amount + 1);
-		
+                storeOneInInventory(c.getMaterial());
+                
 		log.log(Level.FINE, "Inventory is {0} after deposit", inventory);
 	}
 
@@ -171,13 +170,30 @@ public class Storage extends Building implements Actor {
                 throw new Exception("Can't handle military with rank " + m.getRank());
             }
             
-            int amount = inventory.get(material);
-            inventory.put(material, amount + 1);
+            storeOneInInventory(material);
+        } else if (w instanceof Forester) {
+            storeOneInInventory(FORESTER);
         }
         
     }
 
-    public Military retrieveWorker(Material material) throws Exception {
+    public Worker retrieveWorker(Material material) throws Exception {
+        Worker w = null;
+        
+        switch(material) {
+        case FORESTER:
+            w = new Forester();
+            break;
+        default:
+            throw new Exception("Can't retrieve worker of type " + material);
+        }
+        
+        w.setPosition(getFlag());
+        
+        return w;
+    }
+    
+    public Military retrieveMilitary(Material material) throws Exception {
         Military.Rank r = Military.Rank.PRIVATE_RANK;
         
         switch(material) {
@@ -194,13 +210,21 @@ public class Storage extends Building implements Actor {
             throw new Exception("Can't retrieve worker of type " + material);
         }
         
-        return new Military(r);
+        Military m = new Military(r);
+        
+        m.setPosition(getFlag());
+        
+        return m;
     }
 
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
         
-        return new Courier();
+        Courier c = new Courier();
+        
+        c.setPosition(getFlag());
+        
+        return c;
     }
 
     public Military retrieveMilitary() throws Exception {
@@ -232,5 +256,11 @@ public class Storage extends Building implements Actor {
         int amount = inventory.get(m);
         
         inventory.put(m, amount - 1);
+    }
+    
+    private void storeOneInInventory(Material m) {
+        int amount = inventory.get(m);
+        
+        inventory.put(m, amount + 1);
     }
 }

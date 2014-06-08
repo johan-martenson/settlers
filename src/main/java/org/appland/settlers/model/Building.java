@@ -1,6 +1,8 @@
 package org.appland.settlers.model;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +17,11 @@ import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 
 import static org.appland.settlers.model.Material.*;
 
-
 public class Building implements Actor {
     private List<Military> hostedMilitary;
     private List<Military> promisedMilitary;
+    private Worker worker;
+    private Worker promisedWorker;
 
     public boolean isMilitaryBuilding() {
         MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
@@ -37,19 +40,33 @@ public class Building implements Actor {
     }
 
     public boolean needsWorker() {
-        return false;
+        if (!ready()) {
+            return false;
+        }
+        
+        if (worker != null || promisedWorker != null) {
+            return false;
+        }
+        
+        return isWorkerNeeded;
     }
 
-    public Material getWorkerType() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Material getWorkerType() throws Exception {
+        RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
+        
+        if (rw == null) {
+            throw new Exception("No worker needed in " + this);
+        }
+        
+        return rw.workerType();
     }
 
     public void promiseMilitary(Military m) {
         promisedMilitary.add(m);
     }
 
-    public void promiseWorker() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void promiseWorker(Worker w) {
+        promisedWorker = w;
     }
 
     public boolean needMilitaryManning() {
@@ -69,8 +86,19 @@ public class Building implements Actor {
         return promisedMilitary.size();
     }
 
-    public void assignWorker(Worker w) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void assignWorker(Worker w) throws Exception {
+        if (!ready()) {
+            throw new Exception("Can't assign worker to unfinished building");
+        }
+        
+        if (worker != null) {
+            throw new Exception("Building " + this + " is already occupied.");
+        }
+        
+        log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[] {w, this});
+        
+        worker = w;
+        promisedWorker = null;
     }
 
     private boolean isProducer() {
@@ -82,6 +110,18 @@ public class Building implements Actor {
     public void hostMilitary(Military military) {
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
+    }
+
+    private boolean getWorkerRequired() {
+        log.log(Level.INFO, "Checking if {0} requires a worker", this);
+        
+        RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
+        
+        return rw != null;
+    }
+
+    public Worker getWorker() {
+        return worker;
     }
 
     public enum ConstructionState {
@@ -100,6 +140,7 @@ public class Building implements Actor {
     private int                    productionCountdown;
     private Flag                   flag;
     private Cargo                  outputCargo; 
+    private boolean                isWorkerNeeded;
 
     private Logger log = Logger.getLogger(Building.class.getName());
 
@@ -113,14 +154,23 @@ public class Building implements Actor {
             outputCargo           = null;
             flag                  = Flag.createFlag(null);
             productionCountdown   = -1;
+            worker                = null;
+            promisedWorker        = null;
+            
+            /* Check and remember if this building requires a worker */
+            isWorkerNeeded = getWorkerRequired();
     }
     
     public Map<Material, Integer> getInQueue() {
         return receivedMaterial;
     }
     
-    public boolean needsWorker(Material material) {
-        return false;
+    public boolean needsWorker(Material material) throws Exception {
+        if (!isWorkerNeeded) {
+            return false;
+        }
+        
+        return getWorkerType() == material;
     }
     
     public boolean isCargoReady() {

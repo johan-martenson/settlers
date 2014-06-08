@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.Map;
+import static org.appland.settlers.model.Building.ConstructionState.DONE;
 
 import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military.Rank;
@@ -13,6 +14,8 @@ public class Headquarter extends Storage {
 	super();
 	
 	setHeadquarterDefaultInventory(inventory);
+        
+        constructionState = DONE;
     }
     
     public static Headquarter createHeadquarter() {

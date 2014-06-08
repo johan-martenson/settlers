@@ -6,6 +6,7 @@
 
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class Worker implements Actor {
     @Override
     public void stepTime() {
         log.log(Level.INFO, "Stepping time");
-
+        
         if (path != null) {
             log.log(Level.FINE, "There is a path set: {0}", path);
 
@@ -58,7 +59,14 @@ public class Worker implements Actor {
         }
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName();
+    }
+    
     private void reachedNextStep() {
+        log.log(Level.INFO, "Worker {0} has reached {1}", new Object[] {this, path.get(0)});
+        
         position = path.get(0);
         
         path.remove(0);
@@ -81,6 +89,21 @@ public class Worker implements Actor {
         
         targetRoad = r;
         traveling = true;
+        
+        if (r.start.equals(position) || r.end.equals(position)) {
+            path = null;
+        } else {
+            List<Flag> path1 = map.findWay(position, r.start);
+            List<Flag> path2 = map.findWay(position, r.end);
+
+            if (path1.size() < path2.size()) {
+                path = path1;
+                target = r.start;
+            } else {
+                path = path2;
+                target = r.end;
+            }
+        }
     }
 
     public void setPosition(Flag flag) {

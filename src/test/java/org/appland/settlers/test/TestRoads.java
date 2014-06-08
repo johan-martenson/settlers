@@ -155,8 +155,6 @@ public class TestRoads {
                 /* Test route with List<Road> */
                 List<Road> roadsRoute = map.findWayInRoads(points[0], target);
 
-                System.out.println(roadsRoute);
-                
 		assertNotNull(roadsRoute);
 		assertTrue(!roadsRoute.isEmpty());
 		
