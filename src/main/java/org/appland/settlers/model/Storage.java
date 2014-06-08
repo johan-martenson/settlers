@@ -32,10 +32,6 @@ public class Storage extends Building implements Actor {
 	    draftCountdown = -1;
 	}
 
-	public Map<Material, Integer> getInventory() {
-		return inventory;
-	}
-
 	/* This method updates the inventory as a side effect, without any locking */
 	private void draftMilitary() {
 		int swords = inventory.get(SWORD);
@@ -258,5 +254,9 @@ public class Storage extends Building implements Actor {
         int amount = inventory.get(m);
         
         inventory.put(m, amount + 1);
+    }
+
+    public int getAmount(Material m) {
+        return inventory.get(m);
     }
 }

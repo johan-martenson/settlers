@@ -31,8 +31,12 @@ public class Building implements Actor {
 
     public int getMaxHostedMilitary() {
         MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
-        
-        return mb.maxHostedMilitary();
+    
+        if (mb == null) {
+            return 0;
+        } else {
+            return mb.maxHostedMilitary();
+        }
     }
 
     public int getHostedMilitary() {
@@ -65,7 +69,15 @@ public class Building implements Actor {
         promisedMilitary.add(m);
     }
 
-    public void promiseWorker(Worker w) {
+    public void promiseWorker(Worker w) throws Exception {
+        if (!ready()) {
+            throw new Exception("Can't promise worker to building in state " + constructionState);
+        }
+        
+        if (promisedWorker != null) {
+            throw new Exception("Building " + this + " is already promised worker " + promisedWorker);
+        }
+        
         promisedWorker = w;
     }
 

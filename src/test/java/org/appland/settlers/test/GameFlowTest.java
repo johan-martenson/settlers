@@ -624,11 +624,11 @@ public class GameFlowTest {
         hq.depositWorker(new Military(Rank.PRIVATE_RANK));
         hq.depositWorker(new Military(Rank.PRIVATE_RANK));
         
-        assertTrue(hq.getInventory().get(PRIVATE) == 3);
+        assertTrue(hq.getAmount(PRIVATE) == 3);
         
         hq.depositWorker(new Forester());
         
-        assertTrue(hq.getInventory().get(FORESTER) == 1);
+        assertTrue(hq.getAmount(FORESTER) == 1);
         
         /* Assign new workers to unoccupied places and verify that there is a 
          * worker designated for the road. There should be no worker for the 
@@ -676,7 +676,7 @@ public class GameFlowTest {
         assertTrue(bk.isMilitaryBuilding());
         assertTrue(bk.needMilitaryManning());
         assertTrue(bk.getHostedMilitary() == 0);
-        assertTrue(hq.getInventory().get(Material.PRIVATE) == 3);
+        assertTrue(hq.getAmount(Material.PRIVATE) == 3);
         assignNewWorkerToUnoccupiedPlaces(map);
         
         assertTrue(map.getAllWorkers().size() == 3);
@@ -686,7 +686,7 @@ public class GameFlowTest {
 
         assertTrue(map.getTravelingWorkers().size() == 1);
         
-        assertTrue(hq.getInventory().get(Material.PRIVATE) == 2);
+        assertTrue(hq.getAmount(Material.PRIVATE) == 2);
         
         /* Let the military reach the barracks */
         Utils.fastForward(100, map);
@@ -716,7 +716,7 @@ public class GameFlowTest {
         
         assertFalse(bk.needMilitaryManning());
         
-        assertTrue(hq.getInventory().get(Material.PRIVATE) == 1);
+        assertTrue(hq.getAmount(Material.PRIVATE) == 1);
 
         /* Let the military reach the barracks */
         Utils.fastForward(100, map);
@@ -753,7 +753,7 @@ public class GameFlowTest {
         /* Assign new workers to unoccupied buildings and roads. The forester
          * hut needs a forester so a forester should be dispatched from the hq
         */
-        assertTrue(hq.getInventory().get(FORESTER) == 1);
+        assertTrue(hq.getAmount(FORESTER) == 1);
         assertTrue(fHut.needsWorker(FORESTER));
         
         assignNewWorkerToUnoccupiedPlaces(map);
@@ -891,11 +891,10 @@ public class GameFlowTest {
      * The cargo gets the house as its target and is put at the HQ's flag
     */
     private void initiateNewDeliveries(Storage hq, GameMap map) throws InvalidRouteException {
-        Map<Material, Integer> inventory = hq.getInventory();
         Building targetBuilding = null;
         Material materialToDeliver = WOOD;
         
-        for (Material m : inventory.keySet()) {
+        for (Material m : Material.values()) {
             assertNotNull(m);
             
             for (Building b : map.getBuildings()) {

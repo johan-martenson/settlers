@@ -60,16 +60,12 @@ public class InitialModelTest {
 		/* Verify that the initial inventory is correct */
 		Storage storage = player.getStorages().get(0);
 		
-		Map<Material, Integer> inventory = storage.getInventory();
-		
-		assertNotNull(inventory);
-		
-		assertTrue(0 == inventory.get(Material.SHIELD));
-		assertTrue(0 == inventory.get(Material.SWORD));
-		assertTrue(0 == inventory.get(Material.PRIVATE));
-		assertTrue(0 == inventory.get(Material.SERGEANT));
-		assertTrue(0 == inventory.get(Material.GENERAL));
-		assertTrue(0 == inventory.get(Material.BEER));
-		assertTrue(0 == inventory.get(Material.GOLD));
+		assertTrue(storage.getAmount(Material.SHIELD) == 0);
+		assertTrue(storage.getAmount(Material.SWORD) == 0);
+		assertTrue(storage.getAmount(Material.PRIVATE) == 0);
+		assertTrue(storage.getAmount(Material.SERGEANT) == 0);
+		assertTrue(storage.getAmount(Material.GENERAL) == 0);
+		assertTrue(storage.getAmount(Material.BEER) == 0);
+		assertTrue(storage.getAmount(Material.GOLD) == 0);
 	}
 }
