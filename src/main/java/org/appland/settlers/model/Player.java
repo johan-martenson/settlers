@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.appland.settlers.model;
 
@@ -11,17 +11,17 @@ import java.util.List;
  *
  */
 public class Player {
-	
-	/* Buildings */
-	List<Storage> storages;
-	
-	public Player() {
-		storages = new ArrayList<>();
-		
-		storages.add(new Storage());
-	}
-	
-	public List<Storage> getStorages() {
-		return storages;
-	}
+
+    /* Buildings */
+    List<Storage> storages;
+
+    public Player() {
+        storages = new ArrayList<>();
+
+        storages.add(new Storage());
+    }
+
+    public List<Storage> getStorages() {
+        return storages;
+    }
 }

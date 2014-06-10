@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.appland.settlers.model;
 
-@Walker(speed=10)
+@Walker(speed = 10)
 public class Forester extends Worker {
-    
+
 }

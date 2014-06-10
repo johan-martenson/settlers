@@ -7,27 +7,29 @@ import static org.appland.settlers.model.Courier.State.IDLE;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
+
     private State state;
 
     enum State {
+
         IDLE,
         BUSY,
         WALKING_TO_DESTINATION
     }
-    
-    private Cargo      cargo;
-    private Road       road;
+
+    private Cargo cargo;
+    private Road road;
 
     private static Logger log = Logger.getLogger(Courier.class.getName());
 
     public Courier(GameMap gm) {
         log.info("Creating new worker");
-        path     = null;
-        road     = null;
-        state    = IDLE;
+        path = null;
+        road = null;
+        state = IDLE;
         position = null;
-        cargo    = null;
-        map      = gm;
+        cargo = null;
+        map = gm;
     }
 
     public void setRoad(Road road) {
@@ -43,12 +45,12 @@ public class Courier extends Worker {
     @Override
     public void stepTime() {
         super.stepTime();
-        
+
         if (cargo != null) {
             cargo.setPosition(getPosition());
         }
     }
-    
+
     public void putDownCargo() {
         log.log(Level.INFO, "Putting cargo down at position {0}", position);
 
@@ -60,7 +62,7 @@ public class Courier extends Worker {
         cargo.setPosition(position);
 
         cargo = null;
-        
+
         state = IDLE;
     }
 
@@ -79,7 +81,7 @@ public class Courier extends Worker {
         }
 
         log.log(Level.FINE, "Target is {0}", target);
-        
+
         state = BUSY;
     }
 
@@ -93,7 +95,7 @@ public class Courier extends Worker {
                 cargo = c;
             }
         }
-        
+
         position = flag;
 
         cargo = position.retrieveCargo(cargo);
@@ -103,7 +105,7 @@ public class Courier extends Worker {
         } else {
             setTargetFlag(road.start);
         }
-        
+
         state = BUSY;
     }
 
@@ -111,7 +113,7 @@ public class Courier extends Worker {
         targetBuilding.deliver(this.getCargo());
 
         this.cargo = null;
-        
+
         state = IDLE;
     }
 
@@ -119,14 +121,14 @@ public class Courier extends Worker {
     public String toString() {
         if (isTraveling()) {
             String str = "Courier at " + getPosition() + "traveling to flag " + getTarget();
-            
+
             if (targetRoad != null) {
                 str += " for " + targetRoad;
             }
-            
+
             return str;
         }
-        
+
         if (state == IDLE) {
             return "Idle courier at road (" + getRoad() + ")";
         } else if (state == BUSY) {

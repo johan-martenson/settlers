@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.appland.settlers.model;
 
 /**
@@ -15,7 +14,7 @@ public class Point extends java.awt.Point {
     public Point(int x, int y) {
         super(x, y);
     }
-    
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";

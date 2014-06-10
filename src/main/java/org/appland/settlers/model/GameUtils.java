@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.appland.settlers.model;
 
 import java.util.HashMap;
@@ -25,13 +24,13 @@ public class GameUtils {
 
     static boolean isQueueEmpty(Map<Material, Integer> queue) {
         boolean isEmpty = true;
-        
+
         for (Integer amount : queue.values()) {
             if (amount != 0) {
                 isEmpty = false;
             }
         }
-        
+
         return isEmpty;
     }
 }

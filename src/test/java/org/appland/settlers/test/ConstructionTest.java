@@ -30,223 +30,222 @@ import org.junit.Test;
 
 public class ConstructionTest {
 
-	@Test
-	public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Woodcutter wc = new Woodcutter();
-		
-                assertFalse(wc.isMilitaryBuilding());
-                
-                assertTrue(Utils.materialIntMapIsEmpty(wc.getInQueue()));
-		assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
-                assertFalse(wc.isCargoReady());
-                
-                assertTrue(wc.needsMaterial(PLANCK));
-                assertTrue(wc.needsMaterial(STONE));
-                
-                assertFalse(wc.needsMaterial(SERGEANT));
-                
-                assertTrue(wc.needsMaterial(PLANCK));
-                assertTrue(wc.needsMaterial(STONE));
-                
-                wc.promiseDelivery(PLANCK);
-                assertTrue(wc.needsMaterial(PLANCK));
-                assertTrue(wc.needsMaterial(STONE));
-                
-                wc.promiseDelivery(PLANCK);
-                assertFalse(wc.needsMaterial(PLANCK));
-                assertTrue(wc.needsMaterial(STONE));
-                
-                wc.promiseDelivery(STONE);
-                assertFalse(wc.needsMaterial(PLANCK));
-                assertTrue(wc.needsMaterial(STONE));
-                
-                wc.promiseDelivery(STONE);
-                assertFalse(wc.needsMaterial(PLANCK));
-                assertFalse(wc.needsMaterial(STONE));
-		
-		/* Verify that construction doesn't finish before material is delivered */
-                Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
-		
-		Cargo planckCargo = new Cargo(PLANCK);
-                Cargo stoneCargo = new Cargo(STONE);
-		wc.deliver(planckCargo);
-                wc.deliver(planckCargo);
-                wc.deliver(stoneCargo);
-                
-                Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
-                
-                /* Verify that construction can finish when all material is delivered */
-                wc.deliver(stoneCargo);
-                wc.stepTime();
-                
-		assertTrue(wc.getConstructionState() == DONE);
-                
-                assertFalse(wc.isMilitaryBuilding());
-		
-                /* Verify that all material was consumed by the construction */
-                assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
-                assertTrue(wc.getMaterialInQueue(STONE) == 0);
+    @Test
+    public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Woodcutter wc = new Woodcutter();
 
-                /* Verify that the woodcutter doesn't need any material when it's finished */
-                for (Material m : Material.values()) {
-                    assertFalse(wc.needsMaterial(m));
-                }
-                
-		wc.tearDown();
-		
-		assertTrue(wc.getConstructionState() == BURNING);
-		
-                int i;
-		for (i = 0; i < 50; i++) {
-			assertTrue(wc.getConstructionState() == BURNING);
-			wc.stepTime();
-		}
-		
-		assertTrue(wc.getConstructionState() == DESTROYED);
-	}
-	
-        @Test
-        public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-            Barracks brks = new Barracks();
-            
-            assertTrue(brks.getConstructionState() == UNDER_CONSTRUCTION);
-            
-            assertTrue(brks.isMilitaryBuilding());
-            assertTrue(brks.getMaxHostedMilitary() == 2);
-            assertTrue(brks.getHostedMilitary() == 0);
-            assertTrue(brks.getPromisedMilitary() == 0);
-            
-            assertFalse(brks.needMilitaryManning());
-            
-            Utils.constructSmallHouse(brks);
-            
-            assertTrue(brks.isMilitaryBuilding());
-            assertTrue(brks.getConstructionState() == DONE);
-            assertTrue(brks.getHostedMilitary()== 0);
-            assertTrue(brks.getMaxHostedMilitary() == 2);
-            assertTrue(brks.needMilitaryManning());
+        assertFalse(wc.isMilitaryBuilding());
 
-            assertTrue(brks.isMilitaryBuilding());
+        assertTrue(Utils.materialIntMapIsEmpty(wc.getInQueue()));
+        assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
+        assertFalse(wc.isCargoReady());
+
+        assertTrue(wc.needsMaterial(PLANCK));
+        assertTrue(wc.needsMaterial(STONE));
+
+        assertFalse(wc.needsMaterial(SERGEANT));
+
+        assertTrue(wc.needsMaterial(PLANCK));
+        assertTrue(wc.needsMaterial(STONE));
+
+        wc.promiseDelivery(PLANCK);
+        assertTrue(wc.needsMaterial(PLANCK));
+        assertTrue(wc.needsMaterial(STONE));
+
+        wc.promiseDelivery(PLANCK);
+        assertFalse(wc.needsMaterial(PLANCK));
+        assertTrue(wc.needsMaterial(STONE));
+
+        wc.promiseDelivery(STONE);
+        assertFalse(wc.needsMaterial(PLANCK));
+        assertTrue(wc.needsMaterial(STONE));
+
+        wc.promiseDelivery(STONE);
+        assertFalse(wc.needsMaterial(PLANCK));
+        assertFalse(wc.needsMaterial(STONE));
+
+        /* Verify that construction doesn't finish before material is delivered */
+        Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
+
+        Cargo planckCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
+        wc.deliver(planckCargo);
+        wc.deliver(planckCargo);
+        wc.deliver(stoneCargo);
+
+        Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
+
+        /* Verify that construction can finish when all material is delivered */
+        wc.deliver(stoneCargo);
+        wc.stepTime();
+
+        assertTrue(wc.getConstructionState() == DONE);
+
+        assertFalse(wc.isMilitaryBuilding());
+
+        /* Verify that all material was consumed by the construction */
+        assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
+        assertTrue(wc.getMaterialInQueue(STONE) == 0);
+
+        /* Verify that the woodcutter doesn't need any material when it's finished */
+        for (Material m : Material.values()) {
+            assertFalse(wc.needsMaterial(m));
         }
-        
-	@Test
-	public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-		Sawmill sm = new Sawmill();
-		
-		assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
-		
-		/* Verify that construction doesn't finish before material is delivered */
-                Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
-		
-		Cargo planckCargo = new Cargo(PLANCK);
-                Cargo stoneCargo = new Cargo(STONE);
-		sm.deliver(planckCargo);
-                sm.deliver(planckCargo);
-                sm.deliver(planckCargo);
-                sm.deliver(planckCargo);
-                sm.deliver(stoneCargo);
-                sm.deliver(stoneCargo);
-                
-                Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
 
-                /* Verify that construction can finish when all material is delivered */
-                sm.deliver(stoneCargo);
-                sm.stepTime();
-		
-                assertTrue(sm.getConstructionState() == DONE);
-                
-                 /* Verify that all material was consumed by the construction */
-                assertTrue(sm.getMaterialInQueue(PLANCK) == 0);
-                assertTrue(sm.getMaterialInQueue(STONE) == 0);
-                
-                /* Verify that the sawmill needs only WOOD when it's finished */
-                assertTrue(sm.needsMaterial(WOOD));
-                assertFalse(sm.needsMaterial(PLANCK));
-                assertFalse(sm.needsMaterial(STONE));
-                
-                
-		sm.tearDown();
-		
-		Utils.assertConstructionStateDuringFastForward(50, sm, BURNING);
-		
-		assertTrue(sm.getConstructionState() == DESTROYED);
-	}
+        wc.tearDown();
 
-        @Test
-        public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-            Farm farm = new Farm();
-            assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
-            
-            /* Verify that construction doesn't finish before material is delivered */
-                Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
-		
-		Cargo planckCargo = new Cargo(PLANCK);
-                Cargo stoneCargo = new Cargo(STONE);
-		farm.deliver(planckCargo);
-                farm.deliver(planckCargo);
-                farm.deliver(planckCargo);
-                farm.deliver(planckCargo);
-                farm.deliver(stoneCargo);
-                farm.deliver(stoneCargo);
-                farm.deliver(stoneCargo);
-                
-                Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
-            
-                /* Verify that construction can finish when all material is delivered */
-                farm.deliver(stoneCargo);
-                farm.stepTime();
-		
-                assertTrue(farm.getConstructionState() == DONE);
-                
-                 /* Verify that all material was consumed by the construction */
-                assertTrue(farm.getMaterialInQueue(PLANCK) == 0);
-                assertTrue(farm.getMaterialInQueue(STONE) == 0);
-                
-		farm.tearDown();
-		
-		Utils.assertConstructionStateDuringFastForward(50, farm, BURNING);
-		
-		assertTrue(farm.getConstructionState() == DESTROYED);
+        assertTrue(wc.getConstructionState() == BURNING);
+
+        int i;
+        for (i = 0; i < 50; i++) {
+            assertTrue(wc.getConstructionState() == BURNING);
+            wc.stepTime();
         }
-        
-	@Test(expected=InvalidMaterialException.class)
-	public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sw = new Sawmill();
 
-		sw.deliver(new Cargo(SWORD));
-	}
+        assertTrue(wc.getConstructionState() == DESTROYED);
+    }
 
-	@Test(expected=InvalidStateForProduction.class)
-	public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sm = new Sawmill();
-		
-                Utils.constructMediumHouse(sm);
-		
-		assertTrue(sm.getConstructionState() == DONE);
-		
-		sm.tearDown();
-		
-		sm.deliver(new Cargo(WOOD));
-	}
-	
-	@Test (expected=InvalidStateForProduction.class)
-	public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-		Sawmill sm = new Sawmill();
-		
-                Utils.constructMediumHouse(sm);
-                
-		assertTrue(sm.getConstructionState() == DONE);
-		
-		sm.tearDown();
-		
-		Utils.fastForward(1000, sm);
-		
-		sm.deliver(new Cargo(WOOD));
-	}
-	
+    @Test
+    public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Barracks brks = new Barracks();
+
+        assertTrue(brks.getConstructionState() == UNDER_CONSTRUCTION);
+
+        assertTrue(brks.isMilitaryBuilding());
+        assertTrue(brks.getMaxHostedMilitary() == 2);
+        assertTrue(brks.getHostedMilitary() == 0);
+        assertTrue(brks.getPromisedMilitary() == 0);
+
+        assertFalse(brks.needMilitaryManning());
+
+        Utils.constructSmallHouse(brks);
+
+        assertTrue(brks.isMilitaryBuilding());
+        assertTrue(brks.getConstructionState() == DONE);
+        assertTrue(brks.getHostedMilitary() == 0);
+        assertTrue(brks.getMaxHostedMilitary() == 2);
+        assertTrue(brks.needMilitaryManning());
+
+        assertTrue(brks.isMilitaryBuilding());
+    }
+
+    @Test
+    public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Sawmill sm = new Sawmill();
+
+        assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
+
+        /* Verify that construction doesn't finish before material is delivered */
+        Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
+
+        Cargo planckCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
+        sm.deliver(planckCargo);
+        sm.deliver(planckCargo);
+        sm.deliver(planckCargo);
+        sm.deliver(planckCargo);
+        sm.deliver(stoneCargo);
+        sm.deliver(stoneCargo);
+
+        Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
+
+        /* Verify that construction can finish when all material is delivered */
+        sm.deliver(stoneCargo);
+        sm.stepTime();
+
+        assertTrue(sm.getConstructionState() == DONE);
+
+        /* Verify that all material was consumed by the construction */
+        assertTrue(sm.getMaterialInQueue(PLANCK) == 0);
+        assertTrue(sm.getMaterialInQueue(STONE) == 0);
+
+        /* Verify that the sawmill needs only WOOD when it's finished */
+        assertTrue(sm.needsMaterial(WOOD));
+        assertFalse(sm.needsMaterial(PLANCK));
+        assertFalse(sm.needsMaterial(STONE));
+
+        sm.tearDown();
+
+        Utils.assertConstructionStateDuringFastForward(50, sm, BURNING);
+
+        assertTrue(sm.getConstructionState() == DESTROYED);
+    }
+
+    @Test
+    public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Farm farm = new Farm();
+        assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
+
+        /* Verify that construction doesn't finish before material is delivered */
+        Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+
+        Cargo planckCargo = new Cargo(PLANCK);
+        Cargo stoneCargo = new Cargo(STONE);
+        farm.deliver(planckCargo);
+        farm.deliver(planckCargo);
+        farm.deliver(planckCargo);
+        farm.deliver(planckCargo);
+        farm.deliver(stoneCargo);
+        farm.deliver(stoneCargo);
+        farm.deliver(stoneCargo);
+
+        Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+
+        /* Verify that construction can finish when all material is delivered */
+        farm.deliver(stoneCargo);
+        farm.stepTime();
+
+        assertTrue(farm.getConstructionState() == DONE);
+
+        /* Verify that all material was consumed by the construction */
+        assertTrue(farm.getMaterialInQueue(PLANCK) == 0);
+        assertTrue(farm.getMaterialInQueue(STONE) == 0);
+
+        farm.tearDown();
+
+        Utils.assertConstructionStateDuringFastForward(50, farm, BURNING);
+
+        assertTrue(farm.getConstructionState() == DESTROYED);
+    }
+
+    @Test(expected = InvalidMaterialException.class)
+    public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+        Sawmill sw = new Sawmill();
+
+        sw.deliver(new Cargo(SWORD));
+    }
+
+    @Test(expected = InvalidStateForProduction.class)
+    public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+        Sawmill sm = new Sawmill();
+
+        Utils.constructMediumHouse(sm);
+
+        assertTrue(sm.getConstructionState() == DONE);
+
+        sm.tearDown();
+
+        sm.deliver(new Cargo(WOOD));
+    }
+
+    @Test(expected = InvalidStateForProduction.class)
+    public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+        Sawmill sm = new Sawmill();
+
+        Utils.constructMediumHouse(sm);
+
+        assertTrue(sm.getConstructionState() == DONE);
+
+        sm.tearDown();
+
+        Utils.fastForward(1000, sm);
+
+        sm.deliver(new Cargo(WOOD));
+    }
+
     private boolean matchesRequiredMaterialForSmallHouse(Map<Material, Integer> requiredMaterialToFinish) {
         boolean matches = true;
-        
+
         for (Material m : Material.values()) {
             if (m == PLANCK && requiredMaterialToFinish.get(m) != 2) {
                 matches = false;

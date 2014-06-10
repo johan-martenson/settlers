@@ -3,12 +3,12 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.*;
 
-@Production(output=STONE, productionTime=100, requiredGoods = {})
-@HouseSize(size=SMALL)
+@Production(output = STONE, productionTime = 100, requiredGoods = {})
+@HouseSize(size = SMALL)
 public class Quarry extends Building {
-        
-        @Override
-        public String toString() {
-            return "Quarry";
-        }
+
+    @Override
+    public String toString() {
+        return "Quarry";
+    }
 }
