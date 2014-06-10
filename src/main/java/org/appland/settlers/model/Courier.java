@@ -118,7 +118,13 @@ public class Courier extends Worker {
     @Override
     public String toString() {
         if (isTraveling()) {
-            return "Courier traveling to " + targetRoad;
+            String str = "Courier at " + getPosition() + "traveling to flag " + getTarget();
+            
+            if (targetRoad != null) {
+                str += " for " + targetRoad;
+            }
+            
+            return str;
         }
         
         if (state == IDLE) {

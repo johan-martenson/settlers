@@ -62,7 +62,7 @@ public class TestTransportation {
 	}
 	
 	@Test
-	public void testCreateRoad() throws InvalidEndPointException {
+	public void testCreateRoad() throws InvalidEndPointException, Exception {
 		GameMap map = new GameMap();
 		
 		Storage hq = new Storage();
@@ -90,7 +90,7 @@ public class TestTransportation {
 	}
 	
 	@Test(expected=InvalidEndPointException.class)
-	public void testCreateRoadWithoutStartBuilding() throws InvalidEndPointException {
+	public void testCreateRoadWithoutStartBuilding() throws InvalidEndPointException, Exception {
 		GameMap map = new GameMap();
 		
 		Storage s = new Storage();
@@ -101,7 +101,7 @@ public class TestTransportation {
 	}
 	
 	@Test(expected=InvalidEndPointException.class)
-	public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException {
+	public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException, Exception {
 		GameMap map = new GameMap();
 		
 		Woodcutter wc = new Woodcutter();
@@ -119,7 +119,7 @@ public class TestTransportation {
 	}
 	
 	@Test
-	public void createTwoChainedRoads() throws InvalidEndPointException {
+	public void createTwoChainedRoads() throws InvalidEndPointException, Exception {
 		GameMap map = new GameMap();
 		
 		Woodcutter wc = new Woodcutter();
@@ -190,7 +190,7 @@ public class TestTransportation {
 	}
 	
 	@Test
-	public void testWorkerWalk() throws InvalidEndPointException, InvalidRouteException {
+	public void testWorkerWalk() throws InvalidEndPointException, InvalidRouteException, Exception {
 		/*
 		 * F--F1--F2--F3--F4
 		 *    |    |
@@ -279,7 +279,7 @@ public class TestTransportation {
 	}
 	
 	@Test
-	public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException {
+	public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 		GameMap map = new GameMap();
 		
 		Quarry qry = new Quarry();
@@ -348,6 +348,7 @@ public class TestTransportation {
             r = new Road(hq.getFlag(), b.getFlag());
             
             map.placeRoad(r);
+            map.placeWorker(w, hq.getFlag());
             map.assignWorkerToRoad(w, r);
             
             /* Construct barracks */

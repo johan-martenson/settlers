@@ -6,7 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -161,10 +160,6 @@ public class Worker implements Actor {
 
         traveling = true;
     }
-
-    public void assignToBuilding(Building b) {
-        
-    }
     
     public boolean isTraveling() {
         return traveling;
@@ -185,5 +180,9 @@ public class Worker implements Actor {
     public void setTargetBuilding(Building b) throws InvalidRouteException {
         targetBuilding = b;
         setTargetFlag(b.getFlag());
+    }
+
+    public Building getTargetBuilding() {
+        return targetBuilding;
     }
 }

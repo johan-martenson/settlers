@@ -40,7 +40,11 @@ public class GameMap {
             }
         }
         
-        public void placeBuilding(Building hq, Point p) {
+        public void placeBuilding(Building hq, Point p) throws Exception {
+            if (buildings.contains(hq)) {
+                throw new Exception("Can't place " + hq + " as it is already placed.");
+            }
+            
             buildings.add(hq);
 		
             Flag flag = hq.getFlag();
@@ -183,10 +187,15 @@ public class GameMap {
 		return null;
 	}
 
-	public void assignWorkerToRoad(Courier wr, Road road) {
+	public void assignWorkerToRoad(Courier wr, Road road) throws Exception {
             road.setCourier(wr);
             wr.setRoad(road);
             roadToWorkerMap.put(road, wr);
+            
+            if (!allWorkers.contains(wr)) {
+                throw new Exception("Can't assign " + wr + " to " + road + 
+                        ". Worker is not placed on the map");
+            }
 	}
 
 	public Courier getNextWorkerForCargo(Cargo c) {
@@ -220,7 +229,7 @@ public class GameMap {
 		return new Road(end, start);
 	}
 
-	private Courier getWorkerForRoad(Road nextRoad) {
+	public Courier getWorkerForRoad(Road nextRoad) {
             log.log(Level.FINE, "Getting worker for {0}", nextRoad);
 		
             return roadToWorkerMap.get(nextRoad);
@@ -234,7 +243,7 @@ public class GameMap {
 		
 		if (points.size() == 2) {
 			log.log(Level.FINE, "Route found has only one road segment");
-			nextRoads.add(new Road(points.get(0), points.get(1)));
+                        nextRoads.add(getRoad(points.get(0), points.get(1)));
 			
 			log.log(Level.FINE, "Returning route {0}", nextRoads);
 			return nextRoads;
@@ -244,7 +253,7 @@ public class GameMap {
 		
 		int i;
 		for (i = 1; i < points.size(); i++) {
-			nextRoads.add(new Road(next, points.get(i)));
+                        nextRoads.add(getRoad(next, points.get(i)));
                         
                         next = points.get(i);
 		}
@@ -380,5 +389,19 @@ public class GameMap {
         }
         
         return result;
+    }
+
+    public List<Storage> getStorages() {
+        List<Storage> storages = new ArrayList<>();
+        
+        for (Building b : buildings) {
+            if (b instanceof Storage) {
+                storages.add((Storage)b);
+            } else if (b instanceof Headquarter) {
+                storages.add((Storage)b);
+            }
+        }
+        
+        return storages;
     }
 }

@@ -37,9 +37,4 @@ public class Headquarter extends Storage {
 	public String toString() {
 		return "Headquarter with inventory " + this.inventory; 
 	}
-
-
-    public void setReady() {
-        setConstructionReady();
-    }
 }

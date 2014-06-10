@@ -2,12 +2,16 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Flag {
 
 	private Point position;
 	private final List<Cargo> stackedCargo;
 
+        private static Logger log = Logger.getLogger(Flag.class.getName());
+        
         public Flag(int x, int y) {
             this(new Point(x, y));
         }
@@ -22,6 +26,8 @@ public class Flag {
 	}
 
 	public void putCargo(Cargo c) {
+            log.log(Level.INFO, "Putting {0} at {1}", new Object[] {c, this});
+            
             c.setPosition(this);
             stackedCargo.add(c);
 	}

@@ -100,7 +100,7 @@ public class Building implements Actor {
 
     public void assignWorker(Worker w) throws Exception {
         if (!ready()) {
-            throw new Exception("Can't assign worker to unfinished building");
+            throw new Exception("Can't assign " + w + " to unfinished " + this);
         }
         
         if (worker != null) {
@@ -202,7 +202,7 @@ public class Building implements Actor {
         } else if (burningDown() || destroyed()) {
             throw new InvalidStateForProduction(this);
         } else if (ready() && !canAcceptGoods(this)) {
-            throw new DeliveryNotPossibleException();
+            throw new DeliveryNotPossibleException(this);
         } else if (ready() && !isAccepted(material, this)) {
             throw new InvalidMaterialException(material);
         }

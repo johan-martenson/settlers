@@ -77,7 +77,7 @@ public class TestRoads {
         }
         
     	@Test
-	public void testFindRoute() throws InvalidEndPointException, InvalidRouteException {
+	public void testFindRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
 		/*
 		 * F--F1--F2--F3--F4--F10-----------------|
 		 *    |    |                             |

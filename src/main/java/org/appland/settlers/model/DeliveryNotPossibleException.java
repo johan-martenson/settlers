@@ -12,4 +12,8 @@ public class DeliveryNotPossibleException extends Exception {
 	public DeliveryNotPossibleException() {
 		super("This building does not accept deliveries.");
 	}
+        
+        public DeliveryNotPossibleException(Building b) {
+            super("Building " + b + " does not accept deliveries.");
+        }
 }

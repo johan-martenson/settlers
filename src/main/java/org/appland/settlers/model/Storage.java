@@ -259,4 +259,10 @@ public class Storage extends Building implements Actor {
     public int getAmount(Material m) {
         return inventory.get(m);
     }
+    
+    @Override
+    public void deliver(Cargo c) {
+        log.log(Level.INFO, "Delivering {0} to {1}", new Object[] {c, this});
+        storeOneInInventory(c.getMaterial());
+    }
 }
