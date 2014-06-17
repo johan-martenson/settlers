@@ -42,7 +42,7 @@ public class TestRoads {
     }
 
     @Test(expected = InvalidRouteException.class)
-    public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException {
+    public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
         GameMap map = new GameMap();
 
         Flag f1 = new Flag(new Point(1, 1));
@@ -57,7 +57,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException {
+    public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException, Exception {
         GameMap map = new GameMap();
 
         Flag f1 = new Flag(new Point(1, 1));

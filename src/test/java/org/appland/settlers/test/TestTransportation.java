@@ -131,7 +131,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidEndPointException.class)
-    public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException {
+    public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException, Exception {
         GameMap map = new GameMap();
 
         map.placeFlag(new Flag(3, 3));
@@ -139,7 +139,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testDoesRouteExist() throws InvalidEndPointException, InvalidRouteException {
+    public void testDoesRouteExist() throws InvalidEndPointException, InvalidRouteException, Exception {
 
         GameMap map = new GameMap();
 
@@ -159,7 +159,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testDoesRouteExistNo() throws InvalidEndPointException, InvalidRouteException {
+    public void testDoesRouteExistNo() throws InvalidEndPointException, InvalidRouteException, Exception {
         GameMap map = new GameMap();
 
         Flag[] points = new Flag[]{
@@ -259,7 +259,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidRouteException.class)
-    public void testWorkerUnreachableTarget() throws InvalidRouteException {
+    public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
         GameMap map = new GameMap();
 
         Flag target = new Flag(6, 2);
@@ -421,6 +421,22 @@ public class TestTransportation {
         gameLogic.assignTravelingWorkersThatHaveArrived(map);
         
         assertNotNull(hqToMiddleRoad.getCourier());
+    }
+
+    @Test
+    public void testEmptyRoadNeedsCourier() {
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(2, 2));
+        Road r  = new Road(f1, f2);
+        
+        assertTrue(r.needsCourier());
+    }
+    
+    @Test(expected=Exception.class)
+    public void testPromiseCourierTwice() throws Exception {
+        Road r = new Road(null, null);
+        r.promiseCourier();
+        r.promiseCourier();
     }
     
     @Test

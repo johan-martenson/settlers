@@ -45,6 +45,10 @@ public class GameMap {
             throw new Exception("Can't place " + hq + " as it is already placed.");
         }
 
+        if (!isPointFree(p)) {
+            throw new Exception("Can't place building on " + p);
+        }
+        
         buildings.add(hq);
 
         Flag flag = hq.getFlag();
@@ -231,7 +235,15 @@ public class GameMap {
         return nextRoads;
     }
 
-    public void placeFlag(Flag f) {
+    public void placeFlag(Flag f) throws Exception {
+        if (flags.contains(f)) {
+            throw new Exception("Flag " + f + " is already placed on the map");
+        }
+        
+        if (!isPointFree(f.getPosition())) {
+            throw new Exception("Can't place " + f + " on this point because it's already occupied");
+        }
+        
         this.flags.add(f);
     }
 
@@ -370,5 +382,18 @@ public class GameMap {
         }
 
         return storages;
+    }
+
+    private boolean isPointFree(Point p) {
+        boolean hit = false;
+        
+        for (Flag f : flags) {
+            if (f.getPosition().equals(p)) {
+                hit = true;
+                break;
+            }
+        }
+        
+        return !hit;
     }
 }

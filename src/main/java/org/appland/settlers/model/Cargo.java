@@ -2,16 +2,15 @@ package org.appland.settlers.model;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Cargo {
 
-    private Material material;
+    private Material   material;
     private List<Road> plannedRoads;
-    private Building target;
-    private Flag position;
+    private Building   target;
+    private Flag       position;
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -19,19 +18,6 @@ public class Cargo {
         log.log(Level.INFO, "Creating cargo of {0}", m);
 
         material = m;
-
-        /* Increase the log level */
-        log.setLevel(Level.FINEST);
-
-        Handler[] handlers = log.getHandlers();
-        for (Handler h : handlers) {
-            h.setLevel(Level.FINEST);
-        }
-    }
-
-    public static List<Cargo> buildCargoList(Map<Material, Integer> result) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     public Material getMaterial() {
