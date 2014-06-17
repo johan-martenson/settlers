@@ -25,12 +25,12 @@ public class MilitaryCreationAndPromotionTest {
     public void createPrivate() {
         int numberOfPrivates = storage.getAmount(Material.PRIVATE);
 
-        storage.deposit(new Cargo(Material.BEER));
-        storage.deposit(new Cargo(Material.SWORD));
-        storage.deposit(new Cargo(Material.SWORD));
-        storage.deposit(new Cargo(Material.SHIELD));
-        storage.deposit(new Cargo(Material.SHIELD));
-        storage.deposit(new Cargo(Material.SHIELD));
+        storage.deliver(new Cargo(Material.BEER));
+        storage.deliver(new Cargo(Material.SWORD));
+        storage.deliver(new Cargo(Material.SWORD));
+        storage.deliver(new Cargo(Material.SHIELD));
+        storage.deliver(new Cargo(Material.SHIELD));
+        storage.deliver(new Cargo(Material.SHIELD));
 
         assertTrue(storage.getAmount(Material.PRIVATE) == numberOfPrivates);
         assertTrue(storage.getAmount(Material.BEER) == 1);
@@ -47,8 +47,8 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteSinglePrivate() {
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.PRIVATE));
 
         assertTrue(1 == storage.getAmount(Material.GOLD));
         assertTrue(1 == storage.getAmount(Material.PRIVATE));
@@ -65,22 +65,22 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteGroupOfPrivates() {
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
 
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
 
         assertTrue(10 == storage.getAmount(Material.GOLD));
         assertTrue(5 == storage.getAmount(Material.PRIVATE));
@@ -97,26 +97,26 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promotePrivateAndSergeant() {
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
 
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
 
-        storage.deposit(new Cargo(Material.SERGEANT));
-        storage.deposit(new Cargo(Material.SERGEANT));
-        storage.deposit(new Cargo(Material.SERGEANT));
+        storage.deliver(new Cargo(Material.SERGEANT));
+        storage.deliver(new Cargo(Material.SERGEANT));
+        storage.deliver(new Cargo(Material.SERGEANT));
 
         assertTrue(10 == storage.getAmount(Material.GOLD));
         assertTrue(5 == storage.getAmount(Material.PRIVATE));
@@ -134,16 +134,16 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithoutMilitary() {
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
 
         Utils.fastForward(100, storage);
 
@@ -155,27 +155,27 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithOnlyGenerals() {
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
-        storage.deposit(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
+        storage.deliver(new Cargo(Material.GOLD));
 
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
-        storage.deposit(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
+        storage.deliver(new Cargo(Material.GENERAL));
 
         Utils.fastForward(100, storage);
 
@@ -188,11 +188,11 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithoutGold() {
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
-        storage.deposit(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
+        storage.deliver(new Cargo(Material.PRIVATE));
 
         Utils.fastForward(100, storage);
 

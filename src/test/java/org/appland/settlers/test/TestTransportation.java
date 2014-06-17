@@ -2,12 +2,12 @@ package org.appland.settlers.test;
 
 import java.util.List;
 import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -16,6 +16,7 @@ import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
@@ -25,21 +26,17 @@ import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
@@ -329,6 +326,104 @@ public class TestTransportation {
     }
 
     @Test
+    public void testDeliverWithHandover() throws Exception {
+        GameLogic gameLogic  = new GameLogic();
+        GameMap map          = new GameMap();
+        Storage storage      = new Storage();
+        Point hqPoint        = new Point(1, 1);
+        Point middlePoint    = new Point(1, 3);
+        Point endPoint       = new Point(1, 7);
+        Flag middleFlag      = new Flag(middlePoint);
+        Flag endFlag         = new Flag(endPoint);
+        Road hqToMiddleRoad  = new Road(storage.getFlag(), middleFlag);
+        Road middleToEndRoad = new Road(middleFlag, endFlag);
+        Courier mdlToEndCr   = new Courier(map);
+        Courier hqToMdlCr    = new Courier(map);
+        
+        
+        map.placeBuilding(storage, hqPoint);
+        map.placeFlag(middleFlag);
+        map.placeFlag(endFlag);
+        
+        map.placeRoad(hqToMiddleRoad);
+        map.placeRoad(middleToEndRoad);
+        
+        map.placeWorker(hqToMdlCr, storage.getFlag());
+        map.placeWorker(mdlToEndCr, endFlag);
+        
+        map.assignWorkerToRoad(hqToMdlCr, hqToMiddleRoad);
+        map.assignWorkerToRoad(mdlToEndCr, middleToEndRoad);
+        
+        Cargo c = new Cargo(WOOD);
+        endFlag.putCargo(c);
+        c.setTarget(storage, map);
+        
+        gameLogic.assignWorkToIdleCouriers(map);
+        
+        assertTrue(mdlToEndCr.getCargo().equals(c));
+        assertTrue(mdlToEndCr.getTarget().equals(middleFlag));
+        
+        Utils.fastForward(10, map);
+        
+        assertTrue(mdlToEndCr.isArrived());
+        assertTrue(mdlToEndCr.getCargo().equals(c));
+        
+        gameLogic.deliverForWorkersAtTarget(map);
+        
+        assertTrue(middleFlag.getStackedCargo().size() == 1);
+        assertTrue(middleFlag.getStackedCargo().get(0).equals(c));
+        assertNull(mdlToEndCr.getCargo());
+        assertNull(hqToMdlCr.getCargo());
+        assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
+        
+        gameLogic.assignWorkToIdleCouriers(map);
+        
+        assertTrue(hqToMdlCr.getCargo().equals(c));
+
+        Utils.fastForward(10, map);
+        
+        assertFalse(storage.isInStock(WOOD));
+        
+        gameLogic.deliverForWorkersAtTarget(map);
+        
+        assertNull(hqToMdlCr.getCargo());
+        assertTrue(storage.isInStock(WOOD));
+        
+    }
+    
+    @Test
+    public void testCourierIsAssignedToNewRoad() throws Exception {
+        GameLogic gameLogic  = new GameLogic();
+        GameMap map          = new GameMap();
+        Storage storage      = new Storage();
+        Point hqPoint        = new Point(1, 1);
+        Point middlePoint    = new Point(1, 3);
+        Flag middleFlag      = new Flag(middlePoint);
+        Road hqToMiddleRoad  = new Road(storage.getFlag(), middleFlag);
+        
+        map.placeBuilding(storage, hqPoint);
+        map.placeFlag(middleFlag);
+        
+        map.placeRoad(hqToMiddleRoad);
+        
+        assertTrue(hqToMiddleRoad.needsCourier());
+        assertNull(hqToMiddleRoad.getCourier());
+        assertTrue(map.getRoadsWithoutWorker().contains(hqToMiddleRoad));
+        assertTrue(map.getClosestStorage(hqToMiddleRoad).equals(storage));
+        
+        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertFalse(hqToMiddleRoad.needsCourier());
+        assertNull(hqToMiddleRoad.getCourier());
+        
+        Utils.fastForward(10, map);
+        
+        gameLogic.assignTravelingWorkersThatHaveArrived(map);
+        
+        assertNotNull(hqToMiddleRoad.getCourier());
+    }
+    
+    @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         GameMap map = new GameMap();
         Headquarter hq = new Headquarter();
@@ -364,7 +459,7 @@ public class TestTransportation {
         /* Get military from the headquarter
          * - retrieve should set location of the worker
          */
-        m = hq.retrieveMilitary();
+        m = hq.retrieveAnyMilitary();
 
         /* Tell military to go to the barracks */
         m.setMap(map);

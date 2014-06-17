@@ -94,7 +94,7 @@ public class GameLogic {
                 if (b.needMilitaryManning()) {
                     Storage stg = map.getClosestStorage(b);
 
-                    Military m = stg.retrieveMilitary();
+                    Military m = stg.retrieveAnyMilitary();
 
                     m.setMap(map);
                     m.setTargetBuilding(b);
@@ -122,7 +122,7 @@ public class GameLogic {
         }
     }
 
-    public void initiateNewDeliveriesForAllStorages(GameMap map) throws InvalidRouteException {
+    public void initiateNewDeliveriesForAllStorages(GameMap map) throws InvalidRouteException, Exception {
         List<Storage> storages = map.getStorages();
 
         for (Storage s : storages) {
@@ -134,7 +134,7 @@ public class GameLogic {
      * Finds all houses that needs a delivery and picks out a cargo from the storage.
      * The cargo gets the house as its target and is put at the storage's flag
      */
-    public void initiateNewDeliveriesForStorage(Storage hq, GameMap map) throws InvalidRouteException {
+    public void initiateNewDeliveriesForStorage(Storage hq, GameMap map) throws InvalidRouteException, Exception {
         Building targetBuilding = null;
         Material materialToDeliver = WOOD;
 
@@ -183,11 +183,18 @@ public class GameLogic {
 
         for (Courier w : workersAtTarget) {
 
-            if (w.getCargo() != null) {
-                Cargo c = w.getCargo();
+            Cargo c = w.getCargo();
+            
+            if (c == null) {
+                continue;
+            }
+            
+            if (c.isAtTarget()) {
                 Building targetBuilding = c.getTarget();
 
                 w.deliverToTarget(targetBuilding);
+            } else {
+                w.putDownCargo();
             }
         }
     }

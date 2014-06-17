@@ -198,37 +198,6 @@ public class GameMap {
         }
     }
 
-    public Courier getNextWorkerForCargo(Cargo c) {
-        log.log(Level.FINE, "Get next worker for {0}", c);
-
-        List<Road> plannedRoads = c.getPlannedRoads();
-
-        Road nextRoad = plannedRoads.get(0);
-
-        log.log(Level.FINER, "Next road is {0}", nextRoad);
-
-        Courier w = getWorkerForRoad(nextRoad);
-
-        if (w == null) {
-            nextRoad = reverseRoad(nextRoad);
-
-            w = getWorkerForRoad(nextRoad);
-        }
-
-        log.log(Level.FINEST, "Found worker {0}", w);
-
-        return w;
-    }
-
-    private Road reverseRoad(Road nextRoad) {
-        Flag start, end;
-
-        start = nextRoad.start;
-        end = nextRoad.end;
-
-        return new Road(end, start);
-    }
-
     public Courier getWorkerForRoad(Road nextRoad) {
         log.log(Level.FINE, "Getting worker for {0}", nextRoad);
 

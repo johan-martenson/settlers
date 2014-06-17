@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Courier.State.BUSY;
@@ -60,29 +61,14 @@ public class Courier extends Worker {
 
         log.log(Level.FINER, "Setting position in {0} to {1}", new Object[]{cargo, position});
         cargo.setPosition(position);
+        
+        List<Road> plannedRoadForCargo = cargo.getPlannedRoads();
+        plannedRoadForCargo.remove(0);
+        cargo.setPlannedRoads(plannedRoadForCargo);
 
         cargo = null;
 
         state = IDLE;
-    }
-
-    public void pickUpCargo(Flag flag) throws InvalidRouteException {
-        log.log(Level.INFO, "Picking up cargo from flag {0}", flag);
-
-        this.cargo = flag.retrieveNextCargo();
-
-        log.log(Level.FINE, "Got cargo: {0}", cargo);
-        this.position = flag;
-
-        if (flag.equals(road.start)) {
-            setTargetFlag(road.end);
-        } else {
-            setTargetFlag(road.start);
-        }
-
-        log.log(Level.FINE, "Target is {0}", target);
-
-        state = BUSY;
     }
 
     public Cargo getCargo() {

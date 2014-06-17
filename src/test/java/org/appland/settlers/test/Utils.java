@@ -170,7 +170,7 @@ public class Utils {
 
         int i;
         for (i = 0; i < amount; i++) {
-            hq.deposit(c);
+            hq.deliver(c);
         }
     }
 

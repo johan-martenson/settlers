@@ -118,7 +118,8 @@ public class Storage extends Building implements Actor {
         inventory.put(GOLD, gold);
     }
 
-    public void deposit(Cargo c) {
+    @Override
+    public void deliver(Cargo c) {
         log.log(Level.INFO, "Depositing cargo {0}", c);
 
         storeOneInInventory(c.getMaterial());
@@ -126,13 +127,20 @@ public class Storage extends Building implements Actor {
         log.log(Level.FINE, "Inventory is {0} after deposit", inventory);
     }
 
-    public Cargo retrieve(Material wood) {
-        log.log(Level.INFO, "Retrieving one piece of {0}", wood);
+    public Cargo retrieve(Material material) throws Exception {
+        log.log(Level.INFO, "Retrieving one piece of {0}", material);
 
-        int amount = inventory.get(wood);
-        inventory.put(wood, amount - 1);
+        if (!hasAtLeastOne(material)) {
+            throw new Exception("Can't retrieve " + material);
+        }
+        
+        if (isWorker(material)) {
+            throw new Exception("Can't retrieve " + material + " as stuff");
+        }
+        
+        retrieveOneFromInventory(material);
 
-        Cargo c = new Cargo(wood);
+        Cargo c = new Cargo(material);
 
         c.setPosition(getFlag());
 
@@ -140,7 +148,7 @@ public class Storage extends Building implements Actor {
     }
 
     public boolean isInStock(Material m) {
-        return inventory.containsKey(m);
+        return hasAtLeastOne(m);
     }
 
     public void depositWorker(Worker w) throws Exception {
@@ -172,6 +180,10 @@ public class Storage extends Building implements Actor {
     public Worker retrieveWorker(Material material) throws Exception {
         Worker w = null;
 
+        if (!hasAtLeastOne(material)) {
+            throw new Exception("There are no " + material + " to retrieve");
+        }
+        
         switch (material) {
         case FORESTER:
             w = new Forester();
@@ -182,12 +194,20 @@ public class Storage extends Building implements Actor {
 
         w.setPosition(getFlag());
 
+        retrieveOneFromInventory(material);
+        
         return w;
     }
 
     public Military retrieveMilitary(Material material) throws Exception {
         Military.Rank r = Military.Rank.PRIVATE_RANK;
 
+        if (!hasAtLeastOne(material)) {
+            throw new Exception("Can't retrieve military " + material);
+        }
+        
+        retrieveOneFromInventory(material);
+        
         switch (material) {
         case GENERAL:
             r = Military.Rank.GENERAL_RANK;
@@ -219,7 +239,7 @@ public class Storage extends Building implements Actor {
         return c;
     }
 
-    public Military retrieveMilitary() throws Exception {
+    public Military retrieveAnyMilitary() throws Exception {
         Military m = null;
 
         if (hasAtLeastOne(PRIVATE)) {
@@ -260,9 +280,16 @@ public class Storage extends Building implements Actor {
         return inventory.get(m);
     }
 
-    @Override
-    public void deliver(Cargo c) {
-        log.log(Level.INFO, "Delivering {0} to {1}", new Object[]{c, this});
-        storeOneInInventory(c.getMaterial());
+    private boolean isWorker(Material material) {
+        switch (material) {
+        case PRIVATE:
+        case SERGEANT:
+        case GENERAL:
+        case FORESTER:
+        case COURIER:
+            return true;
+        default:
+            return false;
+        }
     }
 }

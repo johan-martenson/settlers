@@ -1,11 +1,6 @@
 package org.appland.settlers.test;
 
-import java.util.Collection;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -28,30 +23,23 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.fastForward;
 
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class GameFlowTest {
+public class GameLogicTest {
     private GameLogic gameLogic;
 
     @Before

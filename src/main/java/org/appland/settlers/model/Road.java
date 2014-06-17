@@ -67,7 +67,11 @@ public class Road {
     }
 
     public boolean needsCourier() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (promisedCourier || courier != null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void promiseCourier() throws Exception {
