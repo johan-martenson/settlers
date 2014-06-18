@@ -315,11 +315,6 @@ public class GameMap {
         return result;
     }
 
-    public Collection<Courier> getCourierAssignedToRoads() {
-        return roadToWorkerMap.values();
-
-    }
-
     public List<Road> getRoadsWithoutWorker() {
         List<Road> result = new ArrayList<>();
         Collection<Road> roadsWithWorkers = roadToWorkerMap.keySet();
