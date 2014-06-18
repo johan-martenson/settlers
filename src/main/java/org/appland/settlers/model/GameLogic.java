@@ -139,8 +139,8 @@ public class GameLogic {
         Material materialToDeliver = WOOD;
 
         for (Material m : Material.values()) {
-
-            for (Building b : map.getBuildings()) {
+            
+            for (Building b : map.getBuildingsWithinReach(hq.getFlag())) {
 
                 if (b.needsMaterial(m) && hq.isInStock(m)) {
                     targetBuilding = b;

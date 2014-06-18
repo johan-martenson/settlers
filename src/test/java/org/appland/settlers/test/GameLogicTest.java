@@ -403,4 +403,21 @@ public class GameLogicTest {
         assertTrue(fHut.getWorker() instanceof Forester);
         assertTrue(map.getTravelingWorkers().isEmpty());
     }
+    
+    @Test
+    public void testInitiateNewDeliveriesForAllStoragesWithNoRoad() throws Exception {
+        GameMap map    = new GameMap();
+        Point hqPoint  = new Point(1, 1);
+        Headquarter hq = new Headquarter();
+        Woodcutter wc  = new Woodcutter();
+        Point wcPoint  = new Point(3, 3);
+        
+        map.placeBuilding(hq, hqPoint);
+        map.placeBuilding(wc, wcPoint);
+        
+        assertTrue(map.getBuildingsWithinReach(hq.getFlag()).size() == 1);
+        assertTrue(map.getBuildingsWithinReach(hq.getFlag()).contains(hq));
+        
+        gameLogic.initiateNewDeliveriesForAllStorages(map);
+    }
 }

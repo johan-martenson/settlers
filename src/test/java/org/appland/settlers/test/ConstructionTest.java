@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import java.util.Map;
 import org.appland.settlers.model.Barracks;
-import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
@@ -10,13 +9,10 @@ import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTR
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Farm;
-import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
-import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;

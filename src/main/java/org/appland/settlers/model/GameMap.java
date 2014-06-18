@@ -3,8 +3,10 @@ package org.appland.settlers.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -139,7 +141,7 @@ public class GameMap {
             throw new InvalidRouteException(start + " has no connecting roads.");
         }
 
-        List<Flag> connectingRoads = roadNetwork.get(start);
+        List<Flag> connectingRoads = getDirectlyConnectedFlags(start);
 
         for (Flag otherEnd : connectingRoads) {
             List<Flag> result = new ArrayList<>();
@@ -395,5 +397,50 @@ public class GameMap {
         }
         
         return !hit;
+    }
+
+    public Set<Building> getBuildingsWithinReach(Flag startFlag) {
+        return getBuildingsWithinReachWithMemory(startFlag, new ArrayList<Flag>());
+    }
+    
+    private Set<Building> getBuildingsWithinReachWithMemory(Flag start, List<Flag> visited) {
+        Set<Building> result = new HashSet<>();
+
+        if (buildingExistsAtFlag(start)) {
+            result.add(getBuildingByFlag(start));
+        }
+        
+        List<Flag> connectedFlags = getDirectlyConnectedFlags(start);
+
+        for (Flag f : connectedFlags) {
+            
+            if (visited.contains(f)) {
+                continue;
+            }
+            
+            List<Flag> visitedCopy = new ArrayList<>();
+            visitedCopy.addAll(visited);
+            visitedCopy.add(f);
+            
+            Set<Building> tmp = getBuildingsWithinReachWithMemory(f, visitedCopy);
+            
+            result.addAll(tmp);
+        }
+        
+        return result;
+    }
+
+    private List<Flag> getDirectlyConnectedFlags(Flag start) {
+        List<Flag> connectedFlags = roadNetwork.get(start);
+        
+        if (connectedFlags == null) {
+            return new ArrayList<>();
+        }
+
+        return roadNetwork.get(start);
+    }
+
+    private boolean buildingExistsAtFlag(Flag start) {
+        return getBuildingByFlag(start) != null;
     }
 }

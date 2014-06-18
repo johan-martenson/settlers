@@ -27,6 +27,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.junit.Assert.assertFalse;
@@ -46,12 +47,14 @@ public class TestScenarios {
     }
 
     @Test
-    public void gameFlowTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void productionAndTransportForWoodcutterAndSawmill() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 
+        /*   --   SETUP   --   */
+        
         // TODO: RE-verify and add asserts!
         /* Create starting position */
         GameMap map = new GameMap();
-        Headquarter hq = new Headquarter();
+        Storage hq = new Storage();
         Point startPosition = new Point(6, 6);
 
         /* Game loop */
@@ -105,6 +108,14 @@ public class TestScenarios {
         assertTrue(qry.getConstructionState() == DONE);
         assertTrue(sm.getConstructionState() == DONE);
 
+        assertTrue(hq.getAmount(WOOD) == 0);
+        assertTrue(hq.getAmount(PLANCK) == 0);
+        assertTrue(hq.getAmount(STONE) == 0);
+        
+        
+        
+        /*   --   START TEST   --   */
+        
         /* Fast forward until the woodcutter has cut some wood */
         fastForward(100, map);
 
@@ -121,10 +132,13 @@ public class TestScenarios {
 
         assertTrue(map.getWorkerForRoad(wcToHqRoad).getPosition().equals(hq.getFlag()));
 
-        /* Cargo has arrived at its target so store it */
+        /* Cargo has arrived at the headquarter so store it */
         gameLogic.deliverForWorkersAtTarget(map);
+        
+        assertNull(map.getWorkerForRoad(wcToHqRoad).getCargo());
+        assertTrue(hq.getAmount(WOOD) == 1);
 
-        /* Find out who needs the wood */
+        /* Find out that the sawmill needs the wood */
         gameLogic.initiateNewDeliveriesForAllStorages(map);
 
         assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
@@ -132,6 +146,7 @@ public class TestScenarios {
         assertNull(map.getWorkerForRoad(smToHqRoad).getCargo());
         assertTrue(hq.getFlag().getStackedCargo().get(0).getPlannedRoads().get(0).equals(smToHqRoad));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
+        assertTrue(hq.getAmount(WOOD) == 0);
 
         /* Get the wood transported to the sawmill */
         gameLogic.assignWorkToIdleCouriers(map);
@@ -143,7 +158,7 @@ public class TestScenarios {
 
         fastForward(100, map);
 
-        /* Cargo has arrived at its target so store it */
+        /* Cargo has arrived at the sawmill so deliver it */
         assertTrue(map.getWorkerForRoad(smToHqRoad).getPosition().equals(sm.getFlag()));
 
         gameLogic.deliverForWorkersAtTarget(map);
@@ -160,113 +175,89 @@ public class TestScenarios {
 
         gameLogic.initiateCollectionOfNewProduce(map);
 
-        /* Transport plancks to nearest storage */
+        /* Transport plancks and new wood to nearest storage*/
         gameLogic.assignWorkToIdleCouriers(map);
 
+        assertNotNull(map.getWorkerForRoad(smToHqRoad).getCargo());
+        assertNotNull(map.getWorkerForRoad(smToHqRoad).getCargo().getMaterial() == PLANCK);
+        
+        assertNotNull(map.getWorkerForRoad(wcToHqRoad).getCargo());
+        assertNotNull(map.getWorkerForRoad(wcToHqRoad).getCargo().getMaterial() == WOOD);
+        
         fastForward(10, map);
 
+        /* Cargo has arrived at the headquarter so store it */
+        assertTrue(map.getWorkerForRoad(smToHqRoad).getPosition().equals(hq.getFlag()));
+        
+        gameLogic.deliverForWorkersAtTarget(map);
+        
+        assertTrue(hq.getAmount(PLANCK) == 1);
+        assertTrue(hq.getAmount(WOOD) == 1);
     }
 
     @Test
-    public void gameFlowWithProperGameLoopTest() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void buildWoodcutterSawmillQuarrySequenciallyFromScratch() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 
+        /*   --   SETIP   --   */
+        
+        
         /* Create Initial Game Setup */
         GameMap map = new GameMap();
         Headquarter hq = new Headquarter();
 
         Point startPosition = new Point(6, 6);
 
-        /* Game loop */
-        gameLogic.gameLoop(map);
-
-        /* Player creates woodcutter, sawmill and quarry */
-        Building wc = new Woodcutter();
-        Sawmill sm = new Sawmill();
-        Quarry qry = new Quarry();
-
-        Point wcSpot = new Point(6, 8);
-        Point smSpot = new Point(8, 6);
-        Point qrySpot = new Point(4, 6);
-
-        map.placeBuilding(wc, wcSpot);
-        map.placeBuilding(sm, smSpot);
-        map.placeBuilding(qry, qrySpot);
         map.placeBuilding(hq, startPosition);
 
-        /* Create roads */
+
+        /*   --   START TEST   --   */
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
+
+        // TODO: assert that nothing happens
+        
+        /* Player creates woodcutter */
+        Building wc = new Woodcutter();
+        Point wcSpot = new Point(6, 8);
+
+        map.placeBuilding(wc, wcSpot);
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
+        
+        /* Player creates road between hq and wc */
         map.placeRoad(hq.getFlag(), wc.getFlag());
-        map.placeRoad(hq.getFlag(), sm.getFlag());
-        map.placeRoad(hq.getFlag(), qry.getFlag());
 
-        /* Assign workers to the roads */
-        Courier wr1 = new Courier(map);
-        Courier wr2 = new Courier(map);
-        Courier wr3 = new Courier(map);
-
-        Road r = map.getRoad(hq.getFlag(), wc.getFlag());
-        map.placeWorker(wr1, wc.getFlag());
-        map.assignWorkerToRoad(wr1, r);
-
-        r = map.getRoad(hq.getFlag(), sm.getFlag());
-        map.placeWorker(wr2, sm.getFlag());
-        map.assignWorkerToRoad(wr2, r);
-
-        r = map.getRoad(hq.getFlag(), qry.getFlag());
-        map.placeWorker(wr3, qry.getFlag());
-        map.assignWorkerToRoad(wr3, r);
-
-        // TODO: add that workers need to populate the buildings before they start producing
-        // TODO: add that workers need to move to roads to populate them
-        /* Buildings, roads, workers done - test that construction happens */
-        assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
-        assertTrue(qry.getConstructionState() == UNDER_CONSTRUCTION);
-        assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
-
-        /* Add more plancks and stone to the HQ inventory */
-        Utils.fillUpInventory(hq, PLANCK, 10);
-        Utils.fillUpInventory(hq, STONE, 10);
-
-        /* -- Assert that all workers are idle */
-        Collection<Courier> workers = map.getCourierAssignedToRoads();
-
-        for (Courier w : workers) {
-            assertNull(w.getCargo());
-            assertNull(w.getTarget());
-        }
-
-        /* Gameloop */
-        assertTrue(hq.getFlag().getStackedCargo().isEmpty());
+        // TODO: assert that the road is unoccupied
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
+        
+        // TODO: assert that the road is occupied
+        
+        /* The road is occupied so the delivery of plancks and stone to the wc can start  */
+        // TODO: assert that the wc is under construction and has no material yet
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
 
         gameLogic.gameLoop(map);
-
-        List<Cargo> hqOutCargos = hq.getFlag().getStackedCargo();
-        assertTrue(hqOutCargos.size() == 1);
-        Cargo c = hqOutCargos.get(0);
-        assertTrue(c.getMaterial() == PLANCK || c.getMaterial() == STONE);
-        assertFalse(c.getTarget().equals(hq));
-
-        /* Gameloop */
-        fastForward(10, map);
+        fastForward(100, map);
+        
         gameLogic.gameLoop(map);
-
-        /* -- Assert that delivery is started for one cargo */
-        workers = map.getCourierAssignedToRoads();
-
-        int busyWorkers = 0;
-        for (Courier w : workers) {
-            if (w.getCargo() != null) {
-                busyWorkers++;
-            }
-        }
-
-        assertTrue(busyWorkers == 1);
-
-        /* Gameloop */
-        fastForward(10, map);
+        fastForward(100, map);
+        
         gameLogic.gameLoop(map);
-
-        /* Ensure first cargo is delivered to house */
-        /* Ensure next cargo is started */
+        fastForward(100, map);
+        
+        /* The woodcutter has all material so construction can finish */
+        fastForward(150, map);
+        
+        // TODO: assert that the woodcutter is finished
+        
+        // TODO: construct remaining houses, wait ~10 turns for production, construct barracks
+    
     }
 
 }
