@@ -17,14 +17,14 @@ TODO
     - Ensure that retrieveWorker and retrieveMilitary:
       - Makes the inventory go down
       - Only succeeds if the worker or military is available
- 2 Add Barracks as an initial military building
- 3 Create text view that can show snapshots of the game map
- 3.5 Clean up
+ 2 Create text view that can show snapshots of the game map
+ 3 Clean up
   - Remove duplicate getHostedSoliders() method
   - Look over state handling in Courier. Is it needed in addition to state handling in Worker?
  4 Add additional constraints
   - A flag can only stack a certain number of cargos
  5 Add that houses are unoccupied before a worker populates them
+ X Evalute to include a request list from houses instead of always looping through all houses
  6 Add several players
  7 Add graphical UI
  8 Finetune cost for production and construction
