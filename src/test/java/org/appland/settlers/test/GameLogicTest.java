@@ -49,11 +49,11 @@ public class GameLogicTest {
 
     @Test
     public void testInitiateCollectionOfNewProduce() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidRouteException, Exception {
-        GameMap map = new GameMap();
-        Woodcutter wc = new Woodcutter();
-        Storage stg = new Storage();
-        Point stgPoint = new Point(1, 1);
-        Point wcPoint = new Point(2, 2);
+        GameMap map    = new GameMap(30, 30);
+        Woodcutter wc  = new Woodcutter();
+        Storage stg    = new Storage();
+        Point stgPoint = new Point(5, 5);
+        Point wcPoint  = new Point(10, 6);
         Road r;
         Courier w = new Courier(map);
 
@@ -92,13 +92,13 @@ public class GameLogicTest {
 
     @Test
     public void testInitiateNewDeliveries() throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidEndPointException, Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(30, 30);
 
         Headquarter hq = new Headquarter();
         Woodcutter wc = new Woodcutter();
 
-        Point hqPoint = new Point(1, 1);
-        Point wcPoint = new Point(2, 2);
+        Point hqPoint = new Point(5, 5);
+        Point wcPoint = new Point(5, 11);
 
         map.placeBuilding(hq, hqPoint);
         map.placeBuilding(wc, wcPoint);
@@ -117,7 +117,7 @@ public class GameLogicTest {
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */
         Sawmill sm = new Sawmill();
 
-        Point smPoint = new Point(1, 2);
+        Point smPoint = new Point(10, 10);
 
         map.placeBuilding(sm, smPoint);
 
@@ -134,12 +134,12 @@ public class GameLogicTest {
 
     @Test
     public void testAssignWorkToIdleCouriers() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap();
-        Sawmill sm = new Sawmill();
-        Point smPoint = new Point(1, 1);
-        Flag f = new Flag(2, 2);
-        Road r = new Road(f, sm.getFlag());
-        Courier w = new Courier(map);
+        GameMap map   = new GameMap(30, 30);
+        Sawmill sm    = new Sawmill();
+        Point smPoint = new Point(5, 5);
+        Flag f        = new Flag(10, 10);
+        Road r        = new Road(f, sm.getFlag());
+        Courier w     = new Courier(map);
 
         map.placeFlag(f);
         map.placeBuilding(sm, smPoint);
@@ -172,11 +172,11 @@ public class GameLogicTest {
 
     @Test
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        GameMap map = new GameMap();
+        GameMap map   = new GameMap(30, 30);
         Woodcutter wc = new Woodcutter();
-        Flag src = new Flag(1, 1);
-        Point wcPoint = new Point(2, 2);
-        Courier w = new Courier(map);
+        Flag src      = new Flag(5, 5);
+        Point wcPoint = new Point(11, 5);
+        Courier w     = new Courier(map);
         Cargo c;
 
         map.placeFlag(src);
@@ -215,15 +215,15 @@ public class GameLogicTest {
 
     @Test
     public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(30, 30);
 
         Headquarter hq = new Headquarter();
         Barracks bk = new Barracks();
         ForesterHut fHut = new ForesterHut();
 
-        Point hqPoint = new Point(1, 1);
-        Point wcPoint = new Point(2, 2);
-        Point fhPoint = new Point(1, 2);
+        Point hqPoint = new Point(5, 5);
+        Point wcPoint = new Point(6, 10);
+        Point fhPoint = new Point(5, 17);
 
         map.placeBuilding(hq, hqPoint);
         map.placeBuilding(bk, wcPoint);
@@ -406,11 +406,11 @@ public class GameLogicTest {
     
     @Test
     public void testInitiateNewDeliveriesForAllStoragesWithNoRoad() throws Exception {
-        GameMap map    = new GameMap();
-        Point hqPoint  = new Point(1, 1);
+        GameMap map    = new GameMap(30, 30);
+        Point hqPoint  = new Point(5, 5);
         Headquarter hq = new Headquarter();
         Woodcutter wc  = new Woodcutter();
-        Point wcPoint  = new Point(3, 3);
+        Point wcPoint  = new Point(5, 11);
         
         map.placeBuilding(hq, hqPoint);
         map.placeBuilding(wc, wcPoint);

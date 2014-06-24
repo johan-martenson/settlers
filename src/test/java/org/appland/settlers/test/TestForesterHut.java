@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Building.ConstructionState;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Forester;
@@ -14,8 +13,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -49,7 +46,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerToUnfinishedForester() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
         ForesterHut f = new ForesterHut();
 
         assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
@@ -59,7 +56,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerToUnfinishedForester() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
         ForesterHut f = new ForesterHut();
 
         assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
@@ -69,7 +66,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerTwice() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
         ForesterHut f = new ForesterHut();
 
         Utils.constructSmallHouse(f);
@@ -81,7 +78,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerTwice() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
         ForesterHut f = new ForesterHut();
 
         Utils.constructSmallHouse(f);
@@ -93,7 +90,7 @@ public class TestForesterHut {
 
     @Test
     public void testForesterHutIsNotMilitary() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
         ForesterHut f = new ForesterHut();
 
         Utils.constructSmallHouse(f);

@@ -33,7 +33,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterIsReadyDirectly() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(5, 5);
         Headquarter hq = new Headquarter();
         Point hqPoint = new Point(1, 1);
 
@@ -44,7 +44,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterNeedsNoWorker() throws Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(5, 5);
         Headquarter hq = new Headquarter();
         Point hqPoint = new Point(1, 1);
 

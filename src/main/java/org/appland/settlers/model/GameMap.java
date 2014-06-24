@@ -12,24 +12,37 @@ import java.util.logging.Logger;
 
 public class GameMap {
 
-    private List<Building> buildings;
-    private List<Road> roads;
-    private List<Flag> flags;
+    private List<Building>        buildings;
+    private List<Road>            roads;
+    private List<Flag>            flags;
     private Map<Flag, List<Flag>> roadNetwork;
-    private Map<Road, Courier> roadToWorkerMap;
-
-    private String theLeader = "Mai Thi Van Anh";
+    private Map<Road, Courier>    roadToWorkerMap;
+    private List<Worker>          allWorkers;
+    private String                theLeader = "Mai Thi Van Anh";
+    private final int             height;
+    private final int             width;
+    private List<Point>           availableFlagPoints;
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
-    private List<Worker> allWorkers;
 
-    public GameMap() {
-        buildings = new ArrayList<>();
-        roads = new ArrayList<>();
-        flags = new ArrayList<>();
-        allWorkers = new ArrayList<>();
-        roadNetwork = new HashMap<>();
-        roadToWorkerMap = new HashMap<>();
+    private final int MINIMUM_WIDTH  = 5;
+    private final int MINIMUM_HEIGHT = 5;
+    
+    public GameMap(int w, int h) throws Exception {
+        width = w;
+        height = h;
+
+        if (width < MINIMUM_WIDTH || height < MINIMUM_HEIGHT) {
+            throw new Exception("Can't create too small map (" + width + "x" + height + ")");
+        }
+        
+        buildings           = new ArrayList<>();
+        roads               = new ArrayList<>();
+        flags               = new ArrayList<>();
+        allWorkers          = new ArrayList<>();
+        roadNetwork         = new HashMap<>();
+        roadToWorkerMap     = new HashMap<>();
+        availableFlagPoints = calculateAvailableFlagPoints();
     }
 
     public void stepTime() {
@@ -42,21 +55,23 @@ public class GameMap {
         }
     }
 
-    public void placeBuilding(Building hq, Point p) throws Exception {
-        if (buildings.contains(hq)) {
-            throw new Exception("Can't place " + hq + " as it is already placed.");
+    public void placeBuilding(Building house, Point p) throws Exception {
+        if (buildings.contains(house)) {
+            throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
         if (!isPointFree(p)) {
             throw new Exception("Can't place building on " + p);
         }
         
-        buildings.add(hq);
+        buildings.add(house);
 
-        Flag flag = hq.getFlag();
+        Flag flag = house.getFlag();
 
         flag.setPosition(p);
         placeFlag(flag);
+        
+        reserveSpaceForBuilding(house);
     }
 
     public void placeRoad(Road roadToPlace) throws InvalidEndPointException {
@@ -238,6 +253,10 @@ public class GameMap {
     }
 
     public void placeFlag(Flag f) throws Exception {
+        if (isPointReserved(f.getPosition())) {
+            throw new Exception("Can't place " + f + " on occupied point");
+        }
+        
         if (flags.contains(f)) {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
@@ -247,6 +266,8 @@ public class GameMap {
         }
         
         this.flags.add(f);
+        
+        reserveSpaceForFlag(f);
     }
 
     public Storage getClosestStorage(Road r) {
@@ -437,5 +458,76 @@ public class GameMap {
 
     private boolean buildingExistsAtFlag(Flag start) {
         return getBuildingByFlag(start) != null;
+    }
+
+    public List<Point> getAvailableFlagPoints() {
+        return availableFlagPoints;
+    }
+    
+    private List<Point> calculateAvailableFlagPoints() {
+        List<Point> result = new ArrayList<>();
+        boolean rowFlip    = true;
+        boolean columnFlip;
+        
+        int x, y;
+        for (x = 1; x < width; x++) {
+            columnFlip = rowFlip;
+            
+            for (y = 1; y < height; y++) {
+                if (columnFlip) {
+                    result.add(new Point(x, y));
+                }
+                
+                columnFlip = !columnFlip;
+            }
+        
+            rowFlip = !rowFlip;
+        }
+        
+        return result;
+    }
+
+    private void reserveSpaceForBuilding(Building hq) {
+        Point p = hq.getFlag().getPosition();
+        
+        reservePoint(p.x + 1, p.y - 1);
+
+        reservePoint(p.x - 2, p.y);
+        reservePoint(p);
+
+        reservePoint(p.x - 3, p.y + 1);
+        reservePoint(p.x - 1, p.y + 1);
+        reservePoint(p.x + 1, p.y + 1);
+
+        reservePoint(p.x - 2, p.y + 2);
+        reservePoint(p.x,     p.y + 2);
+
+    }
+    
+    private void reserveSpaceForFlag(Flag f) {
+        Point p = f.getPosition();
+        
+        reservePoint(p.x - 1, p.y - 1);
+        reservePoint(p.x + 1, p.y - 1);
+
+        reservePoint(p);
+
+        reservePoint(p.x - 1, p.y + 1);
+        reservePoint(p.x + 1, p.y + 1);
+
+    }
+    
+    private void reservePoint(Point p) {
+        if (availableFlagPoints.contains(p)) {
+            availableFlagPoints.remove(p);
+        }
+    }
+    
+    private void reservePoint(int x, int y) {
+        reservePoint(new Point(x, y));
+    }
+
+    private boolean isPointReserved(Point position) {
+        return !availableFlagPoints.contains(position);
     }
 }

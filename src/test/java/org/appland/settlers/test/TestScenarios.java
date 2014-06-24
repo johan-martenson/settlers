@@ -5,12 +5,8 @@
  */
 package org.appland.settlers.test;
 
-import java.util.Collection;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.GameLogic;
@@ -53,7 +49,7 @@ public class TestScenarios {
         
         // TODO: RE-verify and add asserts!
         /* Create starting position */
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(30, 30);
         Storage hq = new Storage();
         Point startPosition = new Point(6, 6);
 
@@ -65,9 +61,9 @@ public class TestScenarios {
         Sawmill sm = new Sawmill();
         Quarry qry = new Quarry();
 
-        Point wcSpot = new Point(6, 8);
-        Point smSpot = new Point(8, 6);
-        Point qrySpot = new Point(4, 6);
+        Point wcSpot = new Point(6, 12);
+        Point smSpot = new Point(12, 6);
+        Point qrySpot = new Point(20, 6);
 
         map.placeBuilding(wc, wcSpot);
         map.placeBuilding(sm, smSpot);
@@ -202,7 +198,7 @@ public class TestScenarios {
         
         
         /* Create Initial Game Setup */
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(30, 30);
         Headquarter hq = new Headquarter();
 
         Point startPosition = new Point(6, 6);
@@ -219,7 +215,7 @@ public class TestScenarios {
         
         /* Player creates woodcutter */
         Building wc = new Woodcutter();
-        Point wcSpot = new Point(6, 8);
+        Point wcSpot = new Point(6, 12);
 
         map.placeBuilding(wc, wcSpot);
 

@@ -19,7 +19,6 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +31,8 @@ public class TestGameMap {
     private GameMap map;
     
     @Before
-    public void setup() {
-        map = new GameMap();
+    public void setup() throws Exception {
+        map = new GameMap(50, 50);
     }
     
     @Test
@@ -145,20 +144,20 @@ public class TestGameMap {
         Headquarter hq = new Headquarter();
         Farm farm      = new Farm();
         
-        Point f1 = new Point(1, 1);
-        Point f2 = new Point(3, 2);
-        Point f3 = new Point(6, 3);
-        Point f4 = new Point(9, 4);
-        Point f5 = new Point(12, 5);
-        Point f6 = new Point(15, 6);
-        Point f7 = new Point(18, 7);
+        Point f1 = new Point(3,  3);
+        Point f2 = new Point(9,  3);
+        Point f3 = new Point(15, 3);
+        Point f4 = new Point(4,  8);
+        Point f5 = new Point(8,  8);
+        Point f6 = new Point(14, 8);
+        Point f7 = new Point(3,  15);
         
-        map.placeBuilding(wc, f1);
-        map.placeBuilding(qry, f2);
+        map.placeBuilding(wc,   f1);
+        map.placeBuilding(qry,  f2);
         map.placeBuilding(qry2, f3);
-        map.placeBuilding(s1, f4);
-        map.placeBuilding(s2, f5);
-        map.placeBuilding(hq, f6);
+        map.placeBuilding(s1,   f4);
+        map.placeBuilding(s2,   f5);
+        map.placeBuilding(hq,   f6);
         map.placeBuilding(farm, f7);
         
         List<Storage> storages = map.getStorages();
@@ -167,5 +166,25 @@ public class TestGameMap {
         assertTrue(storages.contains(s1));
         assertTrue(storages.contains(s2));
         assertTrue(storages.contains(hq));
+    }
+
+    @Test
+    public void testCreateMinimalMap() throws Exception {
+        new GameMap(5, 5);
+    }
+    
+    @Test(expected=Exception.class)
+    public void testCreateTooSmallMap() throws Exception {
+        new GameMap(4, 4);
+    }
+    
+    @Test(expected=Exception.class)
+    public void testCreateMapWithNegativeHeight() throws Exception {
+        new GameMap(10, -1);
+    }
+    
+    @Test(expected=Exception.class)
+    public void testCreateMapWithNegativeWidth() throws Exception {
+        new GameMap(-3, 10);
     }
 }

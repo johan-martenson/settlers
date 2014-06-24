@@ -15,15 +15,10 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadEqualsFlags;
 
-import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -35,18 +30,18 @@ import org.junit.Test;
 public class TestRoads {
 
     @Test
-    public void testGetNotExistingRoad() {
-        GameMap map = new GameMap();
+    public void testGetNotExistingRoad() throws Exception {
+        GameMap map = new GameMap(10, 10);
 
         assertNull(map.getRoad(new Flag(new Point(1, 1)), new Flag(new Point(2, 2))));
     }
 
     @Test(expected = InvalidRouteException.class)
     public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
 
         Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(2, 2));
+        Flag f2 = new Flag(new Point(4, 2));
 
         map.placeFlag(f1);
         map.placeFlag(f2);
@@ -58,10 +53,10 @@ public class TestRoads {
 
     @Test
     public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(10, 10);
 
         Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(2, 2));
+        Flag f2 = new Flag(new Point(4, 2));
 
         map.placeFlag(f1);
         map.placeFlag(f2);
@@ -88,20 +83,20 @@ public class TestRoads {
          *    |---F7---F8
          */
 
-        GameMap map = new GameMap();
+        GameMap map = new GameMap(20, 20);
 
         Flag[] points = new Flag[]{
             new Flag(1, 1), // F
-            new Flag(2, 1), // F1
-            new Flag(3, 1), // F2
-            new Flag(4, 1), // F3
-            new Flag(5, 1), // F4
-            new Flag(2, 4), // F5
-            new Flag(3, 4), // F6
-            new Flag(2, 6), // F7
-            new Flag(3, 6), // F8
-            new Flag(4, 2), // F9
-            new Flag(6, 1)};  // F10
+            new Flag(3, 1), // F1
+            new Flag(5, 1), // F2
+            new Flag(7, 1), // F3
+            new Flag(9, 1), // F4
+            new Flag(2, 6), // F5
+            new Flag(4, 6), // F6
+            new Flag(2, 10), // F7
+            new Flag(4, 10), // F8
+            new Flag(4, 4), // F9
+            new Flag(11, 1)};  // F10
 
         int i;
         for (i = 0; i < points.length; i++) {
@@ -109,7 +104,7 @@ public class TestRoads {
         }
 
         Woodcutter wc = new Woodcutter();
-        map.placeBuilding(wc, new Point(6, 2));
+        map.placeBuilding(wc, new Point(10, 4));
 
         Flag target = wc.getFlag();
 
