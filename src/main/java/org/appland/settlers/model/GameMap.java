@@ -60,7 +60,7 @@ public class GameMap {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
-        if (!isPointFree(p)) {
+        if (isPointReserved(p)) {
             throw new Exception("Can't place building on " + p);
         }
         
@@ -261,10 +261,6 @@ public class GameMap {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
         
-        if (!isPointFree(f.getPosition())) {
-            throw new Exception("Can't place " + f + " on this point because it's already occupied");
-        }
-        
         this.flags.add(f);
         
         reserveSpaceForFlag(f);
@@ -400,19 +396,6 @@ public class GameMap {
         }
 
         return storages;
-    }
-
-    private boolean isPointFree(Point p) {
-        boolean hit = false;
-        
-        for (Flag f : flags) {
-            if (f.getPosition().equals(p)) {
-                hit = true;
-                break;
-            }
-        }
-        
-        return !hit;
     }
 
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
