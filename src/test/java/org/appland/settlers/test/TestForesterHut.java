@@ -99,4 +99,11 @@ public class TestForesterHut {
         assertTrue(f.getHostedMilitary() == 0);
         assertTrue(f.getMaxHostedMilitary() == 0);
     }
+
+    @Test
+    public void testForesterHutUnderConstructionNotNeedsWorker() {
+        ForesterHut f = new ForesterHut();
+
+        assertFalse(f.needsWorker());
+    }
 }

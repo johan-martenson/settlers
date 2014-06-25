@@ -136,5 +136,14 @@ public class TestProduction {
         Utils.constructSmallHouse(wc);
 
         wc.getWorkerType();
-}
+    }
+
+    @Test
+    public void testWoodcutterNotNeedsWorker() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Woodcutter wc = new Woodcutter();
+
+        Utils.constructSmallHouse(wc);
+
+        assertFalse(wc.needsWorker());
+    }
 }
