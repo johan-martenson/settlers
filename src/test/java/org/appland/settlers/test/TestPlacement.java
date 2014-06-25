@@ -7,19 +7,13 @@
 package org.appland.settlers.test;
 
 import java.util.List;
-import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -30,8 +24,30 @@ import org.junit.Test;
 public class TestPlacement {
 
     @Test
-    public void testDefaultMapIsEmpty() {
+    public void testDefaultMapIsEmpty() throws Exception {
+        GameMap map = new GameMap(10, 10);
         
+        List<Point> flagPoints = map.getAvailableFlagPoints();
+        
+        int x, y;
+        
+        boolean yFlip = true;
+        boolean xFlip = true;
+        for (x = 1; x < 10; x++) {
+            yFlip = xFlip;
+            
+            for (y = 1; y < 10; y++) {
+                if (yFlip) {
+                    assertTrue(flagPoints.contains(new Point(x, y)));
+                } else {
+                    assertFalse(flagPoints.contains(new Point(x, y)));
+                }
+            
+                yFlip = !yFlip;
+            }
+            
+            xFlip = !xFlip;
+        }
     }
     
     @Test
@@ -237,10 +253,6 @@ public class TestPlacement {
         List<Point> possibleFlagPoints = map.getAvailableFlagPoints();
         
         /* Verify that the woodcutter occupies the right points */
-        boolean oddEvenFlip = true;
-        int x, y;
-        
-        /* Verify that points at the place of the house are occupied */
         assertTrue (possibleFlagPoints.contains(new Point(2,  2)));
         assertTrue (possibleFlagPoints.contains(new Point(4,  2)));
         assertFalse(possibleFlagPoints.contains(new Point(6,  2)));
@@ -326,5 +338,46 @@ public class TestPlacement {
         Flag f = new Flag(new Point(3, 5));
         
         map.placeFlag(f);
+    }
+
+    @Test(expected=Exception.class)
+    public void testPlaceFlagOnHouse() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Woodcutter wc = new Woodcutter();
+        Point wcPoint = new Point(6, 4);
+        
+        map.placeBuilding(wc, wcPoint);
+
+        Flag f = new Flag(new Point(5, 5));
+        
+        map.placeFlag(f);
+    }
+
+    @Test(expected=Exception.class) 
+    public void testPlaceHouseOnFlag() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Woodcutter wc = new Woodcutter();
+        Point wcPoint = new Point(6, 4);
+        
+        Flag f = new Flag(new Point(5, 5));
+        
+        map.placeFlag(f);
+
+        map.placeBuilding(wc, wcPoint);
+    }
+    
+    @Test(expected=Exception.class)
+    public void testPlaceHouseOnHouse() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Woodcutter wc  = new Woodcutter();
+        Quarry     qry = new Quarry();
+        Point wcPoint = new Point(6, 4);
+        Point qryPoint = new Point(7, 5);
+
+        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(qry, qryPoint);
     }
 }
