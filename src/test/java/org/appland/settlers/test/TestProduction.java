@@ -128,4 +128,13 @@ public class TestProduction {
 
         quarry.deliver(new Cargo(BEER));
     }
+
+    @Test(expected=Exception.class)
+    public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
+        Woodcutter wc = new Woodcutter();
+
+        Utils.constructSmallHouse(wc);
+
+        wc.getWorkerType();
+}
 }
