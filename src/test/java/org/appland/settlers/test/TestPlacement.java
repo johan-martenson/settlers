@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import java.util.List;
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
@@ -16,6 +17,8 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -223,6 +226,64 @@ public class TestPlacement {
         }
     }
 
+    @Test
+    public void testAvailableFlagsNextToLargeHouse() throws Exception {
+        GameMap map   = new GameMap(15, 15);
+        Farm farm     = new Farm();
+        Point farmPoint = new Point(7,3);
+        
+        map.placeBuilding(farm, farmPoint);
+        
+        List<Point> possibleFlagPoints = map.getAvailableFlagPoints();
+        
+        /* Verify that the woodcutter occupies the right points */
+        boolean oddEvenFlip = true;
+        int x, y;
+        
+        /* Verify that points at the place of the house are occupied */
+        assertTrue (possibleFlagPoints.contains(new Point(2,  2)));
+        assertTrue (possibleFlagPoints.contains(new Point(4,  2)));
+        assertFalse(possibleFlagPoints.contains(new Point(6,  2)));
+        assertFalse(possibleFlagPoints.contains(new Point(8,  2)));
+        assertTrue (possibleFlagPoints.contains(new Point(10, 2)));
+        
+        assertTrue (possibleFlagPoints.contains(new Point(1,  3)));
+        assertTrue (possibleFlagPoints.contains(new Point(3,  3)));
+        assertFalse(possibleFlagPoints.contains(new Point(5,  3)));
+        assertFalse(possibleFlagPoints.contains(new Point(7,  3)));
+        assertTrue (possibleFlagPoints.contains(new Point(9,  3)));
+
+        assertTrue (possibleFlagPoints.contains(new Point(2,  4)));
+        assertFalse(possibleFlagPoints.contains(new Point(4,  4)));
+        assertFalse(possibleFlagPoints.contains(new Point(6,  4)));
+        assertFalse(possibleFlagPoints.contains(new Point(8,  4)));
+        assertTrue (possibleFlagPoints.contains(new Point(10, 4)));
+        
+        assertTrue (possibleFlagPoints.contains(new Point(1,  5)));
+        assertFalse(possibleFlagPoints.contains(new Point(3,  5)));
+        assertFalse(possibleFlagPoints.contains(new Point(5,  5)));
+        assertFalse(possibleFlagPoints.contains(new Point(7,  5)));
+        assertTrue (possibleFlagPoints.contains(new Point(9,  5)));
+
+        assertTrue (possibleFlagPoints.contains(new Point(2,  6)));
+        assertFalse(possibleFlagPoints.contains(new Point(4,  6)));
+        assertFalse(possibleFlagPoints.contains(new Point(6,  6)));
+        assertTrue (possibleFlagPoints.contains(new Point(8,  6)));
+        assertTrue (possibleFlagPoints.contains(new Point(10, 6)));
+        
+        assertTrue (possibleFlagPoints.contains(new Point(1,  7)));
+        assertTrue (possibleFlagPoints.contains(new Point(3,  7)));
+        assertFalse(possibleFlagPoints.contains(new Point(5,  7)));
+        assertTrue (possibleFlagPoints.contains(new Point(7,  7)));
+        assertTrue (possibleFlagPoints.contains(new Point(9,  7)));
+
+        assertTrue (possibleFlagPoints.contains(new Point(2,  8)));
+        assertTrue (possibleFlagPoints.contains(new Point(4,  8)));
+        assertTrue (possibleFlagPoints.contains(new Point(6,  8)));
+        assertTrue (possibleFlagPoints.contains(new Point(8,  8)));
+        assertTrue (possibleFlagPoints.contains(new Point(10, 8)));
+    }
+    
     @Test
     public void testPlaceFlagTakesSpace() throws Exception {
         GameMap map = new GameMap(10, 10);

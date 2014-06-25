@@ -473,18 +473,15 @@ public class GameMap {
     private void reserveSpaceForBuilding(Building hq) {
         Point p = hq.getFlag().getPosition();
         
-        reservePoint(p.x + 1, p.y - 1);
-
-        reservePoint(p.x - 2, p.y);
-        reservePoint(p);
-
-        reservePoint(p.x - 3, p.y + 1);
-        reservePoint(p.x - 1, p.y + 1);
-        reservePoint(p.x + 1, p.y + 1);
-
-        reservePoint(p.x - 2, p.y + 2);
-        reservePoint(p.x,     p.y + 2);
-
+        switch(hq.getHouseSize(hq)) {
+        case SMALL:
+        case MEDIUM:
+            reserveSpaceForSmallHouse(p);
+            break;
+        case LARGE:
+            reserveSpaceForLargeHouse(p);
+            break;
+        }
     }
     
     private void reserveSpaceForFlag(Flag f) {
@@ -512,5 +509,40 @@ public class GameMap {
 
     private boolean isPointReserved(Point position) {
         return !availableFlagPoints.contains(position);
+    }
+
+    private void reserveSpaceForLargeHouse(Point p) {
+        reservePoint(p.x - 1, p.y - 1);
+        reservePoint(p.x + 1, p.y - 1);
+
+        reservePoint(p.x - 2, p.y);
+        reservePoint(p);
+
+        reservePoint(p.x - 3, p.y + 1);
+        reservePoint(p.x - 1, p.y + 1);
+        reservePoint(p.x + 1, p.y + 1);
+
+        reservePoint(p.x - 4, p.y + 2);
+        reservePoint(p.x - 2, p.y + 2);
+        reservePoint(p.x,     p.y + 2);
+
+        reservePoint(p.x - 3, p.y + 3);
+        reservePoint(p.x - 1, p.y + 3);
+
+        reservePoint(p.x - 2, p.y + 4);
+    }
+
+    private void reserveSpaceForSmallHouse(Point p) {
+        reservePoint(p.x + 1, p.y - 1);
+
+        reservePoint(p.x - 2, p.y);
+        reservePoint(p);
+
+        reservePoint(p.x - 3, p.y + 1);
+        reservePoint(p.x - 1, p.y + 1);
+        reservePoint(p.x + 1, p.y + 1);
+
+        reservePoint(p.x - 2, p.y + 2);
+        reservePoint(p.x,     p.y + 2);
     }
 }
