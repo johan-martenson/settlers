@@ -277,7 +277,7 @@ public class GameMap {
 
 	// TODO: Change to find the closest storage
         for (Building b : buildings) {
-            if (b instanceof Storage || b instanceof Headquarter) {
+            if (b instanceof Storage) {
                 stg = (Storage) b;
             }
         }
@@ -290,7 +290,7 @@ public class GameMap {
 
 	// TODO: Change to find the closest storage
         for (Building b : buildings) {
-            if (b instanceof Storage || b instanceof Headquarter) {
+            if (b instanceof Storage) {
                 stg = (Storage) b;
             }
         }
@@ -395,8 +395,6 @@ public class GameMap {
 
         for (Building b : buildings) {
             if (b instanceof Storage) {
-                storages.add((Storage) b);
-            } else if (b instanceof Headquarter) {
                 storages.add((Storage) b);
             }
         }
