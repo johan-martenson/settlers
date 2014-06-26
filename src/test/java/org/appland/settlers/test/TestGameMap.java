@@ -187,4 +187,21 @@ public class TestGameMap {
     public void testCreateMapWithNegativeWidth() throws Exception {
         new GameMap(-3, 10);
     }
+
+    @Test
+    public void testGetFlags() throws Exception {
+        GameMap map       = new GameMap(10, 10);
+        Flag    f1        = new Flag(1, 1);
+        Farm    farm      = new Farm();
+        Point   farmPoint = new Point(3, 3);
+        
+        map.placeFlag(f1);
+        map.placeBuilding(farm, farmPoint);
+
+        List<Flag> flags = map.getFlags();
+
+        assertTrue(flags.size() == 2);
+        assertTrue(flags.contains(f1));
+        assertTrue(flags.contains(farm.getFlag()));
+    }
 }
