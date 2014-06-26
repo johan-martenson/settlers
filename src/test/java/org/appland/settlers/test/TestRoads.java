@@ -217,4 +217,22 @@ public class TestRoads {
         map.placeWorker(c, f3);
         map.assignWorkerToRoad(c, r);
     }
+
+    @Test(expected=Exception.class)
+    public void testAssignWorkerToRoadNotOnMap() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Flag f3 = new Flag(new Point(4, 4));
+        Road r  = new Road(f1, f2);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+
+        Courier c = new Courier(map);
+
+        map.placeWorker(c, f1);
+        map.assignWorkerToRoad(c, r);
+    }
 }

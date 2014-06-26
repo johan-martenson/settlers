@@ -211,6 +211,10 @@ public class GameMap {
     public void assignWorkerToRoad(Courier wr, Road road) throws Exception {
         Flag courierFlag = wr.getPosition();
 
+        if (!roads.contains(road)) {
+            throw new Exception("Can't assign courier to " + road + " not on map");
+        }
+
         if (!road.getFlags()[0].equals(courierFlag) && !road.getFlags()[1].equals(courierFlag)) {
             throw new Exception("Can't assign " + wr + " to " + road);
         }
