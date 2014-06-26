@@ -12,6 +12,7 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadEqualsFlags;
 
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
@@ -166,5 +168,53 @@ public class TestRoads {
         assertTrue(roadEqualsFlags(roadsRoute.get(1), points[2], points[9]));
         assertTrue(roadEqualsFlags(roadsRoute.get(2), points[1], points[2]));
         assertTrue(roadEqualsFlags(roadsRoute.get(3), points[0], points[1]));
+    }
+
+    @Test
+    public void testNeedsCourier() throws InvalidEndPointException, InvalidRouteException, Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Road r  = new Road(f1, f2);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+
+        map.placeRoad(r);
+
+        assertTrue(r.needsCourier());
+
+        r.promiseCourier();
+
+        assertFalse(r.needsCourier());
+
+        Courier c = new Courier(map);
+
+        map.placeWorker(c, f1);
+        map.assignWorkerToRoad(c, r);
+
+        assertFalse(r.needsCourier());
+    }
+
+    @Test(expected=Exception.class)
+    public void testAssignCourierAtWrongFlagToRoad() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Flag f3 = new Flag(new Point(4, 4));
+        Road r  = new Road(f1, f2);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+        map.placeFlag(f3);
+
+        map.placeRoad(r);
+
+        Courier c = new Courier(map);
+
+        map.placeWorker(c, f3);
+        map.assignWorkerToRoad(c, r);
     }
 }
