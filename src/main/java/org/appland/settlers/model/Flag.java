@@ -40,14 +40,6 @@ public class Flag {
         this.position = p;
     }
 
-    public Cargo retrieveNextCargo() {
-        int size = stackedCargo.size();
-        Cargo c = stackedCargo.get(size - 1);
-        stackedCargo.remove(size - 1);
-
-        return c;
-    }
-
     @Override
     public String toString() {
         if (stackedCargo.isEmpty()) {
