@@ -6,15 +6,24 @@
 
 package org.appland.settlers.test;
 
+import java.util.Arrays;
 import java.util.List;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.Terrain.TileKey;
+import org.appland.settlers.model.Tile;
+import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Woodcutter;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 /**
@@ -26,7 +35,7 @@ public class TestPlacement {
     @Test
     public void testDefaultMapIsEmpty() throws Exception {
         GameMap map = new GameMap(10, 10);
-        
+    
         List<Point> flagPoints = map.getAvailableFlagPoints();
         
         int x, y;
@@ -244,8 +253,8 @@ public class TestPlacement {
 
     @Test
     public void testAvailableFlagsNextToLargeHouse() throws Exception {
-        GameMap map   = new GameMap(15, 15);
-        Farm farm     = new Farm();
+        GameMap map     = new GameMap(15, 15);
+        Farm farm       = new Farm();
         Point farmPoint = new Point(7,3);
         
         map.placeBuilding(farm, farmPoint);
@@ -329,7 +338,6 @@ public class TestPlacement {
     @Test(expected=Exception.class)
     public void testPlaceFlagTooCloseToSmallHouse() throws Exception {
         GameMap map = new GameMap(10, 10);
-
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -343,7 +351,6 @@ public class TestPlacement {
     @Test(expected=Exception.class)
     public void testPlaceFlagOnHouse() throws Exception {
         GameMap map = new GameMap(10, 10);
-
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -356,12 +363,10 @@ public class TestPlacement {
 
     @Test(expected=Exception.class) 
     public void testPlaceHouseOnFlag() throws Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map   = new GameMap(10, 10);
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
-        
-        Flag f = new Flag(new Point(5, 5));
+        Flag f        = new Flag(new Point(5, 5));
         
         map.placeFlag(f);
 
@@ -370,14 +375,116 @@ public class TestPlacement {
     
     @Test(expected=Exception.class)
     public void testPlaceHouseOnHouse() throws Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map    = new GameMap(10, 10);
         Woodcutter wc  = new Woodcutter();
         Quarry     qry = new Quarry();
-        Point wcPoint = new Point(6, 4);
+        Point wcPoint  = new Point(6, 4);
         Point qryPoint = new Point(7, 5);
-
+        
         map.placeBuilding(wc, wcPoint);
         map.placeBuilding(qry, qryPoint);
+    }
+
+    @Test
+    public void testWaypointsNextToFlag() {
+        
+    }
+
+    @Test
+    public void testAutomaticWaypointSelection() throws Exception {
+        GameMap map = new GameMap(10, 10);
+        //List<Point> = map.proposeNewRoad(new Point(1, 1), new Point(3, 7));
+        
+    }
+
+    @Test
+    public void testPossibleFlagsNextToWater() throws Exception {
+        GameMap map        = new GameMap(6, 6);
+        Point sharedPoint1 = new Point(3, 1);
+        Point sharedPoint2 = new Point(4, 2);
+        Point grassPoint   = new Point(5, 1);
+        Point waterPoint   = new Point(2, 2);
+        
+        Tile waterTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, waterPoint);
+        Tile grassTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, grassPoint);
+        
+        waterTile.setVegetationType(WATER);
+        grassTile.setVegetationType(GRASS);
+
+        map.terrainIsUpdated();
+        
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertTrue(possibleFlags.contains(sharedPoint1));
+        assertTrue(possibleFlags.contains(sharedPoint2));
+        assertTrue(possibleFlags.contains(grassPoint));
+    }
+
+    @Test
+    public void testCanNotPlaceFlagInWater() throws Exception {
+        GameMap map        = new GameMap(6, 6);
+        Point borderPoint1 = new Point(1, 1);
+        Point borderPoint2 = new Point(2, 0);
+        Point borderPoint3 = new Point(4, 0);
+        Point borderPoint4 = new Point(5, 1);
+        Point borderPoint5 = new Point(4, 2);
+        Point borderPoint6 = new Point(2, 2);
+        Point centerPoint  = new Point(3, 1);
+        
+        Tile waterTile1 = map.getTerrain().getTile(borderPoint1, borderPoint2, centerPoint);
+        Tile waterTile2 = map.getTerrain().getTile(borderPoint2, borderPoint3, centerPoint);
+        Tile waterTile3 = map.getTerrain().getTile(borderPoint3, borderPoint4, centerPoint);
+        Tile waterTile4 = map.getTerrain().getTile(borderPoint4, borderPoint5, centerPoint);
+        Tile waterTile5 = map.getTerrain().getTile(borderPoint5, borderPoint6, centerPoint);
+        Tile waterTile6 = map.getTerrain().getTile(borderPoint6, borderPoint1, centerPoint);
+        
+        waterTile1.setVegetationType(WATER);
+        waterTile2.setVegetationType(WATER);
+        waterTile3.setVegetationType(WATER);
+        waterTile4.setVegetationType(WATER);
+        waterTile5.setVegetationType(WATER);
+        waterTile6.setVegetationType(WATER);
+        
+        map.terrainIsUpdated();
+        
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertFalse(possibleFlags.contains(centerPoint));
+    }    
+
+    @Test
+    public void testDifferentPointOrderGivesSameTile() throws Exception {
+        GameMap map  = new GameMap(10, 10);
+        Point point1 = new Point(3, 1);
+        Point point2 = new Point(4, 2);
+        Point point3 = new Point(5, 1);
+        
+        Tile tile1 = map.getTerrain().getTile(point1, point2, point3);
+        Tile tile2 = map.getTerrain().getTile(point1, point3, point2);
+        Tile tile3 = map.getTerrain().getTile(point2, point1, point3);
+        Tile tile4 = map.getTerrain().getTile(point2, point3, point1);
+        Tile tile5 = map.getTerrain().getTile(point3, point1, point2);
+        Tile tile6 = map.getTerrain().getTile(point3, point2, point1);
+    
+        assertEquals(tile1, tile2);
+        assertEquals(tile2, tile3);
+        assertEquals(tile3, tile4);
+        assertEquals(tile4, tile5);
+        assertEquals(tile5, tile6);
+    }
+
+    @Test
+    public void testDifferentiateBetweenCloseTiles() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point bottom1 = new Point(1, 1);
+        Point bottom2 = new Point(3, 1);
+        Point middle  = new Point(2, 2);        
+        Point top1    = new Point(1, 3);
+        Point top2    = new Point(3, 3);
+    
+        Tile t1 = map.getTerrain().getTile(bottom1, bottom2, middle);
+        Tile t2 = map.getTerrain().getTile(top1, top2, middle);
+        
+        assertFalse(t1.equals(t2));
     }
 }

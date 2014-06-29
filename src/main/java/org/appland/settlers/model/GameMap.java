@@ -22,7 +22,8 @@ public class GameMap {
     private final int             height;
     private final int             width;
     private List<Point>           availableFlagPoints;
-
+    private Terrain               terrain;
+    
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
@@ -42,6 +43,7 @@ public class GameMap {
         allWorkers          = new ArrayList<>();
         roadNetwork         = new HashMap<>();
         roadToWorkerMap     = new HashMap<>();
+        terrain             = new Terrain(width, height);
         availableFlagPoints = calculateAvailableFlagPoints();
     }
 
@@ -406,8 +408,16 @@ public class GameMap {
         return storages;
     }
 
+    public List<Point> getAvailableFlagPoints() {
+        return availableFlagPoints;
+    }
+    
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
         return getBuildingsWithinReachWithMemory(startFlag, new ArrayList<Flag>());
+    }
+
+    public Terrain getTerrain() {
+        return terrain;
     }
     
     private Set<Building> getBuildingsWithinReachWithMemory(Flag start, List<Flag> visited) {
@@ -451,22 +461,27 @@ public class GameMap {
         return getBuildingByFlag(start) != null;
     }
 
-    public List<Point> getAvailableFlagPoints() {
-        return availableFlagPoints;
-    }
-    
     private List<Point> calculateAvailableFlagPoints() {
         List<Point> result = new ArrayList<>();
         boolean rowFlip    = true;
         boolean columnFlip;
         
+        /* Place all possible flag points in the list */
         int x, y;
         for (x = 1; x < width; x++) {
             columnFlip = rowFlip;
             
             for (y = 1; y < height; y++) {
                 if (columnFlip) {
-                    result.add(new Point(x, y));
+                    Point p = new Point(x, y);
+                    
+                    /* Remove spots surrounded by water */
+                    if (!terrain.terrainMakesFlagPossible(p)) {
+                        System.out.println("Can't place flag at " + p);
+                        continue;
+                    }
+
+                    result.add(p);
                 }
                 
                 columnFlip = !columnFlip;
@@ -552,5 +567,9 @@ public class GameMap {
 
         reservePoint(p.x - 2, p.y + 2);
         reservePoint(p.x,     p.y + 2);
+    }
+
+    public void terrainIsUpdated() {
+        availableFlagPoints = calculateAvailableFlagPoints();
     }
 }
