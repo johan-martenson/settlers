@@ -192,7 +192,7 @@ public class TestRoads {
         Courier c = new Courier(map);
 
         map.placeWorker(c, f1);
-        map.assignWorkerToRoad(c, r);
+        map.assignCourierToRoad(c, r);
 
         assertFalse(r.needsCourier());
     }
@@ -215,7 +215,7 @@ public class TestRoads {
         Courier c = new Courier(map);
 
         map.placeWorker(c, f3);
-        map.assignWorkerToRoad(c, r);
+        map.assignCourierToRoad(c, r);
     }
 
     @Test(expected=Exception.class)
@@ -233,6 +233,6 @@ public class TestRoads {
         Courier c = new Courier(map);
 
         map.placeWorker(c, f1);
-        map.assignWorkerToRoad(c, r);
+        map.assignCourierToRoad(c, r);
     }
 }

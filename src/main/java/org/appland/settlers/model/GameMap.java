@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.Size.SMALL;
 
 public class GameMap {
 
@@ -23,6 +26,10 @@ public class GameMap {
     private final int             width;
     private List<Point>           availableFlagPoints;
     private Terrain               terrain;
+    private Map<Point, Size>      availableHouseSites;
+    private Iterable<Point>       fullGrid;
+    private List<Point>           reservedPoints;
+    private Map<Point, Object>    pointToGameObject;
     
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -44,7 +51,12 @@ public class GameMap {
         roadNetwork         = new HashMap<>();
         roadToWorkerMap     = new HashMap<>();
         terrain             = new Terrain(width, height);
+        reservedPoints      = new ArrayList<>();
+        pointToGameObject   = new HashMap<>();
+        
+        fullGrid            = buildFullGrid();
         availableFlagPoints = calculateAvailableFlagPoints();
+        availableHouseSites = calculateAvailableHouseSites();
     }
 
     public void stepTime() {
@@ -62,49 +74,28 @@ public class GameMap {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
-        if (isPointReserved(p)) {
-            throw new Exception("Can't place building on " + p);
+        if (!canPlaceHouse(house, p)) {
+            throw new Exception("Can't place building on " + p + ".");
         }
         
         buildings.add(house);
 
         Flag flag = house.getFlag();
 
-        flag.setPosition(p);
+        flag.setPosition(new Point(p.x + 1, p.y - 1));
         placeFlag(flag);
+
+        pointToGameObject.put(p, house);
         
         reserveSpaceForBuilding(house);
     }
 
-    public void placeRoad(Road roadToPlace) throws InvalidEndPointException {
+    public Road placeRoad(Road roadToPlace) throws InvalidEndPointException {
         Flag startFlag = roadToPlace.start;
         Flag endFlag = roadToPlace.end;
-
-        boolean validStart = false;
-        boolean validEnd = false;
-
-        Point start = startFlag.getPosition();
-        Point end = endFlag.getPosition();
-
-        for (Building b : buildings) {
-            Point place = b.getFlag().getPosition();
-
-            if (place.equals(start)) {
-                validStart = true;
-            } else if (place.equals(end)) {
-                validEnd = true;
-            }
-        }
-
-        for (Flag f : flags) {
-            Point p = f.getPosition();
-
-            if (p.x == start.x && p.y == start.y) {
-                validStart = true;
-            } else if (p.x == end.x && p.y == end.y) {
-                validEnd = true;
-            }
-        }
+        
+        boolean validStart = flags.contains(startFlag);
+        boolean validEnd = flags.contains(endFlag);
 
         if (validStart && validEnd) {
             roads.add(roadToPlace);
@@ -123,10 +114,12 @@ public class GameMap {
         } else {
             throw new InvalidEndPointException();
         }
+    
+        return roadToPlace;
     }
 
-    public void placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
-        placeRoad(new Road(startFlag, endFlag));
+    public Road placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
+        return placeRoad(new Road(startFlag, endFlag));
     }
 
     public List<Road> getRoads() {
@@ -136,6 +129,10 @@ public class GameMap {
     public List<Flag> findWay(Flag start, Flag end) throws InvalidRouteException {
         log.log(Level.INFO, "Finding way from {0} to {1}", new Object[]{start, end});
 
+        if (start.equals(end)) {
+            throw new InvalidRouteException("Start and end are the same.");
+        }
+        
         List<Flag> result = findWayWithMemory(start, end, new ArrayList<Flag>());
 
         if (result == null) {
@@ -150,12 +147,8 @@ public class GameMap {
     private List<Flag> findWayWithMemory(Flag start, Flag end, List<Flag> visited) throws InvalidRouteException {
         log.log(Level.INFO, "Finding way from {0} to {1}, already visited {2}", new Object[]{start, end, visited});
 
-        if (start.equals(end)) {
-            throw new InvalidRouteException("Start and end are the same.");
-        }
-
         if (!roadNetwork.containsKey(start)) {
-            throw new InvalidRouteException(start + " has no connecting roads.");
+            return null;
         }
 
         List<Flag> connectingRoads = getDirectlyConnectedFlags(start);
@@ -206,11 +199,11 @@ public class GameMap {
                 return r;
             }
         }
-
+        
         return null;
     }
 
-    public void assignWorkerToRoad(Courier wr, Road road) throws Exception {
+    public void assignCourierToRoad(Courier wr, Road road) throws Exception {
         Flag courierFlag = wr.getPosition();
 
         if (!roads.contains(road)) {
@@ -265,15 +258,16 @@ public class GameMap {
     }
 
     public void placeFlag(Flag f) throws Exception {
-        if (isPointReserved(f.getPosition())) {
+        if (!isAvailablePointForFlag(f.getPosition())) {
             throw new Exception("Can't place " + f + " on occupied point");
         }
         
-        if (flags.contains(f)) {
+        if (isAlreadyPlaced(f)) {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
-        
-        this.flags.add(f);
+
+        pointToGameObject.put(f.getPosition(), f);
+        flags.add(f);
         
         reserveSpaceForFlag(f);
     }
@@ -461,7 +455,7 @@ public class GameMap {
         return getBuildingByFlag(start) != null;
     }
 
-    private List<Point> calculateAvailableFlagPoints() {
+    private List<Point> buildFullGrid() {
         List<Point> result = new ArrayList<>();
         boolean rowFlip    = true;
         boolean columnFlip;
@@ -473,15 +467,7 @@ public class GameMap {
             
             for (y = 1; y < height; y++) {
                 if (columnFlip) {
-                    Point p = new Point(x, y);
-                    
-                    /* Remove spots surrounded by water */
-                    if (!terrain.terrainMakesFlagPossible(p)) {
-                        System.out.println("Can't place flag at " + p);
-                        continue;
-                    }
-
-                    result.add(p);
+                    result.add(new Point(x, y));
                 }
                 
                 columnFlip = !columnFlip;
@@ -492,84 +478,337 @@ public class GameMap {
         
         return result;
     }
-
-    private void reserveSpaceForBuilding(Building hq) {
-        Point p = hq.getFlag().getPosition();
+    
+    private List<Point> calculateAvailableFlagPoints() {
+        List<Point> result      = new ArrayList<>();
         
-        switch(hq.getHouseSize(hq)) {
+        for (Point p : fullGrid) {
+            /* Remove spots surrounded by water */
+            if (!terrain.terrainMakesFlagPossible(p)) {
+                continue;
+            }            
+
+            result.add(p);
+        }
+    
+        return result;
+    }
+
+    private void reserveSpaceForBuilding(Building house) {
+        Point flagPoint  = house.getFlag().getPosition();
+        Point housePoint = new Point(flagPoint.x - 1, flagPoint.y + 1);
+        
+        switch(house.getHouseSize(house)) {
         case SMALL:
+            reserveSpaceForSmallHouse(house, housePoint);
+            break;
         case MEDIUM:
-            reserveSpaceForSmallHouse(p);
+            reserveSpaceForMediumHouse(house, housePoint);
             break;
         case LARGE:
-            reserveSpaceForLargeHouse(p);
+            reserveSpaceForLargeHouse(house, housePoint);
             break;
         }
     }
     
     private void reserveSpaceForFlag(Flag f) {
         Point p = f.getPosition();
+        Point diag1 = new Point(p.x - 1, p.y - 1);
+        Point diag2 = new Point(p.x + 1, p.y - 1);
+        Point diag3 = new Point(p.x - 1, p.y + 1);
+        Point diag4 = new Point(p.x + 1, p.y + 1);
         
-        reservePoint(p.x - 1, p.y - 1);
-        reservePoint(p.x + 1, p.y - 1);
-
-        reservePoint(p);
-
-        reservePoint(p.x - 1, p.y + 1);
-        reservePoint(p.x + 1, p.y + 1);
-
+        markUnavailableForFlag(p);
+        markUnavailableForFlag(diag1);
+        markUnavailableForFlag(diag2);
+        markUnavailableForFlag(diag3);
+        markUnavailableForFlag(diag4);
+        
+        markUnavailableForHouse(p);
+        
+        setPointCovered(p);
     }
     
-    private void reservePoint(Point p) {
-        if (availableFlagPoints.contains(p)) {
-            availableFlagPoints.remove(p);
+    private void setPointCovered(Point p) {
+        reservedPoints.add(p);
+        markUnavailableForFlag(p);
+        markUnavailableForHouse(p);
+    }
+    
+    private void setPointCovered(int x, int y) {
+        setPointCovered(new Point(x, y));
+    }
+
+    private boolean isPointCovered(Point point) {
+        return reservedPoints.contains(point);
+    }
+
+    private void reserveSpaceForLargeHouse(Building house, Point site) {
+        
+        /* Exact point points to house */
+        pointToGameObject.put(site, house);
+        
+        /* Mark all points that this house covers */
+        setPointCovered(site);
+        
+        /* Houses and flags can't be placed exactly where this house is */
+        markUnavailableForFlag(site);
+        markUnavailableForHouse(site);
+        
+        /* Mark spots where flags can't be built */
+        markUnavailableForFlag(site.upLeft());
+        markUnavailableForFlag(site.downLeft());
+        markUnavailableForFlag(site.left());
+        markUnavailableForFlag(site.downRight());
+        markUnavailableForFlag(site.down());
+        markUnavailableForFlag(site.right());
+        markUnavailableForFlag(site.upRight());
+        
+        /* Mark spots where houses can't be built */
+        markMaxHouseSizeForSpot(site.left().downLeft(), MEDIUM);
+        markMaxHouseSizeForSpot(site.left().left(), MEDIUM);
+        markMaxHouseSizeForSpot(site.upLeft().up(), MEDIUM);
+        
+        markUnavailableForHouse(site.left().down());
+        markUnavailableForHouse(site.left().upLeft());
+        markUnavailableForHouse(site.left().up());
+        markUnavailableForHouse(site.up());
+        markUnavailableForHouse(site.upRight());
+        markUnavailableForHouse(site.upLeft());
+        markUnavailableForHouse(site.downLeft());
+        markUnavailableForHouse(site.left());
+        markUnavailableForHouse(site.down());
+        markUnavailableForHouse(site.right());
+    }
+
+    private void reserveSpaceForMediumHouse(Building house, Point site) {
+        /* Exact point points to house */
+        pointToGameObject.put(site, house);
+        
+        /* Mark all points that this house covers */
+        setPointCovered(site);
+        setPointCovered(site.downRight());
+
+        /* Mark spots where flags can't be built */
+        markUnavailableForFlag(site.right().down());
+        markUnavailableForFlag(site.right().downRight());
+        markUnavailableForFlag(site.right());
+        markUnavailableForFlag(site.downLeft());
+        
+        /* Mark spots where houses can't be built */
+        markMaxHouseSizeForSpot(site.right().down(), MEDIUM);
+        markMaxHouseSizeForSpot(site.right().downRight(), MEDIUM);
+        markMaxHouseSizeForSpot(site.down(), MEDIUM);
+        markMaxHouseSizeForSpot(site.left().downLeft(), MEDIUM);
+        markMaxHouseSizeForSpot(site.left().down(), MEDIUM);
+        markMaxHouseSizeForSpot(site.up(), MEDIUM);
+        
+        markUnavailableForHouse(site.downLeft());
+        markUnavailableForHouse(site.left());
+        markUnavailableForHouse(site.upLeft());
+        markUnavailableForHouse(site.upRight());
+        markUnavailableForHouse(site.right());
+    }
+    
+    private void reserveSpaceForSmallHouse(Building house, Point site) {
+        
+        /* Exact point points to house */
+        pointToGameObject.put(site, house);
+        
+        /* Mark all points that this house covers */
+        setPointCovered(site);
+
+        /* Houses and flags can't be placed exactly where this house is */
+        markUnavailableForFlag(site);
+        markUnavailableForHouse(site);
+
+        /* Mark spots where houses can't be built */
+        markMaxHouseSizeForSpot(site.right().down(), MEDIUM);
+        markMaxHouseSizeForSpot(site.right().downRight(), MEDIUM);
+        markMaxHouseSizeForSpot(site.up(), MEDIUM);
+        
+        markUnavailableForHouse(site.down());
+        markUnavailableForHouse(site.downLeft());
+        markUnavailableForHouse(site.left());
+        markUnavailableForHouse(site.upLeft());
+        markUnavailableForHouse(site.upRight());
+        markUnavailableForHouse(site.right());
+        
+        /* Mark spots where flags can't be built */
+        markUnavailableForFlag(site.right().downRight());
+        markUnavailableForFlag(site.downLeft());
+    
+    
+    }
+
+    private void setAdjacentPointsCovered(Point center) {
+        for (Point p : getAdjacentPoints(center)) {
+            setPointCovered(p);
         }
     }
     
-    private void reservePoint(int x, int y) {
-        reservePoint(new Point(x, y));
-    }
-
-    private boolean isPointReserved(Point position) {
-        return !availableFlagPoints.contains(position);
-    }
-
-    private void reserveSpaceForLargeHouse(Point p) {
-        reservePoint(p.x - 1, p.y - 1);
-        reservePoint(p.x + 1, p.y - 1);
-
-        reservePoint(p.x - 2, p.y);
-        reservePoint(p);
-
-        reservePoint(p.x - 3, p.y + 1);
-        reservePoint(p.x - 1, p.y + 1);
-        reservePoint(p.x + 1, p.y + 1);
-
-        reservePoint(p.x - 4, p.y + 2);
-        reservePoint(p.x - 2, p.y + 2);
-        reservePoint(p.x,     p.y + 2);
-
-        reservePoint(p.x - 3, p.y + 3);
-        reservePoint(p.x - 1, p.y + 3);
-
-        reservePoint(p.x - 2, p.y + 4);
-    }
-
-    private void reserveSpaceForSmallHouse(Point p) {
-        reservePoint(p.x + 1, p.y - 1);
-
-        reservePoint(p.x - 2, p.y);
-        reservePoint(p);
-
-        reservePoint(p.x - 3, p.y + 1);
-        reservePoint(p.x - 1, p.y + 1);
-        reservePoint(p.x + 1, p.y + 1);
-
-        reservePoint(p.x - 2, p.y + 2);
-        reservePoint(p.x,     p.y + 2);
-    }
-
     public void terrainIsUpdated() {
         availableFlagPoints = calculateAvailableFlagPoints();
+        
+        availableHouseSites = calculateAvailableHouseSites();
+    }
+
+    public Map<Point, Size> getAvailableHousePoints() {
+        return availableHouseSites;
+    }
+
+    public List<Point> getPossibleAdjacentRoadConnections(Point point) {
+        Point[] adjacentPoints  = getAdjacentPoints(point);
+        List<Point>  resultList = new ArrayList<>();
+        
+        for (Point p : adjacentPoints) {
+            if (isPointCovered(p) && !isFlagAtPoint(p)) {
+                continue;
+            }
+            
+            resultList.add(p);
+        }
+    
+        return resultList;
+    }
+
+    public void placeRoad(Flag start, List<Point> intermediatePoints, Flag end) throws InvalidEndPointException {
+        Road r = placeRoad(start, end);
+        
+        r.setSteps(intermediatePoints);
+    }
+
+    Point[] getAdjacentPoints(Point point) {
+        Point[] adjacentPoints = new Point[8];
+
+        adjacentPoints[0] = new Point(point.x - 2, point.y    );
+        adjacentPoints[1] = new Point(point.x - 1, point.y + 1);
+        adjacentPoints[2] = new Point(point.x    , point.y + 2);
+        adjacentPoints[3] = new Point(point.x + 1, point.y + 1);
+        adjacentPoints[4] = new Point(point.x + 2, point.y    );
+        adjacentPoints[5] = new Point(point.x + 1, point.y - 1);
+        adjacentPoints[6] = new Point(point.x    , point.y - 2);
+        adjacentPoints[7] = new Point(point.x - 1, point.y - 1);
+    
+        return adjacentPoints;
+    }
+
+    private Map<Point, Size> calculateAvailableHouseSites() {
+        Map<Point, Size> result = new HashMap<>();
+        
+        for (Point p : fullGrid) {
+            if (canBuildLargeHouse(p)) {
+                result.put(p, LARGE);
+            } else if (canBuildMediumHouse(p)) {
+                result.put(p, MEDIUM);
+            } else if (canBuildSmallHouse(p)) {
+                result.put(p, SMALL);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean canBuildSmallHouse(Point site) {
+        return terrain.isOnGrass(site) && !isPointCovered(site);
+    }
+
+    private boolean canBuildLargeHouse(Point site) {
+        boolean closeAreaClear = terrain.isOnGrass(site);
+        boolean wideAreaClear = true;
+    
+        if (isPointCovered(site)) {
+            return false;
+        }
+        
+        for (Point p : getAdjacentPoints(site)) {
+            if (!terrain.isOnGrass(p)) {
+                wideAreaClear = false;
+                
+                break;
+            }
+        
+            if (isPointCovered(p)) {
+                wideAreaClear = false;
+                
+                break;
+            }
+        }
+    
+        return closeAreaClear && wideAreaClear;
+    }
+
+    private boolean canBuildMediumHouse(Point site) {
+        boolean areaClear;
+        boolean borderClear;
+        
+        if (isPointCovered(site)) {
+            return false;
+        }
+        
+        areaClear = terrain.isOnGrass(site);
+        
+        borderClear = true;
+        
+        for(Point p : getAdjacentPoints(site)) {
+            if (isPointCovered(p)) {
+                borderClear = false;
+                
+                break;
+            }
+        }
+        
+        return areaClear && borderClear;
+    }
+
+    private boolean canPlaceHouse(Building house, Point site) throws Exception {
+        Size size = house.getHouseSize(house);
+    
+        switch (size) {
+        case SMALL:
+            return canBuildSmallHouse(site);
+        case MEDIUM:
+            return canBuildMediumHouse(site);
+        case LARGE:
+            return canBuildLargeHouse(site);
+        default:
+            throw new Exception("Can't handle house with unexpected size " + size);
+        }
+    }
+
+    private void markUnavailableForHouse(Point point) {
+sy        availableHouseSites.remove(point);
+    }
+
+    private void markUnavailableForFlag(Point point) {
+        availableFlagPoints.remove(point);
+    }
+
+    private boolean isHouseSiteAvailable(Point p) {
+        return availableHouseSites.containsKey(p);
+    }
+
+    private boolean isFlagAtPoint(Point p) {
+        Object o = pointToGameObject.get(p);
+        
+        return o != null && o instanceof Flag;
+    }
+
+    private boolean isAlreadyPlaced(Flag f) {
+        return pointToGameObject.containsValue(f);
+    }
+
+    private void markMaxHouseSizeForSpot(Point down, Size size) {
+        Size currentSize = availableHouseSites.get(down);
+
+        if (size == SMALL) {
+            availableHouseSites.put(down, size);
+        } else if (size == MEDIUM && currentSize == LARGE) {
+            availableHouseSites.put(down, size);
+        }
+    }
+
+    private boolean isAvailablePointForFlag(Point position) {
+        return availableFlagPoints.contains(position);
     }
 }

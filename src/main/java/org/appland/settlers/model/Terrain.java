@@ -7,6 +7,8 @@
 package org.appland.settlers.model;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
@@ -89,9 +91,13 @@ public class Terrain {
         return isSurroundedBy(p, SWAMP);
     }
 
+    protected boolean isOnGrass(Point p) {
+        return isSurroundedBy(p, GRASS);
+    }
+    
     private boolean isSurroundedBy(Point p, Vegetation vegetation) {
-        boolean isSurrounded = true;
-        Tile[]  tiles     = getSurroundingTiles(p);
+        boolean    isSurrounded = true;
+        List<Tile> tiles        = getSurroundingTiles(p);
         
         for (Tile t : tiles) {
             if (t.getVegetationType() != vegetation) {
@@ -103,38 +109,35 @@ public class Terrain {
         return isSurrounded;
     }
 
-    Tile[] getSurroundingTiles(Point center) {
-        int nrSurroundingTiles;
+    List<Tile> getSurroundingTiles(Point center) {
+        List<Tile> allTiles = new LinkedList<>();
+        List<Tile> result   = new LinkedList<>();
         
-        if (center.y > 0 && center.y < height) {
-            nrSurroundingTiles = 6;
-        } else {
-            nrSurroundingTiles = 3;
-        }
-        
-        Tile[] tiles = new Tile[nrSurroundingTiles];
-
         Point rightPoint = new Point(center.x + 2, center.y);
         Point leftPoint  = new Point(center.x - 2, center.y);
+        Point p4 = new Point(center.x + 1, center.y - 1);
+        Point p5 = new Point(center.x - 1, center.y - 1);
+        Point p1 = new Point(center.x - 1, center.y + 1);
+        Point p2 = new Point(center.x + 1, center.y + 1);
 
-        if (center.y > 0) {
-            Point p4 = new Point(center.x + 1, center.y - 1);
-            Point p5 = new Point(center.x - 1, center.y - 1);
-
-            tiles[3] = getTile(p4, center, rightPoint);
-            tiles[4] = getTile(p5, center, p4);
-            tiles[5] = getTile(leftPoint, center, p5);
-        }
+        allTiles.add(getTile(p4, center, rightPoint));
+        allTiles.add(getTile(p5, center, p4));
+        allTiles.add(getTile(leftPoint, center, p5));
     
-        if (center.y < height) {
-            Point p1 = new Point(center.x - 1, center.y + 1);
-            Point p2 = new Point(center.x + 1, center.y + 1);
 
-            tiles[0] = getTile(p1, center, leftPoint);
-            tiles[1] = getTile(p2, center, p1);
-            tiles[2] = getTile(rightPoint, center, p2);
-        }        
-        return tiles;
+        allTiles.add(getTile(p1, center, leftPoint));
+        allTiles.add(getTile(p2, center, p1));
+        allTiles.add(getTile(rightPoint, center, p2));
+
+        for (Tile t : allTiles) {
+            if (t == null) {
+                continue;
+            }
+        
+            result.add(t);
+        }
+        
+        return result;
     }
 
     public boolean terrainMakesFlagPossible(Point p) {

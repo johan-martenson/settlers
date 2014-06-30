@@ -66,11 +66,11 @@ public class TestTransportation {
 
         Road r = roads.get(0);
 
-        assertTrue(r.start.getPosition().x == 5);
-        assertTrue(r.start.getPosition().y == 5);
+        assertTrue(r.start.getPosition().x == 6);
+        assertTrue(r.start.getPosition().y == 4);
 
-        assertTrue(r.end.getPosition().x == 10);
-        assertTrue(r.end.getPosition().y == 6);
+        assertTrue(r.end.getPosition().x == 11);
+        assertTrue(r.end.getPosition().y == 5);
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -104,18 +104,20 @@ public class TestTransportation {
 
     @Test
     public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
-        GameMap map = new GameMap(40, 40);
+        GameMap    map        = new GameMap(40, 40);
+        Flag       middleFlag = new Flag(7, 7);
+        Flag       endFlag    = new Flag(10, 10);
+        Woodcutter wc         = new Woodcutter();
+        Point      wcPoint    = new Point(3, 3);
 
-        Woodcutter wc = new Woodcutter();
+        map.placeBuilding(wc, wcPoint);
+        map.placeFlag(middleFlag);
 
-        map.placeBuilding(wc, new Point(3, 3));
-        map.placeFlag(new Flag(7, 7));
+        map.placeRoad(wc.getFlag(), middleFlag);
 
-        map.placeRoad(new Flag(3, 3), new Flag(7, 7));
+        map.placeFlag(endFlag);
 
-        map.placeFlag(new Flag(10, 10));
-
-        map.placeRoad(new Flag(7, 7), new Flag(10, 10));
+        map.placeRoad(middleFlag, endFlag);
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -339,8 +341,8 @@ public class TestTransportation {
         map.placeWorker(hqToMdlCr, storage.getFlag());
         map.placeWorker(mdlToEndCr, endFlag);
         
-        map.assignWorkerToRoad(hqToMdlCr, hqToMiddleRoad);
-        map.assignWorkerToRoad(mdlToEndCr, middleToEndRoad);
+        map.assignCourierToRoad(hqToMdlCr, hqToMiddleRoad);
+        map.assignCourierToRoad(mdlToEndCr, middleToEndRoad);
         
         Cargo c = new Cargo(WOOD);
         endFlag.putCargo(c);
@@ -385,7 +387,7 @@ public class TestTransportation {
         GameMap map          = new GameMap(30, 30);
         Storage storage      = new Storage();
         Point hqPoint        = new Point(5, 5);
-        Point middlePoint    = new Point(7, 5);
+        Point middlePoint    = new Point(11, 5);
         Flag middleFlag      = new Flag(middlePoint);
         Road hqToMiddleRoad  = new Road(storage.getFlag(), middleFlag);
         
@@ -432,8 +434,8 @@ public class TestTransportation {
         GameMap map = new GameMap(10, 10);
         Headquarter hq = new Headquarter();
         Barracks b = new Barracks();
-        Point bSpot = new Point(3, 3);
-        Point hqSpot = new Point(1, 1);
+        Point bSpot = new Point(7, 7);
+        Point hqSpot = new Point(2, 2);
         Road r;
         Courier w = new Courier(map);
 
@@ -444,7 +446,7 @@ public class TestTransportation {
 
         map.placeRoad(r);
         map.placeWorker(w, hq.getFlag());
-        map.assignWorkerToRoad(w, r);
+        map.assignCourierToRoad(w, r);
 
         /* Construct barracks */
         Utils.constructSmallHouse(b);
