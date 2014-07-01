@@ -777,7 +777,7 @@ public class GameMap {
     }
 
     private void markUnavailableForHouse(Point point) {
-sy        availableHouseSites.remove(point);
+        availableHouseSites.remove(point);
     }
 
     private void markUnavailableForFlag(Point point) {
