@@ -88,5 +88,7 @@ public class Road {
 
     void setCourier(Courier wr) {
         courier = wr;
+
+        promisedCourier = false;
     }
 }
