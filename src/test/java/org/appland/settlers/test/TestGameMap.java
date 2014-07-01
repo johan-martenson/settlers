@@ -38,7 +38,7 @@ public class TestGameMap {
     @Test
     public void testPlaceBuildingOnEmptyMap() throws Exception {
         Woodcutter wc = new Woodcutter();
-        Point wcPoint = new Point(1, 1);
+        Point wcPoint = new Point(3, 3);
         
         map.placeBuilding(wc, wcPoint);
     }
@@ -71,7 +71,7 @@ public class TestGameMap {
         
         map.placeRoad(r);
         
-        map.assignWorkerToRoad(new Courier(map), r);
+        map.assignCourierToRoad(new Courier(map), r);
     }
     
     @Test(expected=Exception.class)
@@ -92,16 +92,6 @@ public class TestGameMap {
         f1.getPosition().x = 3;
         
         map.placeFlag(f1);
-    }
-    
-    @Test(expected=Exception.class)
-    public void testAddRoadWithExactSameStartAndEnd() throws InvalidEndPointException, Exception {
-        Flag f1 = new Flag(new Point(1, 1));
-        Road r  = new Road(f1, f1);
-
-        map.placeFlag(f1);
-        
-        map.placeRoad(r);
     }
     
     @Test(expected=Exception.class)

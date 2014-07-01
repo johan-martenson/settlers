@@ -5,10 +5,14 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -23,9 +27,12 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Size;
+import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.fastForward;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -88,9 +95,9 @@ public class TestScenarios {
         map.placeWorker(wr2, sm.getFlag());
         map.placeWorker(wr3, qry.getFlag());
 
-        map.assignWorkerToRoad(wr1, wcToHqRoad);
-        map.assignWorkerToRoad(wr2, smToHqRoad);
-        map.assignWorkerToRoad(wr3, qryToHqRoad);
+        map.assignCourierToRoad(wr1, wcToHqRoad);
+        map.assignCourierToRoad(wr2, smToHqRoad);
+        map.assignCourierToRoad(wr3, qryToHqRoad);
 
 	// TODO: add that workers need to populate the buildings before they start producing
         // TODO: add that workers need to move to roads to populate them
@@ -194,7 +201,7 @@ public class TestScenarios {
     @Test
     public void buildWoodcutterSawmillQuarrySequenciallyFromScratch() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 
-        /*   --   SETIP   --   */
+        /*   --   SETUP   --   */
         
         
         /* Create Initial Game Setup */
@@ -254,6 +261,159 @@ public class TestScenarios {
         
         // TODO: construct remaining houses, wait ~10 turns for production, construct barracks
     
+    }
+
+    @Test
+    public void testGameStartFromScratchWithUserInput() throws Exception {
+        /*   --   SETUP   --   */
+        
+        
+        /* Create Initial Game Setup */
+        GameMap map = new GameMap(30, 30);
+        Headquarter hq = new Headquarter();
+
+        Point startPosition = new Point(15, 15);
+
+        map.placeBuilding(hq, startPosition);
+
+        /*   --   User    --   */
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
+        
+        /*   --   Create woodcutter   --  */
+        
+        /*  - List all house spots -  */
+        Map<Point, Size> possibleHouseSpots = map.getAvailableHousePoints();
+        
+        assertTrue(possibleHouseSpots.containsKey(new Point (22, 20)));
+        assertTrue(possibleHouseSpots.get(new Point(22, 20)) == LARGE);
+        
+        /*  - Pick 22, 20 -  */        
+        Woodcutter wc      = new Woodcutter();
+        Point      wcPoint = new Point(22, 20);
+        
+        map.placeBuilding(wc, wcPoint);
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);
+        
+        /*   --   Create road to woodcutter   --   */
+        map.placeRoad(hq.getFlag(), wc.getFlag());
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+    
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*   --   Create sawmill   --   */
+        
+        /*  - List all house spots -  */
+        possibleHouseSpots = map.getAvailableHousePoints();
+        
+        assertTrue(possibleHouseSpots.containsKey(new Point (10, 10)));
+        assertTrue(possibleHouseSpots.get(new Point(10, 10)) == LARGE);        
+        
+        /*  - Pick 10, 10 -  */
+        Sawmill sm      = new Sawmill();
+        Point   smPoint = new Point(10, 10);
+        
+        map.placeBuilding(sm, smPoint);
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+    
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+        
+        /*  - Build road carefully to samwill -  */
+        Flag startFlag = hq.getFlag();
+        
+        List<Point> chosenPointsForRoad = new ArrayList<>();
+        
+        /*  - List possible adjacent connections for the road -  */
+        List<Point> roadConnections = map.getPossibleAdjacentRoadConnections(startFlag.getPosition());
+    
+        assertEquals(startFlag.getPosition(), new Point(16, 14));
+        
+        assertTrue(roadConnections.contains(new Point(17, 13)));
+    
+        /*  - Choose 17, 13 -  */
+        chosenPointsForRoad.add(new Point(17, 13));
+
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+        
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(17, 13));
+        
+        assertTrue(roadConnections.contains(new Point(16, 12)));
+
+        /*  - Choose 16, 12 -  */
+        chosenPointsForRoad.add(new Point(16, 12));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(16, 12));
+        
+        assertTrue(roadConnections.contains(new Point(14, 12)));
+
+        /*  - Choose 14, 12 -  */
+        chosenPointsForRoad.add(new Point(14, 12));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(14, 12));
+        
+        assertTrue(roadConnections.contains(new Point(13, 11)));
+
+        /*  - Choose 13, 11 -  */
+        chosenPointsForRoad.add(new Point(13, 11));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(13, 11));
+        
+        assertTrue(roadConnections.contains(new Point(13, 9)));
+        
+        /*  - Choose 13, 9 -  */
+        chosenPointsForRoad.add(new Point(13, 9));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(13, 9));
+        
+        assertTrue(roadConnections.contains(new Point(12, 8)));
+        
+        /*  - Choose 12, 8 -  */
+        chosenPointsForRoad.add(new Point(12, 8));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - Connect to sawmill's flag -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(12, 8));
+        
+        System.out.println(roadConnections);
+        System.out.println(sm.getFlag());
+        
+        assertTrue(roadConnections.contains(sm.getFlag().getPosition()));
+        
+        map.placeRoad(startFlag, chosenPointsForRoad, sm.getFlag());
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /* Sawmill and woodcutter built and connected to headquarter */
     }
 
 }

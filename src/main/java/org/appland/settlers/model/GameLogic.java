@@ -49,7 +49,7 @@ public class GameLogic {
 
                 /* Handle couriers separately */
                 if (w.getTargetRoad() != null) {
-                    map.assignWorkerToRoad((Courier) w, w.getTargetRoad());
+                    map.assignCourierToRoad((Courier) w, w.getTargetRoad());
                     w.stopTraveling();
                 } else if (w.getTargetBuilding() != null) {
                     Flag targetFlag = w.getTarget();

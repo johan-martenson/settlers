@@ -1,11 +1,14 @@
 package org.appland.settlers.model;
 
+import java.util.List;
+
 public class Road {
 
     public Flag start;
     public Flag end;
     private boolean promisedCourier;
     private Courier courier;
+    private List<Point> steps;
 
     public Road(Flag start, Flag end) {
         this.start = start;
@@ -13,6 +16,7 @@ public class Road {
 
         promisedCourier = false;
         courier = null;
+        steps = null;
     }
 
     @Override
@@ -90,5 +94,9 @@ public class Road {
         courier = wr;
 
         promisedCourier = false;
+    }
+
+    void setSteps(List<Point> intermediatePoints) {
+        steps = intermediatePoints;
     }
 }

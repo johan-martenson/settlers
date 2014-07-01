@@ -64,7 +64,7 @@ public class GameLogicTest {
 
         map.placeRoad(r);
         map.placeWorker(w, stg.getFlag());
-        map.assignWorkerToRoad(w, r);
+        map.assignCourierToRoad(w, r);
 
         Utils.constructSmallHouse(wc);
 
@@ -145,7 +145,7 @@ public class GameLogicTest {
         map.placeBuilding(sm, smPoint);
         map.placeRoad(r);
         map.placeWorker(w, f);
-        map.assignWorkerToRoad(w, r);
+        map.assignCourierToRoad(w, r);
 
         Cargo c = new Cargo(PLANCK);
 
@@ -187,7 +187,7 @@ public class GameLogicTest {
         map.placeRoad(r);
         map.placeWorker(w, src);
 
-        map.assignWorkerToRoad(w, r);
+        map.assignCourierToRoad(w, r);
 
         c = new Cargo(PLANCK);
 

@@ -33,9 +33,9 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterIsReadyDirectly() throws Exception {
-        GameMap map = new GameMap(5, 5);
+        GameMap map = new GameMap(15, 15);
         Headquarter hq = new Headquarter();
-        Point hqPoint = new Point(1, 1);
+        Point hqPoint = new Point(5, 5);
 
         map.placeBuilding(hq, hqPoint);
 
@@ -44,9 +44,9 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterNeedsNoWorker() throws Exception {
-        GameMap map = new GameMap(5, 5);
+        GameMap map = new GameMap(15, 15);
         Headquarter hq = new Headquarter();
-        Point hqPoint = new Point(1, 1);
+        Point hqPoint = new Point(5, 5);
 
         map.placeBuilding(hq, hqPoint);
 
