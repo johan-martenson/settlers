@@ -58,7 +58,7 @@ public class TestTransportation {
         Flag f1 = hq.getFlag();
         Flag f2 = wc.getFlag();
 
-        map.placeRoad(f1, f2);
+        map.placeAutoSelectedRoad(f1, f2);
 
         List<Road> roads = map.getRoads();
 
@@ -81,7 +81,7 @@ public class TestTransportation {
 
         map.placeBuilding(s, new Point(4, 6));
 
-        map.placeRoad(new Flag(6, 7), new Flag(4, 6));
+        map.placeAutoSelectedRoad(new Flag(6, 7), new Flag(4, 6));
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -92,14 +92,14 @@ public class TestTransportation {
 
         map.placeBuilding(wc, new Point(3, 3));
 
-        map.placeRoad(new Flag(8, 6), new Flag(3, 3));
+        map.placeAutoSelectedRoad(new Flag(8, 6), new Flag(3, 3));
     }
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutAnyValidEndpoints() throws InvalidEndPointException, Exception {
         GameMap map = new GameMap(10, 10);
 
-        map.placeRoad(new Flag(1, 1), new Flag(3, 5));
+        map.placeAutoSelectedRoad(new Flag(1, 1), new Flag(3, 5));
     }
 
     @Test
@@ -113,11 +113,11 @@ public class TestTransportation {
         map.placeBuilding(wc, wcPoint);
         map.placeFlag(middleFlag);
 
-        map.placeRoad(wc.getFlag(), middleFlag);
+        map.placeAutoSelectedRoad(wc.getFlag(), middleFlag);
 
         map.placeFlag(endFlag);
 
-        map.placeRoad(middleFlag, endFlag);
+        map.placeAutoSelectedRoad(middleFlag, endFlag);
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -125,7 +125,7 @@ public class TestTransportation {
         GameMap map = new GameMap(10, 10);
 
         map.placeFlag(new Flag(3, 3));
-        map.placeRoad(new Flag(3, 3), new Flag(3, 3));
+        map.placeAutoSelectedRoad(new Flag(3, 3), new Flag(3, 3));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class TestTransportation {
             map.placeFlag(points[i]);
         }
 
-        map.placeRoad(points[0], points[1]);
+        map.placeAutoSelectedRoad(points[0], points[1]);
 
         assertTrue(map.routeExist(points[0], points[1]));
     }
@@ -163,7 +163,7 @@ public class TestTransportation {
             map.placeFlag(points[i]);
         }
 
-        map.placeRoad(points[0], points[1]);
+        map.placeAutoSelectedRoad(points[0], points[1]);
 
         assertFalse(map.routeExist(points[0], points[2]));
     }
@@ -200,7 +200,7 @@ public class TestTransportation {
             new Flag(4, 6),
             new Flag(2, 8),
             new Flag(4, 8),
-            new Flag(7, 3)};
+            new Flag(5, 3)};
 
         int i;
         for (i = 0; i < points.length; i++) {
@@ -213,16 +213,16 @@ public class TestTransportation {
 
         Flag target = wc.getFlag();
 
-        map.placeRoad(points[0], points[1]);
-        map.placeRoad(points[1], points[2]);
-        map.placeRoad(points[2], points[3]);
-        map.placeRoad(points[3], points[4]);
-        map.placeRoad(points[2], points[9]);
-        map.placeRoad(points[9], target);
-        map.placeRoad(points[1], points[5]);
-        map.placeRoad(points[5], points[6]);
-        map.placeRoad(points[1], points[7]);
-        map.placeRoad(points[7], points[8]);
+        map.placeAutoSelectedRoad(points[0], points[1]);
+        map.placeAutoSelectedRoad(points[1], points[2]);
+        map.placeAutoSelectedRoad(points[2], points[3]);
+        map.placeAutoSelectedRoad(points[3], points[4]);
+        map.placeAutoSelectedRoad(points[2], points[9]);
+        map.placeAutoSelectedRoad(points[9], target);
+        map.placeAutoSelectedRoad(points[1], points[5]);
+        map.placeAutoSelectedRoad(points[5], points[6]);
+        map.placeAutoSelectedRoad(points[1], points[7]);
+        map.placeAutoSelectedRoad(points[7], points[8]);
 
         Courier worker = new Courier(map);
 
@@ -277,7 +277,7 @@ public class TestTransportation {
         Flag target = stge.getFlag();
         Flag start = qry.getFlag();
 
-        map.placeRoad(start, target);
+        map.placeAutoSelectedRoad(start, target);
 
         Courier worker = new Courier(map);
 
@@ -312,7 +312,6 @@ public class TestTransportation {
 
 		// TODO: Make sure the cargo has a target which is to go to the closest storage building
         c.setTarget(stge, map);
-
     }
 
     @Test
@@ -325,8 +324,6 @@ public class TestTransportation {
         Point endPoint       = new Point(10, 14);
         Flag middleFlag      = new Flag(middlePoint);
         Flag endFlag         = new Flag(endPoint);
-        Road hqToMiddleRoad  = new Road(storage.getFlag(), middleFlag);
-        Road middleToEndRoad = new Road(middleFlag, endFlag);
         Courier mdlToEndCr   = new Courier(map);
         Courier hqToMdlCr    = new Courier(map);
         
@@ -335,8 +332,8 @@ public class TestTransportation {
         map.placeFlag(middleFlag);
         map.placeFlag(endFlag);
         
-        map.placeRoad(hqToMiddleRoad);
-        map.placeRoad(middleToEndRoad);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
+        Road middleToEndRoad = map.placeAutoSelectedRoad(middleFlag, endFlag);
         
         map.placeWorker(hqToMdlCr, storage.getFlag());
         map.placeWorker(mdlToEndCr, endFlag);
@@ -389,12 +386,11 @@ public class TestTransportation {
         Point hqPoint        = new Point(5, 5);
         Point middlePoint    = new Point(11, 5);
         Flag middleFlag      = new Flag(middlePoint);
-        Road hqToMiddleRoad  = new Road(storage.getFlag(), middleFlag);
         
         map.placeBuilding(storage, hqPoint);
         map.placeFlag(middleFlag);
         
-        map.placeRoad(hqToMiddleRoad);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
         
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
@@ -442,9 +438,7 @@ public class TestTransportation {
         map.placeBuilding(hq, hqSpot);
         map.placeBuilding(b, bSpot);
 
-        r = new Road(hq.getFlag(), b.getFlag());
-
-        map.placeRoad(r);
+        r = map.placeAutoSelectedRoad(hq.getFlag(), b.getFlag());
         map.placeWorker(w, hq.getFlag());
         map.assignCourierToRoad(w, r);
 

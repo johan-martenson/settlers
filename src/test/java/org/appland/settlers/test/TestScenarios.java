@@ -78,13 +78,9 @@ public class TestScenarios {
         map.placeBuilding(hq, startPosition);
 
         /* Create roads */
-        Road wcToHqRoad = new Road(hq.getFlag(), wc.getFlag());
-        Road smToHqRoad = new Road(hq.getFlag(), sm.getFlag());
-        Road qryToHqRoad = new Road(hq.getFlag(), qry.getFlag());
-
-        map.placeRoad(wcToHqRoad);
-        map.placeRoad(smToHqRoad);
-        map.placeRoad(qryToHqRoad);
+        Road wcToHqRoad = map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
+        Road smToHqRoad = map.placeAutoSelectedRoad(hq.getFlag(), sm.getFlag());
+        Road qryToHqRoad = map.placeAutoSelectedRoad(hq.getFlag(), qry.getFlag());
 
         /* Assign workers to the roads */
         Courier wr1 = new Courier(map);
@@ -230,7 +226,7 @@ public class TestScenarios {
         fastForward(100, map);
         
         /* Player creates road between hq and wc */
-        map.placeRoad(hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
 
         // TODO: assert that the road is unoccupied
         
@@ -299,7 +295,7 @@ public class TestScenarios {
         fastForward(100, map);
         
         /*   --   Create road to woodcutter   --   */
-        map.placeRoad(hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
         
         gameLogic.gameLoop(map);
         fastForward(100, map);        
@@ -402,9 +398,6 @@ public class TestScenarios {
 
         /*  - Connect to sawmill's flag -  */
         roadConnections = map.getPossibleAdjacentRoadConnections(new Point(12, 8));
-        
-        System.out.println(roadConnections);
-        System.out.println(sm.getFlag());
         
         assertTrue(roadConnections.contains(sm.getFlag().getPosition()));
         
