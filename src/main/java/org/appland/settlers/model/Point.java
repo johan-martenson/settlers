@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.model;
 
+import static java.lang.Math.abs;
+
 /**
  *
  * @author johan
@@ -50,5 +52,13 @@ public class Point extends java.awt.Point {
 
     Point upRight() {
         return new Point(x + 1, y + 1);
+    }
+
+    boolean isAdjacent(Point p) {
+        if (p.equals(this)) {
+            return false;
+        }
+
+        return abs(p.x - x) + abs(p.y - y) == 2;
     }
 }

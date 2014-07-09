@@ -401,7 +401,11 @@ public class TestScenarios {
         
         assertTrue(roadConnections.contains(sm.getFlag().getPosition()));
         
-        map.placeRoad(startFlag, chosenPointsForRoad, sm.getFlag());
+
+        chosenPointsForRoad.add(0,startFlag.getPosition());
+	chosenPointsForRoad.add(sm.getFlag().getPosition());
+
+        map.placeRoad(chosenPointsForRoad);
         
         gameLogic.gameLoop(map);
         fastForward(100, map);        

@@ -38,20 +38,13 @@ public class GameMap {
     private final int MINIMUM_HEIGHT = 5;
 
     private boolean roadCrossesOtherRoads(Road r) {
-        Point iter = r.start.getPosition();
-        
-        for (Point next : r.getWayPoints()) {
-            if (next.equals(r.start.getPosition())) {
-                continue;
-            }
-        
-            MapPoint mapPoint = pointToGameObject.get(iter);
+        for (Point current : r.getWayPoints()) {
+            MapPoint mapPoint = pointToGameObject.get(current);
             
-            if (mapPoint.hasRoadTo(next) && !mapPoint.isFlag()) {
+            if (mapPoint.isRoad() && !mapPoint.isFlag()) {
                 return true;
             }
         }
-        
         
         return false;
     }
@@ -138,19 +131,17 @@ public class GameMap {
     }
 
     class MapPoint {
-        Building    building;
-        Flag        flag;
-        List<Road>  roads;
-        Point       point;
-        List<Point> connectedNeighbors;
-        boolean     isRoad;
+        Building   building;
+        Flag       flag;
+        Point      point;
+        Set<Point> connectedNeighbors;
+        boolean    isRoad;
 
         public MapPoint(Point p) {
             point              = p;
             building           = null;
             flag               = null;
-            roads              = new ArrayList<>();
-            connectedNeighbors = new ArrayList<>();
+            connectedNeighbors = new HashSet<>();
         }
     
         void setBuilding(Building b) throws Exception {
@@ -168,12 +159,12 @@ public class GameMap {
         
             flag = f;
         }
+
+        Flag getFlag() {
+            return flag;
+        }
         
         void addConnectingRoad(Road r) throws Exception {
-            if (roads.contains(r)) {
-                throw new Exception(r + " is already connected to " + this);
-            }
-
             Point previous = null;
             
             for (Point current : r.getWayPoints()) {
@@ -187,16 +178,12 @@ public class GameMap {
                 
                 previous = current;
             }
-            
-            roads.add(r);
         }
         
         void removeConnectingRoad(Road r) throws Exception {
             if (!roads.contains(r)) {
                 throw new Exception(r + " is not connected to " + this);
             }
-
-            roads.remove(r);
         }
         
         private boolean isOccupied() {
@@ -208,12 +195,12 @@ public class GameMap {
             return "Map point " + point + " with " + building + " and " + flag;
         }
 
-        private boolean isFlag() {
+        boolean isFlag() {
             return flag != null;
         }
 
-        private boolean isRoad() {
-            return !roads.isEmpty();
+        boolean isRoad() {
+            return !connectedNeighbors.isEmpty();
         }
         
         private boolean hasRoadTo(Point next) {
@@ -273,34 +260,43 @@ public class GameMap {
         reserveSpaceForBuilding(house);
     }
 
-    public Road placeRoad(Flag start, List<Point> wayPoints, Flag end) throws Exception {
-        Road road = new Road(start, wayPoints, end);
+    public Road placeRoad(List<Point> wayPoints) throws Exception {
+	Point start = wayPoints.get(0);
+        Point end   = wayPoints.get(wayPoints.size() - 1);
 
-        if (!isFlagAtPoint(start.getPosition()) || !isFlagAtPoint(end.getPosition())) {
+        if (!isFlagAtPoint(start) || !isFlagAtPoint(end)) {
             throw new InvalidEndPointException();
         }
 
-        if (start.getPosition().equals(end.getPosition()) && wayPoints.isEmpty()) {
+        if (start.equals(end)) {
             throw new InvalidEndPointException();
         }
-        
+
+        Flag startFlag = getFlagAtPoint(start);
+        Flag endFlag   = getFlagAtPoint(end);
+
+        Road road = new Road(startFlag, wayPoints, endFlag);
+
+        if (roadStepsTooLong(road.getWayPoints())) {
+            throw new Exception("The steps are too long in " + wayPoints);
+        }
+
         if (roadCrossesOtherRoads(road)) {
             throw new Exception("Can't build " + road + " since it crosses other roads");
         }
-
         
         roads.add(road);
 
-        if (!roadNetwork.containsKey(start)) {
-            roadNetwork.put(start, new ArrayList<Flag>());
+        if (!roadNetwork.containsKey(startFlag)) {
+            roadNetwork.put(startFlag, new ArrayList<Flag>());
         }
 
-        if (!roadNetwork.containsKey(end)) {
-            roadNetwork.put(end, new ArrayList<Flag>());
+        if (!roadNetwork.containsKey(endFlag)) {
+            roadNetwork.put(endFlag, new ArrayList<Flag>());
         }
 
-        roadNetwork.get(start).add(end);
-        roadNetwork.get(end).add(start);
+        roadNetwork.get(startFlag).add(endFlag);
+        roadNetwork.get(endFlag).add(startFlag);
     
         addRoadToMapPoints(road);
         
@@ -310,7 +306,11 @@ public class GameMap {
     public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
         List<Point> wayPoints = autoSelectRoad(startFlag, endFlag);
         
-        return placeRoad(startFlag, wayPoints, endFlag);
+	if (wayPoints == null) {
+            throw new InvalidEndPointException();
+        }
+
+        return placeRoad(wayPoints);
     }
 
     public List<Road> getRoads() {
@@ -1019,5 +1019,34 @@ public class GameMap {
         }
     
         return resultMap;
+    }
+
+    private boolean roadStepsTooLong(List<Point> wayPoints) {
+        Point previous = null;
+
+        for (Point current : wayPoints) {
+            if (previous == null) {
+		previous = current;
+                continue;
+            }
+
+            if (!previous.isAdjacent(current)) {
+                return true;
+            }
+
+	    previous = current;
+        }
+
+        return false;
+    }
+
+    private Flag getFlagAtPoint(Point p) throws Exception {
+        MapPoint mp = pointToGameObject.get(p);
+
+        if (!mp.isFlag()) {
+            throw new Exception("There is no flag at " + p);
+        }
+
+        return mp.getFlag();
     }
 }

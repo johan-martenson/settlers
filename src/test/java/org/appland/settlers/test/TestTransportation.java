@@ -81,7 +81,7 @@ public class TestTransportation {
 
         map.placeBuilding(s, new Point(4, 6));
 
-        map.placeAutoSelectedRoad(new Flag(6, 7), new Flag(4, 6));
+        map.placeAutoSelectedRoad(new Flag(5, 7), new Flag(4, 6));
     }
 
     @Test(expected = InvalidEndPointException.class)

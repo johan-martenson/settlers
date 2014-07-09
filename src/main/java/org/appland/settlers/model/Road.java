@@ -112,7 +112,7 @@ public class Road {
         steps = intermediatePoints;
     }
 
-    List<Point> getWayPoints() {
+    public List<Point> getWayPoints() {
         return steps;
     }
 }

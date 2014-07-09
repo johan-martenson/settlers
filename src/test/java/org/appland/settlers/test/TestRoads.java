@@ -17,7 +17,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadEqualsFlags;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -243,15 +242,23 @@ public class TestRoads {
         Flag  end2        = new Flag(new Point(3, 1));
         Point middlePoint = new Point(2, 2);
         
-        List<Point> middlePoints = new ArrayList<>();
-        middlePoints.add(middlePoint);
+        List<Point> wayPoints1 = new ArrayList<>();
+        List<Point> wayPoints2 = new ArrayList<>();
+        wayPoints1.add(commonStart.getPosition());
+        wayPoints1.add(middlePoint);
+        wayPoints1.add(end1.getPosition());
         
-        map.placeFlag(commonStart);
-        map.placeFlag(end1);
-        map.placeFlag(end2);
+        wayPoints2.add(commonStart.getPosition());
+        wayPoints2.add(middlePoint);
+        wayPoints2.add(end2.getPosition());
 
-        map.placeRoad(commonStart, middlePoints, end1);
-        map.placeRoad(commonStart, middlePoints, end2);
+        map.placeRoad(wayPoints1);
+        map.placeRoad(wayPoints2);
+    }
+
+    @Test
+    public void testWayPointsAreCorrectInSingleSegmentRoad() {
+	//TODO: IMPLEMENT!
     }
 
     @Test(expected=Exception.class)
@@ -264,18 +271,70 @@ public class TestRoads {
         Flag  end2        = new Flag(new Point(3, 1));
         Point middlePoint = new Point(2, 2);
         
-        List<Point> middlePoints = new ArrayList<>();
-        middlePoints.add(middlePoint);
+        List<Point> wayPoints1 = new ArrayList<>();
+        List<Point> wayPoints2 = new ArrayList<>();
+	wayPoints1.add(start1.getPosition());
+        wayPoints1.add(middlePoint);
+        wayPoints1.add(end1.getPosition());
         
+	wayPoints2.add(start2.getPosition());
+        wayPoints2.add(middlePoint);
+        wayPoints2.add(end2.getPosition());
+
         map.placeFlag(start1);
         map.placeFlag(start2);
         map.placeFlag(end1);
         map.placeFlag(end2);
 
-        map.placeRoad(start1, middlePoints, end1);
-        map.placeRoad(start2, middlePoints, end2);
+        map.placeRoad(wayPoints1);
+        map.placeRoad(wayPoints2);
     }
 
+    @Test
+    public void testWayPointsEqualsChosenRoad() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag  start       = new Flag(new Point(1, 1));
+        Flag  end         = new Flag(new Point(3, 3));
+        Point middlePoint = new Point(2, 2);
+        
+        List<Point> wayPoints = new ArrayList<>();
+	wayPoints.add(start.getPosition());
+        wayPoints.add(middlePoint);
+	wayPoints.add(end.getPosition());
+        
+        map.placeFlag(start);
+        map.placeFlag(end);
+
+        Road r = map.placeRoad(wayPoints);
+
+	wayPoints = r.getWayPoints();
+
+	assertTrue(wayPoints.size() == 3);
+	assertTrue(wayPoints.get(0).equals(start.getPosition()));
+	assertTrue(wayPoints.get(1).equals(middlePoint));
+	assertTrue(wayPoints.get(2).equals(end.getPosition()));
+    }
+
+    @Test(expected = Exception.class)
+    public void testLargerStepThanOneIsNotOk() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag  start       = new Flag(new Point(1, 1));
+        Flag  end         = new Flag(new Point(4, 4));
+        Point middlePoint = new Point(2, 2);
+        
+        List<Point> middlePoints = new ArrayList<>();
+        middlePoints.add(start.getPosition());
+        middlePoints.add(middlePoint);
+        middlePoints.add(end.getPosition());
+        
+        map.placeFlag(start);
+        map.placeFlag(end);
+
+        map.placeRoad(middlePoints);
+    }
+    
     @Test
     public void testPossibleDirectConnectionsFromFlag() throws Exception {
         GameMap map = new GameMap(10, 10);
