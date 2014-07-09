@@ -67,9 +67,8 @@ public class TestGameMap {
     public void testAssignWorkerNotOnMapToRoad() throws Exception {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(2, 2));
-        Road r  = new Road(f1, f2);
-        
-        map.placeRoad(r);
+
+        Road r = map.placeAutoSelectedRoad(f1, f2);
         
         map.assignCourierToRoad(new Courier(map), r);
     }
@@ -98,21 +97,19 @@ public class TestGameMap {
     public void testAddRoadWithIdenticalStartAndEnd() throws InvalidEndPointException, Exception {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 1));
-        Road r  = new Road(f1, f2);
         
         map.placeFlag(f1);
         map.placeFlag(f2);
         
-        map.placeRoad(r);
+        Road r = map.placeAutoSelectedRoad(f1, f2);
     }
     
     @Test(expected=Exception.class)
-    public void testAddRoadBetweenFlagsNotOnMap() throws InvalidEndPointException {
+    public void testAddRoadBetweenFlagsNotOnMap() throws Exception {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 2));
-        Road r  = new Road(f1, f2);
         
-        map.placeRoad(r);
+        Road r = map.placeAutoSelectedRoad(f1, f2);
     }
     
     @Test(expected=InvalidRouteException.class)

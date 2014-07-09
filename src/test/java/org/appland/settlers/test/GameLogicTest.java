@@ -60,9 +60,7 @@ public class GameLogicTest {
         map.placeBuilding(wc, wcPoint);
         map.placeBuilding(stg, stgPoint);
 
-        r = new Road(stg.getFlag(), wc.getFlag());
-
-        map.placeRoad(r);
+        r = map.placeAutoSelectedRoad(stg.getFlag(), wc.getFlag());
         map.placeWorker(w, stg.getFlag());
         map.assignCourierToRoad(w, r);
 
@@ -103,7 +101,7 @@ public class GameLogicTest {
         map.placeBuilding(hq, hqPoint);
         map.placeBuilding(wc, wcPoint);
 
-        map.placeRoad(hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
 
         Utils.constructSmallHouse(wc);
 
@@ -121,7 +119,7 @@ public class GameLogicTest {
 
         map.placeBuilding(sm, smPoint);
 
-        map.placeRoad(hq.getFlag(), sm.getFlag());
+        map.placeAutoSelectedRoad(hq.getFlag(), sm.getFlag());
 
         /* Verify that a new delivery is initiated for the sawmill */
         assertTrue(sm.needsMaterial(PLANCK));
@@ -138,12 +136,12 @@ public class GameLogicTest {
         Sawmill sm    = new Sawmill();
         Point smPoint = new Point(5, 5);
         Flag f        = new Flag(10, 10);
-        Road r        = new Road(f, sm.getFlag());
         Courier w     = new Courier(map);
-
+        Road r;
+        
         map.placeFlag(f);
         map.placeBuilding(sm, smPoint);
-        map.placeRoad(r);
+        r = map.placeAutoSelectedRoad(f, sm.getFlag());
         map.placeWorker(w, f);
         map.assignCourierToRoad(w, r);
 
@@ -178,13 +176,12 @@ public class GameLogicTest {
         Point wcPoint = new Point(11, 5);
         Courier w     = new Courier(map);
         Cargo c;
+        Road r;
 
         map.placeFlag(src);
         map.placeBuilding(wc, wcPoint);
 
-        Road r = new Road(src, wc.getFlag());
-
-        map.placeRoad(r);
+        r = map.placeAutoSelectedRoad(src, wc.getFlag());
         map.placeWorker(w, src);
 
         map.assignCourierToRoad(w, r);
@@ -236,11 +233,8 @@ public class GameLogicTest {
         assertTrue(map.getAllWorkers().isEmpty());
 
         /* Construct a road without any courier assigned */
-        Road r = new Road(hq.getFlag(), bk.getFlag());
-        Road r2 = new Road(bk.getFlag(), fHut.getFlag());
-
-        map.placeRoad(r);
-        map.placeRoad(r2);
+        Road r  = map.placeAutoSelectedRoad(hq.getFlag(), bk.getFlag());
+        Road r2 = map.placeAutoSelectedRoad(hq.getFlag(), fHut.getFlag());
 
         assertTrue(map.getAllWorkers().isEmpty());
 

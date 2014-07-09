@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Road {
@@ -16,7 +17,18 @@ public class Road {
 
         promisedCourier = false;
         courier = null;
-        steps = null;
+        
+        setSteps(new ArrayList<Point>());
+    }
+
+    Road(Flag start, List<Point> wayPoints, Flag end) {
+        this.start = start;
+        this.end = end;
+
+        promisedCourier = false;
+        courier = null;
+        
+        setSteps(wayPoints);
     }
 
     @Override
@@ -96,7 +108,11 @@ public class Road {
         promisedCourier = false;
     }
 
-    void setSteps(List<Point> intermediatePoints) {
+    private void setSteps(List<Point> intermediatePoints) {
         steps = intermediatePoints;
+    }
+
+    List<Point> getWayPoints() {
+        return steps;
     }
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,14 +28,198 @@ public class GameMap {
     private List<Point>           availableFlagPoints;
     private Terrain               terrain;
     private Map<Point, Size>      availableHouseSites;
-    private Iterable<Point>       fullGrid;
+    private List<Point>           fullGrid;
     private List<Point>           reservedPoints;
-    private Map<Point, Object>    pointToGameObject;
+    private Map<Point, MapPoint>  pointToGameObject;
     
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
+
+    private boolean roadCrossesOtherRoads(Road r) {
+        Point iter = r.start.getPosition();
+        
+        for (Point next : r.getWayPoints()) {
+            if (next.equals(r.start.getPosition())) {
+                continue;
+            }
+        
+            MapPoint mapPoint = pointToGameObject.get(iter);
+            
+            if (mapPoint.hasRoadTo(next) && !mapPoint.isFlag()) {
+                return true;
+            }
+        }
+        
+        
+        return false;
+    }
+
+    private List<Point> autoSelectRoad(Flag startFlag, Flag endFlag) throws Exception {
+        Point start = startFlag.getPosition();
+        Point goal  = endFlag.getPosition();
+        
+        Set<Point> evaluated         = new HashSet<>();
+        Set<Point> toEvaluate        = new HashSet<>();
+        Map<Point, Integer> cost     = new HashMap<>();
+        Map<Point, Integer> fullCost = new HashMap<>();
+        Map<Point, Point> cameFrom   = new HashMap<>();
+        
+        toEvaluate.add(start);
+        cost.put(start, 0);
+        fullCost.put(start, cost.get(start) + estimateDistance(start, goal));
+        
+        while (!toEvaluate.isEmpty()) {
+            Point currentPoint = null;
+            int currentValue = -1;
+            
+            for (Entry<Point, Integer> pair : fullCost.entrySet()) {
+                
+                if (!toEvaluate.contains(pair.getKey())) {
+                    continue;
+                }
+                
+                if (currentPoint == null) {
+                    currentPoint = pair.getKey();
+                    currentValue = pair.getValue();
+                }
+
+                if (currentValue > pair.getValue()) {
+                    currentValue = pair.getValue();
+                    currentPoint = pair.getKey();
+                }
+            }
+
+            if (currentPoint.equals(goal)) {
+                List<Point> path = new ArrayList<>();
+                
+                while (currentPoint != start) {
+                    path.add(0, currentPoint);
+                    
+                    currentPoint = cameFrom.get(currentPoint);
+                }
+                
+                path.add(0, start);
+
+                return path;
+            }
+            
+            toEvaluate.remove(currentPoint);
+            evaluated.add(currentPoint);
+            
+            for (Point neighbor : getPossibleAdjacentRoadConnections(currentPoint)) {
+                if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+            
+                int tentative_cost = cost.get(currentPoint) + 1; //TODO: Change "1" to real cost for step
+
+                if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
+                    cameFrom.put(neighbor, currentPoint);
+                    cost.put(neighbor, tentative_cost);
+                    fullCost.put(neighbor, cost.get(neighbor) + estimateDistance(neighbor, goal));
+                    
+                    toEvaluate.add(neighbor);
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    private Integer estimateDistance(Point start, Point goal) {
+        int deltaX = start.x - goal.x;
+        int deltaY = start.y - goal.y;
+        
+        return deltaX * deltaX + deltaY + deltaY;
+        
+        //return min(abs(start.x - goal.x), abs(start.y - goal.y));
+    }
+
+    class MapPoint {
+        Building    building;
+        Flag        flag;
+        List<Road>  roads;
+        Point       point;
+        List<Point> connectedNeighbors;
+        boolean     isRoad;
+
+        public MapPoint(Point p) {
+            point              = p;
+            building           = null;
+            flag               = null;
+            roads              = new ArrayList<>();
+            connectedNeighbors = new ArrayList<>();
+        }
+    
+        void setBuilding(Building b) throws Exception {
+            if (isOccupied()) {
+                throw new Exception(this + " is already occupied");
+            }
+        
+            building = b;
+        }
+
+        void setFlag(Flag f) throws Exception {
+            if (isOccupied()) {
+                throw new Exception(this + " is already occupied");
+            }
+        
+            flag = f;
+        }
+        
+        void addConnectingRoad(Road r) throws Exception {
+            if (roads.contains(r)) {
+                throw new Exception(r + " is already connected to " + this);
+            }
+
+            Point previous = null;
+            
+            for (Point current : r.getWayPoints()) {
+                if (current.equals(point) && previous != null) {
+                    connectedNeighbors.add(previous);
+                }
+            
+                if (previous != null && previous.equals(point)) {
+                    connectedNeighbors.add(current);
+                }
+                
+                previous = current;
+            }
+            
+            roads.add(r);
+        }
+        
+        void removeConnectingRoad(Road r) throws Exception {
+            if (!roads.contains(r)) {
+                throw new Exception(r + " is not connected to " + this);
+            }
+
+            roads.remove(r);
+        }
+        
+        private boolean isOccupied() {
+            return flag != null || building != null;
+        }
+    
+        @Override
+        public String toString() {
+            return "Map point " + point + " with " + building + " and " + flag;
+        }
+
+        private boolean isFlag() {
+            return flag != null;
+        }
+
+        private boolean isRoad() {
+            return !roads.isEmpty();
+        }
+        
+        private boolean hasRoadTo(Point next) {
+            return connectedNeighbors.contains(next); 
+        }
+    }
     
     public GameMap(int w, int h) throws Exception {
         width = w;
@@ -52,9 +237,9 @@ public class GameMap {
         roadToWorkerMap     = new HashMap<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
-        pointToGameObject   = new HashMap<>();
         
         fullGrid            = buildFullGrid();
+        pointToGameObject   = populateMapPoints(fullGrid);
         availableFlagPoints = calculateAvailableFlagPoints();
         availableHouseSites = calculateAvailableHouseSites();
     }
@@ -82,44 +267,50 @@ public class GameMap {
 
         Flag flag = house.getFlag();
 
-        flag.setPosition(new Point(p.x + 1, p.y - 1));
+        flag.setPosition(p.downRight());
         placeFlag(flag);
 
-        pointToGameObject.put(p, house);
-        
         reserveSpaceForBuilding(house);
     }
 
-    public Road placeRoad(Road roadToPlace) throws InvalidEndPointException {
-        Flag startFlag = roadToPlace.start;
-        Flag endFlag = roadToPlace.end;
-        
-        boolean validStart = flags.contains(startFlag);
-        boolean validEnd = flags.contains(endFlag);
+    public Road placeRoad(Flag start, List<Point> wayPoints, Flag end) throws Exception {
+        Road road = new Road(start, wayPoints, end);
 
-        if (validStart && validEnd) {
-            roads.add(roadToPlace);
-
-            if (!roadNetwork.containsKey(startFlag)) {
-                roadNetwork.put(startFlag, new ArrayList<Flag>());
-            }
-
-            if (!roadNetwork.containsKey(endFlag)) {
-                roadNetwork.put(endFlag, new ArrayList<Flag>());
-            }
-
-            roadNetwork.get(startFlag).add(endFlag);
-            roadNetwork.get(endFlag).add(startFlag);
-
-        } else {
+        if (!isFlagAtPoint(start.getPosition()) || !isFlagAtPoint(end.getPosition())) {
             throw new InvalidEndPointException();
         }
+
+        if (start.getPosition().equals(end.getPosition()) && wayPoints.isEmpty()) {
+            throw new InvalidEndPointException();
+        }
+        
+        if (roadCrossesOtherRoads(road)) {
+            throw new Exception("Can't build " + road + " since it crosses other roads");
+        }
+
+        
+        roads.add(road);
+
+        if (!roadNetwork.containsKey(start)) {
+            roadNetwork.put(start, new ArrayList<Flag>());
+        }
+
+        if (!roadNetwork.containsKey(end)) {
+            roadNetwork.put(end, new ArrayList<Flag>());
+        }
+
+        roadNetwork.get(start).add(end);
+        roadNetwork.get(end).add(start);
     
-        return roadToPlace;
+        addRoadToMapPoints(road);
+        
+        return road;
     }
 
-    public Road placeRoad(Flag startFlag, Flag endFlag) throws InvalidEndPointException {
-        return placeRoad(new Road(startFlag, endFlag));
+    public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
+        List<Point> wayPoints = autoSelectRoad(startFlag, endFlag);
+        
+        return placeRoad(startFlag, wayPoints, endFlag);
     }
 
     public List<Road> getRoads() {
@@ -266,7 +457,7 @@ public class GameMap {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
 
-        pointToGameObject.put(f.getPosition(), f);
+        pointToGameObject.get(f.getPosition()).setFlag(f);
         flags.add(f);
         
         reserveSpaceForFlag(f);
@@ -462,10 +653,10 @@ public class GameMap {
         
         /* Place all possible flag points in the list */
         int x, y;
-        for (x = 1; x < width; x++) {
+        for (y = 1; y < height; y++) {
             columnFlip = rowFlip;
             
-            for (y = 1; y < height; y++) {
+            for (x = 1; x < width; x++) {
                 if (columnFlip) {
                     result.add(new Point(x, y));
                 }
@@ -494,7 +685,7 @@ public class GameMap {
         return result;
     }
 
-    private void reserveSpaceForBuilding(Building house) {
+    private void reserveSpaceForBuilding(Building house) throws Exception {
         Point flagPoint  = house.getFlag().getPosition();
         Point housePoint = new Point(flagPoint.x - 1, flagPoint.y + 1);
         
@@ -535,18 +726,14 @@ public class GameMap {
         markUnavailableForHouse(p);
     }
     
-    private void setPointCovered(int x, int y) {
-        setPointCovered(new Point(x, y));
-    }
-
     private boolean isPointCovered(Point point) {
         return reservedPoints.contains(point);
     }
 
-    private void reserveSpaceForLargeHouse(Building house, Point site) {
+    private void reserveSpaceForLargeHouse(Building house, Point site) throws Exception {
         
         /* Exact point points to house */
-        pointToGameObject.put(site, house);
+        pointToGameObject.get(site).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -581,9 +768,9 @@ public class GameMap {
         markUnavailableForHouse(site.right());
     }
 
-    private void reserveSpaceForMediumHouse(Building house, Point site) {
+    private void reserveSpaceForMediumHouse(Building house, Point site) throws Exception {
         /* Exact point points to house */
-        pointToGameObject.put(site, house);
+        pointToGameObject.get(site).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -610,10 +797,10 @@ public class GameMap {
         markUnavailableForHouse(site.right());
     }
     
-    private void reserveSpaceForSmallHouse(Building house, Point site) {
+    private void reserveSpaceForSmallHouse(Building house, Point site) throws Exception {
         
         /* Exact point points to house */
-        pointToGameObject.put(site, house);
+        pointToGameObject.get(site).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -662,7 +849,15 @@ public class GameMap {
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
+            if (!isWithinMap(p)) {
+                continue;
+            }
+            
             if (isPointCovered(p) && !isFlagAtPoint(p)) {
+                continue;
+            }
+            
+            if (pointToGameObject.get(p).isRoad() && !isFlagAtPoint(p)) {
                 continue;
             }
             
@@ -670,12 +865,6 @@ public class GameMap {
         }
     
         return resultList;
-    }
-
-    public void placeRoad(Flag start, List<Point> intermediatePoints, Flag end) throws InvalidEndPointException {
-        Road r = placeRoad(start, end);
-        
-        r.setSteps(intermediatePoints);
     }
 
     Point[] getAdjacentPoints(Point point) {
@@ -789,13 +978,11 @@ public class GameMap {
     }
 
     private boolean isFlagAtPoint(Point p) {
-        Object o = pointToGameObject.get(p);
-        
-        return o != null && o instanceof Flag;
+        return pointToGameObject.get(p).isFlag();
     }
 
     private boolean isAlreadyPlaced(Flag f) {
-        return pointToGameObject.containsValue(f);
+        return flags.contains(f);
     }
 
     private void markMaxHouseSizeForSpot(Point down, Size size) {
@@ -810,5 +997,27 @@ public class GameMap {
 
     private boolean isAvailablePointForFlag(Point position) {
         return availableFlagPoints.contains(position);
+    }
+
+    private boolean isWithinMap(Point p) {
+        return p.x > 0 && p.x < width && p.y > 0 && p.y < height;
+    }
+
+    private void addRoadToMapPoints(Road road) throws Exception {    
+        for (Point p : road.getWayPoints()) {
+            MapPoint mapPoint = pointToGameObject.get(p);
+            
+            mapPoint.addConnectingRoad(road);
+        }
+    }
+
+    private Map<Point, MapPoint> populateMapPoints(List<Point> fullGrid) {
+        Map<Point, MapPoint> resultMap = new HashMap<>();
+    
+        for (Point p : fullGrid) {
+            resultMap.put(p, new MapPoint(p));
+        }
+    
+        return resultMap;
     }
 }

@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -48,7 +49,7 @@ public class TestRoads {
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        map.placeRoad(f1, f2);
+        map.placeAutoSelectedRoad(f1, f2);
 
         map.findWay(f1, new Flag(new Point(3, 3)));
     }
@@ -63,8 +64,8 @@ public class TestRoads {
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        map.placeRoad(f1, f2);
-
+        map.placeAutoSelectedRoad(f1, f2);
+        
         List<Flag> way = map.findWay(f1, f2);
 
         assertTrue(way.size() == 2);
@@ -110,18 +111,18 @@ public class TestRoads {
 
         Flag target = wc.getFlag();
 
-        map.placeRoad(points[0], points[1]);
-        map.placeRoad(points[1], points[2]);
-        map.placeRoad(points[2], points[3]);
-        map.placeRoad(points[3], points[4]);
-        map.placeRoad(points[4], points[10]);
-        map.placeRoad(points[10], points[6]);
-        map.placeRoad(points[2], points[9]);
-        map.placeRoad(points[9], target);
-        map.placeRoad(points[1], points[5]);
-        map.placeRoad(points[5], points[6]);
-        map.placeRoad(points[1], points[7]);
-        map.placeRoad(points[7], points[8]);
+        map.placeAutoSelectedRoad(points[0], points[1]);
+        map.placeAutoSelectedRoad(points[1], points[2]);
+        map.placeAutoSelectedRoad(points[2], points[3]);
+        map.placeAutoSelectedRoad(points[3], points[4]);
+        map.placeAutoSelectedRoad(points[4], points[10]);
+        map.placeAutoSelectedRoad(points[10], points[6]);
+        map.placeAutoSelectedRoad(points[2], points[9]);
+        map.placeAutoSelectedRoad(points[9], target);
+        map.placeAutoSelectedRoad(points[1], points[5]);
+        map.placeAutoSelectedRoad(points[5], points[6]);
+        map.placeAutoSelectedRoad(points[1], points[7]);
+        map.placeAutoSelectedRoad(points[7], points[8]);
 
         /* Test route with List<Point> */
         List<Flag> route = map.findWay(points[0], target);
@@ -176,12 +177,11 @@ public class TestRoads {
 
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
-        Road r  = new Road(f1, f2);
 
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        map.placeRoad(r);
+        Road r = map.placeAutoSelectedRoad(f1, f2);
 
         assertTrue(r.needsCourier());
 
@@ -204,13 +204,12 @@ public class TestRoads {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
         Flag f3 = new Flag(new Point(4, 4));
-        Road r  = new Road(f1, f2);
 
         map.placeFlag(f1);
         map.placeFlag(f2);
         map.placeFlag(f3);
 
-        map.placeRoad(r);
+        Road r = map.placeAutoSelectedRoad(f1, f2);
 
         Courier c = new Courier(map);
 
@@ -224,7 +223,6 @@ public class TestRoads {
 
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
-        Flag f3 = new Flag(new Point(4, 4));
         Road r  = new Road(f1, f2);
 
         map.placeFlag(f1);
@@ -234,5 +232,154 @@ public class TestRoads {
 
         map.placeWorker(c, f1);
         map.assignCourierToRoad(c, r);
+    }
+
+    @Test(expected=Exception.class)
+    public void testRoadCanNotShareSegment() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag  commonStart = new Flag(new Point(1, 1));
+        Flag  end1        = new Flag(new Point(1, 3));
+        Flag  end2        = new Flag(new Point(3, 1));
+        Point middlePoint = new Point(2, 2);
+        
+        List<Point> middlePoints = new ArrayList<>();
+        middlePoints.add(middlePoint);
+        
+        map.placeFlag(commonStart);
+        map.placeFlag(end1);
+        map.placeFlag(end2);
+
+        map.placeRoad(commonStart, middlePoints, end1);
+        map.placeRoad(commonStart, middlePoints, end2);
+    }
+
+    @Test(expected=Exception.class)
+    public void testRoadsCanNotCross() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag  start1      = new Flag(new Point(1, 1));
+        Flag  end1        = new Flag(new Point(3, 3));
+        Flag  start2      = new Flag(new Point(1, 3));
+        Flag  end2        = new Flag(new Point(3, 1));
+        Point middlePoint = new Point(2, 2);
+        
+        List<Point> middlePoints = new ArrayList<>();
+        middlePoints.add(middlePoint);
+        
+        map.placeFlag(start1);
+        map.placeFlag(start2);
+        map.placeFlag(end1);
+        map.placeFlag(end2);
+
+        map.placeRoad(start1, middlePoints, end1);
+        map.placeRoad(start2, middlePoints, end2);
+    }
+
+    @Test
+    public void testPossibleDirectConnectionsFromFlag() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f = new Flag(new Point(3, 5));
+
+        map.placeFlag(f);
+    
+        List<Point> points = map.getPossibleAdjacentRoadConnections(f.getPosition());
+        
+        assertTrue(points.size() == 8);
+        assertTrue(points.contains(new Point(2, 6)));
+        assertTrue(points.contains(new Point(2, 4)));
+        assertTrue(points.contains(new Point(4, 6)));
+        assertTrue(points.contains(new Point(4, 4)));
+
+        assertTrue(points.contains(new Point(3, 7)));
+        assertTrue(points.contains(new Point(3, 3)));
+        assertTrue(points.contains(new Point(1, 5)));
+        assertTrue(points.contains(new Point(5, 5)));
+    }
+
+    @Test
+    public void testPossibleDirectConnectionsInCorners() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Point downRight = new Point(9, 1);
+        Point downLeft  = new Point(1, 1);
+        Point upRight   = new Point(9, 9);
+        Point upLeft    = new Point(1, 9);
+    
+        List<Point> points = map.getPossibleAdjacentRoadConnections(downRight);
+        
+        assertTrue(points.size() == 3);
+        assertTrue(points.contains(new Point(8, 2)));
+        assertTrue(points.contains(new Point(9, 3)));
+        assertTrue(points.contains(new Point(7, 1)));
+
+        points = map.getPossibleAdjacentRoadConnections(downLeft);
+    
+        assertTrue(points.size() == 3);
+        assertTrue(points.contains(new Point(2, 2)));
+        assertTrue(points.contains(new Point(1, 3)));
+        assertTrue(points.contains(new Point(3, 1)));
+
+        points = map.getPossibleAdjacentRoadConnections(upRight);
+        
+        assertTrue(points.size() == 3);
+        assertTrue(points.contains(new Point(8, 8)));
+        assertTrue(points.contains(new Point(7, 9)));
+        assertTrue(points.contains(new Point(9, 7)));
+        
+        points = map.getPossibleAdjacentRoadConnections(upLeft);
+        
+        assertTrue(points.size() == 3);
+        assertTrue(points.contains(new Point(2, 8)));
+        assertTrue(points.contains(new Point(3, 9)));
+        assertTrue(points.contains(new Point(1, 7)));
+    }
+
+    @Test
+    public void testPossibleDirectConnectionsOnSides() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Point right = new Point(9, 5);
+        Point left  = new Point(1, 5);
+        Point up    = new Point(5, 9);
+        Point down  = new Point(5, 1);
+    
+        List<Point> points = map.getPossibleAdjacentRoadConnections(right);
+        
+        assertTrue(points.size() == 5);
+        assertTrue(points.contains(new Point(8, 4)));
+        assertTrue(points.contains(new Point(8, 6)));
+        assertTrue(points.contains(new Point(7, 5)));
+        assertTrue(points.contains(new Point(9, 3)));
+        assertTrue(points.contains(new Point(9, 7)));
+
+        points = map.getPossibleAdjacentRoadConnections(left);
+    
+        assertTrue(points.size() == 5);
+        assertTrue(points.contains(new Point(2, 4)));
+        assertTrue(points.contains(new Point(2, 6)));
+        assertTrue(points.contains(new Point(3, 5)));
+        assertTrue(points.contains(new Point(1, 3)));
+        assertTrue(points.contains(new Point(1, 7)));
+
+        points = map.getPossibleAdjacentRoadConnections(up);
+        
+        assertTrue(points.size() == 5);
+        assertTrue(points.contains(new Point(4, 8)));
+        assertTrue(points.contains(new Point(6, 8)));
+        assertTrue(points.contains(new Point(5, 7)));
+        assertTrue(points.contains(new Point(3, 9)));
+        assertTrue(points.contains(new Point(7, 9)));
+
+        
+        points = map.getPossibleAdjacentRoadConnections(down);
+        
+        assertTrue(points.size() == 5);
+        assertTrue(points.contains(new Point(4, 2)));
+        assertTrue(points.contains(new Point(6, 2)));
+        assertTrue(points.contains(new Point(5, 3)));
+        assertTrue(points.contains(new Point(3, 1)));
+        assertTrue(points.contains(new Point(7, 1)));
     }
 }

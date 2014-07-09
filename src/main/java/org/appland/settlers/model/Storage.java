@@ -174,7 +174,6 @@ public class Storage extends Building implements Actor {
         } else if (w instanceof Forester) {
             storeOneInInventory(FORESTER);
         }
-
     }
 
     public Worker retrieveWorker(Material material) throws Exception {
