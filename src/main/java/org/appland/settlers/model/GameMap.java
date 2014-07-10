@@ -250,6 +250,8 @@ public class GameMap {
             throw new Exception("Can't place building on " + p + ".");
         }
         
+        house.setPosition(p);
+        
         buildings.add(house);
 
         Flag flag = house.getFlag();
@@ -264,8 +266,12 @@ public class GameMap {
 	Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
-        if (!isFlagAtPoint(start) || !isFlagAtPoint(end)) {
-            throw new InvalidEndPointException();
+        if (!isFlagAtPoint(start)) {
+            throw new InvalidEndPointException(start);
+        }
+        
+        if (!isFlagAtPoint(end)) {
+            throw new InvalidEndPointException(end);
         }
 
         if (start.equals(end)) {
@@ -977,7 +983,7 @@ public class GameMap {
         return availableHouseSites.containsKey(p);
     }
 
-    private boolean isFlagAtPoint(Point p) {
+    public boolean isFlagAtPoint(Point p) {
         return pointToGameObject.get(p).isFlag();
     }
 

@@ -23,6 +23,7 @@ public class Building implements Actor {
     private List<Military> promisedMilitary;
     private Worker worker;
     private Worker promisedWorker;
+    private Point position;
 
     public boolean isMilitaryBuilding() {
         MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
@@ -137,6 +138,10 @@ public class Building implements Actor {
         return worker;
     }
 
+    public Point getPosition() {
+        return position;
+    }
+
     public enum ConstructionState {
 
         UNDER_CONSTRUCTION,
@@ -159,22 +164,27 @@ public class Building implements Actor {
     private Logger log = Logger.getLogger(Building.class.getName());
 
     public Building() {
-        constructionState = ConstructionState.UNDER_CONSTRUCTION;
-        receivedMaterial = createEmptyMaterialIntMap();
-        promisedDeliveries = createEmptyMaterialIntMap();
+        constructionState     = ConstructionState.UNDER_CONSTRUCTION;
+        receivedMaterial      = createEmptyMaterialIntMap();
+        promisedDeliveries    = createEmptyMaterialIntMap();
         constructionCountdown = getConstructionCountdown(this);
-        hostedMilitary = new ArrayList<>();
-        promisedMilitary = new ArrayList<>();
-        outputCargo = null;
-        flag = new Flag(null);
-        productionCountdown = -1;
-        worker = null;
-        promisedWorker = null;
+        hostedMilitary        = new ArrayList<>();
+        promisedMilitary      = new ArrayList<>();
+        outputCargo           = null;
+        flag                  = new Flag(null);
+        productionCountdown   = -1;
+        worker                = null;
+        promisedWorker        = null;
+        position              = null;
 
         /* Check and remember if this building requires a worker */
         isWorkerNeeded = getWorkerRequired();
     }
 
+    void setPosition(Point p) {
+        position = p;
+    }
+    
     public Map<Material, Integer> getInQueue() {
         return receivedMaterial;
     }
