@@ -234,6 +234,26 @@ public class TestRoads {
     }
 
     @Test(expected=Exception.class)
+    public void testAssignTwoWorkersToRoad() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Road r  = new Road(f1, f2);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+
+        Courier c  = new Courier(map);
+        Courier c2 = new Courier(map);
+
+        map.placeWorker(c, f1);
+        map.placeWorker(c2, f1);
+        map.assignCourierToRoad(c, r);
+        map.assignCourierToRoad(c2, r);
+    }
+
+    @Test(expected=Exception.class)
     public void testRoadCanNotShareSegment() throws Exception {
         GameMap map = new GameMap(10, 10);
 
