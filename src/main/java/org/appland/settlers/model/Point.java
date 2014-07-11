@@ -22,35 +22,35 @@ public class Point extends java.awt.Point {
         return "(" + x + ", " + y + ")";
     }
 
-    Point downRight() {
+    public Point downRight() {
         return new Point(x + 1, y - 1);
     }
 
-    Point right() {
+    public Point right() {
         return new Point(x + 2, y);
     }
 
-    Point down() {
+    public Point down() {
         return new Point(x, y - 2);
     }
 
-    Point left() {
+    public Point left() {
         return new Point(x - 2, y);
     }
 
-    Point downLeft() {
+    public Point downLeft() {
         return new Point(x - 1, y - 1);
     }
 
-    Point upLeft() {
+    public Point upLeft() {
         return new Point(x - 1, y + 1);
     }
 
-    Point up() {
+    public Point up() {
         return new Point(x, y + 2);
     }
 
-    Point upRight() {
+    public Point upRight() {
         return new Point(x + 1, y + 1);
     }
 
