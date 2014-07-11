@@ -6,23 +6,29 @@
 package org.appland.settlers.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadEqualsFlags;
+import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
-
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -306,9 +312,11 @@ public class TestRoads {
         map.placeFlag(start);
         map.placeFlag(end);
 
-        Road r = map.placeRoad(wayPoints);
+        map.placeRoad(wayPoints);
 
-	wayPoints = r.getWayPoints();
+	Road r = map.getRoads().get(0);
+        
+        wayPoints = r.getWayPoints();
 
 	assertTrue(wayPoints.size() == 3);
 	assertTrue(wayPoints.get(0).equals(start.getPosition()));
@@ -440,5 +448,27 @@ public class TestRoads {
         assertTrue(points.contains(new Point(5, 3)));
         assertTrue(points.contains(new Point(3, 1)));
         assertTrue(points.contains(new Point(7, 1)));
+    }
+
+    @Test
+    public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception {
+        GameMap map = new GameMap(30, 30);
+
+        map.placeBuilding(new Headquarter(), new Point(5, 5));
+        map.placeFlag(new Flag(new Point(16, 12)));
+        map.placeFlag(new Flag(new Point(20, 12)));
+        map.placeFlag(new Flag(new Point(12, 12)));
+        map.placeRoad(Arrays.asList(new Point[] {new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)}));
+
+        List<Point> points = map.getPossibleAdjacentRoadConnections(new Point(16, 12));
+    
+        assertFalse(points.contains(new Point(16, 14)));
+
+        map.placeFlag(new Flag(new Point(21, 25)));
+        map.placeFlag(new Flag(new Point(25, 25)));
+        map.placeFlag(new Flag(new Point(17, 25)));
+        map.placeRoad(Arrays.asList(new Point[] {new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)}));
+
+        assertFalse(points.contains(new Point(21, 23)));
     }
 }

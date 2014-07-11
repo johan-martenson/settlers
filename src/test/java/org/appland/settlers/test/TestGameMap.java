@@ -41,6 +41,8 @@ public class TestGameMap {
         Point wcPoint = new Point(3, 3);
         
         map.placeBuilding(wc, wcPoint);
+        
+        assertTrue(wc.getPosition().equals(wcPoint));
     }
     
     @Test(expected=Exception.class)
