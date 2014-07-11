@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -269,6 +270,10 @@ public class GameMap {
         reserveSpaceForBuilding(house);
     }
 
+    public Road placeRoad(Point... points) throws Exception {
+        return placeRoad(Arrays.asList(points));
+    }
+    
     public Road placeRoad(List<Point> wayPoints) throws Exception {
 	Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);

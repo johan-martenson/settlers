@@ -517,4 +517,17 @@ public class TestRoads {
 
         assertFalse(points.contains(new Point(21, 23)));
     }
+
+    @Test
+    public void testPlaceRoadWithVarargs() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+
+        Road r = map.placeRoad(f1.getPosition(), new Point(3, 1), f2.getPosition());
+    }
 }
