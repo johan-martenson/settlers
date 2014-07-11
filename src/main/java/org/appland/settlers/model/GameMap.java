@@ -841,12 +841,6 @@ public class GameMap {
     
     }
 
-    private void setAdjacentPointsCovered(Point center) {
-        for (Point p : getAdjacentPoints(center)) {
-            setPointCovered(p);
-        }
-    }
-    
     public void terrainIsUpdated() {
         availableFlagPoints = calculateAvailableFlagPoints();
         

@@ -49,7 +49,7 @@ public class TestGameMap {
     public void testPlaceSameBuildingTwice() throws Exception {
         Woodcutter wc    = new Woodcutter();
         Point wcPoint    = new Point(1, 1);
-        Point otherPoint = new Point(2, 3);
+        Point otherPoint = new Point(2, 8);
         
         map.placeBuilding(wc, wcPoint);
         map.placeBuilding(wc, otherPoint);
@@ -192,5 +192,22 @@ public class TestGameMap {
         assertTrue(flags.size() == 2);
         assertTrue(flags.contains(f1));
         assertTrue(flags.contains(farm.getFlag()));
+    }
+
+    @Test(expected=Exception.class)
+    public void testPlaceBuildingOnInvalidPoint() throws Exception {
+        GameMap map       = new GameMap(10, 10);
+        Farm    farm      = new Farm();
+        Point   farmPoint = new Point(3, 4);
+        
+        map.placeBuilding(farm, farmPoint);
+    }
+
+    @Test(expected=Exception.class)
+    public void testPlaceFlagOnInvalidPoint() throws Exception {
+	GameMap map = new GameMap(10, 10);
+        Flag    f   = new Flag(new Point(4, 7));
+
+        map.placeFlag(f);
     }
 }

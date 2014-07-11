@@ -30,6 +30,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -44,7 +46,9 @@ public class TestRoads {
         assertNull(map.getRoad(new Flag(new Point(1, 1)), new Flag(new Point(2, 2))));
     }
 
-    @Test(expected = InvalidRouteException.class)
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
         GameMap map = new GameMap(10, 10);
 
@@ -54,8 +58,9 @@ public class TestRoads {
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        map.placeAutoSelectedRoad(f1, f2);
+        Road r = map.placeAutoSelectedRoad(f1, f2);
 
+        thrown.expect(InvalidRouteException.class);
         map.findWay(f1, new Flag(new Point(3, 3)));
     }
 
@@ -237,6 +242,52 @@ public class TestRoads {
 
         map.placeWorker(c, f1);
         map.assignCourierToRoad(c, r);
+    }
+
+    @Test(expected=Exception.class)
+    public void testAssignTwoWorkersToRoad() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Road r  = new Road(f1, f2);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+
+        Courier c  = new Courier(map);
+        Courier c2 = new Courier(map);
+
+        map.placeWorker(c, f1);
+        map.placeWorker(c2, f1);
+        map.assignCourierToRoad(c, r);
+        map.assignCourierToRoad(c2, r);
+    }
+
+    @Test(expected=Exception.class)
+    public void testAssignOneWorkerToTwoRoads() throws Exception {
+        GameMap map = new GameMap(10, 10);
+
+        Flag f1 = new Flag(new Point(1, 1));
+        Flag f2 = new Flag(new Point(4, 2));
+        Road r  = new Road(f1, f2);
+
+        Flag f3 = new Flag(new Point(5, 7));
+        Flag f4 = new Flag(new Point(8, 8));
+        Road r2 = new Road(f3, f4);
+
+        map.placeFlag(f1);
+        map.placeFlag(f2);
+        map.placeFlag(f3);
+        map.placeFlag(f4);
+
+        Courier c  = new Courier(map);
+        Courier c2 = new Courier(map);
+
+        map.placeWorker(c, f1);
+        map.placeWorker(c, f3);
+        map.assignCourierToRoad(c, r);
+        map.assignCourierToRoad(c, r2);
     }
 
     @Test(expected=Exception.class)
