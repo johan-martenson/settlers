@@ -54,7 +54,7 @@ public class Point extends java.awt.Point {
         return new Point(x + 1, y + 1);
     }
 
-    boolean isAdjacent(Point p) {
+    public boolean isAdjacent(Point p) {
         if (p.equals(this)) {
             return false;
         }
