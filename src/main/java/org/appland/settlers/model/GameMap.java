@@ -49,15 +49,22 @@ public class GameMap {
         return false;
     }
 
-    private List<Point> autoSelectRoad(Flag startFlag, Flag endFlag) throws Exception {
-        Point start = startFlag.getPosition();
-        Point goal  = endFlag.getPosition();
+    private List<Point> autoSelectRoad(Flag start, Flag end) throws Exception {
+        
+        return findAutoSelectedRoad(start.getPosition(), end.getPosition(), null);
+    }
+    
+    public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
         
         Set<Point> evaluated         = new HashSet<>();
         Set<Point> toEvaluate        = new HashSet<>();
         Map<Point, Integer> cost     = new HashMap<>();
         Map<Point, Integer> fullCost = new HashMap<>();
         Map<Point, Point> cameFrom   = new HashMap<>();
+        
+        if (avoid != null) {        
+            evaluated.addAll(avoid);
+        }
         
         toEvaluate.add(start);
         cost.put(start, 0);
