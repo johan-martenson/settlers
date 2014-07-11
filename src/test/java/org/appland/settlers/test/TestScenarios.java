@@ -124,17 +124,17 @@ public class TestScenarios {
         /* Transport cargo one hop */
         gameLogic.assignWorkToIdleCouriers(map);
 
-        assertNotNull(map.getWorkerForRoad(wcToHqRoad).getCargo());
-        assertTrue(map.getWorkerForRoad(wcToHqRoad).getTarget().equals(hq.getFlag()));
+        assertNotNull(map.getCourierForRoad(wcToHqRoad).getCargo());
+        assertTrue(map.getCourierForRoad(wcToHqRoad).getTarget().equals(hq.getFlag()));
 
         fastForward(100, map);
 
-        assertTrue(map.getWorkerForRoad(wcToHqRoad).getPosition().equals(hq.getFlag()));
+        assertTrue(map.getCourierForRoad(wcToHqRoad).getPosition().equals(hq.getFlag()));
 
         /* Cargo has arrived at the headquarter so store it */
         gameLogic.deliverForWorkersAtTarget(map);
         
-        assertNull(map.getWorkerForRoad(wcToHqRoad).getCargo());
+        assertNull(map.getCourierForRoad(wcToHqRoad).getCargo());
         assertTrue(hq.getAmount(WOOD) == 1);
 
         /* Find out that the sawmill needs the wood */
@@ -142,7 +142,7 @@ public class TestScenarios {
 
         assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
         assertTrue(hq.getFlag().getStackedCargo().get(0).getTarget().equals(sm));
-        assertNull(map.getWorkerForRoad(smToHqRoad).getCargo());
+        assertNull(map.getCourierForRoad(smToHqRoad).getCargo());
         assertTrue(hq.getFlag().getStackedCargo().get(0).getPlannedRoads().get(0).equals(smToHqRoad));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
         assertTrue(hq.getAmount(WOOD) == 0);
@@ -150,15 +150,15 @@ public class TestScenarios {
         /* Get the wood transported to the sawmill */
         gameLogic.assignWorkToIdleCouriers(map);
 
-        assertNotNull(map.getWorkerForRoad(smToHqRoad).getCargo());
-        assertTrue(map.getWorkerForRoad(smToHqRoad).getCargo().getTarget().equals(sm));
-        assertTrue(map.getWorkerForRoad(smToHqRoad).getTarget().equals(sm.getFlag()));
-        assertTrue(map.getWorkerForRoad(smToHqRoad).getCargo().getMaterial() == WOOD);
+        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo());
+        assertTrue(map.getCourierForRoad(smToHqRoad).getCargo().getTarget().equals(sm));
+        assertTrue(map.getCourierForRoad(smToHqRoad).getTarget().equals(sm.getFlag()));
+        assertTrue(map.getCourierForRoad(smToHqRoad).getCargo().getMaterial() == WOOD);
 
         fastForward(100, map);
 
         /* Cargo has arrived at the sawmill so deliver it */
-        assertTrue(map.getWorkerForRoad(smToHqRoad).getPosition().equals(sm.getFlag()));
+        assertTrue(map.getCourierForRoad(smToHqRoad).getPosition().equals(sm.getFlag()));
 
         gameLogic.deliverForWorkersAtTarget(map);
 
@@ -177,16 +177,16 @@ public class TestScenarios {
         /* Transport plancks and new wood to nearest storage*/
         gameLogic.assignWorkToIdleCouriers(map);
 
-        assertNotNull(map.getWorkerForRoad(smToHqRoad).getCargo());
-        assertNotNull(map.getWorkerForRoad(smToHqRoad).getCargo().getMaterial() == PLANCK);
+        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo());
+        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo().getMaterial() == PLANCK);
         
-        assertNotNull(map.getWorkerForRoad(wcToHqRoad).getCargo());
-        assertNotNull(map.getWorkerForRoad(wcToHqRoad).getCargo().getMaterial() == WOOD);
+        assertNotNull(map.getCourierForRoad(wcToHqRoad).getCargo());
+        assertNotNull(map.getCourierForRoad(wcToHqRoad).getCargo().getMaterial() == WOOD);
         
         fastForward(10, map);
 
         /* Cargo has arrived at the headquarter so store it */
-        assertTrue(map.getWorkerForRoad(smToHqRoad).getPosition().equals(hq.getFlag()));
+        assertTrue(map.getCourierForRoad(smToHqRoad).getPosition().equals(hq.getFlag()));
         
         gameLogic.deliverForWorkersAtTarget(map);
         

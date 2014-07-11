@@ -138,18 +138,53 @@ public class GameMap {
         //return min(abs(start.x - goal.x), abs(start.y - goal.y));
     }
 
+    private boolean pointIsOnRoad(Point point) {
+        return getRoadAtPoint(point) != null;
+    }
+    
+    private Road getRoadAtPoint(Point point) {
+        MapPoint p = pointToGameObject.get(point);
+        
+        Iterable<Road> roadsFromPoint = p.getConnectedRoads();
+        
+        for (Road r : roadsFromPoint) {
+            if (!r.getFlags()[0].getPosition().equals(point) &&
+                !r.getFlags()[1].getPosition().equals(point)) {
+                
+                System.out.println(" ROAD " + r + " IS ON  " + point + " MAPPOINT " + p);
+                return r;
+            }
+        }
+
+        return null;
+    }
+
+    private void removeRoad(Road r) throws Exception {
+        System.out.println("REMOVE ROAD " + r);
+        
+        roads.remove(r);
+        
+        for (Point p : r.getWayPoints()) {
+            MapPoint mp = pointToGameObject.get(p);
+            
+            mp.removeConnectingRoad(r);
+        }
+    }
+
     class MapPoint {
         Building   building;
         Flag       flag;
         Point      point;
         Set<Point> connectedNeighbors;
         boolean    isRoad;
+        Set<Road>  connectedRoads;
 
         public MapPoint(Point p) {
             point              = p;
             building           = null;
             flag               = null;
             connectedNeighbors = new HashSet<>();
+            connectedRoads     = new HashSet<>();
         }
     
         void setBuilding(Building b) throws Exception {
@@ -186,11 +221,29 @@ public class GameMap {
                 
                 previous = current;
             }
+
+            connectedRoads.add(r);
         }
         
         void removeConnectingRoad(Road r) throws Exception {
-            if (!roads.contains(r)) {
+            if (!connectedRoads.contains(r)) {
                 throw new Exception(r + " is not connected to " + this);
+            }
+
+            connectedRoads.remove(r);
+            
+            Point previous = null;
+            
+            for (Point current : r.getWayPoints()) {
+                if (current.equals(point) && previous != null) {
+                    connectedNeighbors.remove(previous);
+                }
+            
+                if (previous != null && previous.equals(point)) {
+                    connectedNeighbors.remove(current);
+                }
+                
+                previous = current;
             }
         }
         
@@ -213,6 +266,10 @@ public class GameMap {
         
         private boolean hasRoadTo(Point next) {
             return connectedNeighbors.contains(next); 
+        }
+
+        private Iterable<Road> getConnectedRoads() {
+            return connectedRoads;
         }
     }
     
@@ -275,6 +332,8 @@ public class GameMap {
     }
     
     public Road placeRoad(List<Point> wayPoints) throws Exception {
+        System.out.println("PLACE ROAD AT " + wayPoints);
+        
 	Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
@@ -413,13 +472,13 @@ public class GameMap {
     }
 
     public void assignCourierToRoad(Courier wr, Road road) throws Exception {
-        Flag courierFlag = wr.getPosition();
+        Flag courierPosition = wr.getPosition();
 
         if (!roads.contains(road)) {
             throw new Exception("Can't assign courier to " + road + " not on map");
         }
 
-        if (!road.getFlags()[0].equals(courierFlag) && !road.getFlags()[1].equals(courierFlag)) {
+        if (!road.getFlags()[0].equals(courierPosition) && !road.getFlags()[1].equals(courierPosition)) {
             throw new Exception("Can't assign " + wr + " to " + road);
         }
 
@@ -433,7 +492,7 @@ public class GameMap {
         }
     }
 
-    public Courier getWorkerForRoad(Road nextRoad) {
+    public Courier getCourierForRoad(Road nextRoad) {
         log.log(Level.FINE, "Getting worker for {0}", nextRoad);
 
         return roadToWorkerMap.get(nextRoad);
@@ -467,7 +526,9 @@ public class GameMap {
     }
 
     public void placeFlag(Flag f) throws Exception {
-        if (!isAvailablePointForFlag(f.getPosition())) {
+        Point p = f.getPosition();
+        
+        if (!isAvailablePointForFlag(p)) {
             throw new Exception("Can't place " + f + " on occupied point");
         }
         
@@ -475,10 +536,37 @@ public class GameMap {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
 
-        pointToGameObject.get(f.getPosition()).setFlag(f);
-        flags.add(f);
-        
-        reserveSpaceForFlag(f);
+        if (pointIsOnRoad(p)) {
+            System.out.println("POINT IS ON ROAD: " + p);
+            
+            Road r    = getRoadAtPoint(p);
+            Courier c = getCourierForRoad(r);
+
+            System.out.println("SPLIT " + r + " AT " + p);
+
+            List<Point> points = r.getWayPoints();
+
+            int index = points.indexOf(p);
+
+            removeRoad(r);
+
+            pointToGameObject.get(f.getPosition()).setFlag(f);
+            flags.add(f);
+
+            reserveSpaceForFlag(f);            
+            
+            Road r1 = placeRoad(points.subList(0, index + 1));
+            placeRoad(points.subList(index, points.size()));
+
+            if (c != null) {
+                assignCourierToRoad(c, r1);
+            }
+        } else {
+            pointToGameObject.get(f.getPosition()).setFlag(f);
+            flags.add(f);
+
+            reserveSpaceForFlag(f);
+        }
     }
 
     public Storage getClosestStorage(Road r) {
