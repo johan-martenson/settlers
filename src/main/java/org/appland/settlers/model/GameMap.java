@@ -871,13 +871,9 @@ public class GameMap {
             resultList.add(p);
         }
     
-        if (!resultList.contains(point.upLeft()) && !resultList.contains(point.upRight())) {
-            resultList.remove(point.up());
-        }
+        resultList.remove(point.up());
         
-        if (!resultList.contains(point.downLeft()) && !resultList.contains(point.downRight())) {
-            resultList.remove(point.down());
-        }
+        resultList.remove(point.down());
         
         return resultList;
     }

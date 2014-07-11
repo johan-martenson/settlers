@@ -377,6 +377,17 @@ public class TestScenarios {
         /*  - List possible adjacent connections for the road -  */
         roadConnections = map.getPossibleAdjacentRoadConnections(new Point(13, 11));
         
+        assertTrue(roadConnections.contains(new Point(12, 10)));
+        
+        /*  - Choose 12, 10 -  */
+        chosenPointsForRoad.add(new Point(12, 10));
+        
+        gameLogic.gameLoop(map);
+        fastForward(100, map);        
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(12, 10));
+
         assertTrue(roadConnections.contains(new Point(13, 9)));
         
         /*  - Choose 13, 9 -  */

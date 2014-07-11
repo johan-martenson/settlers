@@ -18,16 +18,11 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadEqualsFlags;
-import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.Rule;
@@ -404,14 +399,14 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnections(f.getPosition());
         
-        assertTrue(points.size() == 8);
+        assertTrue(points.size() == 6);
         assertTrue(points.contains(new Point(2, 6)));
         assertTrue(points.contains(new Point(2, 4)));
         assertTrue(points.contains(new Point(4, 6)));
         assertTrue(points.contains(new Point(4, 4)));
 
-        assertTrue(points.contains(new Point(3, 7)));
-        assertTrue(points.contains(new Point(3, 3)));
+        assertFalse(points.contains(new Point(3, 7)));
+        assertFalse(points.contains(new Point(3, 3)));
         assertTrue(points.contains(new Point(1, 5)));
         assertTrue(points.contains(new Point(5, 5)));
     }
@@ -427,31 +422,31 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnections(downRight);
         
-        assertTrue(points.size() == 3);
+        assertTrue(points.size() == 2);
         assertTrue(points.contains(new Point(8, 2)));
-        assertTrue(points.contains(new Point(9, 3)));
+        assertFalse(points.contains(new Point(9, 3)));
         assertTrue(points.contains(new Point(7, 1)));
 
         points = map.getPossibleAdjacentRoadConnections(downLeft);
     
-        assertTrue(points.size() == 3);
+        assertTrue(points.size() == 2);
         assertTrue(points.contains(new Point(2, 2)));
-        assertTrue(points.contains(new Point(1, 3)));
+        assertFalse(points.contains(new Point(1, 3)));
         assertTrue(points.contains(new Point(3, 1)));
 
         points = map.getPossibleAdjacentRoadConnections(upRight);
         
-        assertTrue(points.size() == 3);
+        assertTrue(points.size() == 2);
         assertTrue(points.contains(new Point(8, 8)));
         assertTrue(points.contains(new Point(7, 9)));
-        assertTrue(points.contains(new Point(9, 7)));
+        assertFalse(points.contains(new Point(9, 7)));
         
         points = map.getPossibleAdjacentRoadConnections(upLeft);
         
-        assertTrue(points.size() == 3);
+        assertTrue(points.size() == 2);
         assertTrue(points.contains(new Point(2, 8)));
         assertTrue(points.contains(new Point(3, 9)));
-        assertTrue(points.contains(new Point(1, 7)));
+        assertFalse(points.contains(new Point(1, 7)));
     }
 
     @Test
@@ -465,38 +460,38 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnections(right);
         
-        assertTrue(points.size() == 5);
+        assertTrue(points.size() == 3);
         assertTrue(points.contains(new Point(8, 4)));
         assertTrue(points.contains(new Point(8, 6)));
         assertTrue(points.contains(new Point(7, 5)));
-        assertTrue(points.contains(new Point(9, 3)));
-        assertTrue(points.contains(new Point(9, 7)));
+        assertFalse(points.contains(new Point(9, 3)));
+        assertFalse(points.contains(new Point(9, 7)));
 
         points = map.getPossibleAdjacentRoadConnections(left);
     
-        assertTrue(points.size() == 5);
+        assertTrue(points.size() == 3);
         assertTrue(points.contains(new Point(2, 4)));
         assertTrue(points.contains(new Point(2, 6)));
         assertTrue(points.contains(new Point(3, 5)));
-        assertTrue(points.contains(new Point(1, 3)));
-        assertTrue(points.contains(new Point(1, 7)));
+        assertFalse(points.contains(new Point(1, 3)));
+        assertFalse(points.contains(new Point(1, 7)));
 
         points = map.getPossibleAdjacentRoadConnections(up);
         
-        assertTrue(points.size() == 5);
+        assertTrue(points.size() == 4);
         assertTrue(points.contains(new Point(4, 8)));
         assertTrue(points.contains(new Point(6, 8)));
-        assertTrue(points.contains(new Point(5, 7)));
+        assertFalse(points.contains(new Point(5, 7)));
         assertTrue(points.contains(new Point(3, 9)));
         assertTrue(points.contains(new Point(7, 9)));
 
         
         points = map.getPossibleAdjacentRoadConnections(down);
         
-        assertTrue(points.size() == 5);
+        assertTrue(points.size() == 4);
         assertTrue(points.contains(new Point(4, 2)));
         assertTrue(points.contains(new Point(6, 2)));
-        assertTrue(points.contains(new Point(5, 3)));
+        assertFalse(points.contains(new Point(5, 3)));
         assertTrue(points.contains(new Point(3, 1)));
         assertTrue(points.contains(new Point(7, 1)));
     }
