@@ -423,5 +423,4 @@ public class TestScenarios {
 
         /* Sawmill and woodcutter built and connected to headquarter */
     }
-
 }

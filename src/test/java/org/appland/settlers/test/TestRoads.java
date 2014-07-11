@@ -530,4 +530,32 @@ public class TestRoads {
 
         Road r = map.placeRoad(f1.getPosition(), new Point(3, 1), f2.getPosition());
     }
+
+    @Test
+    public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        map.placeBuilding(new Headquarter(), new Point(5, 5));
+        map.placeFlag(new Flag(new Point(12, 4)));
+        map.placeFlag(new Flag(new Point(14, 6)));
+        map.placeRoad(new Point(12, 4), new Point(13, 5), new Point(14, 6));
+        map.placeFlag(new Flag(new Point(16, 8)));
+        map.placeRoad(new Point(14, 6), new Point(15, 7), new Point(16, 8));
+        map.placeFlag(new Flag(new Point(16, 4)));
+        map.placeRoad(new Point(16, 4), new Point(15, 5), new Point(14, 6));
+    }
+
+    @Test
+    public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        map.placeBuilding(new Headquarter(), new Point(5, 5));
+        map.placeFlag(new Flag(new Point(9, 5)));
+        map.placeFlag(new Flag(new Point(13, 9)));
+        map.placeRoad(new Point(9, 5), new Point(10, 6), new Point(11, 7), new Point(12, 8), new Point(13, 9));
+        
+        assertTrue(map.getRoads().size() == 1);
+        
+        map.placeFlag(new Flag(new Point(11, 7)));
+
+        assertTrue(map.getRoads().size() == 2);
+    }
 }
