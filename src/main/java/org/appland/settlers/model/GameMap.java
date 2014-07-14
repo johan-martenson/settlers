@@ -247,7 +247,7 @@ public class GameMap {
 
         Road road = new Road(startFlag, wayPoints, endFlag);
 
-        if (roadStepsTooLong(road.getWayPoints())) {
+        if (road.roadStepsTooLong()) {
             throw new Exception("The steps are too long in " + wayPoints);
         }
 
@@ -1003,25 +1003,6 @@ public class GameMap {
         }
     
         return resultMap;
-    }
-
-    private boolean roadStepsTooLong(List<Point> wayPoints) {
-        Point previous = null;
-
-        for (Point current : wayPoints) {
-            if (previous == null) {
-		previous = current;
-                continue;
-            }
-
-            if (!previous.isAdjacent(current)) {
-                return true;
-            }
-
-	    previous = current;
-        }
-
-        return false;
     }
 
     private Flag getFlagAtPoint(Point p) throws Exception {

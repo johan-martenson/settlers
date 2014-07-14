@@ -116,6 +116,29 @@ public class Road {
         return steps;
     }
 
+    protected boolean roadStepsTooLong() {
+        Point previous = null;
+
+        for (Point current : steps) {
+            if (previous == null) {
+               previous = current;
+                continue;
+            }
+
+            if (!previous.isAdjacent(current)) {
+                return true;
+            }
+
+            if (previous.equals(current.up()) || previous.equals(current.down())) {
+                return true;
+            }
+            
+            previous = current;
+        }
+
+        return false;
+    }
+
     Flag getEndFlag() {
         return end;
     }
