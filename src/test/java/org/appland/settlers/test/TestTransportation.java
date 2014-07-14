@@ -172,7 +172,7 @@ public class TestTransportation {
     public void testFindRouteWithSameStartAndEnd() throws InvalidRouteException, Exception {
         GameMap map = new GameMap(10, 10);
 
-        map.findWay(new Flag(1, 1), new Flag(1, 1));
+        map.findWayWithExistingRoads(new Flag(1, 1), new Flag(1, 1));
     }
 
     @Test
@@ -296,7 +296,7 @@ public class TestTransportation {
         Cargo c = qry.retrieveCargo();
         assertTrue(c.getPosition().equals(qry.getFlag()));
 
-        map.findWay(qry.getFlag(), stge.getFlag());
+        map.findWayWithExistingRoads(qry.getFlag(), stge.getFlag());
 
         c.setTarget(stge, map);
 

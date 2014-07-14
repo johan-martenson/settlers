@@ -34,15 +34,15 @@ import org.junit.rules.ExpectedException;
  */
 public class TestRoads {
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void testGetNotExistingRoad() throws Exception {
         GameMap map = new GameMap(10, 10);
 
         assertNull(map.getRoad(new Flag(new Point(1, 1)), new Flag(new Point(2, 2))));
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
         GameMap map = new GameMap(10, 10);
@@ -56,7 +56,7 @@ public class TestRoads {
         Road r = map.placeAutoSelectedRoad(f1, f2);
 
         thrown.expect(InvalidRouteException.class);
-        map.findWay(f1, new Flag(new Point(3, 3)));
+        map.findWayWithExistingRoads(f1, new Flag(new Point(3, 3)));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TestRoads {
 
         map.placeAutoSelectedRoad(f1, f2);
         
-        List<Flag> way = map.findWay(f1, f2);
+        List<Flag> way = map.findWayWithExistingRoads(f1, f2);
 
         assertTrue(way.size() == 2);
         assertTrue(way.get(0).equals(f1));
@@ -130,7 +130,7 @@ public class TestRoads {
         map.placeAutoSelectedRoad(points[7], points[8]);
 
         /* Test route with List<Point> */
-        List<Flag> route = map.findWay(points[0], target);
+        List<Flag> route = map.findWayWithExistingRoads(points[0], target);
 
         assertNotNull(route);
         assertTrue(!route.isEmpty());
@@ -141,7 +141,7 @@ public class TestRoads {
         assertEquals(route.get(3), points[9]);
         assertEquals(route.get(4), target);
 
-        route = map.findWay(target, points[0]);
+        route = map.findWayWithExistingRoads(target, points[0]);
 
         assertEquals(route.get(0), target);
         assertEquals(route.get(1), points[9]);
@@ -149,7 +149,7 @@ public class TestRoads {
         assertEquals(route.get(3), points[1]);
         assertEquals(route.get(4), points[0]);
 
-        route = map.findWay(points[1], points[2]);
+        route = map.findWayWithExistingRoads(points[1], points[2]);
 
         assertEquals(route.get(0), points[1]);
         assertEquals(route.get(1), points[2]);

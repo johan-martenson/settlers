@@ -287,7 +287,7 @@ public class GameMap {
         return roads;
     }
 
-    public List<Flag> findWay(Flag start, Flag end) throws InvalidRouteException {
+    public List<Flag> findWayWithExistingRoads(Flag start, Flag end) throws InvalidRouteException {
         log.log(Level.INFO, "Finding way from {0} to {1}", new Object[]{start, end});
 
         if (start.equals(end)) {
@@ -345,7 +345,7 @@ public class GameMap {
 
     public boolean routeExist(Flag point, Flag point2) throws InvalidRouteException {
         try {
-            findWay(point, point2);
+            findWayWithExistingRoads(point, point2);
         } catch (InvalidRouteException e) {
             return false;
         }
@@ -394,7 +394,7 @@ public class GameMap {
     public List<Road> findWayInRoads(Flag position, Flag flag) throws InvalidRouteException {
         log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{position, flag});
 
-        List<Flag> points = findWay(position, flag);
+        List<Flag> points = findWayWithExistingRoads(position, flag);
         List<Road> nextRoads = new ArrayList<>();
 
         if (points.size() == 2) {

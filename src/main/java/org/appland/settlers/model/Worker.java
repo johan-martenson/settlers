@@ -92,8 +92,8 @@ public class Worker implements Actor {
         if (r.start.equals(position) || r.end.equals(position)) {
             path = null;
         } else {
-            List<Flag> path1 = map.findWay(position, r.start);
-            List<Flag> path2 = map.findWay(position, r.end);
+            List<Flag> path1 = map.findWayWithExistingRoads(position, r.start);
+            List<Flag> path2 = map.findWayWithExistingRoads(position, r.end);
 
             if (path1.size() < path2.size()) {
                 path = path1;
@@ -154,7 +154,7 @@ public class Worker implements Actor {
         log.log(Level.INFO, "Setting target to {0}, previous target was {1}", new Object[]{t, target});
 
         target = t;
-        path = map.findWay(position, target);
+        path = map.findWayWithExistingRoads(position, target);
         path.remove(0);
         log.log(Level.FINE, "Way to target is {0}", path);
 
