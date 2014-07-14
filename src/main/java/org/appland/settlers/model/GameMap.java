@@ -1153,4 +1153,28 @@ public class GameMap {
 
         return mp.getFlag();
     }
+
+    private List<Road> wayPointsToRoads(List<Point> path) throws Exception {
+        List<Road> result = new ArrayList<>();
+        
+        Point previous = null;
+
+        for (Point p : path) {
+            if (previous == null) {
+                previous = p;
+                
+                continue;
+            }
+            
+            if (!isFlagAtPoint(p)) {
+                continue;
+            }
+            
+            result.add(getRoad(getFlagAtPoint(previous), getFlagAtPoint(p)));
+
+            previous = p;
+        }    
+
+        return result;
+    }
 }
