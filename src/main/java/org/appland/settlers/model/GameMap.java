@@ -843,7 +843,7 @@ public class GameMap {
     }
 
     public List<Point> getPossibleAdjacentRoadConnections(Point point) {
-        Point[] adjacentPoints  = getAdjacentPoints(point);
+        Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
@@ -867,21 +867,6 @@ public class GameMap {
         resultList.remove(point.down());
         
         return resultList;
-    }
-
-    Point[] getAdjacentPoints(Point point) {
-        Point[] adjacentPoints = new Point[8];
-
-        adjacentPoints[0] = new Point(point.x - 2, point.y    );
-        adjacentPoints[1] = new Point(point.x - 1, point.y + 1);
-        adjacentPoints[2] = new Point(point.x    , point.y + 2);
-        adjacentPoints[3] = new Point(point.x + 1, point.y + 1);
-        adjacentPoints[4] = new Point(point.x + 2, point.y    );
-        adjacentPoints[5] = new Point(point.x + 1, point.y - 1);
-        adjacentPoints[6] = new Point(point.x    , point.y - 2);
-        adjacentPoints[7] = new Point(point.x - 1, point.y - 1);
-    
-        return adjacentPoints;
     }
 
     private Map<Point, Size> calculateAvailableHouseSites() {
@@ -912,7 +897,7 @@ public class GameMap {
             return false;
         }
         
-        for (Point p : getAdjacentPoints(site)) {
+        for (Point p : site.getAdjacentPoints()) {
             if (!terrain.isOnGrass(p)) {
                 wideAreaClear = false;
                 
@@ -941,7 +926,7 @@ public class GameMap {
         
         borderClear = true;
         
-        for(Point p : getAdjacentPoints(site)) {
+        for(Point p : site.getAdjacentPoints()) {
             if (isPointCovered(p)) {
                 borderClear = false;
                 
@@ -1050,6 +1035,74 @@ public class GameMap {
         }
 
         return mp.getFlag();
+    }
+
+    private boolean isPossibleAsEndPointInRoad(Point p) {
+        MapPoint mp = pointToGameObject.get(p);
+ 
+        if (!isWithinMap(p)) {
+            return false;
+        }
+
+        if (mp.isRoad() && !mp.isFlag()) {
+            return false;
+        }
+
+        return true;        
+    }
+
+    private boolean isPossibleAsAnyPointInRoad(Point p) {
+         MapPoint mp = pointToGameObject.get(p);
+ 
+        if (!isWithinMap(p)) {
+            return false;
+         }
+ 
+        if (mp.isRoad()) {
+            return false;
+        }
+
+        if (mp.isFlag()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Point point) {
+        Point[] adjacentPoints  = point.getAdjacentPoints();
+        List<Point>  resultList = new ArrayList<>();
+        
+        for (Point p : adjacentPoints) {
+            if (isPossibleAsAnyPointInRoad(p)) {
+                resultList.add(p);
+            }
+        }
+    
+        resultList.remove(point.up());
+        
+        resultList.remove(point.down());
+        
+        return resultList;        
+    }
+    
+    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Point point) {
+        Point[] adjacentPoints  = point.getAdjacentPoints();
+        List<Point>  resultList = new ArrayList<>();
+        
+        for (Point p : adjacentPoints) {
+            if (isPossibleAsEndPointInRoad(p)) {
+                resultList.add(p);
+            } else if (isPossibleAsAnyPointInRoad(p)) {
+                resultList.add(p);
+            }
+        }
+    
+        resultList.remove(point.up());
+        
+        resultList.remove(point.down());
+        
+        return resultList;
     }
 
     private List<Road> wayPointsToRoads(List<Point> path) throws Exception {
