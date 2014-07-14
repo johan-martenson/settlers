@@ -279,10 +279,10 @@ public class GameLogicTest {
         assertFalse(w1.isTraveling());
         assertTrue(map.getRoadsWithoutWorker().isEmpty());
         assertEquals(map.getRoad(hq.getFlag(), bk.getFlag()), r);
-        assertNotNull(r.getCourier().getRoad());
+        assertNotNull(r.getCourier().getAssignedRoad());
 
         assertTrue(r.getCourier().equals(w1));
-        assertTrue(r.getCourier().getRoad().equals(r));
+        assertTrue(r.getCourier().getAssignedRoad().equals(r));
 
         /* Finish the construction of the barracks and assign new workers to 
          * unoccupied places and verify that there is a military assigned

@@ -33,12 +33,12 @@ public class Courier extends Worker {
         map = gm;
     }
 
-    public void setRoad(Road road) {
+    public void setAssignedRoad(Road road) {
         log.log(Level.INFO, "Setting road to {0}", road);
         this.road = road;
     }
 
-    public Road getRoad() {
+    public Road getAssignedRoad() {
         log.log(Level.FINE, "Getting road {0}", road);
         return road;
     }
@@ -116,9 +116,9 @@ public class Courier extends Worker {
         }
 
         if (state == IDLE) {
-            return "Idle courier at road (" + getRoad() + ")";
+            return "Idle courier at road (" + getAssignedRoad() + ")";
         } else if (state == BUSY) {
-            return "Courier at road (" + getRoad() + ") carrying " + cargo;
+            return "Courier at road (" + getAssignedRoad() + ") carrying " + cargo;
         } else {
             return "Courier walking to road (" + getTarget() + ")";
         }

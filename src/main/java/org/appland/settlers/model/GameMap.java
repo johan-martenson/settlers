@@ -381,7 +381,7 @@ public class GameMap {
         }
 
         road.setCourier(wr);
-        wr.setRoad(road);
+        wr.setAssignedRoad(road);
         roadToWorkerMap.put(road, wr);
 
         if (!allWorkers.contains(wr)) {

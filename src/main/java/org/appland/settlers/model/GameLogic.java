@@ -166,7 +166,7 @@ public class GameLogic {
         List<Courier> idleWorkers = map.getIdleWorkers();
 
         for (Courier w : idleWorkers) {
-            Road r = w.getRoad();
+            Road r = w.getAssignedRoad();
 
             Flag[] flags = r.getFlags();
 
