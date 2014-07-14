@@ -151,7 +151,6 @@ public class GameMap {
             if (!r.getFlags()[0].getPosition().equals(point) &&
                 !r.getFlags()[1].getPosition().equals(point)) {
                 
-                System.out.println(" ROAD " + r + " IS ON  " + point + " MAPPOINT " + p);
                 return r;
             }
         }
@@ -160,8 +159,6 @@ public class GameMap {
     }
 
     private void removeRoad(Road r) throws Exception {
-        System.out.println("REMOVE ROAD " + r);
-        
         roads.remove(r);
         
         for (Point p : r.getWayPoints()) {
@@ -230,8 +227,6 @@ public class GameMap {
     }
     
     public Road placeRoad(List<Point> wayPoints) throws Exception {
-        System.out.println("PLACE ROAD AT " + wayPoints);
-        
 	Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
@@ -439,12 +434,8 @@ public class GameMap {
         }
 
         if (pointIsOnRoad(p)) {
-            System.out.println("POINT IS ON ROAD: " + p);
-            
             Road r    = getRoadAtPoint(p);
             Courier c = getCourierForRoad(r);
-
-            System.out.println("SPLIT " + r + " AT " + p);
 
             List<Point> points = r.getWayPoints();
 
