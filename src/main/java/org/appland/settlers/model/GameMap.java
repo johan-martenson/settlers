@@ -423,7 +423,11 @@ public class GameMap {
         return nextRoads;
     }
 
-    public void placeFlag(Flag f) throws Exception {
+    public Flag placeFlag(Point p) throws Exception {
+        return placeFlag(new Flag(p));
+    }
+
+    public Flag placeFlag(Flag f) throws Exception {
         Point p = f.getPosition();
         
         if (!isAvailablePointForFlag(p)) {
@@ -465,6 +469,8 @@ public class GameMap {
 
             reserveSpaceForFlag(f);
         }
+
+        return f;
     }
 
     public Storage getClosestStorage(Road r) {
