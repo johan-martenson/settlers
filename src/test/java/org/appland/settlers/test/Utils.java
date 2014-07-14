@@ -28,13 +28,8 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static java.lang.Math.abs;
 
 public class Utils {
 
@@ -210,5 +205,42 @@ public class Utils {
         house.deliver(stoneCargo);
         house.deliver(stoneCargo);
         house.deliver(stoneCargo);
+    }
+
+    static void assertNoStepDirectlyUpwards(List<Point> route) {
+        Point previous = null;
+        
+        for (Point iter : route) {
+            if (previous == null) {
+                previous = iter;
+                continue;
+            }
+
+            assertFalse(iter.x == previous.x && abs(iter.y - previous.y) == 2);
+            
+            previous = iter;
+        }
+    }
+
+    static void fastForwardUntilWorkersReachTarget(GameMap map, Courier... couriers) {
+        for (Courier c : couriers) {
+            assertTrue(c.isTraveling());
+        }
+            
+        for (int i = 0; i < 1000; i++) {
+            boolean allDone = true;
+
+            for (Courier c : couriers) {
+                if (!c.isArrived()) {
+                    allDone = false;
+                }
+            }
+
+            if (allDone) {
+                break;
+            }
+            
+            map.stepTime();
+        }
     }
 }
