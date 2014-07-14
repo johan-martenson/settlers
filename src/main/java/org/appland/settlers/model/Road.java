@@ -115,4 +115,20 @@ public class Road {
     public List<Point> getWayPoints() {
         return steps;
     }
+
+    Flag getEndFlag() {
+        return end;
+    }
+
+    Flag getStartFlag() {
+        return start;
+    }
+
+    Point getStart() {
+        return start.getPosition();
+    }
+
+    Point getEnd() {
+        return end.getPosition();
+    }
 }
