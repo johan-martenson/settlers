@@ -11,24 +11,20 @@ public class Road {
     private Courier courier;
     private List<Point> steps;
 
-    public Road(Flag start, Flag end) {
+    Road(Flag start, List<Point> wayPoints, Flag end) throws Exception {
+        if (roadStepsTooLong(wayPoints)) {
+            throw new Exception("The steps are too long in " + wayPoints);
+        }
+        
         this.start = start;
         this.end = end;
 
         promisedCourier = false;
         courier = null;
         
-        setSteps(new ArrayList<Point>());
-    }
-
-    Road(Flag start, List<Point> wayPoints, Flag end) {
-        this.start = start;
-        this.end = end;
-
-        promisedCourier = false;
-        courier = null;
+        steps = new ArrayList<>();
+        steps.addAll(wayPoints);
         
-        setSteps(wayPoints);
     }
 
     @Override
@@ -108,20 +104,16 @@ public class Road {
         promisedCourier = false;
     }
 
-    private void setSteps(List<Point> intermediatePoints) {
-        steps = intermediatePoints;
-    }
-
     public List<Point> getWayPoints() {
         return steps;
     }
 
-    protected boolean roadStepsTooLong() {
+    private boolean roadStepsTooLong(List<Point> wayPoints) {
         Point previous = null;
 
-        for (Point current : steps) {
+        for (Point current : wayPoints) {
             if (previous == null) {
-               previous = current;
+		previous = current;
                 continue;
             }
 

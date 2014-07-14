@@ -25,17 +25,11 @@ public class GameLogic {
         /* Get idle workers and see if they can pick something up*/
         assignWorkToIdleCouriers(map);
 
-        /* Assign traveling workers who reached their target to their task */
-        assignTravelingWorkersThatHaveArrived(map);
-
         /* Start collection of newly produced goods */
         initiateCollectionOfNewProduce(map);
 
         /* Find out which buildings need deliveries and match with inventory */
         initiateNewDeliveriesForAllStorages(map);
-
-        /* Deliver for workers who reached their targets */
-        deliverForWorkersAtTarget(map);
 
         /* Step time */
         map.stepTime();
@@ -60,10 +54,10 @@ public class GameLogic {
                         w.stopTraveling();
                     } else {
                         building.assignWorker(w);
+                        w.enterBuilding(building);
                         w.stopTraveling();
                     }
                 }
-
             }
         }
     }
@@ -79,9 +73,9 @@ public class GameLogic {
 
             w.setMap(map);
 
-            w.setTargetRoad(r);
-
             map.placeWorker(w, stg.getFlag());
+            
+            w.setTargetRoad(r);
 
             r.promiseCourier();
         }
@@ -97,9 +91,10 @@ public class GameLogic {
                     Military m = stg.retrieveAnyMilitary();
 
                     m.setMap(map);
-                    m.setTargetBuilding(b);
 
                     map.placeWorker(m, stg.getFlag());
+                    
+                    m.setTargetBuilding(b);
 
                     b.promiseMilitary(m);
                 }
@@ -112,10 +107,11 @@ public class GameLogic {
                     Worker w = stg.retrieveWorker(m);
 
                     w.setMap(map);
-                    w.setTargetBuilding(b);
 
                     map.placeWorker(w, stg.getFlag());
 
+                    w.setTargetBuilding(b);
+                    
                     b.promiseWorker(w);
                 }
             }
@@ -162,18 +158,30 @@ public class GameLogic {
         }
     }
 
-    public void assignWorkToIdleCouriers(GameMap map) throws InvalidRouteException {
+    public void assignWorkToIdleCouriers(GameMap map) throws Exception {
         List<Courier> idleWorkers = map.getIdleWorkers();
 
         for (Courier w : idleWorkers) {
             Road r = w.getAssignedRoad();
 
-            Flag[] flags = r.getFlags();
+            Flag f1 = r.getStartFlag();
+            Flag f2 = r.getEndFlag();
 
-            if (flags[0].hasCargoWaitingForRoad(r)) {
-                w.pickUpCargoForRoad(flags[0], r);
-            } else if (flags[1].hasCargoWaitingForRoad(r)) {
-                w.pickUpCargoForRoad(flags[1], r);
+            Point p1 = r.getStart();
+            Point p2 = r.getEnd();
+
+            if (f1.hasCargoWaitingForRoad(r)) {
+                if (w.isAt(p1)) {
+                    w.pickUpCargoForRoad(f1, r);
+                } else {
+                    w.setTargetFlag(f1);
+                }
+            } else if (f2.hasCargoWaitingForRoad(r)) {
+                if (w.isAt(p2)) {
+                    w.pickUpCargoForRoad(f2, r);
+                } else {
+                    w.setTargetFlag(f2);
+                }
             }
         }
     }
@@ -199,7 +207,7 @@ public class GameLogic {
         }
     }
 
-    public void initiateCollectionOfNewProduce(GameMap map) throws InvalidRouteException {
+    public void initiateCollectionOfNewProduce(GameMap map) throws Exception {
         for (Building b : map.getBuildingsWithNewProduce()) {
 
             Cargo c = b.retrieveCargo();

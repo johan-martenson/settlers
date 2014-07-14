@@ -120,7 +120,7 @@ public class TestGameMap {
         
         map.placeFlag(f);
         
-        map.findWayWithExistingRoads(f, f);
+        map.findWayWithExistingRoads(f.getPosition(), f.getPosition());
     }
       
     @Test

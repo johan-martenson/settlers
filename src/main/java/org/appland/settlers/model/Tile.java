@@ -6,13 +6,16 @@
 
 package org.appland.settlers.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  *
  * @author johan
  */
 public class Tile {
     private Vegetation vegetationType;
-
+    
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;
     }

@@ -9,7 +9,7 @@ public class Cargo {
     private Material   material;
     private List<Road> plannedRoads;
     private Building   target;
-    private Flag       position;
+    private Point      position;
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -23,16 +23,16 @@ public class Cargo {
         return this.material;
     }
 
-    public void setTarget(Building target, GameMap map) throws InvalidRouteException {
+    public void setTarget(Building target, GameMap map) throws InvalidRouteException, Exception {
         log.log(Level.INFO, "Setting target to {0}", target);
         this.target = target;
-        this.plannedRoads = map.findWayInRoads(position, target.getFlag());
+        this.plannedRoads = map.findWayInRoads(position, target.getFlag().getPosition());
     }
 
     public boolean isAtTarget() {
         log.log(Level.INFO, "Checking if target ({0}) equals position ({1})", new Object[]{target.getFlag(), position});
 
-        if (position.equals(target.getFlag())) {
+        if (position.equals(target.getFlag().getPosition())) {
             return true;
         } else {
             return false;
@@ -52,7 +52,7 @@ public class Cargo {
         return plannedRoads;
     }
 
-    public void setPosition(Flag p) {
+    public void setPosition(Point p) {
         log.log(Level.INFO, "Setting position to {0}", p);
         this.position = p;
     }
@@ -62,7 +62,7 @@ public class Cargo {
         return material.name() + " cargo to " + target;
     }
 
-    public Flag getPosition() {
+    public Point getPosition() {
         return position;
     }
 }

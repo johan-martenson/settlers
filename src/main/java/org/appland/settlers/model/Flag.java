@@ -28,7 +28,7 @@ public class Flag {
     public void putCargo(Cargo c) {
         log.log(Level.INFO, "Putting {0} at {1}", new Object[]{c, this});
 
-        c.setPosition(this);
+        c.setPosition(getPosition());
         stackedCargo.add(c);
     }
 

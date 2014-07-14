@@ -109,7 +109,7 @@ public class GameMap {
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
             
-            for (Point neighbor : getPossibleAdjacentRoadConnections(currentPoint)) {
+            for (Point neighbor : getPossibleAdjacentRoadConnections(currentPoint, goal)) {
                 if (evaluated.contains(neighbor)) {
                     continue;
                 }
@@ -158,7 +158,7 @@ public class GameMap {
         return null;
     }
 
-    private void removeRoad(Road r) throws Exception {
+    private void removeRoad(Road r) throws Exception {        
         roads.remove(r);
         
         for (Point p : r.getWayPoints()) {
@@ -242,18 +242,26 @@ public class GameMap {
             throw new InvalidEndPointException();
         }
 
+        for (Point p : wayPoints) {
+            if (p.equals(start)) {
+                continue;
+            }
+            
+            if (p.equals(end) && isPossibleAsEndPointInRoad(p)) {
+                continue;
+            }
+            
+            if (isPossibleAsAnyPointInRoad(p)) {
+                continue;
+            }
+
+            throw new Exception(p + " in road is invalid");
+        }
+        
         Flag startFlag = getFlagAtPoint(start);
         Flag endFlag   = getFlagAtPoint(end);
 
         Road road = new Road(startFlag, wayPoints, endFlag);
-
-        if (road.roadStepsTooLong()) {
-            throw new Exception("The steps are too long in " + wayPoints);
-        }
-
-        if (roadCrossesOtherRoads(road)) {
-            throw new Exception("Can't build " + road + " since it crosses other roads");
-        }
         
         roads.add(road);
 
@@ -274,10 +282,14 @@ public class GameMap {
     }
 
     public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
-        List<Point> wayPoints = autoSelectRoad(startFlag, endFlag);
+        return placeAutoSelectedRoad(startFlag.getPosition(), endFlag.getPosition());
+    }
+    
+    public Road placeAutoSelectedRoad(Point start, Point end) throws Exception {
+        List<Point> wayPoints = findAutoSelectedRoad(start, end, null);
         
 	if (wayPoints == null) {
-            throw new InvalidEndPointException();
+            throw new InvalidEndPointException(end);
         }
 
         return placeRoad(wayPoints);
@@ -287,14 +299,14 @@ public class GameMap {
         return roads;
     }
 
-    public List<Flag> findWayWithExistingRoads(Flag start, Flag end) throws InvalidRouteException {
+    public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
         log.log(Level.INFO, "Finding way from {0} to {1}", new Object[]{start, end});
 
         if (start.equals(end)) {
             throw new InvalidRouteException("Start and end are the same.");
         }
         
-        List<Flag> result = findWayWithMemory(start, end, new ArrayList<Flag>());
+        List<Point> result = findWayWithMemory(start, end, new ArrayList<Point>());
 
         if (result == null) {
             log.log(Level.WARNING, "Failed to find a way from {0} to {1}", new Object[]{start, end});
@@ -305,17 +317,15 @@ public class GameMap {
         return result;
     }
 
-    private List<Flag> findWayWithMemory(Flag start, Flag end, List<Flag> visited) throws InvalidRouteException {
-        log.log(Level.INFO, "Finding way from {0} to {1}, already visited {2}", new Object[]{start, end, visited});
+    private List<Point> findWayWithMemory(Point start, Point end, List<Point> visited) throws InvalidRouteException {
+        log.log(Level.FINE, "Finding way from {0} to {1}, already visited {2}", new Object[]{start, end, visited});
 
-        if (!roadNetwork.containsKey(start)) {
-            return null;
-        }
+        MapPoint mp = pointToGameObject.get(start);
+        
+        Collection<Point> connectingRoads = mp.getConnectedNeighbors();
 
-        List<Flag> connectingRoads = getDirectlyConnectedFlags(start);
-
-        for (Flag otherEnd : connectingRoads) {
-            List<Flag> result = new ArrayList<>();
+        for (Point otherEnd : connectingRoads) {
+            List<Point> result = new ArrayList<>();
 
             if (visited.contains(otherEnd)) {
                 continue;
@@ -329,7 +339,7 @@ public class GameMap {
                 visited.add(start);
             }
 
-            List<Flag> tmp = findWayWithMemory(otherEnd, end, visited);
+            List<Point> tmp = findWayWithMemory(otherEnd, end, visited);
 
             if (tmp != null) {
                 result.add(start);
@@ -343,7 +353,7 @@ public class GameMap {
         return null;
     }
 
-    public boolean routeExist(Flag point, Flag point2) throws InvalidRouteException {
+    public boolean routeExist(Point point, Point point2) throws InvalidRouteException {
         try {
             findWayWithExistingRoads(point, point2);
         } catch (InvalidRouteException e) {
@@ -353,10 +363,13 @@ public class GameMap {
         return true;
     }
 
-    public Road getRoad(Flag startPosition, Flag wcSpot) {
+    public Road getRoad(Point start, Point end) throws Exception {
+        Flag startFlag = getFlagAtPoint(start);
+        Flag endFlag   = getFlagAtPoint(end);
+        
         for (Road r : roads) {
-            if ((r.start.equals(startPosition) && r.end.equals(wcSpot))
-                    || (r.end.equals(startPosition) && r.start.equals(wcSpot))) {
+            if ((r.start.equals(startFlag) && r.end.equals(endFlag))
+                    || (r.end.equals(startFlag) && r.start.equals(endFlag))) {
                 return r;
             }
         }
@@ -365,13 +378,13 @@ public class GameMap {
     }
 
     public void assignCourierToRoad(Courier wr, Road road) throws Exception {
-        Flag courierPosition = wr.getPosition();
+        Point courierPosition = wr.getPosition();
 
         if (!roads.contains(road)) {
             throw new Exception("Can't assign courier to " + road + " not on map");
         }
 
-        if (!road.getFlags()[0].equals(courierPosition) && !road.getFlags()[1].equals(courierPosition)) {
+        if (!road.getFlags()[0].getPosition().equals(courierPosition) && !road.getFlags()[1].getPosition().equals(courierPosition)) {
             throw new Exception("Can't assign " + wr + " to " + road);
         }
 
@@ -391,28 +404,23 @@ public class GameMap {
         return roadToWorkerMap.get(nextRoad);
     }
 
-    public List<Road> findWayInRoads(Flag position, Flag flag) throws InvalidRouteException {
-        log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{position, flag});
+    public List<Road> findWayInRoads(Point from, Point to) throws Exception {
+        log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{from, to});
 
-        List<Flag> points = findWayWithExistingRoads(position, flag);
+        List<Point> path = findWayWithExistingRoads(from, to);
         List<Road> nextRoads = new ArrayList<>();
 
-        if (points.size() == 2) {
+        if (path.size() == 2) {
             log.log(Level.FINE, "Route found has only one road segment");
-            nextRoads.add(getRoad(points.get(0), points.get(1)));
+            nextRoads.add(getRoad(path.get(0), path.get(1)));
 
             log.log(Level.FINE, "Returning route {0}", nextRoads);
             return nextRoads;
+        } else if (path.size() == 1) {
+            throw new Exception("Can't find way in roads. Points are too close " + from + ", " + to);
         }
 
-        Flag next = points.get(0);
-
-        int i;
-        for (i = 1; i < points.size(); i++) {
-            nextRoads.add(getRoad(next, points.get(i)));
-
-            next = points.get(i);
-        }
+        nextRoads = wayPointsToRoads(path);
 
         log.log(Level.FINE, "Returning route {0}", nextRoads);
         return nextRoads;
@@ -421,7 +429,7 @@ public class GameMap {
     public Flag placeFlag(Point p) throws Exception {
         return placeFlag(new Flag(p));
     }
-
+    
     public Flag placeFlag(Flag f) throws Exception {
         Point p = f.getPosition();
         
@@ -494,9 +502,15 @@ public class GameMap {
         List<Courier> result = new ArrayList<>();
 
         for (Courier w : roadToWorkerMap.values()) {
-            if (w.getCargo() == null) {
-                result.add(w);
+            if (w.getCargo() != null) {
+                continue;
             }
+
+            if (w.isTraveling()) {
+                continue;
+            }
+
+            result.add(w);
         }
 
         return result;
@@ -548,7 +562,7 @@ public class GameMap {
     }
 
     public void placeWorker(Worker w, Flag f) {
-        w.setPosition(f);
+        w.setPosition(f.getPosition());
         allWorkers.add(w);
     }
 
@@ -839,24 +853,16 @@ public class GameMap {
         return availableHouseSites;
     }
 
-    public List<Point> getPossibleAdjacentRoadConnections(Point point) {
+    public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
-            if (!isWithinMap(p)) {
-                continue;
+            if (p.equals(end) && isPossibleAsEndPointInRoad(p)) {
+                resultList.add(p);
+            } else if (isPossibleAsAnyPointInRoad(p)) {
+                resultList.add(p);
             }
-            
-            if (isPointCovered(p) && !isFlagAtPoint(p)) {
-                continue;
-            }
-            
-            if (pointToGameObject.get(p).isRoad() && !isFlagAtPoint(p)) {
-                continue;
-            }
-            
-            resultList.add(p);
         }
     
         resultList.remove(point.up());
@@ -1014,28 +1020,28 @@ public class GameMap {
 
         return mp.getFlag();
     }
-
+    
     private boolean isPossibleAsEndPointInRoad(Point p) {
         MapPoint mp = pointToGameObject.get(p);
- 
+
         if (!isWithinMap(p)) {
             return false;
         }
-
+        
         if (mp.isRoad() && !mp.isFlag()) {
             return false;
         }
 
         return true;        
     }
-
+    
     private boolean isPossibleAsAnyPointInRoad(Point p) {
-         MapPoint mp = pointToGameObject.get(p);
- 
+        MapPoint mp = pointToGameObject.get(p);
+
         if (!isWithinMap(p)) {
             return false;
-         }
- 
+        }
+        
         if (mp.isRoad()) {
             return false;
         }
@@ -1099,7 +1105,7 @@ public class GameMap {
                 continue;
             }
             
-            result.add(getRoad(getFlagAtPoint(previous), getFlagAtPoint(p)));
+            result.add(getRoad(previous, p));
 
             previous = p;
         }    

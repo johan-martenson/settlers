@@ -8,4 +8,11 @@ package org.appland.settlers.model;
 @Walker(speed = 10)
 public class Forester extends Worker {
 
+    public Forester() {
+        this(null);
+    }
+    
+    public Forester(GameMap map) {
+        super(map);
+    }
 }

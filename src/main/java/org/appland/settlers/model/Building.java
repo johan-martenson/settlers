@@ -1,8 +1,6 @@
 package org.appland.settlers.model;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -234,7 +232,7 @@ public class Building implements Actor {
             return null;
         }
 
-        result.setPosition(getFlag());
+        result.setPosition(getFlag().getPosition());
 
         return result;
     }

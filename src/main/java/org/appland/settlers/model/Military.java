@@ -21,9 +21,15 @@ public class Military extends Worker {
         GENERAL_RANK
     }
 
-    private Rank rank;
+    private final Rank rank;
 
     public Military(Rank r) {
+        this(r, null);
+    }
+    
+    public Military(Rank r, GameMap map) {
+        super(map);
+
         rank = r;
     }
 

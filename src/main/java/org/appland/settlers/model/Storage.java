@@ -142,7 +142,7 @@ public class Storage extends Building implements Actor {
 
         Cargo c = new Cargo(material);
 
-        c.setPosition(getFlag());
+        c.setPosition(getFlag().getPosition());
 
         return c;
     }
@@ -191,7 +191,7 @@ public class Storage extends Building implements Actor {
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        w.setPosition(getFlag());
+        w.setPosition(getFlag().getPosition());
 
         retrieveOneFromInventory(material);
         
@@ -223,7 +223,7 @@ public class Storage extends Building implements Actor {
 
         Military m = new Military(r);
 
-        m.setPosition(getFlag());
+        m.setPosition(getFlag().getPosition());
 
         return m;
     }
@@ -233,7 +233,7 @@ public class Storage extends Building implements Actor {
 
         Courier c = new Courier(null);
 
-        c.setPosition(getFlag());
+        c.setPosition(getFlag().getPosition());
 
         return c;
     }
@@ -254,7 +254,7 @@ public class Storage extends Building implements Actor {
             throw new Exception("No militaries available");
         }
 
-        m.setPosition(getFlag());
+        m.setPosition(getFlag().getPosition());
 
         return m;
     }

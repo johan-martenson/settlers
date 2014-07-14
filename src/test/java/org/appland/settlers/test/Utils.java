@@ -1,6 +1,6 @@
 package org.appland.settlers.test;
 
-import java.awt.Point;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,12 +24,15 @@ import org.appland.settlers.model.Material;
 
 import static org.appland.settlers.model.Material.*;
 
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storage;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import static java.lang.Math.abs;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.assertTrue;
 
 public class Utils {
 
@@ -128,10 +131,10 @@ public class Utils {
         Utils.fastForward(100, house);
     }
 
-    static boolean roadEqualsFlags(Road r, Flag p1, Flag p2) {
-        if (r.start.equals(p1) && r.end.equals(p2)) {
+    static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
+        if (r.start.getPosition().equals(p1) && r.end.getPosition().equals(p2)) {
             return true;
-        } else if (r.start.equals(p2) && r.end.equals(p1)) {
+        } else if (r.start.getPosition().equals(p2) && r.end.getPosition().equals(p1)) {
             return true;
         }
 

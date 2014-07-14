@@ -13,28 +13,36 @@ import java.util.logging.Logger;
  *
  * @author johan
  */
-public class Worker implements Actor {
+public abstract class Worker implements Actor {
 
-    Road targetRoad;
-    protected GameMap map;
-    protected List<Flag> path;
+    private Cargo         carriedCargo;
+    private Road          assignedRoad;
+    private Road          targetRoad;
+    protected GameMap     map;
+    protected List<Point> path;
 
     private static Logger log = Logger.getLogger(Worker.class.getName());
-    protected Flag position;
-    protected Flag target;
-    private boolean traveling;
-    private int walkCountdown;
-    private Building targetBuilding;
+    protected Point       position;
+    protected Flag        target;
+    private boolean       traveling;
+    private int           walkCountdown;
+    private Building      targetBuilding;
+    private boolean       insideBuilding;
 
     public Worker() {
+        this(null);
+    }
+    
+    public Worker(GameMap m) {
         traveling = false;
         target = null;
         position = null;
         path = null;
-        map = null;
         targetRoad = null;
         targetBuilding = null;
-
+        insideBuilding = false;
+        map = m;
+        
         walkCountdown = -1;
     }
 
@@ -42,12 +50,16 @@ public class Worker implements Actor {
     public void stepTime() {
         log.log(Level.INFO, "Stepping time");
 
-        if (path != null) {
+        if (traveling && path != null) {
             log.log(Level.FINE, "There is a path set: {0}", path);
 
             if (walkCountdown == 0) {
                 log.log(Level.FINE, "Reached next step: {0}", position);
-                reachedNextStep();
+                try {
+                    reachedNextStep();
+                } catch (Exception ex) {
+                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else if (walkCountdown == -1) {
                 log.log(Level.FINE, "Starting to walk, currently at {0}", position);
                 walkCountdown = getSpeed() - 2;
@@ -60,24 +72,75 @@ public class Worker implements Actor {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName();
+        if (isTraveling()) {
+            String str = "";
+            if (isExactlyAtPoint()) {            
+                str = "Courier at " + getPosition() + " traveling to flag " + getTarget();
+            } else {
+                str = "Courier latest at " + getLastPoint() + " traveling to " + getTarget();
+            }
+                
+            if (targetRoad != null) {
+                str += " for " + targetRoad;
+            }
+
+            if (carriedCargo != null) {
+                str += " carrying " + carriedCargo;
+            }
+            
+            return str;
+        }
+        
+        return "Idle courier at " + getPosition() + "(road: " + getAssignedRoad() + ")";
     }
 
-    private void reachedNextStep() {
+    private void reachedNextStep() throws Exception {
         log.log(Level.INFO, "Worker {0} has reached {1}", new Object[]{this, path.get(0)});
 
         position = path.get(0);
-
         path.remove(0);
+
+        if (carriedCargo != null) {
+            carriedCargo.setPosition(getPosition());
+        }
+        
+        if (isArrived()) {
+            handleArrival();
+        }
+
         walkCountdown = getSpeed() - 2;
-
-        checkForArrival();
     }
+            
+    private void handleArrival() throws Exception {
+        log.log(Level.FINE, "Arrived at target: {0}", target);
+        path      = null;
+        traveling = false;
 
-    private void checkForArrival() {
-        if (position == target) {
-            log.log(Level.FINE, "Arrived at target: {0}", target);
-            path = null;
+        /* Handle couriers separately */
+        if (getTargetRoad() != null) {
+            map.assignCourierToRoad((Courier) this, getTargetRoad());
+            stopTraveling();
+        } else if (getTargetBuilding() != null) {
+            Flag targetFlag = getTarget();
+            Building building = map.getBuildingByFlag(targetFlag);
+
+            if (this instanceof Military) {
+                building.hostMilitary((Military) this);
+                stopTraveling();
+            } else {
+                building.assignWorker(this);
+                enterBuilding(building);
+                stopTraveling();
+            }
+        }
+            
+        if (carriedCargo != null) {
+            if (carriedCargo.isAtTarget()) {
+
+                deliverToTarget(carriedCargo.getTarget());
+            } else {
+                putDownCargo();
+            }
         }
     }
 
@@ -87,29 +150,33 @@ public class Worker implements Actor {
         }
 
         targetRoad = r;
+        
+        if (position.equals(r.getStart()) || position.equals(r.getEnd())) {            
+            handleArrival();
+            
+            return;
+        }
+
         traveling = true;
 
-        if (r.start.equals(position) || r.end.equals(position)) {
-            path = null;
-        } else {
-            List<Flag> path1 = map.findWayWithExistingRoads(position, r.start);
-            List<Flag> path2 = map.findWayWithExistingRoads(position, r.end);
+        /* Find closest endpoint for the road */
+        List<Point> path1 = map.findWayWithExistingRoads(position, r.getStart());
+        List<Point> path2 = map.findWayWithExistingRoads(position, r.getEnd());
 
-            if (path1.size() < path2.size()) {
-                path = path1;
-                target = r.start;
-            } else {
-                path = path2;
-                target = r.end;
-            }
+        if (path1.size() < path2.size()) {
+            path = path1;
+            target = r.start;
+        } else {
+            path = path2;
+            target = r.end;
         }
     }
 
-    public void setPosition(Flag flag) {
-        position = flag;
+    public void setPosition(Point p) {
+        position = p;
     }
 
-    public Flag getPosition() {
+    public Point getPosition() {
         return position;
     }
 
@@ -125,18 +192,36 @@ public class Worker implements Actor {
         log.log(Level.INFO, "Checking if worker has arrived");
         log.log(Level.FINE, "Worker is at {0} and target is {1}", new Object[]{position, target});
 
-        /* A traveling worker can target a road */
-        if (traveling && targetRoad != null
-                && (targetRoad.start.equals(position) || targetRoad.end.equals(position))) {
+        if (!traveling) {
             return true;
         }
+        
+        if (!isExactlyAtPoint()) {
+            return false;
+        }
+        
+        /* A traveling worker can target a road */
+        if (targetRoad != null) {
+            if (position.equals(targetRoad.getStart())) {
+                return true;
+            }
 
+            if (position.equals(targetRoad.getEnd())) {
+                return true;
+            }
+        }
+        
+        /* A traveling worker can target a flag */
+        if (target != null && target.getPosition().equals(position)) {
+            return true;
+        }
+        
         /* A worker can be idle and not at either of the road's flags */
         if (target == null || position == null) {
             return false;
         }
 
-        if (target.equals(position)) {
+        if (target.getPosition().equals(position)) {
             log.log(Level.INFO, "Worker has arrived at target {0}", target);
             return true;
         }
@@ -152,12 +237,12 @@ public class Worker implements Actor {
 
     public void setTargetFlag(Flag t) throws InvalidRouteException {
         log.log(Level.INFO, "Setting target to {0}, previous target was {1}", new Object[]{t, target});
-
+        
         target = t;
-        path = map.findWayWithExistingRoads(position, target);
+        path = map.findWayWithExistingRoads(position, target.getPosition());
         path.remove(0);
         log.log(Level.FINE, "Way to target is {0}", path);
-
+        
         traveling = true;
     }
 
@@ -184,5 +269,90 @@ public class Worker implements Actor {
 
     public Building getTargetBuilding() {
         return targetBuilding;
+    }
+
+    public boolean isExactlyAtPoint() {
+        return !traveling || walkCountdown < 1;
+    }
+
+    public Point getLastPoint() {
+        return position;
+    }
+
+    public Point getNextPoint() throws Exception {
+        if (path == null || path.isEmpty()) {
+            throw new Exception("No next point set. Target is " + getTarget());
+        }
+
+        return path.get(0);
+    }
+
+    public int getPercentageOfDistanceTraveled() {
+        if (!traveling) {
+            return 100;
+        }
+    
+        return getSpeed() - walkCountdown;
+    }
+
+    public void enterBuilding(Building b) {
+        insideBuilding = true;
+    }
+    
+    public boolean isInsideBuilding() {
+        return insideBuilding;
+    }
+
+    public boolean isAt(Point p2) {
+        return isExactlyAtPoint() && position.equals(p2);
+    }
+
+    public void setAssignedRoad(Road road) {
+        assignedRoad = road;
+    }
+
+    public Road getAssignedRoad() {
+        return assignedRoad;
+    }
+
+        public void putDownCargo() {
+        target.putCargo(carriedCargo);
+        carriedCargo.setPosition(position);
+        
+        List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
+        plannedRoadForCargo.remove(0);
+        carriedCargo.setPlannedRoads(plannedRoadForCargo);
+
+        carriedCargo = null;
+    }
+
+    public Cargo getCargo() {
+        return carriedCargo;
+    }
+
+    public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
+        if (!position.equals(flag.getPosition())) {
+            throw new Exception("Not at " + flag);
+        }
+        
+        for (Cargo c : flag.getStackedCargo()) {
+            if (c.getPlannedRoads().get(0).equals(r)) {
+                carriedCargo = c;
+            }
+        }
+
+        carriedCargo = flag.retrieveCargo(carriedCargo);
+
+        if (flag.equals(assignedRoad.start)) {
+            setTargetFlag(assignedRoad.end);
+        } else {
+            setTargetFlag(assignedRoad.start);
+        }
+    }
+
+    public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        targetBuilding.deliver(this.getCargo());
+
+        carriedCargo = null;
     }
 }

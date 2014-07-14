@@ -32,10 +32,17 @@ import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -129,36 +136,46 @@ public class TestScenarios {
 
         fastForward(100, map);
 
-        assertTrue(map.getCourierForRoad(wcToHqRoad).getPosition().equals(hq.getFlag()));
+        assertTrue(map.getCourierForRoad(wcToHqRoad).isAt(hq.getFlag().getPosition()));
 
         /* Cargo has arrived at the headquarter so store it */
-        gameLogic.deliverForWorkersAtTarget(map);
+//        gameLogic.deliverForWorkersAtTarget(map);
         
         assertNull(map.getCourierForRoad(wcToHqRoad).getCargo());
+        System.out.println("AMOUNT WOOD " + hq.getAmount(WOOD));
         assertTrue(hq.getAmount(WOOD) == 1);
 
         /* Find out that the sawmill needs the wood */
         gameLogic.initiateNewDeliveriesForAllStorages(map);
 
+        Courier courierSmToHq = smToHqRoad.getCourier();
+        
         assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
         assertTrue(hq.getFlag().getStackedCargo().get(0).getTarget().equals(sm));
-        assertNull(map.getCourierForRoad(smToHqRoad).getCargo());
+        assertNull(courierSmToHq.getCargo());
         assertTrue(hq.getFlag().getStackedCargo().get(0).getPlannedRoads().get(0).equals(smToHqRoad));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
         assertTrue(hq.getAmount(WOOD) == 0);
+        assertTrue(courierSmToHq.isAt(sm.getFlag().getPosition()));
+        assertFalse(courierSmToHq.isTraveling());
+        
+        /* Get the wood transported to the sawmill */
+        gameLogic.assignWorkToIdleCouriers(map);
+        
+        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
 
         /* Get the wood transported to the sawmill */
         gameLogic.assignWorkToIdleCouriers(map);
+        
+        assertNotNull(courierSmToHq.getCargo());
+        assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
+        assertTrue(courierSmToHq.getTarget().equals(sm.getFlag()));
+        assertTrue(courierSmToHq.getCargo().getMaterial() == WOOD);
 
-        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo());
-        assertTrue(map.getCourierForRoad(smToHqRoad).getCargo().getTarget().equals(sm));
-        assertTrue(map.getCourierForRoad(smToHqRoad).getTarget().equals(sm.getFlag()));
-        assertTrue(map.getCourierForRoad(smToHqRoad).getCargo().getMaterial() == WOOD);
-
-        fastForward(100, map);
+        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
 
         /* Cargo has arrived at the sawmill so deliver it */
-        assertTrue(map.getCourierForRoad(smToHqRoad).getPosition().equals(sm.getFlag()));
+        assertTrue(smToHqRoad.getCourier().isAt(sm.getFlag().getPosition()));
 
         gameLogic.deliverForWorkersAtTarget(map);
 
@@ -174,21 +191,40 @@ public class TestScenarios {
 
         gameLogic.initiateCollectionOfNewProduce(map);
 
+        assertTrue(courierSmToHq.isAt(sm.getFlag().getPosition()));
+        assertNull(courierSmToHq.getCargo());
+        assertFalse(courierSmToHq.isTraveling());
+        
+        Courier courierWcToHq = map.getCourierForRoad(wcToHqRoad);
+        
+        assertFalse(courierWcToHq.isAt(wc.getFlag().getPosition()));
+        
         /* Transport plancks and new wood to nearest storage*/
         gameLogic.assignWorkToIdleCouriers(map);
 
-        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo());
-        assertNotNull(map.getCourierForRoad(smToHqRoad).getCargo().getMaterial() == PLANCK);
+        assertNotNull(courierSmToHq.getCargo());
+        assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
+        assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
+        assertTrue(courierSmToHq.getTarget().equals(hq.getFlag()));
+        assertTrue(hq.getAmount(PLANCK) == 0);
+        assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         
-        assertNotNull(map.getCourierForRoad(wcToHqRoad).getCargo());
-        assertNotNull(map.getCourierForRoad(wcToHqRoad).getCargo().getMaterial() == WOOD);
+        fastForwardUntilWorkersReachTarget(map, courierWcToHq, courierSmToHq);
         
-        fastForward(10, map);
+        assertTrue(courierSmToHq.isAt(hq.getFlag().getPosition()));
+        assertNull(courierSmToHq.getCargo());
+        assertTrue(hq.getAmount(PLANCK) == 1);
+        
+        /* Make the courier between WC and HQ pick up wood */
+        gameLogic.assignWorkToIdleCouriers(map);
+        
+        assertNotNull(courierWcToHq.getCargo());
+        assertNotNull(courierWcToHq.getCargo().getMaterial() == WOOD);
+        
+        fastForwardUntilWorkersReachTarget(map, courierWcToHq);
 
         /* Cargo has arrived at the headquarter so store it */
-        assertTrue(map.getCourierForRoad(smToHqRoad).getPosition().equals(hq.getFlag()));
-        
-        gameLogic.deliverForWorkersAtTarget(map);
+        assertTrue(courierWcToHq.isAt(hq.getFlag().getPosition()));
         
         assertTrue(hq.getAmount(PLANCK) == 1);
         assertTrue(hq.getAmount(WOOD) == 1);
@@ -329,7 +365,7 @@ public class TestScenarios {
         List<Point> chosenPointsForRoad = new ArrayList<>();
         
         /*  - List possible adjacent connections for the road -  */
-        List<Point> roadConnections = map.getPossibleAdjacentRoadConnections(startFlag.getPosition());
+        List<Point> roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(startFlag.getPosition());
     
         assertEquals(startFlag.getPosition(), new Point(16, 14));
         
@@ -342,7 +378,7 @@ public class TestScenarios {
         fastForward(100, map);        
         
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(17, 13));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(17, 13));
         
         assertTrue(roadConnections.contains(new Point(16, 12)));
 
@@ -353,7 +389,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(16, 12));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(16, 12));
         
         assertTrue(roadConnections.contains(new Point(14, 12)));
 
@@ -364,7 +400,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(14, 12));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(14, 12));
         
         assertTrue(roadConnections.contains(new Point(13, 11)));
 
@@ -375,7 +411,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(13, 11));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(13, 11));
         
         assertTrue(roadConnections.contains(new Point(12, 10)));
         
@@ -386,7 +422,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(12, 10));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(12, 10));
 
         assertTrue(roadConnections.contains(new Point(13, 9)));
         
@@ -397,7 +433,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(13, 9));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(13, 9));
         
         assertTrue(roadConnections.contains(new Point(12, 8)));
         
@@ -408,7 +444,7 @@ public class TestScenarios {
         fastForward(100, map);        
 
         /*  - Connect to sawmill's flag -  */
-        roadConnections = map.getPossibleAdjacentRoadConnections(new Point(12, 8));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(12, 8));
         
         assertTrue(roadConnections.contains(sm.getFlag().getPosition()));
         
