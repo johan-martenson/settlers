@@ -28,6 +28,7 @@ public abstract class Worker implements Actor {
     private int           walkCountdown;
     private Building      targetBuilding;
     private boolean       insideBuilding;
+    private boolean       exactlyAtPoint;
 
     public Worker() {
         this(null);
@@ -44,6 +45,7 @@ public abstract class Worker implements Actor {
         map = m;
         
         walkCountdown = -1;
+        exactlyAtPoint = true;
     }
 
     @Override
@@ -54,17 +56,15 @@ public abstract class Worker implements Actor {
             log.log(Level.FINE, "There is a path set: {0}", path);
 
             if (walkCountdown == 0) {
-                log.log(Level.FINE, "Reached next step: {0}", position);
-                try {
-                    reachedNextStep();
-                } catch (Exception ex) {
-                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                reachedNextStep();
             } else if (walkCountdown == -1) {
-                log.log(Level.FINE, "Starting to walk, currently at {0}", position);
-                walkCountdown = getSpeed() - 2;
+                startWalking();
             } else {
                 log.log(Level.FINE, "Continuing to walk, currently at {0}", position);
+                
+                System.out.println("2. NOT EXACTLY AT POINT");
+                
+                exactlyAtPoint = false;
                 walkCountdown--;
             }
         }
@@ -94,21 +94,30 @@ public abstract class Worker implements Actor {
         return "Idle courier at " + getPosition() + "(road: " + getAssignedRoad() + ")";
     }
 
-    private void reachedNextStep() throws Exception {
+    private void reachedNextStep() {
         log.log(Level.INFO, "Worker {0} has reached {1}", new Object[]{this, path.get(0)});
 
-        position = path.get(0);
-        path.remove(0);
+        try {
+            position = path.get(0);
+            path.remove(0);
 
-        if (carriedCargo != null) {
-            carriedCargo.setPosition(getPosition());
-        }
-        
-        if (isArrived()) {
-            handleArrival();
+            System.out.println("1. EXACTLY AT POINT");
+            
+            exactlyAtPoint = true;
+
+            if (carriedCargo != null) {
+                carriedCargo.setPosition(getPosition());
+            }
+
+            if (isArrived()) {
+                handleArrival();
+            }
+
+            walkCountdown = getSpeed() - 2;
+        } catch (Exception ex) {
+            Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        walkCountdown = getSpeed() - 2;
     }
             
     private void handleArrival() throws Exception {
@@ -272,7 +281,8 @@ public abstract class Worker implements Actor {
     }
 
     public boolean isExactlyAtPoint() {
-        return !traveling || walkCountdown < 1;
+        System.out.println("Traveling " + traveling + ", exactly at point " + exactlyAtPoint);
+        return !traveling || exactlyAtPoint;
     }
 
     public Point getLastPoint() {
@@ -291,8 +301,11 @@ public abstract class Worker implements Actor {
         if (!traveling) {
             return 100;
         }
+        
+        System.out.println("WALK COUNTDOWN IS " + walkCountdown + " speed is " + getSpeed());
+        System.out.println("PERCENT " + (((getSpeed() - walkCountdown - 2) / (double)getSpeed()) * 100));
     
-        return getSpeed() - walkCountdown;
+        return (int)(((double)(getSpeed() - walkCountdown - 2) / (double)getSpeed()) * 100);
     }
 
     public void enterBuilding(Building b) {
@@ -354,5 +367,15 @@ public abstract class Worker implements Actor {
         targetBuilding.deliver(this.getCargo());
 
         carriedCargo = null;
+    }
+
+    private void startWalking() {
+        log.log(Level.FINE, "Starting to walk, currently at {0}", position);
+
+        walkCountdown = getSpeed() - 2;
+        
+        System.out.println("3. NOT EXACTLY AT POINT");
+        
+        exactlyAtPoint = false;
     }
 }
