@@ -201,7 +201,7 @@ public class GameMap {
         }
     }
 
-    public void placeBuilding(Building house, Point p) throws Exception {
+    public Building placeBuilding(Building house, Point p) throws Exception {
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
@@ -220,6 +220,8 @@ public class GameMap {
         placeFlag(flag);
 
         reserveSpaceForBuilding(house);
+        
+        return house;
     }
 
     public Road placeRoad(Point... points) throws Exception {
@@ -1011,7 +1013,7 @@ public class GameMap {
         return resultMap;
     }
 
-    private Flag getFlagAtPoint(Point p) throws Exception {
+    public Flag getFlagAtPoint(Point p) throws Exception {
         MapPoint mp = pointToGameObject.get(p);
 
         if (!mp.isFlag()) {
