@@ -12,11 +12,13 @@ public class Cargo {
     private Point      position;
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
+    private boolean deliveryPromised;
 
     public Cargo(Material m) {
         log.log(Level.INFO, "Creating cargo of {0}", m);
 
         material = m;
+        deliveryPromised = false;
     }
 
     public Material getMaterial() {
@@ -64,5 +66,13 @@ public class Cargo {
 
     public Point getPosition() {
         return position;
+    }
+
+    void promiseDelivery() {
+        deliveryPromised = true;
+    }
+    
+    public boolean isDeliveryPromised() {
+        return deliveryPromised;
     }
 }

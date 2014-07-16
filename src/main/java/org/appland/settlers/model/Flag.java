@@ -58,15 +58,7 @@ public class Flag {
     }
 
     public boolean hasCargoWaitingForRoad(Road r) {
-        for (Cargo c : stackedCargo) {
-            Road nextRoad = c.getPlannedRoads().get(0);
-
-            if (nextRoad.equals(r)) {
-                return true;
-            }
-        }
-
-        return false;
+        return getCargoWaitingForRoad(r) != null;
     }
 
     Cargo retrieveCargo(Cargo c) {
@@ -75,6 +67,22 @@ public class Flag {
             stackedCargo.remove(c);
 
             return c;
+        }
+
+        return null;
+    }
+
+    Cargo getCargoWaitingForRoad(Road r) {
+        for (Cargo c : stackedCargo) {
+            if (c.isDeliveryPromised()) {
+                continue;
+            }
+            
+            Road nextRoad = c.getPlannedRoads().get(0);
+
+            if (nextRoad.equals(r)) {
+                return c;
+            }
         }
 
         return null;

@@ -146,4 +146,14 @@ public class Road {
     Point getEnd() {
         return end.getPosition();
     }
+
+    Flag getOtherFlag(Flag flag) throws Exception {
+        if (flag.equals(start)) {
+            return end;
+        } else if (flag.equals(end)) {
+            return start;
+        }
+
+        throw new Exception(flag + " is not an endpoint to this road (" + this + ")");
+    }
 }

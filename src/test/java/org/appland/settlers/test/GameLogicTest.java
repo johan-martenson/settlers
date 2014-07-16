@@ -155,12 +155,13 @@ public class GameLogicTest {
         assertNull(w.getCargo());
         assertNull(w.getTarget());
 
-        Utils.fastForward(100, w);
-        assertNull(w.getCargo());
-        assertNull(w.getTarget());
+        assertEquals(w.getPosition(), f.getPosition());
+        assertTrue(w.isArrived());
+        assertFalse(w.isTraveling());
+        assertTrue(f.hasCargoWaitingForRoad(w.getAssignedRoad()));
 
         /* Verify that the worker picks up the cargo and has the sawmill as target */
-        gameLogic.assignWorkToIdleCouriers(map);
+        map.stepTime();
         assertNotNull(w.getCargo());
 
         Cargo tmp = w.getCargo();
@@ -205,7 +206,7 @@ public class GameLogicTest {
         assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
 
         /* Verify that deliverForWorkersAtTarget gets the worker to deliver the cargo */
-        gameLogic.deliverForWorkersAtTarget(map);
+        map.stepTime();
 
         assertNull(w.getCargo());
         assertTrue(wc.getMaterialInQueue(PLANCK) == 1);

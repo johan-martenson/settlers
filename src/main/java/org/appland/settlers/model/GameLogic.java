@@ -22,9 +22,6 @@ public class GameLogic {
          */
         assignNewWorkerToUnoccupiedPlaces(map);
 
-        /* Get idle workers and see if they can pick something up*/
-        assignWorkToIdleCouriers(map);
-
         /* Start collection of newly produced goods */
         initiateCollectionOfNewProduce(map);
 
@@ -154,55 +151,6 @@ public class GameLogic {
                 hq.getFlag().putCargo(c);
 
                 break;
-            }
-        }
-    }
-
-    public void assignWorkToIdleCouriers(GameMap map) throws Exception {
-        List<Courier> idleWorkers = map.getIdleWorkers();
-
-        for (Courier w : idleWorkers) {
-            Road r = w.getAssignedRoad();
-
-            Flag f1 = r.getStartFlag();
-            Flag f2 = r.getEndFlag();
-
-            Point p1 = r.getStart();
-            Point p2 = r.getEnd();
-
-            if (f1.hasCargoWaitingForRoad(r)) {
-                if (w.isAt(p1)) {
-                    w.pickUpCargoForRoad(f1, r);
-                } else {
-                    w.setTargetFlag(f1);
-                }
-            } else if (f2.hasCargoWaitingForRoad(r)) {
-                if (w.isAt(p2)) {
-                    w.pickUpCargoForRoad(f2, r);
-                } else {
-                    w.setTargetFlag(f2);
-                }
-            }
-        }
-    }
-
-    public void deliverForWorkersAtTarget(GameMap map) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        List<Courier> workersAtTarget = map.getWorkersAtTarget();
-
-        for (Courier w : workersAtTarget) {
-
-            Cargo c = w.getCargo();
-            
-            if (c == null) {
-                continue;
-            }
-            
-            if (c.isAtTarget()) {
-                Building targetBuilding = c.getTarget();
-
-                w.deliverToTarget(targetBuilding);
-            } else {
-                w.putDownCargo();
             }
         }
     }

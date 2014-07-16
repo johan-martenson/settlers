@@ -357,12 +357,18 @@ public class TestTransportation {
         endFlag.putCargo(c);
         c.setTarget(storage, map);
         
-        gameLogic.assignWorkToIdleCouriers(map);
+        assertTrue(mdlToEndCr.isArrived());
+        assertFalse(mdlToEndCr.isTraveling());
+        assertTrue(mdlToEndCr.isAt(endFlag.getPosition()));
+        assertNull(mdlToEndCr.getCargo());
+        
+        /* Check that the courier picks up the cargo on next tick */
+        map.stepTime();
         
         assertTrue(mdlToEndCr.getCargo().equals(c));
         assertTrue(mdlToEndCr.getTarget().equals(middleFlag));
         
-        Utils.fastForward(40, map);
+        Utils.fastForwardUntilWorkersReachTarget(map, mdlToEndCr);
 
         assertTrue(mdlToEndCr.getPosition().equals(middlePoint));
 
@@ -370,18 +376,13 @@ public class TestTransportation {
         assertTrue(mdlToEndCr.isArrived());
         assertNull(mdlToEndCr.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(c));
-
-        /* Put down cargo at middle flag */
-        gameLogic.deliverForWorkersAtTarget(map);
-        
         assertTrue(middleFlag.getStackedCargo().size() == 1);
         assertTrue(middleFlag.getStackedCargo().get(0).equals(c));
-        assertNull(mdlToEndCr.getCargo());
         assertNull(hqToMdlCr.getCargo());
         assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
         
         /* Next courier picks up cargo */
-        gameLogic.assignWorkToIdleCouriers(map);
+        map.stepTime();
         
         assertTrue(hqToMdlCr.getCargo().equals(c));
 
