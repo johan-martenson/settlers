@@ -400,12 +400,6 @@ public class GameMap {
         }
     }
 
-    public Courier getCourierForRoad(Road nextRoad) {
-        log.log(Level.FINE, "Getting worker for {0}", nextRoad);
-
-        return roadToWorkerMap.get(nextRoad);
-    }
-
     public List<Road> findWayInRoads(Point from, Point to) throws Exception {
         log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{from, to});
 
@@ -445,7 +439,7 @@ public class GameMap {
 
         if (pointIsOnRoad(p)) {
             Road r    = getRoadAtPoint(p);
-            Courier c = getCourierForRoad(r);
+            Courier c = r.getCourier();
 
             List<Point> points = r.getWayPoints();
 

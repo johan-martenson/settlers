@@ -148,11 +148,11 @@ public class TestScenarios {
 
         fastForward(100, map);
 
-        assertTrue(map.getCourierForRoad(wcToHqRoad).isAt(hq.getFlag().getPosition()));
+        assertTrue(wcToHqRoad.getCourier().isAt(hq.getFlag().getPosition()));
 
         /* Cargo has arrived at the headquarter so store it */
         
-        assertNull(map.getCourierForRoad(wcToHqRoad).getCargo());
+        assertNull(wcToHqRoad.getCourier().getCargo());
         assertTrue(hq.getAmount(WOOD) == 1);
 
         /* Find out that the sawmill needs the wood */
