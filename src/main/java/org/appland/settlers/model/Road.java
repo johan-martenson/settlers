@@ -79,11 +79,7 @@ public class Road {
     }
 
     public boolean needsCourier() {
-        if (promisedCourier || courier != null) {
-            return false;
-        } else {
-            return true;
-        }
+        return !promisedCourier && courier == null;
     }
 
     public void promiseCourier() throws Exception {

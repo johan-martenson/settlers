@@ -549,12 +549,11 @@ public class GameMap {
         return result;
     }
 
-    public List<Road> getRoadsWithoutWorker() {
+    public List<Road> getRoadsThatNeedCouriers() {
         List<Road> result = new ArrayList<>();
-        Collection<Road> roadsWithWorkers = roadToWorkerMap.keySet();
 
         for (Road r : roads) {
-            if (!roadsWithWorkers.contains(r)) {
+            if (r.needsCourier()) {
                 result.add(r);
             }
         }

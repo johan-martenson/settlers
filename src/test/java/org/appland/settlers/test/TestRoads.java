@@ -641,4 +641,62 @@ public class TestRoads {
         assertTrue(road0.needsCourier());
         assertTrue(map.getAllWorkers().isEmpty());
     }
+
+    @Test
+    public void testOnlyTwoCouriersAreAssignedToTwoRoads() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(14, 10);
+        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Point point2 = new Point(13, 5);
+        Flag flag0 = map.placeFlag(point2);
+
+        GameLogic gameLogic = new GameLogic();
+        
+        gameLogic.gameLoop(map);
+        Utils.fastForward(100, map);
+        
+        Point point3 = new Point(6, 4);
+        Point point4 = new Point(8, 4);
+        Point point5 = new Point(10, 4);
+        Point point6 = new Point(12, 4);
+        Road road0 = map.placeRoad(point3, point4, point5, point6, point2);
+        
+        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(road0.needsCourier());
+
+        gameLogic.gameLoop(map);
+        map.stepTime();
+        
+        assertTrue(map.getAllWorkers().size() == 1);
+        assertFalse(road0.needsCourier());
+        
+        Point point7 = new Point(14, 6);
+        Point point8 = new Point(15, 7);
+        Point point9 = new Point(16, 8);
+        Point point10 = new Point(15, 9);
+        Road road1 = map.placeRoad(point2, point7, point8, point9, point10);
+
+        assertTrue(road1.needsCourier());
+        assertTrue(map.getAllWorkers().size() == 1);
+        
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+        
+        assertTrue(map.getAllWorkers().size() == 2);
+        assertFalse(road0.needsCourier());
+        
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+
+
+        assertTrue(map.getAllWorkers().size() == 2);
+    }
 }

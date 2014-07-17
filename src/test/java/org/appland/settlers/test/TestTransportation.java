@@ -410,7 +410,7 @@ public class TestTransportation {
         
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertTrue(map.getRoadsWithoutWorker().contains(hqToMiddleRoad));
+        assertTrue(map.getRoadsThatNeedCouriers().contains(hqToMiddleRoad));
         assertTrue(map.getClosestStorage(hqToMiddleRoad).equals(storage));
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);

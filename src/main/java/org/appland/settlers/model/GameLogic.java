@@ -61,7 +61,7 @@ public class GameLogic {
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
         /* Handle unoccupied roads */
-        List<Road> roads = map.getRoadsWithoutWorker();
+        List<Road> roads = map.getRoadsThatNeedCouriers();
 
         for (Road r : roads) {
             Storage stg = map.getClosestStorage(r);

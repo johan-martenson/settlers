@@ -271,7 +271,7 @@ public class GameLogicTest {
         assertTrue(w2.getAssignedRoad().equals(r2));
         
 //        assertFalse(w1.isTraveling());
-        assertTrue(map.getRoadsWithoutWorker().isEmpty());
+        assertTrue(map.getRoadsThatNeedCouriers().isEmpty());
         assertEquals(map.getRoad(hq.getFlag().getPosition(), bk.getFlag().getPosition()), r);
         assertNotNull(r.getCourier().getAssignedRoad());
 
