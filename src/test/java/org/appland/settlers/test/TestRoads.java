@@ -8,14 +8,17 @@ package org.appland.settlers.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadStartStopIsCorrect;
 
 import static org.junit.Assert.assertEquals;
@@ -578,5 +581,64 @@ public class TestRoads {
 
         thrown.expect(Exception.class);
         map.placeRoad(new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
+    }
+
+    @Test
+    public void testOnlyOneCourierIsAssignedToNewRoad() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(12, 6);
+        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(10, 4);
+        Point point5 = new Point(12, 4);
+        Point point6 = new Point(13, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+
+        GameLogic gameLogic = new GameLogic();
+        
+        assertTrue(road0.needsCourier());
+        assertTrue(map.getAllWorkers().isEmpty());
+        
+        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertFalse(road0.needsCourier());
+        assertTrue(map.getAllWorkers().size() == 1);
+        assertEquals(road0.getCourier(), map.getAllWorkers().get(0));
+        
+        Utils.fastForward(100, map);
+        
+        assertFalse(road0.needsCourier());
+        assertTrue(map.getAllWorkers().size() == 1);
+        assertEquals(road0.getCourier(), map.getAllWorkers().get(0));
+    }
+
+    @Test
+    public void testThatCourierIsNotDispatchedToNewRoadWithNoConnection() throws Exception {
+
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(13, 7);
+        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Point point2 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(point2);
+
+        Point point3 = new Point(12, 4);
+        Point point4 = new Point(13, 5);
+        Point point5 = new Point(14, 6);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+
+        assertTrue(road0.needsCourier());
+        assertTrue(map.getAllWorkers().isEmpty());
+
+        GameLogic gameLogic = new GameLogic();
+        
+        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        
+        assertTrue(road0.needsCourier());
+        assertTrue(map.getAllWorkers().isEmpty());
     }
 }

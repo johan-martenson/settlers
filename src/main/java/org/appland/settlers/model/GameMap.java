@@ -470,11 +470,21 @@ public class GameMap {
 
     public Storage getClosestStorage(Road r) {
         Storage stg = null;
+        int distance = -1;
 
-	// TODO: Change to find the closest storage
         for (Building b : buildings) {
             if (b instanceof Storage) {
-                stg = (Storage) b;
+                try {
+                    List<Point> path = findWayWithExistingRoads(r.getStart(), b.getFlag().getPosition());
+                    
+                    if (stg == null) {
+                        stg = (Storage) b;
+                        distance = path.size();
+                    } else if (path.size() < distance) {
+                        distance = path.size();
+                        stg = (Storage) b;
+                    }
+                } catch (InvalidRouteException ex) {}
             }
         }
 

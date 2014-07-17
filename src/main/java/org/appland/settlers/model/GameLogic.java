@@ -66,12 +66,16 @@ public class GameLogic {
         for (Road r : roads) {
             Storage stg = map.getClosestStorage(r);
 
+            if (stg == null) {
+                continue;
+            }
+            
             Courier w = stg.retrieveCourier();
 
             w.setMap(map);
 
             map.placeWorker(w, stg.getFlag());
-            
+
             w.setTargetRoad(r);
 
             r.promiseCourier();
