@@ -469,43 +469,34 @@ public class GameMap {
     }
 
     public Storage getClosestStorage(Road r) {
+        return getClosestStorage(r.getStart());
+    }
+    
+    public Storage getClosestStorage(Building b) {
+        return getClosestStorage(b.getFlag().getPosition());
+    }
+
+    public Storage getClosestStorage(Point p) {
         Storage stg = null;
-        int distance = -1;
+        int distance = Integer.MAX_VALUE;
 
         for (Building b : buildings) {
             if (b instanceof Storage) {
                 try {
-                    if (b.getFlag().getPosition().equals(r.getStart())) {
+                    if (b.getFlag().getPosition().equals(p)) {
                         distance = 0;
                         stg = (Storage)b;
                         break;
                     }
                     
-                    List<Point> path = findWayWithExistingRoads(r.getStart(), b.getFlag().getPosition());
+                    List<Point> path = findWayWithExistingRoads(p, b.getFlag().getPosition());
                     
-                    if (stg == null) {
-                        stg = (Storage) b;
-                        distance = path.size();
-                        break;
-                    } else if (path.size() < distance) {
+                    if (path.size() < distance) {
                         distance = path.size();
                         stg = (Storage) b;
                         break;
                     }
                 } catch (InvalidRouteException ex) {}
-            }
-        }
-
-        return stg;
-    }
-
-    public Storage getClosestStorage(Actor a) {
-        Storage stg = null;
-
-	// TODO: Change to find the closest storage
-        for (Building b : buildings) {
-            if (b instanceof Storage) {
-                stg = (Storage) b;
             }
         }
 
