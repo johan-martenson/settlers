@@ -475,14 +475,22 @@ public class GameMap {
         for (Building b : buildings) {
             if (b instanceof Storage) {
                 try {
+                    if (b.getFlag().getPosition().equals(r.getStart())) {
+                        distance = 0;
+                        stg = (Storage)b;
+                        break;
+                    }
+                    
                     List<Point> path = findWayWithExistingRoads(r.getStart(), b.getFlag().getPosition());
                     
                     if (stg == null) {
                         stg = (Storage) b;
                         distance = path.size();
+                        break;
                     } else if (path.size() < distance) {
                         distance = path.size();
                         stg = (Storage) b;
+                        break;
                     }
                 } catch (InvalidRouteException ex) {}
             }
