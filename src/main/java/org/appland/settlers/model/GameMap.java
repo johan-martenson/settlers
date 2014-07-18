@@ -142,7 +142,7 @@ public class GameMap {
         return getRoadAtPoint(point) != null;
     }
     
-    private Road getRoadAtPoint(Point point) {
+    public Road getRoadAtPoint(Point point) {
         MapPoint p = pointToGameObject.get(point);
         
         Iterable<Road> roadsFromPoint = p.getConnectedRoads();
