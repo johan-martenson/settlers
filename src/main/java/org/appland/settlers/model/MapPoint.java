@@ -118,4 +118,8 @@ public class MapPoint {
     Set<Point> getConnectedNeighbors() {
         return connectedNeighbors;
     }
+
+    Building getBuilding() {
+        return building;
+    }
 }

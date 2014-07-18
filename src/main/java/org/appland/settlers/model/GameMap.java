@@ -1116,4 +1116,20 @@ public class GameMap {
 
         return result;
     }
+
+    public Building getBuildingAtPoint(Point p) {
+        MapPoint mp = pointToGameObject.get(p);
+        
+        return mp.getBuilding();
+    }
+
+    public boolean isBuildingAtPoint(Point p) {
+        return getBuildingAtPoint(p) != null;
+    }
+
+    public boolean isRoadAtPoint(Point p) {
+        MapPoint mp = pointToGameObject.get(p);
+        
+        return !mp.getConnectedNeighbors().isEmpty();
+    }
 }
