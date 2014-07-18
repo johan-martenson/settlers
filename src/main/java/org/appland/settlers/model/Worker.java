@@ -94,6 +94,10 @@ public abstract class Worker implements Actor {
         return "Idle courier at " + getPosition() + "(road: " + getAssignedRoad() + ")";
     }
 
+    protected void onArrival() {
+        log.log(Level.FINE, "On handle with nothing to do");
+    }
+    
     protected void onIdle() {
         log.log(Level.FINE, "On idle with nothing to do");
     }
@@ -153,6 +157,9 @@ public abstract class Worker implements Actor {
                 putDownCargo();
             }
         }
+
+        /* This lets subclasses add their own logic */
+        onArrival();
     }
 
     public void setTargetRoad(Road r) throws Exception {
