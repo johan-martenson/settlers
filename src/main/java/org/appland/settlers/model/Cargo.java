@@ -75,4 +75,8 @@ public class Cargo {
     public boolean isDeliveryPromised() {
         return deliveryPromised;
     }
+
+    void clearPromisedDelivery() {
+        deliveryPromised = false;
+    }
 }

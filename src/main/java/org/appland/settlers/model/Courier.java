@@ -23,10 +23,11 @@ public class Courier extends Worker {
                 Flag otherEnd     = assignedRoad.getOtherFlag(flag);
                 
                 /* Pick up the right cargo if we have promised to do so */
-                if (intendedCargo != null) {                    
+                if (intendedCargo != null) {
                     pickUpCargoFromFlag(intendedCargo, flag);
                     
                     intendedCargo = null;
+                    carriedCargo.clearPromisedDelivery();
                 /* Pick up the cargo where we stand if needed */
                 } else if (flag.hasCargoWaitingForRoad(assignedRoad)) {
                     pickUpCargoForRoad(flag, assignedRoad);
@@ -46,7 +47,6 @@ public class Courier extends Worker {
                     Cargo cargo = start.getCargoWaitingForRoad(r);
                     
                     planToPickUpCargo(cargo, start);
-
                 } else if (end.hasCargoWaitingForRoad(r)) {
                     Cargo cargo = end.getCargoWaitingForRoad(r);
                     
@@ -69,5 +69,9 @@ public class Courier extends Worker {
         intendedCargo = cargo;
 
         setTargetFlag(flag);    
+    }
+
+    public Cargo getPromisedDelivery() {
+        return intendedCargo;
     }
 }

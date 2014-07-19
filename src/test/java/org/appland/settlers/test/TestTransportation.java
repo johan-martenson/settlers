@@ -635,7 +635,68 @@ public class TestTransportation {
         assertEquals(cargo.getPlannedRoads().get(0), road1);
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point2);
+        assertFalse(cargo.isDeliveryPromised());
         assertEquals(flag1.getStackedCargo().get(0), cargo);
         assertFalse(flag1.getStackedCargo().isEmpty());
+    }
+
+    @Test
+    public void testCargoDeliveryPromiseIsCleared() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Point point1 = new Point(6, 6);
+        Point point2 = new Point(7, 7);
+        Point point3 = new Point(9, 7);
+        Point point4 = new Point(11, 7);
+        
+        Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
+        
+        Flag flag0 = map.placeFlag(point0);
+        Flag flag1 = map.placeFlag(point2);
+        Road road0 = map.placeRoad(point0, point1, point2);
+        Road road1 = map.placeRoad(point2, point3, point4);
+        
+        Courier courier = new Courier(map);
+        Courier secondCourier = new Courier(map);
+        
+        map.placeWorker(courier, flag1);
+        map.assignCourierToRoad(courier, road0);
+
+        map.placeWorker(secondCourier, flag1);
+        map.assignCourierToRoad(secondCourier, road1);
+
+        Cargo cargo = new Cargo(WOOD);
+        cargo.setPosition(point0);
+        cargo.setTarget(sm, map);
+        
+        flag0.putCargo(cargo);
+
+        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getPosition(), point0);
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(point2));
+        assertNull(courier.getCargo());
+        assertFalse(cargo.isDeliveryPromised());
+        
+        map.stepTime();
+
+        assertTrue(cargo.isDeliveryPromised());
+        assertEquals(courier.getTargetFlag(), flag0);
+        assertFalse(flag0.getStackedCargo().isEmpty());
+        
+        int i;
+        for (i = 0; i < 1000; i++) {
+            if (!courier.isArrived()) {
+                courier.stepTime();
+            }
+        }
+
+        assertFalse(flag0.getStackedCargo().isEmpty());
+
+        courier.stepTime();
+        
+        assertEquals(courier.getCargo(), cargo);
+        assertTrue(flag0.getStackedCargo().isEmpty());
+        assertFalse(cargo.isDeliveryPromised());
     }
 }

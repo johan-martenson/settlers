@@ -343,15 +343,11 @@ public abstract class Worker implements Actor {
         pickUpCargoFromFlag(cargoToPickUp, flag);
     }
 
-    public void pickUpCargoFromFlag(Cargo c, Flag flag) throws InvalidRouteException {
+    public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
         carriedCargo = flag.retrieveCargo(c);
 
-        if (flag.equals(assignedRoad.getStartFlag())) {
-            setTargetFlag(assignedRoad.getEndFlag());
-        } else {
-            setTargetFlag(assignedRoad.getStartFlag());
-        }
-
+        Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
+        setTargetFlag(otherEnd);
     }
     
     public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
