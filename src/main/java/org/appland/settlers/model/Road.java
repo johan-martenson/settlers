@@ -135,11 +135,11 @@ public class Road {
         return start;
     }
 
-    Point getStart() {
+    public Point getStart() {
         return start.getPosition();
     }
 
-    Point getEnd() {
+    public Point getEnd() {
         return end.getPosition();
     }
 
