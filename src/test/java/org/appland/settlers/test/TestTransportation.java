@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import java.util.List;
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -22,6 +23,7 @@ import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
@@ -501,5 +503,139 @@ public class TestTransportation {
 
         b.hostMilitary(m);
         assertTrue(b.getHostedMilitary() == 1);
+    }
+
+    @Test
+    public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsOnFlag() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Point point1 = new Point(6, 6);
+        Point point2 = new Point(7, 7);
+        
+        Building sm = map.placeBuilding(new Sawmill(), point2.upLeft());
+        
+        Flag flag0 = map.placeFlag(point0);
+        Road road0 = map.placeRoad(point0, point1, point2);
+        
+        Courier courier = new Courier(map);
+        
+        map.placeWorker(courier, flag0);
+        map.assignCourierToRoad(courier, road0);
+        
+        Cargo cargo = new Cargo(WOOD);
+        cargo.setPosition(point0);
+        cargo.setTarget(sm, map);
+        
+        flag0.putCargo(cargo);
+        
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(point0));
+        assertNull(courier.getCargo());
+        
+        map.stepTime();
+        
+        assertEquals(courier.getCargo(), cargo);
+    }
+    
+    @Test
+    public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsNotOnFlag() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Point point1 = new Point(6, 6);
+        Point point2 = new Point(7, 7);
+        
+        Building sm = map.placeBuilding(new Sawmill(), point2.upLeft());
+        
+        Flag flag0 = map.placeFlag(point0);
+        Road road0 = map.placeRoad(point0, point1, point2);
+        
+        Courier courier = new Courier(map);
+        
+        map.placeWorker(courier, sm.getFlag());
+        map.assignCourierToRoad(courier, road0);
+        
+        Cargo cargo = new Cargo(WOOD);
+        cargo.setPosition(point0);
+        cargo.setTarget(sm, map);
+        
+        flag0.putCargo(cargo);
+        
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(point2));
+        assertNull(courier.getCargo());
+        assertFalse(cargo.isDeliveryPromised());
+        
+        map.stepTime();
+        
+        assertTrue(cargo.isDeliveryPromised());
+        assertEquals(courier.getTargetFlag(), flag0);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertTrue(courier.isAt(point0));
+        
+        map.stepTime();
+        
+        assertEquals(courier.getCargo(), cargo);
+    }
+
+    @Test
+    public void testCargoTargetRemainsWhenItIsPutDownAtFlag() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Point point1 = new Point(6, 6);
+        Point point2 = new Point(7, 7);
+        Point point3 = new Point(9, 7);
+        Point point4 = new Point(11, 7);
+        
+        Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
+        
+        Flag flag0 = map.placeFlag(point0);
+        Flag flag1 = map.placeFlag(point2);
+        Road road0 = map.placeRoad(point0, point1, point2);
+        Road road1 = map.placeRoad(point2, point3, point4);
+        
+        Courier courier = new Courier(map);
+        Courier secondCourier = new Courier(map);
+        
+        map.placeWorker(courier, flag0);
+        map.assignCourierToRoad(courier, road0);        
+        
+        map.placeWorker(secondCourier, flag1);
+        map.assignCourierToRoad(secondCourier, road1);
+        
+        Cargo cargo = new Cargo(WOOD);
+        cargo.setPosition(point0);
+        cargo.setTarget(sm, map);
+        
+        flag0.putCargo(cargo);
+
+        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getPosition(), point0);
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(point0));
+        assertNull(courier.getCargo());
+        
+        map.stepTime();
+
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTargetFlag(), flag1);
+        assertTrue(flag1.getStackedCargo().isEmpty());
+        
+        int i;
+        for (i = 0; i < 1000; i++) {
+            if (!courier.isArrived()) {
+                courier.stepTime();
+            }
+        }
+
+        assertTrue(courier.isAt(point2));
+        assertNull(courier.getCargo());
+
+        assertEquals(cargo.getPlannedRoads().get(0), road1);
+        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getPosition(), point2);
+        assertEquals(flag1.getStackedCargo().get(0), cargo);
+        assertFalse(flag1.getStackedCargo().isEmpty());
     }
 }

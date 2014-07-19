@@ -564,7 +564,7 @@ public class GameMap {
     public List<Flag> getFlags() {
         return flags;
     }
-
+    
     public void placeWorker(Worker w, Flag f) {
         w.setPosition(f.getPosition());
         allWorkers.add(w);
