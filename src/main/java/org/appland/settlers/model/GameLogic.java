@@ -43,7 +43,7 @@ public class GameLogic {
                     map.assignCourierToRoad((Courier) w, w.getTargetRoad());
                     w.stopTraveling();
                 } else if (w.getTargetBuilding() != null) {
-                    Flag targetFlag = w.getTarget();
+                    Flag targetFlag = w.getTargetFlag();
                     Building building = map.getBuildingByFlag(targetFlag);
 
                     if (building.isMilitaryBuilding()) {

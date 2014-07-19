@@ -366,7 +366,7 @@ public class TestTransportation {
         map.stepTime();
         
         assertTrue(mdlToEndCr.getCargo().equals(c));
-        assertTrue(mdlToEndCr.getTarget().equals(middleFlag));
+        assertTrue(mdlToEndCr.getTargetFlag().equals(middleFlag));
         
         Utils.fastForwardUntilWorkersReachTarget(map, mdlToEndCr);
 
@@ -488,7 +488,7 @@ public class TestTransportation {
         m.setMap(map);
         m.setPosition(hq.getFlag().getPosition());
         m.setTargetFlag(b.getFlag());
-        assertEquals(m.getTarget(), b.getFlag());
+        assertEquals(m.getTargetFlag(), b.getFlag());
         
         /* Verify that the military reaches the barracks */
         Utils.fastForward(60, m);

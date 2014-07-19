@@ -153,7 +153,7 @@ public class GameLogicTest {
 
         /* Verify that the worker is idle */
         assertNull(w.getCargo());
-        assertNull(w.getTarget());
+        assertNull(w.getTargetFlag());
 
         assertEquals(w.getPosition(), f.getPosition());
         assertTrue(w.isArrived());
@@ -166,7 +166,7 @@ public class GameLogicTest {
 
         Cargo tmp = w.getCargo();
         assertEquals(c, tmp);
-        assertEquals(w.getTarget(), sm.getFlag());
+        assertEquals(w.getTargetFlag(), sm.getFlag());
     }
 
     @Test

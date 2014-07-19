@@ -18,15 +18,16 @@ public abstract class Worker implements Actor {
     protected Cargo       carriedCargo;
     private Road          assignedRoad;
     private Road          targetRoad;
+    private Building      targetBuilding;
+    private Flag          targetFlag;
     protected GameMap     map;
     protected List<Point> path;
 
     private static Logger log = Logger.getLogger(Worker.class.getName());
     protected Point       position;
-    protected Flag        target;
+    protected Point       target;
     private boolean       traveling;
     private int           walkCountdown;
-    private Building      targetBuilding;
     private boolean       insideBuilding;
     private boolean       exactlyAtPoint;
 
@@ -41,6 +42,7 @@ public abstract class Worker implements Actor {
         path = null;
         targetRoad = null;
         targetBuilding = null;
+        targetFlag = null;
         insideBuilding = false;
         map = m;
         
@@ -75,13 +77,17 @@ public abstract class Worker implements Actor {
         if (isTraveling()) {
             String str = "";
             if (isExactlyAtPoint()) {            
-                str = "Courier at " + getPosition() + " traveling to flag " + getTarget();
+                str = "Courier at " + getPosition() + " traveling to " + target;
             } else {
-                str = "Courier latest at " + getLastPoint() + " traveling to " + getTarget();
+                str = "Courier latest at " + getLastPoint() + " traveling to " + target;
             }
                 
             if (targetRoad != null) {
                 str += " for " + targetRoad;
+            } else if (targetFlag != null) {
+                str += " for " + targetFlag;
+            } else if (targetBuilding != null) {
+                str += " for " + targetBuilding;
             }
 
             if (carriedCargo != null) {
@@ -95,7 +101,7 @@ public abstract class Worker implements Actor {
     }
 
     protected void onArrival() {
-        log.log(Level.FINE, "On handle with nothing to do");
+        log.log(Level.FINE, "On handle arrival with nothing to do");
     }
     
     protected void onIdle() {
@@ -136,8 +142,7 @@ public abstract class Worker implements Actor {
             map.assignCourierToRoad((Courier) this, getTargetRoad());
             stopTraveling();
         } else if (getTargetBuilding() != null) {
-            Flag targetFlag = getTarget();
-            Building building = map.getBuildingByFlag(targetFlag);
+            Building building = getTargetBuilding();
 
             if (this instanceof Military) {
                 building.hostMilitary((Military) this);
@@ -151,7 +156,6 @@ public abstract class Worker implements Actor {
             
         if (carriedCargo != null) {
             if (carriedCargo.isAtTarget()) {
-
                 deliverToTarget(carriedCargo.getTarget());
             } else {
                 putDownCargo();
@@ -163,8 +167,8 @@ public abstract class Worker implements Actor {
     }
 
     public void setTargetRoad(Road r) throws Exception {
-        if (target != null) {
-            throw new Exception("Can't have both flag and road as target");
+        if (targetFlag != null || targetBuilding != null) {
+            throw new Exception("Can't set road as target while flag or building are already targetted");
         }
 
         targetRoad = r;
@@ -175,18 +179,14 @@ public abstract class Worker implements Actor {
             return;
         }
 
-        traveling = true;
-
         /* Find closest endpoint for the road */
         List<Point> path1 = map.findWayWithExistingRoads(position, r.getStart());
         List<Point> path2 = map.findWayWithExistingRoads(position, r.getEnd());
 
         if (path1.size() < path2.size()) {
-            path = path1;
-            target = r.start;
+            setTarget(r.getStart());
         } else {
-            path = path2;
-            target = r.end;
+            setTarget(r.getEnd());
         }
     }
 
@@ -202,15 +202,15 @@ public abstract class Worker implements Actor {
         return targetRoad;
     }
 
-    public Flag getTarget() {
-        return target;
+    public Flag getTargetFlag() {
+        return targetFlag;
     }
 
     public boolean isArrived() {
-        log.log(Level.INFO, "Checking if worker has arrived");
-        log.log(Level.FINE, "Worker is at {0} and target is {1}", new Object[]{position, target});
+        log.log(Level.FINE, "Checking if worker has arrived");
+        log.log(Level.FINER, "Worker is at {0} and target is {1}", new Object[]{position, target});
 
-        if (!traveling) {
+        if (!traveling || target == null) {
             return true;
         }
         
@@ -218,28 +218,8 @@ public abstract class Worker implements Actor {
             return false;
         }
         
-        /* A traveling worker can target a road */
-        if (targetRoad != null) {
-            if (position.equals(targetRoad.getStart())) {
-                return true;
-            }
-
-            if (position.equals(targetRoad.getEnd())) {
-                return true;
-            }
-        }
-        
         /* A traveling worker can target a flag */
-        if (target != null && target.getPosition().equals(position)) {
-            return true;
-        }
-        
-        /* A worker can be idle and not at either of the road's flags */
-        if (target == null || position == null) {
-            return false;
-        }
-
-        if (target.getPosition().equals(position)) {
+        if (target != null && target.equals(position)) {
             log.log(Level.INFO, "Worker has arrived at target {0}", target);
             return true;
         }
@@ -254,14 +234,11 @@ public abstract class Worker implements Actor {
     }
 
     public void setTargetFlag(Flag t) throws InvalidRouteException {
-        log.log(Level.INFO, "Setting target to {0}, previous target was {1}", new Object[]{t, target});
+        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, target});
         
-        target = t;
-        path = map.findWayWithExistingRoads(position, target.getPosition());
-        path.remove(0);
-        log.log(Level.FINE, "Way to target is {0}", path);
+        targetFlag = t;
         
-        traveling = true;
+        setTarget(t.getPosition());        
     }
 
     public boolean isTraveling() {
@@ -272,6 +249,8 @@ public abstract class Worker implements Actor {
         traveling = false;
         target = null;
         targetRoad = null;
+        targetBuilding = null;
+        targetFlag = null;
     }
 
     private int getSpeed() {
@@ -299,7 +278,7 @@ public abstract class Worker implements Actor {
 
     public Point getNextPoint() throws Exception {
         if (path == null || path.isEmpty()) {
-            throw new Exception("No next point set. Target is " + getTarget());
+            throw new Exception("No next point set. Target is " + getTargetFlag());
         }
 
         return path.get(0);
@@ -333,8 +312,8 @@ public abstract class Worker implements Actor {
         return assignedRoad;
     }
 
-        public void putDownCargo() {
-        target.putCargo(carriedCargo);
+    public void putDownCargo() {
+        targetFlag.putCargo(carriedCargo);
         carriedCargo.setPosition(position);
         
         List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
@@ -367,7 +346,7 @@ public abstract class Worker implements Actor {
     public void pickUpCargoFromFlag(Cargo c, Flag flag) throws InvalidRouteException {
         carriedCargo = flag.retrieveCargo(c);
 
-        if (flag.equals(assignedRoad.start)) {
+        if (flag.equals(assignedRoad.getStartFlag())) {
             setTargetFlag(assignedRoad.getEndFlag());
         } else {
             setTargetFlag(assignedRoad.getStartFlag());
@@ -387,5 +366,15 @@ public abstract class Worker implements Actor {
         walkCountdown = getSpeed() - 2;
         
         exactlyAtPoint = false;
+    }
+
+    private void setTarget(Point p) throws InvalidRouteException {
+        target = p;
+
+        path = map.findWayWithExistingRoads(position, target);
+        path.remove(0);
+        log.log(Level.FINE, "Way to target is {0}", path);
+        
+        traveling = true;    
     }
 }

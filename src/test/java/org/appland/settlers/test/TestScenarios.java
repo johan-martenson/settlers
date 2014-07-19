@@ -138,7 +138,7 @@ public class TestScenarios {
         map.stepTime();
 
         assertNotNull(courierWcToHq.getCargo());
-        assertTrue(courierWcToHq.getTarget().equals(hq.getFlag()));
+        assertTrue(courierWcToHq.getTargetFlag().equals(hq.getFlag()));
 
         fastForward(100, map);
 
@@ -174,7 +174,7 @@ public class TestScenarios {
         assertTrue(cargo.isDeliveryPromised());
         assertTrue(courierSmToHq.isTraveling());
         assertFalse(courierSmToHq.isArrived());
-        assertEquals(courierSmToHq.getTarget(), hq.getFlag());
+        assertEquals(courierSmToHq.getTargetFlag(), hq.getFlag());
         
         /* The courier reaches the HQ */
         fastForwardUntilWorkersReachTarget(map, courierSmToHq);
@@ -198,7 +198,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getCargo(), cargo);
         assertTrue(courierSmToHq.isTraveling());
         assertTrue(courierSmToHq.getCargo().getMaterial() == WOOD);
-        assertEquals(courierSmToHq.getTarget(), sm.getFlag());
+        assertEquals(courierSmToHq.getTargetFlag(), sm.getFlag());
         assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
         assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
@@ -235,7 +235,7 @@ public class TestScenarios {
         assertNotNull(courierSmToHq.getCargo());
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
-        assertTrue(courierSmToHq.getTarget().equals(hq.getFlag()));
+        assertTrue(courierSmToHq.getTargetFlag().equals(hq.getFlag()));
         assertTrue(hq.getAmount(PLANCK) == 0);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         
