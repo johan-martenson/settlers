@@ -79,7 +79,11 @@ public class Forester extends Worker {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point p = getTreeSpot();
-                 
+
+                if (p == null) {
+                    return;
+                }
+                
                 setOffroadTarget(p);
 
                 state = States.GOING_OUT_TO_PLANT;

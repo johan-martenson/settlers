@@ -396,4 +396,52 @@ public class TestForesterHut {
             assertFalse(foresterHut.isCargoReady());
         }
     }
+
+    @Test
+    public void testForesterStaysInsideWhenThereAreNoSpotsAvailable() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+
+        /* Construct the forester hut */
+        constructSmallHouse(foresterHut);
+
+        /* Put trees around the forester hut */
+        for (Point p : foresterHut.getFlag().getPosition().getAdjacentPoints()) {
+            if (p.equals(point1)) {
+                continue;
+            }
+            
+            map.placeTree(p);
+        }
+        
+        /* Manually place forester */
+        Forester forester = new Forester(map);
+        map.placeWorker(forester, foresterHut.getFlag());
+        foresterHut.assignWorker(forester);
+        forester.enterBuilding(foresterHut);
+        
+        assertTrue(forester.isInsideBuilding());
+        
+        /* Run the game logic 10 times and make sure the forester stays in the hut */
+        GameLogic gameLogic = new GameLogic();
+        
+        int i;
+        for (i = 0; i < 9; i++) {
+            assertTrue(forester.isInsideBuilding());
+            gameLogic.gameLoop(map);
+            Utils.fastForward(10, map);
+        }
+        
+        Utils.fastForward(9, map);
+        
+        assertTrue(forester.isInsideBuilding());
+        
+        /* Step once and make sure the forester stays in the hut */
+        map.stepTime();        
+        
+        assertTrue(forester.isInsideBuilding());
+        
+    }
 }
+
