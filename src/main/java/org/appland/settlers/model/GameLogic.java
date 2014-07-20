@@ -27,9 +27,6 @@ public class GameLogic {
 
         /* Find out which buildings need deliveries and match with inventory */
         initiateNewDeliveriesForAllStorages(map);
-
-        /* Step time */
-        map.stepTime();
     }
 
     public void assignTravelingWorkersThatHaveArrived(GameMap map) throws Exception {
@@ -161,7 +158,6 @@ public class GameLogic {
 
     public void initiateCollectionOfNewProduce(GameMap map) throws Exception {
         for (Building b : map.getBuildingsWithNewProduce()) {
-
             Cargo c = b.retrieveCargo();
             Storage stg = map.getClosestStorage(b);
 

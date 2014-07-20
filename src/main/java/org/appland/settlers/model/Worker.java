@@ -28,7 +28,7 @@ public abstract class Worker implements Actor {
     protected Point       target;
     private boolean       traveling;
     private int           walkCountdown;
-    private boolean       insideBuilding;
+    private Building      home;
     private boolean       exactlyAtPoint;
 
     public Worker() {
@@ -43,7 +43,7 @@ public abstract class Worker implements Actor {
         targetRoad = null;
         targetBuilding = null;
         targetFlag = null;
-        insideBuilding = false;
+        home = null;
         map = m;
         
         walkCountdown = -1;
@@ -101,11 +101,15 @@ public abstract class Worker implements Actor {
     }
 
     protected void onArrival() {
-        log.log(Level.FINE, "On handle arrival with nothing to do");
+        log.log(Level.FINE, "On handle hook arrival with nothing to do");
     }
     
     protected void onIdle() {
-        log.log(Level.FINE, "On idle with nothing to do");
+        log.log(Level.FINE, "On idle hook with nothing to do");
+    }
+    
+    protected void onEnterBuilding(Building b) {
+        log.log(Level.FINE, "On enter building hook with nothing to do");
     }
     
     private void reachedNextStep() {
@@ -293,11 +297,14 @@ public abstract class Worker implements Actor {
     }
 
     public void enterBuilding(Building b) {
-        insideBuilding = true;
+        home = b;
+        
+        /* Allow subclasses to add logic */
+        onEnterBuilding(b);
     }
     
     public boolean isInsideBuilding() {
-        return insideBuilding;
+        return home != null;
     }
 
     public boolean isAt(Point p2) {
@@ -364,7 +371,23 @@ public abstract class Worker implements Actor {
         exactlyAtPoint = false;
     }
 
-    private void setTarget(Point p) throws InvalidRouteException {
+    protected void setOffroadTarget(Point p) {
+        log.log(Level.FINE, "Setting {0} as offroad target", p);
+        
+        target = p;
+        
+        path = map.findWayOffroad(position, target, null);
+        path.remove(0);
+        log.log(Level.FINER, "Way to target is {0}", path);
+        
+        traveling = true;
+        
+        if (isInsideBuilding()) {
+            leaveBuilding();
+        }
+    }
+    
+    protected void setTarget(Point p) throws InvalidRouteException {
         target = p;
 
         path = map.findWayWithExistingRoads(position, target);
@@ -372,5 +395,21 @@ public abstract class Worker implements Actor {
         log.log(Level.FINE, "Way to target is {0}", path);
         
         traveling = true;    
+        
+        if (isInsideBuilding()) {
+            leaveBuilding();
+        }
+    }
+    
+    public Point getTarget() {
+        return target;
+    }
+
+    private void leaveBuilding() {
+        home = null;
+    }
+
+    public Building getHome() {
+        return home;
     }
 }

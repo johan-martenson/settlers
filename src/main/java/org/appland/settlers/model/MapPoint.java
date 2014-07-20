@@ -14,17 +14,19 @@ import java.util.Set;
  * @author johan
  */
 public class MapPoint {
-    Building   building;
-    Flag       flag;
-    Point      point;
-    Set<Point> connectedNeighbors;
-    boolean    isRoad;
-    Set<Road>  connectedRoads;
+    private Building   building;
+    private Flag       flag;
+    private Point      point;
+    private Set<Point> connectedNeighbors;
+    private boolean    isRoad;
+    private Set<Road>  connectedRoads;
+    private Tree       tree;
 
     public MapPoint(Point p) {
         point              = p;
         building           = null;
         flag               = null;
+        tree               = null;
         connectedNeighbors = new HashSet<>();
         connectedRoads     = new HashSet<>();
     }
@@ -120,5 +122,13 @@ public class MapPoint {
 
     Building getBuilding() {
         return building;
+    }
+
+    Tree getTree(Point point) {
+        return tree;
+    }
+
+    void setTree(Tree t) {
+        tree = t;
     }
 }

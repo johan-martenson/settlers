@@ -249,7 +249,7 @@ public class GameLogicTest {
 
         hq.depositWorker(new Forester());
 
-        assertTrue(hq.getAmount(FORESTER) == 1);
+        assertTrue(hq.getAmount(FORESTER) == 3);
         assertTrue(map.getAllWorkers().isEmpty());
         
         /* Assign new workers to unoccupied places and verify that there is a 
@@ -359,7 +359,7 @@ public class GameLogicTest {
         /* Assign new workers to unoccupied buildings and roads. The forester
          * hut needs a forester so a forester should be dispatched from the hq
          */
-        assertTrue(hq.getAmount(FORESTER) == 1);
+        assertTrue(hq.getAmount(FORESTER) == 3);
         assertTrue(fHut.needsWorker(FORESTER));
 
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);

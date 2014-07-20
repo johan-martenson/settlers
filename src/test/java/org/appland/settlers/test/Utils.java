@@ -10,13 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
@@ -27,10 +25,8 @@ import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertTrue;
 
@@ -225,15 +221,15 @@ public class Utils {
         }
     }
 
-    static void fastForwardUntilWorkersReachTarget(GameMap map, Courier... couriers) {
-        for (Courier c : couriers) {
+    static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... couriers) {
+        for (Worker c : couriers) {
             assertTrue(c.isTraveling());
         }
             
         for (int i = 0; i < 1000; i++) {
             boolean allDone = true;
 
-            for (Courier c : couriers) {
+            for (Worker c : couriers) {
                 if (!c.isArrived()) {
                     allDone = false;
                 }

@@ -31,6 +31,8 @@ public class Headquarter extends Storage {
         inventory.put(WOOD, InitialState.STORAGE_INITIAL_WOOD);
         inventory.put(PLANCK, InitialState.STORAGE_INITIAL_PLANCKS);
         inventory.put(STONE, InitialState.STORAGE_INITIAL_STONES);
+
+        inventory.put(FORESTER, InitialState.STORAGE_INITIAL_FORESTER);
     }
 
     @Override
