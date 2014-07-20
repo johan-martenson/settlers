@@ -32,6 +32,7 @@ public class GameMap {
     private List<Point>           fullGrid;
     private List<Point>           reservedPoints;
     private Map<Point, MapPoint>  pointToGameObject;
+    private List<Tree>            trees;
     
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -51,7 +52,6 @@ public class GameMap {
     }
 
     private List<Point> autoSelectRoad(Flag start, Flag end) throws Exception {
-        
         return findAutoSelectedRoad(start.getPosition(), end.getPosition(), null);
     }
     
@@ -183,6 +183,7 @@ public class GameMap {
         roadToWorkerMap     = new HashMap<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
+        trees               = new ArrayList<>();
         
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -197,6 +198,10 @@ public class GameMap {
 
         for (Building b : buildings) {
             b.stepTime();
+        }
+
+        for (Tree t : trees) {
+            t.stepTime();
         }
     }
 
@@ -1241,6 +1246,14 @@ public class GameMap {
     void placeTree(Point position) {
         MapPoint mp = pointToGameObject.get(position);
     
-        mp.setTree(new Tree());
+        Tree tree = new Tree(position);
+        
+        mp.setTree(tree);
+        
+        trees.add(tree);
+    }
+
+    public Iterable<Tree> getTrees() {
+        return trees;
     }
 }
