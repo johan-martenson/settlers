@@ -67,24 +67,6 @@ public class TestProduction {
         sawmill.deliver(new Cargo(GOLD));
     }
 
-    @Test
-    public void testProduceWood() throws InvalidStateForProduction, InvalidLogicException, InvalidMaterialException, DeliveryNotPossibleException {
-        Building woodcutter = new Woodcutter();
-
-        Utils.constructSmallHouse(woodcutter);
-
-        assertTrue(woodcutter.getConstructionState() == DONE);
-        assertFalse(woodcutter.isCargoReady());
-
-        Utils.fastForward(100, woodcutter);
-        assertTrue(woodcutter.isCargoReady());
-
-        Cargo result = woodcutter.retrieveCargo();
-        assertFalse(woodcutter.isCargoReady());
-        assertNotNull(result);
-        assertTrue(result.getMaterial() == WOOD);
-    }
-
     @Test(expected = DeliveryNotPossibleException.class)
     public void testDeliverMaterialToWoodcutter() throws DeliveryNotPossibleException, InvalidMaterialException, InvalidStateForProduction {
         Building woodcutter = new Woodcutter();
@@ -131,19 +113,19 @@ public class TestProduction {
 
     @Test(expected=Exception.class)
     public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
-        Woodcutter wc = new Woodcutter();
+        Sawmill sm = new Sawmill();
 
-        Utils.constructSmallHouse(wc);
+        Utils.constructMediumHouse(sm);
 
-        wc.getWorkerType();
+        sm.getWorkerType();
     }
 
     @Test
-    public void testWoodcutterNotNeedsWorker() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        Woodcutter wc = new Woodcutter();
+    public void testSawmillNotNeedsWorker() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        Sawmill sm = new Sawmill();
 
-        Utils.constructSmallHouse(wc);
+        Utils.constructMediumHouse(sm);
 
-        assertFalse(wc.needsWorker());
+        assertFalse(sm.needsWorker());
     }
 }

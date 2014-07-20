@@ -362,6 +362,7 @@ public class TestForesterHut {
         }
 
         assertTrue(forester.isPlanting());
+        assertFalse(map.isTreeAtPoint(point));
 
         map.stepTime();
         

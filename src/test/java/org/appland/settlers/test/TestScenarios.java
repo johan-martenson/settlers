@@ -32,6 +32,7 @@ import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.WoodcutterWorker;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
 import static org.junit.Assert.assertEquals;
@@ -79,6 +80,8 @@ public class TestScenarios {
         map.placeBuilding(qry, qrySpot);
         map.placeBuilding(hq, startPosition);
 
+        map.placeTree(wcSpot.downRight().right());
+        
         /* Create roads */
         Road wcToHqRoad = map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
         Road smToHqRoad = map.placeAutoSelectedRoad(hq.getFlag(), sm.getFlag());
@@ -88,10 +91,12 @@ public class TestScenarios {
         Courier wr1 = new Courier(map);
         Courier wr2 = new Courier(map);
         Courier wr3 = new Courier(map);
+        WoodcutterWorker wcr = new WoodcutterWorker(map);
 
         map.placeWorker(wr1, wc.getFlag());
         map.placeWorker(wr2, sm.getFlag());
         map.placeWorker(wr3, qry.getFlag());
+        map.placeWorker(wcr, wc.getFlag());
 
         map.assignCourierToRoad(wr1, wcToHqRoad);
         map.assignCourierToRoad(wr2, smToHqRoad);
@@ -113,15 +118,25 @@ public class TestScenarios {
         assertTrue(hq.getAmount(PLANCK) == 0);
         assertTrue(hq.getAmount(STONE) == 0);
         
+        wc.assignWorker(wcr);
+        wcr.enterBuilding(wc);
         
+        assertEquals(wc.getWorker(), wcr);
         
         /*   --   START TEST   --   */
         
         /* Fast forward until the woodcutter has cut some wood */
-        while (!wc.isCargoReady()) {
+        int i;
+        for (i = 0; i < 700; i++) {
+            if (wc.isCargoReady()) {
+                break;
+            }
+
             map.stepTime();
         }
 
+        assertTrue(wc.isCargoReady());
+        
         /* Retrieve cargo from woodcutter and put it on the flag */
         gameLogic.initiateCollectionOfNewProduce(map);
 
@@ -239,25 +254,11 @@ public class TestScenarios {
         assertTrue(hq.getAmount(PLANCK) == 0);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         
-        fastForwardUntilWorkersReachTarget(map, courierWcToHq, courierSmToHq);
+        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
         
         assertTrue(courierSmToHq.isAt(hq.getFlag().getPosition()));
         assertNull(courierSmToHq.getCargo());
         assertTrue(hq.getAmount(PLANCK) == 1);
-        
-        /* Make the courier between WC and HQ pick up wood */
-        map.stepTime();
-        
-        assertNotNull(courierWcToHq.getCargo());
-        assertNotNull(courierWcToHq.getCargo().getMaterial() == WOOD);
-        
-        fastForwardUntilWorkersReachTarget(map, courierWcToHq);
-
-        /* Cargo has arrived at the headquarter so store it */
-        assertTrue(courierWcToHq.isAt(hq.getFlag().getPosition()));
-        
-        assertTrue(hq.getAmount(PLANCK) == 1);
-        assertTrue(hq.getAmount(WOOD) == 1);
     }
 
     @Test

@@ -8,7 +8,9 @@ public @interface Production {
 
     Material output();
 
-    int productionTime();
+    int productionTime() default 100;
 
     Material[] requiredGoods();
+    
+    boolean manualProduction() default false;
 }

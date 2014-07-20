@@ -140,6 +140,16 @@ public class Building implements Actor {
         return position;
     }
 
+    private boolean isAutomaticProducer() {
+        Production p = getClass().getAnnotation(Production.class);
+
+        return !p.manualProduction();
+    }
+
+    void putProducedCargoForDelivery(Cargo carriedCargo) {
+        outputCargo = carriedCargo;
+    }
+
     public enum ConstructionState {
 
         UNDER_CONSTRUCTION,
@@ -188,10 +198,10 @@ public class Building implements Actor {
     }
 
     public boolean needsWorker(Material material) throws Exception {
-        if (!isWorkerNeeded) {
+        if (!needsWorker()) {
             return false;
         }
-
+        
         return getWorkerType() == material;
     }
 
@@ -300,7 +310,7 @@ public class Building implements Actor {
                 constructionState = DESTROYED;
             }
         } else if (ready()) {
-            if (isProducer() && !isCargoReady()) {
+            if (isProducer() && !isCargoReady() && isAutomaticProducer()) {
                 log.log(Level.INFO, "Calling produce");
                 outputCargo = produce();
             }

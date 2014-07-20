@@ -1167,7 +1167,7 @@ public class GameMap {
     public boolean isTreeAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
         
-        return mp.getTree(point) != null;
+        return mp.getTree() != null;
     }
 
     List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
@@ -1243,7 +1243,7 @@ public class GameMap {
         return null;
     }
 
-    void placeTree(Point position) {
+    public Tree placeTree(Point position) {
         MapPoint mp = pointToGameObject.get(position);
     
         Tree tree = new Tree(position);
@@ -1251,9 +1251,21 @@ public class GameMap {
         mp.setTree(tree);
         
         trees.add(tree);
+        
+        return tree;
     }
 
     public Iterable<Tree> getTrees() {
         return trees;
+    }
+
+    void removeTree(Point position) {
+        MapPoint mp = pointToGameObject.get(position);
+        
+        Tree tree = mp.getTree();
+        
+        mp.removeTree();
+        
+        trees.remove(tree);
     }
 }

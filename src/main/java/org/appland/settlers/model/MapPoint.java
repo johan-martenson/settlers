@@ -124,11 +124,15 @@ public class MapPoint {
         return building;
     }
 
-    Tree getTree(Point point) {
+    Tree getTree() {
         return tree;
     }
 
     void setTree(Tree t) {
         tree = t;
+    }
+
+    void removeTree() {
+        tree = null;
     }
 }
