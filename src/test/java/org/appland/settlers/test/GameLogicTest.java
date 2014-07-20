@@ -50,42 +50,48 @@ public class GameLogicTest {
     @Test
     public void testInitiateCollectionOfNewProduce() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidRouteException, Exception {
         GameMap map    = new GameMap(30, 30);
-        Woodcutter wc  = new Woodcutter();
+        Sawmill sm     = new Sawmill();
         Storage stg    = new Storage();
         Point stgPoint = new Point(5, 5);
         Point wcPoint  = new Point(10, 6);
         Road r;
         Courier w = new Courier(map);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(sm, wcPoint);
         map.placeBuilding(stg, stgPoint);
 
-        r = map.placeAutoSelectedRoad(stg.getFlag(), wc.getFlag());
+        r = map.placeAutoSelectedRoad(stg.getFlag(), sm.getFlag());
         map.placeWorker(w, stg.getFlag());
         map.assignCourierToRoad(w, r);
 
-        Utils.constructSmallHouse(wc);
+        Utils.constructMediumHouse(sm);
 
-        /* Fast forward until the woodcutter has produced a cargo with WOOD */
-        fastForward(100, wc, w);
-        assertTrue(wc.isCargoReady());
+        /* Deliver WOOD to the sawmill */
+        Cargo woodCargo = new Cargo(WOOD);
+        woodCargo.setPosition(sm.getFlag().getPosition());
+
+        sm.deliver(woodCargo);
+        
+        /* Fast forward until the sawmill has produced a cargo with PLANCKS */
+        fastForward(100, sm, w);
+        assertTrue(sm.isCargoReady());
         assertNull(w.getCargo());
 
         /* Verify that the worker doesn't pick up the cargo by himself as time passes */
-        fastForward(100, wc, w);
-        assertTrue(wc.isCargoReady());
+        fastForward(100, sm, w);
+        assertTrue(sm.isCargoReady());
         assertNull(w.getCargo());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(sm.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that initiateCollectionOfNewProduce gets the worker to pick up the cargo */
         gameLogic.initiateCollectionOfNewProduce(map);
-        assertFalse(wc.isCargoReady());
+        assertFalse(sm.isCargoReady());
         assertNull(w.getCargo());
-        assertFalse(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(sm.getFlag().getStackedCargo().isEmpty());
 
-        Cargo c = wc.getFlag().getStackedCargo().get(0);
+        Cargo c = sm.getFlag().getStackedCargo().get(0);
         assertTrue(c.getTarget().equals(stg));
-        assertTrue(c.getMaterial() == WOOD);
+        assertTrue(c.getMaterial() == PLANCK);
     }
 
     @Test
