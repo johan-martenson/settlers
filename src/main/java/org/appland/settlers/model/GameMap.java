@@ -56,7 +56,6 @@ public class GameMap {
     }
     
     public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
-        
         Set<Point> evaluated         = new HashSet<>();
         Set<Point> toEvaluate        = new HashSet<>();
         Map<Point, Integer> cost     = new HashMap<>();
@@ -876,6 +875,33 @@ public class GameMap {
         return resultList;
     }
 
+    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point point) {
+        Point[] adjacentPoints  = point.getAdjacentPoints();
+        List<Point>  resultList = new ArrayList<>();
+        
+        for (Point p : adjacentPoints) {
+            if (!isWithinMap(p)) {
+                continue;
+            }
+            
+            if (isBuildingAtPoint(p)) {
+                continue;
+            }
+            
+            if (terrain.isInWater(p)) {
+                continue;
+            }
+            
+            resultList.add(p);
+        }
+    
+        resultList.remove(point.up());
+        
+        resultList.remove(point.down());
+        
+        return resultList;
+    }
+    
     private Map<Point, Size> calculateAvailableHouseSites() {
         Map<Point, Size> result = new HashMap<>();
         
@@ -1131,5 +1157,90 @@ public class GameMap {
         MapPoint mp = pointToGameObject.get(p);
         
         return !mp.getConnectedNeighbors().isEmpty();
+    }
+
+    public boolean isTreeAtPoint(Point point) {
+        MapPoint mp = pointToGameObject.get(point);
+        
+        return mp.getTree(point) != null;
+    }
+
+    List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
+        Set<Point> evaluated         = new HashSet<>();
+        Set<Point> toEvaluate        = new HashSet<>();
+        Map<Point, Integer> cost     = new HashMap<>();
+        Map<Point, Integer> fullCost = new HashMap<>();
+        Map<Point, Point> cameFrom   = new HashMap<>();
+        
+        if (avoid != null) {        
+            evaluated.addAll(avoid);
+        }
+
+        toEvaluate.add(start);
+        cost.put(start, 0);
+        fullCost.put(start, cost.get(start) + estimateDistance(start, goal));
+
+        while (!toEvaluate.isEmpty()) {
+            Point currentPoint = null;
+            int currentValue = -1;
+            
+            for (Entry<Point, Integer> pair : fullCost.entrySet()) {
+                
+                if (!toEvaluate.contains(pair.getKey())) {
+                    continue;
+                }
+                
+                if (currentPoint == null) {
+                    currentPoint = pair.getKey();
+                    currentValue = pair.getValue();
+                }
+
+                if (currentValue > pair.getValue()) {
+                    currentValue = pair.getValue();
+                    currentPoint = pair.getKey();
+                }
+            }
+
+            if (currentPoint.equals(goal)) {
+                List<Point> path = new ArrayList<>();
+                
+                while (currentPoint != start) {
+                    path.add(0, currentPoint);
+                    
+                    currentPoint = cameFrom.get(currentPoint);
+                }
+                
+                path.add(0, start);
+
+                return path;
+            }
+            
+            toEvaluate.remove(currentPoint);
+            evaluated.add(currentPoint);
+            
+            for (Point neighbor : getPossibleAdjacentOffRoadConnections(currentPoint)) {
+                if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+            
+                int tentative_cost = cost.get(currentPoint) + 1; //TODO: Change "1" to real cost for step
+
+                if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
+                    cameFrom.put(neighbor, currentPoint);
+                    cost.put(neighbor, tentative_cost);
+                    fullCost.put(neighbor, cost.get(neighbor) + estimateDistance(neighbor, goal));
+                    
+                    toEvaluate.add(neighbor);
+                }
+            }
+        }
+        
+        return null;
+    }
+
+    void placeTree(Point position) {
+        MapPoint mp = pointToGameObject.get(position);
+    
+        mp.setTree(new Tree());
     }
 }
