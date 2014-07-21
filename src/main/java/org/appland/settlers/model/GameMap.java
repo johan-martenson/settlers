@@ -1265,4 +1265,10 @@ public class GameMap {
         
         trees.remove(tree);
     }
+
+    Tree getTreeAtPoint(Point p) {
+        MapPoint mp = pointToGameObject.get(p);
+        
+        return mp.getTree();
+    }
 }
