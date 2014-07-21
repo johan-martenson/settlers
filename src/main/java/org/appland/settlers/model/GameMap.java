@@ -370,12 +370,9 @@ public class GameMap {
     }
 
     public Road getRoad(Point start, Point end) throws Exception {
-        Flag startFlag = getFlagAtPoint(start);
-        Flag endFlag   = getFlagAtPoint(end);
-        
         for (Road r : roads) {
-            if ((r.start.equals(startFlag) && r.end.equals(endFlag))
-                    || (r.end.equals(startFlag) && r.start.equals(endFlag))) {
+            if ((r.getStart().equals(start) && r.getEnd().equals(end))
+                    || (r.getEnd().equals(start) && r.getStart().equals(end))) {
                 return r;
             }
         }

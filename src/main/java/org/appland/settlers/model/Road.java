@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Road {
 
-    public Flag start;
-    public Flag end;
+    private Flag start;
+    private Flag end;
     private boolean promisedCourier;
     private Courier courier;
     private List<Point> steps;

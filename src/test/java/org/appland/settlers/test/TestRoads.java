@@ -43,7 +43,6 @@ public class TestRoads {
     public void testGetNotExistingRoad() throws Exception {
         GameMap map = new GameMap(10, 10);
 
-        thrown.expect(Exception.class);
         assertNull(map.getRoad(new Point(1, 1), new Point(2, 2)));
     }
 

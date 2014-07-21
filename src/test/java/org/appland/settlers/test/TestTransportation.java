@@ -68,11 +68,11 @@ public class TestTransportation {
 
         Road r = roads.get(0);
 
-        assertTrue(r.start.getPosition().x == 6);
-        assertTrue(r.start.getPosition().y == 4);
+        assertTrue(r.getStart().x == 6);
+        assertTrue(r.getStart().y == 4);
 
-        assertTrue(r.end.getPosition().x == 11);
-        assertTrue(r.end.getPosition().y == 5);
+        assertTrue(r.getEnd().x == 11);
+        assertTrue(r.getEnd().y == 5);
     }
 
     @Test(expected = InvalidEndPointException.class)

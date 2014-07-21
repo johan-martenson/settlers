@@ -128,9 +128,9 @@ public class Utils {
     }
 
     static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
-        if (r.start.getPosition().equals(p1) && r.end.getPosition().equals(p2)) {
+        if (r.getStart().equals(p1) && r.getEnd().equals(p2)) {
             return true;
-        } else if (r.start.getPosition().equals(p2) && r.end.getPosition().equals(p1)) {
+        } else if (r.getStart().equals(p2) && r.getEnd().equals(p1)) {
             return true;
         }
 
