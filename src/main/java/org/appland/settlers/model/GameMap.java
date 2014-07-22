@@ -1242,9 +1242,13 @@ public class GameMap {
         return null;
     }
 
-    public Tree placeTree(Point position) {
+    public Tree placeTree(Point position) throws Exception {
         MapPoint mp = pointToGameObject.get(position);
     
+        if (mp.isFlag() || mp.isRoad() || mp.isBuilding() || mp.isStone()) {
+            throw new Exception("Can't place tree on " + position);
+        }
+        
         Tree tree = new Tree(position);
         
         mp.setTree(tree);

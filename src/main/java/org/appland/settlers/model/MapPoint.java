@@ -145,4 +145,12 @@ public class MapPoint {
     Stone getStone() {
         return stone;
     }
+
+    boolean isBuilding() {
+        return building != null;
+    }
+
+    boolean isStone() {
+        return stone != null;
+    }
 }

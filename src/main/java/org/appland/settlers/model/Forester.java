@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.appland.settlers.model.Forester.States.PLANTING;
 import static org.appland.settlers.model.Forester.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
@@ -96,7 +98,11 @@ public class Forester extends Worker {
             }
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
-                map.placeTree(getPosition());
+                try {
+                    map.placeTree(getPosition());
+                } catch (Exception ex) {
+                    Logger.getLogger(Forester.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 state = States.GOING_BACK_TO_HOUSE;
                 
                 setOffroadTarget(hut.getFlag().getPosition());

@@ -444,8 +444,56 @@ public class TestForesterHut {
         /* Step once and make sure the forester stays in the hut */
         map.stepTime();        
         
+        assertTrue(forester.isInsideBuilding());        
+    }
+
+    @Test
+    public void testForesterDoesNotPlantTreeOnStone() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+
+        /* Construct the forester hut */
+        constructSmallHouse(foresterHut);
+
+        /* Put trees around the forester hut */
+        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+            if (p.equals(point1)) {
+                continue;
+            }
+            
+            if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
+                continue;
+            }
+            
+            map.placeStone(p);
+        }
+        
+        /* Manually place forester */
+        Forester forester = new Forester(map);
+        map.placeWorker(forester, foresterHut.getFlag());
+        foresterHut.assignWorker(forester);
+        forester.enterBuilding(foresterHut);
+        
         assertTrue(forester.isInsideBuilding());
         
+        /* Run the game logic 10 times and make sure the forester stays in the hut */
+        GameLogic gameLogic = new GameLogic();
+        
+        int i;
+        for (i = 0; i < 9; i++) {
+            assertTrue(forester.isInsideBuilding());
+            gameLogic.gameLoop(map);
+            Utils.fastForward(10, map);
+        }
+        
+        Utils.fastForward(9, map);
+        
+        assertTrue(forester.isInsideBuilding());
+        
+        /* Step once and make sure the forester stays in the hut */
+        map.stepTime();        
+        
+        assertTrue(forester.isInsideBuilding());
     }
 }
-

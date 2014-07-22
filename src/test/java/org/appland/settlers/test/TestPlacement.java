@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Farm;
@@ -17,24 +16,13 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
-import org.appland.settlers.model.Terrain.TileKey;
 import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Woodcutter;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -526,5 +514,15 @@ public class TestPlacement {
         Tile t2 = map.getTerrain().getTile(top1, top2, middle);
         
         assertFalse(t1.equals(t2));
+    }
+
+    @Test(expected = Exception.class)
+    public void testTreeCannotBePlacedOnStone() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        map.placeStone(point0);
+        
+        map.placeTree(point0);
     }
 }
