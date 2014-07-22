@@ -17,25 +17,50 @@ import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor {
 
-
+    public enum ConstructionState {
+        UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
+    }
+    
     protected ConstructionState constructionState;
     
-    private Countdown constructionCountdown;
-    private Map<Material, Integer> receivedMaterial;
-    private Cargo outputCargo;
+    private Cargo   outputCargo;
     private boolean isWorkerNeeded;
-    private Worker worker;
-    private Worker promisedWorker;
-    private Point position;
+    private Worker  worker;
+    private Worker  promisedWorker;
+    private Point   position;
 
+    private final Countdown              constructionCountdown;
     private final Map<Material, Integer> promisedDeliveries;
-    private final Countdown destructionCountdown;
-    private final Countdown productionCountdown;
-    private final Flag flag;
-    private final Logger log = Logger.getLogger(Building.class.getName());
-    private final List<Military> hostedMilitary;
-    private final List<Military> promisedMilitary;
+    private final Countdown              destructionCountdown;
+    private final Countdown              productionCountdown;
+    private final Flag                   flag;
+    private final List<Military>         hostedMilitary;
+    private final List<Military>         promisedMilitary;
+    private final Map<Material, Integer> receivedMaterial;
 
+    private static final Logger log = Logger.getLogger(Building.class.getName());
+
+    public Building() {
+        constructionState     = UNDER_CONSTRUCTION;
+        receivedMaterial      = createEmptyMaterialIntMap();
+        promisedDeliveries    = createEmptyMaterialIntMap();
+        constructionCountdown = new Countdown();
+        destructionCountdown  = new Countdown();
+        hostedMilitary        = new ArrayList<>();
+        promisedMilitary      = new ArrayList<>();
+        outputCargo           = null;
+        flag                  = new Flag(null);
+        productionCountdown   = new Countdown();
+        worker                = null;
+        promisedWorker        = null;
+        position              = null;
+
+        /* Check and remember if this building requires a worker */
+        isWorkerNeeded = getWorkerRequired();
+        
+        constructionCountdown.countFrom(getConstructionCountdown());
+    }
+    
     public boolean isMilitaryBuilding() {
         MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
 
@@ -137,7 +162,7 @@ public class Building implements Actor {
     }
 
     private boolean getWorkerRequired() {
-        log.log(Level.INFO, "Checking if {0} requires a worker", this);
+        log.log(Level.FINE, "Checking if {0} requires a worker", this);
 
         RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
 
@@ -152,6 +177,10 @@ public class Building implements Actor {
         return position;
     }
 
+    void setPosition(Point p) {
+        position = p;
+    }
+
     private boolean isAutomaticProducer() {
         Production p = getClass().getAnnotation(Production.class);
 
@@ -160,38 +189,6 @@ public class Building implements Actor {
 
     void putProducedCargoForDelivery(Cargo carriedCargo) {
         outputCargo = carriedCargo;
-    }
-
-    public enum ConstructionState {
-        UNDER_CONSTRUCTION,
-        DONE,
-        BURNING,
-        DESTROYED
-    }
-
-    public Building() {
-        constructionState     = ConstructionState.UNDER_CONSTRUCTION;
-        receivedMaterial      = createEmptyMaterialIntMap();
-        promisedDeliveries    = createEmptyMaterialIntMap();
-        constructionCountdown = new Countdown();
-        destructionCountdown  = new Countdown();
-        hostedMilitary        = new ArrayList<>();
-        promisedMilitary      = new ArrayList<>();
-        outputCargo           = null;
-        flag                  = new Flag(null);
-        productionCountdown   = new Countdown();
-        worker                = null;
-        promisedWorker        = null;
-        position              = null;
-
-        /* Check and remember if this building requires a worker */
-        isWorkerNeeded = getWorkerRequired();
-        
-        constructionCountdown.countFrom(getConstructionCountdown());
-    }
-
-    void setPosition(Point p) {
-        position = p;
     }
     
     public Map<Material, Integer> getInQueue() {
