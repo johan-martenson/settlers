@@ -210,8 +210,7 @@ public class Building implements Actor {
         return outputCargo != null;
     }
 
-    public void deliver(Cargo c)
-            throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void deliver(Cargo c) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         log.log(Level.INFO, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});
 
         Material material = c.getMaterial();
@@ -219,12 +218,18 @@ public class Building implements Actor {
         /* Wood and stone can be delivered during construction */
         if (underConstruction() && (material != PLANCK && material != STONE)) {
             throw new InvalidMaterialException(material);
-            /* Can't accept delivery when building is burning or destroyed */
-        } else if (burningDown() || destroyed()) {
+        }
+
+        /* Can't accept delivery when building is burning or destroyed */
+        if (burningDown() || destroyed()) {
             throw new InvalidStateForProduction(this);
-        } else if (ready() && !canAcceptGoods()) {
+        }
+
+        if (ready() && !canAcceptGoods()) {
             throw new DeliveryNotPossibleException();
-        } else if (ready() && !isAccepted(material)) {
+        }
+        
+        if (ready() && !isAccepted(material)) {
             throw new InvalidMaterialException(material);
         }
 
