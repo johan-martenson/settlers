@@ -461,11 +461,7 @@ public class Building implements Actor {
                 productionCountdown.countFrom(getProductionTime() - 2);
             }
 
-            /* Production ongoing and not finished */
-        } else if (productionCountdown.isCounting()) {
-            productionCountdown.step();
-
-            /* Production just finished */
+        /* Production just finished */
         } else if (productionCountdown.reachedZero()) {
             result = new Cargo(getProductionMaterial());
 
@@ -473,6 +469,10 @@ public class Building implements Actor {
 
             productionCountdown.reset();
             consumeResources();
+            
+        /* Production ongoing and not finished */
+        } else {
+            productionCountdown.step();
         }
 
         log.log(Level.FINE, "Result from produce is {0}", result);
