@@ -17,8 +17,8 @@ import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor {
 
-    private List<Military> hostedMilitary;
-    private List<Military> promisedMilitary;
+    private final List<Military> hostedMilitary;
+    private final List<Military> promisedMilitary;
     private Worker worker;
     private Worker promisedWorker;
     private Point position;
@@ -151,7 +151,6 @@ public class Building implements Actor {
     }
 
     public enum ConstructionState {
-
         UNDER_CONSTRUCTION,
         DONE,
         BURNING,
@@ -162,14 +161,14 @@ public class Building implements Actor {
     protected Countdown constructionCountdown;
     protected Map<Material, Integer> receivedMaterial;
 
-    private Map<Material, Integer> promisedDeliveries;
-    private Countdown destructionCountdown;
-    private Countdown productionCountdown;
-    private Flag flag;
+    private final Map<Material, Integer> promisedDeliveries;
+    private final Countdown destructionCountdown;
+    private final Countdown productionCountdown;
+    private final Flag flag;
     private Cargo outputCargo;
     private boolean isWorkerNeeded;
 
-    private Logger log = Logger.getLogger(Building.class.getName());
+    private final Logger log = Logger.getLogger(Building.class.getName());
 
     public Building() {
         constructionState     = ConstructionState.UNDER_CONSTRUCTION;
