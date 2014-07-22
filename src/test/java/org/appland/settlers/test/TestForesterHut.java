@@ -407,8 +407,12 @@ public class TestForesterHut {
         constructSmallHouse(foresterHut);
 
         /* Put trees around the forester hut */
-        for (Point p : foresterHut.getFlag().getPosition().getAdjacentPoints()) {
+        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
             if (p.equals(point1)) {
+                continue;
+            }
+            
+            if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
                 continue;
             }
             

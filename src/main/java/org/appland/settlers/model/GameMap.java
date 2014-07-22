@@ -1323,7 +1323,7 @@ public class GameMap {
         return new Cargo(Material.STONE);
     }
 
-    Iterable<Point> getPointsWithinRadius(Point point, int radius) {
+    public Iterable<Point> getPointsWithinRadius(Point point, int radius) {
         List<Point> result = new ArrayList<>();
     
         int x;

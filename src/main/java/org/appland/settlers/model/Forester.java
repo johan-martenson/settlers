@@ -18,7 +18,7 @@ public class Forester extends Worker {
     private Building hut;
 
     private Point getTreeSpot() {
-        Point[] adjacentPoints = getPosition().getAdjacentPoints();
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(hut.getPosition(), 4);
         
         for (Point p : adjacentPoints) {
             if (map.isBuildingAtPoint(p)) {
@@ -34,6 +34,10 @@ public class Forester extends Worker {
             }
 
             if (map.isTreeAtPoint(p)) {
+                continue;
+            }
+            
+            if (map.isStoneAtPoint(p)) {
                 continue;
             }
 

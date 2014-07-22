@@ -6,6 +6,7 @@
 
 package org.appland.settlers.model;
 
+import java.util.List;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.WoodcutterWorker.States.CUTTING_TREE;
@@ -30,7 +31,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     private Point getTreeToCutDown() {
-        Point[] adjacentPoints = getPosition().getAdjacentPoints();
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(hut.getPosition(), 4);
 
         for (Point p : adjacentPoints) {
             if (!map.isTreeAtPoint(p)) {
