@@ -32,10 +32,10 @@ import static org.junit.Assert.assertTrue;
 
 public class Utils {
 
-    private static Logger log = Logger.getLogger(Courier.class.getName());
+    private static final Logger log = Logger.getLogger(Courier.class.getName());
 
     public static void fastForward(int time, Actor b) {
-        int i = 0;
+        int i;
         for (i = 0; i < time; i++) {
             b.stepTime();
         }
