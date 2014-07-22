@@ -33,6 +33,7 @@ public class GameMap {
     private List<Point>           reservedPoints;
     private Map<Point, MapPoint>  pointToGameObject;
     private List<Tree>            trees;
+    private List<Stone>           stones;
     
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -184,6 +185,7 @@ public class GameMap {
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
         trees               = new ArrayList<>();
+        stones              = new ArrayList<>();
         
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -1275,9 +1277,11 @@ public class GameMap {
     public Stone placeStone(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
-        Stone stone = new Stone();
+        Stone stone = new Stone(point);
         
         mp.setStone(stone);
+        
+        stones.add(stone);
         
         return stone;
     }
@@ -1348,5 +1352,9 @@ public class GameMap {
         }
 
         return result;
+    }
+
+    public Iterable<Stone> getStones() {
+        return stones;
     }
 }

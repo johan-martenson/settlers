@@ -13,9 +13,11 @@ package org.appland.settlers.model;
 public class Stone {
 
     private int amount;
+    private Point position;
     
-    public Stone() {
+    public Stone(Point p) {
         amount = 10;
+        position = p;
     }
     
     void removeOnePart() {
@@ -28,5 +30,9 @@ public class Stone {
     
     public int getAmount() {
         return amount;
+    }
+
+    public Point getPosition() {
+        return position;
     }
 }
