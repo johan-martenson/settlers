@@ -82,7 +82,6 @@ public class Building implements Actor {
     }
 
     public boolean needMilitaryManning() {
-
         if (ready()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
@@ -293,19 +292,16 @@ public class Building implements Actor {
     @Override
     public void stepTime() {
         if (underConstruction()) {
-
-            if (constructionCountdown.isCounting()) {
-                constructionCountdown.step();
-            }
-            
             if (constructionCountdown.reachedZero()) {            
-                if (isConstructionReady()) {
+                if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
                     consumeConstructionMaterial();
 
                     constructionState = DONE;
                 }
+            } else {
+                constructionCountdown.step();
             }
         } else if (burningDown()) {
             destructionCountdown.step();
@@ -421,20 +417,20 @@ public class Building implements Actor {
 
         switch (sizeAnnotation.size()) {
         case SMALL:
-            constructionTime = 100;
+            constructionTime = 100 - 1;
             break;
         case MEDIUM:
-            constructionTime = 150;
+            constructionTime = 150 - 1;
             break;
         case LARGE:
-            constructionTime = 200;
+            constructionTime = 200 - 1;
             break;
         }
 
         return constructionTime;
     }
 
-    private boolean isConstructionReady() {
+    private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
         boolean materialAvailable = true;
 
