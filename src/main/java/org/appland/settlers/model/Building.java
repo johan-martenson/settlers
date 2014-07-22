@@ -296,6 +296,8 @@ public class Building implements Actor {
 
     @Override
     public void stepTime() {
+        log.log(Level.FINE, "Stepping time in building");
+
         if (underConstruction()) {
             if (constructionCountdown.reachedZero()) {            
                 if (isMaterialForConstructionAvailable()) {
@@ -309,14 +311,14 @@ public class Building implements Actor {
                 constructionCountdown.step();
             }
         } else if (burningDown()) {
-            destructionCountdown.step();
-
             if (destructionCountdown.reachedZero()) {
                 constructionState = DESTROYED;
+            } else {
+                destructionCountdown.step();
             }
         } else if (ready()) {
             if (isProducer() && !isCargoReady() && isAutomaticProducer()) {
-                log.log(Level.INFO, "Calling produce");
+                log.log(Level.FINER, "Calling produce");
                 outputCargo = produce();
             }
         }
@@ -332,7 +334,7 @@ public class Building implements Actor {
 
     public void tearDown() {
         constructionState = ConstructionState.BURNING;
-        destructionCountdown.countFrom(50);
+        destructionCountdown.countFrom(49);
     }
 
     public int getProductionTime() {
