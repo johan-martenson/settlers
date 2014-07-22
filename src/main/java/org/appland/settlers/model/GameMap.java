@@ -1084,6 +1084,18 @@ public class GameMap {
             return false;
         }
 
+        if (mp.isStone()) {
+            return false;
+        }
+        
+        if (mp.isBuilding()) {
+            return false;
+        }
+        
+        if (mp.isTree()) {
+            return false;
+        }
+        
         return true;
     }
 

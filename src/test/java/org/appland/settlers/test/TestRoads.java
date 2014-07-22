@@ -18,6 +18,7 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadStartStopIsCorrect;
 
@@ -720,5 +721,21 @@ public class TestRoads {
         path = map.findAutoSelectedRoad(new Point(11, 3), new Point(3, 3), null);
         
         assertTrue(path.size() == 5);
+    }
+
+    @Test(expected = Exception.class)
+    public void testRoadCannotGoThroughSmallBuilding() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Point point2 = new Point(8, 6);
+        Flag flag0 = map.placeFlag(point2);
+
+        Point point3 = new Point(6, 4);
+        Point point4 = new Point(5, 3);
+        Point point5 = new Point(4, 4);
+        Point point6 = new Point(6, 6);
+        Road road0 = map.placeRoad(point3, point4, point5, point0, point6, point2);
+
     }
 }

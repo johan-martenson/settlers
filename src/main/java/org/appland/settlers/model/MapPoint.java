@@ -153,4 +153,8 @@ public class MapPoint {
     boolean isStone() {
         return stone != null;
     }
+
+    boolean isTree() {
+        return tree != null;
+    }
 }
