@@ -3,13 +3,17 @@ FIXES
 
 TODO
 
+ Test
+  - Plant tree at stone point
+  - Split road into two
+  - Road cannot go through houses
+  - Roads should be as short as possible
+
  1 Increase test coverage
   - Test to find house that needs a material while the house has more in the queue than it needs
   - Test getClosestStorage
   - Test getMaterialsToBuildHouse
   - Test getQueue
-  - Test deliver to ready house that can't accept deliveries
-  - Test deliver something invalid to a ready house 
   - Test looking for a building that needs a material and has nothing in its queue
   - Test that too much material can't be delivered to a house under construction
   - Add tests for inventory management
