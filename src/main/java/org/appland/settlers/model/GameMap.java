@@ -60,8 +60,8 @@ public class GameMap {
         Set<Point> evaluated         = new HashSet<>();
         Set<Point> toEvaluate        = new HashSet<>();
         Map<Point, Integer> cost     = new HashMap<>();
-        Map<Point, Integer> fullCost = new HashMap<>();
-        Map<Point, Point> cameFrom   = new HashMap<>();
+        Map<Point, Double>  fullCost = new HashMap<>();
+        Map<Point, Point>   cameFrom = new HashMap<>();
         
         if (avoid != null) {        
             evaluated.addAll(avoid);
@@ -69,13 +69,13 @@ public class GameMap {
         
         toEvaluate.add(start);
         cost.put(start, 0);
-        fullCost.put(start, cost.get(start) + estimateDistance(start, goal));
+        fullCost.put(start, cost.get(start) + start.distance(goal));
         
         while (!toEvaluate.isEmpty()) {
             Point currentPoint = null;
-            int currentValue = -1;
+            double currentValue = -1;
             
-            for (Entry<Point, Integer> pair : fullCost.entrySet()) {
+            for (Entry<Point, Double> pair : fullCost.entrySet()) {
                 
                 if (!toEvaluate.contains(pair.getKey())) {
                     continue;
@@ -119,7 +119,7 @@ public class GameMap {
                 if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
                     cameFrom.put(neighbor, currentPoint);
                     cost.put(neighbor, tentative_cost);
-                    fullCost.put(neighbor, cost.get(neighbor) + estimateDistance(neighbor, goal));
+                    fullCost.put(neighbor, cost.get(neighbor) + neighbor.distance(goal));
                     
                     toEvaluate.add(neighbor);
                 }

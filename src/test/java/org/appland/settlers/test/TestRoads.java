@@ -698,4 +698,27 @@ public class TestRoads {
 
         assertTrue(map.getAllWorkers().size() == 2);
     }
+
+    @Test
+    public void testFindShortestWay() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        List<Point> path = map.findAutoSelectedRoad(new Point(2, 2), new Point(11, 11), null);
+        
+        System.out.println("PATH " + path);
+        
+        assertTrue(path.size() == 10);
+    
+        path = map.findAutoSelectedRoad(new Point(11, 11), new Point(2, 2), null);
+        
+        assertTrue(path.size() == 10);
+        
+        path = map.findAutoSelectedRoad(new Point(3, 3), new Point(11, 3), null);
+        
+        assertTrue(path.size() == 5);
+    
+        path = map.findAutoSelectedRoad(new Point(11, 3), new Point(3, 3), null);
+        
+        assertTrue(path.size() == 5);
+    }
 }
