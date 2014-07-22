@@ -17,11 +17,24 @@ import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor {
 
-    private final List<Military> hostedMilitary;
-    private final List<Military> promisedMilitary;
+
+    protected ConstructionState constructionState;
+    
+    private Countdown constructionCountdown;
+    private Map<Material, Integer> receivedMaterial;
+    private Cargo outputCargo;
+    private boolean isWorkerNeeded;
     private Worker worker;
     private Worker promisedWorker;
     private Point position;
+
+    private final Map<Material, Integer> promisedDeliveries;
+    private final Countdown destructionCountdown;
+    private final Countdown productionCountdown;
+    private final Flag flag;
+    private final Logger log = Logger.getLogger(Building.class.getName());
+    private final List<Military> hostedMilitary;
+    private final List<Military> promisedMilitary;
 
     public boolean isMilitaryBuilding() {
         MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
@@ -155,19 +168,6 @@ public class Building implements Actor {
         BURNING,
         DESTROYED
     }
-
-    protected ConstructionState constructionState;
-    protected Countdown constructionCountdown;
-    protected Map<Material, Integer> receivedMaterial;
-
-    private final Map<Material, Integer> promisedDeliveries;
-    private final Countdown destructionCountdown;
-    private final Countdown productionCountdown;
-    private final Flag flag;
-    private Cargo outputCargo;
-    private boolean isWorkerNeeded;
-
-    private final Logger log = Logger.getLogger(Building.class.getName());
 
     public Building() {
         constructionState     = ConstructionState.UNDER_CONSTRUCTION;
@@ -465,7 +465,7 @@ public class Building implements Actor {
         } else if (productionCountdown.reachedZero()) {
             result = new Cargo(getProductionMaterial());
 
-            log.log(Level.INFO, "{0} produced {1}", new Object[]{this, result});
+            log.log(Level.FINE, "{0} produced {1}", new Object[]{this, result});
 
             productionCountdown.reset();
             consumeResources();
@@ -475,7 +475,6 @@ public class Building implements Actor {
             productionCountdown.step();
         }
 
-        log.log(Level.FINE, "Result from produce is {0}", result);
         return result;
     }
 
@@ -551,7 +550,7 @@ public class Building implements Actor {
         int delivered = receivedMaterial.get(material);
         int required = allMaterialNeededForConstruction.get(material);
 
-        log.log(Level.INFO, "Is more {0} needed for construction: {1} > {2} + {3}",
+        log.log(Level.FINE, "Is more {0} needed for construction: {1} > {2} + {3}",
                 new Object[]{material, required, promised, delivered});
 
         return (required > promised + delivered);
