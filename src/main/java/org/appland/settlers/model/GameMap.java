@@ -1330,16 +1330,16 @@ public class GameMap {
         int y;
         boolean rowFlip = false;
         
-        for (y = point.y - radius; y < point.y + radius; y++) {
+        for (y = point.y - radius; y <= point.y + radius; y++) {
             int startX = point.x - radius;
             
             if (rowFlip) {
                 startX++;
             }
             
-            for (x = startX; x < point.x + radius; x += 2) {
+            for (x = startX; x <= point.x + radius; x += 2) {
                 Point p = new Point(x, y);
-                if (isWithinMap(p)) {
+                if (isWithinMap(p) && point.distance(p) <= radius) {
                     result.add(p);
                 }
             }
