@@ -32,4 +32,16 @@ class Countdown {
     boolean isActive() {
         return count != -1;
     }
+
+    boolean isInactive() {
+        return !isActive();
+    }
+
+    void reset() {
+        count = -1;
+    }
+
+    boolean isCounting() {
+        return count > 0;
+    }
 }

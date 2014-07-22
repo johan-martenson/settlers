@@ -159,12 +159,12 @@ public class Building implements Actor {
     }
 
     protected ConstructionState constructionState;
-    protected int constructionCountdown;
+    protected Countdown constructionCountdown;
     protected Map<Material, Integer> receivedMaterial;
 
     private Map<Material, Integer> promisedDeliveries;
-    private int destructionCountdown;
-    private int productionCountdown;
+    private Countdown destructionCountdown;
+    private Countdown productionCountdown;
     private Flag flag;
     private Cargo outputCargo;
     private boolean isWorkerNeeded;
@@ -175,18 +175,21 @@ public class Building implements Actor {
         constructionState     = ConstructionState.UNDER_CONSTRUCTION;
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
-        constructionCountdown = getConstructionCountdown(this);
+        constructionCountdown = new Countdown();
+        destructionCountdown  = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
         outputCargo           = null;
         flag                  = new Flag(null);
-        productionCountdown   = -1;
+        productionCountdown   = new Countdown();
         worker                = null;
         promisedWorker        = null;
         position              = null;
 
         /* Check and remember if this building requires a worker */
         isWorkerNeeded = getWorkerRequired();
+        
+        constructionCountdown.countFrom(getConstructionCountdown(this));
     }
 
     void setPosition(Point p) {
@@ -292,21 +295,23 @@ public class Building implements Actor {
     public void stepTime() {
         if (underConstruction()) {
 
-            if (constructionCountdown > 0) {
-                constructionCountdown--;
+            if (constructionCountdown.isCounting()) {
+                constructionCountdown.step();
             }
+            
+            if (constructionCountdown.reachedZero()) {            
+                if (isConstructionReady()) {
+                    log.log(Level.INFO, "Construction of {0} done", this);
 
-            if (isConstructionReady(constructionCountdown)) {
-                log.log(Level.INFO, "Construction of {0} done", this);
+                    consumeConstructionMaterial();
 
-                consumeConstructionMaterial();
-
-                constructionState = DONE;
+                    constructionState = DONE;
+                }
             }
         } else if (burningDown()) {
-            destructionCountdown--;
+            destructionCountdown.step();
 
-            if (destructionCountdown == 0) {
+            if (destructionCountdown.reachedZero()) {
                 constructionState = DESTROYED;
             }
         } else if (ready()) {
@@ -327,7 +332,7 @@ public class Building implements Actor {
 
     public void tearDown() {
         constructionState = ConstructionState.BURNING;
-        destructionCountdown = 50;
+        destructionCountdown.countFrom(50);
     }
 
     public int getProductionTime(Building building) {
@@ -430,13 +435,7 @@ public class Building implements Actor {
         return constructionTime;
     }
 
-    private boolean isConstructionReady(int countdown) {
-        boolean timeOk = false;
-
-        if (countdown == 0) {
-            timeOk = true;
-        }
-
+    private boolean isConstructionReady() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse(this);
         boolean materialAvailable = true;
 
@@ -448,29 +447,29 @@ public class Building implements Actor {
             }
         }
 
-        return materialAvailable && timeOk;
+        return materialAvailable;
     }
 
     private Cargo produce() {
         Cargo result = null;
 
         /* Construction hasn't started */
-        if (productionCountdown == -1) {
+        if (productionCountdown.isInactive()) {
             if (productionCanStart(this)) {
-                productionCountdown = getProductionTime(this) - 2;
+                productionCountdown.countFrom(getProductionTime(this) - 2);
             }
 
             /* Production ongoing and not finished */
-        } else if (productionCountdown > 0) {
-            productionCountdown--;
+        } else if (productionCountdown.isCounting()) {
+            productionCountdown.step();
 
             /* Production just finished */
-        } else if (productionCountdown == 0) {
+        } else if (productionCountdown.reachedZero()) {
             result = new Cargo(getProductionMaterial(this));
 
             log.log(Level.INFO, "{0} produced {1}", new Object[]{this, result});
 
-            productionCountdown = -1;
+            productionCountdown.reset();
             consumeResources(this);
         }
 
