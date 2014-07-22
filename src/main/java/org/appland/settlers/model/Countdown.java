@@ -44,4 +44,8 @@ class Countdown {
     boolean isCounting() {
         return count > 0;
     }
+
+    int getCount() {
+        return count;
+    }
 }

@@ -27,7 +27,7 @@ public abstract class Worker implements Actor {
     protected Point       position;
     protected Point       target;
     private boolean       traveling;
-    private int           walkCountdown;
+    private Countdown     walkCountdown;
     private Building      home;
     private boolean       exactlyAtPoint;
 
@@ -46,7 +46,7 @@ public abstract class Worker implements Actor {
         home = null;
         map = m;
         
-        walkCountdown = -1;
+        walkCountdown = new Countdown();
         exactlyAtPoint = true;
     }
 
@@ -57,9 +57,9 @@ public abstract class Worker implements Actor {
         if (traveling && path != null) {
             log.log(Level.FINE, "There is a path set: {0}", path);
 
-            if (walkCountdown == 0) {
+            if (walkCountdown.reachedZero()) {
                 reachedNextStep();
-            } else if (walkCountdown == -1) {
+            } else if (walkCountdown.isInactive()) {
                 if (isArrived()) {
                     try {
                         handleArrival();
@@ -73,7 +73,7 @@ public abstract class Worker implements Actor {
                 log.log(Level.FINE, "Continuing to walk, currently at {0}", position);
                 
                 exactlyAtPoint = false;
-                walkCountdown--;
+                walkCountdown.step();
             }
         } else {
             onIdle();
@@ -137,7 +137,7 @@ public abstract class Worker implements Actor {
                 handleArrival();
             }
 
-            walkCountdown = getSpeed() - 2;
+            walkCountdown.countFrom(getSpeed() - 2);
         } catch (Exception ex) {
             Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -301,7 +301,7 @@ public abstract class Worker implements Actor {
             return 100;
         }
     
-        return (int)(((double)(getSpeed() - walkCountdown - 2) / (double)getSpeed()) * 100);
+        return (int)(((double)(getSpeed() - walkCountdown.getCount() - 2) / (double)getSpeed()) * 100);
     }
 
     public void enterBuilding(Building b) {
@@ -374,7 +374,7 @@ public abstract class Worker implements Actor {
     private void startWalking() {
         log.log(Level.FINE, "Starting to walk, currently at {0}", position);
 
-        walkCountdown = getSpeed() - 2;
+        walkCountdown.countFrom(getSpeed() - 2);
         
         exactlyAtPoint = false;
     }
