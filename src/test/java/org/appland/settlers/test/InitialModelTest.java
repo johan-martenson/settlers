@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import static org.junit.Assert.*;
 
-import java.util.Map;
 
 import org.appland.settlers.controller.Controller;
 import org.appland.settlers.model.Game;
