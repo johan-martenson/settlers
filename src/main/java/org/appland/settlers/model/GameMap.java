@@ -59,7 +59,7 @@ public class GameMap {
     public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
         Set<Point> evaluated         = new HashSet<>();
         Set<Point> toEvaluate        = new HashSet<>();
-        Map<Point, Integer> cost     = new HashMap<>();
+        Map<Point, Double>  cost     = new HashMap<>();
         Map<Point, Double>  fullCost = new HashMap<>();
         Map<Point, Point>   cameFrom = new HashMap<>();
         
@@ -68,7 +68,7 @@ public class GameMap {
         }
         
         toEvaluate.add(start);
-        cost.put(start, 0);
+        cost.put(start, (double)0);
         fullCost.put(start, cost.get(start) + start.distance(goal));
         
         while (!toEvaluate.isEmpty()) {
@@ -114,7 +114,7 @@ public class GameMap {
                     continue;
                 }
             
-                int tentative_cost = cost.get(currentPoint) + 1; //TODO: Change "1" to real cost for step
+                double tentative_cost = cost.get(currentPoint) + currentPoint.distance(neighbor);
 
                 if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
                     cameFrom.put(neighbor, currentPoint);
