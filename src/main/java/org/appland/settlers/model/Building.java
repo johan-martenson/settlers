@@ -188,7 +188,7 @@ public class Building implements Actor {
         /* Check and remember if this building requires a worker */
         isWorkerNeeded = getWorkerRequired();
         
-        constructionCountdown.countFrom(getConstructionCountdown(this));
+        constructionCountdown.countFrom(getConstructionCountdown());
     }
 
     void setPosition(Point p) {
@@ -223,9 +223,9 @@ public class Building implements Actor {
             /* Can't accept delivery when building is burning or destroyed */
         } else if (burningDown() || destroyed()) {
             throw new InvalidStateForProduction(this);
-        } else if (ready() && !canAcceptGoods(this)) {
-            throw new DeliveryNotPossibleException(this);
-        } else if (ready() && !isAccepted(material, this)) {
+        } else if (ready() && !canAcceptGoods()) {
+            throw new DeliveryNotPossibleException();
+        } else if (ready() && !isAccepted(material)) {
             throw new InvalidMaterialException(material);
         }
 
@@ -261,7 +261,7 @@ public class Building implements Actor {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + buildingToString();
+        return getClass().getSimpleName() + buildingToString();
     }
 
     public String buildingToString() {
@@ -334,28 +334,28 @@ public class Building implements Actor {
         destructionCountdown.countFrom(50);
     }
 
-    public int getProductionTime(Building building) {
-        Production p = building.getClass().getAnnotation(Production.class);
+    public int getProductionTime() {
+        Production p = getClass().getAnnotation(Production.class);
 
         return p.productionTime();
     }
 
-    public Material getProductionMaterial(Building building) {
-        Production p = building.getClass().getAnnotation(Production.class);
+    public Material getProductionMaterial() {
+        Production p = getClass().getAnnotation(Production.class);
 
         return p.output();
     }
 
-    public Size getHouseSize(Building b) {
-        HouseSize hs = b.getClass().getAnnotation(HouseSize.class);
+    public Size getHouseSize() {
+        HouseSize hs = getClass().getAnnotation(HouseSize.class);
 
         return hs.size();
     }
 
-    public Map<Material, Integer> getRequiredGoodsForProduction(Building building) {
+    public Map<Material, Integer> getRequiredGoodsForProduction() {
         log.log(Level.INFO, "Getting the required goods for this building");
 
-        Production p = building.getClass().getAnnotation(Production.class);
+        Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
         log.log(Level.FINE, "Found annotations for {0} in class", requiredGoods);
@@ -384,7 +384,7 @@ public class Building implements Actor {
 
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  */
     private void consumeConstructionMaterial() {
-        Map<Material, Integer> materialToConsume = this.getMaterialsToBuildHouse(this);
+        Map<Material, Integer> materialToConsume = getMaterialsToBuildHouse();
 
         for (Entry<Material, Integer> pair : materialToConsume.entrySet()) {
             int cost = pair.getValue();
@@ -394,10 +394,10 @@ public class Building implements Actor {
         }
     }
 
-    private Map<Material, Integer> getMaterialsToBuildHouse(Building b) {
+    private Map<Material, Integer> getMaterialsToBuildHouse() {
         Map<Material, Integer> materials = createEmptyMaterialIntMap();
 
-        switch (getHouseSize(b)) {
+        switch (getHouseSize()) {
         case SMALL:
             materials.put(PLANCK, 2);
             materials.put(STONE, 2);
@@ -415,8 +415,8 @@ public class Building implements Actor {
         return materials;
     }
 
-    private int getConstructionCountdown(Building building) {
-        HouseSize sizeAnnotation = building.getClass().getAnnotation(HouseSize.class);
+    private int getConstructionCountdown() {
+        HouseSize sizeAnnotation = getClass().getAnnotation(HouseSize.class);
         int constructionTime = 100;
 
         switch (sizeAnnotation.size()) {
@@ -435,7 +435,7 @@ public class Building implements Actor {
     }
 
     private boolean isConstructionReady() {
-        Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse(this);
+        Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
         boolean materialAvailable = true;
 
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
@@ -454,8 +454,8 @@ public class Building implements Actor {
 
         /* Construction hasn't started */
         if (productionCountdown.isInactive()) {
-            if (productionCanStart(this)) {
-                productionCountdown.countFrom(getProductionTime(this) - 2);
+            if (productionCanStart()) {
+                productionCountdown.countFrom(getProductionTime() - 2);
             }
 
             /* Production ongoing and not finished */
@@ -464,20 +464,20 @@ public class Building implements Actor {
 
             /* Production just finished */
         } else if (productionCountdown.reachedZero()) {
-            result = new Cargo(getProductionMaterial(this));
+            result = new Cargo(getProductionMaterial());
 
             log.log(Level.INFO, "{0} produced {1}", new Object[]{this, result});
 
             productionCountdown.reset();
-            consumeResources(this);
+            consumeResources();
         }
 
         log.log(Level.FINE, "Result from produce is {0}", result);
         return result;
     }
 
-    private void consumeResources(Building building) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+    private void consumeResources() {
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
         for (Entry<Material, Integer> entry : requiredGoods.entrySet()) {
             Material m = entry.getKey();
@@ -488,8 +488,8 @@ public class Building implements Actor {
         }
     }
 
-    private boolean productionCanStart(Building building) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+    private boolean productionCanStart() {
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
         if (requiredGoods.keySet().isEmpty()) {
             return true;
@@ -501,7 +501,7 @@ public class Building implements Actor {
             Material m = entry.getKey();
             int amount = entry.getValue();
 
-            if (building.receivedMaterial.get(m) < amount) {
+            if (receivedMaterial.get(m) < amount) {
                 resourcesPresent = false;
             }
         }
@@ -509,14 +509,14 @@ public class Building implements Actor {
         return resourcesPresent;
     }
 
-    private boolean isAccepted(Material material, Building building) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(building);
+    private boolean isAccepted(Material material) {
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
         return requiredGoods.containsKey(material);
     }
 
-    private boolean canAcceptGoods(Building building) {
-        Map<Material, Integer> requiredGoods = building.getRequiredGoodsForProduction(building);
+    private boolean canAcceptGoods() {
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
         return !requiredGoods.keySet().isEmpty();
     }
@@ -542,7 +542,7 @@ public class Building implements Actor {
     }
 
     private boolean moreMaterialNeededForConstruction(Material material) {
-        Map<Material, Integer> allMaterialNeededForConstruction = getMaterialsToBuildHouse(this);
+        Map<Material, Integer> allMaterialNeededForConstruction = getMaterialsToBuildHouse();
 
         int promised = promisedDeliveries.get(material);
         int delivered = receivedMaterial.get(material);
@@ -555,7 +555,7 @@ public class Building implements Actor {
     }
 
     private boolean needsMaterialForProduction(Material material) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction(this);
+        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
         if (!requiredGoods.containsKey(material)) {
             /* Building does not accept the material */

@@ -711,7 +711,7 @@ public class GameMap {
         Point flagPoint  = house.getFlag().getPosition();
         Point housePoint = new Point(flagPoint.x - 1, flagPoint.y + 1);
         
-        switch(house.getHouseSize(house)) {
+        switch(house.getHouseSize()) {
         case SMALL:
             reserveSpaceForSmallHouse(house, housePoint);
             break;
@@ -975,7 +975,7 @@ public class GameMap {
     }
 
     private boolean canPlaceHouse(Building house, Point site) throws Exception {
-        Size size = house.getHouseSize(house);
+        Size size = house.getHouseSize();
     
         switch (size) {
         case SMALL:
