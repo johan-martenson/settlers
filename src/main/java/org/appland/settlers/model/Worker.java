@@ -66,9 +66,9 @@ public abstract class Worker implements Actor {
                     } catch (Exception ex) {
                         Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                } else {
+                    startWalking();
                 }
-                
-                startWalking();
             } else {
                 log.log(Level.FINE, "Continuing to walk, currently at {0}", position);
                 
