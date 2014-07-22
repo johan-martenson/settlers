@@ -17,5 +17,6 @@ public class InitialState {
         public static final int STORAGE_INITIAL_STONES = 10;
         public static final int STORAGE_INITIAL_FORESTER = 2;
         public static final int STORAGE_INITIAL_WOODCUTTER_WORKER = 4;
+        public static final int STORAGE_INITIAL_STONEMASON = 2;
 
 }

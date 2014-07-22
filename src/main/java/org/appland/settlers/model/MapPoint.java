@@ -21,12 +21,14 @@ public class MapPoint {
     private boolean    isRoad;
     private Set<Road>  connectedRoads;
     private Tree       tree;
+    private Stone      stone;
 
     public MapPoint(Point p) {
         point              = p;
         building           = null;
         flag               = null;
         tree               = null;
+        stone              = null;
         connectedNeighbors = new HashSet<>();
         connectedRoads     = new HashSet<>();
     }
@@ -134,5 +136,13 @@ public class MapPoint {
 
     void removeTree() {
         tree = null;
+    }
+
+    void setStone(Stone s) {
+        stone = s;
+    }
+
+    Stone getStone() {
+        return stone;
     }
 }

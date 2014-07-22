@@ -77,22 +77,6 @@ public class TestProduction {
     }
 
     @Test
-    public void testProduceStone() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
-        Quarry quarry = new Quarry();
-        Cargo result;
-
-        Utils.constructSmallHouse(quarry);
-        assertFalse(quarry.isCargoReady());
-
-        Utils.fastForward(100, quarry);
-        assertTrue(quarry.isCargoReady());
-
-        result = quarry.retrieveCargo();
-        assertFalse(quarry.isCargoReady());
-        assertTrue(STONE == result.getMaterial());
-    }
-
-    @Test
     public void testRetrieveStoneDuringConstruction() throws InvalidStateForProduction {
         Quarry quarry = new Quarry();
 

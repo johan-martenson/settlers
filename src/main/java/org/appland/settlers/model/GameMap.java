@@ -1271,4 +1271,82 @@ public class GameMap {
         
         return mp.getTree();
     }
+
+    public Stone placeStone(Point point) {
+        MapPoint mp = pointToGameObject.get(point);
+
+        Stone stone = new Stone();
+        
+        mp.setStone(stone);
+        
+        return stone;
+    }
+
+    public boolean isStoneAtPoint(Point point2) {
+        MapPoint mp = pointToGameObject.get(point2);
+        
+        return mp.getStone() != null;
+    }
+
+    int getDistanceForPath(List<Point> path) {
+        int distance = 0;
+        Point previous = null;
+        
+        for (Point current : path) {
+            if (previous == null) {
+                previous = current;
+
+                continue;
+            }
+
+            distance += previous.distance(current);
+        }
+        
+        return distance;
+    }
+
+    Cargo removePartOfStone(Point position) {
+        MapPoint mp = pointToGameObject.get(position);
+        
+        Stone stone = mp.getStone();
+        
+        if (stone.noMoreStone()) {
+            return null;
+        }
+        
+        stone.removeOnePart();
+        
+        if (stone.noMoreStone()) {
+            mp.setStone(null);
+        }
+
+        return new Cargo(Material.STONE);
+    }
+
+    Iterable<Point> getPointsWithinRadius(Point point, int radius) {
+        List<Point> result = new ArrayList<>();
+    
+        int x;
+        int y;
+        boolean rowFlip = false;
+        
+        for (y = point.y - radius; y < point.y + radius; y++) {
+            int startX = point.x - radius;
+            
+            if (rowFlip) {
+                startX++;
+            }
+            
+            for (x = startX; x < point.x + radius; x += 2) {
+                Point p = new Point(x, y);
+                if (isWithinMap(p)) {
+                    result.add(p);
+                }
+            }
+
+            rowFlip = !rowFlip;
+        }
+
+        return result;
+    }
 }

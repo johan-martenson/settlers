@@ -24,6 +24,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
@@ -294,16 +295,23 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(start, target);
 
         Courier worker = new Courier(map);
-
+        Stonemason mason = new Stonemason(map);
+                
+        map.placeStone(qry.getFlag().getPosition().up().up());
+        
         worker.setPosition(start.getPosition());
 
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(stge);
 
+        map.placeWorker(mason, qry.getFlag());
+        qry.assignWorker(mason);
+        mason.enterBuilding(qry);
+        
         assertTrue(qry.getConstructionState() == DONE);
 
         /* Production starts, wait for it to finish */
-        Utils.fastForward(100, qry, stge, worker);
+        Utils.fastForward(250, map);
 
         assertTrue(qry.isCargoReady());
 

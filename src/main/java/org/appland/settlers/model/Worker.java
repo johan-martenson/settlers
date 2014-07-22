@@ -53,13 +53,21 @@ public abstract class Worker implements Actor {
     @Override
     public void stepTime() {
         log.log(Level.INFO, "Stepping time");
-
+        
         if (traveling && path != null) {
             log.log(Level.FINE, "There is a path set: {0}", path);
 
             if (walkCountdown == 0) {
                 reachedNextStep();
             } else if (walkCountdown == -1) {
+                if (isArrived()) {
+                    try {
+                        handleArrival();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                
                 startWalking();
             } else {
                 log.log(Level.FINE, "Continuing to walk, currently at {0}", position);
@@ -138,6 +146,7 @@ public abstract class Worker implements Actor {
             
     private void handleArrival() throws Exception {
         log.log(Level.FINE, "Arrived at target: {0}", target);
+
         path      = null;
         traveling = false;
 
@@ -222,7 +231,6 @@ public abstract class Worker implements Actor {
             return false;
         }
         
-        /* A traveling worker can target a flag */
         if (target != null && target.equals(position)) {
             log.log(Level.INFO, "Worker has arrived at target {0}", target);
             return true;
@@ -377,6 +385,7 @@ public abstract class Worker implements Actor {
         target = p;
         
         path = map.findWayOffroad(position, target, null);
+        
         path.remove(0);
         log.log(Level.FINER, "Way to target is {0}", path);
         
