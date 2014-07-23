@@ -22,6 +22,7 @@ public class MapPoint {
     private Set<Road>  connectedRoads;
     private Tree       tree;
     private Stone      stone;
+    private Crop       crop;
 
     public MapPoint(Point p) {
         point              = p;
@@ -29,6 +30,7 @@ public class MapPoint {
         flag               = null;
         tree               = null;
         stone              = null;
+        crop               = null;
         connectedNeighbors = new HashSet<>();
         connectedRoads     = new HashSet<>();
     }
@@ -156,5 +158,13 @@ public class MapPoint {
 
     boolean isTree() {
         return tree != null;
+    }
+
+    void setCrop(Crop c) {
+        crop = c;
+    }
+
+    Crop getCrop() {
+        return crop;
     }
 }

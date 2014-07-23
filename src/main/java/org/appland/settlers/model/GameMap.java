@@ -34,11 +34,13 @@ public class GameMap {
     private Map<Point, MapPoint>  pointToGameObject;
     private List<Tree>            trees;
     private List<Stone>           stones;
-    
+    private List<Crop>            crops;    
+
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
+
 
     private boolean roadCrossesOtherRoads(Road r) {
         for (Point current : r.getWayPoints()) {
@@ -186,6 +188,7 @@ public class GameMap {
         reservedPoints      = new ArrayList<>();
         trees               = new ArrayList<>();
         stones              = new ArrayList<>();
+        crops               = new ArrayList<>();
         
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -204,6 +207,10 @@ public class GameMap {
 
         for (Tree t : trees) {
             t.stepTime();
+        }
+
+        for (Crop c : crops) {
+            c.stepTime();
         }
     }
 
@@ -756,6 +763,10 @@ public class GameMap {
     }
 
     private void reserveSpaceForLargeHouse(Building house, Point site) throws Exception {
+
+        /* Mark map points that are covered by the house. The site itself is already marked */
+        pointToGameObject.get(site.upRight()).setBuilding(house);
+        pointToGameObject.get(site.upLeft()).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -1301,6 +1312,24 @@ public class GameMap {
         return stone;
     }
 
+    public Crop placeCrop(Point point) {
+        MapPoint mp = pointToGameObject.get(point);
+
+        Crop crop = new Crop(point);
+
+        mp.setCrop(crop);
+
+        crops.add(crop);
+
+        return crop;
+    }
+    
+    public boolean isCropAtPoint(Point p) {
+        MapPoint mp = pointToGameObject.get(p);
+
+        return mp.getCrop() != null;
+    }
+    
     public boolean isStoneAtPoint(Point point2) {
         MapPoint mp = pointToGameObject.get(point2);
         
