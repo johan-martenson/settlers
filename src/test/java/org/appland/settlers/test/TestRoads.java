@@ -19,6 +19,7 @@ import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import static org.appland.settlers.test.Utils.roadStartStopIsCorrect;
 
@@ -533,6 +534,32 @@ public class TestRoads {
         GameMap map = new GameMap(20, 20);
         Point point2 = new Point(12, 8);
         Building building1 = map.placeBuilding(new Woodcutter(), point2);
+        Point point3 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point3);
+
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+    
+        assertFalse(points.contains(point2));
+    }
+
+    @Test
+    public void testNoPossibleConnectionUnderStone() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point2 = new Point(12, 8);
+        Stone stone0 = map.placeStone(point2);
+        Point point3 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point3);
+
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+    
+        assertFalse(points.contains(point2));
+    }
+
+    @Test
+    public void testNoPossibleConnectionUnderTree() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point2 = new Point(12, 8);
+        Tree tree0 = map.placeTree(point2);
         Point point3 = new Point(10, 8);
         Flag flag0 = map.placeFlag(point3);
 

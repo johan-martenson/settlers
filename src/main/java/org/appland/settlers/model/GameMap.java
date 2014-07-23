@@ -1051,23 +1051,23 @@ public class GameMap {
     }
     
     private boolean isPossibleAsEndPointInRoad(Point p) {
-        MapPoint mp = pointToGameObject.get(p);
-
         if (!isWithinMap(p)) {
             return false;
         }
-        
-        if (mp.isRoad() && !mp.isFlag()) {
-            return false;
-        }
 
-        if (mp.isBuilding()) {
-            return false;
+        if (isPossibleAsAnyPointInRoad(p)) {
+            return true;
         }
         
-        return true;        
+        MapPoint mp = pointToGameObject.get(p);
+        
+        if (mp.isFlag()) {
+            return true;
+        }
+        
+        return false;
     }
-    
+
     private boolean isPossibleAsAnyPointInRoad(Point p) {
         MapPoint mp = pointToGameObject.get(p);
 
