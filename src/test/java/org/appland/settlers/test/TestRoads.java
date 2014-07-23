@@ -529,6 +529,19 @@ public class TestRoads {
     }
 
     @Test
+    public void testNoPossibleConnectionUnderBuilding() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point2 = new Point(12, 8);
+        Building building1 = map.placeBuilding(new Woodcutter(), point2);
+        Point point3 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point3);
+
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+    
+        assertFalse(points.contains(point2));
+    }
+    
+    @Test
     public void testPlaceRoadWithVarargs() throws Exception {
         GameMap map = new GameMap(10, 10);
 
@@ -705,8 +718,6 @@ public class TestRoads {
         GameMap map = new GameMap(20, 20);
         
         List<Point> path = map.findAutoSelectedRoad(new Point(2, 2), new Point(11, 11), null);
-        
-        System.out.println("PATH " + path);
         
         assertTrue(path.size() == 10);
     

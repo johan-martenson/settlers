@@ -709,7 +709,10 @@ public class GameMap {
 
     private void reserveSpaceForBuilding(Building house) throws Exception {
         Point flagPoint  = house.getFlag().getPosition();
-        Point housePoint = new Point(flagPoint.x - 1, flagPoint.y + 1);
+        Point housePoint = flagPoint.upLeft();
+        
+        /* Exact point points to house */
+        pointToGameObject.get(housePoint).setBuilding(house);
         
         switch(house.getHouseSize()) {
         case SMALL:
@@ -754,9 +757,6 @@ public class GameMap {
 
     private void reserveSpaceForLargeHouse(Building house, Point site) throws Exception {
         
-        /* Exact point points to house */
-        pointToGameObject.get(site).setBuilding(house);
-        
         /* Mark all points that this house covers */
         setPointCovered(site);
         
@@ -791,8 +791,6 @@ public class GameMap {
     }
 
     private void reserveSpaceForMediumHouse(Building house, Point site) throws Exception {
-        /* Exact point points to house */
-        pointToGameObject.get(site).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -820,9 +818,6 @@ public class GameMap {
     }
     
     private void reserveSpaceForSmallHouse(Building house, Point site) throws Exception {
-        
-        /* Exact point points to house */
-        pointToGameObject.get(site).setBuilding(house);
         
         /* Mark all points that this house covers */
         setPointCovered(site);
@@ -1066,6 +1061,10 @@ public class GameMap {
             return false;
         }
 
+        if (mp.isBuilding()) {
+            return false;
+        }
+        
         return true;        
     }
     
