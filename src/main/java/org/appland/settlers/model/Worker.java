@@ -206,14 +206,6 @@ public abstract class Worker implements Actor {
         this.map = map;
     }
 
-    protected void setTargetFlag(Flag t) throws InvalidRouteException {
-        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, target});
-        
-        targetFlag = t;
-        
-        setTarget(t.getPosition());        
-    }
-
     public boolean isTraveling() {
         return traveling;
     }
@@ -234,7 +226,7 @@ public abstract class Worker implements Actor {
 
     public void setTargetBuilding(Building b) throws InvalidRouteException {
         targetBuilding = b;
-        setTargetFlag(b.getFlag());
+        setTarget(b.getFlag().getPosition());
     }
 
     public Building getTargetBuilding() {

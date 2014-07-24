@@ -1,11 +1,15 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
     private Cargo intendedCargo;
 
+    private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
+    
     public Courier(GameMap map) {
         super(map);
         
@@ -175,8 +179,11 @@ public class Courier extends Worker {
         return super.getTargetFlag();
     }
 
-    @Override
     public void setTargetFlag(Flag t) throws InvalidRouteException {
-        super.setTargetFlag(t);
+        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, target});
+        
+        targetFlag = t;
+        
+        setTarget(t.getPosition());
     }
 }
