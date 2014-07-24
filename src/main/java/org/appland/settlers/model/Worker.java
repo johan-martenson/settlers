@@ -151,10 +151,7 @@ public abstract class Worker implements Actor {
         traveling = false;
 
         /* Handle couriers separately */
-        if (getTargetRoad() != null) {
-            map.assignCourierToRoad((Courier) this, getTargetRoad());
-            stopTraveling();
-        } else if (getTargetBuilding() != null) {
+        if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
             stopTraveling();
@@ -177,10 +174,6 @@ public abstract class Worker implements Actor {
 
     public Point getPosition() {
         return position;
-    }
-
-    protected Road getTargetRoad() {
-        return targetRoad;
     }
 
     public Flag getTargetFlag() {

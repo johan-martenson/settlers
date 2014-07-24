@@ -102,9 +102,8 @@ public class Courier extends Worker {
         super.setAssignedRoad(road);
     }
 
-    @Override
     public Road getTargetRoad() {
-        return super.getTargetRoad();
+        return targetRoad;
     }
 
     public void setTargetRoad(Road r) throws Exception {
@@ -140,6 +139,9 @@ public class Courier extends Worker {
                 } else {
                     putDownCargo();
                 }
+            } else if (getTargetRoad() != null) {
+                map.assignCourierToRoad(this, getTargetRoad());
+                stopTraveling();
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);

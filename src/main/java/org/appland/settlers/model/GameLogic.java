@@ -36,9 +36,13 @@ public class GameLogic {
             if (w.isArrived()) {
 
                 /* Handle couriers separately */
-                if (w.getTargetRoad() != null) {
-                    map.assignCourierToRoad((Courier) w, w.getTargetRoad());
-                    w.stopTraveling();
+                if (w instanceof Courier) {
+                    Courier courier = (Courier)w;
+                    
+                    if (courier.getAssignedRoad() != null) {
+                        map.assignCourierToRoad(courier, courier.getTargetRoad());
+                        w.stopTraveling();
+                    }
                 } else if (w.getTargetBuilding() != null) {
                     Flag targetFlag = w.getTargetFlag();
                     Building building = map.getBuildingByFlag(targetFlag);
