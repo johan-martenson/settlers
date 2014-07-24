@@ -6,7 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.List;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.WoodcutterWorker.States.CUTTING_TREE;
