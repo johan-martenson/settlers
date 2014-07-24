@@ -103,7 +103,7 @@ public class Courier extends Worker {
     public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
         Cargo cargoToPickUp = null;
         
-        if (!position.equals(flag.getPosition())) {
+        if (!getPosition().equals(flag.getPosition())) {
             throw new Exception("Not at " + flag);
         }
         
@@ -135,15 +135,15 @@ public class Courier extends Worker {
 
         targetRoad = r;
         
-        if (position.equals(r.getStart()) || position.equals(r.getEnd())) {            
-            setTarget(position);
+        if (isAt(r.getStart()) || isAt(r.getEnd())) {            
+            setTarget(getPosition());
             
             return;
         }
 
         /* Find closest endpoint for the road */
-        List<Point> path1 = map.findWayWithExistingRoads(position, r.getStart());
-        List<Point> path2 = map.findWayWithExistingRoads(position, r.getEnd());
+        List<Point> path1 = map.findWayWithExistingRoads(getPosition(), r.getStart());
+        List<Point> path2 = map.findWayWithExistingRoads(getPosition(), r.getEnd());
 
         if (path1.size() < path2.size()) {
             setTarget(r.getStart());
@@ -180,7 +180,7 @@ public class Courier extends Worker {
     
     public void putDownCargo() {
         getTargetFlag().putCargo(carriedCargo);
-        carriedCargo.setPosition(position);
+        carriedCargo.setPosition(getPosition());
         
         List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
         plannedRoadForCargo.remove(0);
@@ -194,7 +194,7 @@ public class Courier extends Worker {
     }
 
     public void setTargetFlag(Flag t) throws InvalidRouteException {
-        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, target});
+        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, getTarget()});
         
         targetFlag = t;
         

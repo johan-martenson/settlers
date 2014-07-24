@@ -20,9 +20,10 @@ public abstract class Worker implements Actor {
     protected GameMap     map;
     protected List<Point> path;
 
-    private static Logger log = Logger.getLogger(Worker.class.getName());
-    protected Point       position;
-    protected Point       target;
+    private final static Logger log = Logger.getLogger(Worker.class.getName());
+
+    private Point         position;
+    private Point         target;
     private boolean       traveling;
     private Countdown     walkCountdown;
     private Building      home;
