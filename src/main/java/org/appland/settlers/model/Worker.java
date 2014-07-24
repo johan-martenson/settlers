@@ -34,15 +34,15 @@ public abstract class Worker implements Actor {
     }
     
     public Worker(GameMap m) {
-        traveling = false;
-        target = null;
-        position = null;
-        path = null;
+        traveling      = false;
+        target         = null;
+        position       = null;
+        path           = null;
         targetBuilding = null;
-        home = null;
-        map = m;
+        home           = null;
+        map            = m;
         
-        walkCountdown = new Countdown();
+        walkCountdown  = new Countdown();
         exactlyAtPoint = true;
     }
 
@@ -142,7 +142,7 @@ public abstract class Worker implements Actor {
         path      = null;
         traveling = false;
 
-        /* Handle couriers separately */
+        /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
