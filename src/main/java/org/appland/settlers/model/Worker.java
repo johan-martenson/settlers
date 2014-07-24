@@ -16,9 +16,9 @@ import java.util.logging.Logger;
 public abstract class Worker implements Actor {
 
     protected Cargo       carriedCargo;
+    protected Building    targetBuilding;
     private Road          assignedRoad;
     private Road          targetRoad;
-    private Building      targetBuilding;
     private Flag          targetFlag;
     protected GameMap     map;
     protected List<Point> path;
@@ -157,13 +157,13 @@ public abstract class Worker implements Actor {
         } else if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
+            stopTraveling();
+            
             if (this instanceof Military) {
                 building.hostMilitary((Military) this);
-                stopTraveling();
             } else {
                 building.assignWorker(this);
                 enterBuilding(building);
-                stopTraveling();
             }
         }
             
