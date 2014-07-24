@@ -378,7 +378,7 @@ public class GameLogicTest {
         Worker forester = map.getTravelingWorkers().get(0);
 
         /* Let the forester reach the forester hut */
-        Utils.fastForward(120, map);
+        Utils.fastForwardUntilWorkersReachTarget(map, forester);
         
         assertNotNull(fHut.getWorker());
         assertTrue(fHut.getWorker() instanceof Forester);
