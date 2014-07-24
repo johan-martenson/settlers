@@ -166,14 +166,6 @@ public abstract class Worker implements Actor {
                 enterBuilding(building);
             }
         }
-            
-        if (carriedCargo != null) {
-            if (carriedCargo.isAtTarget()) {
-                deliverToTarget(carriedCargo.getTarget());
-            } else {
-                putDownCargo();
-            }
-        }
 
         /* This lets subclasses add their own logic */
         onArrival();
@@ -363,12 +355,6 @@ public abstract class Worker implements Actor {
 
         Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
         setTargetFlag(otherEnd);
-    }
-    
-    protected void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        targetBuilding.deliver(this.getCargo());
-
-        carriedCargo = null;
     }
 
     private void startWalking() {

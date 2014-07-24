@@ -74,9 +74,10 @@ public class Courier extends Worker {
         return intendedCargo;
     }
 
-    @Override
     public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        super.deliverToTarget(targetBuilding);
+        targetBuilding.deliver(this.getCargo());
+
+        carriedCargo = null;
     }
 
     @Override
@@ -107,5 +108,20 @@ public class Courier extends Worker {
     @Override
     public void setTargetRoad(Road r) throws Exception {
         super.setTargetRoad(r);
+    }
+
+    @Override
+    protected void onArrival() {
+        try {
+            if (carriedCargo != null) {
+                if (carriedCargo.isAtTarget()) {
+                    deliverToTarget(carriedCargo.getTarget());
+                } else {
+                    putDownCargo();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+        }
     }
 }
