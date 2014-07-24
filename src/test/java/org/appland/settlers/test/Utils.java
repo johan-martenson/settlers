@@ -180,7 +180,7 @@ public class Utils {
         return isEmpty;
     }
 
-    static void constructLargeHouse(Storage house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructLargeHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
 
         Cargo planckCargo = new Cargo(PLANCK);
@@ -204,6 +204,8 @@ public class Utils {
         house.deliver(stoneCargo);
         house.deliver(stoneCargo);
         house.deliver(stoneCargo);
+        
+        fastForward(200, house);
     }
 
     static void assertNoStepDirectlyUpwards(List<Point> route) {
