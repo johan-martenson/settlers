@@ -1,5 +1,7 @@
 package org.appland.settlers.model;
 
+import java.util.List;
+
 @Walker(speed = 10)
 public class Courier extends Worker {
     private Cargo intendedCargo;
@@ -105,9 +107,28 @@ public class Courier extends Worker {
         return super.getTargetRoad();
     }
 
-    @Override
     public void setTargetRoad(Road r) throws Exception {
-        super.setTargetRoad(r);
+        if (getTargetFlag() != null || getTargetBuilding() != null) {
+            throw new Exception("Can't set road as target while flag or building are already targetted");
+        }
+
+        targetRoad = r;
+        
+        if (position.equals(r.getStart()) || position.equals(r.getEnd())) {            
+            setTarget(position);
+            
+            return;
+        }
+
+        /* Find closest endpoint for the road */
+        List<Point> path1 = map.findWayWithExistingRoads(position, r.getStart());
+        List<Point> path2 = map.findWayWithExistingRoads(position, r.getEnd());
+
+        if (path1.size() < path2.size()) {
+            setTarget(r.getStart());
+        } else {
+            setTarget(r.getEnd());
+        }    
     }
 
     @Override

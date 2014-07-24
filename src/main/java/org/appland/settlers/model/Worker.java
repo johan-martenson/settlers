@@ -171,30 +171,6 @@ public abstract class Worker implements Actor {
         onArrival();
     }
 
-    protected void setTargetRoad(Road r) throws Exception {
-        if (targetFlag != null || targetBuilding != null) {
-            throw new Exception("Can't set road as target while flag or building are already targetted");
-        }
-
-        targetRoad = r;
-        
-        if (position.equals(r.getStart()) || position.equals(r.getEnd())) {            
-            handleArrival();
-            
-            return;
-        }
-
-        /* Find closest endpoint for the road */
-        List<Point> path1 = map.findWayWithExistingRoads(position, r.getStart());
-        List<Point> path2 = map.findWayWithExistingRoads(position, r.getEnd());
-
-        if (path1.size() < path2.size()) {
-            setTarget(r.getStart());
-        } else {
-            setTarget(r.getEnd());
-        }
-    }
-
     public void setPosition(Point p) {
         position = p;
     }
@@ -385,6 +361,15 @@ public abstract class Worker implements Actor {
     protected void setTarget(Point p) throws InvalidRouteException {
         target = p;
 
+        if (target.equals(getPosition())) {
+            try {
+                handleArrival();
+                return;
+            } catch (Exception ex) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         path = map.findWayWithExistingRoads(position, target);
         path.remove(0);
         log.log(Level.FINE, "Way to target is {0}", path);
