@@ -44,8 +44,8 @@ public class GameLogic {
                         w.stopTraveling();
                     }
                 } else if (w.getTargetBuilding() != null) {
-                    Flag targetFlag = w.getTargetFlag();
-                    Building building = map.getBuildingByFlag(targetFlag);
+                    Point target = w.getTarget();
+                    Building building = map.getBuildingAtPoint(target);
 
                     if (building.isMilitaryBuilding()) {
                         building.hostMilitary((Military) w);

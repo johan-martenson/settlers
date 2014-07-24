@@ -174,9 +174,8 @@ public class Courier extends Worker {
         carriedCargo = null;
     }
 
-    @Override
     public Flag getTargetFlag() {
-        return super.getTargetFlag();
+        return targetFlag;
     }
 
     public void setTargetFlag(Flag t) throws InvalidRouteException {

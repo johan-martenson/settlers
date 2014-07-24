@@ -176,10 +176,6 @@ public abstract class Worker implements Actor {
         return position;
     }
 
-    protected Flag getTargetFlag() {
-        return targetFlag;
-    }
-
     public boolean isArrived() {
         log.log(Level.FINE, "Checking if worker has arrived");
         log.log(Level.FINER, "Worker is at {0} and target is {1}", new Object[]{position, target});
@@ -243,7 +239,7 @@ public abstract class Worker implements Actor {
 
     public Point getNextPoint() throws Exception {
         if (path == null || path.isEmpty()) {
-            throw new Exception("No next point set. Target is " + getTargetFlag());
+            throw new Exception("No next point set. Target is " + getTarget());
         }
 
         return path.get(0);
