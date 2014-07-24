@@ -9,6 +9,7 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HALFWAY;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
+import static org.appland.settlers.model.Material.WHEAT;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Crop implements Actor {
     private Countdown growthCountdown;
 
     public enum GrowthState {
-        JUST_PLANTED, HALFWAY, FULL_GROWN
+        JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
     }
     
     private Point position;
@@ -56,5 +57,11 @@ public class Crop implements Actor {
 
     public GrowthState getGrowthState() {
         return state;
+    }
+
+    public Cargo harvest() {
+        state = GrowthState.HARVESTED;
+        
+        return new Cargo(WHEAT);
     }
 }
