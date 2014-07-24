@@ -17,8 +17,8 @@ public abstract class Worker implements Actor {
 
     protected Cargo       carriedCargo;
     protected Building    targetBuilding;
-    private Road          assignedRoad;
-    private Road          targetRoad;
+    protected Road        assignedRoad;
+    protected Road        targetRoad;
     private Flag          targetFlag;
     protected GameMap     map;
     protected List<Point> path;
@@ -179,7 +179,7 @@ public abstract class Worker implements Actor {
         onArrival();
     }
 
-    public void setTargetRoad(Road r) throws Exception {
+    protected void setTargetRoad(Road r) throws Exception {
         if (targetFlag != null || targetBuilding != null) {
             throw new Exception("Can't set road as target while flag or building are already targetted");
         }
@@ -211,7 +211,7 @@ public abstract class Worker implements Actor {
         return position;
     }
 
-    public Road getTargetRoad() {
+    protected Road getTargetRoad() {
         return targetRoad;
     }
 
@@ -319,11 +319,11 @@ public abstract class Worker implements Actor {
         return isExactlyAtPoint() && position.equals(p2);
     }
 
-    public void setAssignedRoad(Road road) {
+    protected void setAssignedRoad(Road road) {
         assignedRoad = road;
     }
 
-    public Road getAssignedRoad() {
+    protected Road getAssignedRoad() {
         return assignedRoad;
     }
 
@@ -342,7 +342,7 @@ public abstract class Worker implements Actor {
         return carriedCargo;
     }
 
-    public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
+    protected void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
         Cargo cargoToPickUp = null;
         
         if (!position.equals(flag.getPosition())) {
@@ -358,14 +358,14 @@ public abstract class Worker implements Actor {
         pickUpCargoFromFlag(cargoToPickUp, flag);
     }
 
-    public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
+    protected void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
         carriedCargo = flag.retrieveCargo(c);
 
         Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
         setTargetFlag(otherEnd);
     }
     
-    public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    protected void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         targetBuilding.deliver(this.getCargo());
 
         carriedCargo = null;

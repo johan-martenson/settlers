@@ -267,8 +267,11 @@ public class GameLogicTest {
         // TODO: Ensure that only one worker is dispatched even though there are two unassigned roads
         assertTrue(map.getAllWorkers().size() == 2);
         
-        Worker w1 = map.getAllWorkers().get(0);
-        Worker w2 = map.getAllWorkers().get(1);
+        assertTrue(map.getAllWorkers().get(0) instanceof Courier);
+        assertTrue(map.getAllWorkers().get(1) instanceof Courier);
+        
+        Courier w1 = (Courier)map.getAllWorkers().get(0);
+        Courier w2 = (Courier)map.getAllWorkers().get(1);
         
         assertTrue(w1.isAt(hq.getFlag().getPosition()));
         assertTrue(w1.getAssignedRoad().equals(r));

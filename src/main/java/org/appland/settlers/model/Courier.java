@@ -18,7 +18,6 @@ public class Courier extends Worker {
         
         try {
             if (map.isFlagAtPoint(getPosition())) {
-                Road assignedRoad = getAssignedRoad();
                 Flag flag         = map.getFlagAtPoint(getPosition());
                 Flag otherEnd     = assignedRoad.getOtherFlag(flag);
                 
@@ -73,5 +72,40 @@ public class Courier extends Worker {
 
     public Cargo getPromisedDelivery() {
         return intendedCargo;
+    }
+
+    @Override
+    public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        super.deliverToTarget(targetBuilding);
+    }
+
+    @Override
+    public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
+        super.pickUpCargoFromFlag(c, flag);
+    }
+
+    @Override
+    public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
+        super.pickUpCargoForRoad(flag, r);
+    }
+
+    @Override
+    public Road getAssignedRoad() {
+        return super.getAssignedRoad();
+    }
+
+    @Override
+    public void setAssignedRoad(Road road) {
+        super.setAssignedRoad(road);
+    }
+
+    @Override
+    public Road getTargetRoad() {
+        return super.getTargetRoad();
+    }
+
+    @Override
+    public void setTargetRoad(Road r) throws Exception {
+        super.setTargetRoad(r);
     }
 }
