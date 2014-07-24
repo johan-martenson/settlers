@@ -17,9 +17,6 @@ public abstract class Worker implements Actor {
 
     protected Cargo       carriedCargo;
     protected Building    targetBuilding;
-    protected Road        assignedRoad;
-    protected Road        targetRoad;
-    protected Flag        targetFlag;
     protected GameMap     map;
     protected List<Point> path;
 
@@ -40,9 +37,7 @@ public abstract class Worker implements Actor {
         target = null;
         position = null;
         path = null;
-        targetRoad = null;
         targetBuilding = null;
-        targetFlag = null;
         home = null;
         map = m;
         
@@ -90,11 +85,7 @@ public abstract class Worker implements Actor {
                 str = "Courier latest at " + getLastPoint() + " traveling to " + target;
             }
                 
-            if (targetRoad != null) {
-                str += " for " + targetRoad;
-            } else if (targetFlag != null) {
-                str += " for " + targetFlag;
-            } else if (targetBuilding != null) {
+            if (targetBuilding != null) {
                 str += " for " + targetBuilding;
             }
 
@@ -209,9 +200,7 @@ public abstract class Worker implements Actor {
     public void stopTraveling() {
         traveling = false;
         target = null;
-        targetRoad = null;
         targetBuilding = null;
-        targetFlag = null;
     }
 
     private int getSpeed() {

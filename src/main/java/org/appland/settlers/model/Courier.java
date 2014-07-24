@@ -6,14 +6,21 @@ import java.util.logging.Logger;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
-    private Cargo intendedCargo;
 
     private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
-    
+
+    private Cargo intendedCargo;
+    private Road assignedRoad;
+    private Road targetRoad;
+    private Flag targetFlag;
+
     public Courier(GameMap map) {
         super(map);
         
         intendedCargo = null;
+        assignedRoad  = null;
+        targetRoad    = null;
+        targetFlag    = null;
     }
 
     @Override
@@ -163,6 +170,14 @@ public class Courier extends Worker {
         }
     }
 
+    @Override
+    public void stopTraveling() {
+        targetFlag = null;
+        targetRoad = null;
+        
+        super.stopTraveling();
+    }
+    
     public void putDownCargo() {
         getTargetFlag().putCargo(carriedCargo);
         carriedCargo.setPosition(position);
