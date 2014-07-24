@@ -280,10 +280,6 @@ public abstract class Worker implements Actor {
         return isExactlyAtPoint() && position.equals(p2);
     }
 
-    protected void setAssignedRoad(Road road) {
-        assignedRoad = road;
-    }
-
     protected Road getAssignedRoad() {
         return assignedRoad;
     }

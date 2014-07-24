@@ -110,9 +110,8 @@ public class Courier extends Worker {
         return super.getAssignedRoad();
     }
 
-    @Override
     public void setAssignedRoad(Road road) {
-        super.setAssignedRoad(road);
+        assignedRoad = road;
     }
 
     public Road getTargetRoad() {
