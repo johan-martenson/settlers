@@ -116,12 +116,10 @@ public class Forester extends Worker {
         } else if (state == States.GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             
+            enterBuilding(hut);
+            
             countdown.countFrom(99);
         }
 
-    }
-
-    @Override
-    protected void onArrival() {
     }
 }
