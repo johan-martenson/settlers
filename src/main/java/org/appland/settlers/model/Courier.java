@@ -159,8 +159,14 @@ public class Courier extends Worker {
         }
     }
 
-    @Override
     public void putDownCargo() {
-        super.putDownCargo();
+        getTargetFlag().putCargo(carriedCargo);
+        carriedCargo.setPosition(position);
+        
+        List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
+        plannedRoadForCargo.remove(0);
+        carriedCargo.setPlannedRoads(plannedRoadForCargo);
+
+        carriedCargo = null;
     }
 }

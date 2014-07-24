@@ -280,17 +280,6 @@ public abstract class Worker implements Actor {
         return isExactlyAtPoint() && position.equals(p2);
     }
 
-    protected void putDownCargo() {
-        targetFlag.putCargo(carriedCargo);
-        carriedCargo.setPosition(position);
-        
-        List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
-        plannedRoadForCargo.remove(0);
-        carriedCargo.setPlannedRoads(plannedRoadForCargo);
-
-        carriedCargo = null;
-    }
-
     public Cargo getCargo() {
         return carriedCargo;
     }
