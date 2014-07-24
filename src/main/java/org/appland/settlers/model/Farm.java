@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Size.LARGE;
 
@@ -13,6 +14,7 @@ import static org.appland.settlers.model.Size.LARGE;
  * @author johan
  */
 @HouseSize(size = LARGE)
-@Production(output = WHEAT, productionTime = 100, requiredGoods = {})
+@Production(output = WHEAT, requiredGoods = {}, manualProduction = true)
+@RequiresWorker(workerType = FARMER)
 public class Farm extends Building {
 }

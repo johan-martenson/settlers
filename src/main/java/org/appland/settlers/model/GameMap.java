@@ -1401,4 +1401,12 @@ public class GameMap {
     public Iterable<Stone> getStones() {
         return stones;
     }
+
+    public Crop getCropAtPoint(Point point) {
+        return pointToGameObject.get(point).getCrop();
+    }
+
+    public Iterable<Crop> getCrops() {
+        return crops;
+    }
 }

@@ -4,7 +4,6 @@ import java.util.Map;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 
 import static org.appland.settlers.model.Material.*;
-import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.policy.InitialState;
 
 @HouseSize(size = Size.LARGE)
@@ -35,6 +34,7 @@ public class Headquarter extends Storage {
         inventory.put(FORESTER, InitialState.STORAGE_INITIAL_FORESTER);
         inventory.put(WOODCUTTER_WORKER, InitialState.STORAGE_INITIAL_WOODCUTTER_WORKER);
         inventory.put(STONEMASON, InitialState.STORAGE_INITIAL_STONEMASON);
+        inventory.put(FARMER, InitialState.STORAGE_INITIAL_FARMER);
     }
 
     @Override
