@@ -158,4 +158,9 @@ public class Courier extends Worker {
             e.printStackTrace(System.out);
         }
     }
+
+    @Override
+    public void putDownCargo() {
+        super.putDownCargo();
+    }
 }

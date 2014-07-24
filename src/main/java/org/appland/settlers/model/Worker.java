@@ -280,7 +280,7 @@ public abstract class Worker implements Actor {
         return isExactlyAtPoint() && position.equals(p2);
     }
 
-    public void putDownCargo() {
+    protected void putDownCargo() {
         targetFlag.putCargo(carriedCargo);
         carriedCargo.setPosition(position);
         
