@@ -296,7 +296,7 @@ public class Building implements Actor {
         log.log(Level.FINE, "Stepping time in building");
 
         if (underConstruction()) {
-            if (constructionCountdown.reachedZero()) {            
+            if (constructionCountdown.reachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
@@ -325,7 +325,7 @@ public class Building implements Actor {
         return flag;
     }
 
-    public Object getConstructionState() {
+    public ConstructionState getConstructionState() {
         return constructionState;
     }
 
