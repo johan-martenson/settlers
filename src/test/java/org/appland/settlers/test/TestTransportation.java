@@ -497,8 +497,9 @@ public class TestTransportation {
         /* Tell military to go to the barracks */
         m.setMap(map);
         m.setPosition(hq.getFlag().getPosition());
-        m.setTargetFlag(b.getFlag());
-        assertEquals(m.getTargetFlag(), b.getFlag());
+        m.setTargetBuilding(b);
+        assertEquals(m.getTargetBuilding(), b);
+        assertEquals(m.getTarget(), b.getFlag().getPosition());
         
         /* Verify that the military reaches the barracks */
         Utils.fastForward(60, m);
@@ -507,9 +508,6 @@ public class TestTransportation {
         assertTrue(m.isArrived());
 
         /* Make the military enter the barracks */
-        assertTrue(b.getHostedMilitary() == 0);
-
-        b.hostMilitary(m);
         assertTrue(b.getHostedMilitary() == 1);
     }
 

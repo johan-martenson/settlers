@@ -19,7 +19,7 @@ public abstract class Worker implements Actor {
     protected Building    targetBuilding;
     protected Road        assignedRoad;
     protected Road        targetRoad;
-    private Flag          targetFlag;
+    protected Flag        targetFlag;
     protected GameMap     map;
     protected List<Point> path;
 
@@ -176,7 +176,7 @@ public abstract class Worker implements Actor {
         return position;
     }
 
-    public Flag getTargetFlag() {
+    protected Flag getTargetFlag() {
         return targetFlag;
     }
 
@@ -206,7 +206,7 @@ public abstract class Worker implements Actor {
         this.map = map;
     }
 
-    public void setTargetFlag(Flag t) throws InvalidRouteException {
+    protected void setTargetFlag(Flag t) throws InvalidRouteException {
         log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, target});
         
         targetFlag = t;
