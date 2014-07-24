@@ -303,29 +303,6 @@ public abstract class Worker implements Actor {
         return carriedCargo;
     }
 
-    protected void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
-        Cargo cargoToPickUp = null;
-        
-        if (!position.equals(flag.getPosition())) {
-            throw new Exception("Not at " + flag);
-        }
-        
-        for (Cargo c : flag.getStackedCargo()) {
-            if (c.getPlannedRoads().get(0).equals(r)) {
-                cargoToPickUp = c;
-            }
-        }
-
-        pickUpCargoFromFlag(cargoToPickUp, flag);
-    }
-
-    protected void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
-        carriedCargo = flag.retrieveCargo(c);
-
-        Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
-        setTargetFlag(otherEnd);
-    }
-
     private void startWalking() {
         log.log(Level.FINE, "Starting to walk, currently at {0}", position);
 

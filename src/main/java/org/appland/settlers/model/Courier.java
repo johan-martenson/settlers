@@ -82,14 +82,27 @@ public class Courier extends Worker {
         carriedCargo = null;
     }
 
-    @Override
     public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
-        super.pickUpCargoFromFlag(c, flag);
+        carriedCargo = flag.retrieveCargo(c);
+
+        Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
+        setTargetFlag(otherEnd);
     }
 
-    @Override
     public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
-        super.pickUpCargoForRoad(flag, r);
+        Cargo cargoToPickUp = null;
+        
+        if (!position.equals(flag.getPosition())) {
+            throw new Exception("Not at " + flag);
+        }
+        
+        for (Cargo c : flag.getStackedCargo()) {
+            if (c.getPlannedRoads().get(0).equals(r)) {
+                cargoToPickUp = c;
+            }
+        }
+
+        pickUpCargoFromFlag(cargoToPickUp, flag);
     }
 
     @Override
