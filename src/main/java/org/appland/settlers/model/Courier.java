@@ -39,7 +39,7 @@ public class Courier extends Worker {
                     pickUpCargoFromFlag(intendedCargo, flag);
                     
                     intendedCargo = null;
-                    carriedCargo.clearPromisedDelivery();
+                    getCargo().clearPromisedDelivery();
                 /* Pick up the cargo where we stand if needed */
                 } else if (flag.hasCargoWaitingForRoad(assignedRoad)) {
                     pickUpCargoForRoad(flag, assignedRoad);
@@ -90,11 +90,11 @@ public class Courier extends Worker {
     public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         targetBuilding.deliver(this.getCargo());
 
-        carriedCargo = null;
+        setCargo(null);
     }
 
     public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
-        carriedCargo = flag.retrieveCargo(c);
+        setCargo(flag.retrieveCargo(c));
 
         Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
         setTargetFlag(otherEnd);
@@ -155,9 +155,10 @@ public class Courier extends Worker {
     @Override
     protected void onArrival() {
         try {
-            if (carriedCargo != null) {
-                if (carriedCargo.isAtTarget()) {
-                    deliverToTarget(carriedCargo.getTarget());
+            Cargo cargo = getCargo();
+            if (cargo != null) {
+                if (cargo.isAtTarget()) {
+                    deliverToTarget(cargo.getTarget());
                 } else {
                     putDownCargo();
                 }
@@ -179,14 +180,16 @@ public class Courier extends Worker {
     }
     
     public void putDownCargo() {
-        getTargetFlag().putCargo(carriedCargo);
-        carriedCargo.setPosition(getPosition());
+        Cargo cargo = getCargo();
         
-        List<Road> plannedRoadForCargo = carriedCargo.getPlannedRoads();
+        getTargetFlag().putCargo(cargo);
+        cargo.setPosition(getPosition());
+        
+        List<Road> plannedRoadForCargo = cargo.getPlannedRoads();
         plannedRoadForCargo.remove(0);
-        carriedCargo.setPlannedRoads(plannedRoadForCargo);
+        cargo.setPlannedRoads(plannedRoadForCargo);
 
-        carriedCargo = null;
+        setCargo(null);
     }
 
     public Flag getTargetFlag() {

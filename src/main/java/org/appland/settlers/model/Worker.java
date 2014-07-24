@@ -15,8 +15,8 @@ import java.util.logging.Logger;
  */
 public abstract class Worker implements Actor {
 
-    protected Cargo       carriedCargo;
-    protected Building    targetBuilding;
+    private Cargo         carriedCargo;
+    private Building      targetBuilding;
     protected GameMap     map;
     protected List<Point> path;
 
@@ -320,5 +320,9 @@ public abstract class Worker implements Actor {
 
     public Building getHome() {
         return home;
+    }
+
+    protected void setCargo(Cargo cargo) {
+        carriedCargo = cargo;
     }
 }
