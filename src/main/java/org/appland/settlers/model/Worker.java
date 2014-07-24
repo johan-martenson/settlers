@@ -105,7 +105,7 @@ public abstract class Worker implements Actor {
             return str;
         }
         
-        return "Idle courier at " + getPosition() + "(road: " + getAssignedRoad() + ")";
+        return "Idle courier at " + getPosition();
     }
 
     protected void onArrival() {
@@ -278,10 +278,6 @@ public abstract class Worker implements Actor {
 
     public boolean isAt(Point p2) {
         return isExactlyAtPoint() && position.equals(p2);
-    }
-
-    protected Road getAssignedRoad() {
-        return assignedRoad;
     }
 
     public void putDownCargo() {

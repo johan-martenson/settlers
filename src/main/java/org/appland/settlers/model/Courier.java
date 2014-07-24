@@ -105,9 +105,8 @@ public class Courier extends Worker {
         pickUpCargoFromFlag(cargoToPickUp, flag);
     }
 
-    @Override
     public Road getAssignedRoad() {
-        return super.getAssignedRoad();
+        return assignedRoad;
     }
 
     public void setAssignedRoad(Road road) {
