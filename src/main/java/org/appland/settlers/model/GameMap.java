@@ -20,7 +20,6 @@ public class GameMap {
     private List<Building>        buildings;
     private List<Road>            roads;
     private List<Flag>            flags;
-    private Map<Flag, List<Flag>> roadNetwork;
     private List<Worker>          allWorkers;
     private String                theLeader = "Mai Thi Van Anh";
     private final int             height;
@@ -181,7 +180,6 @@ public class GameMap {
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         allWorkers          = new ArrayList<>();
-        roadNetwork         = new HashMap<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
         trees               = new ArrayList<>();
@@ -277,17 +275,6 @@ public class GameMap {
         Road road = new Road(startFlag, wayPoints, endFlag);
         
         roads.add(road);
-
-        if (!roadNetwork.containsKey(startFlag)) {
-            roadNetwork.put(startFlag, new ArrayList<Flag>());
-        }
-
-        if (!roadNetwork.containsKey(endFlag)) {
-            roadNetwork.put(endFlag, new ArrayList<Flag>());
-        }
-
-        roadNetwork.get(startFlag).add(endFlag);
-        roadNetwork.get(endFlag).add(startFlag);
     
         addRoadToMapPoints(road);
         
@@ -609,52 +596,50 @@ public class GameMap {
     }
     
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
-        return getBuildingsWithinReachWithMemory(startFlag, new ArrayList<Flag>());
+        return getBuildingsWithinReachWithMemory(startFlag.getPosition(), new ArrayList<Point>());
     }
 
     public Terrain getTerrain() {
         return terrain;
     }
     
-    private Set<Building> getBuildingsWithinReachWithMemory(Flag start, List<Flag> visited) {
+    /* TODO: Replace this with an implementation of a* */
+    private Set<Building> getBuildingsWithinReachWithMemory(Point start, List<Point> visited) {
         Set<Building> result = new HashSet<>();
 
-        if (buildingExistsAtFlag(start)) {
-            result.add(getBuildingByFlag(start));
+        if (isFlagAtPoint(start) && isBuildingAtPoint(start.upLeft())) {
+            try {
+                Flag flag = getFlagAtPoint(start);
+                Building building = getBuildingAtPoint(start.upLeft());
+                
+                if (flag.equals(building.getFlag())) {
+                    result.add(getBuildingAtPoint(start.upLeft()));
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
-        List<Flag> connectedFlags = getDirectlyConnectedFlags(start);
+        MapPoint mp = pointToGameObject.get(start);
+        
+        Set<Point> connectedFlags = mp.getConnectedNeighbors();
 
-        for (Flag f : connectedFlags) {
+        for (Point p : connectedFlags) {
             
-            if (visited.contains(f)) {
+            if (visited.contains(p)) {
                 continue;
             }
             
-            List<Flag> visitedCopy = new ArrayList<>();
+            List<Point> visitedCopy = new ArrayList<>();
             visitedCopy.addAll(visited);
-            visitedCopy.add(f);
+            visitedCopy.add(p);
             
-            Set<Building> tmp = getBuildingsWithinReachWithMemory(f, visitedCopy);
+            Set<Building> tmp = getBuildingsWithinReachWithMemory(p, visitedCopy);
             
             result.addAll(tmp);
         }
         
         return result;
-    }
-
-    private List<Flag> getDirectlyConnectedFlags(Flag start) {
-        List<Flag> connectedFlags = roadNetwork.get(start);
-        
-        if (connectedFlags == null) {
-            return new ArrayList<>();
-        }
-
-        return roadNetwork.get(start);
-    }
-
-    private boolean buildingExistsAtFlag(Flag start) {
-        return getBuildingByFlag(start) != null;
     }
 
     private List<Point> buildFullGrid() {

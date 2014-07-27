@@ -134,7 +134,7 @@ public class GameLogicTest {
         assertTrue(sm.needsMaterial(PLANCK));
         assertTrue(sm.needsMaterial(STONE));
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
-
+        
         gameLogic.initiateNewDeliveriesForStorage(hq, map);
         assertFalse(hq.getFlag().getStackedCargo().isEmpty());
     }
