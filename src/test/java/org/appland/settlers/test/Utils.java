@@ -254,7 +254,7 @@ public class Utils {
         assertNotNull(worker);
         assertNotNull(map);
         
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 200; i++) { // set back to 1000
             if (worker.isAt(target)) {
                 break;
             }

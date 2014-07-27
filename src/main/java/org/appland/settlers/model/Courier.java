@@ -169,11 +169,8 @@ public class Courier extends Worker {
         state = WALKING_TO_ROAD;
     }
 
-    @Override
     public void stopTraveling() {
         targetRoad = null;
-        
-        super.stopTraveling();
     }
     
     public void putDownCargo() throws Exception {
