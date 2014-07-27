@@ -498,24 +498,6 @@ public class GameMap {
         return buildings;
     }
 
-    public List<Courier> getWorkersAtTarget() {
-        List<Courier> result = new ArrayList<>();
-
-        for (Worker w : allWorkers) {
-            if (!(w instanceof Courier)) {
-                continue;
-            }
-            
-            Courier c = (Courier)w;
-            
-            if (c.isArrived()) {
-                result.add(c);
-            }
-        }
-
-        return result;
-    }
-
     public List<Building> getBuildingsWithNewProduce() {
         List<Building> result = new ArrayList<>();
 
