@@ -985,10 +985,6 @@ public class GameMap {
         availableFlagPoints.remove(point);
     }
 
-    private boolean isHouseSiteAvailable(Point p) {
-        return availableHouseSites.containsKey(p);
-    }
-
     public boolean isFlagAtPoint(Point p) {
         return pointToGameObject.get(p).isFlag();
     }
