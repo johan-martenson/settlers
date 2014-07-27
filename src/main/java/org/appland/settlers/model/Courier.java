@@ -11,6 +11,11 @@ import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
+    private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
+
+    private Cargo intendedCargo;
+    private Road assignedRoad;
+    private Road targetRoad;
     private States state;
     private Point idlePoint;
 
@@ -44,12 +49,6 @@ public class Courier extends Worker {
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO, GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT
     }
     
-    private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
-
-    private Cargo intendedCargo;
-    private Road assignedRoad;
-    private Road targetRoad;
-
     public Courier(GameMap map) {
         super(map);
         
