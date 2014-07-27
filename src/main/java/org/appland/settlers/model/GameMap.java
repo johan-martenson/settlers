@@ -21,7 +21,6 @@ public class GameMap {
     private List<Road>            roads;
     private List<Flag>            flags;
     private Map<Flag, List<Flag>> roadNetwork;
-    private Map<Road, Courier>    roadToWorkerMap;
     private List<Worker>          allWorkers;
     private String                theLeader = "Mai Thi Van Anh";
     private final int             height;
@@ -183,7 +182,6 @@ public class GameMap {
         flags               = new ArrayList<>();
         allWorkers          = new ArrayList<>();
         roadNetwork         = new HashMap<>();
-        roadToWorkerMap     = new HashMap<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
         trees               = new ArrayList<>();
