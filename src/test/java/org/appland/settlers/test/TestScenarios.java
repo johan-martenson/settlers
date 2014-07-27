@@ -98,10 +98,13 @@ public class TestScenarios {
         map.placeWorker(wr3, qry.getFlag());
         map.placeWorker(wcr, wc.getFlag());
 
-        map.assignCourierToRoad(wr1, wcToHqRoad);
-        map.assignCourierToRoad(wr2, smToHqRoad);
-        map.assignCourierToRoad(wr3, qryToHqRoad);
+        wr1.setTargetRoad(wcToHqRoad);
+        wr2.setTargetRoad(smToHqRoad);
+        wr3.setTargetRoad(qryToHqRoad);
 
+        /* Let the couriers reach their targeted roads */
+        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
+        
 	// TODO: add that workers need to populate the buildings before they start producing
         // TODO: add that workers need to move to roads to populate them
         /* Move forward in time until the small buildings are done */
@@ -141,7 +144,7 @@ public class TestScenarios {
         gameLogic.initiateCollectionOfNewProduce(map);
 
         Courier courierWcToHq = wcToHqRoad.getCourier();
-        assertTrue(courierWcToHq.isAt(wc.getFlag().getPosition()));
+
         assertNull(courierWcToHq.getCargo());
         assertTrue(courierWcToHq.isArrived());
         assertFalse(courierWcToHq.isTraveling());
@@ -152,15 +155,19 @@ public class TestScenarios {
         /* Transport cargo one hop */
         map.stepTime();
 
+        assertEquals(courierWcToHq.getTarget(), wc.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, wc.getFlag().getPosition());
+        
         assertNotNull(courierWcToHq.getCargo());
-        assertTrue(courierWcToHq.getTargetFlag().equals(hq.getFlag()));
+        assertEquals(courierWcToHq.getTarget(), hq.getFlag().getPosition());
 
-        fastForward(100, map);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, hq.getFlag().getPosition());
 
         assertTrue(wcToHqRoad.getCourier().isAt(hq.getFlag().getPosition()));
 
-        /* Cargo has arrived at the headquarter so store it */
-        
+        /* Cargo has arrived at the headquarter and stored */
+
         assertNull(wcToHqRoad.getCourier().getCargo());
         assertTrue(hq.getAmount(WOOD) == 1);
 
@@ -170,43 +177,32 @@ public class TestScenarios {
         Courier courierSmToHq = smToHqRoad.getCourier();
         
         assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
+
         Cargo cargo = hq.getFlag().getStackedCargo().get(0);
+
         assertTrue(cargo.getTarget().equals(sm));
         assertNull(courierSmToHq.getCargo());
         assertTrue(cargo.getPlannedRoads().get(0).equals(smToHqRoad));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
         assertTrue(hq.getAmount(WOOD) == 0);
-        assertTrue(courierSmToHq.isAt(sm.getFlag().getPosition()));
         assertFalse(courierSmToHq.isTraveling());
         assertEquals(courierSmToHq.getAssignedRoad(), smToHqRoad);
         assertFalse(cargo.isDeliveryPromised());
         
         /* Get the wood transported to the sawmill */
         map.stepTime();
-
-        /* The courier starts walking to the HQ */
         
+        /* The courier starts walking to the HQ */
+
         assertTrue(cargo.isDeliveryPromised());
         assertTrue(courierSmToHq.isTraveling());
         assertFalse(courierSmToHq.isArrived());
-        assertEquals(courierSmToHq.getTargetFlag(), hq.getFlag());
+        assertEquals(courierSmToHq.getTarget(), hq.getFlag().getPosition());
         
         /* The courier reaches the HQ */
-        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, hq.getFlag().getPosition());
         
-        assertTrue(courierSmToHq.isArrived());
-        assertFalse(courierSmToHq.isTraveling());
-        assertNull(courierSmToHq.getCargo());
-        assertFalse(hq.getFlag().getStackedCargo().isEmpty());
-        assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
-        assertFalse(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
-        assertEquals(smToHqRoad.getCourier(), courierSmToHq);
-        assertTrue(cargo.isDeliveryPromised());
-        assertTrue(courierSmToHq.isAt(hq.getFlag().getPosition()));
-        assertEquals(courierSmToHq.getAssignedRoad(), smToHqRoad);
-        
-        /* The courier picks up the WOOD */
-        map.stepTime();
+        /* The courier has picked up the WOOD */
         
         assertFalse(courierSmToHq.isArrived());
         assertNotNull(courierSmToHq.getCargo());
@@ -219,14 +215,11 @@ public class TestScenarios {
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
         
         /* Get the wood transported to the sawmill and deliver it*/
-        fastForwardUntilWorkersReachTarget(map, courierSmToHq);
+        Utils.fastForwardUntilWorkersReachTarget(map, courierSmToHq);
 
-        /* Cargo has arrived at the sawmill so deliver it */
-        assertTrue(smToHqRoad.getCourier().isAt(sm.getFlag().getPosition()));
-        
-        map.stepTime();
-        
+        /* Cargo has arrived at the sawmill and the courier has delivered it */
         assertTrue(sm.getMaterialInQueue(WOOD) == 1);
+        assertTrue(courierSmToHq.isIdle());
 
         /* Produce plancks in sawmill */
         assertFalse(sm.isCargoReady());
@@ -238,15 +231,17 @@ public class TestScenarios {
 
         gameLogic.initiateCollectionOfNewProduce(map);
 
-        assertTrue(courierSmToHq.isAt(sm.getFlag().getPosition()));
         assertNull(courierSmToHq.getCargo());
         assertFalse(courierSmToHq.isTraveling());
-        
         assertFalse(courierWcToHq.isAt(wc.getFlag().getPosition()));
         
         /* Transport plancks and new wood to nearest storage*/
         map.stepTime();
 
+        assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getFlag().getPosition());
+        
         assertNotNull(courierSmToHq.getCargo());
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
@@ -256,7 +251,6 @@ public class TestScenarios {
         
         fastForwardUntilWorkersReachTarget(map, courierSmToHq);
         
-        assertTrue(courierSmToHq.isAt(hq.getFlag().getPosition()));
         assertNull(courierSmToHq.getCargo());
         assertTrue(hq.getAmount(PLANCK) == 1);
     }

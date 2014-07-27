@@ -644,6 +644,11 @@ public class TestRoads {
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
+        /* Let the new courier reach its road */
+        assertTrue(map.getAllWorkers().size() == 1);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, map.getAllWorkers().get(0));
+        
         assertFalse(road0.needsCourier());
         assertTrue(map.getAllWorkers().size() == 1);
         assertEquals(road0.getCourier(), map.getAllWorkers().get(0));

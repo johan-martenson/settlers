@@ -3,10 +3,47 @@ package org.appland.settlers.model;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;
+import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
+import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
+import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
+import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
+    private States state;
+    private Point idlePoint;
 
+    private Point findIdlePointAtRoad(Road road) {
+        List<Point> wayPoints = road.getWayPoints();
+        
+        if (wayPoints.size() < 3) {
+            return wayPoints.get(0);
+        }
+
+        return wayPoints.get((int)(wayPoints.size() / 2));
+    }
+
+    private boolean isOnRoad(Road road) {
+        return road.getWayPoints().contains(getPosition());
+    }
+
+    public boolean isWalkingToIdlePoint() {
+        return state == RETURNING_TO_IDLE_SPOT;
+    }
+
+    public boolean isWalkingToRoad() {
+        return state == WALKING_TO_ROAD;
+    }
+
+    public boolean isIdle() {
+        return state == IDLE_AT_ROAD;
+    }
+
+    enum States {
+        WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO, GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT
+    }
+    
     private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
 
     private Cargo intendedCargo;
@@ -21,53 +58,37 @@ public class Courier extends Worker {
         assignedRoad  = null;
         targetRoad    = null;
         targetFlag    = null;
+
+        state = States.WALKING_TO_ROAD;
     }
 
     @Override
     protected void onIdle() {
-        if (!isAssignedToRoad()) {
-            return;
-        }
-        
-        try {
-            if (map.isFlagAtPoint(getPosition())) {
-                Flag flag         = map.getFlagAtPoint(getPosition());
-                Flag otherEnd     = assignedRoad.getOtherFlag(flag);
-                
-                /* Pick up the right cargo if we have promised to do so */
-                if (intendedCargo != null) {
-                    pickUpCargoFromFlag(intendedCargo, flag);
-                    
-                    intendedCargo = null;
-                    getCargo().clearPromisedDelivery();
-                /* Pick up the cargo where we stand if needed */
-                } else if (flag.hasCargoWaitingForRoad(assignedRoad)) {
-                    pickUpCargoForRoad(flag, assignedRoad);
-                    
-                /* See if there is a cargo at the other end to pick up */
-                } else if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
-                    Cargo cargo = otherEnd.getCargoWaitingForRoad(assignedRoad);
-                    
-                    planToPickUpCargo(cargo, otherEnd);
-                }
-            } else {
-                Road r = getAssignedRoad();
-                Flag start = r.getStartFlag();
-                Flag end = r.getEndFlag();
-                
-                if (start.hasCargoWaitingForRoad(r)) {
-                    Cargo cargo = start.getCargoWaitingForRoad(r);
+
+        if (state == IDLE_AT_ROAD) {            
+            Flag start = assignedRoad.getStartFlag();
+            Flag end   = assignedRoad.getEndFlag();
+
+            if (start.hasCargoWaitingForRoad(assignedRoad)) {
+                try {
+                    Cargo cargo = start.getCargoWaitingForRoad(assignedRoad);
                     
                     planToPickUpCargo(cargo, start);
-                } else if (end.hasCargoWaitingForRoad(r)) {
-                    Cargo cargo = end.getCargoWaitingForRoad(r);
+                    
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                } catch (InvalidRouteException ex) {
+                    Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else if (end.hasCargoWaitingForRoad(assignedRoad)) {
+                try {
+                    Cargo cargo = end.getCargoWaitingForRoad(assignedRoad);
                     
                     planToPickUpCargo(cargo, end);
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                } catch (InvalidRouteException ex) {
+                    Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -79,8 +100,8 @@ public class Courier extends Worker {
         cargo.promiseDelivery();
 
         intendedCargo = cargo;
-
-        setTargetFlag(flag);    
+    
+        setTarget(flag.getPosition());
     }
 
     public Cargo getPromisedDelivery() {
@@ -120,8 +141,21 @@ public class Courier extends Worker {
         return assignedRoad;
     }
 
-    public void setAssignedRoad(Road road) {
-        assignedRoad = road;
+    public void setAssignedRoad(Road road) throws Exception {
+        if (isOnRoad(road)) {
+            assignedRoad = road;
+            idlePoint = findIdlePointAtRoad(road);
+            
+            if (isAt(idlePoint)) {
+                state = IDLE_AT_ROAD;
+            } else {
+                setTarget(idlePoint);
+                
+                state = RETURNING_TO_IDLE_SPOT;
+            }            
+        } else {
+            throw new Exception("CAN'T ASSIGN COURIER TO ROAD WHEN IT'S NOT STANDING AT ONE OF ITS FLAGS");
+        }
     }
 
     public Road getTargetRoad() {
@@ -135,40 +169,11 @@ public class Courier extends Worker {
 
         targetRoad = r;
         
-        if (isAt(r.getStart()) || isAt(r.getEnd())) {            
-            setTarget(getPosition());
-            
-            return;
-        }
-
-        /* Find closest endpoint for the road */
-        List<Point> path1 = map.findWayWithExistingRoads(getPosition(), r.getStart());
-        List<Point> path2 = map.findWayWithExistingRoads(getPosition(), r.getEnd());
-
-        if (path1.size() < path2.size()) {
-            setTarget(r.getStart());
-        } else {
-            setTarget(r.getEnd());
-        }    
-    }
-
-    @Override
-    protected void onArrival() {
-        try {
-            Cargo cargo = getCargo();
-            if (cargo != null) {
-                if (cargo.isAtTarget()) {
-                    deliverToTarget(cargo.getTarget());
-                } else {
-                    putDownCargo();
-                }
-            } else if (getTargetRoad() != null) {
-                map.assignCourierToRoad(this, getTargetRoad());
-                stopTraveling();
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
+        idlePoint = findIdlePointAtRoad(r);
+        
+        setTarget(idlePoint);
+        
+        state = WALKING_TO_ROAD;
     }
 
     @Override
@@ -202,5 +207,74 @@ public class Courier extends Worker {
         targetFlag = t;
         
         setTarget(t.getPosition());
+    }
+
+    @Override
+    protected void onArrival() {
+        if (state == WALKING_TO_ROAD) {
+            Road r = getTargetRoad();
+            
+            r.setCourier(this);
+            
+            assignedRoad = r;
+            
+            state = IDLE_AT_ROAD;
+        } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
+            if (map.isFlagAtPoint(getPosition())) {
+                try {                    
+                    Flag flag         = map.getFlagAtPoint(getPosition());
+                    Flag otherEnd     = assignedRoad.getOtherFlag(flag);
+                    
+                    /* Pick up the right cargo if we have promised to do so */
+                    if (intendedCargo != null) {
+                        pickUpCargoFromFlag(intendedCargo, flag);
+                        
+                        intendedCargo = null;
+                        getCargo().clearPromisedDelivery();
+                        /* Pick up the cargo where we stand if needed */
+                    } else if (flag.hasCargoWaitingForRoad(assignedRoad)) {
+                        pickUpCargoForRoad(flag, assignedRoad);
+                    }
+                    
+                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                } catch (Exception ex) {
+                    Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
+            try {
+                Cargo cargoToDeliver = getCargo();
+
+                if (cargoToDeliver.isAtTarget()) {
+                    deliverToTarget(cargoToDeliver.getTarget());
+                } else {
+                    putDownCargo();
+                }
+                
+                Flag flag     = map.getFlagAtPoint(getPosition());
+                Flag otherEnd = assignedRoad.getOtherFlag(flag);
+
+                if (flag.hasCargoWaitingForRoad(getAssignedRoad())) {
+                    pickUpCargoForRoad(flag, assignedRoad);
+                    
+                    setTarget(otherEnd.getPosition());
+                    
+                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                } else if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
+                    Cargo cargoToPickUp = otherEnd.getCargoWaitingForRoad(assignedRoad);
+                    
+                    planToPickUpCargo(cargoToPickUp, otherEnd);
+                    
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                } else {
+                    setTarget(idlePoint);
+                    state = RETURNING_TO_IDLE_SPOT;
+                }
+            } catch (Exception e) {
+                e.printStackTrace(System.out);
+            }
+        } else if (state == RETURNING_TO_IDLE_SPOT) {
+            state = IDLE_AT_ROAD;
+        }
     }
 }

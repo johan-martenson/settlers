@@ -27,6 +27,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 import static org.junit.Assert.assertTrue;
 
@@ -223,15 +224,18 @@ public class Utils {
         }
     }
 
-    static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... couriers) {
-        for (Worker c : couriers) {
+    static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) {
+        assertNotNull(map);
+        assertFalse(workers.length == 0);
+        
+        for (Worker c : workers) {
             assertTrue(c.isTraveling());
         }
             
         for (int i = 0; i < 1000; i++) {
             boolean allDone = true;
 
-            for (Worker c : couriers) {
+            for (Worker c : workers) {
                 if (!c.isArrived()) {
                     allDone = false;
                 }
@@ -243,5 +247,21 @@ public class Utils {
             
             map.stepTime();
         }
+    }
+
+    static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) {
+        assertNotNull(target);
+        assertNotNull(worker);
+        assertNotNull(map);
+        
+        for (int i = 0; i < 1000; i++) {
+            if (worker.isAt(target)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isAt(target));
     }
 }

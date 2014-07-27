@@ -8,6 +8,8 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -107,11 +109,11 @@ public class TestTransportation {
 
     @Test
     public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
-        GameMap    map        = new GameMap(40, 40);
-        Flag       middleFlag = new Flag(7, 7);
-        Flag       endFlag    = new Flag(10, 10);
-        Woodcutter wc         = new Woodcutter();
-        Point      wcPoint    = new Point(3, 3);
+        GameMap map = new GameMap(40, 40);
+        Flag middleFlag = new Flag(7, 7);
+        Flag endFlag = new Flag(10, 10);
+        Woodcutter wc = new Woodcutter();
+        Point wcPoint = new Point(3, 3);
 
         map.placeBuilding(wc, wcPoint);
         map.placeFlag(middleFlag);
@@ -191,12 +193,12 @@ public class TestTransportation {
          *    |---F7---F8
          */
         Point wcPoint = new Point(10, 16);
-        Woodcutter wc = new Woodcutter();
-        Flag start    = new Flag(new Point(2, 18));
-        Flag f1       = new Flag(new Point(4, 18));
-        Flag f2       = new Flag(new Point(6, 18));
-        Flag f9       = new Flag(new Point(8, 14));
-        
+        ForesterHut hut = new ForesterHut();
+        Flag start = new Flag(new Point(2, 18));
+        Flag f1 = new Flag(new Point(4, 18));
+        Flag f2 = new Flag(new Point(6, 18));
+        Flag f9 = new Flag(new Point(8, 14));
+
         GameMap map = new GameMap(20, 20);
         map.placeBuilding(new Headquarter(), new Point(5, 5));
         map.placeFlag(start);
@@ -208,7 +210,7 @@ public class TestTransportation {
         map.placeRoad(new Point(4, 18), new Point(6, 18));
         map.placeRoad(new Point(6, 18), new Point(8, 18));
         map.placeRoad(new Point(8, 18), new Point(10, 18));
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(hut, wcPoint);
         map.placeFlag(f9);
         map.placeRoad(new Point(6, 18), new Point(7, 17), new Point(8, 16), new Point(7, 15), f9.getPosition());
         map.placeRoad(f9.getPosition(), new Point(10, 14), new Point(11, 15));
@@ -221,46 +223,47 @@ public class TestTransportation {
         map.placeFlag(new Flag(new Point(10, 12)));
         map.placeRoad(new Point(8, 12), new Point(10, 12));
 
-        Flag target = wc.getFlag();
+        Utils.constructSmallHouse(hut);
+
+        Flag target = hut.getFlag();
 
         assertTrue(target.getPosition().equals(new Point(11, 15)));
-        
-        Courier worker = new Courier(map);
 
-        assertNotNull(worker);
+        Forester forester = new Forester(map);
 
-        worker.setPosition(start.getPosition());
-        worker.setTargetFlag(target);
-        
+        assertNotNull(forester);
+
+        forester.setPosition(start.getPosition());
+        forester.setTargetBuilding(hut);
+
         /* Road to go: (2, 18), (4, 18), (6, 18), (7, 17), (8, 16), (7, 15), (8, 14), (10, 14), (11, 15) */
         /*             start    f1       f2                                  f9                 target */
+        assertTrue(forester.getPosition().equals(start.getPosition()));
 
-        assertTrue(worker.getPosition().equals(start.getPosition()));
+        Utils.fastForward(10, forester);
 
-        Utils.fastForward(10, worker);
+        assertTrue(forester.getPosition().equals(f1.getPosition()));
 
-        assertTrue(worker.getPosition().equals(f1.getPosition()));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(f2.getPosition()));
 
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(f2.getPosition()));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(new Point(7, 17)));
 
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(new Point(7, 17)));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(new Point(8, 16)));
 
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(new Point(8, 16)));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(new Point(7, 15)));
 
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(new Point(7, 15)));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(f9.getPosition()));
 
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(f9.getPosition()));
-        
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(new Point(10, 14)));
-        
-        Utils.fastForward(10, worker);
-        assertTrue(worker.getPosition().equals(target.getPosition()));
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(new Point(10, 14)));
+
+        Utils.fastForward(10, forester);
+        assertTrue(forester.getPosition().equals(target.getPosition()));
     }
 
     @Test(expected = InvalidRouteException.class)
@@ -296,9 +299,9 @@ public class TestTransportation {
 
         Courier worker = new Courier(map);
         Stonemason mason = new Stonemason(map);
-                
+
         map.placeStone(qry.getFlag().getPosition().up().up());
-        
+
         worker.setPosition(start.getPosition());
 
         Utils.constructSmallHouse(qry);
@@ -307,7 +310,7 @@ public class TestTransportation {
         map.placeWorker(mason, qry.getFlag());
         qry.assignWorker(mason);
         mason.enterBuilding(qry);
-        
+
         assertTrue(qry.getConstructionState() == DONE);
 
         /* Production starts, wait for it to finish */
@@ -332,99 +335,123 @@ public class TestTransportation {
 
         assertTrue(c.getMaterial() == STONE);
 
-		// TODO: Make sure the cargo has a target which is to go to the closest storage building
+        // TODO: Make sure the cargo has a target which is to go to the closest storage building
         c.setTarget(stge, map);
     }
 
     @Test
     public void testDeliverWithHandover() throws Exception {
-        GameLogic gameLogic  = new GameLogic();
-        GameMap map          = new GameMap(40, 40);
-        Storage storage      = new Storage();
-        Point hqPoint        = new Point(6, 4);
-        Point middlePoint    = new Point(10, 10); // hq to middle 6 steps
-        Point endPoint       = new Point(10, 14); // end to middle 4 steps
-        Flag middleFlag      = new Flag(middlePoint);
-        Flag endFlag         = new Flag(endPoint);
-        Courier mdlToEndCr   = new Courier(map);
-        Courier hqToMdlCr    = new Courier(map);
-        
-        
+        GameLogic gameLogic = new GameLogic();
+        GameMap map = new GameMap(40, 40);
+        Storage storage = new Storage();
+        Point hqPoint = new Point(6, 4);
+        Point middlePoint = new Point(10, 10); // hq to middle 6 steps
+        Point endPoint = new Point(10, 14); // end to middle 4 steps
+        Flag middleFlag = new Flag(middlePoint);
+        Flag endFlag = new Flag(endPoint);
+        Courier mdlToEndCr = new Courier(map);
+        Courier hqToMdlCr = new Courier(map);
+
         map.placeBuilding(storage, hqPoint);
         map.placeFlag(middleFlag);
         map.placeFlag(endFlag);
-        
+
         Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
         Road middleToEndRoad = map.placeRoad(middlePoint, middlePoint.upRight(), middlePoint.upRight().upLeft(), endPoint.downLeft(), endPoint);
-        
+
         map.placeWorker(hqToMdlCr, middleFlag);
         map.placeWorker(mdlToEndCr, endFlag);
-        
+
         map.assignCourierToRoad(hqToMdlCr, hqToMiddleRoad);
         map.assignCourierToRoad(mdlToEndCr, middleToEndRoad);
-        
+
+        /* Let couriers walk to the middle of their roads and become idle */
+        for (int i = 0; i < 500; i++) {
+            if (hqToMdlCr.isIdle() && mdlToEndCr.isIdle()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(mdlToEndCr.isArrived());
+        assertFalse(mdlToEndCr.isTraveling());
+        assertNull(mdlToEndCr.getCargo());
+
         Cargo c = new Cargo(WOOD);
         endFlag.putCargo(c);
         c.setTarget(storage, map);
-        
-        assertTrue(mdlToEndCr.isArrived());
-        assertFalse(mdlToEndCr.isTraveling());
-        assertTrue(mdlToEndCr.isAt(endFlag.getPosition()));
-        assertNull(mdlToEndCr.getCargo());
-        
-        /* Check that the courier picks up the cargo on next tick */
+
+        /* The courier detects the cargo on next tick */
         map.stepTime();
-        
-        assertTrue(mdlToEndCr.getCargo().equals(c));
-        assertTrue(mdlToEndCr.getTargetFlag().equals(middleFlag));
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, mdlToEndCr);
+
+        assertEquals(mdlToEndCr.getTarget(), endFlag.getPosition());
+
+        /* Let the courier walk to the cargo at end flag and picks up the cargo*/
+        Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, endFlag.getPosition());
+
+        assertEquals(mdlToEndCr.getCargo(), c);
+        assertEquals(mdlToEndCr.getTargetFlag(), middleFlag);
+
+        /* Let the courier walk to  */
+        Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, middlePoint);
 
         assertTrue(mdlToEndCr.getPosition().equals(middlePoint));
 
-        /* Courier at middle point */        
-        assertTrue(mdlToEndCr.isArrived());
+        /* Courier at middle point */
+        assertFalse(mdlToEndCr.isIdle());
         assertNull(mdlToEndCr.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(c));
         assertTrue(middleFlag.getStackedCargo().size() == 1);
         assertTrue(middleFlag.getStackedCargo().get(0).equals(c));
         assertNull(hqToMdlCr.getCargo());
         assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
-        
-        /* Next courier picks up cargo */
-        map.stepTime();
-        
-        assertTrue(hqToMdlCr.getCargo().equals(c));
 
-        Utils.fastForward(80, map);
-        
-        assertTrue(hqToMdlCr.isAt(storage.getFlag().getPosition()));        
+        /* Next courier detects the cargo and walks there */
+        map.stepTime();
+
+        assertEquals(hqToMdlCr.getTarget(), middlePoint);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, middlePoint);
+
+        /* Courier has picked up cargo */
+        assertEquals(hqToMdlCr.getCargo(), c);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, hqPoint.downRight());
+
+        assertTrue(hqToMdlCr.isAt(storage.getFlag().getPosition()));
         assertNull(hqToMdlCr.getCargo());
         assertTrue(storage.isInStock(WOOD));
-        
     }
-    
+
     @Test
     public void testCourierIsAssignedToNewRoad() throws Exception {
-        GameLogic gameLogic  = new GameLogic();
-        GameMap map          = new GameMap(30, 30);
-        Storage storage      = new Storage();
-        Point hqPoint        = new Point(5, 5);
-        Point middlePoint    = new Point(11, 5);
-        Flag middleFlag      = new Flag(middlePoint);
-        
+        GameLogic gameLogic = new GameLogic();
+        GameMap map = new GameMap(30, 30);
+        Storage storage = new Storage();
+        Point hqPoint = new Point(5, 5);
+        Point middlePoint = new Point(11, 5);
+        Flag middleFlag = new Flag(middlePoint);
+
         map.placeBuilding(storage, hqPoint);
         map.placeFlag(middleFlag);
-        
+
+        Utils.constructLargeHouse(storage);
+
         Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
-        
+
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
         assertTrue(map.getRoadsThatNeedCouriers().contains(hqToMiddleRoad));
         assertTrue(map.getClosestStorage(hqToMiddleRoad).equals(storage));
-        
+
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
+
+        assertFalse(hqToMiddleRoad.needsCourier());
+
+        /* Courier needs to walk to road before it's assigned */
+        Utils.fastForwardUntilWorkersReachTarget(map, map.getAllWorkers().get(0));
+
         assertFalse(hqToMiddleRoad.needsCourier());
         assertNotNull(hqToMiddleRoad.getCourier());
     }
@@ -434,30 +461,30 @@ public class TestTransportation {
         GameMap map = new GameMap(10, 10);
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(3, 1));
-        
+
         map.placeFlag(f1);
         map.placeFlag(f2);
-        
-        Road r  = map.placeRoad(f1.getPosition(), f2.getPosition());
-        
+
+        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
+
         assertTrue(r.needsCourier());
     }
-    
-    @Test(expected=Exception.class)
+
+    @Test(expected = Exception.class)
     public void testPromiseCourierTwice() throws Exception {
         GameMap map = new GameMap(10, 10);
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(3, 1));
-        
+
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        Road r  = map.placeRoad(f1.getPosition(), f2.getPosition());
+        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
 
         r.promiseCourier();
         r.promiseCourier();
     }
-    
+
     @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         GameMap map = new GameMap(10, 10);
@@ -500,10 +527,10 @@ public class TestTransportation {
         m.setTargetBuilding(b);
         assertEquals(m.getTargetBuilding(), b);
         assertEquals(m.getTarget(), b.getFlag().getPosition());
-        
+
         /* Verify that the military reaches the barracks */
         Utils.fastForward(60, m);
-        
+
         assertTrue(m.isAt(b.getFlag().getPosition()));
         assertTrue(m.isArrived());
 
@@ -512,76 +539,43 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsOnFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Point point0 = new Point(5, 5);
-        Point point1 = new Point(6, 6);
-        Point point2 = new Point(7, 7);
-        
-        Building sm = map.placeBuilding(new Sawmill(), point2.upLeft());
-        
-        Flag flag0 = map.placeFlag(point0);
-        Road road0 = map.placeRoad(point0, point1, point2);
-        
-        Courier courier = new Courier(map);
-        
-        map.placeWorker(courier, flag0);
-        map.assignCourierToRoad(courier, road0);
-        
-        Cargo cargo = new Cargo(WOOD);
-        cargo.setPosition(point0);
-        cargo.setTarget(sm, map);
-        
-        flag0.putCargo(cargo);
-        
-        assertFalse(courier.isTraveling());
-        assertTrue(courier.isAt(point0));
-        assertNull(courier.getCargo());
-        
-        map.stepTime();
-        
-        assertEquals(courier.getCargo(), cargo);
-    }
-    
-    @Test
     public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsNotOnFlag() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Point point0 = new Point(5, 5);
-        Point point1 = new Point(6, 6);
-        Point point2 = new Point(7, 7);
-        
-        Building sm = map.placeBuilding(new Sawmill(), point2.upLeft());
-        
-        Flag flag0 = map.placeFlag(point0);
-        Road road0 = map.placeRoad(point0, point1, point2);
-        
+        Point start = new Point(5, 5);
+        Point middle = new Point(6, 6);
+        Point end = new Point(7, 7);
+
+        Building sm = map.placeBuilding(new Sawmill(), end.upLeft());
+
+        Flag flag0 = map.placeFlag(start);
+        Road road0 = map.placeRoad(start, middle, end);
+
         Courier courier = new Courier(map);
-        
+
         map.placeWorker(courier, sm.getFlag());
         map.assignCourierToRoad(courier, road0);
-        
-        Cargo cargo = new Cargo(WOOD);
-        cargo.setPosition(point0);
-        cargo.setTarget(sm, map);
-        
-        flag0.putCargo(cargo);
-        
-        assertFalse(courier.isTraveling());
-        assertTrue(courier.isAt(point2));
-        assertNull(courier.getCargo());
-        assertFalse(cargo.isDeliveryPromised());
-        
-        map.stepTime();
-        
-        assertTrue(cargo.isDeliveryPromised());
-        assertEquals(courier.getTargetFlag(), flag0);
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
-        assertTrue(courier.isAt(point0));
-        
+        Cargo cargo = new Cargo(WOOD);
+        cargo.setPosition(start);
+        cargo.setTarget(sm, map);
+
+        flag0.putCargo(cargo);
+
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(middle));
+        assertNull(courier.getCargo());
+        assertFalse(cargo.isDeliveryPromised());
+
         map.stepTime();
-        
+
+        assertTrue(cargo.isDeliveryPromised());
+        assertEquals(courier.getTarget(), flag0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, start);
+
+        assertTrue(courier.isAt(start));
         assertEquals(courier.getCargo(), cargo);
     }
 
@@ -593,55 +587,64 @@ public class TestTransportation {
         Point point2 = new Point(7, 7);
         Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
-        
+
         Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
-        
+
         Flag flag0 = map.placeFlag(point0);
         Flag flag1 = map.placeFlag(point2);
         Road road0 = map.placeRoad(point0, point1, point2);
         Road road1 = map.placeRoad(point2, point3, point4);
-        
+
         Courier courier = new Courier(map);
         Courier secondCourier = new Courier(map);
-        
+
         map.placeWorker(courier, flag0);
-        map.assignCourierToRoad(courier, road0);        
+        courier.setTargetRoad(road0);
         
         map.placeWorker(secondCourier, flag1);
-        map.assignCourierToRoad(secondCourier, road1);
+        secondCourier.setTargetRoad(road1);
+        
+        /* Let the couriers reach their roads and get assigned */
+        Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
         
         Cargo cargo = new Cargo(WOOD);
         cargo.setPosition(point0);
         cargo.setTarget(sm, map);
-        
+
         flag0.putCargo(cargo);
 
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point0);
         assertFalse(courier.isTraveling());
-        assertTrue(courier.isAt(point0));
+        assertTrue(courier.isAt(point1));
         assertNull(courier.getCargo());
-        
+        assertFalse(cargo.isDeliveryPromised());
+
+        /* Make courier detect cargo */
         map.stepTime();
 
+        assertNull(courier.getCargo());
+        assertEquals(courier.getTarget(), point0);
+        assertTrue(cargo.isDeliveryPromised());
+        
+        /* Let the courier reach the cargo and pick it up */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+        
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTargetFlag(), flag1);
         assertTrue(flag1.getStackedCargo().isEmpty());
+        assertEquals(courier.getTarget(), point2);
+        assertFalse(cargo.isDeliveryPromised());
         
-        int i;
-        for (i = 0; i < 1000; i++) {
-            if (!courier.isArrived()) {
-                courier.stepTime();
-            }
-        }
-
+        /* Fast forward until the courier reaches the other flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 
         assertEquals(cargo.getPlannedRoads().get(0), road1);
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point2);
-        assertFalse(cargo.isDeliveryPromised());
         assertEquals(flag1.getStackedCargo().get(0), cargo);
         assertFalse(flag1.getStackedCargo().isEmpty());
     }
@@ -654,53 +657,50 @@ public class TestTransportation {
         Point point2 = new Point(7, 7);
         Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
-        
+
         Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
-        
+
         Flag flag0 = map.placeFlag(point0);
         Flag flag1 = map.placeFlag(point2);
         Road road0 = map.placeRoad(point0, point1, point2);
         Road road1 = map.placeRoad(point2, point3, point4);
-        
+
         Courier courier = new Courier(map);
         Courier secondCourier = new Courier(map);
-        
+
         map.placeWorker(courier, flag1);
-        map.assignCourierToRoad(courier, road0);
+        courier.setTargetRoad(road0);
 
         map.placeWorker(secondCourier, flag1);
-        map.assignCourierToRoad(secondCourier, road1);
+        secondCourier.setTargetRoad(road1);
 
+        /* Let the couriers reach their target road and become idle */
+        Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
+        
         Cargo cargo = new Cargo(WOOD);
         cargo.setPosition(point0);
         cargo.setTarget(sm, map);
-        
+
         flag0.putCargo(cargo);
 
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point0);
         assertFalse(courier.isTraveling());
-        assertTrue(courier.isAt(point2));
+        assertTrue(courier.isAt(point1));
         assertNull(courier.getCargo());
         assertFalse(cargo.isDeliveryPromised());
-        
+
+        /* Make the first courier detect the cargo */
         map.stepTime();
 
         assertTrue(cargo.isDeliveryPromised());
-        assertEquals(courier.getTargetFlag(), flag0);
-        assertFalse(flag0.getStackedCargo().isEmpty());
-        
-        int i;
-        for (i = 0; i < 1000; i++) {
-            if (!courier.isArrived()) {
-                courier.stepTime();
-            }
-        }
-
+        assertEquals(courier.getTarget(), flag0.getPosition());
         assertFalse(flag0.getStackedCargo().isEmpty());
 
-        courier.stepTime();
+        /* Let the courier reach and pick up the cargo */
         
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+
         assertEquals(courier.getCargo(), cargo);
         assertTrue(flag0.getStackedCargo().isEmpty());
         assertFalse(cargo.isDeliveryPromised());

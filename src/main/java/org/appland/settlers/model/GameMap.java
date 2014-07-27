@@ -516,7 +516,11 @@ public class GameMap {
     public List<Courier> getIdleWorkers() {
         List<Courier> result = new ArrayList<>();
 
-        for (Courier w : roadToWorkerMap.values()) {
+        for (Worker w : allWorkers) {
+            if (!(w instanceof Courier)) {
+                continue;
+            }
+            
             if (w.getCargo() != null) {
                 continue;
             }
@@ -525,7 +529,7 @@ public class GameMap {
                 continue;
             }
 
-            result.add(w);
+            result.add((Courier)w);
         }
 
         return result;
@@ -538,9 +542,15 @@ public class GameMap {
     public List<Courier> getWorkersAtTarget() {
         List<Courier> result = new ArrayList<>();
 
-        for (Courier w : roadToWorkerMap.values()) {
-            if (w.isArrived()) {
-                result.add(w);
+        for (Worker w : allWorkers) {
+            if (!(w instanceof Courier)) {
+                continue;
+            }
+            
+            Courier c = (Courier)w;
+            
+            if (c.isArrived()) {
+                result.add(c);
             }
         }
 

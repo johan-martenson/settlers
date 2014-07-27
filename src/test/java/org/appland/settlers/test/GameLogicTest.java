@@ -142,15 +142,18 @@ public class GameLogicTest {
         Sawmill sm    = new Sawmill();
         Point smPoint = new Point(5, 5);
         Flag f        = new Flag(10, 10);
-        Courier w     = new Courier(map);
+        Courier courier     = new Courier(map);
         Road r;
         
         map.placeFlag(f);
         map.placeBuilding(sm, smPoint);
         r = map.placeAutoSelectedRoad(f, sm.getFlag());
-        map.placeWorker(w, f);
-        map.assignCourierToRoad(w, r);
+        map.placeWorker(courier, f);
+        courier.setTargetRoad(r);
 
+        /* Fast forward so the courier can reach its road and be assigned */
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
         Cargo c = new Cargo(PLANCK);
 
         c.setPosition(f.getPosition());
@@ -158,21 +161,25 @@ public class GameLogicTest {
         f.putCargo(c);
 
         /* Verify that the worker is idle */
-        assertNull(w.getCargo());
-        assertNull(w.getTargetFlag());
+        assertTrue(courier.isIdle());
+        assertNull(courier.getCargo());
+        assertNull(courier.getTargetFlag());
 
-        assertEquals(w.getPosition(), f.getPosition());
-        assertTrue(w.isArrived());
-        assertFalse(w.isTraveling());
-        assertTrue(f.hasCargoWaitingForRoad(w.getAssignedRoad()));
+        assertTrue(courier.isArrived());
+        assertFalse(courier.isTraveling());
+        assertTrue(f.hasCargoWaitingForRoad(courier.getAssignedRoad()));
 
         /* Verify that the worker picks up the cargo and has the sawmill as target */
         map.stepTime();
-        assertNotNull(w.getCargo());
 
-        Cargo tmp = w.getCargo();
-        assertEquals(c, tmp);
-        assertEquals(w.getTargetFlag(), sm.getFlag());
+        assertEquals(courier.getTarget(), f.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, f.getPosition());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(c, courier.getCargo());
+        assertEquals(courier.getTargetFlag(), sm.getFlag());
     }
 
     @Test
@@ -190,31 +197,35 @@ public class GameLogicTest {
 
         r = map.placeAutoSelectedRoad(src, wc.getFlag());
         map.placeWorker(w, src);
+        w.setTargetRoad(r);
 
-        map.assignCourierToRoad(w, r);
-
+        /* Fast forward to let the courier reach its road and get assigned */
+        Utils.fastForwardUntilWorkersReachTarget(map, w);
+        
         c = new Cargo(PLANCK);
 
         src.putCargo(c);
         c.setTarget(wc, map);
 
-        w.pickUpCargoForRoad(src, r);
-
+        /* Let the courier detect and pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(w.getTarget(), src.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, src.getPosition());
+        
+        assertEquals(w.getCargo(), c);
+        
         /* Move worker to the sawmill */
-        fastForward(40, w, wc);
+        assertEquals(w.getTarget(), wc.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, wc.getFlag().getPosition());
         
         assertTrue(w.isAt(wc.getFlag().getPosition()));
 
         /* Verify the worker delivers the cargo when it has reached the target */
-        fastForward(100, w, wc);
         assertNull(w.getCargo());
         assertTrue(w.isAt(wc.getFlag().getPosition()));
-        assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
-
-        /* Verify that deliverForWorkersAtTarget gets the worker to deliver the cargo */
-        map.stepTime();
-
-        assertNull(w.getCargo());
         assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
     }
 
@@ -273,13 +284,13 @@ public class GameLogicTest {
         Courier w1 = (Courier)map.getAllWorkers().get(0);
         Courier w2 = (Courier)map.getAllWorkers().get(1);
         
-        assertTrue(w1.isAt(hq.getFlag().getPosition()));
+        /* Fast forward to let the couriers reach their roads */
+        Utils.fastForwardUntilWorkersReachTarget(map, w1, w2);
+        
         assertTrue(w1.getAssignedRoad().equals(r));
         
-        assertTrue(w2.isAt(hq.getFlag().getPosition()));
         assertTrue(w2.getAssignedRoad().equals(r2));
         
-//        assertFalse(w1.isTraveling());
         assertTrue(map.getRoadsThatNeedCouriers().isEmpty());
         assertEquals(map.getRoad(hq.getFlag().getPosition(), bk.getFlag().getPosition()), r);
         assertNotNull(r.getCourier().getAssignedRoad());
