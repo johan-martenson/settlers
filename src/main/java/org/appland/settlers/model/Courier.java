@@ -49,7 +49,6 @@ public class Courier extends Worker {
     private Cargo intendedCargo;
     private Road assignedRoad;
     private Road targetRoad;
-    private Flag targetFlag;
 
     public Courier(GameMap map) {
         super(map);
@@ -57,7 +56,6 @@ public class Courier extends Worker {
         intendedCargo = null;
         assignedRoad  = null;
         targetRoad    = null;
-        targetFlag    = null;
 
         state = States.WALKING_TO_ROAD;
     }
@@ -178,7 +176,6 @@ public class Courier extends Worker {
 
     @Override
     public void stopTraveling() {
-        targetFlag = null;
         targetRoad = null;
         
         super.stopTraveling();
