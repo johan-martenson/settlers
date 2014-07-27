@@ -270,16 +270,19 @@ public class TestTransportation {
     public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
         GameMap map = new GameMap(10, 10);
 
-        Flag target = new Flag(6, 2);
+        Flag away = new Flag(6, 2);
         Flag start = new Flag(2, 2);
+        Flag end = map.placeFlag(new Point(4, 2));
 
         map.placeFlag(start);
-        map.placeFlag(target);
+        map.placeFlag(away);
 
+        Road targetRoad = map.placeRoad(start.getPosition(), end.getPosition());
         Courier worker = new Courier(map);
 
-        worker.setPosition(start.getPosition());
-        worker.setTargetFlag(target);
+        map.placeWorker(worker, away);
+
+        worker.setTargetRoad(targetRoad);
     }
 
     @Test
@@ -391,7 +394,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, endFlag.getPosition());
 
         assertEquals(mdlToEndCr.getCargo(), c);
-        assertEquals(mdlToEndCr.getTargetFlag(), middleFlag);
+        assertEquals(mdlToEndCr.getTarget(), middleFlag.getPosition());
 
         /* Let the courier walk to  */
         Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, middlePoint);
@@ -634,7 +637,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
         
         assertEquals(courier.getCargo(), cargo);
-        assertEquals(courier.getTargetFlag(), flag1);
+        assertEquals(courier.getTarget(), flag1.getPosition());
         assertTrue(flag1.getStackedCargo().isEmpty());
         assertEquals(courier.getTarget(), point2);
         assertFalse(cargo.isDeliveryPromised());

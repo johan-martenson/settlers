@@ -118,7 +118,7 @@ public class Courier extends Worker {
         setCargo(flag.retrieveCargo(c));
 
         Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
-        setTargetFlag(otherEnd);
+        setTarget(otherEnd.getPosition());
     }
 
     public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
@@ -163,16 +163,16 @@ public class Courier extends Worker {
     }
 
     public void setTargetRoad(Road r) throws Exception {
-        if (getTargetFlag() != null || getTargetBuilding() != null) {
+        if (getTargetBuilding() != null) {
             throw new Exception("Can't set road as target while flag or building are already targetted");
         }
 
         targetRoad = r;
-        
+
         idlePoint = findIdlePointAtRoad(r);
-        
+
         setTarget(idlePoint);
-        
+
         state = WALKING_TO_ROAD;
     }
 
@@ -184,29 +184,18 @@ public class Courier extends Worker {
         super.stopTraveling();
     }
     
-    public void putDownCargo() {
+    public void putDownCargo() throws Exception {
         Cargo cargo = getCargo();
+        Flag flag = map.getFlagAtPoint(getPosition());
         
-        getTargetFlag().putCargo(cargo);
+        flag.putCargo(cargo);
         cargo.setPosition(getPosition());
-        
+
         List<Road> plannedRoadForCargo = cargo.getPlannedRoads();
         plannedRoadForCargo.remove(0);
         cargo.setPlannedRoads(plannedRoadForCargo);
 
         setCargo(null);
-    }
-
-    public Flag getTargetFlag() {
-        return targetFlag;
-    }
-
-    public void setTargetFlag(Flag t) throws InvalidRouteException {
-        log.log(Level.INFO, "Setting target flag to {0}, previous target was {1}", new Object[]{t, getTarget()});
-        
-        targetFlag = t;
-        
-        setTarget(t.getPosition());
     }
 
     @Override

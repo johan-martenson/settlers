@@ -209,7 +209,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getCargo(), cargo);
         assertTrue(courierSmToHq.isTraveling());
         assertTrue(courierSmToHq.getCargo().getMaterial() == WOOD);
-        assertEquals(courierSmToHq.getTargetFlag(), sm.getFlag());
+        assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
         assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
         assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
@@ -245,7 +245,7 @@ public class TestScenarios {
         assertNotNull(courierSmToHq.getCargo());
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
-        assertTrue(courierSmToHq.getTargetFlag().equals(hq.getFlag()));
+        assertEquals(courierSmToHq.getTarget(), hq.getFlag().getPosition());
         assertTrue(hq.getAmount(PLANCK) == 0);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         

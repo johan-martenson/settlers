@@ -166,7 +166,6 @@ public class GameLogicTest {
         /* Verify that the worker is idle */
         assertTrue(courier.isIdle());
         assertNull(courier.getCargo());
-        assertNull(courier.getTargetFlag());
 
         assertTrue(courier.isArrived());
         assertFalse(courier.isTraveling());
@@ -182,7 +181,7 @@ public class GameLogicTest {
         /* Verify that the courier has picked up the cargo */
         assertNotNull(courier.getCargo());
         assertEquals(c, courier.getCargo());
-        assertEquals(courier.getTargetFlag(), sm.getFlag());
+        assertEquals(courier.getTarget(), sm.getFlag().getPosition());
     }
 
     @Test
