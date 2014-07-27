@@ -18,18 +18,19 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  * @author johan
  */
 public abstract class Worker implements Actor {
+
     enum States {
         WALKING_AND_EXACTLY_AT_POINT, WALKING_BETWEEN_POINTS, IDLE_OUTSIDE, IDLE_INSIDE
     }
     
-    private States        state;
-    private Cargo         carriedCargo;
-    private Building      targetBuilding;
+    private final static Logger log = Logger.getLogger(Worker.class.getName());
+
     protected GameMap     map;
     protected List<Point> path;
 
-    private final static Logger log = Logger.getLogger(Worker.class.getName());
-
+    private States        state;
+    private Cargo         carriedCargo;
+    private Building      targetBuilding;
     private Point         position;
     private Point         target;
     private Countdown     walkCountdown;
