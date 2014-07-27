@@ -89,10 +89,6 @@ public class Courier extends Worker {
         }
     }
 
-    private boolean isAssignedToRoad() {
-        return getAssignedRoad() != null;
-    }
-    
     private void planToPickUpCargo(Cargo cargo, Flag flag) throws InvalidRouteException {
         cargo.promiseDelivery();
 
