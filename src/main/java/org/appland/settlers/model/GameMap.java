@@ -38,10 +38,6 @@ public class GameMap {
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
-
-    private List<Point> autoSelectRoad(Flag start, Flag end) throws Exception {
-        return findAutoSelectedRoad(start.getPosition(), end.getPosition(), null);
-    }
     
     public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
         Set<Point> evaluated         = new HashSet<>();
