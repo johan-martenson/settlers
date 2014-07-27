@@ -22,7 +22,7 @@ public abstract class Worker implements Actor {
         WALKING_AND_EXACTLY_AT_POINT, WALKING_BETWEEN_POINTS, IDLE_OUTSIDE, IDLE_INSIDE
     }
     
-    private States        workerState;
+    private States        state;
     private Cargo         carriedCargo;
     private Building      targetBuilding;
     protected GameMap     map;
@@ -30,7 +30,7 @@ public abstract class Worker implements Actor {
 
     private final static Logger log = Logger.getLogger(Worker.class.getName());
 
-    private Point         workerPosition;
+    private Point         position;
     private Point         target;
     private Countdown     walkCountdown;
     private Building      home;
@@ -41,7 +41,7 @@ public abstract class Worker implements Actor {
     
     public Worker(GameMap m) {
         target         = null;
-        workerPosition = null;
+        position = null;
         path           = null;
         targetBuilding = null;
         home           = null;
@@ -49,22 +49,22 @@ public abstract class Worker implements Actor {
         
         walkCountdown  = new Countdown();
         
-        workerState = IDLE_OUTSIDE;
+        state = IDLE_OUTSIDE;
     }
 
     @Override
     public void stepTime() {
         log.log(Level.FINE, "Stepping time");
 
-        if (workerState == WALKING_AND_EXACTLY_AT_POINT) {
-            workerPosition = path.get(0);
+        if (state == WALKING_AND_EXACTLY_AT_POINT) {
+            position = path.get(0);
             path.remove(0);
 
             updateCargoPosition();
 
-            if (workerPosition.equals(target)) {
+            if (position.equals(target)) {
                 try {
-                    workerState = IDLE_OUTSIDE;
+                    state = IDLE_OUTSIDE;
 
                     handleArrival();
                 } catch (Exception ex) {
@@ -73,18 +73,18 @@ public abstract class Worker implements Actor {
             } else {
                 walkCountdown.countFrom(getSpeed() - 3);
                 
-                workerState = WALKING_BETWEEN_POINTS;
+                state = WALKING_BETWEEN_POINTS;
             }
-        } else if (workerState == WALKING_BETWEEN_POINTS) {
+        } else if (state == WALKING_BETWEEN_POINTS) {
             if (walkCountdown.reachedZero()) {
                 
-                workerState = WALKING_AND_EXACTLY_AT_POINT;
+                state = WALKING_AND_EXACTLY_AT_POINT;
             } else {
                 walkCountdown.step();
             }
-        } else if (workerState == IDLE_OUTSIDE) {            
+        } else if (state == IDLE_OUTSIDE) {            
             onIdle();
-        } else if (workerState == IDLE_INSIDE) {
+        } else if (state == IDLE_INSIDE) {
             onIdle();
         }
     }
@@ -145,18 +145,18 @@ public abstract class Worker implements Actor {
     }
 
     public void setPosition(Point p) {
-        workerPosition = p;
+        position = p;
     }
 
     public Point getPosition() {
-        return workerPosition;
+        return position;
     }
 
     public boolean isArrived() {
         log.log(Level.FINE, "Checking if worker has arrived");
-        log.log(Level.FINER, "Worker is at {0} and target is {1}", new Object[]{workerPosition, target});
+        log.log(Level.FINER, "Worker is at {0} and target is {1}", new Object[]{position, target});
 
-        if (workerState == IDLE_INSIDE || workerState == IDLE_OUTSIDE) {
+        if (state == IDLE_INSIDE || state == IDLE_OUTSIDE) {
             return true;
         }
         
@@ -170,7 +170,7 @@ public abstract class Worker implements Actor {
     }
 
     public boolean isTraveling() {
-        return workerState == WALKING_AND_EXACTLY_AT_POINT || workerState == WALKING_BETWEEN_POINTS;
+        return state == WALKING_AND_EXACTLY_AT_POINT || state == WALKING_BETWEEN_POINTS;
     }
 
     private int getSpeed() {
@@ -189,11 +189,11 @@ public abstract class Worker implements Actor {
     }
 
     public boolean isExactlyAtPoint() {
-        return workerState != WALKING_BETWEEN_POINTS;
+        return state != WALKING_BETWEEN_POINTS;
     }
 
     public Point getLastPoint() {
-        return workerPosition;
+        return position;
     }
 
     public Point getNextPoint() throws Exception {
@@ -205,7 +205,7 @@ public abstract class Worker implements Actor {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (workerState != WALKING_BETWEEN_POINTS) {
+        if (state != WALKING_BETWEEN_POINTS) {
             return 100;
         }
     
@@ -213,7 +213,7 @@ public abstract class Worker implements Actor {
     }
 
     public void enterBuilding(Building b) {
-        workerState = IDLE_INSIDE;
+        state = IDLE_INSIDE;
         
         home = b;
         
@@ -222,11 +222,11 @@ public abstract class Worker implements Actor {
     }
     
     public boolean isInsideBuilding() {
-        return workerState == IDLE_INSIDE;
+        return state == IDLE_INSIDE;
     }
 
     public boolean isAt(Point p2) {
-        return isExactlyAtPoint() && workerPosition.equals(p2);
+        return isExactlyAtPoint() && position.equals(p2);
     }
 
     public Cargo getCargo() {
@@ -236,21 +236,21 @@ public abstract class Worker implements Actor {
     protected void setOffroadTarget(Point p) {
         log.log(Level.FINE, "Setting {0} as offroad target", p);
         
-        if (workerState == IDLE_INSIDE) {
+        if (state == IDLE_INSIDE) {
             leaveBuilding();
         }
 
-        workerState = WALKING_AND_EXACTLY_AT_POINT;
+        state = WALKING_AND_EXACTLY_AT_POINT;
         target = p;
         
-        if (workerPosition.equals(p)) {            
+        if (position.equals(p)) {            
             try {
                 handleArrival();
             } catch (Exception ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            path = map.findWayOffroad(workerPosition, p, null);
+            path = map.findWayOffroad(position, p, null);
 
             log.log(Level.FINER, "Way to target is {0}", path);
         }
@@ -259,21 +259,21 @@ public abstract class Worker implements Actor {
     protected void setTarget(Point p) throws InvalidRouteException {
         target = p;
 
-        if (workerState == IDLE_INSIDE) {
+        if (state == IDLE_INSIDE) {
             leaveBuilding();
         }
 
-        workerState = WALKING_AND_EXACTLY_AT_POINT;
+        state = WALKING_AND_EXACTLY_AT_POINT;
         target = p;
 
-        if (workerPosition.equals(p)) {
+        if (position.equals(p)) {
             try {
                 handleArrival();
             } catch (Exception ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {        
-            path = map.findWayWithExistingRoads(workerPosition, target);
+            path = map.findWayWithExistingRoads(position, target);
 
             log.log(Level.FINE, "Way to target is {0}", path);
         }
