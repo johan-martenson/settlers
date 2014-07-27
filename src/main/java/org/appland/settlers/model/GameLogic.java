@@ -35,15 +35,7 @@ public class GameLogic {
         for (Worker w : travelingWorkers) {
             if (w.isArrived()) {
 
-                /* Handle couriers separately */
-                if (w instanceof Courier) {
-                    Courier courier = (Courier)w;
-                    
-                    if (courier.getAssignedRoad() != null) {
-                        map.assignCourierToRoad(courier, courier.getTargetRoad());
-                        w.stopTraveling();
-                    }
-                } else if (w.getTargetBuilding() != null) {
+                if (w.getTargetBuilding() != null) {
                     Point target = w.getTarget();
                     Building building = map.getBuildingAtPoint(target);
 

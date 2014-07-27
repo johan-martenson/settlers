@@ -62,7 +62,10 @@ public class GameLogicTest {
 
         r = map.placeAutoSelectedRoad(stg.getFlag(), sm.getFlag());
         map.placeWorker(w, stg.getFlag());
-        map.assignCourierToRoad(w, r);
+        w.setTargetRoad(r);
+        
+        /* Fast forward to let the courier reach its target road */
+        Utils.fastForwardUntilWorkersReachTarget(map, w);
 
         Utils.constructMediumHouse(sm);
 

@@ -362,9 +362,9 @@ public class TestTransportation {
         map.placeWorker(hqToMdlCr, middleFlag);
         map.placeWorker(mdlToEndCr, endFlag);
 
-        map.assignCourierToRoad(hqToMdlCr, hqToMiddleRoad);
-        map.assignCourierToRoad(mdlToEndCr, middleToEndRoad);
-
+        hqToMdlCr.setTargetRoad(hqToMiddleRoad);
+        mdlToEndCr.setTargetRoad(middleToEndRoad);
+        
         /* Let couriers walk to the middle of their roads and become idle */
         for (int i = 0; i < 500; i++) {
             if (hqToMdlCr.isIdle() && mdlToEndCr.isIdle()) {
@@ -500,7 +500,10 @@ public class TestTransportation {
 
         r = map.placeAutoSelectedRoad(hq.getFlag(), b.getFlag());
         map.placeWorker(w, hq.getFlag());
-        map.assignCourierToRoad(w, r);
+        w.setTargetRoad(r);
+        
+        /* Let the courier get to its target road */
+        Utils.fastForwardUntilWorkersReachTarget(map, w);
 
         /* Construct barracks */
         Utils.constructSmallHouse(b);
@@ -553,7 +556,7 @@ public class TestTransportation {
         Courier courier = new Courier(map);
 
         map.placeWorker(courier, sm.getFlag());
-        map.assignCourierToRoad(courier, road0);
+        courier.setTargetRoad(road0);
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         

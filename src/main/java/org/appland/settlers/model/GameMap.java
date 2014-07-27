@@ -389,27 +389,6 @@ public class GameMap {
         return null;
     }
 
-    public void assignCourierToRoad(Courier wr, Road road) throws Exception {
-        Point courierPosition = wr.getPosition();
-
-        if (!roads.contains(road)) {
-            throw new Exception("Can't assign courier to " + road + " not on map");
-        }
-
-        if (!road.getFlags()[0].getPosition().equals(courierPosition) && !road.getFlags()[1].getPosition().equals(courierPosition)) {
-            throw new Exception("Can't assign " + wr + " to " + road);
-        }
-
-        road.setCourier(wr);
-        wr.setAssignedRoad(road);
-        roadToWorkerMap.put(road, wr);
-
-        if (!allWorkers.contains(wr)) {
-            throw new Exception("Can't assign " + wr + " to " + road
-                    + ". Worker is not placed on the map");
-        }
-    }
-
     public List<Road> findWayInRoads(Point from, Point to) throws Exception {
         log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{from, to});
 
@@ -464,10 +443,6 @@ public class GameMap {
             
             Road r1 = placeRoad(points.subList(0, index + 1));
             placeRoad(points.subList(index, points.size()));
-
-            if (c != null) {
-                assignCourierToRoad(c, r1);
-            }
         } else {
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);

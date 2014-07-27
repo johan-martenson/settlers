@@ -87,6 +87,10 @@ public class Road {
             throw new Exception("Road " + this + " already has a courier promised");
         }
 
+        if (!needsCourier()) {
+            throw new Exception("Road " + this + " already has a courier");
+        }
+        
         promisedCourier = true;
     }
 

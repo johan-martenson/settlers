@@ -66,16 +66,6 @@ public class TestGameMap {
     }
     
     @Test(expected=Exception.class)
-    public void testAssignWorkerNotOnMapToRoad() throws Exception {
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(2, 2));
-
-        Road r = map.placeAutoSelectedRoad(f1, f2);
-        
-        map.assignCourierToRoad(new Courier(map), r);
-    }
-    
-    @Test(expected=Exception.class)
     public void testPlaceFlagsOnSamePlace() throws Exception {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 1));
