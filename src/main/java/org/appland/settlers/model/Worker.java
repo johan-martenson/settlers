@@ -26,15 +26,15 @@ public abstract class Worker implements Actor {
     private final static Logger log = Logger.getLogger(Worker.class.getName());
 
     protected GameMap     map;
-    protected List<Point> path;
-
-    private States        state;
-    private Cargo         carriedCargo;
-    private Building      targetBuilding;
-    private Point         position;
-    private Point         target;
-    private Countdown     walkCountdown;
-    private Building      home;
+    
+    private List<Point> path;
+    private States      state;
+    private Cargo       carriedCargo;
+    private Building    targetBuilding;
+    private Point       position;
+    private Point       target;
+    private Countdown   walkCountdown;
+    private Building    home;
 
     public Worker() {
         this(null);
