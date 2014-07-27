@@ -565,20 +565,6 @@ public class GameMap {
         return result;
     }
 
-    public Building getBuildingByFlag(Flag targetFlag) {
-        Building result = null;
-
-        for (Building b : buildings) {
-            if (b.getFlag().equals(targetFlag)) {
-                result = b;
-
-                break;
-            }
-        }
-
-        return result;
-    }
-
     public List<Storage> getStorages() {
         List<Storage> storages = new ArrayList<>();
 
