@@ -39,19 +39,6 @@ public class GameMap {
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
 
-
-    private boolean roadCrossesOtherRoads(Road r) {
-        for (Point current : r.getWayPoints()) {
-            MapPoint mapPoint = pointToGameObject.get(current);
-            
-            if (mapPoint.isRoad() && !mapPoint.isFlag()) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-
     private List<Point> autoSelectRoad(Flag start, Flag end) throws Exception {
         return findAutoSelectedRoad(start.getPosition(), end.getPosition(), null);
     }
