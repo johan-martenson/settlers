@@ -333,7 +333,6 @@ public class GameLogicTest {
         assertFalse(map.getAllWorkers().get(2).isTraveling());
 
         /* Make traveling workers that have arrived enter their building or road */
-        //gameLogic.assignTravelingWorkersThatHaveArrived(map);
 
         assertTrue(map.getTravelingWorkers().isEmpty());
         assertTrue(bk.needMilitaryManning());

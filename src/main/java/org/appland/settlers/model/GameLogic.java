@@ -29,29 +29,6 @@ public class GameLogic {
         initiateNewDeliveriesForAllStorages(map);
     }
 
-    public void assignTravelingWorkersThatHaveArrived(GameMap map) throws Exception {
-        List<Worker> travelingWorkers = map.getTravelingWorkers();
-
-        for (Worker w : travelingWorkers) {
-            if (w.isArrived()) {
-
-                if (w.getTargetBuilding() != null) {
-                    Point target = w.getTarget();
-                    Building building = map.getBuildingAtPoint(target);
-
-                    if (building.isMilitaryBuilding()) {
-                        building.hostMilitary((Military) w);
-                        w.stopTraveling();
-                    } else {
-                        building.assignWorker(w);
-                        w.enterBuilding(building);
-                        w.stopTraveling();
-                    }
-                }
-            }
-        }
-    }
-
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
         /* Handle unoccupied roads */
         List<Road> roads = map.getRoadsThatNeedCouriers();
