@@ -477,7 +477,6 @@ public class GameMap {
                     if (path.size() < distance) {
                         distance = path.size();
                         stg = (Storage) b;
-                        break;
                     }
                 } catch (InvalidRouteException ex) {}
             }

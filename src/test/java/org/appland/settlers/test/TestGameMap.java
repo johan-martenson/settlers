@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import java.util.List;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -199,5 +198,10 @@ public class TestGameMap {
         Flag    f   = new Flag(new Point(4, 7));
 
         map.placeFlag(f);
+    }
+
+    @Test
+    public void testGetClosestStorage() {
+        // TODO: Write test
     }
 }
