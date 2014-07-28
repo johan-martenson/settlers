@@ -159,7 +159,7 @@ public class TestQuarry {
         assertNotNull(point);
         
         assertTrue(point.isAdjacent(point2));
-        assertTrue(mason.isTraveling());
+        assertTrue(mason.isTraveling() || point.equals(mason.getPosition()));
         assertFalse(map.isBuildingAtPoint(point));
     }
 

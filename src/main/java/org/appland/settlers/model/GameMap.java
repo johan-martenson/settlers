@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -1226,9 +1227,17 @@ public class GameMap {
         return stone;
     }
 
-    public Crop placeCrop(Point point) {
+    public Crop placeCrop(Point point) throws Exception {
         MapPoint mp = pointToGameObject.get(point);
 
+        if (isCropAtPoint(point)) {
+            Crop crop = mp.getCrop();
+            
+            if (crop.getGrowthState() != HARVESTED) {
+                throw new Exception("Can't place crop on non-harvested crop at " + point);
+            }
+        }
+        
         Crop crop = new Crop(point);
 
         mp.setCrop(crop);

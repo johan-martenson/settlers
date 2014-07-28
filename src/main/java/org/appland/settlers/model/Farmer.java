@@ -6,10 +6,16 @@
 
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
+import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_HARVEST;
 import static org.appland.settlers.model.Farmer.States.HARVESTING;
@@ -49,13 +55,22 @@ public class Farmer extends Worker {
         
         for (Point p : getSurroundingSpotsForCrops()) {
             if (map.isBuildingAtPoint(p) || 
-                map.isCropAtPoint(p)     || 
                 map.isFlagAtPoint(p)     ||
                 map.isRoadAtPoint(p)     ||
                 map.isTreeAtPoint(p)) {
-                chosenPoint = p;
-                break;
+                continue;
             }
+
+            if (map.isCropAtPoint(p)) {
+                Crop crop = map.getCropAtPoint(p);
+                
+                if (crop.getGrowthState() != HARVESTED) {
+                    continue;
+                }
+            }
+
+            chosenPoint = p;
+            break;
         }
 
         return chosenPoint;
@@ -115,14 +130,14 @@ public class Farmer extends Worker {
     protected void onIdle() {
         if (state == States.RESTING_IN_HOUSE) {
             
-            if (countdown.reachedZero()) {
+            if (countdown.reachedZero()) {                
                 Crop cropToHarvest = findCropToHarvest();
 
                 if (cropToHarvest != null) {                    
                     state = States.GOING_OUT_TO_HARVEST;
                     
                     setOffroadTarget(cropToHarvest.getPosition());
-                } else {
+                } else if (getSurroundingNonHarvestedCrops().size() < 5) {
                     Point p = getFreeSpotToPlant();
 
                     if (p == null) {
@@ -139,11 +154,15 @@ public class Farmer extends Worker {
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
                 
-                Crop crop = map.placeCrop(getPosition());
-                
-                state = States.GOING_BACK_TO_HOUSE;
-                
-                setOffroadTarget(hut.getFlag().getPosition());
+                try {
+                    Crop crop = map.placeCrop(getPosition());
+                    
+                    state = States.GOING_BACK_TO_HOUSE;
+                    
+                    setOffroadTarget(hut.getFlag().getPosition());
+                } catch (Exception ex) {
+                    Logger.getLogger(Farmer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 countdown.step();
             }
@@ -178,5 +197,21 @@ public class Farmer extends Worker {
                 countdown.step();
             }
         }
+    }
+
+    private Collection<Crop> getSurroundingNonHarvestedCrops() {
+        List<Crop> result = new ArrayList<>();
+        
+        for (Point p : getSurroundingSpotsForCrops()) {
+            if (map.isCropAtPoint(p)) {
+                Crop crop = map.getCropAtPoint(p);
+                
+                if (crop.getGrowthState() != HARVESTED) {
+                    result.add(map.getCropAtPoint(p));
+                }
+            }
+        }
+
+        return result;
     }
 }
