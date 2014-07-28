@@ -61,7 +61,7 @@ public class TestFarm {
         
         assertEquals(crop.getGrowthState(), Crop.GrowthState.JUST_PLANTED);
         
-        Utils.fastForward(99, map);
+        Utils.fastForward(199, map);
 
         assertEquals(crop.getGrowthState(), Crop.GrowthState.JUST_PLANTED);
         
@@ -69,7 +69,7 @@ public class TestFarm {
         
         assertEquals(crop.getGrowthState(), Crop.GrowthState.HALFWAY);
         
-        Utils.fastForward(99, map);
+        Utils.fastForward(199, map);
                 
         assertEquals(crop.getGrowthState(), Crop.GrowthState.HALFWAY);
         

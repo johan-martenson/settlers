@@ -16,20 +16,23 @@ import static org.appland.settlers.model.Material.WHEAT;
  * @author johan
  */
 public class Crop implements Actor {
-    private GrowthState state;
-    private Countdown growthCountdown;
 
     public enum GrowthState {
         JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
     }
     
-    private Point position;
+    private final static int TIME_TO_GROW = 199;
+    
+    private GrowthState state;
+    private final Countdown growthCountdown;
+    private final Point position;
 
+    
     public Crop(Point point) {
         position = point;
         state = JUST_PLANTED;
         growthCountdown = new Countdown();
-        growthCountdown.countFrom(99);
+        growthCountdown.countFrom(TIME_TO_GROW);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class Crop implements Actor {
             if (state == JUST_PLANTED) {
                 state = HALFWAY;
                 
-                growthCountdown.countFrom(99);
+                growthCountdown.countFrom(TIME_TO_GROW);
             } else if (state == HALFWAY) {
                 state = FULL_GROWN;
             }
