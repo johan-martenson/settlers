@@ -162,30 +162,6 @@ public class TestRoads {
         assertTrue(route.size() == 2);
         assertEquals(route.get(0), points[1]);
         assertEquals(route.get(1), points[2]);
-
-        /* Test route with List<Road> */
-        assertTrue(map.isFlagAtPoint(points[0]));
-        assertTrue(map.isFlagAtPoint(target));
-        
-        List<Road> roadsRoute = map.findWayInRoads(points[0], target);
-
-        assertNotNull(roadsRoute);
-        assertTrue(!roadsRoute.isEmpty());
-
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(0), points[0], points[1]));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(1), points[1], points[2]));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(2), points[2], points[9]));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(3), points[9], target));
-
-        roadsRoute = map.findWayInRoads(target, (points[0]));
-
-        assertNotNull(roadsRoute);
-        assertTrue(!roadsRoute.isEmpty());
-
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(0), points[9], target));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(1), points[2], points[9]));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(2), points[1], points[2]));
-        assertTrue(roadStartStopIsCorrect(roadsRoute.get(3), points[0], points[1]));
     }
 
     @Test

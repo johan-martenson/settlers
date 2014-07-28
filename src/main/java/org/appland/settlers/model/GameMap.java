@@ -358,28 +358,6 @@ public class GameMap {
         return null;
     }
 
-    public List<Road> findWayInRoads(Point from, Point to) throws Exception {
-        log.log(Level.INFO, "Finding the way from {0} to {1}", new Object[]{from, to});
-
-        List<Point> path = findWayWithExistingRoads(from, to);
-        List<Road> nextRoads = new ArrayList<>();
-
-        if (path.size() == 2) {
-            log.log(Level.FINE, "Route found has only one road segment");
-            nextRoads.add(getRoad(path.get(0), path.get(1)));
-
-            log.log(Level.FINE, "Returning route {0}", nextRoads);
-            return nextRoads;
-        } else if (path.size() == 1) {
-            throw new Exception("Can't find way in roads. Points are too close " + from + ", " + to);
-        }
-
-        nextRoads = wayPointsToRoads(path);
-
-        log.log(Level.FINE, "Returning route {0}", nextRoads);
-        return nextRoads;
-    }
-
     public Flag placeFlag(Point p) throws Exception {
         return placeFlag(new Flag(p));
     }
