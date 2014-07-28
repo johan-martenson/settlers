@@ -462,7 +462,6 @@ public class GameMap {
             if (b instanceof Storage) {
                 try {
                     if (b.getFlag().getPosition().equals(p)) {
-                        distance = 0;
                         stg = (Storage)b;
                         break;
                     }
