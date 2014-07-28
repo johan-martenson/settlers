@@ -396,22 +396,30 @@ public class GameMap {
         }
 
         if (pointIsOnRoad(p)) {
-            Road r    = getRoadAtPoint(p);
-            Courier c = r.getCourier();
+            Road existingRoad    = getRoadAtPoint(p);
+            Courier courier = existingRoad.getCourier();
 
-            List<Point> points = r.getWayPoints();
+            List<Point> points = existingRoad.getWayPoints();
 
             int index = points.indexOf(p);
 
-            removeRoad(r);
+            removeRoad(existingRoad);
 
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);
 
             reserveSpaceForFlag(f);            
             
-            Road r1 = placeRoad(points.subList(0, index + 1));
+            Road newRoad1 = placeRoad(points.subList(0, index + 1));
             placeRoad(points.subList(index, points.size()));
+            
+            /* Re-assign the courier to one of the new roads */
+            if (courier != null) {
+                courier.setTargetRoad(newRoad1);
+                
+                newRoad1.promiseCourier();
+            }
+            
         } else {
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);
