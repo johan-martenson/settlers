@@ -120,7 +120,7 @@ public class Courier extends Worker {
         }
         
         for (Cargo c : flag.getStackedCargo()) {
-            if (c.getPlannedRoads().get(0).equals(r)) {
+            if (r.getWayPoints().contains(c.getNextStep())) {
                 cargoToPickUp = c;
             }
         }
@@ -179,10 +179,6 @@ public class Courier extends Worker {
         
         flag.putCargo(cargo);
         cargo.setPosition(getPosition());
-
-        List<Road> plannedRoadForCargo = cargo.getPlannedRoads();
-        plannedRoadForCargo.remove(0);
-        cargo.setPlannedRoads(plannedRoadForCargo);
 
         setCargo(null);
     }

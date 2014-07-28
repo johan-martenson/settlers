@@ -182,7 +182,7 @@ public class TestScenarios {
 
         assertTrue(cargo.getTarget().equals(sm));
         assertNull(courierSmToHq.getCargo());
-        assertTrue(cargo.getPlannedRoads().get(0).equals(smToHqRoad));
+        assertTrue(smToHqRoad.getWayPoints().contains(cargo.getNextStep()));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
         assertTrue(hq.getAmount(WOOD) == 0);
         assertFalse(courierSmToHq.isTraveling());

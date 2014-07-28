@@ -78,9 +78,7 @@ public class Flag {
                 continue;
             }
             
-            Road nextRoad = c.getPlannedRoads().get(0);
-
-            if (nextRoad.equals(r)) {
+            if (r.getWayPoints().contains(c.getNextStep())) {
                 return c;
             }
         }

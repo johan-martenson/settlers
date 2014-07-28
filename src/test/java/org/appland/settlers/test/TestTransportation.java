@@ -648,7 +648,7 @@ public class TestTransportation {
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 
-        assertEquals(cargo.getPlannedRoads().get(0), road1);
+        assertTrue(road1.getWayPoints().contains(cargo.getNextStep()));
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point2);
         assertEquals(flag1.getStackedCargo().get(0), cargo);

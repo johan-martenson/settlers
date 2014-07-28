@@ -6,12 +6,12 @@ import java.util.logging.Logger;
 
 public class Cargo {
 
-    private Material   material;
-    private List<Road> plannedRoads;
-    private Building   target;
-    private Point      position;
-
-    private static Logger log = Logger.getLogger(GameMap.class.getName());
+    private Material    material;
+    private Building    target;
+    private Point       position;
+    private List<Point> path;
+    
+    private static final Logger log = Logger.getLogger(GameMap.class.getName());
     private boolean deliveryPromised;
 
     public Cargo(Material m) {
@@ -28,7 +28,8 @@ public class Cargo {
     public void setTarget(Building target, GameMap map) throws InvalidRouteException, Exception {
         log.log(Level.INFO, "Setting target to {0}", target);
         this.target = target;
-        this.plannedRoads = map.findWayInRoads(position, target.getFlag().getPosition());
+        
+        path = map.findWayWithExistingRoads(position, target.getFlag().getPosition());
     }
 
     public boolean isAtTarget() {
@@ -45,18 +46,26 @@ public class Cargo {
         return target;
     }
 
-    public void setPlannedRoads(List<Road> roads) {
-        log.log(Level.INFO, "Setting planned route to {0}", roads);
-        this.plannedRoads = roads;
+    public void setPlannedSteps(List<Point> steps) {
+        log.log(Level.INFO, "Setting planned route to {0}", steps);
+        path = steps;
     }
 
-    public List<Road> getPlannedRoads() {
-        return plannedRoads;
+    public List<Point> getPlannedSteps() {
+        return path;
     }
 
+    public Point getNextStep() {
+        return path.get(0);
+    }
+    
     public void setPosition(Point p) {
         log.log(Level.INFO, "Setting position to {0}", p);
-        this.position = p;
+        position = p;
+        
+        if (path != null && path.size() > 0 && path.get(0).equals(p)) {
+            path.remove(0);
+        }
     }
 
     @Override
