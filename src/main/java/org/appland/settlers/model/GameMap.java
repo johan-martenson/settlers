@@ -1106,25 +1106,25 @@ public class GameMap {
     }
 
     List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
-        Set<Point> evaluated         = new HashSet<>();
-        Set<Point> toEvaluate        = new HashSet<>();
-        Map<Point, Integer> cost     = new HashMap<>();
-        Map<Point, Integer> fullCost = new HashMap<>();
-        Map<Point, Point> cameFrom   = new HashMap<>();
+        Set<Point> evaluated        = new HashSet<>();
+        Set<Point> toEvaluate       = new HashSet<>();
+        Map<Point, Double> cost     = new HashMap<>();
+        Map<Point, Double> fullCost = new HashMap<>();
+        Map<Point, Point> cameFrom  = new HashMap<>();
         
         if (avoid != null) {        
             evaluated.addAll(avoid);
         }
 
         toEvaluate.add(start);
-        cost.put(start, 0);
-        fullCost.put(start, cost.get(start) + estimateDistance(start, goal));
+        cost.put(start, (double)0);
+        fullCost.put(start, cost.get(start) + start.distance(goal));
 
         while (!toEvaluate.isEmpty()) {
             Point currentPoint = null;
-            int currentValue = -1;
+            double currentValue = -1;
             
-            for (Entry<Point, Integer> pair : fullCost.entrySet()) {
+            for (Entry<Point, Double> pair : fullCost.entrySet()) {
                 
                 if (!toEvaluate.contains(pair.getKey())) {
                     continue;
@@ -1163,7 +1163,7 @@ public class GameMap {
                     continue;
                 }
             
-                int tentative_cost = cost.get(currentPoint) + 1; //TODO: Change "1" to real cost for step
+                double tentative_cost = cost.get(currentPoint) + currentPoint.distance(neighbor);
 
                 if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
                     cameFrom.put(neighbor, currentPoint);
