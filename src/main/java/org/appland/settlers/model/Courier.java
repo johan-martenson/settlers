@@ -15,7 +15,6 @@ public class Courier extends Worker {
 
     private Cargo intendedCargo;
     private Road assignedRoad;
-    private Road targetRoad;
     private States state;
     private Point idlePoint;
 
@@ -54,7 +53,6 @@ public class Courier extends Worker {
         
         intendedCargo = null;
         assignedRoad  = null;
-        targetRoad    = null;
 
         state = States.WALKING_TO_ROAD;
     }
@@ -134,33 +132,12 @@ public class Courier extends Worker {
         return assignedRoad;
     }
 
-    public void setAssignedRoad(Road road) throws Exception {
-        if (isOnRoad(road)) {
-            assignedRoad = road;
-            idlePoint = findIdlePointAtRoad(road);
-            
-            if (isAt(idlePoint)) {
-                state = IDLE_AT_ROAD;
-            } else {
-                setTarget(idlePoint);
-                
-                state = RETURNING_TO_IDLE_SPOT;
-            }            
-        } else {
-            throw new Exception("CAN'T ASSIGN COURIER TO ROAD WHEN IT'S NOT STANDING AT ONE OF ITS FLAGS");
-        }
-    }
-
-    public Road getTargetRoad() {
-        return targetRoad;
-    }
-
-    public void setTargetRoad(Road r) throws Exception {
+    public void assignToRoad(Road r) throws Exception {
         if (getTargetBuilding() != null) {
             throw new Exception("Can't set road as target while flag or building are already targetted");
         }
 
-        targetRoad = r;
+        assignedRoad = r;
 
         idlePoint = findIdlePointAtRoad(r);
 
@@ -169,10 +146,6 @@ public class Courier extends Worker {
         state = WALKING_TO_ROAD;
     }
 
-    public void stopTraveling() {
-        targetRoad = null;
-    }
-    
     public void putDownCargo() throws Exception {
         Cargo cargo = getCargo();
         Flag flag = map.getFlagAtPoint(getPosition());
@@ -190,11 +163,7 @@ public class Courier extends Worker {
     @Override
     protected void onArrival() {
         if (state == WALKING_TO_ROAD) {
-            Road r = getTargetRoad();
-            
-            r.setCourier(this);
-            
-            assignedRoad = r;
+            assignedRoad.setCourier(this);
             
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {

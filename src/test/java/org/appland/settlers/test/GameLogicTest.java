@@ -62,7 +62,7 @@ public class GameLogicTest {
 
         r = map.placeAutoSelectedRoad(stg.getFlag(), sm.getFlag());
         map.placeWorker(w, stg.getFlag());
-        w.setTargetRoad(r);
+        w.assignToRoad(r);
         
         /* Fast forward to let the courier reach its target road */
         Utils.fastForwardUntilWorkersReachTarget(map, w);
@@ -152,7 +152,7 @@ public class GameLogicTest {
         map.placeBuilding(sm, smPoint);
         r = map.placeAutoSelectedRoad(f, sm.getFlag());
         map.placeWorker(courier, f);
-        courier.setTargetRoad(r);
+        courier.assignToRoad(r);
 
         /* Fast forward so the courier can reach its road and be assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
@@ -199,7 +199,7 @@ public class GameLogicTest {
 
         r = map.placeAutoSelectedRoad(src, wc.getFlag());
         map.placeWorker(w, src);
-        w.setTargetRoad(r);
+        w.assignToRoad(r);
 
         /* Fast forward to let the courier reach its road and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, w);

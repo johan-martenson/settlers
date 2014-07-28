@@ -282,7 +282,7 @@ public class TestTransportation {
 
         map.placeWorker(worker, away);
 
-        worker.setTargetRoad(targetRoad);
+        worker.assignToRoad(targetRoad);
     }
 
     @Test
@@ -365,8 +365,8 @@ public class TestTransportation {
         map.placeWorker(hqToMdlCr, middleFlag);
         map.placeWorker(mdlToEndCr, endFlag);
 
-        hqToMdlCr.setTargetRoad(hqToMiddleRoad);
-        mdlToEndCr.setTargetRoad(middleToEndRoad);
+        hqToMdlCr.assignToRoad(hqToMiddleRoad);
+        mdlToEndCr.assignToRoad(middleToEndRoad);
         
         /* Let couriers walk to the middle of their roads and become idle */
         for (int i = 0; i < 500; i++) {
@@ -503,7 +503,7 @@ public class TestTransportation {
 
         r = map.placeAutoSelectedRoad(hq.getFlag(), b.getFlag());
         map.placeWorker(w, hq.getFlag());
-        w.setTargetRoad(r);
+        w.assignToRoad(r);
         
         /* Let the courier get to its target road */
         Utils.fastForwardUntilWorkersReachTarget(map, w);
@@ -559,7 +559,7 @@ public class TestTransportation {
         Courier courier = new Courier(map);
 
         map.placeWorker(courier, sm.getFlag());
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
@@ -605,10 +605,10 @@ public class TestTransportation {
         Courier secondCourier = new Courier(map);
 
         map.placeWorker(courier, flag0);
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
         
         map.placeWorker(secondCourier, flag1);
-        secondCourier.setTargetRoad(road1);
+        secondCourier.assignToRoad(road1);
         
         /* Let the couriers reach their roads and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
@@ -675,10 +675,10 @@ public class TestTransportation {
         Courier secondCourier = new Courier(map);
 
         map.placeWorker(courier, flag1);
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         map.placeWorker(secondCourier, flag1);
-        secondCourier.setTargetRoad(road1);
+        secondCourier.assignToRoad(road1);
 
         /* Let the couriers reach their target road and become idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);

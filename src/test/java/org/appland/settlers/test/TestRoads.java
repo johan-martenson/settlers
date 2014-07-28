@@ -207,7 +207,7 @@ public class TestRoads {
         Courier c = new Courier(map);
 
         map.placeWorker(c, f1);
-        c.setTargetRoad(r);
+        c.assignToRoad(r);
         
         Utils.fastForwardUntilWorkersReachTarget(map, c);
 
@@ -228,7 +228,7 @@ public class TestRoads {
 
         Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
         map.placeWorker(c, f1);
-        c.setTargetRoad(r);
+        c.assignToRoad(r);
     }
 
     @Test(expected=Exception.class)
@@ -248,10 +248,10 @@ public class TestRoads {
         
         map.placeWorker(c, f1);
         map.placeWorker(c2, f1);
-        c.setTargetRoad(r);
+        c.assignToRoad(r);
         r.promiseCourier();
         
-        c2.setTargetRoad(r);
+        c2.assignToRoad(r);
         r.promiseCourier();
     }
 
@@ -594,7 +594,7 @@ public class TestRoads {
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        map.placeFlag(endPoint);
+        Flag endFlag = map.placeFlag(endPoint);
         Road road = map.placeRoad(hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
@@ -603,8 +603,8 @@ public class TestRoads {
         
         /* Place original courier */
         Courier courier = new Courier(map);
-        
-        courier.setTargetRoad(road);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
         
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
@@ -614,11 +614,11 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Split road */
-        map.placeFlag(new Flag(new Point(11, 7)));
+        map.placeFlag(new Flag(middlePoint2));
 
-        assertTrue(courier.isWalkingToIdlePoint());
-        assertEquals(courier.getAssignedRoad(), road);
-        assertEquals(road.getCourier(), courier);
+        assertTrue(courier.isWalkingToRoad());
+        assertTrue(courier.getAssignedRoad().getStart().equals(middlePoint2) ||
+                   courier.getAssignedRoad().getEnd().equals(middlePoint2));
     }
     
     @Test
@@ -639,7 +639,7 @@ public class TestRoads {
         /* Place original courier */
         Courier courier = new Courier(map);
         map.placeWorker(courier, endFlag);
-        courier.setTargetRoad(road);
+        courier.assignToRoad(road);
         
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
@@ -668,8 +668,8 @@ public class TestRoads {
         
         Courier secondCourier = (Courier)w2;
         
-        assertNotNull(secondCourier.getTargetRoad());
-        assertFalse(secondCourier.getTargetRoad().equals(road));
+        assertNotNull(secondCourier.getAssignedRoad());
+        assertFalse(secondCourier.getAssignedRoad().equals(road));
     }
     
     @Test

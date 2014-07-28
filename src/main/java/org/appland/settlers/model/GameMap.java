@@ -415,7 +415,7 @@ public class GameMap {
             
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
-                courier.setTargetRoad(newRoad1);
+                courier.assignToRoad(newRoad1);
                 
                 newRoad1.promiseCourier();
             }

@@ -98,9 +98,9 @@ public class TestScenarios {
         map.placeWorker(wr3, qry.getFlag());
         map.placeWorker(wcr, wc.getFlag());
 
-        wr1.setTargetRoad(wcToHqRoad);
-        wr2.setTargetRoad(smToHqRoad);
-        wr3.setTargetRoad(qryToHqRoad);
+        wr1.assignToRoad(wcToHqRoad);
+        wr2.assignToRoad(smToHqRoad);
+        wr3.assignToRoad(qryToHqRoad);
 
         /* Let the couriers reach their targeted roads */
         Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);

@@ -47,7 +47,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag2);
 
-        courier.setTargetRoad(road1);        
+        courier.assignToRoad(road1);        
         
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
@@ -70,7 +70,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag2);
 
-        courier.setTargetRoad(road0);        
+        courier.assignToRoad(road0);        
         
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
@@ -98,7 +98,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag2);
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
         
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
@@ -125,7 +125,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag2);
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
         
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
@@ -172,7 +172,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag0);
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
         
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isWalkingToRoad());
@@ -215,7 +215,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag0);
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         /* Courier will walk to idle point at the road */
         assertTrue(courier.isWalkingToRoad());
@@ -274,7 +274,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag0);
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         /* Courier will walk to idle point at the road */
         assertTrue(courier.isWalkingToRoad());
@@ -350,7 +350,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, leftWoodcutter.getFlag());
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         /* Courier will walk to idle point at the road */
         assertTrue(courier.isWalkingToRoad());
@@ -425,7 +425,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, leftWoodcutter.getFlag());
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         /* Courier will walk to idle point at the road */
         assertTrue(courier.isWalkingToRoad());
@@ -491,7 +491,7 @@ public class TestCourier {
         Courier courier = new Courier(map);
         map.placeWorker(courier, wc.getFlag());
 
-        courier.setTargetRoad(road0);
+        courier.assignToRoad(road0);
 
         /* Courier will walk to idle point at the road */
         assertTrue(courier.isWalkingToRoad());

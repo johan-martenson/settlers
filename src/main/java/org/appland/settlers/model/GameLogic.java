@@ -46,7 +46,7 @@ public class GameLogic {
 
             map.placeWorker(w, stg.getFlag());
 
-            w.setTargetRoad(r);
+            w.assignToRoad(r);
 
             r.promiseCourier();
         }
