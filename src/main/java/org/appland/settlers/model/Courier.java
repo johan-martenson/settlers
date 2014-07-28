@@ -132,18 +132,45 @@ public class Courier extends Worker {
         return assignedRoad;
     }
 
-    public void assignToRoad(Road r) throws Exception {
+    public void assignToRoad(Road newRoad) throws Exception {
         if (getTargetBuilding() != null) {
             throw new Exception("Can't set road as target while flag or building are already targetted");
         }
 
-        assignedRoad = r;
+        Road currentAssignedRoad = assignedRoad;
 
-        idlePoint = findIdlePointAtRoad(r);
+        assignedRoad = newRoad;    
+        idlePoint = findIdlePointAtRoad(newRoad);
 
-        setTarget(idlePoint);
+        
+        /* Fulfill delivery if it has been started */
+        if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
+            
+            /* Change the target if it doesn't match any of the end points of the new road */
+            if (!getTarget().equals(newRoad.getStart()) && !getTarget().equals(newRoad.getEnd())) {
+                if (newRoad.getStart().equals(currentAssignedRoad.getStart())) {
+                    setTarget(newRoad.getEnd());
+                } else {
+                    setTarget(newRoad.getStart());
+                }
+            }
 
-        state = WALKING_TO_ROAD;
+        /* If the courier is going to pick up a new cargo, cancel and go to the new road */
+        } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
+            intendedCargo.clearPromisedDelivery();
+            
+            intendedCargo = null;
+            
+            setTarget(idlePoint);
+
+            state = WALKING_TO_ROAD;
+        
+        /* For the other states, just go to the new road */
+        } else {
+            setTarget(idlePoint);
+
+            state = WALKING_TO_ROAD;    
+        }
     }
 
     public void putDownCargo() throws Exception {
