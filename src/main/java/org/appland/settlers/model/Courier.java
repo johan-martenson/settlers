@@ -196,7 +196,8 @@ public class Courier extends Worker {
                         
                         intendedCargo = null;
                         getCargo().clearPromisedDelivery();
-                        /* Pick up the cargo where we stand if needed */
+
+                    /* Pick up the cargo where we stand if needed */
                     } else if (flag.hasCargoWaitingForRoad(assignedRoad)) {
                         pickUpCargoForRoad(flag, assignedRoad);
                     }
@@ -241,5 +242,10 @@ public class Courier extends Worker {
         } else if (state == RETURNING_TO_IDLE_SPOT) {
             state = IDLE_AT_ROAD;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Courier " + state;
     }
 }
