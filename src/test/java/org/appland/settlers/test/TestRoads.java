@@ -21,6 +21,7 @@ import static org.appland.settlers.model.Material.BEER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -801,6 +802,66 @@ public class TestRoads {
         assertNotNull(secondCourier.getAssignedRoad());
         assertFalse(secondCourier.getAssignedRoad().equals(road));
     }
+
+    @Test
+    public void testCourierDeliversCorrectlyToBuildingAfterItsRoadIsSplit() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Storage hq = new Headquarter();
+        map.placeBuilding(hq, new Point(5, 5));
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(endPoint);
+        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+                                  middlePoint1, 
+                                  middlePoint2,
+                                  middlePoint3,
+                                  endPoint);
+        
+        /* Place original courier */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertEquals(courier.getAssignedRoad(), road);
+        assertEquals(road.getCourier(), courier);
+        assertTrue(courier.isIdle());
+        assertTrue(courier.isAt(middlePoint2));
+        
+        /* Make the courier pick up a cargo and start walking to deliver it */
+        Cargo cargo = new Cargo(BEER);
+        endFlag.putCargo(cargo);
+        cargo.setTarget(hq, map);
+        
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), endPoint);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        
+        map.stepTime();
+        
+        assertTrue(courier.isTraveling());
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        
+        /* Let the courier get close to the hq */
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+        
+        /* Split road */
+        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+        
+        assertTrue(hq.getAmount(BEER) == 0);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getFlag().getPosition());
+        
+        assertNull(courier.getCargo());
+        assertTrue(hq.getAmount(BEER) == 1);
+    }
     
     @Test
     public void testRoadCanNotOverlapExistingFlag() throws Exception {
@@ -815,7 +876,7 @@ public class TestRoads {
         thrown.expect(Exception.class);
         map.placeRoad(new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
     }
-
+    
     @Test
     public void testOnlyOneCourierIsAssignedToNewRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
