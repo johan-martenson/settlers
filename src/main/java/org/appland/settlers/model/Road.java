@@ -7,7 +7,6 @@ public class Road {
 
     private Flag start;
     private Flag end;
-    private boolean promisedCourier;
     private Courier courier;
     private List<Point> steps;
 
@@ -19,7 +18,6 @@ public class Road {
         this.start = start;
         this.end = end;
 
-        promisedCourier = false;
         courier = null;
         
         steps = new ArrayList<>();
@@ -79,19 +77,7 @@ public class Road {
     }
 
     public boolean needsCourier() {
-        return !promisedCourier && courier == null;
-    }
-
-    public void promiseCourier() throws Exception {
-        if (promisedCourier) {
-            throw new Exception("Road " + this + " already has a courier promised");
-        }
-
-        if (!needsCourier()) {
-            throw new Exception("Road " + this + " already has a courier");
-        }
-        
-        promisedCourier = true;
+        return courier == null;
     }
 
     public Courier getCourier() {
@@ -100,8 +86,6 @@ public class Road {
 
     void setCourier(Courier wr) {
         courier = wr;
-
-        promisedCourier = false;
     }
 
     public List<Point> getWayPoints() {

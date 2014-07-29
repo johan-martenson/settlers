@@ -433,7 +433,7 @@ public class GameMap {
                 
                 courier.assignToRoad(roadToAssign);
                 
-                roadToAssign.promiseCourier();
+                roadToAssign.setCourier(courier);
             }
             
         } else {

@@ -24,7 +24,6 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.roadStartStopIsCorrect;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -178,14 +177,12 @@ public class TestRoads {
 
         assertTrue(r.needsCourier());
 
-        r.promiseCourier();
-
-        assertFalse(r.needsCourier());
-
         Courier c = new Courier(map);
 
         map.placeWorker(c, f1);
         c.assignToRoad(r);
+        
+        assertFalse(r.needsCourier());
         
         Utils.fastForwardUntilWorkersReachTarget(map, c);
 
@@ -227,10 +224,8 @@ public class TestRoads {
         map.placeWorker(c, f1);
         map.placeWorker(c2, f1);
         c.assignToRoad(r);
-        r.promiseCourier();
         
         c2.assignToRoad(r);
-        r.promiseCourier();
     }
 
     @Test(expected=Exception.class)
@@ -718,6 +713,44 @@ public class TestRoads {
         assertEquals(courier.getPosition(), middlePoint3);
     }
 
+    @Test
+    public void testCourierWalkingToAssignedRoadAdaptsWhenItsRoadIsSplit() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(endPoint);
+        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+                                  middlePoint1, 
+                                  middlePoint2,
+                                  middlePoint3,
+                                  endPoint);
+        
+        /* Place original courier */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
+        
+        map.stepTime();
+        
+        assertEquals(courier.getAssignedRoad(), road);
+        assertEquals(road.getCourier(), courier);
+        assertTrue(courier.isWalkingToRoad());
+                
+        /* Split road */
+        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+
+        assertTrue(courier.isWalkingToRoad());
+        assertTrue(courier.getTarget().equals(middlePoint1) ||
+                   courier.getTarget().equals(middlePoint3));
+
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+
+        assertTrue(courier.isIdle());        
+    }
+    
     @Test
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
         GameMap map = new GameMap(20, 20);

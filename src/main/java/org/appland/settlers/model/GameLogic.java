@@ -47,8 +47,6 @@ public class GameLogic {
             map.placeWorker(w, stg.getFlag());
 
             w.assignToRoad(r);
-
-            r.promiseCourier();
         }
 
         /* Handle unoccupied regular buildings and military buildings*/

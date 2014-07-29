@@ -142,6 +142,7 @@ public class Courier extends Worker {
         assignedRoad = newRoad;    
         idlePoint = findIdlePointAtRoad(newRoad);
 
+        newRoad.setCourier(this);
         
         /* Fulfill delivery if it has been started */
         if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
@@ -186,8 +187,6 @@ public class Courier extends Worker {
     @Override
     protected void onArrival() {
         if (state == WALKING_TO_ROAD) {
-            assignedRoad.setCourier(this);
-            
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             if (map.isFlagAtPoint(getPosition())) {

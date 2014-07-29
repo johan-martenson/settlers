@@ -473,20 +473,6 @@ public class TestTransportation {
         assertTrue(r.needsCourier());
     }
 
-    @Test(expected = Exception.class)
-    public void testPromiseCourierTwice() throws Exception {
-        GameMap map = new GameMap(10, 10);
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(3, 1));
-
-        map.placeFlag(f1);
-        map.placeFlag(f2);
-
-        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
-
-        r.promiseCourier();
-        r.promiseCourier();
-    }
 
     @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
