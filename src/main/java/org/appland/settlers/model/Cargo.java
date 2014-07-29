@@ -56,6 +56,10 @@ public class Cargo {
     }
 
     public Point getNextStep() {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+        
         return path.get(0);
     }
     
