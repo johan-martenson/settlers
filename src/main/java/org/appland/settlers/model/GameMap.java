@@ -374,8 +374,8 @@ public class GameMap {
         }
 
         if (pointIsOnRoad(flagPoint)) {
-            Road existingRoad    = getRoadAtPoint(flagPoint);
-            Courier courier = existingRoad.getCourier();
+            Road existingRoad = getRoadAtPoint(flagPoint);
+            Courier courier   = existingRoad.getCourier();
 
             List<Point> points = existingRoad.getWayPoints();
 
@@ -432,8 +432,6 @@ public class GameMap {
                 }
                 
                 courier.assignToRoad(roadToAssign);
-                
-                roadToAssign.setCourier(courier);
             }
             
         } else {
