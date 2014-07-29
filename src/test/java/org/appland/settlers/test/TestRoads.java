@@ -655,6 +655,70 @@ public class TestRoads {
     }
     
     @Test
+    public void testCourierDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(endPoint);
+        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+                                  middlePoint1, 
+                                  middlePoint2,
+                                  middlePoint3,
+                                  endPoint);
+        
+        /* Place original courier */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertEquals(courier.getAssignedRoad(), road);
+        assertEquals(road.getCourier(), courier);
+        assertTrue(courier.isIdle());
+        assertTrue(courier.isAt(middlePoint2));
+        
+        /* Make the courier pick up a cargo and start walking to deliver it */
+        Cargo cargo = new Cargo(BEER);
+        endFlag.putCargo(cargo);
+        cargo.setTarget(hq, map);
+        
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), endPoint);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        
+        map.stepTime();
+        
+        assertTrue(courier.isTraveling());
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        
+        /* Split road */
+        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+
+        assertFalse(courier.isWalkingToRoad());
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTarget(), middlePoint2);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint2);
+        
+        assertNull(courier.getCargo());
+        assertTrue(middleFlag.getStackedCargo().contains(cargo));
+        assertTrue(courier.isWalkingToIdlePoint());
+        assertEquals(courier.getTarget(), middlePoint3);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertTrue(courier.isIdle());
+        assertEquals(courier.getPosition(), middlePoint3);
+    }
+
+    @Test
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
         GameMap map = new GameMap(20, 20);
         Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
