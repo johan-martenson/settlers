@@ -28,10 +28,6 @@ public class Courier extends Worker {
         return wayPoints.get((int)(wayPoints.size() / 2));
     }
 
-    private boolean isOnRoad(Road road) {
-        return road.getWayPoints().contains(getPosition());
-    }
-
     public boolean isWalkingToIdlePoint() {
         return state == RETURNING_TO_IDLE_SPOT;
     }
