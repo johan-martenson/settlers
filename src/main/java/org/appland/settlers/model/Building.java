@@ -15,7 +15,7 @@ import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 
 import static org.appland.settlers.model.Material.*;
 
-public class Building implements Actor {
+public class Building implements Actor, EndPoint {
 
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
@@ -173,6 +173,7 @@ public class Building implements Actor {
         return worker;
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }
@@ -572,5 +573,48 @@ public class Building implements Actor {
 
         log.log(Level.FINE, "This building requires {0}", material);
         return true;
+    }
+
+    @Override
+    public List<Cargo> getStackedCargo() {
+        List<Cargo> result = new ArrayList<>();
+        
+        if (outputCargo != null) {
+            result.add(outputCargo);
+        }
+
+        return result;
+    }
+
+    @Override
+    public void putCargo(Cargo c) throws Exception {
+        deliver(c);
+    }
+
+    @Override
+    public boolean hasCargoWaitingForRoad(Road r) {
+        return getCargoWaitingForRoad(r) != null;
+    }
+
+    @Override
+    public Cargo retrieveCargo(Cargo c) {
+        Cargo tmp = outputCargo;
+        outputCargo = null;
+            
+        return tmp;
+    }
+
+    @Override
+    public Cargo getCargoWaitingForRoad(Road r) {
+        if (outputCargo.isDeliveryPromised()) {
+            return null;
+        }
+            
+        if (r.getWayPoints().contains(outputCargo.getNextStep())) {
+            return outputCargo;
+        }
+
+
+        return null;
     }
 }

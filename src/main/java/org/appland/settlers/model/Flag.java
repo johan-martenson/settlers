@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Flag {
+public class Flag implements EndPoint {
 
     private Point position;
     private final List<Cargo> stackedCargo;
@@ -21,10 +21,12 @@ public class Flag {
         stackedCargo = new ArrayList<>();
     }
 
+    @Override
     public List<Cargo> getStackedCargo() {
         return stackedCargo;
     }
 
+    @Override
     public void putCargo(Cargo c) {
         log.log(Level.INFO, "Putting {0} at {1}", new Object[]{c, this});
 
@@ -32,6 +34,7 @@ public class Flag {
         stackedCargo.add(c);
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }
@@ -57,11 +60,13 @@ public class Flag {
         }
     }
 
+    @Override
     public boolean hasCargoWaitingForRoad(Road r) {
         return getCargoWaitingForRoad(r) != null;
     }
 
-    Cargo retrieveCargo(Cargo c) {
+    @Override
+    public Cargo retrieveCargo(Cargo c) {
         if (stackedCargo.contains(c)) {
 
             stackedCargo.remove(c);
@@ -72,7 +77,8 @@ public class Flag {
         return null;
     }
 
-    Cargo getCargoWaitingForRoad(Road r) {
+    @Override
+    public Cargo getCargoWaitingForRoad(Road r) {
         for (Cargo c : stackedCargo) {
             if (c.isDeliveryPromised()) {
                 continue;

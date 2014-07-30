@@ -530,7 +530,6 @@ public class TestRoads {
     @Test
     public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
-        map.placeBuilding(new Headquarter(), new Point(5, 5));
         map.placeFlag(new Flag(new Point(9, 5)));
         map.placeFlag(new Flag(new Point(13, 9)));
         
@@ -622,7 +621,7 @@ public class TestRoads {
         assertTrue(courier.isIdle());
         assertTrue(courier.isAt(middlePoint2));
         
-        /* Make the courier pick up a cargo and start walking to deliver it */
+        /* Place the cargo on the end of the road, furthest away from the hq */
         Cargo cargo = new Cargo(BEER);
         endFlag.putCargo(cargo);
         cargo.setTarget(hq, map);
@@ -631,15 +630,16 @@ public class TestRoads {
         
         assertEquals(courier.getTarget(), endPoint);
         
+        /* Make the courier pick up a cargo and start walking to deliver it */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
         
         map.stepTime();
         
         assertTrue(courier.isTraveling());
         assertEquals(courier.getCargo(), cargo);
-        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        assertEquals(courier.getTarget(), hq.getPosition());
         
-        /* Split road */
+        /* Split road with the courier on the road further away from the hq */
         map.placeFlag(new Flag(middlePoint2));
 
         assertFalse(courier.isWalkingToRoad());
@@ -651,9 +651,10 @@ public class TestRoads {
     }
     
     @Test
-    public void testCourierDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
+    public void testCourierFarFromToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Storage hq = new Headquarter();
+        map.placeBuilding(hq, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
@@ -686,32 +687,119 @@ public class TestRoads {
         
         assertEquals(courier.getTarget(), endPoint);
         
+        /* Fast forward until the courier picks up the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
         
         map.stepTime();
         
         assertTrue(courier.isTraveling());
         assertEquals(courier.getCargo(), cargo);
-        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        assertEquals(courier.getTarget(), hq.getPosition());
         
-        /* Split road */
+        /* Split road with the courier on the new road further away from the 
+           headquarter */
         Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
-        assertEquals(courier.getTarget(), middlePoint2);
 
+        /* Verify that the courier has changed target to the new middle flag */
+        assertEquals(courier.getTarget(), middlePoint2);
+        
+        /* Let the courier leave the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint2);
         
         assertNull(courier.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(cargo));
-        assertTrue(courier.isWalkingToIdlePoint());
+        
+        /* Verify that the courier becomes idle after delivery */
         assertEquals(courier.getTarget(), middlePoint3);
         
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
         assertTrue(courier.isIdle());
         assertEquals(courier.getPosition(), middlePoint3);
+    }
+        
+    @Test
+    public void testCourierCloseToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Storage hq = new Headquarter();
+        map.placeBuilding(hq, new Point(5, 5));
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(endPoint);
+        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+                                  middlePoint1, 
+                                  middlePoint2,
+                                  middlePoint3,
+                                  endPoint);
+        
+        /* Place original courier */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertEquals(courier.getAssignedRoad(), road);
+        assertEquals(road.getCourier(), courier);
+        assertTrue(courier.isIdle());
+        assertTrue(courier.isAt(middlePoint2));
+        
+        /* Make the courier pick up a cargo and start walking to deliver it */
+        Cargo cargo = new Cargo(BEER);
+        endFlag.putCargo(cargo);
+        cargo.setTarget(hq, map);
+        
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), endPoint);
+        
+        /* Fast forward until the courier picks up the cargo */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, endPoint);
+        
+        map.stepTime();
+        
+        assertTrue(courier.isTraveling());
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTarget(), hq.getPosition());
+        
+        /* Let the courier pass the middle of the road */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+        
+        /* Split road with the courier on the new road closer to the 
+           headquarter */
+        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+
+        assertFalse(courier.isWalkingToRoad());
+        assertEquals(courier.getCargo(), cargo);
+
+        /* Verify that the courier is sitll targeting the hq */
+        assertEquals(courier.getTarget(), hq.getPosition());
+        
+        /* Let the courier leave the cargo */
+        assertTrue(hq.getAmount(BEER) == 0);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getPosition());
+        
+        assertNull(courier.getCargo());
+        assertTrue(hq.getAmount(BEER) == 1);
+        
+        /* Let the courier walk back to the hq's flag */
+        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getFlag().getPosition());
+        
+        /* Verify that the courier becomes idle after delivery */
+        assertEquals(courier.getTarget(), middlePoint1);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertTrue(courier.isIdle());
+        assertEquals(courier.getPosition(), middlePoint1);
     }
 
     @Test
@@ -846,18 +934,18 @@ public class TestRoads {
         
         assertTrue(courier.isTraveling());
         assertEquals(courier.getCargo(), cargo);
-        assertEquals(courier.getTarget(), hq.getFlag().getPosition());
+        assertEquals(courier.getTarget(), hq.getPosition());
         
         /* Let the courier get close to the hq */
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
         
-        /* Split road */
+        /* Split road with the courier close to the hq*/
         Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
         
         assertTrue(hq.getAmount(BEER) == 0);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getPosition());
         
         assertNull(courier.getCargo());
         assertTrue(hq.getAmount(BEER) == 1);
@@ -1033,6 +1121,27 @@ public class TestRoads {
         Point point5 = new Point(4, 4);
         Point point6 = new Point(6, 6);
         Road road0 = map.placeRoad(point3, point4, point5, point0, point6, point2);
+    }
 
+    @Test
+    public void testRoadIsCreatedBetweenHouseAndFlag() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+
+        Point point3 = new Point(6, 4);
+
+        assertNotNull(map.getRoad(point0, point3));
+    }
+
+    @Test
+    public void testRoadBetweenHouseAndFlagNeedsNoCourier() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+
+        Point point3 = new Point(6, 4);
+
+        assertFalse(map.getRoad(point0, point3).needsCourier());
     }
 }

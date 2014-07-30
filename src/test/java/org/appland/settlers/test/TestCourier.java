@@ -19,6 +19,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -518,16 +519,106 @@ public class TestCourier {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(courier.getCargo(), cargoForRightWoodcutter);
-        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertEquals(courier.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
         assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getFlag().getPosition());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
+        
+        /* Verify that courier does not deliver the cargo to the flag */
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getTarget(), wc.getPosition());
+        assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
-        assertEquals(courier.getTarget(), middlePoint);
+        assertEquals(courier.getPosition(), wc.getPosition());
         assertTrue(wc.getInQueue().get(Material.PLANCK) == 1);
+    }
+
+    @Test
+    public void testCourierGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point middlePoint = new Point(8, 4);
+        Point rightFlagPoint = new Point(10, 4);
+        Flag rightFlag = map.placeFlag(rightFlagPoint);
+
+        Point leftFlagPoint = new Point(6, 4);
+        
+        Building wc = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
+        
+        Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
+        
+        /* Place cargo at flag0 */
+        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK);
+        rightFlag.putCargo(cargoForRightWoodcutter);
+        cargoForRightWoodcutter.setTarget(wc, map);
+        
+        /* Place courier at same flag as cargo */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, wc.getFlag());
+
+        courier.assignToRoad(road0);
+
+        /* Courier will walk to idle point at the road */
+        assertTrue(courier.isWalkingToRoad());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertEquals(courier.getPosition(), middlePoint);
+        assertTrue(courier.isArrived());
+        assertTrue(courier.isIdle());
+        
+        /* Courier detects the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), rightFlagPoint);
+        assertTrue(courier.isTraveling());
+        assertFalse(rightFlag.getStackedCargo().isEmpty());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        assertTrue(courier.isAt(rightFlagPoint));
+                
+        /* When worker arrives at the flag it automatically picks up the cargo
+            - It picks up the cargo directly and sets the other flag as target
+            - It walks to the other flag and delivers the cargo
+        */
+        assertEquals(courier.getCargo(), cargoForRightWoodcutter);
+        assertEquals(courier.getTarget(), wc.getPosition());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(courier.isIdle());
+        assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
+        
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
+        
+        /* Verify that courier does not deliver the cargo to the flag */
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getTarget(), wc.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+
+        assertFalse(courier.isIdle());
+        assertEquals(courier.getPosition(), wc.getPosition());
+        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getFlag().getPosition());
+        
+        assertEquals(courier.getPosition(), wc.getFlag().getPosition());
+        assertFalse(courier.isIdle());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        
+        assertEquals(courier.getPosition(), middlePoint);
+        assertTrue(courier.isIdle());
     }
 }

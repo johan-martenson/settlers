@@ -160,11 +160,11 @@ public class TestScenarios {
         Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, wc.getFlag().getPosition());
         
         assertNotNull(courierWcToHq.getCargo());
-        assertEquals(courierWcToHq.getTarget(), hq.getFlag().getPosition());
+        assertEquals(courierWcToHq.getTarget(), hq.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, hq.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, hq.getPosition());
 
-        assertTrue(wcToHqRoad.getCourier().isAt(hq.getFlag().getPosition()));
+        assertTrue(wcToHqRoad.getCourier().isAt(hq.getPosition()));
 
         /* Cargo has arrived at the headquarter and stored */
 
@@ -203,13 +203,12 @@ public class TestScenarios {
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, hq.getFlag().getPosition());
         
         /* The courier has picked up the WOOD */
-        
         assertFalse(courierSmToHq.isArrived());
         assertNotNull(courierSmToHq.getCargo());
         assertEquals(courierSmToHq.getCargo(), cargo);
         assertTrue(courierSmToHq.isTraveling());
         assertTrue(courierSmToHq.getCargo().getMaterial() == WOOD);
-        assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
+        assertEquals(courierSmToHq.getTarget(), sm.getPosition());
         assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
         assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
@@ -245,7 +244,7 @@ public class TestScenarios {
         assertNotNull(courierSmToHq.getCargo());
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
-        assertEquals(courierSmToHq.getTarget(), hq.getFlag().getPosition());
+        assertEquals(courierSmToHq.getTarget(), hq.getPosition());
         assertTrue(hq.getAmount(PLANCK) == 0);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         

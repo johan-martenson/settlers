@@ -29,7 +29,7 @@ public class Cargo {
         log.log(Level.INFO, "Setting target to {0}", target);
         this.target = target;
         
-        path = map.findWayWithExistingRoads(position, target.getFlag().getPosition());
+        path = map.findWayWithExistingRoads(position, target.getPosition());
     }
 
     public boolean isAtTarget() {

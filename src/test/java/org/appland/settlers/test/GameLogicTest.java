@@ -181,7 +181,7 @@ public class GameLogicTest {
         /* Verify that the courier has picked up the cargo */
         assertNotNull(courier.getCargo());
         assertEquals(c, courier.getCargo());
-        assertEquals(courier.getTarget(), sm.getFlag().getPosition());
+        assertEquals(courier.getTarget(), sm.getPosition());
     }
 
     @Test
@@ -219,15 +219,15 @@ public class GameLogicTest {
         assertEquals(w.getCargo(), c);
         
         /* Move worker to the sawmill */
-        assertEquals(w.getTarget(), wc.getFlag().getPosition());
+        assertEquals(w.getTarget(), wc.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, w, wc.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, wc.getPosition());
         
-        assertTrue(w.isAt(wc.getFlag().getPosition()));
+        assertTrue(w.isAt(wc.getPosition()));
 
         /* Verify the worker delivers the cargo when it has reached the target */
         assertNull(w.getCargo());
-        assertTrue(w.isAt(wc.getFlag().getPosition()));
+        assertTrue(w.isAt(wc.getPosition()));
         assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
     }
 

@@ -5,12 +5,13 @@ import java.util.List;
 
 public class Road {
 
-    private Flag start;
-    private Flag end;
+    private EndPoint start;
+    private EndPoint end;
     private Courier courier;
     private List<Point> steps;
+    private boolean  needsCourier;
 
-    Road(Flag start, List<Point> wayPoints, Flag end) throws Exception {
+    Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
         if (roadStepsTooLong(wayPoints)) {
             throw new Exception("The steps are too long in " + wayPoints);
         }
@@ -23,6 +24,7 @@ public class Road {
         steps = new ArrayList<>();
         steps.addAll(wayPoints);
         
+        needsCourier = true;
     }
 
     @Override
@@ -72,12 +74,12 @@ public class Road {
         return true;
     }
 
-    public Flag[] getFlags() {
-        return new Flag[]{start, end};
+    public EndPoint[] getFlags() {
+        return new EndPoint[]{start, end};
     }
 
     public boolean needsCourier() {
-        return courier == null;
+        return courier == null && needsCourier;
     }
 
     public Courier getCourier() {
@@ -115,11 +117,11 @@ public class Road {
         return false;
     }
 
-    Flag getEndFlag() {
+    EndPoint getEndFlag() {
         return end;
     }
 
-    Flag getStartFlag() {
+    EndPoint getStartFlag() {
         return start;
     }
 
@@ -131,7 +133,7 @@ public class Road {
         return end.getPosition();
     }
 
-    Flag getOtherFlag(Flag flag) throws Exception {
+    EndPoint getOtherFlag(EndPoint flag) throws Exception {
         if (flag.equals(start)) {
             return end;
         } else if (flag.equals(end)) {
@@ -139,5 +141,9 @@ public class Road {
         }
 
         throw new Exception(flag + " is not an endpoint to this road (" + this + ")");
+    }
+
+    void setNeedsCourier(boolean b) {
+        needsCourier = b;
     }
 }

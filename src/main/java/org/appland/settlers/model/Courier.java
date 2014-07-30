@@ -3,6 +3,8 @@ package org.appland.settlers.model;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
+import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
@@ -40,8 +42,20 @@ public class Courier extends Worker {
         return state == IDLE_AT_ROAD;
     }
 
+    private EndPoint getEndPointAtPoint(Point currentPosition) throws Exception {
+        if (map.isFlagAtPoint(currentPosition)) {
+            return map.getFlagAtPoint(currentPosition);
+        } else if (map.isBuildingAtPoint(currentPosition)) {
+            return map.getBuildingAtPoint(currentPosition);
+        }
+
+        throw new Exception("No endpoint at " + currentPosition);
+    }
+
     enum States {
-        WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO, GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT
+        WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO, 
+        GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,
+        GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD
     }
     
     public Courier(GameMap map) {
@@ -57,8 +71,8 @@ public class Courier extends Worker {
     protected void onIdle() {
 
         if (state == IDLE_AT_ROAD) {            
-            Flag start = assignedRoad.getStartFlag();
-            Flag end   = assignedRoad.getEndFlag();
+            EndPoint start = assignedRoad.getStartFlag();
+            EndPoint end   = assignedRoad.getEndFlag();
 
             if (start.hasCargoWaitingForRoad(assignedRoad)) {
                 try {
@@ -83,7 +97,7 @@ public class Courier extends Worker {
         }
     }
 
-    private void planToPickUpCargo(Cargo cargo, Flag flag) throws InvalidRouteException {
+    private void planToPickUpCargo(Cargo cargo, EndPoint flag) throws InvalidRouteException {
         cargo.promiseDelivery();
 
         intendedCargo = cargo;
@@ -101,14 +115,11 @@ public class Courier extends Worker {
         setCargo(null);
     }
 
-    public void pickUpCargoFromFlag(Cargo c, Flag flag) throws Exception {
+    public void pickUpCargoFromFlag(Cargo c, EndPoint flag) throws Exception {
         setCargo(flag.retrieveCargo(c));
-
-        Flag otherEnd = getAssignedRoad().getOtherFlag(flag);
-        setTarget(otherEnd.getPosition());
     }
 
-    public void pickUpCargoForRoad(Flag flag, Road r) throws Exception {
+    public void pickUpCargoForRoad(EndPoint flag, Road r) throws Exception {
         Cargo cargoToPickUp = null;
         
         if (!getPosition().equals(flag.getPosition())) {
@@ -152,6 +163,34 @@ public class Courier extends Worker {
                 }
             }
 
+        /* Fulfill delivery if it has been started */
+        } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
+            Point last = getLastPoint();
+
+            List<Point> plannedPath = getPlannedPath();
+            
+            /* Deliver cargo to the closest flag in the road if none of the 
+               flags are next to the current targeted building 
+            */
+            if (!getTarget().equals(newRoad.getStart().upLeft()) &&
+                !getTarget().equals(newRoad.getEnd().upLeft())) {
+                int indexOfStart = plannedPath.indexOf(newRoad.getStart());
+                int indexOfEnd   = plannedPath.indexOf(newRoad.getEnd());
+                
+                state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+
+                if (indexOfStart < indexOfEnd) {
+                    setTarget(newRoad.getStart());    
+                } else {
+                    setTarget(newRoad.getEnd());
+                }
+            }
+                
+            /* If the courier is on the road closest to the building, keep 
+               the state and target so that it goes to the building and 
+               delivers the cargo
+            */
+            
         /* If the courier is going to pick up a new cargo, cancel and go to the new road */
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             intendedCargo.clearPromisedDelivery();
@@ -166,16 +205,17 @@ public class Courier extends Worker {
         } else {
             setTarget(idlePoint);
 
-            state = WALKING_TO_ROAD;    
+            state = WALKING_TO_ROAD;
         }
     }
 
     public void putDownCargo() throws Exception {
         Cargo cargo = getCargo();
-        Flag flag = map.getFlagAtPoint(getPosition());
+        Point currentPosition = getPosition();
+        EndPoint endPoint = getEndPointAtPoint(currentPosition);
         
-        flag.putCargo(cargo);
-        cargo.setPosition(getPosition());
+        endPoint.putCargo(cargo);
+        cargo.setPosition(currentPosition);
 
         setCargo(null);
     }
@@ -187,8 +227,8 @@ public class Courier extends Worker {
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             if (map.isFlagAtPoint(getPosition())) {
                 try {                    
-                    Flag flag         = map.getFlagAtPoint(getPosition());
-                    Flag otherEnd     = assignedRoad.getOtherFlag(flag);
+                    EndPoint flag         = map.getFlagAtPoint(getPosition());
+                    EndPoint otherEnd     = assignedRoad.getOtherFlag(flag);
                     
                     /* Pick up the right cargo if we have promised to do so */
                     if (intendedCargo != null) {
@@ -202,10 +242,37 @@ public class Courier extends Worker {
                         pickUpCargoForRoad(flag, assignedRoad);
                     }
                     
-                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                    /* If the intended building is directly after the flag, deliver it 
+                       all the way */
+                    List<Point> plannedPath = getCargo().getPlannedSteps();
+
+                    int index = plannedPath.indexOf(otherEnd.getPosition());
+                    Point lastPoint = plannedPath.get(plannedPath.size() - 1);
+
+                    if (map.isBuildingAtPoint(lastPoint) && index == plannedPath.size() - 2) {
+                        setTarget(lastPoint);
+                        
+                        state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
+                    } else {
+                        setTarget(otherEnd.getPosition());
+                        
+                        state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                    }
                 } catch (Exception ex) {
                     Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
+            try {
+                Building targetBuilding = getCargo().getTarget();
+                
+                deliverToTarget(targetBuilding);
+                
+                setTarget(targetBuilding.getFlag().getPosition());
+                
+                state = GOING_BACK_TO_ROAD;
+            } catch (Exception ex) {
+                Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
             try {
@@ -217,8 +284,9 @@ public class Courier extends Worker {
                     putDownCargo();
                 }
                 
-                Flag flag     = map.getFlagAtPoint(getPosition());
-                Flag otherEnd = assignedRoad.getOtherFlag(flag);
+                Point currentPosition = getPosition();
+                EndPoint flag = getEndPointAtPoint(currentPosition);
+                EndPoint otherEnd = assignedRoad.getOtherFlag(flag);
 
                 if (flag.hasCargoWaitingForRoad(getAssignedRoad())) {
                     pickUpCargoForRoad(flag, assignedRoad);
@@ -239,6 +307,32 @@ public class Courier extends Worker {
             } catch (Exception e) {
                 e.printStackTrace(System.out);
             }
+        } else if (state == GOING_BACK_TO_ROAD) {
+            try {
+                Point currentPosition = getPosition();
+                EndPoint flag = getEndPointAtPoint(currentPosition);
+                EndPoint otherEnd = assignedRoad.getOtherFlag(flag);
+
+                if (flag.hasCargoWaitingForRoad(getAssignedRoad())) {
+                    pickUpCargoForRoad(flag, assignedRoad);
+                    
+                    setTarget(otherEnd.getPosition());
+                    
+                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                } else if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
+                    Cargo cargoToPickUp = otherEnd.getCargoWaitingForRoad(assignedRoad);
+                    
+                    planToPickUpCargo(cargoToPickUp, otherEnd);
+                    
+                    state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+                } else {
+                    setTarget(idlePoint);
+                    state = RETURNING_TO_IDLE_SPOT;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         } else if (state == RETURNING_TO_IDLE_SPOT) {
             state = IDLE_AT_ROAD;
         }

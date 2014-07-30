@@ -307,4 +307,8 @@ public abstract class Worker implements Actor {
             carriedCargo.setPosition(getPosition());
         }
     }
+
+    public List<Point> getPlannedPath() {
+        return path;
+    }
 }

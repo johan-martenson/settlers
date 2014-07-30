@@ -54,20 +54,14 @@ public class TestTransportation {
     public void testCreateRoad() throws InvalidEndPointException, Exception {
         GameMap map = new GameMap(30, 30);
 
-        Storage hq = new Storage();
-        Woodcutter wc = new Woodcutter();
-
-        map.placeBuilding(hq, new Point(5, 5));
-        map.placeBuilding(wc, new Point(10, 6));
-
-        Flag f1 = hq.getFlag();
-        Flag f2 = wc.getFlag();
+        Flag f1 = map.placeFlag(new Point(6, 4));
+        Flag f2 = map.placeFlag(new Point(11, 5));
 
         map.placeAutoSelectedRoad(f1, f2);
 
         List<Road> roads = map.getRoads();
 
-        assertTrue(1 == roads.size());
+        assertTrue(roads.size() == 1);
 
         Road r = roads.get(0);
 
@@ -420,9 +414,9 @@ public class TestTransportation {
         /* Courier has picked up cargo */
         assertEquals(hqToMdlCr.getCargo(), c);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, hqPoint.downRight());
+        Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, hqPoint);
 
-        assertTrue(hqToMdlCr.isAt(storage.getFlag().getPosition()));
+        assertTrue(hqToMdlCr.isAt(storage.getPosition()));
         assertNull(hqToMdlCr.getCargo());
         assertTrue(storage.isInStock(WOOD));
     }
