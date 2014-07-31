@@ -345,6 +345,7 @@ public class TestQuarry {
 
         assertTrue(mason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
+        assertNull(mason.getCargo());
 
         map.stepTime();
         
@@ -352,6 +353,7 @@ public class TestQuarry {
         
         assertEquals(mason.getTarget(), quarry.getFlag().getPosition());
         assertFalse(quarry.isCargoReady());
+        assertNotNull(mason.getCargo());
         
         if (!mason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, mason);

@@ -7,6 +7,7 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Stonemason.States.GETTING_STONE;
 import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
@@ -21,7 +22,6 @@ public class Stonemason extends Worker {
     private final Countdown countdown;
     private Building hut;
     private Point stoneTarget;
-    private Cargo stoneCargo;
     
     enum States {
         WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_GET_STONE, GETTING_STONE, GOING_BACK_TO_HOUSE
@@ -39,7 +39,6 @@ public class Stonemason extends Worker {
         countdown = new Countdown();
         hut = null;
         stoneTarget = null;
-        stoneCargo = null;
     }
 
     public boolean isGettingStone() {
@@ -95,7 +94,10 @@ public class Stonemason extends Worker {
             }
         } else if (state == GETTING_STONE) {
             if (countdown.reachedZero()) {
-                stoneCargo = map.removePartOfStone(stoneTarget);
+                map.removePartOfStone(stoneTarget);
+                
+                setCargo(new Cargo(STONE, map));
+                
                 state = GOING_BACK_TO_HOUSE;
                 
                 stoneTarget = null;
@@ -111,9 +113,9 @@ public class Stonemason extends Worker {
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = States.RESTING_IN_HOUSE;
             
-            if (stoneCargo != null) {
-                hut.putProducedCargoForDelivery(stoneCargo);
-                stoneCargo = null;
+            if (getCargo() != null) {
+                hut.putProducedCargoForDelivery(getCargo());
+                setCargo(null);
             }
     
             enterBuilding(hut);
