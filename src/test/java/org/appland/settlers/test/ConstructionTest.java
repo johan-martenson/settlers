@@ -63,8 +63,8 @@ public class ConstructionTest {
         /* Verify that construction doesn't finish before material is delivered */
         Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
 
-        Cargo planckCargo = new Cargo(PLANCK);
-        Cargo stoneCargo = new Cargo(STONE);
+        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo stoneCargo = new Cargo(STONE, null);
         wc.deliver(planckCargo);
         wc.deliver(planckCargo);
         wc.deliver(stoneCargo);
@@ -134,8 +134,8 @@ public class ConstructionTest {
         /* Verify that construction doesn't finish before material is delivered */
         Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
 
-        Cargo planckCargo = new Cargo(PLANCK);
-        Cargo stoneCargo = new Cargo(STONE);
+        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo stoneCargo = new Cargo(STONE, null);
         sm.deliver(planckCargo);
         sm.deliver(planckCargo);
         sm.deliver(planckCargo);
@@ -175,8 +175,8 @@ public class ConstructionTest {
         /* Verify that construction doesn't finish before material is delivered */
         Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
 
-        Cargo planckCargo = new Cargo(PLANCK);
-        Cargo stoneCargo = new Cargo(STONE);
+        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo stoneCargo = new Cargo(STONE, null);
         farm.deliver(planckCargo);
         farm.deliver(planckCargo);
         farm.deliver(planckCargo);
@@ -208,7 +208,7 @@ public class ConstructionTest {
     public void testInvalidDeliveryToUnfinishedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
         Sawmill sw = new Sawmill();
 
-        sw.deliver(new Cargo(SWORD));
+        sw.deliver(new Cargo(SWORD, null));
     }
 
     @Test(expected = InvalidStateForProduction.class)
@@ -221,7 +221,7 @@ public class ConstructionTest {
 
         sm.tearDown();
 
-        sm.deliver(new Cargo(WOOD));
+        sm.deliver(new Cargo(WOOD, null));
     }
 
     @Test(expected = InvalidStateForProduction.class)
@@ -236,7 +236,7 @@ public class ConstructionTest {
 
         Utils.fastForward(1000, sm);
 
-        sm.deliver(new Cargo(WOOD));
+        sm.deliver(new Cargo(WOOD, null));
     }
 
     private boolean matchesRequiredMaterialForSmallHouse(Map<Material, Integer> requiredMaterialToFinish) {

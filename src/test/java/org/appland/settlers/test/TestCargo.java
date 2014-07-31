@@ -27,7 +27,7 @@ public class TestCargo {
     
     @Test
     public void testNextStepIsNullForCargoWithoutTarget() throws Exception {
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, null);
         assertNull(cargo.getNextStep());
     }
 
@@ -42,7 +42,7 @@ public class TestCargo {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
 
-        Cargo cargo = new Cargo(PLANCK);
+        Cargo cargo = new Cargo(PLANCK, map);
         
         flag0.putCargo(cargo);
         
@@ -57,7 +57,7 @@ public class TestCargo {
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(point1);
 
-        Cargo cargo = new Cargo(PLANCK);
+        Cargo cargo = new Cargo(PLANCK, map);
         
         flag0.putCargo(cargo);
         

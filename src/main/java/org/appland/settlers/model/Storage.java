@@ -140,7 +140,7 @@ public class Storage extends Building implements Actor {
         
         retrieveOneFromInventory(material);
 
-        Cargo c = new Cargo(material);
+        Cargo c = new Cargo(material, map);
 
         c.setPosition(getFlag().getPosition());
 
@@ -185,16 +185,16 @@ public class Storage extends Building implements Actor {
         
         switch (material) {
         case FORESTER:
-            w = new Forester();
+            w = new Forester(map);
             break;
         case WOODCUTTER_WORKER:
-            w = new WoodcutterWorker();
+            w = new WoodcutterWorker(map);
             break;
         case STONEMASON:
-            w = new Stonemason();
+            w = new Stonemason(map);
             break;
         case FARMER:
-            w = new Farmer();
+            w = new Farmer(map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
@@ -230,7 +230,7 @@ public class Storage extends Building implements Actor {
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        Military m = new Military(r);
+        Military m = new Military(r, map);
 
         m.setPosition(getFlag().getPosition());
 
@@ -240,7 +240,7 @@ public class Storage extends Building implements Actor {
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
 
-        Courier c = new Courier(null);
+        Courier c = new Courier(map);
 
         c.setPosition(getFlag().getPosition());
 

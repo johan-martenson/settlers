@@ -109,7 +109,7 @@ public class WoodcutterWorker extends Worker {
             if (countdown.reachedZero()) {
                 map.removeTree(getPosition());
                 
-                woodCargo = new Cargo(WOOD);
+                woodCargo = new Cargo(WOOD, map);
                 
                 state = GOING_BACK_TO_FLAG_WITH_CARGO;
                 

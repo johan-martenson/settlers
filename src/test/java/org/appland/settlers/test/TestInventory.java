@@ -12,12 +12,8 @@ import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Storage;
-import org.junit.Assert;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,56 +65,56 @@ public class TestInventory {
     @Test
     public void testDepositRetrieveDeadMatter() throws Exception {
 
-        storage.deliver(new Cargo(SWORD));
+        storage.deliver(new Cargo(SWORD, null));
         assertTrue(storage.getAmount(SWORD) == 1);
         assertTrue(storage.isInStock(SWORD));
         storage.retrieve(SWORD);
         assertTrue(storage.getAmount(SWORD) == 0);
         assertFalse(storage.isInStock(SWORD));
 
-        storage.deliver(new Cargo(SHIELD));
+        storage.deliver(new Cargo(SHIELD, null));
         assertTrue(storage.getAmount(SHIELD) == 1);
         assertTrue(storage.isInStock(SHIELD));
         storage.retrieve(SHIELD);
         assertTrue(storage.getAmount(SHIELD) == 0);
         assertFalse(storage.isInStock(SHIELD));
 
-        storage.deliver(new Cargo(BEER));
+        storage.deliver(new Cargo(BEER, null));
         assertTrue(storage.getAmount(BEER) == 1);
         assertTrue(storage.isInStock(BEER));
         storage.retrieve(BEER);
         assertTrue(storage.getAmount(BEER) == 0);
         assertFalse(storage.isInStock(BEER));
 
-        storage.deliver(new Cargo(GOLD));
+        storage.deliver(new Cargo(GOLD, null));
         assertTrue(storage.getAmount(GOLD) == 1);
         assertTrue(storage.isInStock(GOLD));
         storage.retrieve(GOLD);
         assertTrue(storage.getAmount(GOLD) == 0);
         assertFalse(storage.isInStock(GOLD));
 
-        storage.deliver(new Cargo(WOOD));
+        storage.deliver(new Cargo(WOOD, null));
         assertTrue(storage.getAmount(WOOD) == 1);
         assertTrue(storage.isInStock(WOOD));
         storage.retrieve(WOOD);
         assertTrue(storage.getAmount(WOOD) == 0);
         assertFalse(storage.isInStock(WOOD));
 
-        storage.deliver(new Cargo(PLANCK));
+        storage.deliver(new Cargo(PLANCK, null));
         assertTrue(storage.getAmount(PLANCK) == 1);
         assertTrue(storage.isInStock(PLANCK));
         storage.retrieve(PLANCK);
         assertTrue(storage.getAmount(PLANCK) == 0);
         assertFalse(storage.isInStock(PLANCK));
 
-        storage.deliver(new Cargo(STONE));
+        storage.deliver(new Cargo(STONE, null));
         assertTrue(storage.getAmount(STONE) == 1);
         assertTrue(storage.isInStock(STONE));
         storage.retrieve(STONE);
         assertTrue(storage.getAmount(STONE) == 0);
         assertFalse(storage.isInStock(STONE));
 
-        storage.deliver(new Cargo(WHEAT));
+        storage.deliver(new Cargo(WHEAT, null));
         assertTrue(storage.getAmount(WHEAT) == 1);
         assertTrue(storage.isInStock(WHEAT));
         storage.retrieve(WHEAT);

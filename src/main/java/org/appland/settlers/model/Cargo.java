@@ -10,15 +10,17 @@ public class Cargo {
     private Building    target;
     private Point       position;
     private List<Point> path;
-    
+
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
     private boolean deliveryPromised;
+    private GameMap map;
 
-    public Cargo(Material m) {
-        log.log(Level.INFO, "Creating cargo of {0}", m);
+    public Cargo(Material materialToSet, GameMap mapToSet) {
+        log.log(Level.INFO, "Creating cargo of {0}", materialToSet);
 
-        material = m;
+        material         = materialToSet;
         deliveryPromised = false;
+        map              = mapToSet;
     }
 
     public Material getMaterial() {

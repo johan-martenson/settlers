@@ -70,7 +70,7 @@ public class GameLogicTest {
         Utils.constructMediumHouse(sm);
 
         /* Deliver WOOD to the sawmill */
-        Cargo woodCargo = new Cargo(WOOD);
+        Cargo woodCargo = new Cargo(WOOD, map);
         woodCargo.setPosition(sm.getFlag().getPosition());
 
         sm.deliver(woodCargo);
@@ -157,7 +157,7 @@ public class GameLogicTest {
         /* Fast forward so the courier can reach its road and be assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
-        Cargo c = new Cargo(PLANCK);
+        Cargo c = new Cargo(PLANCK, map);
 
         c.setPosition(f.getPosition());
         c.setTarget(sm, map);
@@ -204,7 +204,7 @@ public class GameLogicTest {
         /* Fast forward to let the courier reach its road and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, w);
         
-        c = new Cargo(PLANCK);
+        c = new Cargo(PLANCK, map);
 
         src.putCargo(c);
         c.setTarget(wc, map);

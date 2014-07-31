@@ -622,7 +622,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Place the cargo on the end of the road, furthest away from the hq */
-        Cargo cargo = new Cargo(BEER);
+        Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
         cargo.setTarget(hq, map);
         
@@ -679,7 +679,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Make the courier pick up a cargo and start walking to deliver it */
-        Cargo cargo = new Cargo(BEER);
+        Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
         cargo.setTarget(hq, map);
         
@@ -750,7 +750,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Make the courier pick up a cargo and start walking to deliver it */
-        Cargo cargo = new Cargo(BEER);
+        Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
         cargo.setTarget(hq, map);
         
@@ -920,7 +920,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Make the courier pick up a cargo and start walking to deliver it */
-        Cargo cargo = new Cargo(BEER);
+        Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
         cargo.setTarget(hq, map);
         

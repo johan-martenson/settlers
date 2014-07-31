@@ -42,7 +42,7 @@ public class TestTransportation {
     @Test
     public void testCreateCargo() {
         for (Material m : Material.values()) {
-            Cargo c = new Cargo(m);
+            Cargo c = new Cargo(m, null);
 
             assertNotNull(c);
 
@@ -375,7 +375,7 @@ public class TestTransportation {
         assertFalse(mdlToEndCr.isTraveling());
         assertNull(mdlToEndCr.getCargo());
 
-        Cargo c = new Cargo(WOOD);
+        Cargo c = new Cargo(WOOD, map);
         endFlag.putCargo(c);
         c.setTarget(storage, map);
 
@@ -543,7 +543,7 @@ public class TestTransportation {
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
         
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(start);
         cargo.setTarget(sm, map);
 
@@ -593,7 +593,7 @@ public class TestTransportation {
         /* Let the couriers reach their roads and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
         
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
         cargo.setTarget(sm, map);
 
@@ -663,7 +663,7 @@ public class TestTransportation {
         /* Let the couriers reach their target road and become idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
         
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
         cargo.setTarget(sm, map);
 

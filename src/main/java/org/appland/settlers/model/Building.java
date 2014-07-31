@@ -471,7 +471,7 @@ public class Building implements Actor, EndPoint {
 
         /* Production just finished */
         } else if (productionCountdown.reachedZero()) {
-            result = new Cargo(getProductionMaterial());
+            result = new Cargo(getProductionMaterial(), map);
 
             log.log(Level.FINE, "{0} produced {1}", new Object[]{this, result});
 

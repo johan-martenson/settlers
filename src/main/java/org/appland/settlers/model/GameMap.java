@@ -1351,7 +1351,7 @@ public class GameMap {
             mp.setStone(null);
         }
 
-        return new Cargo(Material.STONE);
+        return new Cargo(Material.STONE, this);
     }
 
     public Iterable<Point> getPointsWithinRadius(Point point, int radius) {

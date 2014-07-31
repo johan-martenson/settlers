@@ -166,7 +166,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3);
         
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
         cargo.setTarget(wc, map);
         
@@ -208,7 +208,7 @@ public class TestCourier {
         Road road1 = map.placeRoad(point1, point3);
         
         /* Place cargo at flag0 */
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
         cargo.setTarget(wc, map);
         
@@ -267,7 +267,7 @@ public class TestCourier {
         Road road1 = map.placeRoad(point1, point3);
         
         /* Place cargo at flag0 */
-        Cargo cargo = new Cargo(WOOD);
+        Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
         cargo.setTarget(wc, map);
         
@@ -343,7 +343,7 @@ public class TestCourier {
         Road road1 = map.placeRoad(flagPoint, point3);
         
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(WOOD);
+        Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
         leftWoodcutter.getFlag().putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(rightWoodcutter, map);
         
@@ -374,7 +374,7 @@ public class TestCourier {
         assertTrue(courier.isAt(leftWoodcutter.getFlag().getPosition()));
         
         /* Place cargo at other flag for courier to discover after delivery */
-        Cargo cargoForLeftWoodcutter = new Cargo(STONE);
+        Cargo cargoForLeftWoodcutter = new Cargo(STONE, map);
         
         cargoForLeftWoodcutter.setPosition(middleFlag.getPosition());
         middleFlag.putCargo(cargoForLeftWoodcutter);
@@ -418,7 +418,7 @@ public class TestCourier {
         Road road1 = map.placeRoad(flagPoint, point3);
         
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(WOOD);
+        Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
         leftWoodcutter.getFlag().putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(rightWoodcutter, map);
         
@@ -484,7 +484,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
         
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK);
+        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(wc, map);
         
@@ -556,7 +556,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
         
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK);
+        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(wc, map);
         

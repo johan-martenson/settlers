@@ -5,7 +5,6 @@ import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTR
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 
 import static org.junit.Assert.assertFalse;
@@ -16,7 +15,6 @@ import static org.junit.Assert.assertTrue;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
-import org.appland.settlers.model.InvalidLogicException;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Quarry;
@@ -42,7 +40,7 @@ public class TestProduction {
         assertTrue(sawmill.getConstructionState() == DONE);
         assertFalse(sawmill.isCargoReady());
 
-        sawmill.deliver(new Cargo(WOOD));
+        sawmill.deliver(new Cargo(WOOD, null));
 
         assertTrue(1 == sawmill.getMaterialInQueue(WOOD));
 
@@ -64,7 +62,7 @@ public class TestProduction {
 
         assertTrue(DONE == sawmill.getConstructionState());
 
-        sawmill.deliver(new Cargo(GOLD));
+        sawmill.deliver(new Cargo(GOLD, null));
     }
 
     @Test(expected = DeliveryNotPossibleException.class)
@@ -73,7 +71,7 @@ public class TestProduction {
 
         Utils.constructSmallHouse(woodcutter);
 
-        woodcutter.deliver(new Cargo(WOOD));
+        woodcutter.deliver(new Cargo(WOOD, null));
     }
 
     @Test
@@ -92,7 +90,7 @@ public class TestProduction {
 
         Utils.constructSmallHouse(quarry);
 
-        quarry.deliver(new Cargo(BEER));
+        quarry.deliver(new Cargo(BEER, null));
     }
 
     @Test(expected=Exception.class)

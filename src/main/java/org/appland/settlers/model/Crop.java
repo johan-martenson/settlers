@@ -65,6 +65,6 @@ public class Crop implements Actor {
     public Cargo harvest() {
         state = GrowthState.HARVESTED;
         
-        return new Cargo(WHEAT);
+        return new Cargo(WHEAT, null);
     }
 }
