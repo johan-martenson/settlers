@@ -22,6 +22,7 @@ public class Building implements Actor, EndPoint {
     }
     
     protected ConstructionState constructionState;
+    protected GameMap           map;
     
     private Cargo   outputCargo;
     private boolean isWorkerNeeded;
@@ -54,11 +55,20 @@ public class Building implements Actor, EndPoint {
         worker                = null;
         promisedWorker        = null;
         position              = null;
+        map                   = null;
 
         /* Check and remember if this building requires a worker */
         isWorkerNeeded = getWorkerRequired();
         
         constructionCountdown.countFrom(getConstructionCountdown());
+    }
+    
+    protected void setMap(GameMap m) {
+        map = m;
+    }
+    
+    public GameMap getMap() {
+        return map;
     }
     
     public boolean isMilitaryBuilding() {

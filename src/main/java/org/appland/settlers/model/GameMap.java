@@ -195,6 +195,8 @@ public class GameMap {
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
+        house.setMap(this);
+        
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }

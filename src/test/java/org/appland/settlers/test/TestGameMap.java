@@ -19,7 +19,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -205,5 +205,18 @@ public class TestGameMap {
     @Test
     public void testGetClosestStorage() {
         // TODO: Write test
+    }
+
+    @Test
+    public void testPlaceBuildingSetsMap() throws Exception {
+        GameMap map    = new GameMap(10, 10);
+        Farm    farm   = new Farm();
+        Point   point0 = new Point(5, 5);
+
+        assertNull(farm.getMap());
+        
+        map.placeBuilding(farm, point0);
+        
+        assertEquals(farm.getMap(), map);
     }
 }
