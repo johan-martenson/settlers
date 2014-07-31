@@ -27,7 +27,7 @@ public class Cargo {
         return this.material;
     }
 
-    public void setTarget(Building target, GameMap map) throws InvalidRouteException, Exception {
+    public void setTarget(Building target) throws InvalidRouteException, Exception {
         log.log(Level.INFO, "Setting target to {0}", target);
         this.target = target;
         

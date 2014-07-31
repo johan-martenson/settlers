@@ -46,7 +46,7 @@ public class TestCargo {
         
         flag0.putCargo(cargo);
         
-        cargo.setTarget(wc, map);
+        cargo.setTarget(wc);
         
         assertEquals(cargo.getNextStep(), point3);
     }

@@ -624,7 +624,7 @@ public class TestRoads {
         /* Place the cargo on the end of the road, furthest away from the hq */
         Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
-        cargo.setTarget(hq, map);
+        cargo.setTarget(hq);
         
         map.stepTime();
         
@@ -681,7 +681,7 @@ public class TestRoads {
         /* Make the courier pick up a cargo and start walking to deliver it */
         Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
-        cargo.setTarget(hq, map);
+        cargo.setTarget(hq);
         
         map.stepTime();
         
@@ -752,7 +752,7 @@ public class TestRoads {
         /* Make the courier pick up a cargo and start walking to deliver it */
         Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
-        cargo.setTarget(hq, map);
+        cargo.setTarget(hq);
         
         map.stepTime();
         
@@ -922,7 +922,7 @@ public class TestRoads {
         /* Make the courier pick up a cargo and start walking to deliver it */
         Cargo cargo = new Cargo(BEER, map);
         endFlag.putCargo(cargo);
-        cargo.setTarget(hq, map);
+        cargo.setTarget(hq);
         
         map.stepTime();
         

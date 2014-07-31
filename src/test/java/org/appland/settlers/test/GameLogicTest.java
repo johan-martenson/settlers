@@ -160,7 +160,7 @@ public class GameLogicTest {
         Cargo c = new Cargo(PLANCK, map);
 
         c.setPosition(f.getPosition());
-        c.setTarget(sm, map);
+        c.setTarget(sm);
         f.putCargo(c);
 
         /* Verify that the worker is idle */
@@ -207,7 +207,7 @@ public class GameLogicTest {
         c = new Cargo(PLANCK, map);
 
         src.putCargo(c);
-        c.setTarget(wc, map);
+        c.setTarget(wc);
 
         /* Let the courier detect and pick up the cargo */
         map.stepTime();

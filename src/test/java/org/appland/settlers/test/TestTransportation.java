@@ -320,7 +320,7 @@ public class TestTransportation {
 
         map.findWayWithExistingRoads(qry.getFlag().getPosition(), stge.getFlag().getPosition());
 
-        c.setTarget(stge, map);
+        c.setTarget(stge);
 
         qry.getFlag().putCargo(c);
 
@@ -333,7 +333,7 @@ public class TestTransportation {
         assertTrue(c.getMaterial() == STONE);
 
         // TODO: Make sure the cargo has a target which is to go to the closest storage building
-        c.setTarget(stge, map);
+        c.setTarget(stge);
     }
 
     @Test
@@ -377,7 +377,7 @@ public class TestTransportation {
 
         Cargo c = new Cargo(WOOD, map);
         endFlag.putCargo(c);
-        c.setTarget(storage, map);
+        c.setTarget(storage);
 
         /* The courier detects the cargo on next tick */
         map.stepTime();
@@ -545,7 +545,7 @@ public class TestTransportation {
         
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(start);
-        cargo.setTarget(sm, map);
+        cargo.setTarget(sm);
 
         flag0.putCargo(cargo);
 
@@ -595,7 +595,7 @@ public class TestTransportation {
         
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
-        cargo.setTarget(sm, map);
+        cargo.setTarget(sm);
 
         flag0.putCargo(cargo);
 
@@ -665,7 +665,7 @@ public class TestTransportation {
         
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
-        cargo.setTarget(sm, map);
+        cargo.setTarget(sm);
 
         flag0.putCargo(cargo);
 

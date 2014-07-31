@@ -188,7 +188,10 @@ public class Farmer extends Worker {
             if (countdown.reachedZero()) {
 
                 Crop crop = map.getCropAtPoint(getPosition());
-                cropCargo = crop.harvest();
+                crop.harvest();
+                
+                /* Create a crop cargo to make sure the map is set correctly */
+                cropCargo = new Cargo(Material.WHEAT, map);
                 
                 state = GOING_BACK_TO_HOUSE;
                 

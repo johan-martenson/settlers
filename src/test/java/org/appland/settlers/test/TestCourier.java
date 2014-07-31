@@ -168,7 +168,7 @@ public class TestCourier {
         
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc, map);
+        cargo.setTarget(wc);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag0);
@@ -210,7 +210,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc, map);
+        cargo.setTarget(wc);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);
@@ -269,7 +269,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc, map);
+        cargo.setTarget(wc);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);
@@ -345,7 +345,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
         leftWoodcutter.getFlag().putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(rightWoodcutter, map);
+        cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);
@@ -378,7 +378,7 @@ public class TestCourier {
         
         cargoForLeftWoodcutter.setPosition(middleFlag.getPosition());
         middleFlag.putCargo(cargoForLeftWoodcutter);
-        cargoForLeftWoodcutter.setTarget(leftWoodcutter, map);
+        cargoForLeftWoodcutter.setTarget(leftWoodcutter);
         
         /* When worker arrives at the flag it automatically picks up the cargo
             - It picks up the cargo directly and sets the other flag as target
@@ -420,7 +420,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
         leftWoodcutter.getFlag().putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(rightWoodcutter, map);
+        cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);
@@ -486,7 +486,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc, map);
+        cargoForRightWoodcutter.setTarget(wc);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);
@@ -558,7 +558,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc, map);
+        cargoForRightWoodcutter.setTarget(wc);
         
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(map);

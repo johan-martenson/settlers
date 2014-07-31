@@ -119,7 +119,7 @@ public class GameLogic {
             if (targetBuilding != null) {
                 targetBuilding.promiseDelivery(materialToDeliver);
                 Cargo c = hq.retrieve(materialToDeliver);
-                c.setTarget(targetBuilding, map);
+                c.setTarget(targetBuilding);
                 hq.getFlag().putCargo(c);
 
                 break;
@@ -132,7 +132,7 @@ public class GameLogic {
             Cargo c = b.retrieveCargo();
             Storage stg = map.getClosestStorage(b.getPosition());
 
-            c.setTarget(stg, map);
+            c.setTarget(stg);
 
             b.getFlag().putCargo(c);
         }

@@ -149,7 +149,7 @@ public class WoodcutterWorker extends Worker {
                 Storage stg = map.getClosestStorage(getPosition());
 
                 woodCargo.setPosition(getPosition());
-                woodCargo.setTarget(stg, map);
+                woodCargo.setTarget(stg);
                 hut.getFlag().putCargo(woodCargo);
                                 
                 woodCargo = null;
