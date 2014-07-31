@@ -28,7 +28,6 @@ public class WoodcutterWorker extends Worker {
     private States    state;
     private Countdown countdown;
     private Building  hut;
-    private Cargo     woodCargo;
 
     WoodcutterWorker() {
         this(null);
@@ -73,7 +72,6 @@ public class WoodcutterWorker extends Worker {
         state = States.WALKING_TO_TARGET;
         countdown = new Countdown();
         hut = null;
-        woodCargo = null;
     }
     
     public boolean isCuttingTree() {
@@ -109,7 +107,7 @@ public class WoodcutterWorker extends Worker {
             if (countdown.reachedZero()) {
                 map.removeTree(getPosition());
                 
-                woodCargo = new Cargo(WOOD, map);
+                setCargo(new Cargo(WOOD, map));
                 
                 state = GOING_BACK_TO_FLAG_WITH_CARGO;
                 
@@ -148,11 +146,13 @@ public class WoodcutterWorker extends Worker {
             try {
                 Storage stg = map.getClosestStorage(getPosition());
 
-                woodCargo.setPosition(getPosition());
-                woodCargo.setTarget(stg);
-                hut.getFlag().putCargo(woodCargo);
+                Cargo cargo = getCargo();
+                
+                cargo.setPosition(getPosition());
+                cargo.setTarget(stg);
+                hut.getFlag().putCargo(cargo);
                                 
-                woodCargo = null;
+                setCargo(null);
                 
                 setTarget(hut.getPosition());
                 

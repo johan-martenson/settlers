@@ -458,12 +458,14 @@ public class TestWoodcutter {
 
         assertTrue(wcWorker.isCuttingTree());
         assertTrue(map.isTreeAtPoint(point));
+        assertNull(wcWorker.getCargo());
 
         map.stepTime();
         
         /* The woodcutter has cut down the tree and goes back via the flag*/
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
+        assertNotNull(wcWorker.getCargo());
         
         assertEquals(wcWorker.getTarget(), wc.getFlag().getPosition());
         assertFalse(wc.isCargoReady());
@@ -482,7 +484,7 @@ public class TestWoodcutter {
         /* Woodcutter enter building but does not store the cargo yet */
         assertFalse(wc.isCargoReady());
         assertTrue(wcWorker.isInsideBuilding());
-        //assertNotNull(wcWorker.getCargo());
+        assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
         /* Woodcutter leaves the building and puts the cargo on the building's flag */
