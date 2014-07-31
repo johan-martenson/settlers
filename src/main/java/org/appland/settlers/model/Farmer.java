@@ -32,7 +32,6 @@ public class Farmer extends Worker {
     private States state;
     private Countdown countdown;
     private Farm hut;
-    private Cargo cropCargo;
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
         Point hutPoint = hut.getPosition();
@@ -171,8 +170,10 @@ public class Farmer extends Worker {
             
             countdown.countFrom(19);
         } else if (state == States.GOING_BACK_TO_HOUSE) {            
-            if (cropCargo != null) {
-                hut.putProducedCargoForDelivery(cropCargo);
+            if (getCargo() != null) {
+                hut.putProducedCargoForDelivery(getCargo());
+                
+                setCargo(null);
             }
             
             enterBuilding(hut);
@@ -191,7 +192,7 @@ public class Farmer extends Worker {
                 crop.harvest();
                 
                 /* Create a crop cargo to make sure the map is set correctly */
-                cropCargo = new Cargo(Material.WHEAT, map);
+                setCargo(new Cargo(Material.WHEAT, map));
                 
                 state = GOING_BACK_TO_HOUSE;
                 

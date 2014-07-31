@@ -26,12 +26,9 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -490,11 +487,13 @@ public class TestFarm {
 
         assertTrue(farmer.isHarvesting());
         assertTrue(map.isCropAtPoint(point));
+        assertNull(farmer.getCargo());
         
         map.stepTime();
         
         assertFalse(farmer.isHarvesting());
-        assertEquals(crop.getGrowthState(), HARVESTED);        
+        assertEquals(crop.getGrowthState(), HARVESTED);
+        assertNotNull(farmer.getCargo());
 
         assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
         
@@ -506,6 +505,7 @@ public class TestFarm {
         map.stepTime();
         
         assertTrue(farmer.isInsideBuilding());
+        assertNull(farmer.getCargo());
     }
     
     @Test
