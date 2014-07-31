@@ -488,10 +488,6 @@ public class GameMap {
     public Storage getClosestStorage(Road r) {
         return getClosestStorage(r.getStart());
     }
-    
-    public Storage getClosestStorage(Building b) {
-        return getClosestStorage(b.getFlag().getPosition());
-    }
 
     public Storage getClosestStorage(Point p) {
         Storage stg = null;
@@ -1168,7 +1164,7 @@ public class GameMap {
         return mp.getTree() != null;
     }
 
-    List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
+    public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
         Set<Point> evaluated        = new HashSet<>();
         Set<Point> toEvaluate       = new HashSet<>();
         Map<Point, Double> cost     = new HashMap<>();

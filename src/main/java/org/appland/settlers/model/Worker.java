@@ -245,7 +245,7 @@ public abstract class Worker implements Actor {
 
         target = p;
         
-        if (position.equals(p)) {            
+        if (position.equals(p)) {
             try {
                 state = IDLE_OUTSIDE;
                 

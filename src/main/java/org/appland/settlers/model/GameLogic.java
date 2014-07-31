@@ -55,7 +55,7 @@ public class GameLogic {
         for (Building b : buildings) {
             if (b.isMilitaryBuilding()) {
                 if (b.needMilitaryManning()) {
-                    Storage stg = map.getClosestStorage(b);
+                    Storage stg = map.getClosestStorage(b.getPosition());
 
                     Military m = stg.retrieveAnyMilitary();
 
@@ -71,7 +71,7 @@ public class GameLogic {
                 if (b.needsWorker()) {
                     Material m = b.getWorkerType();
 
-                    Storage stg = map.getClosestStorage(b);
+                    Storage stg = map.getClosestStorage(b.getPosition());
 
                     Worker w = stg.retrieveWorker(m);
 
@@ -130,7 +130,7 @@ public class GameLogic {
     public void initiateCollectionOfNewProduce(GameMap map) throws Exception {
         for (Building b : map.getBuildingsWithNewProduce()) {
             Cargo c = b.retrieveCargo();
-            Storage stg = map.getClosestStorage(b);
+            Storage stg = map.getClosestStorage(b.getPosition());
 
             c.setTarget(stg, map);
 

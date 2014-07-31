@@ -129,19 +129,21 @@ public class TestScenarios {
         /*   --   START TEST   --   */
         
         /* Fast forward until the woodcutter has cut some wood */
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        
         int i;
         for (i = 0; i < 700; i++) {
-            if (wc.isCargoReady()) {
+            if (!wc.getFlag().getStackedCargo().isEmpty()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(wc.isCargoReady());
+        assertFalse(wc.getFlag().getStackedCargo().isEmpty());
         
         /* Retrieve cargo from woodcutter and put it on the flag */
-        gameLogic.initiateCollectionOfNewProduce(map);
+        //gameLogic.initiateCollectionOfNewProduce(map);
 
         Courier courierWcToHq = wcToHqRoad.getCourier();
 

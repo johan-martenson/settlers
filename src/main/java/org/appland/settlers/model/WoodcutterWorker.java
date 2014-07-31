@@ -6,13 +6,18 @@
 
 package org.appland.settlers.model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.WoodcutterWorker.States.CUTTING_TREE;
+import static org.appland.settlers.model.WoodcutterWorker.States.GOING_BACK_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.WoodcutterWorker.States.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.WoodcutterWorker.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.WoodcutterWorker.States.GOING_OUT_TO_CUT_TREE;
+import static org.appland.settlers.model.WoodcutterWorker.States.GOING_OUT_TO_PUT_CARGO;
+import static org.appland.settlers.model.WoodcutterWorker.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.WoodcutterWorker.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.WoodcutterWorker.States.WALKING_TO_TARGET;
 
 /**
  *
@@ -51,13 +56,21 @@ public class WoodcutterWorker extends Worker {
     }
     
     enum States {
-        WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_CUT_TREE, CUTTING_TREE, GOING_BACK_TO_HOUSE
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE, 
+        GOING_OUT_TO_CUT_TREE,
+        CUTTING_TREE, 
+        GOING_BACK_TO_FLAG_WITH_CARGO,
+        GOING_BACK_TO_HOUSE_WITH_CARGO, 
+        IN_HOUSE_WITH_CARGO,
+        GOING_OUT_TO_PUT_CARGO,
+        GOING_BACK_TO_HOUSE 
     }
     
     public WoodcutterWorker(GameMap map) {
         super(map);
         
-        state = WALKING_TO_TARGET;
+        state = States.WALKING_TO_TARGET;
         countdown = new Countdown();
         hut = null;
         woodCargo = null;
@@ -98,7 +111,7 @@ public class WoodcutterWorker extends Worker {
                 
                 woodCargo = new Cargo(WOOD);
                 
-                state = States.GOING_BACK_TO_HOUSE;
+                state = GOING_BACK_TO_FLAG_WITH_CARGO;
                 
                 setOffroadTarget(hut.getFlag().getPosition());
             } else {
@@ -108,17 +121,53 @@ public class WoodcutterWorker extends Worker {
             state = CUTTING_TREE;
             
             countdown.countFrom(49);
+        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+            enterBuilding(hut);
+                
+            state = IN_HOUSE_WITH_CARGO;
+        } else if (state == IN_HOUSE_WITH_CARGO) {
+            try {
+                setTarget(hut.getFlag().getPosition());
+
+                state = GOING_OUT_TO_PUT_CARGO;
+            } catch (InvalidRouteException ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             
-            if (woodCargo != null) {
-                hut.putProducedCargoForDelivery(woodCargo);
-                woodCargo = null;
-            }
-    
             enterBuilding(hut);
             
             countdown.countFrom(99);
+        }
+    }
+
+    @Override
+    public void onArrival() {
+        if (state == GOING_OUT_TO_PUT_CARGO) {
+            try {
+                Storage stg = map.getClosestStorage(getPosition());
+
+                woodCargo.setPosition(getPosition());
+                woodCargo.setTarget(stg, map);
+                hut.getFlag().putCargo(woodCargo);
+                                
+                woodCargo = null;
+                
+                setTarget(hut.getPosition());
+                
+                state = GOING_BACK_TO_HOUSE;
+            } catch (Exception ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (state == GOING_BACK_TO_FLAG_WITH_CARGO) {
+            try {
+                setTarget(hut.getPosition());
+                
+                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
+            } catch (InvalidRouteException ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

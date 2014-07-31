@@ -30,6 +30,8 @@ public class Cargo {
         this.target = target;
         
         path = map.findWayWithExistingRoads(position, target.getPosition());
+        
+        path.remove(0);
     }
 
     public boolean isAtTarget() {
