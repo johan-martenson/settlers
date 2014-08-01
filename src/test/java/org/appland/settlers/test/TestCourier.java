@@ -42,8 +42,11 @@ public class TestCourier {
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(point2);
         
-        Road road0 = map.placeRoad(point2, point0);
-        Road road1 = map.placeRoad(point0, point1);
+        Point point3 = new Point(7, 3);
+        Point point4 = new Point(9, 3);
+        
+        Road road0 = map.placeRoad(point2, point3, point0);
+        Road road1 = map.placeRoad(point0, point4, point1);
 
         Courier courier = new Courier(map);
         map.placeWorker(courier, flag2);
@@ -151,20 +154,21 @@ public class TestCourier {
     @Test
     public void testCourierWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Point middle = new Point(8, 4);
-        Point point1 = new Point(10, 4);
+        Point middle = new Point(7, 3);
+        Point point1 = new Point(8, 4);
         Flag flag1 = map.placeFlag(point1);
 
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(12, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point3.upLeft());
+        Point point3 = new Point(9, 5);
+        Point point4 = new Point(11, 5);
+        Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
         Utils.constructSmallHouse(wc);
         
         Road road0 = map.placeRoad(point2, middle, point1);
-        Road road1 = map.placeRoad(point1, point3);
+        Road road1 = map.placeRoad(point1, point3, point4);
         
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
@@ -192,20 +196,21 @@ public class TestCourier {
     @Test
     public void testCourierPicksUpCargoFromFlag() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Point middle = new Point(8, 4);
-        Point point1 = new Point(10, 4);
+        Point middle = new Point(7, 3);
+        Point point1 = new Point(8, 4);
         Flag flag1 = map.placeFlag(point1);
 
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(12, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point3.upLeft());
+        Point point3 = new Point(9, 5);
+        Point point4 = new Point(11, 5);
+        Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
         Utils.constructSmallHouse(wc);
         
         Road road0 = map.placeRoad(point2, middle, point1);
-        Road road1 = map.placeRoad(point1, point3);
+        Road road1 = map.placeRoad(point1, point3, point4);
         
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
@@ -259,12 +264,13 @@ public class TestCourier {
         Flag flag0 = map.placeFlag(point2);
         
         Point point3 = new Point(12, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point3.upLeft());
+        Point point4 = new Point(13, 5);
+        Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
         Utils.constructSmallHouse(wc);
         
         Road road0 = map.placeRoad(point2, middle, point1);
-        Road road1 = map.placeRoad(point1, point3);
+        Road road1 = map.placeRoad(point1, point3, point4);
         
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
@@ -334,13 +340,14 @@ public class TestCourier {
         Point leftFlag = new Point(6, 4);
         
         Point point3 = new Point(12, 4);
-        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point3.upLeft());
+        Point point4 = new Point(13, 5);
+        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlag.upLeft());
         
         Utils.constructSmallHouse(rightWoodcutter);
         
         Road road0 = map.placeRoad(leftFlag, middlePoint, flagPoint);
-        Road road1 = map.placeRoad(flagPoint, point3);
+        Road road1 = map.placeRoad(flagPoint, point3, point4);
         
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
@@ -409,13 +416,14 @@ public class TestCourier {
         Point leftFlag = new Point(6, 4);
         
         Point point3 = new Point(12, 4);
-        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point3.upLeft());
+        Point point4 = new Point(13, 5);
+        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlag.upLeft());
         
         Utils.constructSmallHouse(rightWoodcutter);
         
         Road road0 = map.placeRoad(leftFlag, middlePoint, flagPoint);
-        Road road1 = map.placeRoad(flagPoint, point3);
+        Road road1 = map.placeRoad(flagPoint, point3, point4);
         
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);

@@ -258,6 +258,14 @@ public class GameMap {
             throw new InvalidEndPointException();
         }
 
+        /* 
+           Verify that the road has at least one free point between the 
+           endpoints so the courier has somewhere to stand
+        */
+        if (wayPoints.size() < 3) {
+            throw new Exception("Road " + wayPoints + " is too short.");
+        }
+        
         for (Point p : wayPoints) {
             if (p.equals(start)) {
                 continue;

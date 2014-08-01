@@ -55,9 +55,8 @@ public abstract class Worker implements Actor {
 
     @Override
     public void stepTime() {
-        log.log(Level.FINE, "Stepping time");
-
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
+            Point oldPoint = position;
             position = path.get(0);
             path.remove(0);
 

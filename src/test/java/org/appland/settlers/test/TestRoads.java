@@ -124,18 +124,18 @@ public class TestRoads {
         map.placeFlag(target);
 
         map.placeRoad(points[0], new Point(3, 3), points[1]);
-        map.placeRoad(points[1], points[2]);
+        map.placeRoad(points[1], points[1].upRight(), points[2]);
         
-        map.placeRoad(points[2], points[3]);
+        map.placeRoad(points[2], points[2].downRight(), points[3]);
         
-        map.placeRoad(points[3], points[4]);
-        map.placeRoad(points[4], points[10]);
+        map.placeRoad(points[3], points[3].upRight(), points[4]);
+        map.placeRoad(points[4], points[4].upRight(), points[10]);
         map.placeRoad(points[2], points[2].upRight(), points[9]);
-        map.placeRoad(points[9], target);
+        map.placeRoad(points[9], points[9].upRight(), target);
         map.placeAutoSelectedRoad(points[1], points[5]);
-        map.placeRoad(points[5], points[6]);
+        map.placeRoad(points[5], points[5].upRight(), points[6]);
         map.placeAutoSelectedRoad(points[1], points[7]);
-        map.placeRoad(points[7], points[8]);
+        map.placeRoad(points[7], points[7].upRight(), points[8]);
 
         /* Test route with List<Point> */
         List<Point> route = map.findWayWithExistingRoads(points[0], target);
@@ -143,7 +143,7 @@ public class TestRoads {
         assertNotNull(route);
         assertTrue(!route.isEmpty());
 
-        assertTrue(route.size() < 8);
+        assertTrue(route.size() < 10);
         assertEquals(route.get(0), points[0]);
         assertEquals(route.get(route.size() - 1), target);
 
@@ -151,7 +151,7 @@ public class TestRoads {
         
         route = map.findWayWithExistingRoads(target, points[0]);
 
-        assertTrue(route.size() < 8);
+        assertTrue(route.size() < 10);
         assertEquals(route.get(0), target);
         assertEquals(route.get(route.size() - 1), points[0]);
 
@@ -159,9 +159,10 @@ public class TestRoads {
         
         route = map.findWayWithExistingRoads(points[1], points[2]);
 
-        assertTrue(route.size() == 2);
+        assertTrue(route.size() == 3);
         assertEquals(route.get(0), points[1]);
-        assertEquals(route.get(1), points[2]);
+        assertEquals(route.get(1), points[1].upRight());
+        assertEquals(route.get(2), points[2]);
     }
 
     @Test
@@ -1143,5 +1144,17 @@ public class TestRoads {
         Point point3 = new Point(6, 4);
 
         assertFalse(map.getRoad(point0, point3).needsCourier());
+    }
+
+    @Test(expected = Exception.class)
+    public void testCanNotCreateHorizontalRoadWithoutSpaceForCourier() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(3, 3);
+        Point point1 = new Point(5, 3);
+        
+        map.placeFlag(point0);
+        map.placeFlag(point1);
+        
+        map.placeRoad(point0, point1);
     }
 }

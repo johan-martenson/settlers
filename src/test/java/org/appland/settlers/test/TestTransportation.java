@@ -200,10 +200,10 @@ public class TestTransportation {
         map.placeFlag(f2);
         map.placeFlag(new Flag(new Point(8, 18)));
         map.placeFlag(new Flag(new Point(10, 18)));
-        map.placeRoad(new Point(2, 18), new Point(4, 18));
-        map.placeRoad(new Point(4, 18), new Point(6, 18));
-        map.placeRoad(new Point(6, 18), new Point(8, 18));
-        map.placeRoad(new Point(8, 18), new Point(10, 18));
+        map.placeRoad(new Point(2, 18), new Point(3, 19), new Point(4, 18));
+        map.placeRoad(new Point(4, 18), new Point(5, 19), new Point(6, 18));
+        map.placeRoad(new Point(6, 18), new Point(7, 19), new Point(8, 18));
+        map.placeRoad(new Point(8, 18), new Point(9, 19), new Point(10, 18));
         map.placeBuilding(hut, wcPoint);
         map.placeFlag(f9);
         map.placeRoad(new Point(6, 18), new Point(7, 17), new Point(8, 16), new Point(7, 15), f9.getPosition());
@@ -213,9 +213,9 @@ public class TestTransportation {
         map.placeFlag(new Flag(new Point(8, 10)));
         map.placeRoad(new Point(4, 18), new Point(3, 17), new Point(2, 16), new Point(1, 15), new Point(2, 14), new Point(3, 13), new Point(4, 12), new Point(5, 11), new Point(6, 10), new Point(8, 10));
         map.placeFlag(new Flag(new Point(10, 10)));
-        map.placeRoad(new Point(8, 10), new Point(10, 10));
+        map.placeRoad(new Point(8, 10), new Point(9, 11), new Point(10, 10));
         map.placeFlag(new Flag(new Point(10, 12)));
-        map.placeRoad(new Point(8, 12), new Point(10, 12));
+        map.placeRoad(new Point(8, 12), new Point(9, 13), new Point(10, 12));
 
         Utils.constructSmallHouse(hut);
 
@@ -227,37 +227,47 @@ public class TestTransportation {
 
         assertNotNull(forester);
 
-        forester.setPosition(start.getPosition());
+        map.placeWorker(forester, start);
         forester.setTargetBuilding(hut);
 
-        /* Road to go: (2, 18), (4, 18), (6, 18), (7, 17), (8, 16), (7, 15), (8, 14), (10, 14), (11, 15) */
-        /*             start    f1       f2                                  f9                 target */
+
+        /* Road to go: [(2, 18), (3, 19), (4, 18), (5, 19), (6, 18), (7, 17), (8, 16), (7, 15), (8, 14), (10, 14), (11, 15), (10, 16)] */
+        /*             start              f1                f2                                   f9                          target */
         assertTrue(forester.getPosition().equals(start.getPosition()));
 
-        Utils.fastForward(10, forester);
-
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(3, 19));
+        assertTrue(forester.getPosition().equals(new Point(3, 19)));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, f1.getPosition());
         assertTrue(forester.getPosition().equals(f1.getPosition()));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(5, 19));
+        assertTrue(forester.getPosition().equals(new Point(5, 19)));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, f2.getPosition());
         assertTrue(forester.getPosition().equals(f2.getPosition()));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(7, 17));
         assertTrue(forester.getPosition().equals(new Point(7, 17)));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(8, 16));
         assertTrue(forester.getPosition().equals(new Point(8, 16)));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(7, 15));
         assertTrue(forester.getPosition().equals(new Point(7, 15)));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, f9.getPosition());
         assertTrue(forester.getPosition().equals(f9.getPosition()));
 
-        Utils.fastForward(10, forester);
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(10, 14));
         assertTrue(forester.getPosition().equals(new Point(10, 14)));
 
-        Utils.fastForward(10, forester);
-        assertTrue(forester.getPosition().equals(target.getPosition()));
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, new Point(11, 15));
+        assertTrue(forester.getPosition().equals(new Point(11, 15)));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, hut.getPosition());
+        assertTrue(forester.isExactlyAtPoint());
+        assertTrue(forester.getPosition().equals(hut.getPosition()));
     }
 
     @Test(expected = InvalidRouteException.class)
@@ -267,11 +277,13 @@ public class TestTransportation {
         Flag away = new Flag(6, 2);
         Flag start = new Flag(2, 2);
         Flag end = map.placeFlag(new Point(4, 2));
+        
+        Point middle = new Point(3, 3);
 
         map.placeFlag(start);
         map.placeFlag(away);
 
-        Road targetRoad = map.placeRoad(start.getPosition(), end.getPosition());
+        Road targetRoad = map.placeRoad(start.getPosition(), middle, end.getPosition());
         Courier worker = new Courier(map);
 
         map.placeWorker(worker, away);
@@ -458,11 +470,12 @@ public class TestTransportation {
         GameMap map = new GameMap(10, 10);
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(3, 1));
-
+        Point middle = new Point(2, 2);
+        
         map.placeFlag(f1);
         map.placeFlag(f2);
 
-        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
+        Road r = map.placeRoad(f1.getPosition(), middle, f2.getPosition());
 
         assertTrue(r.needsCourier());
     }
