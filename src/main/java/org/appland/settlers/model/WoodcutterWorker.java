@@ -27,14 +27,13 @@ import static org.appland.settlers.model.WoodcutterWorker.States.RESTING_IN_HOUS
 public class WoodcutterWorker extends Worker {
     private States    state;
     private Countdown countdown;
-    private Building  hut;
 
     WoodcutterWorker() {
         this(null);
     }
 
     private Point getTreeToCutDown() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(hut.getPosition(), 4);
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
 
         for (Point p : adjacentPoints) {
             if (!map.isTreeAtPoint(p)) {
@@ -45,15 +44,16 @@ public class WoodcutterWorker extends Worker {
             if (tree.getSize() != LARGE) {
                 continue;
             }
-            
-            if (map.findWayOffroad(p, getPosition(), null) != null) {
+
+            if (map.findWayOffroad(p, getHome().getFlag().getPosition(), null) != null) {
                 return p;
             }
+
         }
 
         return null;
     }
-    
+
     enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE, 
@@ -71,7 +71,6 @@ public class WoodcutterWorker extends Worker {
         
         state = States.WALKING_TO_TARGET;
         countdown = new Countdown();
-        hut = null;
     }
     
     public boolean isCuttingTree() {
@@ -80,7 +79,9 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        hut = b;
+        if (b instanceof Woodcutter) {
+            setHome(b);
+        }
         
         state = RESTING_IN_HOUSE;
         
@@ -88,7 +89,7 @@ public class WoodcutterWorker extends Worker {
     }
     
     @Override
-    protected void onIdle() {
+    protected void onIdle() {        
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
@@ -96,7 +97,7 @@ public class WoodcutterWorker extends Worker {
                 if (p == null) {
                     return;
                 }
-                
+
                 setOffroadTarget(p);
                 
                 state = GOING_OUT_TO_CUT_TREE;
@@ -109,9 +110,9 @@ public class WoodcutterWorker extends Worker {
                 
                 setCargo(new Cargo(WOOD, map));
                 
-                state = GOING_BACK_TO_FLAG_WITH_CARGO;
+                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
                 
-                setOffroadTarget(hut.getFlag().getPosition());
+                returnHomeOffroad();
             } else {
                 countdown.step();
             }
@@ -120,12 +121,12 @@ public class WoodcutterWorker extends Worker {
             
             countdown.countFrom(49);
         } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            enterBuilding(hut);
+            enterBuilding(getHome());
                 
             state = IN_HOUSE_WITH_CARGO;
         } else if (state == IN_HOUSE_WITH_CARGO) {
             try {
-                setTarget(hut.getFlag().getPosition());
+                setTarget(getHome().getFlag().getPosition());
 
                 state = GOING_OUT_TO_PUT_CARGO;
             } catch (InvalidRouteException ex) {
@@ -134,7 +135,7 @@ public class WoodcutterWorker extends Worker {
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             
-            enterBuilding(hut);
+            enterBuilding(getHome());
             
             countdown.countFrom(99);
         }
@@ -150,11 +151,11 @@ public class WoodcutterWorker extends Worker {
                 
                 cargo.setPosition(getPosition());
                 cargo.setTarget(stg);
-                hut.getFlag().putCargo(cargo);
+                getHome().getFlag().putCargo(cargo);
                                 
                 setCargo(null);
                 
-                setTarget(hut.getPosition());
+                setTarget(getHome().getPosition());
                 
                 state = GOING_BACK_TO_HOUSE;
             } catch (Exception ex) {
@@ -162,7 +163,7 @@ public class WoodcutterWorker extends Worker {
             }
         } else if (state == GOING_BACK_TO_FLAG_WITH_CARGO) {
             try {
-                setTarget(hut.getPosition());
+                setTarget(getHome().getPosition());
                 
                 state = GOING_BACK_TO_HOUSE_WITH_CARGO;
             } catch (InvalidRouteException ex) {

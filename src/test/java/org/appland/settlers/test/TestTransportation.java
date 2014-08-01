@@ -512,12 +512,12 @@ public class TestTransportation {
         m.setPosition(hq.getFlag().getPosition());
         m.setTargetBuilding(b);
         assertEquals(m.getTargetBuilding(), b);
-        assertEquals(m.getTarget(), b.getFlag().getPosition());
+        assertEquals(m.getTarget(), b.getPosition());
 
         /* Verify that the military reaches the barracks */
         Utils.fastForward(60, m);
 
-        assertTrue(m.isAt(b.getFlag().getPosition()));
+        assertTrue(m.isAt(b.getPosition()));
         assertTrue(m.isArrived());
 
         /* Make the military enter the barracks */

@@ -184,7 +184,7 @@ public abstract class Worker implements Actor {
 
     public void setTargetBuilding(Building b) throws InvalidRouteException {
         buildingToEnter = b;
-        setTarget(b.getFlag().getPosition());
+        setTarget(b.getPosition());
     }
 
     public Building getTargetBuilding() {
@@ -237,14 +237,21 @@ public abstract class Worker implements Actor {
     }
 
     protected void setOffroadTarget(Point p) {
-        log.log(Level.FINE, "Setting {0} as offroad target", p);
+        setOffroadTarget(p, null);
+    }
+    
+    protected void setOffroadTarget(Point p, Point via) {
+        boolean wasInside = false;
+        
+        log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {p, via});
+        
+        target = p;
         
         if (state == IDLE_INSIDE) {
+            wasInside = true;
             leaveBuilding();
         }
 
-        target = p;
-        
         if (position.equals(p)) {
             try {
                 state = IDLE_OUTSIDE;
@@ -254,17 +261,40 @@ public abstract class Worker implements Actor {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            path = map.findWayOffroad(position, p, null);
+            if (wasInside && !target.equals(home.getFlag().getPosition())) {                
+                if (via != null) {
+                    path = map.findWayOffroad(home.getFlag().getPosition(), p, via, null);
+                } else {
+                    path = map.findWayOffroad(home.getFlag().getPosition(), p, null);
+                }
 
+                path.add(0, home.getPosition());
+            } else {
+                if (via != null) {
+                    path = map.findWayOffroad(getPosition(), p, via, null);
+                } else {
+                    path = map.findWayOffroad(getPosition(), p, null);
+                }
+            }
+                
             log.log(Level.FINER, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
     }
     
     protected void setTarget(Point p) throws InvalidRouteException {
+        setTarget(p, null);
+    }
+    
+    protected void setTarget(Point p, Point via) throws InvalidRouteException {
+        boolean wasInside = false;
+        
+        log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
+        
         target = p;
 
         if (state == IDLE_INSIDE) {
+            wasInside = true;
             leaveBuilding();
         }
 
@@ -279,8 +309,22 @@ public abstract class Worker implements Actor {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {        
-            path = map.findWayWithExistingRoads(position, target);
-
+            if (wasInside && !target.equals(home.getFlag().getPosition())) {
+                if (via != null) {
+                    path = map.findWayWithExistingRoads(home.getFlag().getPosition(), target, via);
+                } else {
+                    path = map.findWayWithExistingRoads(home.getFlag().getPosition(), target);
+                }
+                
+                path.add(0, home.getPosition());
+            } else {
+                if (via != null) {
+                    path = map.findWayWithExistingRoads(getPosition(), target, via);
+                } else {
+                    path = map.findWayWithExistingRoads(getPosition(), target);
+                }
+            }
+                
             log.log(Level.FINE, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
@@ -291,7 +335,6 @@ public abstract class Worker implements Actor {
     }
 
     private void leaveBuilding() {
-        home = null;
     }
 
     public Building getHome() {
@@ -310,5 +353,19 @@ public abstract class Worker implements Actor {
 
     public List<Point> getPlannedPath() {
         return path;
+    }
+
+    protected void returnHomeOffroad() {
+        setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
+    }
+
+    protected void returnHome() throws InvalidRouteException {
+        setTarget(home.getFlag().getPosition(), home.getFlag().getPosition());
+        
+        path.add(home.getPosition());
+    }
+
+    protected void setHome(Building h) {
+        home = h;
     }
 }

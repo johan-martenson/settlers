@@ -467,15 +467,12 @@ public class TestWoodcutter {
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
         
-        assertEquals(wcWorker.getTarget(), wc.getFlag().getPosition());
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
         assertFalse(wc.isCargoReady());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
         
-        assertEquals(wcWorker.getTarget(), wc.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
-
         assertFalse(wc.isCargoReady());
         assertFalse(wcWorker.isInsideBuilding());
         
@@ -614,15 +611,12 @@ public class TestWoodcutter {
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         
-        assertEquals(wcWorker.getTarget(), wc.getFlag().getPosition());
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
         assertFalse(wc.isCargoReady());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getFlag().getPosition());
-        
-        assertEquals(wcWorker.getTarget(), wc.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
 
         assertFalse(wc.isCargoReady());
         assertFalse(wcWorker.isInsideBuilding());
@@ -633,7 +627,7 @@ public class TestWoodcutter {
         /* Woodcutter enter building but does not store the cargo yet */
         assertFalse(wc.isCargoReady());
         assertTrue(wcWorker.isInsideBuilding());
-        //assertNotNull(wcWorker.getCargo());
+        assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
         /* Woodcutter leaves the building and puts the cargo on the building's flag */
@@ -764,5 +758,168 @@ public class TestWoodcutter {
         map.stepTime();
         
         assertFalse(wcWorker.isInsideBuilding());
+    }
+    
+    @Test
+    public void testWoodcutterGoesOutToCutTreesSeveralTimes() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        Point point2 = new Point(12, 4);
+        Tree tree0 = map.placeTree(point2);
+        Point point3 = new Point(6, 4);
+        Building hq = map.placeBuilding(new Headquarter(), point3);
+        
+        Point point4 = new Point(9, 3);
+        
+        Road road0 = map.placeRoad(hq.getFlag().getPosition(), point4, wc.getFlag().getPosition());
+        
+        Point point5 = new Point(11, 5);
+        Tree tree1 = map.placeTree(point5);
+        
+        /* Construct the forester hut */
+        constructSmallHouse(wc);
+        
+        /* Grow tree */
+        int i;
+        for (i = 0; i < 500; i++) {
+            map.stepTime();
+            
+            if (tree0.getSize() == LARGE) {
+                break;
+            }
+        }
+
+        assertTrue(tree0.getSize() == LARGE);
+        assertTrue(tree1.getSize() == LARGE);
+        
+        
+        /* Manually place forester */
+        WoodcutterWorker wcWorker = new WoodcutterWorker(map);
+        map.placeWorker(wcWorker, wc.getFlag());
+        wc.assignWorker(wcWorker);
+        wcWorker.enterBuilding(wc);
+        
+        /* Wait for the woodcutter worker to leave the hut */
+        GameLogic gameLogic = new GameLogic();
+
+        for (i = 0; i < 10; i++) {
+            gameLogic.gameLoop(map);
+            Utils.fastForward(10, map);
+        }
+        
+        assertFalse(wcWorker.isInsideBuilding());    
+
+        assertTrue(wcWorker.isTraveling());
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
+
+        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        
+        assertTrue(wcWorker.isArrived());
+
+        map.stepTime();
+        
+        assertTrue(wcWorker.isCuttingTree());
+        
+        /* Wait for the woodcutter to cut down the tree */
+        for (i = 0; i < 50; i++) {
+            assertTrue(wcWorker.isCuttingTree());
+            gameLogic.gameLoop(map);
+            map.stepTime();
+        }
+        
+        /* The woodcutter has cut down the tree and goes back via the flag*/
+        assertFalse(wcWorker.isCuttingTree());
+        
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
+
+        map.stepTime();
+        
+        /* Woodcutter enters building but does not store the cargo yet */
+        assertFalse(wc.isCargoReady());
+        assertTrue(wcWorker.isInsideBuilding());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertEquals(wc.getPosition(), wc.getPosition());
+        assertNotNull(wcWorker.getCargo());
+        
+        /* Woodcutter leaves the building and puts the cargo on the building's flag */
+        map.stepTime();
+        
+        assertFalse(wcWorker.isInsideBuilding());
+        assertEquals(wcWorker.getTarget(), wc.getFlag().getPosition());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        
+        /* Let the woodcuttter reach the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getFlag().getPosition());
+        
+        assertFalse(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(wc.isCargoReady());
+        assertNull(wcWorker.getCargo());
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
+        
+        Cargo cargo = wc.getFlag().getStackedCargo().get(0);
+        
+        assertEquals(cargo.getTarget(), hq);
+        
+        /* Let the woodcutter go back to the hut */
+        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        
+        map.stepTime();
+        
+        /* Let the woodcutter rest */
+        assertTrue(wcWorker.isInsideBuilding());
+        
+        Utils.fastForward(99, map);
+        
+        assertTrue(wcWorker.isInsideBuilding());
+        
+        /* Verify that the woodcutter goes out again */
+        map.stepTime();
+        
+        assertFalse(wcWorker.isInsideBuilding());
+        
+    }
+
+    @Test
+    public void testPositionIsCorrectWhenWoodcutterEntersHut() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(8, 6);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+
+        GameLogic gameLogic = new GameLogic();
+        
+        /* Finish the woodcutter */
+        Utils.constructSmallHouse(wc);
+        
+        /* Run game logic twice, once to place courier and once to place woodcutter worker */
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+        
+        gameLogic.gameLoop(map);
+        Utils.fastForward(10, map);
+        
+        WoodcutterWorker wcWorker;
+        List<Worker> workers = map.getAllWorkers();
+        
+        if (workers.get(0) instanceof WoodcutterWorker) {
+            wcWorker = (WoodcutterWorker) workers.get(0);
+        } else {
+            wcWorker = (WoodcutterWorker) workers.get(1);
+        }
+    
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+        
+        assertEquals(wcWorker.getPosition(), wc.getPosition());
     }
 }
