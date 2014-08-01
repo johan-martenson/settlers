@@ -316,7 +316,7 @@ public class TestFarm {
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
         assertTrue(farmer.isTraveling());
-        assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm.getPosition());
 
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
         
@@ -498,7 +498,7 @@ public class TestFarm {
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
 
-        assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
         
@@ -591,7 +591,7 @@ public class TestFarm {
             assertFalse(farmer.isHarvesting());
             assertTrue(map.isCropAtPoint(point));
 
-            assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+            assertEquals(farmer.getTarget(), farm.getPosition());
 
             Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 

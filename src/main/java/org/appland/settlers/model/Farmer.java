@@ -18,6 +18,7 @@ import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_HARVEST;
+import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_PLANT;
 import static org.appland.settlers.model.Farmer.States.HARVESTING;
 import static org.appland.settlers.model.Farmer.States.PLANTING;
 import static org.appland.settlers.model.Farmer.States.RESTING_IN_HOUSE;
@@ -156,20 +157,20 @@ public class Farmer extends Worker {
                 try {
                     Crop crop = map.placeCrop(getPosition());
                     
-                    state = States.GOING_BACK_TO_HOUSE;
+                    state = GOING_BACK_TO_HOUSE;
                     
-                    setOffroadTarget(hut.getFlag().getPosition());
+                    returnHomeOffroad();
                 } catch (Exception ex) {
                     Logger.getLogger(Farmer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 countdown.step();
             }
-        } else if (state == States.GOING_OUT_TO_PLANT) {
+        } else if (state == GOING_OUT_TO_PLANT) {
             state = PLANTING;
             
             countdown.countFrom(19);
-        } else if (state == States.GOING_BACK_TO_HOUSE) {            
+        } else if (state == GOING_BACK_TO_HOUSE) {            
             if (getCargo() != null) {
                 hut.putProducedCargoForDelivery(getCargo());
                 
@@ -196,7 +197,7 @@ public class Farmer extends Worker {
                 
                 state = GOING_BACK_TO_HOUSE;
                 
-                setOffroadTarget(hut.getFlag().getPosition());
+                returnHomeOffroad();
             } else {
                 countdown.step();
             }
