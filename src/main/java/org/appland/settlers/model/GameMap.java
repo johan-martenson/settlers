@@ -209,10 +209,15 @@ public class GameMap {
         
         buildings.add(house);
 
-        Flag flag = house.getFlag();
-
-        flag.setPosition(p.downRight());
-        placeFlag(flag);
+        /* Use the existing flag if it exists, otherwise place a new flag */
+        if (isFlagAtPoint(p.downRight())) {
+            house.setFlag(getFlagAtPoint(p.downRight()));
+        } else {
+            Flag flag = house.getFlag();
+            
+            flag.setPosition(p.downRight());
+            placeFlag(flag);
+        }
 
         reserveSpaceForBuilding(house);
         

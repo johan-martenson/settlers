@@ -7,6 +7,7 @@
 package org.appland.settlers.test;
 
 import java.util.List;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -237,5 +238,17 @@ public class TestGameMap {
         
         assertNotNull(map.findWayWithExistingRoads(point0, point1));
         assertNotNull(map.findWayWithExistingRoads(point1, point0));
+    }
+
+    @Test
+    public void testCreateHouseNextToExistingFlag() throws Exception {
+        GameMap    map    = new GameMap(10, 10);
+        Point      point0 = new Point(5, 5);
+        Flag       flag0  = map.placeFlag(point0);
+        
+        Building wc = map.placeBuilding(new Woodcutter(), point0.upLeft());
+        
+        assertEquals(wc.getFlag(), flag0);
+        assertNotNull(map.getRoad(wc.getPosition(), point0));
     }
 }

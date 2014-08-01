@@ -17,6 +17,10 @@ import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor, EndPoint {
 
+    void setFlag(Flag flagAtPoint) {
+        flag = flagAtPoint;
+    }
+
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }
@@ -29,12 +33,12 @@ public class Building implements Actor, EndPoint {
     private Worker  worker;
     private Worker  promisedWorker;
     private Point   position;
+    private Flag    flag;
 
     private final Countdown              constructionCountdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final Countdown              destructionCountdown;
     private final Countdown              productionCountdown;
-    private final Flag                   flag;
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
