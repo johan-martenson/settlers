@@ -336,6 +336,7 @@ public class TestQuarry {
         map.stepTime();
         
         assertTrue(mason.isGettingStone());
+        assertNull(mason.getCargo());
         
         for (i = 0; i < 49; i++) {
             assertTrue(mason.isGettingStone());

@@ -243,6 +243,7 @@ public class TestFarm {
         
         assertFalse(farmer.isPlanting());
         assertTrue(map.isCropAtPoint(point));
+        assertNull(farmer.getCargo());
     }
 
     @Test
@@ -404,11 +405,13 @@ public class TestFarm {
 
         assertTrue(farmer.isHarvesting());
         assertTrue(map.isCropAtPoint(point));
+        assertNull(farmer.getCargo());
         
         map.stepTime();
         
         assertFalse(farmer.isHarvesting());
         assertEquals(crop.getGrowthState(), HARVESTED);
+        assertNotNull(farmer.getCargo());
     }
 
     @Test

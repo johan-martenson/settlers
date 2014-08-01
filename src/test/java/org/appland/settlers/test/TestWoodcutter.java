@@ -352,7 +352,7 @@ public class TestWoodcutter {
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
         
-        assertFalse(wcWorker.isInsideBuilding());    
+        assertFalse(wcWorker.isInsideBuilding());
 
         Point point = wcWorker.getTarget();
 
@@ -367,6 +367,7 @@ public class TestWoodcutter {
         map.stepTime();
         
         assertTrue(wcWorker.isCuttingTree());
+        assertNull(wcWorker.getCargo());
         
         for (i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
@@ -381,6 +382,7 @@ public class TestWoodcutter {
         
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
+        assertNull(wcWorker.getCargo());
     }
 
     @Test
