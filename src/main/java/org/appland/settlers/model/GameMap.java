@@ -304,6 +304,17 @@ public class GameMap {
         return roads;
     }
 
+    public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
+        List<Point> path1 = findWayWithExistingRoads(start, via);
+        List<Point> path2 = findWayWithExistingRoads(via, end);
+        
+        path2.remove(0);
+        
+        path1.addAll(path2);
+        
+        return path1;
+    }
+    
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
         log.log(Level.INFO, "Finding way from {0} to {1}", new Object[]{start, end});
 
@@ -874,7 +885,9 @@ public class GameMap {
             }
             
             if (isBuildingAtPoint(p)) {
-                continue;
+                if (!getBuildingAtPoint(p).getPosition().equals(p)) {
+                    continue;
+                }
             }
             
             if (terrain.isInWater(p)) {
@@ -1166,6 +1179,17 @@ public class GameMap {
         return mp.getTree() != null;
     }
 
+    public List<Point> findWayOffroad(Point start, Point goal, Point via, Collection<Point> avoid) {
+        List<Point> path1 = findWayOffroad(start, via, avoid);
+        List<Point> path2 = findWayOffroad(via, goal, avoid);
+        
+        path2.remove(0);
+        
+        path1.addAll(path2);
+        
+        return path1;
+    }
+    
     public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
         Set<Point> evaluated        = new HashSet<>();
         Set<Point> toEvaluate       = new HashSet<>();

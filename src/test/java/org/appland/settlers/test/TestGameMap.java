@@ -19,6 +19,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -218,5 +219,23 @@ public class TestGameMap {
         map.placeBuilding(farm, point0);
         
         assertEquals(farm.getMap(), map);
+    }
+
+    @Test
+    public void testFindWayBetweenHouseAndItsFlag() throws Exception {
+        GameMap    map    = new GameMap(10, 10);
+        Woodcutter wc     = new Woodcutter();
+        Point      point0 = new Point(5, 5);
+        Point      point1 = new Point(6, 4);
+
+        map.placeBuilding(wc, point0);
+        
+        assertNotNull(map.getRoad(point0, point1));
+
+        assertNotNull(map.findWayOffroad(point0, point1, null));
+        assertNotNull(map.findWayOffroad(point1, point0, null));
+        
+        assertNotNull(map.findWayWithExistingRoads(point0, point1));
+        assertNotNull(map.findWayWithExistingRoads(point1, point0));
     }
 }
