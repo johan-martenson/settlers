@@ -382,7 +382,7 @@ public class TestWoodcutter {
         
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
-        assertNull(wcWorker.getCargo());
+        assertNotNull(wcWorker.getCargo());
     }
 
     @Test
