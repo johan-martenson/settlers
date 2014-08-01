@@ -102,7 +102,7 @@ public class Stonemason extends Worker {
                 
                 stoneTarget = null;
                 
-                setOffroadTarget(hut.getFlag().getPosition());
+                returnHomeOffroad();
             } else {
                 countdown.step();
             }

@@ -352,7 +352,7 @@ public class TestQuarry {
         
         assertFalse(mason.isGettingStone());
         
-        assertEquals(mason.getTarget(), quarry.getFlag().getPosition());
+        assertEquals(mason.getTarget(), quarry.getPosition());
         assertFalse(quarry.isCargoReady());
         assertNotNull(mason.getCargo());
         
