@@ -434,7 +434,7 @@ public class TestForesterHut {
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
 
-        assertEquals(forester.getTarget(), foresterHut.getFlag().getPosition());
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
         assertTrue(forester.isTraveling());
         
         Utils.fastForwardUntilWorkersReachTarget(map, forester);

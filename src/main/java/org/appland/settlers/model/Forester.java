@@ -105,7 +105,7 @@ public class Forester extends Worker {
                 }
                 state = States.GOING_BACK_TO_HOUSE;
                 
-                setOffroadTarget(hut.getFlag().getPosition());
+                returnHomeOffroad();
             } else {
                 countdown.step();
             }
