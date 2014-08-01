@@ -440,4 +440,26 @@ public class TestQuarry {
     public void testStonemasonIgnoresStoneTooFarAway() {
         // TODO
     }
+
+    @Test
+    public void testStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
+        GameMap map = new GameMap(10, 10);
+        
+        Point point0 = new Point(5, 5);
+        
+        Stone stone0 = map.placeStone(point0);
+        
+        int i;
+        for (i = 0; i < 9; i++) {
+            stone0.removeOnePart();
+            map.stepTime();
+            assertTrue(map.isStoneAtPoint(point0));
+        }
+        
+        stone0.removeOnePart();
+        
+        map.stepTime();
+        
+        assertFalse(map.isStoneAtPoint(point0));
+    }
 }

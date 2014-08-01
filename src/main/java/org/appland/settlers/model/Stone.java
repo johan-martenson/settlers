@@ -13,14 +13,14 @@ package org.appland.settlers.model;
 public class Stone {
 
     private int amount;
-    private Point position;
+    private final Point position;
     
     public Stone(Point p) {
         amount = 10;
         position = p;
     }
     
-    void removeOnePart() {
+    public void removeOnePart() {
         amount--;
     }
 

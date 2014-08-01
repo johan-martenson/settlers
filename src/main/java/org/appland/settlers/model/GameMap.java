@@ -192,6 +192,17 @@ public class GameMap {
         for (Crop c : crops) {
             c.stepTime();
         }
+
+        List<Stone> stonesToRemove = new ArrayList<>();
+        for (Stone s : stones) {
+            if (s.noMoreStone()) {
+                stonesToRemove.add(s);
+            }
+        }
+
+        for (Stone s : stonesToRemove) {
+            removeStone(s);
+        }
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
@@ -1428,5 +1439,13 @@ public class GameMap {
 
     public Iterable<Crop> getCrops() {
         return crops;
+    }
+
+    private void removeStone(Stone s) {
+        MapPoint mp = pointToGameObject.get(s.getPosition());
+        
+        mp.setStone(null);
+        
+        stones.remove(s);
     }
 }
