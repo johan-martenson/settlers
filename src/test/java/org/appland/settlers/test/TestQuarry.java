@@ -289,8 +289,12 @@ public class TestQuarry {
     @Test
     public void testStonemasonReturnsAndStoresStoneAsCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
+        map.placeAutoSelectedRoad(hq.getFlag(), quarry.getFlag());
+        
         Point point2 = new Point(13, 5);
         Stone stone = map.placeStone(point2);
         
@@ -350,25 +354,42 @@ public class TestQuarry {
 
         map.stepTime();
         
+        /* Stonemason has the stone and goes back to the quarry */
         assertFalse(mason.isGettingStone());
         
         assertEquals(mason.getTarget(), quarry.getPosition());
         assertFalse(quarry.isCargoReady());
         assertNotNull(mason.getCargo());
         
-        if (!mason.isArrived()) {
-            Utils.fastForwardUntilWorkersReachTarget(map, mason);
-        }
-
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getPosition());
+        
         assertFalse(quarry.isCargoReady());
         assertFalse(mason.isInsideBuilding());
         
         map.stepTime();
-        
-        assertTrue(quarry.isCargoReady());
-        assertTrue(mason.isInsideBuilding());
-        assertNull(mason.getCargo());
 
+        assertFalse(quarry.isCargoReady());
+        assertTrue(mason.isInsideBuilding());
+        assertNotNull(mason.getCargo());
+        
+        /* Stonemason leaves the hut and goes to the flag to drop the cargo */
+        map.stepTime();
+        
+        assertFalse(mason.isInsideBuilding());
+        assertEquals(mason.getTarget(), quarry.getFlag().getPosition());
+        assertTrue(quarry.getFlag().getStackedCargo().isEmpty());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getFlag().getPosition());
+        
+        assertFalse(quarry.getFlag().getStackedCargo().isEmpty());
+        assertNull(mason.getCargo());
+        
+        /* The stonemason goes back to the quarry */
+        assertEquals(mason.getTarget(), quarry.getPosition());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, mason);
+        
+        assertTrue(mason.isInsideBuilding());
     }
 
     @Test

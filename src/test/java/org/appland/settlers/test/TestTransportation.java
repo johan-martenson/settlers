@@ -325,27 +325,12 @@ public class TestTransportation {
         /* Production starts, wait for it to finish */
         Utils.fastForward(250, map);
 
-        assertTrue(qry.isCargoReady());
+        assertFalse(qry.getFlag().getStackedCargo().isEmpty());
 
-        Cargo c = qry.retrieveCargo();
+        Cargo c = qry.getFlag().getCargoWaitingForRoad(map.getRoad(stge.getFlag().getPosition(), qry.getFlag().getPosition()));
         assertTrue(c.getPosition().equals(qry.getFlag().getPosition()));
-
-        map.findWayWithExistingRoads(qry.getFlag().getPosition(), stge.getFlag().getPosition());
-
-        c.setTarget(stge);
-
-        qry.getFlag().putCargo(c);
-
-        List<Cargo> cargos = qry.getFlag().getStackedCargo();
-
-        assertTrue(cargos.size() == 1);
-
-        c = cargos.get(0);
-
+        assertEquals(c.getTarget(), stge);
         assertTrue(c.getMaterial() == STONE);
-
-        // TODO: Make sure the cargo has a target which is to go to the closest storage building
-        c.setTarget(stge);
     }
 
     @Test

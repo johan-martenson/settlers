@@ -7,10 +7,15 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Stonemason.States.GETTING_STONE;
 import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
+import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_PUT_CARGO;
 import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Stonemason.States.IN_HOUSE_WITH_CARGO;
 
 /**
  *
@@ -20,11 +25,17 @@ import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
 public class Stonemason extends Worker {
     private States state;
     private final Countdown countdown;
-    private Building hut;
     private Point stoneTarget;
     
     enum States {
-        WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_GET_STONE, GETTING_STONE, GOING_BACK_TO_HOUSE
+        WALKING_TO_TARGET, 
+        RESTING_IN_HOUSE, 
+        GOING_OUT_TO_GET_STONE, 
+        GETTING_STONE, 
+        GOING_BACK_TO_HOUSE_WITH_CARGO, 
+        IN_HOUSE_WITH_CARGO,
+        GOING_OUT_TO_PUT_CARGO,
+        GOING_BACK_TO_HOUSE
     }
     
     public Stonemason() {
@@ -37,7 +48,6 @@ public class Stonemason extends Worker {
         state = WALKING_TO_TARGET;
         
         countdown = new Countdown();
-        hut = null;
         stoneTarget = null;
     }
 
@@ -47,7 +57,9 @@ public class Stonemason extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        hut = b;
+        if (b instanceof Quarry) {
+            setHome(b);
+        }
         
         state = States.RESTING_IN_HOUSE;
 
@@ -62,12 +74,12 @@ public class Stonemason extends Worker {
                 double tempDistance;
                 double distance = Integer.MAX_VALUE;
                 
-                for (Point p : map.getPointsWithinRadius(hut.getPosition(), 4)) {
+                for (Point p : map.getPointsWithinRadius(getHome().getPosition(), 4)) {
                     if (!map.isStoneAtPoint(p)) {
                         continue;
                     }
 
-                    List<Point> pathToStone = map.findWayOffroad(hut.getFlag().getPosition(), p, null);
+                    List<Point> pathToStone = map.findWayOffroad(getHome().getFlag().getPosition(), p, null);
 
                     if (pathToStone == null) {
                         continue;
@@ -98,7 +110,7 @@ public class Stonemason extends Worker {
                 
                 setCargo(new Cargo(STONE, map));
                 
-                state = GOING_BACK_TO_HOUSE;
+                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
                 
                 stoneTarget = null;
                 
@@ -110,17 +122,52 @@ public class Stonemason extends Worker {
             state = GETTING_STONE;
             
             countdown.countFrom(49);
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            state = States.RESTING_IN_HOUSE;
+        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+            enterBuilding(getHome());
             
-            if (getCargo() != null) {
-                hut.putProducedCargoForDelivery(getCargo());
-                setCargo(null);
+            state = IN_HOUSE_WITH_CARGO;
+        } else if (state == IN_HOUSE_WITH_CARGO) {
+            try {
+                setTarget(getHome().getFlag().getPosition());
+
+                state = GOING_OUT_TO_PUT_CARGO;
+            } catch (InvalidRouteException ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
-    
-            enterBuilding(hut);
-            
-            countdown.countFrom(99);
         }
     }
+
+    @Override
+    public void onArrival() {
+        if (state == GOING_OUT_TO_PUT_CARGO) {
+            try {
+                Storage stg = map.getClosestStorage(getPosition());
+
+                Cargo cargo = getCargo();
+                
+                cargo.setPosition(getPosition());
+                cargo.setTarget(stg);
+                getHome().getFlag().putCargo(cargo);
+                                
+                setCargo(null);
+                
+                setTarget(getHome().getPosition());
+                
+                state = GOING_BACK_TO_HOUSE;
+            } catch (Exception ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (state == GOING_BACK_TO_HOUSE) {
+            state = States.RESTING_IN_HOUSE;
+
+            if (getCargo() != null) {
+                getHome().putProducedCargoForDelivery(getCargo());
+                setCargo(null);
+            }
+
+            enterBuilding(getHome());
+
+            countdown.countFrom(99);
+        }
+    } 
 }
