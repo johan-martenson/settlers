@@ -300,4 +300,12 @@ public class Storage extends Building implements Actor {
             return false;
         }
     }
+
+    boolean hasMilitary() {
+        if (!hasAtLeastOne(PRIVATE) && !hasAtLeastOne(SERGEANT) && !hasAtLeastOne(GENERAL)) {
+            return false;
+        }
+    
+        return true;
+    }
 }
