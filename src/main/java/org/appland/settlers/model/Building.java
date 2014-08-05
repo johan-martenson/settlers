@@ -21,6 +21,16 @@ public class Building implements Actor, EndPoint {
         flag = flagAtPoint;
     }
 
+    int getDefenceRadius() {
+        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+
+        if (mb == null) {
+            return 0;
+        } else {
+            return mb.defenceRadius();
+        }    
+    }
+
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }
