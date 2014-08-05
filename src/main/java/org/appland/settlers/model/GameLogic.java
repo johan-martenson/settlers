@@ -57,6 +57,10 @@ public class GameLogic {
                 if (b.needMilitaryManning()) {
                     Storage stg = map.getClosestStorage(b.getPosition());
 
+                    if (!stg.hasMilitary()) {
+                        continue;
+                    }
+                    
                     Military m = stg.retrieveAnyMilitary();
 
                     m.setMap(map);
