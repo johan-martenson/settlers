@@ -16,4 +16,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface MilitaryBuilding {
 
     int maxHostedMilitary();
+    
+    int defenceRadius();
 }
