@@ -7,6 +7,7 @@ import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.policy.InitialState;
 
 @HouseSize(size = Size.LARGE)
+@MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 20)
 public class Headquarter extends Storage {
 
     public Headquarter() {
