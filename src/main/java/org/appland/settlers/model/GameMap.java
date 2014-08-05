@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1277,7 +1276,7 @@ public class GameMap {
         return new Cargo(Material.STONE, this);
     }
 
-    public Iterable<Point> getPointsWithinRadius(Point point, int radius) {
+    public Collection<Point> getPointsWithinRadius(Point point, int radius) {
         List<Point> result = new ArrayList<>();
     
         int x;
@@ -1322,5 +1321,17 @@ public class GameMap {
         mp.setStone(null);
         
         stones.remove(s);
+    }
+
+    public Collection<Point> getLandBorder() {
+        Set<Point> occupiedPoints = new HashSet<>();
+        
+        for (Building b : getBuildings()) {
+            if (b.isMilitaryBuilding()) {
+                occupiedPoints.addAll(getPointsWithinRadius(b.getPosition(), b.getDefenceRadius()));
+            }
+        }
+    
+        return GameUtils.findHullSimple(occupiedPoints);
     }
 }

@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import java.util.Collection;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
@@ -20,6 +21,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -251,4 +253,32 @@ public class TestGameMap {
         assertEquals(wc.getFlag(), flag0);
         assertNotNull(map.getRoad(wc.getPosition(), point0));
     }
+
+    @Test
+    public void testGetPerimeterWithOnlyHeadquarter() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Collection<Point> border = map.getLandBorder();
+        assertTrue(border.contains(new Point(50, 30)));
+        assertTrue(border.contains(new Point(50, 70)));
+        
+        assertTrue(border.contains(new Point(30, 50)));
+        assertTrue(border.contains(new Point(70, 50)));
+        
+        assertFalse(border.contains(new Point(31, 50)));
+        assertFalse(border.contains(new Point(29, 50)));
+    
+        assertFalse(border.contains(new Point(71, 50)));
+        assertFalse(border.contains(new Point(69, 50)));
+    
+        assertFalse(border.contains(new Point(50, 31)));
+        assertFalse(border.contains(new Point(50, 29)));
+        
+        assertFalse(border.contains(new Point(50, 31)));
+        assertFalse(border.contains(new Point(50, 29)));
+    }
 }
+
+
