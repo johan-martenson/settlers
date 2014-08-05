@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
+import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -41,76 +42,13 @@ public class GameMap {
     private final int MINIMUM_HEIGHT = 5;
     
     public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
-        Set<Point> evaluated         = new HashSet<>();
-        Set<Point> toEvaluate        = new HashSet<>();
-        Map<Point, Double>  cost     = new HashMap<>();
-        Map<Point, Double>  fullCost = new HashMap<>();
-        Map<Point, Point>   cameFrom = new HashMap<>();
-        
-        if (avoid != null) {        
-            evaluated.addAll(avoid);
-        }
-        
-        toEvaluate.add(start);
-        cost.put(start, (double)0);
-        fullCost.put(start, cost.get(start) + start.distance(goal));
-        
-        while (!toEvaluate.isEmpty()) {
-            Point currentPoint = null;
-            double currentValue = -1;
-            
-            for (Entry<Point, Double> pair : fullCost.entrySet()) {
-                
-                if (!toEvaluate.contains(pair.getKey())) {
-                    continue;
-                }
-                
-                if (currentPoint == null) {
-                    currentPoint = pair.getKey();
-                    currentValue = pair.getValue();
-                }
+        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
-                if (currentValue > pair.getValue()) {
-                    currentValue = pair.getValue();
-                    currentPoint = pair.getKey();
-                }
+            @Override
+            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+                return getPossibleAdjacentRoadConnections(start, goal);
             }
-
-            if (currentPoint.equals(goal)) {
-                List<Point> path = new ArrayList<>();
-                
-                while (currentPoint != start) {
-                    path.add(0, currentPoint);
-                    
-                    currentPoint = cameFrom.get(currentPoint);
-                }
-                
-                path.add(0, start);
-
-                return path;
-            }
-            
-            toEvaluate.remove(currentPoint);
-            evaluated.add(currentPoint);
-            
-            for (Point neighbor : getPossibleAdjacentRoadConnections(currentPoint, goal)) {
-                if (evaluated.contains(neighbor)) {
-                    continue;
-                }
-            
-                double tentative_cost = cost.get(currentPoint) + currentPoint.distance(neighbor);
-
-                if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
-                    cameFrom.put(neighbor, currentPoint);
-                    cost.put(neighbor, tentative_cost);
-                    fullCost.put(neighbor, cost.get(neighbor) + neighbor.distance(goal));
-                    
-                    toEvaluate.add(neighbor);
-                }
-            }
-        }
-        
-        return null;
+        });
     }
 
     private Integer estimateDistance(Point start, Point goal) {
@@ -1215,76 +1153,13 @@ public class GameMap {
     }
     
     public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
-        Set<Point> evaluated        = new HashSet<>();
-        Set<Point> toEvaluate       = new HashSet<>();
-        Map<Point, Double> cost     = new HashMap<>();
-        Map<Point, Double> fullCost = new HashMap<>();
-        Map<Point, Point> cameFrom  = new HashMap<>();
-        
-        if (avoid != null) {        
-            evaluated.addAll(avoid);
-        }
+        return GameUtils.findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
-        toEvaluate.add(start);
-        cost.put(start, (double)0);
-        fullCost.put(start, cost.get(start) + start.distance(goal));
-
-        while (!toEvaluate.isEmpty()) {
-            Point currentPoint = null;
-            double currentValue = -1;
-            
-            for (Entry<Point, Double> pair : fullCost.entrySet()) {
-                
-                if (!toEvaluate.contains(pair.getKey())) {
-                    continue;
-                }
-                
-                if (currentPoint == null) {
-                    currentPoint = pair.getKey();
-                    currentValue = pair.getValue();
-                }
-
-                if (currentValue > pair.getValue()) {
-                    currentValue = pair.getValue();
-                    currentPoint = pair.getKey();
-                }
+            @Override
+            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+                return getPossibleAdjacentOffRoadConnections(start);
             }
-
-            if (currentPoint.equals(goal)) {
-                List<Point> path = new ArrayList<>();
-                
-                while (currentPoint != start) {
-                    path.add(0, currentPoint);
-                    
-                    currentPoint = cameFrom.get(currentPoint);
-                }
-                
-                path.add(0, start);
-
-                return path;
-            }
-            
-            toEvaluate.remove(currentPoint);
-            evaluated.add(currentPoint);
-            
-            for (Point neighbor : getPossibleAdjacentOffRoadConnections(currentPoint)) {
-                if (evaluated.contains(neighbor)) {
-                    continue;
-                }
-            
-                double tentative_cost = cost.get(currentPoint) + currentPoint.distance(neighbor);
-
-                if (!toEvaluate.contains(neighbor) || tentative_cost < cost.get(neighbor)) {
-                    cameFrom.put(neighbor, currentPoint);
-                    cost.put(neighbor, tentative_cost);
-                    fullCost.put(neighbor, cost.get(neighbor) + estimateDistance(neighbor, goal));
-                    
-                    toEvaluate.add(neighbor);
-                }
-            }
-        }
-        
-        return null;
+        });
     }
 
     public Tree placeTree(Point position) throws Exception {
