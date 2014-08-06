@@ -868,12 +868,10 @@ public class TestWoodcutter {
         
         /* Let the woodcutter go back to the hut */
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
-        
-        map.stepTime();
-        
-        /* Let the woodcutter rest */
+
         assertTrue(wcWorker.isInsideBuilding());
         
+        /* Let the woodcutter rest */
         Utils.fastForward(99, map);
         
         assertTrue(wcWorker.isInsideBuilding());

@@ -130,12 +130,6 @@ public class WoodcutterWorker extends Worker {
             } catch (InvalidRouteException ex) {
                 Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            state = RESTING_IN_HOUSE;
-            
-            enterBuilding(getHome());
-            
-            countdown.countFrom(99);
         }
     }
 
@@ -159,6 +153,12 @@ public class WoodcutterWorker extends Worker {
             } catch (Exception ex) {
                 Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (state == GOING_BACK_TO_HOUSE) {
+            state = RESTING_IN_HOUSE;
+            
+            enterBuilding(getHome());
+            
+            countdown.countFrom(99);
         }
     }
 }
