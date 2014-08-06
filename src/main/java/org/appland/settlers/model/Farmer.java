@@ -165,7 +165,6 @@ public class Farmer extends Worker {
             }
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
-                
                 try {
                     Crop crop = map.placeCrop(getPosition());
                     
