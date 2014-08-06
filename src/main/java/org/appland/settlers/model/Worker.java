@@ -297,8 +297,6 @@ public abstract class Worker implements Actor {
             leaveBuilding();
         }
 
-        target = p;
-
         if (position.equals(p)) {
             try {
                 state = IDLE_OUTSIDE;
@@ -359,9 +357,7 @@ public abstract class Worker implements Actor {
     }
 
     protected void returnHome() throws InvalidRouteException {
-        setTarget(home.getFlag().getPosition(), home.getFlag().getPosition());
-        
-        path.add(home.getPosition());
+        setTarget(home.getPosition(), home.getFlag().getPosition());
     }
 
     protected void setHome(Building h) {
