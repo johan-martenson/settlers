@@ -622,10 +622,6 @@ public class TestFarm {
             Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
             assertTrue(farmer.isArrived());
-            assertFalse(farmer.isInsideBuilding());
-
-            farmer.stepTime();
-
             assertTrue(farmer.isInsideBuilding());
         }
 
