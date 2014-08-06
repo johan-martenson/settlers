@@ -17,9 +17,12 @@ import java.util.logging.Logger;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_HARVEST;
 import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_PLANT;
+import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_PUT_CARGO;
 import static org.appland.settlers.model.Farmer.States.HARVESTING;
+import static org.appland.settlers.model.Farmer.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.States.PLANTING;
 import static org.appland.settlers.model.Farmer.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
@@ -91,7 +94,16 @@ public class Farmer extends Worker {
     }
 
     enum States {
-        WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_PLANT, PLANTING, GOING_BACK_TO_HOUSE, GOING_OUT_TO_HARVEST, HARVESTING
+        WALKING_TO_TARGET, 
+        RESTING_IN_HOUSE, 
+        GOING_OUT_TO_PLANT, 
+        PLANTING, 
+        GOING_BACK_TO_HOUSE, 
+        GOING_OUT_TO_HARVEST, 
+        HARVESTING,
+        GOING_BACK_TO_HOUSE_WITH_CARGO,
+        GOING_OUT_TO_PUT_CARGO,
+        IN_HOUSE_WITH_CARGO
     }
 
     public Farmer() {
@@ -170,18 +182,6 @@ public class Farmer extends Worker {
             state = PLANTING;
             
             countdown.countFrom(19);
-        } else if (state == GOING_BACK_TO_HOUSE) {            
-            if (getCargo() != null) {
-                hut.putProducedCargoForDelivery(getCargo());
-                
-                setCargo(null);
-            }
-            
-            enterBuilding(hut);
-            
-            state = RESTING_IN_HOUSE;
-            
-            countdown.countFrom(99);
         } else if (state == GOING_OUT_TO_HARVEST) {
             state = HARVESTING;
             
@@ -195,11 +195,23 @@ public class Farmer extends Worker {
                 /* Create a crop cargo to make sure the map is set correctly */
                 setCargo(new Cargo(Material.WHEAT, map));
                 
-                state = GOING_BACK_TO_HOUSE;
+                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
                 
                 returnHomeOffroad();
             } else {
                 countdown.step();
+            }
+        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+            enterBuilding(getHome());
+                
+            state = IN_HOUSE_WITH_CARGO;
+        } else if (state == IN_HOUSE_WITH_CARGO) {
+            try {
+                setTarget(getHome().getFlag().getPosition());
+
+                state = GOING_OUT_TO_PUT_CARGO;
+            } catch (InvalidRouteException ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -218,5 +230,34 @@ public class Farmer extends Worker {
         }
 
         return result;
+    }
+
+    @Override
+    public void onArrival() {
+        if (state == GOING_OUT_TO_PUT_CARGO) {
+            try {
+                Storage stg = map.getClosestStorage(getPosition());
+
+                Cargo cargo = getCargo();
+                
+                cargo.setPosition(getPosition());
+                cargo.setTarget(stg);
+                getHome().getFlag().putCargo(cargo);
+                                
+                setCargo(null);
+                
+                setTarget(getHome().getPosition());
+                
+                state = GOING_BACK_TO_HOUSE;
+            } catch (Exception ex) {
+                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (state == GOING_BACK_TO_HOUSE) {
+            state = RESTING_IN_HOUSE;
+            
+            enterBuilding(getHome());
+            
+            countdown.countFrom(99);
+        }
     }
 }

@@ -433,7 +433,7 @@ public class TestFarm {
 
         int i;
         for (i = 0; i < 500; i++) {
-            if (crop.getGrowthState() == Crop.GrowthState.FULL_GROWN) {
+            if (crop.getGrowthState() == FULL_GROWN) {
                 break;
             }
 
@@ -494,12 +494,14 @@ public class TestFarm {
         
         map.stepTime();
         
+        /* Farmer is walking back to farm with cargo of wheat */
         assertFalse(farmer.isHarvesting());
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
 
         assertEquals(farmer.getTarget(), farm.getPosition());
         
+        /* Farmer reaches the building */
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
         
         assertTrue(farmer.isArrived());
@@ -507,8 +509,32 @@ public class TestFarm {
         
         map.stepTime();
         
+        /* Farmer enters the building */
         assertTrue(farmer.isInsideBuilding());
+        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(farmer.getCargo());
+        assertFalse(farm.isCargoReady());
+
+        /* Farmer leaves the building and places the cargo at the flag */
+        map.stepTime();
+        
+        assertFalse(farmer.isInsideBuilding());
+        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(farmer.getCargo());
+        assertFalse(farm.isCargoReady());
+        assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
+        
+        assertFalse(farm.getFlag().getStackedCargo().isEmpty());
         assertNull(farmer.getCargo());
+        
+        /* Farmer goes back to the building */
+        assertEquals(farmer.getTarget(), farm.getPosition());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, farmer);
+        
+        assertTrue(farmer.isInsideBuilding());
     }
     
     @Test
