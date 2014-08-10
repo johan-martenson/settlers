@@ -10,6 +10,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
@@ -34,6 +35,10 @@ public class TestCargo {
     @Test
     public void testGetNextIsValidDirectlyAfterSetTarget() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(6, 4);
@@ -54,6 +59,10 @@ public class TestCargo {
     @Test
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(point1);
 

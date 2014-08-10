@@ -60,7 +60,7 @@ public class TestScenarios {
         // TODO: RE-verify and add asserts!
         /* Create starting position */
         GameMap map = new GameMap(30, 30);
-        Storage hq = new Storage();
+        Storage hq = new Headquarter();
         Point startPosition = new Point(6, 6);
 
         /* Game loop */
@@ -75,10 +75,10 @@ public class TestScenarios {
         Point smSpot = new Point(12, 6);
         Point qrySpot = new Point(20, 6);
 
+        map.placeBuilding(hq, startPosition);
         map.placeBuilding(wc, wcSpot);
         map.placeBuilding(sm, smSpot);
         map.placeBuilding(qry, qrySpot);
-        map.placeBuilding(hq, startPosition);
 
         map.placeTree(wcSpot.downRight().right());
         
@@ -117,9 +117,9 @@ public class TestScenarios {
         assertTrue(qry.getConstructionState() == DONE);
         assertTrue(sm.getConstructionState() == DONE);
 
-        assertTrue(hq.getAmount(WOOD) == 0);
-        assertTrue(hq.getAmount(PLANCK) == 0);
-        assertTrue(hq.getAmount(STONE) == 0);
+        assertTrue(hq.getAmount(WOOD) == 4);
+        assertTrue(hq.getAmount(PLANCK) == 10);
+        assertTrue(hq.getAmount(STONE) == 10);
         
         wc.assignWorker(wcr);
         wcr.enterBuilding(wc);
@@ -171,7 +171,7 @@ public class TestScenarios {
         /* Cargo has arrived at the headquarter and stored */
 
         assertNull(wcToHqRoad.getCourier().getCargo());
-        assertTrue(hq.getAmount(WOOD) == 1);
+        assertTrue(hq.getAmount(WOOD) == 5);
 
         /* Find out that the sawmill needs the wood */
         gameLogic.initiateNewDeliveriesForAllStorages(map);
@@ -186,7 +186,7 @@ public class TestScenarios {
         assertNull(courierSmToHq.getCargo());
         assertTrue(smToHqRoad.getWayPoints().contains(cargo.getNextStep()));
         assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
-        assertTrue(hq.getAmount(WOOD) == 0);
+        assertTrue(hq.getAmount(WOOD) == 4);
         assertFalse(courierSmToHq.isTraveling());
         assertEquals(courierSmToHq.getAssignedRoad(), smToHqRoad);
         assertFalse(cargo.isDeliveryPromised());
@@ -247,13 +247,13 @@ public class TestScenarios {
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
         assertEquals(courierSmToHq.getTarget(), hq.getPosition());
-        assertTrue(hq.getAmount(PLANCK) == 0);
+        assertTrue(hq.getAmount(PLANCK) == 10);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         
         fastForwardUntilWorkersReachTarget(map, courierSmToHq);
         
         assertNull(courierSmToHq.getCargo());
-        assertTrue(hq.getAmount(PLANCK) == 1);
+        assertTrue(hq.getAmount(PLANCK) == 11);
     }
 
     @Test

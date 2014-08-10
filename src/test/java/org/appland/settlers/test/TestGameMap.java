@@ -42,16 +42,17 @@ public class TestGameMap {
     
     @Test
     public void testPlaceBuildingOnEmptyMap() throws Exception {
-        Woodcutter wc = new Woodcutter();
-        Point wcPoint = new Point(3, 3);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeBuilding(wc, wcPoint);
-        
-        assertTrue(wc.getPosition().equals(wcPoint));
+        assertTrue(hq.getPosition().equals(hqPoint));
     }
     
     @Test(expected=Exception.class)
     public void testPlaceSameBuildingTwice() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+
         Woodcutter wc    = new Woodcutter();
         Point wcPoint    = new Point(1, 1);
         Point otherPoint = new Point(2, 8);
@@ -62,6 +63,9 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testPlaceTwoBuildingsOnSameSpot() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc  = new Woodcutter();
         Quarry     qry = new Quarry();
         Point wcPoint  = new Point(1, 1);
@@ -72,6 +76,9 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testPlaceFlagsOnSamePlace() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 1));
         
@@ -81,6 +88,9 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testPlaceSameFlagTwice() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f1 = new Flag(new Point(1, 1));
         
         map.placeFlag(f1);
@@ -92,6 +102,9 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testAddRoadWithIdenticalStartAndEnd() throws InvalidEndPointException, Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 1));
         
@@ -103,6 +116,9 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testAddRoadBetweenFlagsNotOnMap() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 2));
         
@@ -111,6 +127,9 @@ public class TestGameMap {
     
     @Test(expected=InvalidRouteException.class)
     public void testFindWayBetweenSameFlag() throws Exception {
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f = new Flag(new Point(1, 1));
         
         map.placeFlag(f);
@@ -136,12 +155,12 @@ public class TestGameMap {
         Point f6 = new Point(14, 8);
         Point f7 = new Point(3,  15);
         
+        map.placeBuilding(hq,   f6);
         map.placeBuilding(wc,   f1);
         map.placeBuilding(qry,  f2);
         map.placeBuilding(qry2, f3);
         map.placeBuilding(s1,   f4);
         map.placeBuilding(s2,   f5);
-        map.placeBuilding(hq,   f6);
         map.placeBuilding(farm, f7);
         
         List<Storage> storages = map.getStorages();
@@ -174,7 +193,9 @@ public class TestGameMap {
 
     @Test
     public void testGetFlags() throws Exception {
-        GameMap map       = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag    f1        = new Flag(1, 1);
         Farm    farm      = new Farm();
         Point   farmPoint = new Point(3, 3);
@@ -184,14 +205,16 @@ public class TestGameMap {
 
         List<Flag> flags = map.getFlags();
 
-        assertTrue(flags.size() == 2);
+        assertTrue(flags.size() == 3);
         assertTrue(flags.contains(f1));
         assertTrue(flags.contains(farm.getFlag()));
     }
 
     @Test(expected=Exception.class)
     public void testPlaceBuildingOnInvalidPoint() throws Exception {
-        GameMap map       = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);        
+        
         Farm    farm      = new Farm();
         Point   farmPoint = new Point(3, 4);
         
@@ -200,7 +223,9 @@ public class TestGameMap {
 
     @Test(expected=Exception.class)
     public void testPlaceFlagOnInvalidPoint() throws Exception {
-	GameMap map = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);        
+        
         Flag    f   = new Flag(new Point(4, 7));
 
         map.placeFlag(f);
@@ -213,7 +238,9 @@ public class TestGameMap {
 
     @Test
     public void testPlaceBuildingSetsMap() throws Exception {
-        GameMap map    = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);        
+        
         Farm    farm   = new Farm();
         Point   point0 = new Point(5, 5);
 
@@ -226,7 +253,9 @@ public class TestGameMap {
 
     @Test
     public void testFindWayBetweenHouseAndItsFlag() throws Exception {
-        GameMap    map    = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);        
+        
         Woodcutter wc     = new Woodcutter();
         Point      point0 = new Point(5, 5);
         Point      point1 = new Point(6, 4);
@@ -244,7 +273,9 @@ public class TestGameMap {
 
     @Test
     public void testCreateHouseNextToExistingFlag() throws Exception {
-        GameMap    map    = new GameMap(10, 10);
+        Point hqPoint = new Point(8, 8);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point      point0 = new Point(5, 5);
         Flag       flag0  = map.placeFlag(point0);
         
@@ -278,6 +309,62 @@ public class TestGameMap {
         
         assertFalse(border.contains(new Point(50, 31)));
         assertFalse(border.contains(new Point(50, 29)));
+    }
+
+    @Test(expected = Exception.class)
+    public void testPlaceFlagOutsideBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(71, 71);
+        map.placeFlag(point1);
+    }
+
+    @Test(expected = Exception.class)
+    public void testPlaceBuildingOutsideBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(71, 71);
+        map.placeBuilding(new Woodcutter(), point1);
+    }
+    
+    @Test
+    public void testPlaceBuildingOutsideBorderHasNoEffect() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(71, 71);
+        
+        try {
+            map.placeBuilding(new Woodcutter(), point1);
+        } catch (Exception e) {}
+        
+        assertTrue(map.getBuildings().size() == 1);
+        assertTrue(map.getFlags().size() == 1);
+        assertTrue(map.getRoads().size() == 1);
+    }
+    
+    @Test(expected = Exception.class)
+    public void testPlaceRoadThatGoesOutsideTheBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(49, 69);
+        Point point2 = new Point(50, 70);
+        Point point3 = new Point(51, 71);
+        Point point4 = new Point(50, 72);
+        Point point5 = new Point(49, 71);
+        Point point6 = new Point(48, 70);
+        Point point7 = new Point(47, 69);
+        
+        map.placeFlag(point1);
+        map.placeFlag(point7);
+        
+        map.placeRoad(point1, point2, point3, point4, point5, point6, point7);
     }
 }
 

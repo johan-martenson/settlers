@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,12 +35,14 @@ public class GameMap {
     private List<Tree>            trees;
     private List<Stone>           stones;
     private List<Crop>            crops;    
+    private List<Point>           border;
+    private Collection<Point>     allPointsWithinBorder;    
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
-    
+
     public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
@@ -143,20 +146,31 @@ public class GameMap {
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
-        house.setMap(this);
-        
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
+        if (buildings.isEmpty() && house instanceof Headquarter) {
+            /* Allow building an initial headquarter */
+        } else if(!isWithinBorder(p)) {
+            throw new Exception("Can't place " + house + " at " + p + " because it is outside the border.");
+        }
+        
         if (!canPlaceHouse(house, p)) {
             throw new Exception("Can't place building on " + p + ".");
         }
         
+        house.setMap(this);        
         house.setPosition(p);
         
         buildings.add(house);
 
+        /* Initialize the border if it's the first house and it's a headquarter */
+        if (buildings.size() == 1 && house instanceof Headquarter) {
+            allPointsWithinBorder = calculateAllPointsWithinBorder();
+            border = calculateBorder(allPointsWithinBorder);
+        }
+        
         /* Use the existing flag if it exists, otherwise place a new flag */
         if (isFlagAtPoint(p.downRight())) {
             house.setFlag(getFlagAtPoint(p.downRight()));
@@ -170,6 +184,12 @@ public class GameMap {
         reserveSpaceForBuilding(house);
         
         placeDriveWay(house);
+        
+        /* Update the border if this is a military building */
+        if (house.isMilitaryBuilding()) {
+            allPointsWithinBorder = calculateAllPointsWithinBorder();
+            border = calculateBorder(allPointsWithinBorder);
+        }
         
         return house;
     }
@@ -211,6 +231,13 @@ public class GameMap {
             throw new InvalidEndPointException();
         }
 
+        /* Verify that all points of the road are within the border */
+        for (Point p : wayPoints) {
+            if (!isWithinBorder(p)) {
+                throw new Exception("Can't place road with " + p + " outside the border");
+            }
+        }
+        
         /* 
            Verify that the road has at least one free point between the 
            endpoints so the courier has somewhere to stand
@@ -366,6 +393,10 @@ public class GameMap {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
 
+        if (!isWithinBorder(f.getPosition())) {
+            throw new Exception("Can't place flag at " + f.getPosition() + " outside of the border");
+        }
+        
         /* Handle the case where the flag is on an existing road that will be split */
         if (pointIsOnRoad(flagPoint)) {
             Road existingRoad = getRoadAtPoint(flagPoint);
@@ -1324,6 +1355,14 @@ public class GameMap {
     }
 
     public Collection<Point> getLandBorder() {
+        return border;
+    }
+
+    private boolean isWithinBorder(Point position) {
+        return allPointsWithinBorder.contains(position);
+    }
+    
+    private Collection<Point> calculateAllPointsWithinBorder() {
         Set<Point> occupiedPoints = new HashSet<>();
         
         for (Building b : getBuildings()) {
@@ -1331,7 +1370,11 @@ public class GameMap {
                 occupiedPoints.addAll(getPointsWithinRadius(b.getPosition(), b.getDefenceRadius()));
             }
         }
+        
+        return occupiedPoints;
+    }
     
+    private List<Point> calculateBorder(Collection<Point> occupiedPoints) {
         return GameUtils.findHullSimple(occupiedPoints);
     }
 }

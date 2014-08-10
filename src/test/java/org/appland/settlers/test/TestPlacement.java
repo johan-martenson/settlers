@@ -11,6 +11,7 @@ import java.util.Map;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Sawmill;
@@ -103,7 +104,11 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToSmallHouse() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        GameMap map   = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -137,7 +142,11 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToSmallHouse() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        GameMap map   = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -171,7 +180,11 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToMediumHouse() throws Exception {
-        GameMap map     = new GameMap(15, 15);
+        GameMap map     = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Sawmill sawmill = new Sawmill();
         Point farmPoint = new Point(7,3);
         
@@ -208,7 +221,11 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToMediumHouse() throws Exception {
-        GameMap map     = new GameMap(15, 15);
+        GameMap map     = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Sawmill sawmill = new Sawmill();
         Point farmPoint = new Point(7,3);
         
@@ -251,7 +268,11 @@ public class TestPlacement {
     
     @Test
     public void testAvailableHousesNextToLargeHouse() throws Exception {
-        GameMap map     = new GameMap(15, 15);
+        GameMap map     = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Farm farm       = new Farm();
         Point farmPoint = new Point(7,3);
         
@@ -293,7 +314,11 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToLargeHouse() throws Exception {
-        GameMap map     = new GameMap(15, 15);
+        GameMap map     = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Farm farm       = new Farm();
         Point farmPoint = new Point(7,3);
         
@@ -335,7 +360,11 @@ public class TestPlacement {
     
     @Test
     public void testPlaceFlagTakesSpace() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point   p   = new Point(3, 3);
         Flag    f   = new Flag(p);
         
@@ -365,7 +394,11 @@ public class TestPlacement {
     
     @Test(expected=Exception.class)
     public void testPlaceFlagTooCloseToSmallHouse() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -378,7 +411,11 @@ public class TestPlacement {
 
     @Test(expected=Exception.class)
     public void testPlaceFlagOnHouse() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         
@@ -391,7 +428,11 @@ public class TestPlacement {
 
     @Test(expected=Exception.class) 
     public void testPlaceHouseOnFlag() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        GameMap map   = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
         Flag f        = new Flag(new Point(6, 4));
@@ -403,7 +444,11 @@ public class TestPlacement {
     
     @Test(expected=Exception.class)
     public void testPlaceHouseOnHouse() throws Exception {
-        GameMap map    = new GameMap(10, 10);
+        GameMap map    = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc  = new Woodcutter();
         Quarry     qry = new Quarry();
         Point wcPoint  = new Point(6, 4);

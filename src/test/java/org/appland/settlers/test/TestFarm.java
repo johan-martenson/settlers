@@ -78,6 +78,10 @@ public class TestFarm {
     @Test
     public void testUnfinishedFarmNeedsNoFarmer() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point0);
 
@@ -89,6 +93,10 @@ public class TestFarm {
     @Test
     public void testFinishedFarmNeedsFarmer() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point0);
 

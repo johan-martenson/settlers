@@ -37,6 +37,9 @@ public class TestQuarry {
     @Test
     public void testFinishedQuarryNeedsWorker() throws Exception {
         GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(8, 6);
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
@@ -80,6 +83,10 @@ public class TestQuarry {
     @Test
     public void testArrivedStonemasonRestsInHutAndThenLeaves() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
         Point point2 = new Point(12, 4);
@@ -119,6 +126,10 @@ public class TestQuarry {
     @Test
     public void testStonemasonFindsSpotToGetStone() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
         Point point2 = new Point(12, 4);
@@ -166,6 +177,10 @@ public class TestQuarry {
     @Test
     public void testStonemasonReachesPointToGetStone() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
         Point point2 = new Point(11, 5);
@@ -220,6 +235,10 @@ public class TestQuarry {
     @Test
     public void testStonemasonGetsStone() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
         Point point2 = new Point(11, 5);
@@ -289,14 +308,18 @@ public class TestQuarry {
     @Test
     public void testStonemasonReturnsAndStoresStoneAsCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
-        Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point1);
+        Point point2 = new Point(10, 4);
+        Building quarry = map.placeBuilding(new Quarry(), point2);
         map.placeAutoSelectedRoad(hq.getFlag(), quarry.getFlag());
         
-        Point point2 = new Point(13, 5);
-        Stone stone = map.placeStone(point2);
+        Point point3 = new Point(13, 5);
+        Stone stone = map.placeStone(point3);
         
         /* Construct the forester hut */
         constructSmallHouse(quarry);
@@ -327,7 +350,7 @@ public class TestQuarry {
 
         Point point = mason.getTarget();
 
-        assertTrue(point.isAdjacent(point2));
+        assertTrue(point.isAdjacent(point3));
         assertTrue(mason.isTraveling());
         
         if (!mason.isArrived()) {
@@ -335,7 +358,7 @@ public class TestQuarry {
         }
         
         assertTrue(mason.isArrived());
-        assertTrue(mason.getPosition().isAdjacent(point2));
+        assertTrue(mason.getPosition().isAdjacent(point3));
 
         map.stepTime();
         
@@ -395,6 +418,10 @@ public class TestQuarry {
     @Test
     public void testQuarryWithoutStoneProducesNothing() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
@@ -423,6 +450,10 @@ public class TestQuarry {
     @Test
     public void testStonemasonStaysAtHomeWhenNoStonesAreAvailable() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
         Point point2 = new Point(12, 4);
@@ -465,23 +496,26 @@ public class TestQuarry {
 
     @Test
     public void testStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
         
-        Point point0 = new Point(5, 5);
+        Point point1 = new Point(5, 5);
         
-        Stone stone0 = map.placeStone(point0);
+        Stone stone0 = map.placeStone(point1);
         
         int i;
         for (i = 0; i < 9; i++) {
             stone0.removeOnePart();
             map.stepTime();
-            assertTrue(map.isStoneAtPoint(point0));
+            assertTrue(map.isStoneAtPoint(point1));
         }
         
         stone0.removeOnePart();
         
         map.stepTime();
         
-        assertFalse(map.isStoneAtPoint(point0));
+        assertFalse(map.isStoneAtPoint(point1));
     }
 }

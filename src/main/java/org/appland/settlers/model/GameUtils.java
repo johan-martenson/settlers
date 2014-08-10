@@ -199,7 +199,7 @@ public class GameUtils {
         return null;
     }
 
-    public static Collection<Point> findHullSimple(Collection<Point> pts) {
+    public static List<Point> findHullSimple(Collection<Point> pts) {
         List<Point> points = new ArrayList<>();
         List<Point> hull = new LinkedList<>();
         

@@ -11,6 +11,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -33,6 +34,10 @@ public class TestCourier {
     @Test
     public void testCourierWalksToIntendedRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(8, 4);
         Flag flag0 = map.placeFlag(point0);
 
@@ -62,6 +67,10 @@ public class TestCourier {
     @Test
     public void testCourierGoesToMiddlePointOfRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(8, 4);
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -90,6 +99,10 @@ public class TestCourier {
     @Test
     public void testCourierIsIdleWhenMiddlePointIsReached() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(8, 4);
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -117,6 +130,10 @@ public class TestCourier {
     @Test
     public void testCourierRemainsIdleWhenThereIsNoCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point point0 = new Point(8, 4);
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -154,6 +171,10 @@ public class TestCourier {
     @Test
     public void testCourierWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middle = new Point(7, 3);
         Point point1 = new Point(8, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -196,6 +217,10 @@ public class TestCourier {
     @Test
     public void testCourierPicksUpCargoFromFlag() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middle = new Point(7, 3);
         Point point1 = new Point(8, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -256,6 +281,10 @@ public class TestCourier {
     @Test
     public void testCourierDeliversCargoAndBecomesIdle() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middle = new Point(8, 4);
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
@@ -333,6 +362,10 @@ public class TestCourier {
     @Test
     public void testCourierPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middlePoint = new Point(8, 4);
         Point flagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(flagPoint);
@@ -409,6 +442,10 @@ public class TestCourier {
     @Test
     public void testCourierPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middlePoint = new Point(8, 4);
         Point flagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(flagPoint);
@@ -481,6 +518,10 @@ public class TestCourier {
     @Test
     public void testCourierDeliversToBuilding() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middlePoint = new Point(8, 4);
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(rightFlagPoint);
@@ -553,6 +594,10 @@ public class TestCourier {
     @Test
     public void testCourierGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Point middlePoint = new Point(8, 4);
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(rightFlagPoint);

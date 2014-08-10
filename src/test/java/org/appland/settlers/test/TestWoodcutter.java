@@ -43,6 +43,10 @@ public class TestWoodcutter {
     @Test
     public void testUnfinishedWoodcutterNeedsNoWoodcutter() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(6, 4);
@@ -60,6 +64,10 @@ public class TestWoodcutter {
     @Test
     public void testFinishedWoodcutterNeedsWoodcutterWorker() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(6, 4);
@@ -143,6 +151,10 @@ public class TestWoodcutter {
     @Test
     public void testArrivedWoodcutterRestsInHutAndThenLeaves() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
@@ -191,6 +203,10 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterFindsSpotToCutDownTree() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
@@ -251,6 +267,10 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterReachesPointToCutDownTree() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
@@ -311,6 +331,10 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterCutsDownTree() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
@@ -388,12 +412,12 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterReturnsAndStoresWoodAsCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
+        Point point3 = new Point(6, 4);
+        Building hq = map.placeBuilding(new Headquarter(), point3);
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
-        Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(), point3);
         
         Point point4 = new Point(9, 3);
         
@@ -521,14 +545,14 @@ public class TestWoodcutter {
         @Test
     public void testWoodCargoIsCorrect() throws Exception {
         GameMap map = new GameMap(20, 20);
+        Point point3 = new Point(6, 4);
+        Building hq = map.placeBuilding(new Headquarter(), point3);
         Point point0 = new Point(14, 4);
         Building hut = map.placeBuilding(new ForesterHut(), point0);
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
-        Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(), point3);
         
         Point point4 = new Point(2, 4);
         Building hut2 = map.placeBuilding(new ForesterHut(), point4);
@@ -660,6 +684,10 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterHutWithoutTreesProducesNothing() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
@@ -692,6 +720,10 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterDoesNotCutSmallOrMediumTrees() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
@@ -765,12 +797,12 @@ public class TestWoodcutter {
     @Test
     public void testWoodcutterGoesOutToCutTreesSeveralTimes() throws Exception {
         GameMap map = new GameMap(20, 20);
+        Point point3 = new Point(6, 4);
+        Building hq = map.placeBuilding(new Headquarter(), point3);
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         Point point2 = new Point(12, 4);
         Tree tree0 = map.placeTree(point2);
-        Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(), point3);
         
         Point point4 = new Point(9, 3);
         

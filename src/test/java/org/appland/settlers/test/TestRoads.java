@@ -53,7 +53,10 @@ public class TestRoads {
 
     @Test
     public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
 
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
@@ -69,8 +72,11 @@ public class TestRoads {
 
     @Test
     public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
 
@@ -99,8 +105,11 @@ public class TestRoads {
          *    |---F7---F8
          */
 
-        GameMap map = new GameMap(20, 20);
+        GameMap map = new GameMap(30, 30);
 
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point[] points = new Point[]{
             new Point(1,  3), // F
             new Point(5,  3), // F1
@@ -167,8 +176,11 @@ public class TestRoads {
 
     @Test
     public void testNeedsCourier() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
 
@@ -193,8 +205,11 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testAssignWorkerToRoadNotOnMap() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
 
@@ -210,8 +225,11 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testAssignTwoWorkersToRoad() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
 
@@ -232,8 +250,11 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testRoadCanNotShareSegment() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag  commonStart = new Flag(new Point(1, 1));
         Flag  end1        = new Flag(new Point(1, 3));
         Flag  end2        = new Flag(new Point(3, 1));
@@ -260,8 +281,11 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testRoadsCanNotCross() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag  start1      = new Flag(new Point(1, 1));
         Flag  end1        = new Flag(new Point(3, 3));
         Flag  start2      = new Flag(new Point(1, 3));
@@ -289,8 +313,11 @@ public class TestRoads {
 
     @Test
     public void testWayPointsEqualsChosenRoad() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag  start       = new Flag(new Point(1, 1));
         Flag  end         = new Flag(new Point(3, 3));
         Point middlePoint = new Point(2, 2);
@@ -305,10 +332,10 @@ public class TestRoads {
 
         map.placeRoad(wayPoints);
 
-	Road r = map.getRoads().get(0);
+	Road r = map.getRoad(start.getPosition(), end.getPosition());
         
         wayPoints = r.getWayPoints();
-
+        
 	assertTrue(wayPoints.size() == 3);
 	assertTrue(wayPoints.get(0).equals(start.getPosition()));
 	assertTrue(wayPoints.get(1).equals(middlePoint));
@@ -317,8 +344,11 @@ public class TestRoads {
 
     @Test(expected = Exception.class)
     public void testLargerStepThanOneIsNotOk() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag  start       = new Flag(new Point(1, 1));
         Flag  end         = new Flag(new Point(4, 4));
         Point middlePoint = new Point(2, 2);
@@ -336,8 +366,11 @@ public class TestRoads {
     
     @Test
     public void testPossibleDirectConnectionsFromFlag() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(15, 15);
 
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f = new Flag(new Point(3, 5));
 
         map.placeFlag(f);
@@ -360,6 +393,9 @@ public class TestRoads {
     public void testPossibleDirectConnectionsInCorners() throws Exception {
         GameMap map = new GameMap(10, 10);
 
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point downRight = new Point(9, 1);
         Point downLeft  = new Point(1, 1);
         Point upRight   = new Point(9, 9);
@@ -398,6 +434,9 @@ public class TestRoads {
     public void testPossibleDirectConnectionsOnSides() throws Exception {
         GameMap map = new GameMap(10, 10);
 
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point right = new Point(9, 5);
         Point left  = new Point(1, 5);
         Point up    = new Point(5, 9);
@@ -445,7 +484,7 @@ public class TestRoads {
     public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception {
         GameMap map = new GameMap(30, 30);
 
-        map.placeBuilding(new Headquarter(), new Point(5, 5));
+        map.placeBuilding(new Headquarter(), new Point(16, 10));
         map.placeFlag(new Flag(new Point(16, 12)));
         map.placeFlag(new Flag(new Point(20, 12)));
         map.placeFlag(new Flag(new Point(12, 12)));
@@ -466,6 +505,10 @@ public class TestRoads {
     @Test
     public void testNoPossibleConnectionUnderBuilding() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point2 = new Point(12, 8);
         Building building1 = map.placeBuilding(new Woodcutter(), point2);
         Point point3 = new Point(10, 8);
@@ -479,6 +522,10 @@ public class TestRoads {
     @Test
     public void testNoPossibleConnectionUnderStone() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point2 = new Point(12, 8);
         Stone stone0 = map.placeStone(point2);
         Point point3 = new Point(10, 8);
@@ -492,6 +539,10 @@ public class TestRoads {
     @Test
     public void testNoPossibleConnectionUnderTree() throws Exception {
         GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Point point2 = new Point(12, 8);
         Tree tree0 = map.placeTree(point2);
         Point point3 = new Point(10, 8);
@@ -503,9 +554,28 @@ public class TestRoads {
     }
     
     @Test
-    public void testPlaceRoadWithVarargs() throws Exception {
-        GameMap map = new GameMap(10, 10);
+    public void testNoPossibleConnectionsOutsideBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Point point2 = new Point(50, 71);
+        Point point3 = new Point(50, 70);
+        Flag flag0 = map.placeFlag(point3);
 
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+    
+        assertFalse(points.contains(point2));
+    }
+    
+    @Test
+    public void testPlaceRoadWithVarargs() throws Exception {
+        GameMap map = new GameMap(15, 15);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(4, 2));
 
@@ -531,6 +601,10 @@ public class TestRoads {
     @Test
     public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
         map.placeFlag(new Flag(new Point(9, 5)));
         map.placeFlag(new Flag(new Point(13, 9)));
         
@@ -541,13 +615,18 @@ public class TestRoads {
         Point m3 = new Point(12, 8);
         map.placeRoad(start, m1, m2, m3, end);
         
-        assertTrue(map.getRoads().size() == 1);
+        assertTrue(map.getRoads().size() == 2);
         
         map.placeFlag(new Flag(m2));
 
-        assertTrue(map.getRoads().size() == 2);
-        Road r1 = map.getRoads().get(0);
-        Road r2 = map.getRoads().get(1);
+        assertTrue(map.getRoads().size() == 3);
+        List<Road> roads = new ArrayList<>();
+        roads.addAll(map.getRoads());
+        
+        roads.remove(map.getRoad(point0, point0.downRight()));
+        
+        Road r1 = roads.get(0);
+        Road r2 = roads.get(1);
 
         assertTrue((r1.getStart().equals(start) && r1.getEnd().equals(m2)) ||
                    (r1.getStart().equals(m2) && r1.getEnd().equals(start)) ||
@@ -1149,12 +1228,16 @@ public class TestRoads {
     @Test(expected = Exception.class)
     public void testCanNotCreateHorizontalRoadWithoutSpaceForCourier() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Point point0 = new Point(3, 3);
-        Point point1 = new Point(5, 3);
+
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
         
-        map.placeFlag(point0);
+        Point point1 = new Point(3, 3);
+        Point point2 = new Point(5, 3);
+        
         map.placeFlag(point1);
+        map.placeFlag(point2);
         
-        map.placeRoad(point0, point1);
+        map.placeRoad(point1, point2);
     }
 }

@@ -53,7 +53,10 @@ public class TestTransportation {
     @Test
     public void testCreateRoad() throws InvalidEndPointException, Exception {
         GameMap map = new GameMap(30, 30);
-
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag f1 = map.placeFlag(new Point(6, 4));
         Flag f2 = map.placeFlag(new Point(11, 5));
 
@@ -61,9 +64,9 @@ public class TestTransportation {
 
         List<Road> roads = map.getRoads();
 
-        assertTrue(roads.size() == 1);
+        assertTrue(roads.size() == 2);
 
-        Road r = roads.get(0);
+        Road r = map.getRoad(new Point(6, 4), new Point(11, 5));
 
         assertTrue(r.getStart().x == 6);
         assertTrue(r.getStart().y == 4);
@@ -74,8 +77,11 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutStartBuilding() throws InvalidEndPointException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Storage s = new Storage();
 
         map.placeBuilding(s, new Point(4, 6));
@@ -85,8 +91,11 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Woodcutter wc = new Woodcutter();
 
         map.placeBuilding(wc, new Point(3, 3));
@@ -96,14 +105,21 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutAnyValidEndpoints() throws InvalidEndPointException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         map.placeAutoSelectedRoad(new Flag(1, 1), new Flag(3, 5));
     }
 
     @Test
     public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
         GameMap map = new GameMap(40, 40);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag middleFlag = new Flag(7, 7);
         Flag endFlag = new Flag(10, 10);
         Woodcutter wc = new Woodcutter();
@@ -121,8 +137,11 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         map.placeFlag(new Flag(3, 3));
         map.placeAutoSelectedRoad(new Flag(3, 3), new Flag(3, 3));
     }
@@ -130,8 +149,11 @@ public class TestTransportation {
     @Test
     public void testDoesRouteExist() throws InvalidEndPointException, InvalidRouteException, Exception {
 
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag[] points = new Flag[]{
             new Flag(1, 1),
             new Flag(3, 3)
@@ -149,8 +171,11 @@ public class TestTransportation {
 
     @Test
     public void testDoesRouteExistNo() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag[] points = new Flag[]{
             new Flag(1, 1),
             new Flag(3, 3),
@@ -272,8 +297,11 @@ public class TestTransportation {
 
     @Test(expected = InvalidRouteException.class)
     public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Flag away = new Flag(6, 2);
         Flag start = new Flag(2, 2);
         Flag end = map.placeFlag(new Point(4, 2));
@@ -293,8 +321,11 @@ public class TestTransportation {
 
     @Test
     public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, Exception {
-        GameMap map = new GameMap(10, 10);
-
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Quarry qry = new Quarry();
         Storage stge = new Storage();
 
@@ -337,16 +368,16 @@ public class TestTransportation {
     public void testDeliverWithHandover() throws Exception {
         GameLogic gameLogic = new GameLogic();
         GameMap map = new GameMap(40, 40);
-        Storage storage = new Storage();
+        Storage storage = new Headquarter();
         Point hqPoint = new Point(6, 4);
         Point middlePoint = new Point(10, 10); // hq to middle 6 steps
         Point endPoint = new Point(10, 14); // end to middle 4 steps
+        map.placeBuilding(storage, hqPoint);
         Flag middleFlag = new Flag(middlePoint);
         Flag endFlag = new Flag(endPoint);
         Courier mdlToEndCr = new Courier(map);
         Courier hqToMdlCr = new Courier(map);
 
-        map.placeBuilding(storage, hqPoint);
         map.placeFlag(middleFlag);
         map.placeFlag(endFlag);
 
@@ -422,15 +453,13 @@ public class TestTransportation {
     public void testCourierIsAssignedToNewRoad() throws Exception {
         GameLogic gameLogic = new GameLogic();
         GameMap map = new GameMap(30, 30);
-        Storage storage = new Storage();
+        Storage storage = new Headquarter();
         Point hqPoint = new Point(5, 5);
         Point middlePoint = new Point(11, 5);
         Flag middleFlag = new Flag(middlePoint);
 
         map.placeBuilding(storage, hqPoint);
         map.placeFlag(middleFlag);
-
-        Utils.constructLargeHouse(storage);
 
         Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
 
@@ -452,10 +481,13 @@ public class TestTransportation {
 
     @Test
     public void testEmptyRoadNeedsCourier() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(20, 20);
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(3, 1));
         Point middle = new Point(2, 2);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
         
         map.placeFlag(f1);
         map.placeFlag(f2);
@@ -468,7 +500,7 @@ public class TestTransportation {
 
     @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        GameMap map = new GameMap(10, 10);
+        GameMap map = new GameMap(20, 20);
         Headquarter hq = new Headquarter();
         Barracks b = new Barracks();
         Point bSpot = new Point(7, 7);
@@ -528,7 +560,10 @@ public class TestTransportation {
         Point start = new Point(5, 5);
         Point middle = new Point(6, 6);
         Point end = new Point(7, 7);
-
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Building sm = map.placeBuilding(new Sawmill(), end.upLeft());
 
         Flag flag0 = map.placeFlag(start);
@@ -571,7 +606,10 @@ public class TestTransportation {
         Point point2 = new Point(7, 7);
         Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
-
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
 
         Flag flag0 = map.placeFlag(point0);
@@ -641,7 +679,10 @@ public class TestTransportation {
         Point point2 = new Point(7, 7);
         Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
-
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         Building sm = map.placeBuilding(new Sawmill(), point4.upLeft());
 
         Flag flag0 = map.placeFlag(point0);
