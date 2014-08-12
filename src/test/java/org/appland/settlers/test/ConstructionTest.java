@@ -9,6 +9,8 @@ import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTR
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Farm;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
@@ -102,7 +105,7 @@ public class ConstructionTest {
     }
 
     @Test
-    public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Barracks brks = new Barracks();
 
         assertTrue(brks.getConstructionState() == UNDER_CONSTRUCTION);
@@ -114,6 +117,14 @@ public class ConstructionTest {
 
         assertFalse(brks.needMilitaryManning());
 
+        /* brks needs a reference to the game map and this is set implicityly when it's placed on the map */
+        GameMap map = new GameMap(30, 30);
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(brks, point1);
+        
         Utils.constructSmallHouse(brks);
 
         assertTrue(brks.isMilitaryBuilding());

@@ -367,7 +367,9 @@ public class Building implements Actor, EndPoint {
         constructionState = ConstructionState.BURNING;
         destructionCountdown.countFrom(49);
         
-        map.updateBorder();
+        if (isMilitaryBuilding()) {
+            map.updateBorder();
+        }
     }
 
     public int getProductionTime() {

@@ -502,7 +502,7 @@ public class TestGameMap {
                 
         assertTrue(map.getBorders().size() == 2);
     }
-    
+
     @Test
     public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() {
         // TODO: Implement test
