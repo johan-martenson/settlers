@@ -8,7 +8,9 @@ package org.appland.settlers.test;
 
 import java.util.Collection;
 import java.util.List;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
+import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -348,7 +350,7 @@ public class TestGameMap {
         assertTrue(map.getRoads().size() == 1);
     }
     
-    @Test(expected = Exception.class)
+    @Test
     public void testPlaceRoadThatGoesOutsideTheBorder() throws Exception {
         GameMap map = new GameMap(100, 100);
         Point point0 = new Point(50, 50);
@@ -364,6 +366,88 @@ public class TestGameMap {
         map.placeFlag(point1);
         map.placeFlag(point7);
         
-        map.placeRoad(point1, point2, point3, point4, point5, point6, point7);
+        try {
+            map.placeRoad(point1, point2, point3, point4, point5, point6, point7);
+            assertFalse(true);
+        } catch (Exception e) {}
+        
+        assertTrue(map.getRoads().size() == 1);
+    }
+
+    @Test
+    public void testRemoveFlag() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(50, 68);
+        Flag flag0 = map.placeFlag(point1);
+        
+        map.removeFlag(flag0);
+        
+        assertFalse(map.getFlags().contains(flag0));
+        assertFalse(map.isFlagAtPoint(point1));
+    }
+    
+    @Test
+    public void testRemovingFlagRemovesConnectedRoad() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(52, 50);
+        
+        Point point2 = new Point(53, 49);
+        Flag flag0 = map.placeFlag(point2);
+        
+        Road road0 = map.placeRoad(hq.getFlag().getPosition(), point1, point2);
+        
+        map.removeFlag(flag0);
+        
+        assertFalse(map.getFlags().contains(flag0));
+        assertFalse(map.getRoads().contains(road0));
+        assertNull(map.getRoad(point0, point2));
+    }
+    
+    @Test
+    public void testDestroyBuildingByRemovingFlag() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(50, 68);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        
+        map.removeFlag(wc.getFlag());
+        
+        assertTrue(map.getFlags().size() == 1);
+        assertTrue(map.getRoads().size() == 1);
+        assertTrue(map.getBuildings().size() == 2);
+        assertTrue(wc.getConstructionState() == BURNING);
+    }
+    
+    @Test
+    public void testBuildingBarracksExtendsBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        Collection<Point> border = map.getLandBorder();
+        
+        assertTrue(border.contains(new Point(50, 70)));
+        assertFalse(border.contains(new Point(50, 74)));
+        
+        Point point1 = new Point(50, 68);
+        map.placeBuilding(new Barracks(), point1);
+        
+        border = map.getLandBorder();
+        
+        assertFalse(border.contains(new Point(50, 70)));
+        assertTrue(border.contains(new Point(50, 74)));
+    }
+
+    @Test
+    public void testBarracksCanOnlyBeBuiltCloseToBorder() {
+        // TODO: Implement test
     }
 }

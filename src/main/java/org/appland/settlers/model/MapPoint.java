@@ -167,4 +167,8 @@ public class MapPoint {
     Crop getCrop() {
         return crop;
     }
+
+    void removeFlag() {
+        flag = null;
+    }
 }

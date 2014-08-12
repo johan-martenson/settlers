@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1412,5 +1413,34 @@ public class GameMap {
         }
 
         return true;
+    }
+
+    public void removeFlag(Flag flag) throws Exception {
+        MapPoint mpUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
+        MapPoint mp = pointToGameObject.get(flag.getPosition());
+        
+        /* Destroy the house if the flag is connected to a house */
+        if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
+            Building attachedBuilding = mpUpLeft.getBuilding();
+            
+            attachedBuilding.tearDown();
+        }
+        
+        /* Remove the road if the flag is an endpoint to a road */
+        List<Road> roadsToRemove = new LinkedList<>();
+        for (Road r : mp.getConnectedRoads()) {
+            if (r.getStartFlag().equals(flag) || r.getEndFlag().equals(flag)) {
+                roadsToRemove.add(r);
+            }
+        }
+        
+        for (Road r : roadsToRemove) {
+            removeRoad(r);
+        }
+        
+        /* Remove the flag */
+        mp.removeFlag();
+        
+        flags.remove(flag);
     }
 }
