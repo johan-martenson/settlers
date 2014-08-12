@@ -146,29 +146,27 @@ public class GameMap {
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
+        boolean firstHouse = false;
+        
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
-        if (buildings.isEmpty() && house instanceof Headquarter) {
-            /* Allow building an initial headquarter */
-        } else if(!isWithinBorder(p)) {
-            throw new Exception("Can't place " + house + " at " + p + " because it is outside the border.");
+        /* Handle the first building separately */
+        if (buildings.isEmpty()) {
+            if (! (house instanceof Headquarter)) {
+                throw new Exception("Can not place " + house + " as initial building");
+            }
+            
+            firstHouse = true;
         }
         
+        if (!firstHouse && !isWithinBorder(p)) {
+            throw new Exception("Can't place building on " + p + " because it's outside the border");
+        }
+
         if (!canPlaceHouse(house, p)) {
             throw new Exception("Can't place building on " + p + ".");
-        }
-        
-        house.setMap(this);        
-        house.setPosition(p);
-        
-        buildings.add(house);
-
-        /* Initialize the border if it's the first house and it's a headquarter */
-        if (buildings.size() == 1 && house instanceof Headquarter) {
-            allPointsWithinBorder = calculateAllPointsWithinBorder();
-            border = calculateBorder(allPointsWithinBorder);
         }
         
         /* Use the existing flag if it exists, otherwise place a new flag */
@@ -178,7 +176,23 @@ public class GameMap {
             Flag flag = house.getFlag();
             
             flag.setPosition(p.downRight());
-            placeFlag(flag);
+            
+            if (firstHouse) {
+                placeFlagRegardlessOfBorder(flag);
+            } else {
+                placeFlag(flag);
+            }
+        }
+
+        house.setMap(this);        
+        house.setPosition(p);
+        
+        buildings.add(house);
+
+        /* Initialize the border if it's the first house and it's a headquarter */
+        if (buildings.size() == 1 && house instanceof Headquarter) {
+            allPointsWithinBorder = calculateAllPointsWithinBorder();
+            border = calculateBorder(allPointsWithinBorder);
         }
 
         reserveSpaceForBuilding(house);
@@ -383,17 +397,25 @@ public class GameMap {
     }
     
     public Flag placeFlag(Flag f) throws Exception {
+        return doPlaceFlag(f, true);
+    }
+    
+    private Flag placeFlagRegardlessOfBorder(Flag flag) throws Exception {
+        return doPlaceFlag(flag, false);
+    }    
+    
+    private Flag doPlaceFlag(Flag f, boolean checkBorder) throws Exception {
         Point flagPoint = f.getPosition();
-        
-        if (!isAvailablePointForFlag(flagPoint)) {
-            throw new Exception("Can't place " + f + " on occupied point");
-        }
         
         if (isAlreadyPlaced(f)) {
             throw new Exception("Flag " + f + " is already placed on the map");
         }
 
-        if (!isWithinBorder(f.getPosition())) {
+        if (!isPossibleFlagPoint(flagPoint)) {
+            throw new Exception("Can't place " + f + " on occupied point");
+        }
+        
+        if (checkBorder && !isWithinBorder(f.getPosition())) {
             throw new Exception("Can't place flag at " + f.getPosition() + " outside of the border");
         }
         
@@ -1208,7 +1230,7 @@ public class GameMap {
         return tree;
     }
 
-    public Iterable<Tree> getTrees() {
+    public Collection<Tree> getTrees() {
         return trees;
     }
 
@@ -1376,5 +1398,19 @@ public class GameMap {
     
     private List<Point> calculateBorder(Collection<Point> occupiedPoints) {
         return GameUtils.findHullSimple(occupiedPoints);
+    }
+
+    private boolean isPossibleFlagPoint(Point flagPoint) {
+        MapPoint mp = pointToGameObject.get(flagPoint);
+        
+        if (mp.isStone() || mp.isTree() || mp.isBuilding()) {
+            return false;
+        }
+        
+        if (!isAvailablePointForFlag(flagPoint)) {
+            return false;
+        }
+
+        return true;
     }
 }

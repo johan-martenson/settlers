@@ -561,13 +561,92 @@ public class TestPlacement {
         assertFalse(t1.equals(t2));
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testTreeCannotBePlacedOnStone() throws Exception {
         GameMap map   = new GameMap(10, 10);
         Point point0  = new Point(3, 3);
     
         map.placeStone(point0);
         
+        try {
+            map.placeTree(point0);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getTrees().isEmpty());
+    }
+
+    @Test
+    public void testCanNotPlaceFlagOnStone() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        map.placeStone(point0);
+        
+        try {
+            map.placeFlag(point0);
+            assertFalse(true);
+        } catch (Exception e) {}
+        
+        assertTrue(map.getBuildings().size() == 1);
+    }
+
+    @Test
+    public void testCanNotPlaceFlagOnTree() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
         map.placeTree(point0);
+        
+        try {
+            map.placeFlag(point0);
+            assertFalse(true);
+        } catch (Exception e) {}
+        
+        assertTrue(map.getBuildings().size() == 1);
+    }
+
+    @Test
+    public void testCanNotPlaceFlagOnHouse() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+            
+        map.placeBuilding(new Woodcutter(), point0);
+        
+        try {
+            map.placeFlag(point0);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getFlags().size() == 2);
+    }
+
+    @Test
+    public void testCanNotPlaceBuildingIfFlagCanNotBePlaced() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        map.placeTree(point0.downRight());
+            
+        try {
+            map.placeBuilding(new Woodcutter(), point0);        
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getBuildings().size() == 1);
+        assertTrue(map.getFlags().size() == 1);
+        assertTrue(map.getTrees().size() == 1);
     }
 }

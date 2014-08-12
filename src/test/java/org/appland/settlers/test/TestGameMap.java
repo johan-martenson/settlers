@@ -367,5 +367,3 @@ public class TestGameMap {
         map.placeRoad(point1, point2, point3, point4, point5, point6, point7);
     }
 }
-
-
