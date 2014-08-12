@@ -293,7 +293,9 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(), point0);
         
-        Collection<Point> border = map.getLandBorder();
+        assertTrue(map.getBorders().size() == 1);
+        
+        Collection<Point> border = map.getBorders().get(0);
         assertTrue(border.contains(new Point(50, 30)));
         assertTrue(border.contains(new Point(50, 70)));
         
@@ -432,20 +434,80 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(), point0);
         
-        Collection<Point> border = map.getLandBorder();
+        assertTrue(map.getBorders().size() == 1);
+        Collection<Point> border = map.getBorders().get(0);
         
         assertTrue(border.contains(new Point(50, 70)));
         assertFalse(border.contains(new Point(50, 74)));
         
         Point point1 = new Point(50, 68);
-        map.placeBuilding(new Barracks(), point1);
+        Building barracks = map.placeBuilding(new Barracks(), point1);
         
-        border = map.getLandBorder();
+        Utils.constructSmallHouse(barracks);
+        
+        assertTrue(map.getBorders().size() == 1);
+        border = map.getBorders().get(0);
         
         assertFalse(border.contains(new Point(50, 70)));
         assertTrue(border.contains(new Point(50, 74)));
     }
 
+    @Test
+    public void testRemovingRemoteBarracksSplitsBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        assertTrue(map.getBorders().size() == 1);
+        Collection<Point> border = map.getBorders().get(0);
+        
+        assertTrue(border.contains(new Point(50, 70)));
+        assertFalse(border.contains(new Point(50, 74)));
+        
+        Point point1 = new Point(50, 68);
+        Building barracks0 = map.placeBuilding(new Barracks(), point1);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        assertTrue(map.getBorders().size() == 1);
+        border = map.getBorders().get(0);
+        
+        assertFalse(border.contains(new Point(50, 70)));
+        assertTrue(border.contains(new Point(50, 74)));        
+        
+        Point point2 = new Point(50, 72);
+        Building barracks1 = map.placeBuilding(new Barracks(), point2);
+
+        Utils.constructSmallHouse(barracks1);
+        
+        assertTrue(map.getBorders().size() == 1);
+        border = map.getBorders().get(0);
+        
+        assertFalse(border.contains(new Point(50, 74)));
+        assertTrue(border.contains(new Point(50, 78)));        
+        
+        Point point3 = new Point(50, 76);
+        Building barracks2 = map.placeBuilding(new Barracks(), point3);
+        
+        Utils.constructSmallHouse(barracks2);
+        
+        assertTrue(map.getBorders().size() == 1);
+        border = map.getBorders().get(0);
+        
+        assertFalse(border.contains(new Point(50, 78)));
+        assertTrue(border.contains(new Point(50, 82)));
+        
+        barracks0.tearDown();
+        barracks1.tearDown();
+                
+        assertTrue(map.getBorders().size() == 2);
+    }
+    
+    @Test
+    public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() {
+        // TODO: Implement test
+    }
+    
     @Test
     public void testBarracksCanOnlyBeBuiltCloseToBorder() {
         // TODO: Implement test

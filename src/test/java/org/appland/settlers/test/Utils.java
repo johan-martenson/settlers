@@ -126,6 +126,8 @@ public class Utils {
         house.deliver(stoneCargo);
 
         Utils.fastForward(100, house);
+        
+        assertTrue(house.getConstructionState() == DONE);
     }
 
     static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {

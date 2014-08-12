@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,10 @@ public class Building implements Actor, EndPoint {
         } else {
             return mb.defenceRadius();
         }    
+    }
+
+    Collection<Point> getDefendedLand() {
+        return map.getPointsWithinRadius(getPosition(), getDefenceRadius());
     }
 
     public enum ConstructionState {
@@ -326,8 +331,12 @@ public class Building implements Actor, EndPoint {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
                     consumeConstructionMaterial();
-
+                    
                     constructionState = DONE;
+
+                    if (isMilitaryBuilding()) {
+                        map.updateBorder();
+                    }
                 }
             } else {
                 constructionCountdown.step();
@@ -357,6 +366,8 @@ public class Building implements Actor, EndPoint {
     public void tearDown() {
         constructionState = ConstructionState.BURNING;
         destructionCountdown.countFrom(49);
+        
+        map.updateBorder();
     }
 
     public int getProductionTime() {
