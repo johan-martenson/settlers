@@ -11,6 +11,7 @@ import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
+import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -23,9 +24,14 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -504,7 +510,97 @@ public class TestGameMap {
     }
 
     @Test
-    public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() {
+    public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        assertTrue(map.getBorders().size() == 1);
+        Collection<Point> border = map.getBorders().get(0);
+        
+        assertTrue(border.contains(new Point(50, 70)));
+        assertFalse(border.contains(new Point(50, 74)));
+        
+        Point point1 = new Point(50, 68);
+        Building barracks0 = map.placeBuilding(new Barracks(), point1);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        Point point2 = new Point(50, 72);
+        Building wc = map.placeBuilding(new Woodcutter(), point2);
+        
+        Utils.constructSmallHouse(wc);
+        
+        assertTrue(map.getBuildings().contains(wc));
+        assertEquals(wc.getConstructionState(), DONE);
+        
+        barracks0.tearDown();
+        
+        assertTrue(map.getBuildings().contains(wc));
+        assertEquals(wc.getConstructionState(), BURNING);
+    }
+
+    @Test
+    public void testShrinkingBorderDestroysFlagNowOutsideOfBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        assertTrue(map.getBorders().size() == 1);
+        Collection<Point> border = map.getBorders().get(0);
+        
+        assertTrue(border.contains(new Point(50, 70)));
+        assertFalse(border.contains(new Point(50, 74)));
+        
+        Point point1 = new Point(50, 68);
+        Building barracks0 = map.placeBuilding(new Barracks(), point1);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        Point point2 = new Point(50, 72);
+        Flag flag0 = map.placeFlag(point2);
+        
+        assertTrue(map.getFlags().contains(flag0));
+        
+        barracks0.tearDown();
+        
+        assertFalse(map.getFlags().contains(flag0));
+    }
+
+    @Test
+    public void testShrinkingBorderDestroysRoadNowOutsideOfBorder() throws Exception {
+        GameMap map = new GameMap(100, 100);
+        Point point0 = new Point(50, 50);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        assertTrue(map.getBorders().size() == 1);
+        Collection<Point> border = map.getBorders().get(0);
+        
+        assertTrue(border.contains(new Point(50, 70)));
+        assertFalse(border.contains(new Point(50, 74)));
+        
+        Point point1 = new Point(50, 68);
+        Building barracks0 = map.placeBuilding(new Barracks(), point1);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        Point point2 = new Point(50, 72);
+        Flag flag0 = map.placeFlag(point2);
+        
+        Point point3 = new Point(48, 70);
+        Flag flag1 = map.placeFlag(point3);
+        
+        Road road0 = map.placeRoad(point2, point2.downLeft(), point3);
+        
+        assertTrue(map.getRoads().contains(road0));
+        
+        barracks0.tearDown();
+        
+        assertFalse(map.getRoads().contains(road0));
+    }
+    
+    @Test
+    public void testBorderCanBeConcave() {
         // TODO: Implement test
     }
     

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
@@ -205,9 +206,46 @@ public class GameMap {
         return house;
     }
 
-    void updateBorder() {
+    void updateBorder() throws Exception {
+        
+        /* Re-calculate borders */
         allPointsWithinBorder = calculateAllPointsWithinBorders();
         borders = calculateBorders(allPointsWithinBorder);
+
+        /* Destroy buildings now outside of the borders */
+        for (Building b : buildings) {
+            if (b.getConstructionState() == BURNING) {
+                continue;
+            }
+            
+            if (!isWithinBorder(b.getPosition()) || !isWithinBorder(b.getFlag().getPosition())) {
+                b.tearDown();
+            }
+        }
+
+        /* Remove flags now outside of the borders */
+        List<Flag> flagsToRemove = new LinkedList<>();
+
+        for (Flag f : flags) {
+            if (!isWithinBorder(f.getPosition())) {
+                flagsToRemove.add(f);
+            }
+        }
+
+        flags.removeAll(flagsToRemove);
+        
+        /* Remove any roads now outside of the borders */
+        List<Road> roadsToRemove = new LinkedList<>();
+        
+        for (Road r : roads) {
+            for (Point p : r.getWayPoints()) {
+                if (!isWithinBorder(p)) {
+                    roadsToRemove.add(r);
+                }
+            }
+        }
+    
+        roads.removeAll(roadsToRemove);
     }
     
     private Road placeDriveWay(Building building) throws Exception {
