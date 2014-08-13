@@ -199,7 +199,7 @@ public class GameUtils {
         return null;
     }
 
-    public static List<Point> findHullSimple(Collection<Point> pts) {
+    public static List<Point> hullWanderer(Collection<Point> pts) {
         List<Point> points = new ArrayList<>();
         List<Point> hull = new LinkedList<>();
         
@@ -208,65 +208,45 @@ public class GameUtils {
         Collections.sort(points, new SortPointsByY());
         
         Point lowestLeft = points.get(0);
-        
-        /* Follow lowest row */
-        for (Point next : points) {
-            if (next.y != lowestLeft.y) {
-                break;
-            }
-        
-            hull.add(next);
-        }
-
-        /* Walk the right side upwards */
-        int startIndex = points.indexOf(hull.get(hull.size() - 1));
-        Point previous = null;
-        for (Point p : points.subList(startIndex + 1, points.size())) {
-            if (previous == null) {
-                previous = p;
-                
-                continue;
-            }
-
-            if (p.y != previous.y) {
-                hull.add(previous);
-            }
-        
-            previous = p;
-        }
-        
-        hull.add(points.get(points.size() - 1));
-
-        /* Walk the top row */
-        Collections.reverse(points);
-        Point highestPoint = points.get(0);
-        
-        
-        for (Point next : points.subList(1, points.size())) {
-            if (next.y != highestPoint.y) {
-                break;
-            }
-
-            hull.add(next);
-        }
-
-        /* Walk the left side downwards */
-        startIndex = points.indexOf(hull.get(hull.size() - 1));
-        previous = null;
-        for (Point p : points.subList(startIndex + 1, points.size())) {
-            if (previous == null) {
-                previous = p;
-                
-                continue;
-            }
+        Point current = lowestLeft;
+        Point previous = lowestLeft.down();
+        while (true) {
+            hull.add(current);
             
-            if (p.y != previous.y) {
-                hull.add(previous);
+            for (Point it : getSurroundingPointsCounterClockwise(current, previous)) {
+                if (pts.contains(it)) {
+                    previous = current;
+                    current = it;
+                    break;
+                }
             }
-        
-            previous = p;
-        }
 
+            if (current.equals(lowestLeft)) {
+                break;
+            }
+        }
+        
         return hull;
+    }
+    
+    private static Iterable<Point> getSurroundingPointsCounterClockwise(Point center, Point arm) {
+        List<Point> surrounding = new LinkedList<>();
+        List<Point> result = new LinkedList<>();
+        
+        surrounding.add(center.down());
+        surrounding.add(center.downRight());
+        surrounding.add(center.right());
+        surrounding.add(center.upRight());
+        surrounding.add(center.up());
+        surrounding.add(center.upLeft());
+        surrounding.add(center.left());
+        surrounding.add(center.downLeft());
+        
+        int armIndex = surrounding.indexOf(arm);
+        
+        result.addAll(surrounding.subList(armIndex + 1, surrounding.size()));
+        result.addAll(surrounding.subList(0, armIndex + 1));
+        
+        return result;
     }
 }

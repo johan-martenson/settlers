@@ -30,7 +30,7 @@ import org.junit.Test;
 public class ConstructionTest {
 
     @Test
-    public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Woodcutter wc = new Woodcutter();
 
         assertFalse(wc.isMilitaryBuilding());
@@ -137,7 +137,7 @@ public class ConstructionTest {
     }
 
     @Test
-    public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Sawmill sm = new Sawmill();
 
         assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
@@ -179,7 +179,7 @@ public class ConstructionTest {
     }
 
     @Test
-    public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Farm farm = new Farm();
         assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
 
@@ -223,7 +223,7 @@ public class ConstructionTest {
     }
 
     @Test(expected = InvalidStateForProduction.class)
-    public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+    public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
         Sawmill sm = new Sawmill();
 
         Utils.constructMediumHouse(sm);
@@ -236,7 +236,7 @@ public class ConstructionTest {
     }
 
     @Test(expected = InvalidStateForProduction.class)
-    public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException {
+    public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
         Sawmill sm = new Sawmill();
 
         Utils.constructMediumHouse(sm);

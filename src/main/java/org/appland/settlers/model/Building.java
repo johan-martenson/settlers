@@ -238,7 +238,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public void deliver(Cargo c) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        log.log(Level.INFO, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});
+        log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});
 
         Material material = c.getMaterial();
 
@@ -281,7 +281,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsMaterial(Material material) {
-        log.log(Level.INFO, "Does {0} require {1}", new Object[]{this, material});
+        log.log(Level.FINE, "Does {0} require {1}", new Object[]{this, material});
 
         if (underConstruction()) {
             return moreMaterialNeededForConstruction(material);
@@ -335,7 +335,11 @@ public class Building implements Actor, EndPoint {
                     constructionState = DONE;
 
                     if (isMilitaryBuilding()) {
-                        map.updateBorder();
+                        try {
+                            map.updateBorder();
+                        } catch (Exception ex) {
+                            Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             } else {
@@ -363,7 +367,7 @@ public class Building implements Actor, EndPoint {
         return constructionState;
     }
 
-    public void tearDown() {
+    public void tearDown() throws Exception {
         constructionState = ConstructionState.BURNING;
         destructionCountdown.countFrom(49);
         
@@ -391,12 +395,12 @@ public class Building implements Actor, EndPoint {
     }
 
     public Map<Material, Integer> getRequiredGoodsForProduction() {
-        log.log(Level.INFO, "Getting the required goods for this building");
+        log.log(Level.FINE, "Getting the required goods for this building");
 
         Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
-        log.log(Level.FINE, "Found annotations for {0} in class", requiredGoods);
+        log.log(Level.FINER, "Found annotations for {0} in class", requiredGoods);
 
         /* Return empty map if the annotation isn't there */
         if (p == null) {

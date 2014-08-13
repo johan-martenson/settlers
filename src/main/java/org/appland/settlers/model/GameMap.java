@@ -1478,7 +1478,7 @@ public class GameMap {
         List<Collection<Point>> result = new LinkedList<>();
         
         for (Collection<Point> occupiedLand : occupiedPoints) {
-            result.add(GameUtils.findHullSimple(occupiedLand));
+            result.add(GameUtils.hullWanderer(occupiedLand));
         }
         
         return result;

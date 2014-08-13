@@ -600,8 +600,46 @@ public class TestGameMap {
     }
     
     @Test
-    public void testBorderCanBeConcave() {
-        // TODO: Implement test
+    public void testBorderCanBeConcave() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* 0 ticks from start */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* 34 ticks from start */
+        Point point3 = new Point(4, 24);
+        Building building1 = map.placeBuilding(new Barracks(), point3);
+
+        Utils.constructSmallHouse(building1);
+        
+        /* 55 ticks from start */
+        Point point4 = new Point(19, 19);
+        Building building2 = map.placeBuilding(new Barracks(), point4);
+
+        Utils.constructSmallHouse(building2);
+        
+        /* 951 ticks from start */
+        Point point39 = new Point(20, 24);
+        Building building3 = map.placeBuilding(new Barracks(), point39);
+
+        Utils.constructSmallHouse(building3);
+        
+        /* 1957 ticks from start */
+        Point point45 = new Point(24, 28);
+        Building building4 = map.placeBuilding(new Barracks(), point45);
+        
+        Utils.constructSmallHouse(building4);
+
+        assertTrue(map.getBorders().size() == 1);
+        
+        Collection<Point> border = map.getBorders().get(0);
+        
+        assertTrue(border.contains(new Point(24, 34)));
+        assertTrue(border.contains(new Point(4, 30)));
+        
+        Point point46 = new Point(11, 23);
+        assertTrue(border.contains(point46));
     }
     
     @Test
