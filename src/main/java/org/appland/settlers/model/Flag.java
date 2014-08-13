@@ -28,7 +28,7 @@ public class Flag implements EndPoint {
 
     @Override
     public void putCargo(Cargo c) {
-        log.log(Level.INFO, "Putting {0} at {1}", new Object[]{c, this});
+        log.log(Level.FINE, "Putting {0} at {1}", new Object[]{c, this});
 
         c.setPosition(getPosition());
         stackedCargo.add(c);

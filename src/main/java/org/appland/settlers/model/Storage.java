@@ -120,15 +120,15 @@ public class Storage extends Building implements Actor {
 
     @Override
     public void deliver(Cargo c) {
-        log.log(Level.INFO, "Depositing cargo {0}", c);
+        log.log(Level.FINE, "Depositing cargo {0}", c);
 
         storeOneInInventory(c.getMaterial());
 
-        log.log(Level.FINE, "Inventory is {0} after deposit", inventory);
+        log.log(Level.FINER, "Inventory is {0} after deposit", inventory);
     }
 
     public Cargo retrieve(Material material) throws Exception {
-        log.log(Level.INFO, "Retrieving one piece of {0}", material);
+        log.log(Level.FINE, "Retrieving one piece of {0}", material);
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve " + material);
@@ -144,6 +144,8 @@ public class Storage extends Building implements Actor {
 
         c.setPosition(getFlag().getPosition());
 
+        log.log(Level.FINER, "Inventory is {0} after retrieval", inventory);
+        
         return c;
     }
 

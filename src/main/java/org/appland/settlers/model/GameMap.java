@@ -149,6 +149,8 @@ public class GameMap {
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
+        log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, p});
+        
         boolean firstHouse = false;
         
         if (buildings.contains(house)) {
@@ -270,7 +272,9 @@ public class GameMap {
     }
     
     public Road placeRoad(List<Point> wayPoints) throws Exception {
-	Point start = wayPoints.get(0);
+        log.log(Level.INFO, "Placing road through {0}", wayPoints);
+        
+        Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
         if (!isFlagAtPoint(start)) {
@@ -358,7 +362,7 @@ public class GameMap {
     }
     
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
-        log.log(Level.INFO, "Finding way from {0} to {1}", new Object[]{start, end});
+        log.log(Level.FINE, "Finding way from {0} to {1}", new Object[]{start, end});
 
         if (start.equals(end)) {
             throw new InvalidRouteException("Start and end are the same.");
@@ -445,6 +449,8 @@ public class GameMap {
     }    
     
     private Flag doPlaceFlag(Flag f, boolean checkBorder) throws Exception {
+        log.log(Level.INFO, "Placing {0}", new Object[]{f});
+        
         Point flagPoint = f.getPosition();
         
         if (isAlreadyPlaced(f)) {

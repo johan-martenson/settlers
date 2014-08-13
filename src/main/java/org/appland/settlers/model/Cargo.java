@@ -16,7 +16,7 @@ public class Cargo {
     private GameMap map;
 
     public Cargo(Material materialToSet, GameMap mapToSet) {
-        log.log(Level.INFO, "Creating cargo of {0}", materialToSet);
+        log.log(Level.FINE, "Creating cargo of {0}", materialToSet);
 
         material         = materialToSet;
         deliveryPromised = false;
@@ -28,7 +28,7 @@ public class Cargo {
     }
 
     public void setTarget(Building target) throws InvalidRouteException, Exception {
-        log.log(Level.INFO, "Setting target to {0}", target);
+        log.log(Level.FINE, "Setting target to {0}", target);
         this.target = target;
         
         path = map.findWayWithExistingRoads(position, target.getPosition());
@@ -37,7 +37,7 @@ public class Cargo {
     }
 
     public boolean isAtTarget() {
-        log.log(Level.INFO, "Checking if target ({0}) equals position ({1})", new Object[]{target.getFlag(), position});
+        log.log(Level.FINE, "Checking if target ({0}) equals position ({1})", new Object[]{target.getFlag(), position});
 
         if (position.equals(target.getFlag().getPosition())) {
             return true;
@@ -51,7 +51,7 @@ public class Cargo {
     }
 
     public void setPlannedSteps(List<Point> steps) {
-        log.log(Level.INFO, "Setting planned route to {0}", steps);
+        log.log(Level.FINE, "Setting planned route to {0}", steps);
         path = steps;
     }
 
@@ -68,7 +68,7 @@ public class Cargo {
     }
     
     public void setPosition(Point p) {
-        log.log(Level.INFO, "Setting position to {0}", p);
+        log.log(Level.FINE, "Setting position to {0}", p);
         position = p;
         
         if (path != null && path.size() > 0 && path.get(0).equals(p)) {
