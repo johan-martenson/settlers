@@ -36,6 +36,7 @@ public class Headquarter extends Storage {
         inventory.put(WOODCUTTER_WORKER, InitialState.STORAGE_INITIAL_WOODCUTTER_WORKER);
         inventory.put(STONEMASON, InitialState.STORAGE_INITIAL_STONEMASON);
         inventory.put(FARMER, InitialState.STORAGE_INITIAL_FARMER);
+        inventory.put(SAWMILL_WORKER, InitialState.STORAGE_INITIAL_SAWMILL_WORKER);
     }
 
     @Override

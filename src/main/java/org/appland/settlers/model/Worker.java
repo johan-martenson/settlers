@@ -357,7 +357,11 @@ public abstract class Worker implements Actor {
     }
 
     protected void returnHome() throws InvalidRouteException {
-        setTarget(home.getPosition(), home.getFlag().getPosition());
+        if (getPosition().equals(home.getFlag().getPosition())) {
+            setTarget(home.getPosition());
+        } else {
+            setTarget(home.getPosition(), home.getFlag().getPosition());
+        }
     }
 
     protected void setHome(Building h) {
