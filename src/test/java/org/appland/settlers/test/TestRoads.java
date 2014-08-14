@@ -560,13 +560,15 @@ public class TestRoads {
         
         map.placeBuilding(new Headquarter(), point0);
         
-        Point point2 = new Point(50, 71);
+        Point point1 = new Point(49, 71);
+        Point point2 = new Point(51, 71);
         Point point3 = new Point(50, 70);
         Flag flag0 = map.placeFlag(point3);
 
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
-    
+        
         assertFalse(points.contains(point2));
+        assertFalse(points.contains(point1));
     }
     
     @Test
@@ -1170,6 +1172,9 @@ public class TestRoads {
     @Test
     public void testFindShortestWay() throws Exception {
         GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(5, 9);
+        map.placeBuilding(new Headquarter(), hqPoint);
         
         List<Point> path = map.findAutoSelectedRoad(new Point(2, 2), new Point(11, 11), null);
         

@@ -1130,7 +1130,7 @@ public class GameMap {
     private boolean isPossibleAsAnyPointInRoad(Point p) {
         MapPoint mp = pointToGameObject.get(p);
 
-        if (!isWithinMap(p)) {
+        if (!isWithinBorder(p)) {
             return false;
         }
         
