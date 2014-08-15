@@ -23,7 +23,7 @@ public class Storage extends Building implements Actor {
     private int promotionCountdown;
     private int draftCountdown;
 
-    private Logger log = Logger.getLogger(Storage.class.getName());
+    private static final Logger log = Logger.getLogger(Storage.class.getName());
 
     public Storage() {
         inventory = createEmptyMaterialIntMap();
@@ -203,6 +203,9 @@ public class Storage extends Building implements Actor {
             break;
         case WELL_WORKER:
             w = new WellWorker(map);
+            break;
+        case MILLER:
+            w = new Miller(map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);

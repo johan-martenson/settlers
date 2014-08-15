@@ -72,7 +72,7 @@ public class SawmillWorker extends Worker {
 
                         setCargo(cargo);
 
-                        getHome().getInQueue().put(WOOD, amountWood - 1);
+                        getHome().consumeOne(WOOD);
 
                         state = GOING_TO_FLAG_WITH_CARGO;
 

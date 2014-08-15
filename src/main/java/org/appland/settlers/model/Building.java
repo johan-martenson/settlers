@@ -40,6 +40,12 @@ public class Building implements Actor, EndPoint {
         return getInQueue().get(material);
     }
 
+    void consumeOne(Material material) {
+        int amount = getInQueue().get(material);
+        
+        getInQueue().put(material, amount - 1);
+    }
+
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }
