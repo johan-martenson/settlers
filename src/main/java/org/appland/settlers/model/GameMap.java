@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -54,15 +53,6 @@ public class GameMap {
                 return getPossibleAdjacentRoadConnections(start, goal);
             }
         });
-    }
-
-    private Integer estimateDistance(Point start, Point goal) {
-        int deltaX = start.x - goal.x;
-        int deltaY = start.y - goal.y;
-        
-        return deltaX * deltaX + deltaY + deltaY;
-        
-        //return min(abs(start.x - goal.x), abs(start.y - goal.y));
     }
 
     private boolean pointIsOnRoad(Point point) {
@@ -415,16 +405,6 @@ public class GameMap {
         return null;
     }
 
-    public boolean routeExist(Point point, Point point2) throws InvalidRouteException {
-        try {
-            findWayWithExistingRoads(point, point2);
-        } catch (InvalidRouteException e) {
-            return false;
-        }
-
-        return true;
-    }
-
     public Road getRoad(Point start, Point end) throws Exception {
         for (Road r : roads) {
             if ((r.getStart().equals(start) && r.getEnd().equals(end))
@@ -558,10 +538,6 @@ public class GameMap {
         return f;
     }
 
-    public Storage getClosestStorage(Road r) {
-        return getClosestStorage(r.getStart());
-    }
-
     public Storage getClosestStorage(Point p) {
         Storage stg = null;
         int distance = Integer.MAX_VALUE;
@@ -648,18 +624,6 @@ public class GameMap {
 
     public List<Worker> getAllWorkers() {
         return allWorkers;
-    }
-
-    public List<Worker> getTravelingWorkers() {
-        List<Worker> result = new ArrayList<>();
-
-        for (Worker w : getAllWorkers()) {
-            if (w.isTraveling()) {
-                result.add(w);
-            }
-        }
-
-        return result;
     }
 
     public List<Storage> getStorages() {

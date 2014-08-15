@@ -146,52 +146,6 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(new Flag(3, 3), new Flag(3, 3));
     }
 
-    @Test
-    public void testDoesRouteExist() throws InvalidEndPointException, InvalidRouteException, Exception {
-
-        GameMap map = new GameMap(20, 20);
-        
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
-        
-        Flag[] points = new Flag[]{
-            new Flag(1, 1),
-            new Flag(3, 3)
-        };
-
-        int i;
-        for (i = 0; i < points.length; i++) {
-            map.placeFlag(points[i]);
-        }
-
-        map.placeAutoSelectedRoad(points[0], points[1]);
-
-        assertTrue(map.routeExist(points[0].getPosition(), points[1].getPosition()));
-    }
-
-    @Test
-    public void testDoesRouteExistNo() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(20, 20);
-        
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
-        
-        Flag[] points = new Flag[]{
-            new Flag(1, 1),
-            new Flag(3, 3),
-            new Flag(5, 5)
-        };
-
-        int i;
-        for (i = 0; i < points.length; i++) {
-            map.placeFlag(points[i]);
-        }
-
-        map.placeAutoSelectedRoad(points[0], points[1]);
-
-        assertFalse(map.routeExist(points[0].getPosition(), points[2].getPosition()));
-    }
-
     @Test(expected = InvalidRouteException.class)
     public void testFindRouteWithSameStartAndEnd() throws InvalidRouteException, Exception {
         GameMap map = new GameMap(10, 10);
@@ -466,7 +420,7 @@ public class TestTransportation {
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
         assertTrue(map.getRoadsThatNeedCouriers().contains(hqToMiddleRoad));
-        assertTrue(map.getClosestStorage(hqToMiddleRoad).equals(storage));
+        assertTrue(map.getClosestStorage(hqToMiddleRoad.getStart()).equals(storage));
 
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
 

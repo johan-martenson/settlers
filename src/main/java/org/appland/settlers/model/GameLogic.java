@@ -34,7 +34,7 @@ public class GameLogic {
         List<Road> roads = map.getRoadsThatNeedCouriers();
 
         for (Road r : roads) {
-            Storage stg = map.getClosestStorage(r);
+            Storage stg = map.getClosestStorage(r.getStart());
 
             if (stg == null) {
                 continue;
