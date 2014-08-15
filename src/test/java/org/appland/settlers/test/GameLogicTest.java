@@ -75,24 +75,33 @@ public class GameLogicTest {
 
         sm.deliver(woodCargo);
         
+        /* Occupy the sawmill */
+        Utils.occupySawmill(sm, map);
+        
         /* Fast forward until the sawmill has produced a cargo with PLANCKS */
-        fastForward(100, sm, w);
-        assertTrue(sm.isCargoReady());
-        assertNull(w.getCargo());
-
-        /* Verify that the worker doesn't pick up the cargo by himself as time passes */
-        fastForward(100, sm, w);
-        assertTrue(sm.isCargoReady());
-        assertNull(w.getCargo());
-        assertTrue(sm.getFlag().getStackedCargo().isEmpty());
-
-        /* Verify that initiateCollectionOfNewProduce gets the worker to pick up the cargo */
-        gameLogic.initiateCollectionOfNewProduce(map);
-        assertFalse(sm.isCargoReady());
+        assertTrue(sm.getInQueue().get(WOOD) == 1);
+        
+        fastForward(150, map);
+        assertNotNull(sm.getWorker().getCargo());
+        
+        /* Let the sawmill worker deliver the cargo to the flag */
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
+        
         assertNull(w.getCargo());
         assertFalse(sm.getFlag().getStackedCargo().isEmpty());
 
-        Cargo c = sm.getFlag().getStackedCargo().get(0);
+        /* Verify that the worker picks up the cargo by himself as time passes */
+        map.stepTime();
+        
+        assertEquals(w.getTarget(), sm.getFlag().getPosition());
+        assertNull(w.getCargo());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, sm.getFlag().getPosition());
+        
+        assertNotNull(w.getCargo());
+        
+        Cargo c = w.getCargo();
         assertTrue(c.getTarget().equals(stg));
         assertTrue(c.getMaterial() == PLANCK);
     }

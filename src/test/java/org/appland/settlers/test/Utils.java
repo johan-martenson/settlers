@@ -17,6 +17,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
+import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 
@@ -24,6 +25,8 @@ import static org.appland.settlers.model.Material.*;
 
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertFalse;
@@ -267,5 +270,15 @@ public class Utils {
         }
 
         assertTrue(worker.isAt(target));
+    }
+
+    static void occupySawmill(Sawmill sm, GameMap map) throws InvalidRouteException {
+        SawmillWorker sw = new SawmillWorker(map);
+        
+        map.placeWorker(sw, sm.getFlag());
+        
+        sw.setTargetBuilding(sm);
+        
+        fastForwardUntilWorkersReachTarget(map, sw);
     }
 }

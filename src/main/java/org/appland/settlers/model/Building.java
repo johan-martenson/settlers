@@ -36,6 +36,10 @@ public class Building implements Actor, EndPoint {
         return map.getPointsWithinRadius(getPosition(), getDefenceRadius());
     }
 
+    int getAmount(Material material) {
+        return getInQueue().get(material);
+    }
+
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }

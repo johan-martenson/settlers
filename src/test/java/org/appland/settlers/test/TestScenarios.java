@@ -126,6 +126,8 @@ public class TestScenarios {
         
         assertEquals(wc.getWorker(), wcr);
         
+        Utils.occupySawmill(sm, map);
+        
         /*   --   START TEST   --   */
         
         /* Fast forward until the woodcutter has cut some wood */
@@ -143,8 +145,6 @@ public class TestScenarios {
         assertFalse(wc.getFlag().getStackedCargo().isEmpty());
         
         /* Retrieve cargo from woodcutter and put it on the flag */
-        //gameLogic.initiateCollectionOfNewProduce(map);
-
         Courier courierWcToHq = wcToHqRoad.getCourier();
 
         assertNull(courierWcToHq.getCargo());
@@ -216,22 +216,31 @@ public class TestScenarios {
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
         
         /* Get the wood transported to the sawmill and deliver it*/
-        Utils.fastForwardUntilWorkersReachTarget(map, courierSmToHq);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getPosition());
 
         /* Cargo has arrived at the sawmill and the courier has delivered it */
         assertTrue(sm.getMaterialInQueue(WOOD) == 1);
-        assertTrue(courierSmToHq.isIdle());
+        
+        /* Produce plancks in sawmill. 
+        
+        Note! The sawmill worker is after the courier 
+              in the worker list so it will get called to step time once before 
+              this section is reached
+        */
+        for (i = 0; i < 49; i++) {
+            assertNull(sm.getWorker().getCargo());
+            map.stepTime();
+        }
 
-        /* Produce plancks in sawmill */
-        assertFalse(sm.isCargoReady());
-
-        fastForward(100, map);
-
-        assertTrue(sm.isCargoReady());
+        assertNotNull(sm.getWorker().getCargo());
         assertTrue(sm.getMaterialInQueue(WOOD) == 0);
 
-        gameLogic.initiateCollectionOfNewProduce(map);
-
+        /* Let the sawmill worker leave the cargo at the flag */
+        
+        assertEquals(sm.getWorker().getTarget(), sm.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
+        
         assertNull(courierSmToHq.getCargo());
         assertFalse(courierSmToHq.isTraveling());
         assertFalse(courierWcToHq.isAt(wc.getFlag().getPosition()));
