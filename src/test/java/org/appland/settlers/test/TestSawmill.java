@@ -418,11 +418,11 @@ public class TestSawmill {
         sawmill.deliver(new Cargo(WOOD, map));
         
         /* Wait until the sawmill worker produces a planck */
-        assertTrue(sawmill.getInQueue().get(WOOD) == 2);
+        assertTrue(sawmill.getAmount(WOOD) == 2);
         
         Utils.fastForward(150, map);
         
-        assertTrue(sawmill.getInQueue().get(WOOD) == 1);
+        assertTrue(sawmill.getAmount(WOOD) == 1);
     }
 
     @Test

@@ -79,7 +79,7 @@ public class GameLogicTest {
         Utils.occupySawmill(sm, map);
         
         /* Fast forward until the sawmill has produced a cargo with PLANCKS */
-        assertTrue(sm.getInQueue().get(WOOD) == 1);
+        assertTrue(sm.getAmount(WOOD) == 1);
         
         fastForward(150, map);
         assertNotNull(sm.getWorker().getCargo());

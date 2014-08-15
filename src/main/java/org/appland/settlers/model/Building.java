@@ -36,7 +36,7 @@ public class Building implements Actor, EndPoint {
         return map.getPointsWithinRadius(getPosition(), getDefenceRadius());
     }
 
-    int getAmount(Material material) {
+    public int getAmount(Material material) {
         return getInQueue().get(material);
     }
 
@@ -231,7 +231,7 @@ public class Building implements Actor, EndPoint {
         outputCargo = carriedCargo;
     }
     
-    public Map<Material, Integer> getInQueue() {
+    private Map<Material, Integer> getInQueue() {
         return receivedMaterial;
     }
 

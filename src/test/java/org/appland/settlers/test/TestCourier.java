@@ -13,15 +13,21 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -571,7 +577,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
+        assertTrue(wc.getAmount(PLANCK) == 0);
         
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
@@ -581,14 +587,14 @@ public class TestCourier {
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
         assertEquals(courier.getTarget(), wc.getPosition());
-        assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
+        assertTrue(wc.getAmount(PLANCK) == 0);
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), wc.getPosition());
-        assertTrue(wc.getInQueue().get(Material.PLANCK) == 1);
+        assertTrue(wc.getAmount(PLANCK) == 1);
     }
 
     @Test
@@ -647,7 +653,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertTrue(wc.getInQueue().get(Material.PLANCK) == 0);
+        assertTrue(wc.getAmount(PLANCK) == 0);
         
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         

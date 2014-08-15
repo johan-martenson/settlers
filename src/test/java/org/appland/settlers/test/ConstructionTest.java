@@ -35,7 +35,8 @@ public class ConstructionTest {
 
         assertFalse(wc.isMilitaryBuilding());
 
-        assertTrue(Utils.materialIntMapIsEmpty(wc.getInQueue()));
+        assertTrue(wc.getAmount(WOOD) == 0);
+        assertTrue(wc.getAmount(PLANCK) == 0);
         assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
         assertFalse(wc.isCargoReady());
 

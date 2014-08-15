@@ -66,8 +66,6 @@ public class SawmillWorker extends Worker {
             if (getHome().getAmount(WOOD) > 0) {
                 if (countdown.reachedZero()) {
                     try {
-                        int amountWood = getHome().getInQueue().get(WOOD);
-
                         Cargo cargo = new Cargo(PLANCK, map);
 
                         setCargo(cargo);
