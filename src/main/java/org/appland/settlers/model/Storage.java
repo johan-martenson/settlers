@@ -201,6 +201,9 @@ public class Storage extends Building implements Actor {
         case SAWMILL_WORKER:
             w = new SawmillWorker(map);
             break;
+        case WELL_WORKER:
+            w = new WellWorker(map);
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }

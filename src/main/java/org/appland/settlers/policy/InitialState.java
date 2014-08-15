@@ -21,4 +21,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_STONEMASON = 2;
         public static final int STORAGE_INITIAL_FARMER = 2;
         public static final int STORAGE_INITIAL_SAWMILL_WORKER = 1;
+        public static final int STORAGE_INITIAL_WELL_WORKER = 1;
 }
