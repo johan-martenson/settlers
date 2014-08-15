@@ -22,9 +22,6 @@ public class GameLogic {
          */
         assignNewWorkerToUnoccupiedPlaces(map);
 
-        /* Start collection of newly produced goods */
-        initiateCollectionOfNewProduce(map);
-
         /* Find out which buildings need deliveries and match with inventory */
         initiateNewDeliveriesForAllStorages(map);
     }
@@ -128,17 +125,6 @@ public class GameLogic {
 
                 break;
             }
-        }
-    }
-
-    public void initiateCollectionOfNewProduce(GameMap map) throws Exception {
-        for (Building b : map.getBuildingsWithNewProduce()) {
-            Cargo c = b.retrieveCargo();
-            Storage stg = map.getClosestStorage(b.getPosition());
-
-            c.setTarget(stg);
-
-            b.getFlag().putCargo(c);
         }
     }
 }
