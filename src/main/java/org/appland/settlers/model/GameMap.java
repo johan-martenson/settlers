@@ -617,8 +617,8 @@ public class GameMap {
         return flags;
     }
     
-    public void placeWorker(Worker w, Flag f) {
-        w.setPosition(f.getPosition());
+    public void placeWorker(Worker w, EndPoint e) {
+        w.setPosition(e.getPosition());
         allWorkers.add(w);
     }
 
