@@ -17,7 +17,6 @@ import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WELL_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Worker;
@@ -267,13 +266,16 @@ public class TestWell {
         
         assertNotNull(ww.getCargo());
         assertEquals(ww.getTarget(), well.getFlag().getPosition());
-
+        
         /* Let the worker reach the flag and place the cargo*/
         assertTrue(well.getFlag().getStackedCargo().isEmpty());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
 
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
+
+        /* Verify that the water cargo has the right target */
+        assertEquals(well.getFlag().getStackedCargo().get(0).getTarget(), hq);
         
         /* Let the worker walk back to the well */
         assertEquals(ww.getTarget(), well.getPosition());
