@@ -23,4 +23,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_SAWMILL_WORKER = 1;
         public static final int STORAGE_INITIAL_WELL_WORKER = 1;
         public static final int STORAGE_INITIAL_MILLER = 1;
+        public static final int STORAGE_INITIAL_BAKER = 1;
 }
