@@ -454,6 +454,10 @@ public class GameMap {
 
             int index = points.indexOf(flagPoint);
 
+            if (index < 2 || points.size() - index < 3) {
+                throw new Exception("Splitting road creates too short roads");
+            }
+            
             removeRoad(existingRoad);
 
             pointToGameObject.get(f.getPosition()).setFlag(f);

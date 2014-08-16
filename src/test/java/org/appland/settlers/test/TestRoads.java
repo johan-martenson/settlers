@@ -1245,4 +1245,60 @@ public class TestRoads {
         
         map.placeRoad(point1, point2);
     }
+
+    @Test
+    public void testSplitHorisontalRoadInBeginningWithTooShortRemainingRoads() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        map.placeFlag(new Flag(new Point(9, 5)));
+        map.placeFlag(new Flag(new Point(17, 5)));
+        
+        Point start = new Point(9, 5);
+        Point end = new Point(17, 5);
+        Point m1 = new Point(11, 5);
+        Point m2 = new Point(13, 5);
+        Point m3 = new Point(15, 5);
+        map.placeRoad(start, m1, m2, m3, end);
+        
+        assertTrue(map.getRoads().size() == 2);
+        
+        try {
+            map.placeFlag(new Flag(m1));
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getRoads().size() == 2);
+        assertNotNull(map.getRoad(start, end));
+    }
+
+    @Test
+    public void testSplitHorisontalRoadInEndWithTooShortRemainingRoads() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        map.placeFlag(new Flag(new Point(9, 5)));
+        map.placeFlag(new Flag(new Point(17, 5)));
+        
+        Point start = new Point(9, 5);
+        Point end = new Point(17, 5);
+        Point m1 = new Point(11, 5);
+        Point m2 = new Point(13, 5);
+        Point m3 = new Point(15, 5);
+        map.placeRoad(start, m1, m2, m3, end);
+        
+        assertTrue(map.getRoads().size() == 2);
+        
+        try {
+            map.placeFlag(new Flag(m3));
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getRoads().size() == 2);
+        assertNotNull(map.getRoad(start, end));
+    }
 }
