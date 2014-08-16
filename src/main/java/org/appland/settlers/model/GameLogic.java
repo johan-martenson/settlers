@@ -29,7 +29,7 @@ public class GameLogic {
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
         /* Handle unoccupied roads */
         List<Road> roads = map.getRoadsThatNeedCouriers();
-
+        
         for (Road r : roads) {
             Storage stg = map.getClosestStorage(r.getStart());
 
@@ -107,6 +107,11 @@ public class GameLogic {
         for (Material m : Material.values()) {
             
             for (Building b : map.getBuildingsWithinReach(hq.getFlag())) {
+                
+                /* Don't deliver to itself */
+                if (hq.equals(b)) {
+                    continue;
+                }
 
                 if (b.needsMaterial(m) && hq.isInStock(m)) {
                     targetBuilding = b;

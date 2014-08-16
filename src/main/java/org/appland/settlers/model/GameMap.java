@@ -643,50 +643,35 @@ public class GameMap {
     }
     
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
-        return getBuildingsWithinReachWithMemory(startFlag.getPosition(), new ArrayList<Point>());
+        List<Point> toEvaluate = new LinkedList<>();
+        List<Point> visited = new LinkedList<>();
+        Set<Building> reachable = new HashSet<>();
+        
+        toEvaluate.add(startFlag.getPosition());
+        
+        while (!toEvaluate.isEmpty()) {
+            Point point = toEvaluate.get(0);
+            toEvaluate.remove(point);
+            
+            if (isBuildingAtPoint(point)) {
+                reachable.add(getBuildingAtPoint(point));
+            }
+            
+            visited.add(point);
+            
+            MapPoint mp = pointToGameObject.get(point);
+            Set<Point> neighbors = new HashSet<>();
+            neighbors.addAll(mp.getConnectedNeighbors());
+            
+            neighbors.removeAll(visited);
+            toEvaluate.addAll(neighbors);
+        }
+        
+        return reachable;
     }
 
     public Terrain getTerrain() {
         return terrain;
-    }
-    
-    /* TODO: Replace this with an implementation of a* */
-    private Set<Building> getBuildingsWithinReachWithMemory(Point start, List<Point> visited) {
-        Set<Building> result = new HashSet<>();
-
-        if (isFlagAtPoint(start) && isBuildingAtPoint(start.upLeft())) {
-            try {
-                Flag flag = getFlagAtPoint(start);
-                Building building = getBuildingAtPoint(start.upLeft());
-                
-                if (flag.equals(building.getFlag())) {
-                    result.add(getBuildingAtPoint(start.upLeft()));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        MapPoint mp = pointToGameObject.get(start);
-        
-        Set<Point> connectedFlags = mp.getConnectedNeighbors();
-
-        for (Point p : connectedFlags) {
-            
-            if (visited.contains(p)) {
-                continue;
-            }
-            
-            List<Point> visitedCopy = new ArrayList<>();
-            visitedCopy.addAll(visited);
-            visitedCopy.add(p);
-            
-            Set<Building> tmp = getBuildingsWithinReachWithMemory(p, visitedCopy);
-            
-            result.addAll(tmp);
-        }
-        
-        return result;
     }
 
     private List<Point> buildFullGrid() {
