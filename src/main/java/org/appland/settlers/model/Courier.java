@@ -291,9 +291,22 @@ public class Courier extends Worker {
                 if (flag.hasCargoWaitingForRoad(getAssignedRoad())) {
                     pickUpCargoForRoad(flag, assignedRoad);
                     
-                    setTarget(otherEnd.getPosition());
-                    
-                    state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                    /* If the intended building is directly after the flag, deliver it 
+                       all the way */
+                    List<Point> plannedPath = getCargo().getPlannedSteps();
+
+                    int index = plannedPath.indexOf(otherEnd.getPosition());
+                    Point lastPoint = plannedPath.get(plannedPath.size() - 1);
+
+                    if (map.isBuildingAtPoint(lastPoint) && index == plannedPath.size() - 2) {
+                        setTarget(lastPoint);
+                        
+                        state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
+                    } else {
+                        setTarget(otherEnd.getPosition());
+                        
+                        state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+                    }
                 } else if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
                     Cargo cargoToPickUp = otherEnd.getCargoWaitingForRoad(assignedRoad);
                     

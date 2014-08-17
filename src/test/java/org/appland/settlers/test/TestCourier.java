@@ -17,17 +17,13 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -373,20 +369,20 @@ public class TestCourier {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         Point middlePoint = new Point(8, 4);
-        Point flagPoint = new Point(10, 4);
-        Flag middleFlag = map.placeFlag(flagPoint);
+        Point middleFlagPoint = new Point(10, 4);
+        Flag middleFlag = map.placeFlag(middleFlagPoint);
 
-        Point leftFlag = new Point(6, 4);
+        Point leftFlagPoint = new Point(6, 4);
         
         Point point3 = new Point(12, 4);
-        Point point4 = new Point(13, 5);
-        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
-        Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlag.upLeft());
+        Point rightFlagPoint = new Point(13, 5);
+        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), rightFlagPoint.upLeft());
+        Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
         
         Utils.constructSmallHouse(rightWoodcutter);
         
-        Road road0 = map.placeRoad(leftFlag, middlePoint, flagPoint);
-        Road road1 = map.placeRoad(flagPoint, point3, point4);
+        Road road0 = map.placeRoad(leftFlagPoint, middlePoint, middleFlagPoint);
+        Road road1 = map.placeRoad(middleFlagPoint, point3, rightFlagPoint);
         
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(WOOD, map);
@@ -422,7 +418,7 @@ public class TestCourier {
         /* Place cargo at other flag for courier to discover after delivery */
         Cargo cargoForLeftWoodcutter = new Cargo(STONE, map);
         
-        cargoForLeftWoodcutter.setPosition(middleFlag.getPosition());
+        cargoForLeftWoodcutter.setPosition(middleFlagPoint);
         middleFlag.putCargo(cargoForLeftWoodcutter);
         cargoForLeftWoodcutter.setTarget(leftWoodcutter);
         
@@ -431,18 +427,18 @@ public class TestCourier {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(courier.getCargo(), cargoForRightWoodcutter);
-        assertEquals(courier.getTarget(), middleFlag.getPosition());
+        assertEquals(courier.getTarget(), middleFlagPoint);
         assertTrue(leftWoodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlag.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
         
         assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
         assertEquals(courier.getCargo(), cargoForLeftWoodcutter);
         assertFalse(courier.isIdle());
         
         /* After delivering the cargo, the courier picks up the other cargo without going back to the middle */
-        assertEquals(courier.getTarget(), leftWoodcutter.getFlag().getPosition());
+        assertEquals(courier.getTarget(), leftWoodcutter.getPosition());
     }
 
     @Test
@@ -679,5 +675,91 @@ public class TestCourier {
         
         assertEquals(courier.getPosition(), middlePoint);
         assertTrue(courier.isIdle());
+    }
+
+    @Test
+    public void testCourierDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        Point middlePoint = new Point(8, 4);
+        Point middleFlagPoint = new Point(10, 4);
+        Flag middleFlag = map.placeFlag(middleFlagPoint);
+        
+        Point rightFlagPoint = new Point(14, 4);
+        Flag rightFlag = map.placeFlag(rightFlagPoint);
+
+        Point wcFlagPoint = new Point(6, 4);
+        
+        Building wc = map.placeBuilding(new Woodcutter(), wcFlagPoint.upLeft());
+        
+        Road road0 = map.placeRoad(wcFlagPoint, middlePoint, middleFlagPoint);
+        Road road1 = map.placeRoad(middleFlagPoint, middleFlagPoint.right(), rightFlagPoint);
+        
+        Building quarry = map.placeBuilding(new Quarry(), rightFlagPoint.upLeft());
+                
+        /* Place cargo at the woodcutter's flag */
+        Cargo cargoForQuarry = new Cargo(PLANCK, map);
+        wc.getFlag().putCargo(cargoForQuarry);
+        cargoForQuarry.setTarget(quarry);
+        
+        /* Place courier at middle flag */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, middleFlag);
+
+        courier.assignToRoad(road0);
+
+        /* Courier will walk to idle point at the road */
+        assertTrue(courier.isWalkingToRoad());
+        assertEquals(courier.getTarget(), middlePoint);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint);
+        
+        assertEquals(courier.getPosition(), middlePoint);
+        assertTrue(courier.isArrived());
+        assertTrue(courier.isIdle());
+        
+        /* Courier detects the cargo at the woodcutter */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertTrue(courier.isTraveling());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        assertTrue(courier.isAt(wc.getFlag().getPosition()));
+                
+        /* When worker arrives at the flag it automatically picks up the cargo
+            - It picks up the cargo directly and sets the other flag as target
+            - It walks to the other flag and delivers the cargo
+        */
+        assertEquals(courier.getCargo(), cargoForQuarry);
+        assertEquals(courier.getTarget(), middleFlagPoint);
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(courier.isIdle());
+        
+        /* Put the other cargo at the middle flag with the woodcutter as its target */
+        Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
+        middleFlag.putCargo(cargoForWoodcutter);
+        cargoForWoodcutter.setTarget(wc);
+
+        /* Let the courier reach the middle flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
+        
+        /* Verify that courier puts down the cargo and picks up the new cargo */
+        assertFalse(middleFlag.getStackedCargo().isEmpty());
+        assertEquals(courier.getCargo(), cargoForWoodcutter);
+        assertEquals(courier.getTarget(), wc.getPosition());
+        assertTrue(wc.getAmount(PLANCK) == 0);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+
+        assertNull(courier.getCargo());
+        assertFalse(courier.isIdle());
+        assertEquals(courier.getPosition(), wc.getPosition());
+        assertTrue(wc.getAmount(PLANCK) == 1);
+        
     }
 }
