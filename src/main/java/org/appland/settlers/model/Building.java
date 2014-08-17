@@ -3,6 +3,7 @@ package org.appland.settlers.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,6 +45,16 @@ public class Building implements Actor, EndPoint {
         int amount = getInQueue().get(material);
         
         getInQueue().put(material, amount - 1);
+    }
+
+    Collection<Point> getDiscoveredLand() {
+        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        
+        if (mb == null) {
+            return new LinkedList<>();
+        }
+
+        return map.getPointsWithinRadius(getPosition(), mb.defenceRadius() + 2);
     }
 
     public enum ConstructionState {

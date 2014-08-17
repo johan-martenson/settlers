@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import java.awt.geom.Path2D;
 import java.util.Collection;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
@@ -24,14 +25,9 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -640,6 +636,96 @@ public class TestGameMap {
         
         Point point46 = new Point(11, 23);
         assertTrue(border.contains(point46));
+    }
+    
+    @Test
+    public void testFieldOfViewIsOutsideBorder() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* 0 ticks from start */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        
+        Point point1 = new Point(1, 23);
+        
+        assertTrue(map.getBorders().get(0).contains(point1));
+        
+        Point point2 = new Point(1, 25);
+        assertTrue(map.getFieldOfView().contains(point2));
+    }
+    
+    @Test
+    public void testFieldOfViewContainsAllOwnedLand() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* 0 ticks from start */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        
+        Collection<Point> border = map.getBorders().get(0);
+        List<Point> fieldOfView = map.getFieldOfView();
+
+        Path2D.Double path = new Path2D.Double();
+        path.moveTo(fieldOfView.get(fieldOfView.size() - 1).x, fieldOfView.get(fieldOfView.size() - 1).y);
+        
+        for (Point p : fieldOfView) {
+            path.lineTo(p.x, p.y);
+        }
+
+        for (Point p : border) {
+            assertTrue(path.contains(p));
+        }
+    }
+    
+    @Test
+    public void testFieldOfViewCannotShrink() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* 0 ticks from start */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* 34 ticks from start */
+        Point point3 = new Point(4, 24);
+        Building building1 = map.placeBuilding(new Barracks(), point3);
+
+        Utils.constructSmallHouse(building1);
+        
+        Collection<Point> fieldOfViewBefore = map.getFieldOfView();
+        
+        building1.tearDown();
+        
+        assertEquals(fieldOfViewBefore, map.getFieldOfView());
+    }
+    
+    @Test
+    public void testFieldOfViewGrowsWhenBorderGrows() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* 0 ticks from start */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(), point0);
+
+        Collection<Point> oldFieldOfView = map.getFieldOfView();
+        
+        Point point1 = new Point(5, 27);
+        
+        assertTrue(oldFieldOfView.contains(point1));
+        
+        /* 34 ticks from start */
+        Point point2 = new Point(4, 24);
+        Building building1 = map.placeBuilding(new Barracks(), point2);
+
+        Utils.constructSmallHouse(building1);
+        
+        Collection<Point> newFieldOfView = map.getFieldOfView();
+
+        Point point3 = new Point(4, 32);
+        
+        System.out.println(" FOV " + newFieldOfView);
+        
+        assertTrue(newFieldOfView.contains(point3));
+        assertFalse(newFieldOfView.contains(point1));
     }
     
     @Test

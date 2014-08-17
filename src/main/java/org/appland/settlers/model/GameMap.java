@@ -39,6 +39,8 @@ public class GameMap {
     private List<Crop>              crops;    
     private List<Collection<Point>> borders;
     private List<Collection<Point>> allPointsWithinBorder;    
+    private List<Point>             fieldOfView;
+    private List<Point>             discoveredLand;
 
     private static Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -102,6 +104,8 @@ public class GameMap {
         trees               = new ArrayList<>();
         stones              = new ArrayList<>();
         crops               = new ArrayList<>();
+        
+        discoveredLand      = new LinkedList<>();
         
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -203,6 +207,10 @@ public class GameMap {
         /* Re-calculate borders */
         allPointsWithinBorder = calculateAllPointsWithinBorders();
         borders = calculateBorders(allPointsWithinBorder);
+        
+        /* Update field of view */
+        updateDiscoveredLand();
+        fieldOfView = calculateFieldOfView(discoveredLand);
 
         /* Destroy buildings now outside of the borders */
         for (Building b : buildings) {
@@ -1437,12 +1445,16 @@ public class GameMap {
         List<Collection<Point>> result = new LinkedList<>();
         
         for (Collection<Point> occupiedLand : occupiedPoints) {
-            result.add(GameUtils.hullWanderer(occupiedLand));
+            result.add(calculateBorder(occupiedLand));
         }
         
         return result;
     }
 
+    private Collection<Point> calculateBorder(Collection<Point> occupiedPoints) {
+        return GameUtils.hullWanderer(occupiedPoints);
+    }
+    
     private boolean isPossibleFlagPoint(Point flagPoint) {
         MapPoint mp = pointToGameObject.get(flagPoint);
         
@@ -1496,5 +1508,21 @@ public class GameMap {
         }
 
         return result;
+    }
+
+    public List<Point> getFieldOfView() {
+        return fieldOfView;
+    }
+
+    private void updateDiscoveredLand() {
+        for (Building b : buildings) {
+            if (b.isMilitaryBuilding()) {
+                discoveredLand.addAll(b.getDiscoveredLand());
+            }
+        }
+    }
+
+    private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {
+        return GameUtils.hullWanderer(discoveredLand);
     }
 }
