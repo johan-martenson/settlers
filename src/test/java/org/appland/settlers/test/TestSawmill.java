@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -18,6 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -98,22 +100,29 @@ public class TestSawmill {
         /* Verify that a sawmill worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof SawmillWorker ||
-                   map.getAllWorkers().get(1) instanceof SawmillWorker);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
+        assertTrue(map.getAllWorkers().size() == 3);
+        boolean foundSawmillWorker = false;
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof SawmillWorker) {
+                foundSawmillWorker = true;
+            }
         }
-
+        
+        assertTrue(foundSawmillWorker);
+        
+        /* Let the sawmill worker reach the sawmill */
+        SawmillWorker sw = null;
+        
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof SawmillWorker) {
+                sw = (SawmillWorker)w;
+            }
+        }
+        
         assertEquals(sw.getTarget(), sawmill.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, sw);
@@ -145,32 +154,9 @@ public class TestSawmill {
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
-        
-        assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
 
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().isEmpty());
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof SawmillWorker ||
-                   map.getAllWorkers().get(1) instanceof SawmillWorker);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
-        }
-
-        assertEquals(sw.getTarget(), sawmill.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        /* Occupy the sawmill */
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -230,31 +216,8 @@ public class TestSawmill {
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
         
-        assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
-
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().isEmpty());
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof SawmillWorker ||
-                   map.getAllWorkers().get(1) instanceof SawmillWorker);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
-        }
-
-        assertEquals(sw.getTarget(), sawmill.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        /* Occupy the sawmill */
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -303,32 +266,9 @@ public class TestSawmill {
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
-        
-        assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
 
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().isEmpty());
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof SawmillWorker ||
-                   map.getAllWorkers().get(1) instanceof SawmillWorker);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
-        }
-
-        assertEquals(sw.getTarget(), sawmill.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        /* Occupy the sawmill */
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -386,43 +326,24 @@ public class TestSawmill {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        //Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
         
-        assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
-
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().isEmpty());
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
-        }
-
-        assertEquals(sw.getTarget(), sawmill.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        /* Occupy the sawmill */
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         /* Deliver wood to the sawmill */
         sawmill.deliver(new Cargo(WOOD, map));
-        sawmill.deliver(new Cargo(WOOD, map));
         
         /* Wait until the sawmill worker produces a planck */
-        assertTrue(sawmill.getAmount(WOOD) == 2);
+        assertTrue(sawmill.getAmount(WOOD) == 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(sawmill.getAmount(WOOD) == 1);
+        assertTrue(sawmill.getAmount(WOOD) == 0);
+        assertTrue(sawmill.needsMaterial(WOOD));
     }
 
     @Test
@@ -448,27 +369,8 @@ public class TestSawmill {
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
         
-        assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
-
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().isEmpty());
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-
-        /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sw;
-        if (map.getAllWorkers().get(0) instanceof SawmillWorker) {
-            sw = (SawmillWorker)map.getAllWorkers().get(0);
-        } else {
-            sw = (SawmillWorker)map.getAllWorkers().get(1);
-        }
-
-        assertEquals(sw.getTarget(), sawmill.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        /* Occupy the sawmill */
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         /* Fast forward so that the sawmill worker would produced plancks
            if it had had any wood

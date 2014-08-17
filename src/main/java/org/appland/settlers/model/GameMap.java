@@ -183,8 +183,8 @@ public class GameMap {
             }
         }
 
-        house.setMap(this);        
         house.setPosition(p);
+        house.setMap(this);
         
         buildings.add(house);
 

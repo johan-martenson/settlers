@@ -24,6 +24,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -134,8 +135,16 @@ public class TestFarm {
         Utils.fastForward(10, map);
 
         List<Worker> workers = map.getAllWorkers();
-        assertTrue(workers.size() == 2);
-        assertTrue(workers.get(0) instanceof Farmer || workers.get(1) instanceof Farmer);
+        assertTrue(workers.size() == 3);
+        Farmer farmer = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Farmer) {
+                farmer = (Farmer)w;
+            }
+        }
+    
+        assertNotNull(farmer);
     }
 
     @Test

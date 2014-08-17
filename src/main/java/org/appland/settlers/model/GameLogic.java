@@ -23,7 +23,7 @@ public class GameLogic {
         assignNewWorkerToUnoccupiedPlaces(map);
 
         /* Find out which buildings need deliveries and match with inventory */
-        initiateNewDeliveriesForAllStorages(map);
+        //initiateNewDeliveriesForAllStorages(map);
     }
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {

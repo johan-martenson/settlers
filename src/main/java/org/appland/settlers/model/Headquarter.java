@@ -1,6 +1,8 @@
 package org.appland.settlers.model;
 
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 
 import static org.appland.settlers.model.Material.*;
@@ -13,11 +15,31 @@ public class Headquarter extends Storage {
     public Headquarter() {
         super();
 
-        setHeadquarterDefaultInventory(inventory);
-
-        constructionState = DONE;
+        try {
+            setHeadquarterDefaultInventory(inventory);
+            
+            constructionState = DONE;
+        } catch (Exception ex) {
+            Logger.getLogger(Headquarter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    @Override
+    protected void setMap(GameMap m) {
+        super.setMap(m);
+            
+        try {
+            Worker w = new StorageWorker(m);
+            map.placeWorker(w, this);
+            
+            w.enterBuilding(this);
+
+            assignWorker(w);
+        } catch (Exception ex) {
+            Logger.getLogger(Headquarter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
         inventory.put(SHIELD, InitialState.STORAGE_INITIAL_SHIELDS);
         inventory.put(SWORD, InitialState.STORAGE_INIITAL_SWORDS);

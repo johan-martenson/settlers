@@ -28,11 +28,13 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
+import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.fastForward;
 import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
 import static org.junit.Assert.assertEquals;
@@ -102,13 +104,7 @@ public class TestScenarios {
         wr2.assignToRoad(smToHqRoad);
         wr3.assignToRoad(qryToHqRoad);
 
-        /* Let the couriers reach their targeted roads */
-        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
-        
-	// TODO: add that workers need to populate the buildings before they start producing
-        // TODO: add that workers need to move to roads to populate them
         /* Move forward in time until the small buildings are done */
-        // TODO: Change to deliver required material for construction
         Utils.constructSmallHouse(wc);
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(sm);
@@ -120,13 +116,16 @@ public class TestScenarios {
         assertTrue(hq.getAmount(WOOD) == 4);
         assertTrue(hq.getAmount(PLANCK) == 10);
         assertTrue(hq.getAmount(STONE) == 10);
+
+        /* Let the couriers reach their targeted roads */
+        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
         
         wc.assignWorker(wcr);
         wcr.enterBuilding(wc);
         
         assertEquals(wc.getWorker(), wcr);
         
-        Utils.occupySawmill(sm, map);
+        Utils.occupyBuilding(new SawmillWorker(map), sm, map);
         
         /*   --   START TEST   --   */
         
@@ -163,19 +162,43 @@ public class TestScenarios {
         
         assertNotNull(courierWcToHq.getCargo());
         assertEquals(courierWcToHq.getTarget(), hq.getPosition());
-
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, hq.getPosition());
-
+        assertEquals(courierWcToHq.getCargo().getMaterial(), WOOD);
+        
+        int amountWood = hq.getAmount(WOOD);
+        
+        for (i = 0; i < 500; i++) {
+            if (courierWcToHq.getPosition().equals(hq.getPosition())) {
+                break;
+            }
+            
+            amountWood = hq.getAmount(WOOD);
+            
+            map.stepTime();
+        }
+        
         assertTrue(wcToHqRoad.getCourier().isAt(hq.getPosition()));
 
         /* Cargo has arrived at the headquarter and stored */
 
         assertNull(wcToHqRoad.getCourier().getCargo());
-        assertTrue(hq.getAmount(WOOD) == 5);
+        assertTrue(hq.getAmount(WOOD) == amountWood + 1);
 
         /* Find out that the sawmill needs the wood */
-        gameLogic.initiateNewDeliveriesForAllStorages(map);
+        Worker w = hq.getWorker();
+        
+        for (i = 0; i < 300; i++) {
+            
+            if (w.getTarget().equals(hq.getFlag().getPosition()) && w.getCargo().getMaterial().equals(WOOD)) {
+                break;
+            }
 
+            map.stepTime();
+        }
+        
+        assertEquals(w.getTarget(), hq.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, hq.getFlag().getPosition());
+        
         Courier courierSmToHq = smToHqRoad.getCourier();
         
         assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
@@ -185,11 +208,6 @@ public class TestScenarios {
         assertTrue(cargo.getTarget().equals(sm));
         assertNull(courierSmToHq.getCargo());
         assertTrue(smToHqRoad.getWayPoints().contains(cargo.getNextStep()));
-        assertTrue(hq.getFlag().hasCargoWaitingForRoad(smToHqRoad));
-        assertTrue(hq.getAmount(WOOD) == 4);
-        assertFalse(courierSmToHq.isTraveling());
-        assertEquals(courierSmToHq.getAssignedRoad(), smToHqRoad);
-        assertFalse(cargo.isDeliveryPromised());
         
         /* Get the wood transported to the sawmill */
         map.stepTime();
@@ -227,7 +245,11 @@ public class TestScenarios {
               in the worker list so it will get called to step time once before 
               this section is reached
         */
-        for (i = 0; i < 49; i++) {
+        for (i = 0; i < 500; i++) {
+            if (sm.getWorker().getCargo() != null) {
+                break;
+            }
+            
             assertNull(sm.getWorker().getCargo());
             map.stepTime();
         }
@@ -256,13 +278,11 @@ public class TestScenarios {
         assertTrue(courierSmToHq.getCargo().getMaterial() == PLANCK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
         assertEquals(courierSmToHq.getTarget(), hq.getPosition());
-        assertTrue(hq.getAmount(PLANCK) == 10);
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
         
         fastForwardUntilWorkersReachTarget(map, courierSmToHq);
         
         assertNull(courierSmToHq.getCargo());
-        assertTrue(hq.getAmount(PLANCK) == 11);
     }
 
     @Test

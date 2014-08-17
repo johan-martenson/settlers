@@ -10,6 +10,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -74,9 +75,15 @@ public class TestWell {
         Utils.fastForward(10, map);
         
         List<Worker> workers = map.getAllWorkers();
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(workers.get(0) instanceof WellWorker || workers.get(1) instanceof WellWorker);
-        assertTrue(workers.get(0) instanceof Courier || workers.get(1) instanceof Courier);
+        assertTrue(map.getAllWorkers().size() == 3);
+        boolean foundWellWorker = false;
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof WellWorker) {
+                foundWellWorker = true;
+            }
+        }
+        
+        assertTrue(foundWellWorker);    
     }
 
     @Test
@@ -129,11 +136,12 @@ public class TestWell {
         Utils.fastForward(10, map);
         
         /* Get the well worker */
-        List<Worker> workers = map.getAllWorkers();
-        Worker ww = workers.get(0);
+        Worker ww = null;
         
-        if (! (ww instanceof WellWorker)) {
-            ww = workers.get(1);
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof WellWorker) {
+                ww = w;
+            }
         }
 
         /* Let the well worker reach the well */

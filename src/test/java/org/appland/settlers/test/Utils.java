@@ -276,7 +276,7 @@ public class Utils {
         assertTrue(worker.isAt(target));
     }
 
-    static void occupySawmill(Sawmill sm, GameMap map) throws InvalidRouteException {
+    static SawmillWorker occupySawmill(Sawmill sm, GameMap map) throws InvalidRouteException {
         SawmillWorker sw = new SawmillWorker(map);
         
         map.placeWorker(sw, sm.getFlag());
@@ -284,12 +284,16 @@ public class Utils {
         sw.setTargetBuilding(sm);
         
         fastForwardUntilWorkersReachTarget(map, sw);
+        
+        return sw;
     }
 
-    static void occupyBuilding(StorageWorker storageWorker, Building storage, GameMap map) throws InvalidRouteException {
-        map.placeWorker(storageWorker, storage.getFlag());
-        storageWorker.setTargetBuilding(storage);
+    static Worker occupyBuilding(Worker worker, Building building, GameMap map) throws InvalidRouteException {
+        map.placeWorker(worker, building.getFlag());
+        worker.setTargetBuilding(building);
         
-        fastForwardUntilWorkerReachesPoint(map, storageWorker, storage.getPosition());
+        fastForwardUntilWorkerReachesPoint(map, worker, building.getPosition());
+        
+        return worker;
     }
 }

@@ -7,6 +7,7 @@
 package org.appland.settlers.test;
 
 import java.util.List;
+import org.appland.settlers.model.Baker;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Courier;
@@ -75,9 +76,16 @@ public class TestQuarry {
         Utils.fastForward(10, map);
         
         List<Worker> workers = map.getAllWorkers();
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(workers.get(0) instanceof Stonemason || workers.get(1) instanceof Stonemason);
-        assertTrue(workers.get(0) instanceof Courier || workers.get(1) instanceof Courier);
+        assertTrue(map.getAllWorkers().size() == 3);
+        Stonemason stonemason = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Stonemason) {
+                stonemason = (Stonemason)w;
+            }
+        }
+    
+        assertNotNull(stonemason);
     }
 
     @Test

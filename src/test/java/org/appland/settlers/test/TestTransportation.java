@@ -29,6 +29,7 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -427,7 +428,14 @@ public class TestTransportation {
         assertFalse(hqToMiddleRoad.needsCourier());
 
         /* Courier needs to walk to road before it's assigned */
-        Utils.fastForwardUntilWorkersReachTarget(map, map.getAllWorkers().get(0));
+        Courier c = null;
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Courier) {
+                c = (Courier)w;
+            }
+        }
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, c);
 
         assertFalse(hqToMiddleRoad.needsCourier());
         assertNotNull(hqToMiddleRoad.getCourier());

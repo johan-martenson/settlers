@@ -139,8 +139,16 @@ public class TestForesterHut {
         Utils.fastForward(10, map);
 
         List<Worker> workers = map.getAllWorkers();
-        assertTrue(workers.size() == 2);
-        assertTrue(workers.get(0) instanceof Forester || workers.get(1) instanceof Forester);
+        assertTrue(workers.size() == 3);
+        
+        boolean foundForester = false;
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Forester) {
+                foundForester = true;
+            }
+        }
+        
+        assertTrue(foundForester);
     }
 
     @Test
@@ -169,7 +177,7 @@ public class TestForesterHut {
         gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
 
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Keep running the gameloop and make sure no more workers are allocated */
         int i;
@@ -178,7 +186,7 @@ public class TestForesterHut {
             Utils.fastForward(10, map);
         }
 
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().size() == 3);
     }
 
     @Test

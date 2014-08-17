@@ -19,6 +19,8 @@ import org.appland.settlers.model.Baker;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WATER;
+import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -99,20 +101,19 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof Baker ||
-                   map.getAllWorkers().get(1) instanceof Baker);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());
@@ -153,20 +154,19 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof Baker ||
-                   map.getAllWorkers().get(1) instanceof Baker);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());
@@ -237,20 +237,19 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof Baker ||
-                   map.getAllWorkers().get(1) instanceof Baker);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());
@@ -311,20 +310,19 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
         
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(map.getAllWorkers().get(0) instanceof Baker ||
-                   map.getAllWorkers().get(1) instanceof Baker);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());
@@ -398,16 +396,17 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());
@@ -457,16 +456,17 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         GameLogic gameLogic = new GameLogic();
         
-        assertTrue(map.getAllWorkers().isEmpty());
+        assertTrue(map.getAllWorkers().size() == 1);
         
         gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
 
         /* Let the bakery worker reach the bakery */
-        Baker baker;
-        if (map.getAllWorkers().get(0) instanceof Baker) {
-            baker = (Baker)map.getAllWorkers().get(0);
-        } else {
-            baker = (Baker)map.getAllWorkers().get(1);
+        Baker baker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker)w;
+            }
         }
 
         assertEquals(baker.getTarget(), bakery.getPosition());

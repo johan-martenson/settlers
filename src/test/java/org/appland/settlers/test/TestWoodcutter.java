@@ -10,13 +10,13 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Building.ConstructionState;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
@@ -107,9 +107,15 @@ public class TestWoodcutter {
         Utils.fastForward(10, map);
         
         List<Worker> workers = map.getAllWorkers();
-        assertTrue(map.getAllWorkers().size() == 2);
-        assertTrue(workers.get(0) instanceof WoodcutterWorker || workers.get(1) instanceof WoodcutterWorker);
-        assertTrue(workers.get(0) instanceof Courier || workers.get(1) instanceof Courier);
+        assertTrue(map.getAllWorkers().size() == 3);
+        boolean foundWoodcutter = false;
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof WoodcutterWorker) {
+                foundWoodcutter = true;
+            }
+        }
+        
+        assertTrue(foundWoodcutter);    
     }
     
     @Test
@@ -136,7 +142,7 @@ public class TestWoodcutter {
         gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
 
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().size() == 3);
 
         /* Keep running the gameloop and make sure no more workers are allocated */
         int i;
@@ -145,7 +151,7 @@ public class TestWoodcutter {
             Utils.fastForward(10, map);
         }
 
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getAllWorkers().size() == 3);
     }
 
     @Test
@@ -939,13 +945,12 @@ public class TestWoodcutter {
         gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
         
-        WoodcutterWorker wcWorker;
-        List<Worker> workers = map.getAllWorkers();
-        
-        if (workers.get(0) instanceof WoodcutterWorker) {
-            wcWorker = (WoodcutterWorker) workers.get(0);
-        } else {
-            wcWorker = (WoodcutterWorker) workers.get(1);
+        WoodcutterWorker wcWorker = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof WoodcutterWorker) {
+                wcWorker = (WoodcutterWorker)w;
+            }
         }
     
         assertEquals(wcWorker.getTarget(), wc.getPosition());
