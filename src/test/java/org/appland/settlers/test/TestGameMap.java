@@ -722,8 +722,6 @@ public class TestGameMap {
 
         Point point3 = new Point(4, 32);
         
-        System.out.println(" FOV " + newFieldOfView);
-        
         assertTrue(newFieldOfView.contains(point3));
         assertFalse(newFieldOfView.contains(point1));
     }
