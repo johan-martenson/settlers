@@ -28,7 +28,9 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Worker;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -109,6 +111,8 @@ public class Utils {
         sm.deliver(stoneCargo);
 
         Utils.fastForward(150, sm);
+        
+        assertEquals(sm.getConstructionState(), DONE);
     }
 
     static void constructSmallHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
@@ -165,7 +169,7 @@ public class Utils {
         return result;
     }
 
-    static void fillUpInventory(Storage hq, Material material, int amount) {
+    static void fillUpInventory(Storage hq, Material material, int amount) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
         Cargo c = new Cargo(material, null);
 
         int i;
@@ -280,5 +284,12 @@ public class Utils {
         sw.setTargetBuilding(sm);
         
         fastForwardUntilWorkersReachTarget(map, sw);
+    }
+
+    static void occupyBuilding(StorageWorker storageWorker, Building storage, GameMap map) throws InvalidRouteException {
+        map.placeWorker(storageWorker, storage.getFlag());
+        storageWorker.setTargetBuilding(storage);
+        
+        fastForwardUntilWorkerReachesPoint(map, storageWorker, storage.getPosition());
     }
 }

@@ -2,10 +2,8 @@ package org.appland.settlers.test;
 
 import java.util.Map;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.InvalidNumberOfPlayersException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Storage;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -17,12 +15,14 @@ public class MilitaryCreationAndPromotionTest {
     Map<Material, Integer> inventory;
 
     @Before
-    public void setupTest() throws InvalidNumberOfPlayersException {
+    public void setupTest() throws Exception {
         storage = new Storage();
+        
+        Utils.constructMediumHouse(storage);
     }
 
     @Test
-    public void createPrivate() {
+    public void createPrivate() throws Exception {
         int numberOfPrivates = storage.getAmount(Material.PRIVATE);
 
         storage.deliver(new Cargo(Material.BEER, null));
@@ -46,7 +46,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteSinglePrivate() {
+    public void promoteSinglePrivate() throws Exception {
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.PRIVATE, null));
 
@@ -64,7 +64,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteGroupOfPrivates() {
+    public void promoteGroupOfPrivates() throws Exception {
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
@@ -96,7 +96,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promotePrivateAndSergeant() {
+    public void promotePrivateAndSergeant() throws Exception {
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
@@ -133,7 +133,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteWithoutMilitary() {
+    public void promoteWithoutMilitary() throws Exception {
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
@@ -154,7 +154,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteWithOnlyGenerals() {
+    public void promoteWithOnlyGenerals() throws Exception {
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
         storage.deliver(new Cargo(Material.GOLD, null));
@@ -187,7 +187,7 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteWithoutGold() {
+    public void promoteWithoutGold() throws Exception {
         storage.deliver(new Cargo(Material.PRIVATE, null));
         storage.deliver(new Cargo(Material.PRIVATE, null));
         storage.deliver(new Cargo(Material.PRIVATE, null));

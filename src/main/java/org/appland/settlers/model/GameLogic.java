@@ -72,7 +72,7 @@ public class GameLogic {
                 if (b.needsWorker()) {
                     Material m = b.getWorkerType();
 
-                    Storage stg = map.getClosestStorage(b.getPosition());
+                    Storage stg = map.getClosestStorage(b.getPosition(), b);
 
                     Worker w = stg.retrieveWorker(m);
 

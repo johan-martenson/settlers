@@ -3,6 +3,7 @@ package org.appland.settlers.model;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.FORESTER;
@@ -11,12 +12,14 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.SWORD;
 import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.policy.ProductionDelays;
 
 @HouseSize(size = MEDIUM)
+@RequiresWorker(workerType = STORAGE_WORKER)
 public class Storage extends Building implements Actor {
 
     protected Map<Material, Integer> inventory;
@@ -52,6 +55,7 @@ public class Storage extends Building implements Actor {
 
     @Override
     public void stepTime() {
+        super.stepTime();
 
         /* Handle promotion with delay */
         if (isPromotionPossible(inventory)) {
@@ -119,12 +123,16 @@ public class Storage extends Building implements Actor {
     }
 
     @Override
-    public void deliver(Cargo c) {
-        log.log(Level.FINE, "Depositing cargo {0}", c);
+    public void deliver(Cargo c) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+        if (!isWorking()) {
+            super.deliver(c);
+        } else {
+            log.log(Level.FINE, "Depositing cargo {0}", c);
 
-        storeOneInInventory(c.getMaterial());
+            storeOneInInventory(c.getMaterial());
 
-        log.log(Level.FINER, "Inventory is {0} after deposit", inventory);
+            log.log(Level.FINER, "Inventory is {0} after deposit", inventory);
+        }
     }
 
     public Cargo retrieve(Material material) throws Exception {
@@ -209,6 +217,9 @@ public class Storage extends Building implements Actor {
             break;
         case BAKER:
             w = new Baker(map);
+            break;
+        case STORAGE_WORKER:
+            w = new StorageWorker(map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
@@ -321,5 +332,9 @@ public class Storage extends Building implements Actor {
         }
     
         return true;
+    }
+
+    private boolean isWorking() {
+        return getConstructionState() == DONE;
     }
 }

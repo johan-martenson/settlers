@@ -499,17 +499,16 @@ public class Building implements Actor, EndPoint {
 
     private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
-        boolean materialAvailable = true;
 
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
             Material m = entry.getKey();
 
             if (receivedMaterial.get(m) < entry.getValue()) {
-                materialAvailable = false;
+                return false;
             }
         }
 
-        return materialAvailable;
+        return true;
     }
 
     private Cargo produce() {

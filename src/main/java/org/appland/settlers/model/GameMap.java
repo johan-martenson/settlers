@@ -551,10 +551,18 @@ public class GameMap {
     }
 
     public Storage getClosestStorage(Point p) {
+        return getClosestStorage(p, null);
+    }
+    
+    public Storage getClosestStorage(Point p, Building avoid) {
         Storage stg = null;
         int distance = Integer.MAX_VALUE;
 
         for (Building b : buildings) {
+            if (b.equals(avoid)) {
+                continue;
+            }
+            
             if (b instanceof Storage) {
                 try {
                     if (b.getFlag().getPosition().equals(p)) {

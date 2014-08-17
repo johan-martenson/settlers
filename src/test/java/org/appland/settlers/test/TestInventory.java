@@ -27,8 +27,10 @@ public class TestInventory {
     Storage storage;
 
     @Before
-    public void initTests() {
+    public void initTests() throws Exception {
         storage = new Storage();
+        
+        Utils.constructMediumHouse(storage);
     }
 
     @Test
