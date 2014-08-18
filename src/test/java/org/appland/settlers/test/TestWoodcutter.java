@@ -16,7 +16,6 @@ import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
-import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
@@ -501,17 +500,14 @@ public class TestWoodcutter {
         
         assertEquals(wcWorker.getTarget(), wc.getPosition());
         assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
-        assertFalse(wc.isCargoReady());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
         
-        assertFalse(wc.isCargoReady());
         assertFalse(wcWorker.isInsideBuilding());
         
         map.stepTime();
         
         /* Woodcutter enter building but does not store the cargo yet */
-        assertFalse(wc.isCargoReady());
         assertTrue(wcWorker.isInsideBuilding());
         assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
@@ -527,7 +523,6 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getFlag().getPosition());
         
         assertFalse(wc.getFlag().getStackedCargo().isEmpty());
-        assertFalse(wc.isCargoReady());
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), wc.getPosition());
         
@@ -644,20 +639,17 @@ public class TestWoodcutter {
         assertFalse(map.isTreeAtPoint(point));
         
         assertEquals(wcWorker.getTarget(), wc.getPosition());
-        assertFalse(wc.isCargoReady());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
 
-        assertFalse(wc.isCargoReady());
         assertFalse(wcWorker.isInsideBuilding());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
         map.stepTime();
         
         /* Woodcutter enter building but does not store the cargo yet */
-        assertFalse(wc.isCargoReady());
         assertTrue(wcWorker.isInsideBuilding());
         assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
@@ -674,7 +666,6 @@ public class TestWoodcutter {
         
         /* Verify that the cargo is setup correctly */
         assertFalse(wc.getFlag().getStackedCargo().isEmpty());
-        assertFalse(wc.isCargoReady());
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), wc.getPosition());
         
@@ -700,7 +691,6 @@ public class TestWoodcutter {
         /* Construct the forester hut */
         
         constructSmallHouse(wc);
-        assertFalse(wc.isCargoReady());
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -709,12 +699,12 @@ public class TestWoodcutter {
         wcWorker.enterBuilding(wc);
         
         assertTrue(wcWorker.isInsideBuilding());
-        assertFalse(wc.isCargoReady());
+        assertNull(wcWorker.getCargo());
 
         int i;
         for (i = 0; i < 100; i++) {
             map.stepTime();
-            assertFalse(wc.isCargoReady());
+            assertNull(wcWorker.getCargo());
         }
     }
 
@@ -879,7 +869,6 @@ public class TestWoodcutter {
         map.stepTime();
         
         /* Woodcutter enters building but does not store the cargo yet */
-        assertFalse(wc.isCargoReady());
         assertTrue(wcWorker.isInsideBuilding());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertEquals(wc.getPosition(), wc.getPosition());
@@ -896,7 +885,6 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getFlag().getPosition());
         
         assertFalse(wc.getFlag().getStackedCargo().isEmpty());
-        assertFalse(wc.isCargoReady());
         assertNull(wcWorker.getCargo());
         assertEquals(wcWorker.getTarget(), wc.getPosition());
         

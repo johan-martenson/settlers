@@ -160,11 +160,6 @@ public class Stonemason extends Worker {
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = States.RESTING_IN_HOUSE;
 
-            if (getCargo() != null) {
-                getHome().putProducedCargoForDelivery(getCargo());
-                setCargo(null);
-            }
-
             enterBuilding(getHome());
 
             countdown.countFrom(99);

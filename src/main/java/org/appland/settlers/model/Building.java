@@ -64,7 +64,6 @@ public class Building implements Actor, EndPoint {
     protected ConstructionState constructionState;
     protected GameMap           map;
     
-    private Cargo   outputCargo;
     private boolean isWorkerNeeded;
     private Worker  worker;
     private Worker  promisedWorker;
@@ -74,7 +73,6 @@ public class Building implements Actor, EndPoint {
     private final Countdown              constructionCountdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final Countdown              destructionCountdown;
-    private final Countdown              productionCountdown;
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
@@ -89,9 +87,7 @@ public class Building implements Actor, EndPoint {
         destructionCountdown  = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
-        outputCargo           = null;
         flag                  = new Flag(null);
-        productionCountdown   = new Countdown();
         worker                = null;
         promisedWorker        = null;
         position              = null;
@@ -238,10 +234,6 @@ public class Building implements Actor, EndPoint {
         return !p.manualProduction();
     }
 
-    void putProducedCargoForDelivery(Cargo carriedCargo) {
-        outputCargo = carriedCargo;
-    }
-    
     private Map<Material, Integer> getInQueue() {
         return receivedMaterial;
     }
@@ -252,10 +244,6 @@ public class Building implements Actor, EndPoint {
         }
         
         return getWorkerType() == material;
-    }
-
-    public boolean isCargoReady() {
-        return outputCargo != null;
     }
 
     @Override
@@ -289,19 +277,6 @@ public class Building implements Actor, EndPoint {
         promisedDeliveries.put(material, existingQuantity - 1);
     }
 
-    public Cargo retrieveCargo() {
-        Cargo result = outputCargo;
-        outputCargo = null;
-
-        if (result == null) {
-            return null;
-        }
-
-        result.setPosition(getFlag().getPosition());
-
-        return result;
-    }
-
     public boolean needsMaterial(Material material) {
         log.log(Level.FINE, "Does {0} require {1}", new Object[]{this, material});
 
@@ -331,8 +306,6 @@ public class Building implements Actor, EndPoint {
 
             str += "in queue and ";
         }
-
-        str += outputCargo + " waiting to be picked up";
 
         return str;
     }
@@ -372,11 +345,6 @@ public class Building implements Actor, EndPoint {
                 constructionState = DESTROYED;
             } else {
                 destructionCountdown.step();
-            }
-        } else if (ready()) {
-            if (isProducer() && !isCargoReady() && isAutomaticProducer()) {
-                log.log(Level.FINER, "Calling produce");
-                outputCargo = produce();
             }
         }
     }
@@ -512,32 +480,6 @@ public class Building implements Actor, EndPoint {
         return true;
     }
 
-    private Cargo produce() {
-        Cargo result = null;
-
-        /* Construction hasn't started */
-        if (productionCountdown.isInactive()) {
-            if (productionCanStart()) {
-                productionCountdown.countFrom(getProductionTime() - 2);
-            }
-
-        /* Production just finished */
-        } else if (productionCountdown.reachedZero()) {
-            result = new Cargo(getProductionMaterial(), map);
-
-            log.log(Level.FINE, "{0} produced {1}", new Object[]{this, result});
-
-            productionCountdown.reset();
-            consumeResources();
-            
-        /* Production ongoing and not finished */
-        } else {
-            productionCountdown.step();
-        }
-
-        return result;
-    }
-
     private void consumeResources() {
         Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
@@ -639,39 +581,21 @@ public class Building implements Actor, EndPoint {
 
     @Override
     public List<Cargo> getStackedCargo() {
-        List<Cargo> result = new ArrayList<>();
-        
-        if (outputCargo != null) {
-            result.add(outputCargo);
-        }
-
-        return result;
+        return new ArrayList<>();
     }
 
     @Override
     public boolean hasCargoWaitingForRoad(Road r) {
-        return getCargoWaitingForRoad(r) != null;
+        return false;
     }
 
     @Override
     public Cargo retrieveCargo(Cargo c) {
-        Cargo tmp = outputCargo;
-        outputCargo = null;
-            
-        return tmp;
+        return null;
     }
 
     @Override
     public Cargo getCargoWaitingForRoad(Road r) {
-        if (outputCargo.isDeliveryPromised()) {
-            return null;
-        }
-            
-        if (r.getWayPoints().contains(outputCargo.getNextStep())) {
-            return outputCargo;
-        }
-
-
         return null;
     }
 }

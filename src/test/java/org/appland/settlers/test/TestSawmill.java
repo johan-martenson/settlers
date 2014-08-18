@@ -231,7 +231,6 @@ public class TestSawmill {
         for (i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertFalse(sawmill.isCargoReady());
             assertNull(sw.getCargo());
         }
 
@@ -240,7 +239,6 @@ public class TestSawmill {
         assertNotNull(sw.getCargo());
         assertEquals(sw.getCargo().getMaterial(), PLANCK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-        assertFalse(sawmill.isCargoReady());
     }
 
     @Test
@@ -282,7 +280,6 @@ public class TestSawmill {
         for (i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-            assertFalse(sawmill.isCargoReady());
             assertNull(sw.getCargo());
         }
 
@@ -291,7 +288,6 @@ public class TestSawmill {
         assertNotNull(sw.getCargo());
         assertEquals(sw.getCargo().getMaterial(), PLANCK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
-        assertFalse(sawmill.isCargoReady());
         
         /* Verify that the sawmill worker leaves the cargo at the flag */
         assertEquals(sw.getTarget(), sawmill.getFlag().getPosition());

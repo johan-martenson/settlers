@@ -268,7 +268,6 @@ public class TestBakery {
         for (i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-            assertFalse(bakery.isCargoReady());
             assertNull(baker.getCargo());
         }
 
@@ -277,7 +276,6 @@ public class TestBakery {
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
         assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-        assertFalse(bakery.isCargoReady());
     }
 
     @Test
@@ -341,7 +339,6 @@ public class TestBakery {
         for (i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-            assertFalse(bakery.isCargoReady());
             assertNull(baker.getCargo());
         }
 
@@ -350,7 +347,6 @@ public class TestBakery {
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
         assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-        assertFalse(bakery.isCargoReady());
         
         /* Verify that the bakery worker leaves the cargo at the flag */
         assertEquals(baker.getTarget(), bakery.getFlag().getPosition());

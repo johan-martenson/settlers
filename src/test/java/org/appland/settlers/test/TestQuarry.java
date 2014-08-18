@@ -7,10 +7,8 @@
 package org.appland.settlers.test;
 
 import java.util.List;
-import org.appland.settlers.model.Baker;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -389,17 +387,14 @@ public class TestQuarry {
         assertFalse(mason.isGettingStone());
         
         assertEquals(mason.getTarget(), quarry.getPosition());
-        assertFalse(quarry.isCargoReady());
         assertNotNull(mason.getCargo());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getPosition());
         
-        assertFalse(quarry.isCargoReady());
         assertFalse(mason.isInsideBuilding());
         
         map.stepTime();
 
-        assertFalse(quarry.isCargoReady());
         assertTrue(mason.isInsideBuilding());
         assertNotNull(mason.getCargo());
         
@@ -436,7 +431,6 @@ public class TestQuarry {
         /* Construct the forester hut */
         
         constructSmallHouse(quarry);
-        assertFalse(quarry.isCargoReady());
         
         /* Manually place forester */
         Stonemason mason = new Stonemason(map);
@@ -445,12 +439,12 @@ public class TestQuarry {
         mason.enterBuilding(quarry);
         
         assertTrue(mason.isInsideBuilding());
-        assertFalse(quarry.isCargoReady());
+        assertNull(mason.getCargo());
 
         int i;
         for (i = 0; i < 100; i++) {
             map.stepTime();
-            assertFalse(quarry.isCargoReady());
+            assertNull(mason.getCargo());
         }
         
     }

@@ -530,7 +530,6 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
         assertTrue(farm.getFlag().getStackedCargo().isEmpty());
         assertNotNull(farmer.getCargo());
-        assertFalse(farm.isCargoReady());
 
         /* Farmer leaves the building and places the cargo at the flag */
         map.stepTime();
@@ -538,7 +537,6 @@ public class TestFarm {
         assertFalse(farmer.isInsideBuilding());
         assertTrue(farm.getFlag().getStackedCargo().isEmpty());
         assertNotNull(farmer.getCargo());
-        assertFalse(farm.isCargoReady());
         assertEquals(farmer.getTarget(), farm.getFlag().getPosition());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm.getFlag().getPosition());
@@ -675,13 +673,13 @@ public class TestFarm {
         
         int i;
         for (i = 0; i < 20; i++) {
-            assertFalse(farm.isCargoReady());
+            assertTrue(farm.getFlag().getStackedCargo().isEmpty());
             
             gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
-        assertFalse(farm.isCargoReady());        
+        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
     }
 
     @Test

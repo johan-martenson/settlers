@@ -609,18 +609,6 @@ public class GameMap {
         return buildings;
     }
 
-    public List<Building> getBuildingsWithNewProduce() {
-        List<Building> result = new ArrayList<>();
-
-        for (Building b : buildings) {
-            if (b.isCargoReady()) {
-                result.add(b);
-            }
-        }
-
-        return result;
-    }
-
     public List<Road> getRoadsThatNeedCouriers() {
         List<Road> result = new ArrayList<>();
 

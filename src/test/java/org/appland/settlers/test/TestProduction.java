@@ -47,16 +47,6 @@ public class TestProduction {
         woodcutter.putCargo(new Cargo(WOOD, null));
     }
 
-    @Test
-    public void testRetrieveStoneDuringConstruction() throws InvalidStateForProduction {
-        Quarry quarry = new Quarry();
-
-        quarry.stepTime();
-        Cargo result = quarry.retrieveCargo();
-
-        assertNull(result);
-    }
-
     @Test(expected = DeliveryNotPossibleException.class)
     public void testDeliveryMaterialToQuarry() throws Exception {
         Quarry quarry = new Quarry();

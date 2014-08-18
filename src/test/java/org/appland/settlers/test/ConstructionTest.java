@@ -38,7 +38,6 @@ public class ConstructionTest {
         assertTrue(wc.getAmount(WOOD) == 0);
         assertTrue(wc.getAmount(PLANCK) == 0);
         assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
-        assertFalse(wc.isCargoReady());
 
         assertTrue(wc.needsMaterial(PLANCK));
         assertTrue(wc.needsMaterial(STONE));
