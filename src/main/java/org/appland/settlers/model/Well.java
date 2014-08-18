@@ -15,7 +15,7 @@ import static org.appland.settlers.model.Size.SMALL;
  * @author johan
  */
 @HouseSize(size = SMALL)
-@Production(requiredGoods = {}, output = WATER, manualProduction = true)
+@Production(requiredGoods = {}, output = WATER)
 @RequiresWorker(workerType = WELL_WORKER)
 public class Well extends Building {
     

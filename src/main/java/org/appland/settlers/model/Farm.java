@@ -14,7 +14,7 @@ import static org.appland.settlers.model.Size.LARGE;
  * @author johan
  */
 @HouseSize(size = LARGE)
-@Production(output = WHEAT, requiredGoods = {}, manualProduction = true)
+@Production(output = WHEAT, requiredGoods = {})
 @RequiresWorker(workerType = FARMER)
 public class Farm extends Building {
 }

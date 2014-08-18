@@ -354,12 +354,6 @@ public class Building implements Actor, EndPoint {
         }
     }
 
-    public int getProductionTime() {
-        Production p = getClass().getAnnotation(Production.class);
-
-        return p.productionTime();
-    }
-
     public Material getProductionMaterial() {
         Production p = getClass().getAnnotation(Production.class);
 
