@@ -8,7 +8,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -224,8 +223,8 @@ public class TestSawmill {
         assertEquals(sawmill.getWorker(), sw);        
 
         /* Deliver wood to the sawmill */
-        sawmill.deliver(new Cargo(WOOD, map));
-        sawmill.deliver(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
         
         /* Verify that the sawmill produces plancks */
         int i;
@@ -275,8 +274,8 @@ public class TestSawmill {
         assertEquals(sawmill.getWorker(), sw);        
 
         /* Deliver wood to the sawmill */
-        sawmill.deliver(new Cargo(WOOD, map));
-        sawmill.deliver(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
         
         /* Verify that the sawmill produces plancks */
         int i;
@@ -335,7 +334,7 @@ public class TestSawmill {
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
         
         /* Deliver wood to the sawmill */
-        sawmill.deliver(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
         
         /* Wait until the sawmill worker produces a planck */
         assertTrue(sawmill.getAmount(WOOD) == 1);
@@ -381,7 +380,7 @@ public class TestSawmill {
         assertNull(sw.getCargo());
         
         /* Deliver wood to the sawmill */
-        sawmill.deliver(new Cargo(WOOD, map));
+        sawmill.putCargo(new Cargo(WOOD, map));
         
         /* Verify that it takes 50 steps for the sawmill worker to produce the planck */
         int i;

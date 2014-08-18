@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import java.util.List;
-import org.appland.settlers.model.Baker;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
@@ -257,7 +256,7 @@ public class TestMill {
         /* Deliver wheat to the mill */
         Cargo cargo = new Cargo(WHEAT, map);
         
-        mill.deliver(cargo);
+        mill.putCargo(cargo);
         
         /* Put the worker in the well */
         Miller miller = new Miller(map);
@@ -307,7 +306,7 @@ public class TestMill {
         /* Deliver wheat to the mill */
         Cargo cargo = new Cargo(WHEAT, map);
         
-        mill.deliver(cargo);
+        mill.putCargo(cargo);
         
         /* Put the worker in the well */
         Miller miller = new Miller(map);

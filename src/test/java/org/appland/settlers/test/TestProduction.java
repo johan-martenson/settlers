@@ -28,23 +28,23 @@ public class TestProduction {
     }
 
     @Test(expected = InvalidMaterialException.class)
-    public void testWrongMaterialToSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testWrongMaterialToSawmill() throws Exception {
         Sawmill sawmill = new Sawmill();
 
         Utils.constructMediumHouse(sawmill);
 
         assertTrue(DONE == sawmill.getConstructionState());
 
-        sawmill.deliver(new Cargo(GOLD, null));
+        sawmill.putCargo(new Cargo(GOLD, null));
     }
 
     @Test(expected = DeliveryNotPossibleException.class)
-    public void testDeliverMaterialToWoodcutter() throws DeliveryNotPossibleException, InvalidMaterialException, InvalidStateForProduction {
+    public void testDeliverMaterialToWoodcutter() throws Exception {
         Building woodcutter = new Woodcutter();
 
         Utils.constructSmallHouse(woodcutter);
 
-        woodcutter.deliver(new Cargo(WOOD, null));
+        woodcutter.putCargo(new Cargo(WOOD, null));
     }
 
     @Test
@@ -58,12 +58,12 @@ public class TestProduction {
     }
 
     @Test(expected = DeliveryNotPossibleException.class)
-    public void testDeliveryMaterialToQuarry() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void testDeliveryMaterialToQuarry() throws Exception {
         Quarry quarry = new Quarry();
 
         Utils.constructSmallHouse(quarry);
 
-        quarry.deliver(new Cargo(BEER, null));
+        quarry.putCargo(new Cargo(BEER, null));
     }
 
     @Test(expected=Exception.class)

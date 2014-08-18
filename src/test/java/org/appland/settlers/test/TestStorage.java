@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import com.sun.corba.se.spi.orb.OperationFactory;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
@@ -174,7 +173,7 @@ public class TestStorage {
         Utils.fastForward(19, map);
         
         /* Put plancks in the storage */
-        storage.deliver(new Cargo(PLANCK, map));
+        storage.putCargo(new Cargo(PLANCK, map));
         
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
@@ -221,7 +220,7 @@ public class TestStorage {
         Utils.fastForward(19, map);
         
         /* Put plancks in the storage */
-        storage.deliver(new Cargo(PLANCK, map));
+        storage.putCargo(new Cargo(PLANCK, map));
         
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
@@ -271,7 +270,7 @@ public class TestStorage {
         Utils.fastForward(19, map);
         
         /* Put plancks in the storage */
-        storage.deliver(new Cargo(PLANCK, map));
+        storage.putCargo(new Cargo(PLANCK, map));
         
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());

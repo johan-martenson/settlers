@@ -25,12 +25,12 @@ public class MilitaryCreationAndPromotionTest {
     public void createPrivate() throws Exception {
         int numberOfPrivates = storage.getAmount(Material.PRIVATE);
 
-        storage.deliver(new Cargo(Material.BEER, null));
-        storage.deliver(new Cargo(Material.SWORD, null));
-        storage.deliver(new Cargo(Material.SWORD, null));
-        storage.deliver(new Cargo(Material.SHIELD, null));
-        storage.deliver(new Cargo(Material.SHIELD, null));
-        storage.deliver(new Cargo(Material.SHIELD, null));
+        storage.putCargo(new Cargo(Material.BEER, null));
+        storage.putCargo(new Cargo(Material.SWORD, null));
+        storage.putCargo(new Cargo(Material.SWORD, null));
+        storage.putCargo(new Cargo(Material.SHIELD, null));
+        storage.putCargo(new Cargo(Material.SHIELD, null));
+        storage.putCargo(new Cargo(Material.SHIELD, null));
 
         assertTrue(storage.getAmount(Material.PRIVATE) == numberOfPrivates);
         assertTrue(storage.getAmount(Material.BEER) == 1);
@@ -47,8 +47,8 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteSinglePrivate() throws Exception {
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
 
         assertTrue(1 == storage.getAmount(Material.GOLD));
         assertTrue(1 == storage.getAmount(Material.PRIVATE));
@@ -65,22 +65,22 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteGroupOfPrivates() throws Exception {
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
 
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
 
         assertTrue(10 == storage.getAmount(Material.GOLD));
         assertTrue(5 == storage.getAmount(Material.PRIVATE));
@@ -97,26 +97,26 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promotePrivateAndSergeant() throws Exception {
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
 
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
 
-        storage.deliver(new Cargo(Material.SERGEANT, null));
-        storage.deliver(new Cargo(Material.SERGEANT, null));
-        storage.deliver(new Cargo(Material.SERGEANT, null));
+        storage.putCargo(new Cargo(Material.SERGEANT, null));
+        storage.putCargo(new Cargo(Material.SERGEANT, null));
+        storage.putCargo(new Cargo(Material.SERGEANT, null));
 
         assertTrue(10 == storage.getAmount(Material.GOLD));
         assertTrue(5 == storage.getAmount(Material.PRIVATE));
@@ -134,16 +134,16 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithoutMilitary() throws Exception {
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
 
         Utils.fastForward(100, storage);
 
@@ -155,27 +155,27 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithOnlyGenerals() throws Exception {
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
-        storage.deliver(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
+        storage.putCargo(new Cargo(Material.GOLD, null));
 
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
-        storage.deliver(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
+        storage.putCargo(new Cargo(Material.GENERAL, null));
 
         Utils.fastForward(100, storage);
 
@@ -188,11 +188,11 @@ public class MilitaryCreationAndPromotionTest {
 
     @Test
     public void promoteWithoutGold() throws Exception {
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
-        storage.deliver(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        storage.putCargo(new Cargo(Material.PRIVATE, null));
 
         Utils.fastForward(100, storage);
 

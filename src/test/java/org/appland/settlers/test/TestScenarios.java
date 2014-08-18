@@ -197,13 +197,15 @@ public class TestScenarios {
         
         assertEquals(w.getTarget(), hq.getFlag().getPosition());
         
+        int amountInStack = hq.getFlag().getStackedCargo().size();
+        
         Utils.fastForwardUntilWorkerReachesPoint(map, w, hq.getFlag().getPosition());
         
         Courier courierSmToHq = smToHqRoad.getCourier();
         
-        assertTrue(hq.getFlag().getStackedCargo().get(0).getMaterial() == WOOD);
+        assertTrue(hq.getFlag().getStackedCargo().get(amountInStack).getMaterial() == WOOD);
 
-        Cargo cargo = hq.getFlag().getStackedCargo().get(0);
+        Cargo cargo = hq.getFlag().getStackedCargo().get(amountInStack);
 
         assertTrue(cargo.getTarget().equals(sm));
         assertNull(courierSmToHq.getCargo());

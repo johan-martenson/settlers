@@ -28,7 +28,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -87,7 +86,7 @@ public class Utils {
         return result;
     }
 
-    static void constructMediumHouse(Building sm) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructMediumHouse(Building sm) throws Exception {
         assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
 
         Cargo woodCargo = new Cargo(PLANCK, null);
@@ -98,24 +97,24 @@ public class Utils {
         sm.promiseDelivery(PLANCK);
         sm.promiseDelivery(PLANCK);
         sm.promiseDelivery(PLANCK);
-        sm.deliver(woodCargo);
-        sm.deliver(woodCargo);
-        sm.deliver(woodCargo);
-        sm.deliver(woodCargo);
+        sm.putCargo(woodCargo);
+        sm.putCargo(woodCargo);
+        sm.putCargo(woodCargo);
+        sm.putCargo(woodCargo);
 
         sm.promiseDelivery(STONE);
         sm.promiseDelivery(STONE);
         sm.promiseDelivery(STONE);
-        sm.deliver(stoneCargo);
-        sm.deliver(stoneCargo);
-        sm.deliver(stoneCargo);
+        sm.putCargo(stoneCargo);
+        sm.putCargo(stoneCargo);
+        sm.putCargo(stoneCargo);
 
         Utils.fastForward(150, sm);
         
         assertEquals(sm.getConstructionState(), DONE);
     }
 
-    static void constructSmallHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructSmallHouse(Building house) throws Exception {
         assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
 
         Cargo woodCargo = new Cargo(PLANCK, null);
@@ -124,13 +123,13 @@ public class Utils {
         /* Deliver 2 wood and 2 stone */
         house.promiseDelivery(PLANCK);
         house.promiseDelivery(PLANCK);
-        house.deliver(woodCargo);
-        house.deliver(woodCargo);
+        house.putCargo(woodCargo);
+        house.putCargo(woodCargo);
 
         house.promiseDelivery(STONE);
         house.promiseDelivery(STONE);
-        house.deliver(stoneCargo);
-        house.deliver(stoneCargo);
+        house.putCargo(stoneCargo);
+        house.putCargo(stoneCargo);
 
         Utils.fastForward(100, house);
         
@@ -169,12 +168,12 @@ public class Utils {
         return result;
     }
 
-    static void fillUpInventory(Storage hq, Material material, int amount) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void fillUpInventory(Storage hq, Material material, int amount) throws Exception {
         Cargo c = new Cargo(material, null);
 
         int i;
         for (i = 0; i < amount; i++) {
-            hq.deliver(c);
+            hq.putCargo(c);
         }
     }
 
@@ -190,7 +189,7 @@ public class Utils {
         return isEmpty;
     }
 
-    static void constructLargeHouse(Building house) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    static void constructLargeHouse(Building house) throws Exception {
         assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
 
         Cargo planckCargo = new Cargo(PLANCK, null);
@@ -201,19 +200,19 @@ public class Utils {
         house.promiseDelivery(PLANCK);
         house.promiseDelivery(PLANCK);
         house.promiseDelivery(PLANCK);
-        house.deliver(planckCargo);
-        house.deliver(planckCargo);
-        house.deliver(planckCargo);
-        house.deliver(planckCargo);
+        house.putCargo(planckCargo);
+        house.putCargo(planckCargo);
+        house.putCargo(planckCargo);
+        house.putCargo(planckCargo);
 
         house.promiseDelivery(STONE);
         house.promiseDelivery(STONE);
         house.promiseDelivery(STONE);
         house.promiseDelivery(STONE);
-        house.deliver(stoneCargo);
-        house.deliver(stoneCargo);
-        house.deliver(stoneCargo);
-        house.deliver(stoneCargo);
+        house.putCargo(stoneCargo);
+        house.putCargo(stoneCargo);
+        house.putCargo(stoneCargo);
+        house.putCargo(stoneCargo);
         
         fastForward(200, house);
     }

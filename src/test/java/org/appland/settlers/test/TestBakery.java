@@ -19,7 +19,6 @@ import org.appland.settlers.model.Baker;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WATER;
-import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -261,8 +260,8 @@ public class TestBakery {
         assertEquals(bakery.getWorker(), baker);        
 
         /* Deliver wood to the bakery */
-        bakery.deliver(new Cargo(WATER, map));
-        bakery.deliver(new Cargo(FLOUR, map));
+        bakery.putCargo(new Cargo(WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
         
         /* Verify that the bakery produces plancks */
         int i;
@@ -334,8 +333,8 @@ public class TestBakery {
         assertEquals(bakery.getWorker(), baker);        
 
         /* Deliver wood to the bakery */
-        bakery.deliver(new Cargo(WATER, map));
-        bakery.deliver(new Cargo(FLOUR, map));
+        bakery.putCargo(new Cargo(WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
         
         /* Verify that the bakery produces plancks */
         int i;
@@ -414,8 +413,8 @@ public class TestBakery {
         Utils.fastForwardUntilWorkersReachTarget(map, baker);
         
         /* Deliver wood to the bakery */
-        bakery.deliver(new Cargo(WATER, map));
-        bakery.deliver(new Cargo(FLOUR, map));
+        bakery.putCargo(new Cargo(WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
         
         /* Wait until the bakery worker produces a planck */
         assertTrue(bakery.getAmount(WATER) == 1);
@@ -482,8 +481,8 @@ public class TestBakery {
         assertNull(baker.getCargo());
         
         /* Deliver ingredients to the bakery */
-        bakery.deliver(new Cargo(WATER, map));
-        bakery.deliver(new Cargo(FLOUR, map));
+        bakery.putCargo(new Cargo(WATER, map));
+        bakery.putCargo(new Cargo(FLOUR, map));
         
         /* Verify that it takes 50 steps for the bakery worker to produce the planck */
         int i;

@@ -109,12 +109,6 @@ public class Courier extends Worker {
         return intendedCargo;
     }
 
-    public void deliverToTarget(Building targetBuilding) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
-        targetBuilding.deliver(this.getCargo());
-
-        setCargo(null);
-    }
-
     public void pickUpCargoFromFlag(Cargo c, EndPoint flag) throws Exception {
         setCargo(flag.retrieveCargo(c));
     }
@@ -266,7 +260,9 @@ public class Courier extends Worker {
             try {
                 Building targetBuilding = getCargo().getTarget();
                 
-                deliverToTarget(targetBuilding);
+                targetBuilding.putCargo(getCargo());
+                
+                setCargo(null);
                 
                 setTarget(targetBuilding.getFlag().getPosition());
                 
@@ -276,13 +272,9 @@ public class Courier extends Worker {
             }
         } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
             try {
-                Cargo cargoToDeliver = getCargo();
+                putDownCargo();
 
-                if (cargoToDeliver.isAtTarget()) {
-                    deliverToTarget(cargoToDeliver.getTarget());
-                } else {
-                    putDownCargo();
-                }
+                setCargo(null);
                 
                 Point currentPosition = getPosition();
                 EndPoint flag = getEndPointAtPoint(currentPosition);

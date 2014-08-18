@@ -258,7 +258,8 @@ public class Building implements Actor, EndPoint {
         return outputCargo != null;
     }
 
-    public void deliver(Cargo c) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    @Override
+    public void putCargo(Cargo c) throws Exception {
         log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});
 
         Material material = c.getMaterial();
@@ -645,11 +646,6 @@ public class Building implements Actor, EndPoint {
         }
 
         return result;
-    }
-
-    @Override
-    public void putCargo(Cargo c) throws Exception {
-        deliver(c);
     }
 
     @Override

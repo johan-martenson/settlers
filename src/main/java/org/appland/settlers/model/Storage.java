@@ -123,9 +123,9 @@ public class Storage extends Building implements Actor {
     }
 
     @Override
-    public void deliver(Cargo c) throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction {
+    public void putCargo(Cargo c) throws Exception {
         if (!isWorking()) {
-            super.deliver(c);
+            super.putCargo(c);
         } else {
             log.log(Level.FINE, "Depositing cargo {0}", c);
 
