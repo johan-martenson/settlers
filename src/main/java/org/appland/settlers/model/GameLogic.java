@@ -7,7 +7,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import static org.appland.settlers.model.Material.WOOD;
 
 /**
  *
@@ -21,9 +20,6 @@ public class GameLogic {
          * unoccupied military buildings
          */
         assignNewWorkerToUnoccupiedPlaces(map);
-
-        /* Find out which buildings need deliveries and match with inventory */
-        //initiateNewDeliveriesForAllStorages(map);
     }
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
@@ -84,51 +80,6 @@ public class GameLogic {
                     
                     b.promiseWorker(w);
                 }
-            }
-        }
-    }
-
-    public void initiateNewDeliveriesForAllStorages(GameMap map) throws InvalidRouteException, Exception {
-        List<Storage> storages = map.getStorages();
-
-        for (Storage s : storages) {
-            initiateNewDeliveriesForStorage(s, map);
-        }
-    }
-
-    /*
-     * Finds all houses that needs a delivery and picks out a cargo from the storage.
-     * The cargo gets the house as its target and is put at the storage's flag
-     */
-    public void initiateNewDeliveriesForStorage(Storage hq, GameMap map) throws InvalidRouteException, Exception {
-        Building targetBuilding = null;
-        Material materialToDeliver = WOOD;
-
-        for (Material m : Material.values()) {
-            
-            for (Building b : map.getBuildingsWithinReach(hq.getFlag())) {
-                
-                /* Don't deliver to itself */
-                if (hq.equals(b)) {
-                    continue;
-                }
-
-                if (b.needsMaterial(m) && hq.isInStock(m)) {
-                    targetBuilding = b;
-                    materialToDeliver = m;
-
-                    break;
-                }
-            }
-
-            /* Start delivery */
-            if (targetBuilding != null) {
-                targetBuilding.promiseDelivery(materialToDeliver);
-                Cargo c = hq.retrieve(materialToDeliver);
-                c.setTarget(targetBuilding);
-                hq.getFlag().putCargo(c);
-
-                break;
             }
         }
     }

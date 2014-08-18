@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
+import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -19,18 +20,14 @@ import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.SawmillWorker;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 
-import static org.appland.settlers.test.Utils.fastForward;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -69,9 +66,16 @@ public class GameLogicTest {
          * Verify that no new deliveries are initiated
          */
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
-        gameLogic.initiateNewDeliveriesForStorage(hq, map);
+        assertNull(hq.getWorker().getCargo());
+        
+        map.stepTime();
+        
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
+        assertNull(hq.getWorker().getCargo());
 
+        /* Fast forward so the worker in the hq is rested */
+        Utils.fastForward(20, map);
+        
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */
         Sawmill sm = new Sawmill();
 
@@ -86,8 +90,9 @@ public class GameLogicTest {
         assertTrue(sm.needsMaterial(STONE));
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
         
-        gameLogic.initiateNewDeliveriesForStorage(hq, map);
-        assertFalse(hq.getFlag().getStackedCargo().isEmpty());
+        map.stepTime();
+
+        assertNotNull(hq.getWorker().getCargo());
     }
 
     @Test
@@ -242,6 +247,12 @@ public class GameLogicTest {
         
         Courier w1 = (Courier)map.getAllWorkers().get(1);
         Courier w2 = (Courier)map.getAllWorkers().get(2);
+
+        /* Construct the barracks */
+        
+        Utils.constructSmallHouse(bk);
+        
+        assertTrue(bk.getConstructionState() == DONE);
         
         /* Fast forward to let the couriers reach their roads */
         Utils.fastForwardUntilWorkersReachTarget(map, w1, w2);
@@ -256,13 +267,7 @@ public class GameLogicTest {
 
         assertTrue(r.getCourier().equals(w1));
         assertTrue(r.getCourier().getAssignedRoad().equals(r));
-
-        /* Finish the construction of the barracks and assign new workers to 
-         * unoccupied places and verify that there is a military assigned
-         * to occupy the barracks
-         */
-        Utils.constructSmallHouse(bk);
-
+        
         assertTrue(map.getAllWorkers().size() == 3);
         assertTrue(bk.isMilitaryBuilding());
         assertTrue(bk.needMilitaryManning());
@@ -349,22 +354,5 @@ public class GameLogicTest {
         
         assertNotNull(fHut.getWorker());
         assertTrue(fHut.getWorker() instanceof Forester);
-    }
-    
-    @Test
-    public void testInitiateNewDeliveriesForAllStoragesWithNoRoad() throws Exception {
-        GameMap map    = new GameMap(30, 30);
-        Point hqPoint  = new Point(5, 5);
-        Headquarter hq = new Headquarter();
-        Woodcutter wc  = new Woodcutter();
-        Point wcPoint  = new Point(5, 11);
-        
-        map.placeBuilding(hq, hqPoint);
-        map.placeBuilding(wc, wcPoint);
-        
-        assertTrue(map.getBuildingsWithinReach(hq.getFlag()).size() == 1);
-        assertTrue(map.getBuildingsWithinReach(hq.getFlag()).contains(hq));
-        
-        gameLogic.initiateNewDeliveriesForAllStorages(map);
     }
 }
