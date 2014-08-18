@@ -196,12 +196,6 @@ public class Building implements Actor, EndPoint {
         promisedWorker = null;
     }
 
-    private boolean isProducer() {
-        Production p = getClass().getAnnotation(Production.class);
-
-        return p != null;
-    }
-
     public void hostMilitary(Military military) {
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
@@ -226,12 +220,6 @@ public class Building implements Actor, EndPoint {
 
     void setPosition(Point p) {
         position = p;
-    }
-
-    private boolean isAutomaticProducer() {
-        Production p = getClass().getAnnotation(Production.class);
-
-        return !p.manualProduction();
     }
 
     private Map<Material, Integer> getInQueue() {
@@ -478,39 +466,6 @@ public class Building implements Actor, EndPoint {
         }
 
         return true;
-    }
-
-    private void consumeResources() {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
-
-        for (Entry<Material, Integer> entry : requiredGoods.entrySet()) {
-            Material m = entry.getKey();
-            int cost = entry.getValue();
-
-            int before = receivedMaterial.get(m);
-            receivedMaterial.put(m, before - cost);
-        }
-    }
-
-    private boolean productionCanStart() {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
-
-        if (requiredGoods.keySet().isEmpty()) {
-            return true;
-        }
-
-        boolean resourcesPresent = true;
-
-        for (Entry<Material, Integer> entry : requiredGoods.entrySet()) {
-            Material m = entry.getKey();
-            int amount = entry.getValue();
-
-            if (receivedMaterial.get(m) < amount) {
-                resourcesPresent = false;
-            }
-        }
-
-        return resourcesPresent;
     }
 
     private boolean isAccepted(Material material) {
