@@ -559,9 +559,8 @@ public class TestWoodcutter {
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
-        map.placeWorker(wcWorker, wc.getFlag());
-        wc.assignWorker(wcWorker);
-        wcWorker.enterBuilding(wc);
+
+        Utils.occupyBuilding(wcWorker, wc, map);
         
         assertTrue(wcWorker.isInsideBuilding());
         assertNull(wcWorker.getCargo());
@@ -588,14 +587,13 @@ public class TestWoodcutter {
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
-        /* Construct the forester hut */
+        /* Construct the woodcutter hut */
         constructSmallHouse(wc);
         
-        /* Manually place forester */
+        /* Place the woodcutter */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
-        map.placeWorker(wcWorker, wc.getFlag());
-        wc.assignWorker(wcWorker);
-        wcWorker.enterBuilding(wc);
+
+        Utils.occupyBuilding(wcWorker, wc, map);
         
         /* Run the game logic 10 times and make sure the forester stays in the hut */
         GameLogic gameLogic = new GameLogic();

@@ -83,9 +83,17 @@ public abstract class Worker implements Actor {
                 walkCountdown.step();
             }
         } else if (state == IDLE_OUTSIDE) {            
-            onIdle();
+            try {
+                onIdle();
+            } catch (Exception ex) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else if (state == IDLE_INSIDE) {
-            onIdle();
+            try {
+                onIdle();
+            } catch (Exception ex) {
+                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -113,11 +121,11 @@ public abstract class Worker implements Actor {
         return "Idle courier at " + getPosition();
     }
 
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         log.log(Level.FINE, "On handle hook arrival with nothing to do");
     }
     
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         log.log(Level.FINE, "On idle hook with nothing to do");
     }
     
@@ -214,7 +222,11 @@ public abstract class Worker implements Actor {
         return (int)(((double)(getSpeed() - walkCountdown.getCount() - 2) / (double)getSpeed()) * 100);
     }
 
-    public void enterBuilding(Building b) {
+    public void enterBuilding(Building b) throws Exception {
+        if (!getPosition().equals(b.getPosition())) {
+            throw new Exception("Can't enter " + b + " when worker is at " + getPosition());
+        }
+        
         state = IDLE_INSIDE;
         
         home = b;

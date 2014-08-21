@@ -126,7 +126,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    public void onArrival() {
+    public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
             try {
                 Storage stg = map.getClosestStorage(getPosition());
@@ -149,7 +149,7 @@ public class WoodcutterWorker extends Worker {
             state = RESTING_IN_HOUSE;
             
             enterBuilding(getHome());
-            
+
             countdown.countFrom(99);
         } else if (state == GOING_OUT_TO_CUT_TREE) {
             state = CUTTING_TREE;

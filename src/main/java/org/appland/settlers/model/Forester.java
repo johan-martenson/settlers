@@ -81,7 +81,7 @@ public class Forester extends Worker {
     }
     
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point p = getTreeSpot();

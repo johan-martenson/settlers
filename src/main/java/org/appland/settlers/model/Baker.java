@@ -55,7 +55,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = BAKING_BREAD;
@@ -88,7 +88,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             try {
                 Flag f = map.getFlagAtPoint(getPosition());

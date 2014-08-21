@@ -107,7 +107,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         if (state == DELIVERING_CARGO_TO_FLAG) {
             try {
                 Flag f = getHome().getFlag();

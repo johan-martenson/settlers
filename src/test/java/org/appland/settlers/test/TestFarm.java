@@ -24,7 +24,6 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -165,9 +164,7 @@ public class TestFarm {
 
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -209,9 +206,7 @@ public class TestFarm {
 
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -281,9 +276,7 @@ public class TestFarm {
 
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -374,9 +367,7 @@ public class TestFarm {
         
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -459,9 +450,7 @@ public class TestFarm {
         
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -570,9 +559,7 @@ public class TestFarm {
         
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         
@@ -725,9 +712,7 @@ public class TestFarm {
         /* Place farmer */
         Farmer farmer = new Farmer(map);
         
-        map.placeWorker(farmer, farm.getFlag());
-        farm.assignWorker(farmer);
-        farmer.enterBuilding(farm);
+        Utils.occupyBuilding(farmer, farm, map);
         
         assertTrue(farmer.isInsideBuilding());
         

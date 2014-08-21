@@ -83,32 +83,32 @@ public class WellWorker extends Worker {
     }
     
     @Override
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
+            Flag f = getHome().getFlag();
+            Storage stg = map.getClosestStorage(getPosition());
+
+            Cargo cargo = getCargo();
+
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
+
+            f.putCargo(getCargo());
+
+            setCargo(null);
+
+            returnHome();
+
+            state = GOING_BACK_TO_HOUSE;
+        } else if (state == GOING_BACK_TO_HOUSE) {
             try {
-                Flag f = getHome().getFlag();
-                Storage stg = map.getClosestStorage(getPosition());
+                enterBuilding(getHome());
                 
-                Cargo cargo = getCargo();
-                
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
-                
-                f.putCargo(getCargo());
-                
-                setCargo(null);
-                
-                returnHome();
-                
-                state = GOING_BACK_TO_HOUSE;
+                state = RESTING_IN_HOUSE;
+                countdown.countFrom(RESTING_TIME);
             } catch (Exception ex) {
                 Logger.getLogger(WellWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            enterBuilding(getHome());
-            
-            state = RESTING_IN_HOUSE;
-            countdown.countFrom(RESTING_TIME);
         }
     }
 }

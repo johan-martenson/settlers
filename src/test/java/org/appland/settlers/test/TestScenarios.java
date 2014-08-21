@@ -98,7 +98,7 @@ public class TestScenarios {
         map.placeWorker(wr1, wc.getFlag());
         map.placeWorker(wr2, sm.getFlag());
         map.placeWorker(wr3, qry.getFlag());
-        map.placeWorker(wcr, wc.getFlag());
+        map.placeWorker(wcr, wc);
 
         wr1.assignToRoad(wcToHqRoad);
         wr2.assignToRoad(smToHqRoad);

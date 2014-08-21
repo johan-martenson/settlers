@@ -139,7 +139,7 @@ public class Farmer extends Worker {
     }
     
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == States.RESTING_IN_HOUSE) {
             
             if (countdown.reachedZero()) {                
@@ -232,7 +232,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    public void onArrival() {
+    public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
             try {
                 Storage stg = map.getClosestStorage(getPosition());

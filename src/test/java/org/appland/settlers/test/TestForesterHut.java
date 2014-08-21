@@ -205,9 +205,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -246,9 +245,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -295,9 +293,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         /* Run the game logic 10 times and make sure the forester stays in the hut */
         GameLogic gameLogic = new GameLogic();
@@ -344,9 +341,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         /* Run the game logic 10 times and make sure the forester stays in the hut */
         GameLogic gameLogic = new GameLogic();
@@ -409,9 +405,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         /* Run the game logic 10 times and make sure the forester stays in the hut */
         GameLogic gameLogic = new GameLogic();
@@ -487,9 +482,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         assertTrue(forester.isInsideBuilding());
         assertNull(forester.getCargo());
@@ -529,9 +523,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -583,9 +576,8 @@ public class TestForesterHut {
         
         /* Manually place forester */
         Forester forester = new Forester(map);
-        map.placeWorker(forester, foresterHut.getFlag());
-        foresterHut.assignWorker(forester);
-        forester.enterBuilding(foresterHut);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
         
         assertTrue(forester.isInsideBuilding());
         

@@ -86,7 +86,7 @@ public class SawmillWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             try {
                 Flag f = map.getFlagAtPoint(getPosition());

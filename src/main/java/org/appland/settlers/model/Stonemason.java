@@ -6,6 +6,8 @@
 
 package org.appland.settlers.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,9 +15,11 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Stonemason.States.GETTING_STONE;
 import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
+import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_GET_STONE;
 import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Stonemason.States.IN_HOUSE_WITH_CARGO;
+import static org.appland.settlers.model.Stonemason.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
 
 /**
  *
@@ -67,19 +71,28 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onIdle() {
-        if (state == States.RESTING_IN_HOUSE) {
+    protected void onIdle() throws Exception {
+        System.out.println("ON IDLE " + state);
+        
+        if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point accessPoint = null;
                 double tempDistance;
                 double distance = Integer.MAX_VALUE;
+                Point homePoint = getHome().getPosition();
                 
-                for (Point p : map.getPointsWithinRadius(getHome().getPosition(), 4)) {
+                for (Point p : map.getPointsWithinRadius(homePoint, 4)) {
                     if (!map.isStoneAtPoint(p)) {
                         continue;
                     }
 
-                    List<Point> pathToStone = map.findWayOffroad(getHome().getFlag().getPosition(), p, null);
+                    if (p.equals(homePoint)) {
+                        continue;
+                    }
+                    
+                    Collection<Point> homePointList = new LinkedList<>();
+                    homePointList.add(homePoint);
+                    List<Point> pathToStone = map.findWayOffroad(getHome().getFlag().getPosition(), p, homePointList);
 
                     if (pathToStone == null) {
                         continue;
@@ -98,9 +111,14 @@ public class Stonemason extends Worker {
                     return;
                 }
                 
-                setOffroadTarget(accessPoint);
+                System.out.println("  BEFORE SET OFFROAD TARGET");
+                System.out.println("  WORKER IS AT " + getPosition());
+                System.out.println("  HOME IS AT " + getHome().getPosition());
                 
-                state = States.GOING_OUT_TO_GET_STONE;
+                setOffroadTarget(accessPoint);
+                System.out.println("  AFTER SET OFFROAD TARGET");
+
+                state = GOING_OUT_TO_GET_STONE;
             } else {
                 countdown.step();
             }
@@ -118,7 +136,7 @@ public class Stonemason extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == States.GOING_OUT_TO_GET_STONE) {
+        } else if (state == GOING_OUT_TO_GET_STONE) {
             state = GETTING_STONE;
             
             countdown.countFrom(49);
@@ -138,7 +156,9 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    public void onArrival() {
+    public void onArrival() throws Exception {
+        System.out.println("ON ARRIVAL " + state);
+        
         if (state == GOING_OUT_TO_PUT_CARGO) {
             try {
                 Storage stg = map.getClosestStorage(getPosition());

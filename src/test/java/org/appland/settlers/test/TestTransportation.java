@@ -302,9 +302,7 @@ public class TestTransportation {
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(stge);
 
-        map.placeWorker(mason, qry.getFlag());
-        qry.assignWorker(mason);
-        mason.enterBuilding(qry);
+        Utils.occupyBuilding(mason, qry, map);
 
         assertTrue(qry.getConstructionState() == DONE);
 
