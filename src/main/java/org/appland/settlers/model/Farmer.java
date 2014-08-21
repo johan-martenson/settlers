@@ -133,20 +133,20 @@ public class Farmer extends Worker {
         
         hut = (Farm)b;
         
-        state = States.RESTING_IN_HOUSE;
+        state = RESTING_IN_HOUSE;
         
         countdown.countFrom(99);
     }
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == States.RESTING_IN_HOUSE) {
+        if (state == RESTING_IN_HOUSE) {
             
             if (countdown.reachedZero()) {                
                 Crop cropToHarvest = findCropToHarvest();
 
                 if (cropToHarvest != null) {                    
-                    state = States.GOING_OUT_TO_HARVEST;
+                    state = GOING_OUT_TO_HARVEST;
                     
                     setOffroadTarget(cropToHarvest.getPosition());
                 } else if (getSurroundingNonHarvestedCrops().size() < 5) {
@@ -158,7 +158,7 @@ public class Farmer extends Worker {
 
                     setOffroadTarget(p);
 
-                    state = States.GOING_OUT_TO_PLANT;
+                    state = GOING_OUT_TO_PLANT;
                 }
             } else {
                 countdown.step();
@@ -177,14 +177,6 @@ public class Farmer extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == GOING_OUT_TO_PLANT) {
-            state = PLANTING;
-            
-            countdown.countFrom(19);
-        } else if (state == GOING_OUT_TO_HARVEST) {
-            state = HARVESTING;
-            
-            countdown.countFrom(19);
         } else if (state == HARVESTING) {
             if (countdown.reachedZero()) {
 
@@ -200,10 +192,6 @@ public class Farmer extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            enterBuilding(getHome());
-                
-            state = IN_HOUSE_WITH_CARGO;
         } else if (state == IN_HOUSE_WITH_CARGO) {
             try {
                 setTarget(getHome().getFlag().getPosition());
@@ -257,6 +245,18 @@ public class Farmer extends Worker {
             enterBuilding(getHome());
             
             countdown.countFrom(99);
+        } else if (state == GOING_OUT_TO_PLANT) {
+            state = PLANTING;
+            
+            countdown.countFrom(19);
+        } else if (state == GOING_OUT_TO_HARVEST) {
+            state = HARVESTING;
+            
+            countdown.countFrom(19);
+        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+            enterBuilding(getHome());
+                
+            state = IN_HOUSE_WITH_CARGO;
         }
     }
 }

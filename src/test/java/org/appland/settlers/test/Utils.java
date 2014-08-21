@@ -328,7 +328,7 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<Forester> aClass) {
+    static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class aClass) {
         boolean found = false;
         
         for (Worker w : allWorkers) {
