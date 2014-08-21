@@ -17,6 +17,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
@@ -325,5 +326,17 @@ public class Utils {
         }
 
         assertEquals(crop.getGrowthState(), FULL_GROWN);
+    }
+
+    static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<Forester> aClass) {
+        boolean found = false;
+        
+        for (Worker w : allWorkers) {
+            if (w.getClass().equals(aClass)) {
+                found = true;
+            }
+        }
+    
+        assertTrue(found);
     }
 }

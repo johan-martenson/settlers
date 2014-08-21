@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Building.ConstructionState;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -17,7 +16,6 @@ import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,7 +34,6 @@ public class TestForesterHut {
 
         assertFalse(f.needsWorker());
 
-        // TODO: New test to verify that a worker can't be assigned to an unfinished forrester */
         Utils.constructSmallHouse(f);
 
         /* Verify that the forrester is unoccupied when it's newly constructed */
@@ -115,10 +112,13 @@ public class TestForesterHut {
     @Test
     public void testForesterIsAssignedToForesterHut() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(7, 3);
         Point point4 = new Point(8, 2);
@@ -132,24 +132,16 @@ public class TestForesterHut {
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
 
-        List<Worker> workers = map.getAllWorkers();
-        assertTrue(workers.size() == 3);
-        
-        boolean foundForester = false;
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Forester) {
-                foundForester = true;
-            }
-        }
-        
-        assertTrue(foundForester);
+        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Forester.class);
     }
 
     @Test
     public void testOnlyOneForesterIsAssignedToForesterHut() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
         Point point2 = new Point(6, 4);
@@ -167,11 +159,8 @@ public class TestForesterHut {
 
         assertTrue(map.getAllWorkers().size() == 3);
 
-        /* Keep running the gameloop and make sure no more workers are allocated */
-        int i;
-        for (i = 0; i < 20; i++) {
-            Utils.fastForward(10, map);
-        }
+        /* Keep running the game loop and make sure no more workers are allocated */
+        Utils.fastForward(200, map);
 
         assertTrue(map.getAllWorkers().size() == 3);
     }
@@ -196,14 +185,12 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */        
         int i;
-        for (i = 0; i < 9; i++) {
+        for (i = 0; i < 99; i++) {
             assertTrue(forester.isInsideBuilding());
-            Utils.fastForward(10, map);
+            map.stepTime();
         }
-        
-        Utils.fastForward(9, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -233,13 +220,8 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Let the forester rest */
+        Utils.fastForward(99, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -276,13 +258,8 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Let the forester rest */
+        Utils.fastForward(99, map);
         
         assertTrue(forester.isInsideBuilding());
         
@@ -321,14 +298,9 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */        
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
-        
+        /* Let the forester rest */
+        Utils.fastForward(99, map);
+                
         assertTrue(forester.isInsideBuilding());
         
         /* Step once and make sure the forester goes out of the hut */
@@ -343,12 +315,10 @@ public class TestForesterHut {
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
         
         assertTrue(forester.isArrived());
-        assertTrue(forester.isAt(point));
-
-        map.stepTime();
-        
+        assertTrue(forester.isAt(point));        
         assertTrue(forester.isPlanting());
         
+        int i;
         for (i = 0; i < 19; i++) {
             assertTrue(forester.isPlanting());
             map.stepTime();
@@ -381,14 +351,9 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */        
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
-        
+        /* Let the forester rest */
+        Utils.fastForward(99, map);
+                
         assertTrue(forester.isInsideBuilding());
         
         /* Step once and make sure the forester goes out of the hut */
@@ -404,22 +369,17 @@ public class TestForesterHut {
         
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
-
-        map.stepTime();
-        
         assertTrue(forester.isPlanting());
         
-        for (i = 0; i < 19; i++) {
-            assertTrue(forester.isPlanting());
-
-            map.stepTime();
-        }
-
+        /* Wait for the forester to plant the tree */
+        Utils.fastForward(19, map);
+        
         assertTrue(forester.isPlanting());
         assertFalse(map.isTreeAtPoint(point));
 
         map.stepTime();
         
+        /* Verify that the forester goes back home */
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
 
@@ -428,11 +388,7 @@ public class TestForesterHut {
         
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
-        assertTrue(forester.isArrived());
-        assertFalse(forester.isInsideBuilding());
-        
-        map.stepTime();
-        
+        assertTrue(forester.isArrived());        
         assertTrue(forester.isInsideBuilding());
     }
     
@@ -447,7 +403,6 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        
         constructSmallHouse(foresterHut);
         
         /* Manually place forester */
@@ -458,10 +413,12 @@ public class TestForesterHut {
         assertTrue(forester.isInsideBuilding());
         assertNull(forester.getCargo());
 
+        /* Verify that the forester doesn't produce anything */
         int i;
         for (i = 0; i < 100; i++) {
             map.stepTime();
             assertNull(forester.getCargo());
+            assertTrue(foresterHut.getFlag().getStackedCargo().isEmpty());
         }
     }
 
@@ -498,21 +455,12 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 199 times and make sure the forester stays in the hut */
+        /* Verify that the forester stays in the hut */
         int i;
-        for (i = 0; i < 9; i++) {
+        for (i = 0; i < 200; i++) {
             assertTrue(forester.isInsideBuilding());
-            Utils.fastForward(10, map);
+            map.stepTime();
         }
-        
-        Utils.fastForward(9, map);
-        
-        assertTrue(forester.isInsideBuilding());
-        
-        /* Step once and make sure the forester stays in the hut */
-        map.stepTime();        
-        
-        assertTrue(forester.isInsideBuilding());        
     }
 
     @Test
@@ -548,19 +496,13 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            assertTrue(forester.isInsideBuilding());
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the forester to rest */        
+        Utils.fastForward(99, map);
         
         assertTrue(forester.isInsideBuilding());
         
         /* Step once and make sure the forester stays in the hut */
-        map.stepTime();        
+        map.stepTime();
         
         assertTrue(forester.isInsideBuilding());
     }

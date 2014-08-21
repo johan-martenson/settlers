@@ -7,6 +7,7 @@ package org.appland.settlers.model;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Forester.States.GOING_OUT_TO_PLANT;
 import static org.appland.settlers.model.Forester.States.PLANTING;
 import static org.appland.settlers.model.Forester.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
@@ -15,6 +16,9 @@ import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
 
 @Walker(speed = 10)
 public class Forester extends Worker {
+    private static final int TIME_TO_PLANT = 19;
+    private static final int TIME_TO_REST = 99;
+    
     private States state;
     private Countdown countdown;
     private Building hut;
@@ -77,7 +81,7 @@ public class Forester extends Worker {
         
         state = RESTING_IN_HOUSE;
         
-        countdown.countFrom(99);
+        countdown.countFrom(TIME_TO_REST);
     }
     
     @Override
@@ -92,7 +96,7 @@ public class Forester extends Worker {
                 
                 setOffroadTarget(p);
 
-                state = States.GOING_OUT_TO_PLANT;
+                state = GOING_OUT_TO_PLANT;
             } else {
                 countdown.step();
             }
@@ -109,17 +113,21 @@ public class Forester extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == States.GOING_OUT_TO_PLANT) {
+        }
+    }
+
+    @Override
+    protected void onArrival() throws Exception {
+        if (state == GOING_OUT_TO_PLANT) {
             state = PLANTING;
             
-            countdown.countFrom(19);
+            countdown.countFrom(TIME_TO_PLANT);
         } else if (state == States.GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             
-            enterBuilding(hut);
+            enterBuilding(getHome());
             
-            countdown.countFrom(99);
+            countdown.countFrom(TIME_TO_REST);
         }
-
     }
 }
