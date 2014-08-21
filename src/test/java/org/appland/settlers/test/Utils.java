@@ -27,7 +27,9 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
+import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -287,12 +289,26 @@ public class Utils {
         return sw;
     }
 
-    static Worker occupyBuilding(Worker worker, Building building, GameMap map) throws InvalidRouteException {
+    static Worker occupyBuilding(Worker worker, Building building, GameMap map) throws Exception {
         map.placeWorker(worker, building.getFlag());
-        worker.setTargetBuilding(building);
-        
-        fastForwardUntilWorkerReachesPoint(map, worker, building.getPosition());
+        building.assignWorker(worker);
+        worker.enterBuilding(building);
+
+        assertEquals(building.getWorker(), worker);
         
         return worker;
+    }
+
+    static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) {
+        int i;
+        for (i = 0; i < 500; i++) {
+            map.stepTime();
+            
+            if (tree.getSize() == LARGE) {
+                break;
+            }
+        }
+
+        assertEquals(tree.getSize(), LARGE);
     }
 }
