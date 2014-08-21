@@ -15,6 +15,7 @@ public class InitialState {
         public static final int STORAGE_INITIAL_WOOD = 4;
         public static final int STORAGE_INITIAL_PLANCKS = 10;
         public static final int STORAGE_INITIAL_STONES = 10;
+        public static final int STORAGE_INITIAL_FISH = 0;
         
         public static final int STORAGE_INITIAL_FORESTER = 2;
         public static final int STORAGE_INITIAL_WOODCUTTER_WORKER = 4;
@@ -25,4 +26,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_MILLER = 1;
         public static final int STORAGE_INITIAL_BAKER = 1;
         public static final int STORAGE_INITIAL_STORAGE_WORKER = 1;
+        public static final int STORAGE_INITIAL_FISHERMAN = 1;
 }

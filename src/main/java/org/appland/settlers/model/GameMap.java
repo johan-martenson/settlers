@@ -18,6 +18,7 @@ import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
+import org.appland.settlers.model.Tile.Vegetation;
 
 public class GameMap {
 
@@ -1520,5 +1521,15 @@ public class GameMap {
 
     private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {
         return GameUtils.hullWanderer(discoveredLand);
+    }
+
+    boolean isNextToWater(Point p) {
+        for (Tile t : terrain.getSurroundingTiles(p)) {
+            if (t.getVegetationType() == Vegetation.WATER) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }

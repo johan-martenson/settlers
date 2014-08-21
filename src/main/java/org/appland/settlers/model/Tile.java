@@ -6,9 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  *
  * @author johan

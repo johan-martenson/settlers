@@ -32,6 +32,9 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tile;
+import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
@@ -338,5 +341,13 @@ public class Utils {
         }
     
         assertTrue(found);
+    }
+
+    static void surroundPointWithWater(Point p1, Point p2, Point p3, GameMap map) {        
+        Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
+        
+        waterTile.setVegetationType(WATER);
+
+        map.terrainIsUpdated();
     }
 }

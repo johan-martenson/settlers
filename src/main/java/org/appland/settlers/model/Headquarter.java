@@ -53,6 +53,7 @@ public class Headquarter extends Storage {
         inventory.put(WOOD, InitialState.STORAGE_INITIAL_WOOD);
         inventory.put(PLANCK, InitialState.STORAGE_INITIAL_PLANCKS);
         inventory.put(STONE, InitialState.STORAGE_INITIAL_STONES);
+        inventory.put(FISH, InitialState.STORAGE_INITIAL_FISH);
 
         inventory.put(FORESTER, InitialState.STORAGE_INITIAL_FORESTER);
         inventory.put(WOODCUTTER_WORKER, InitialState.STORAGE_INITIAL_WOODCUTTER_WORKER);
@@ -63,6 +64,7 @@ public class Headquarter extends Storage {
         inventory.put(MILLER, InitialState.STORAGE_INITIAL_MILLER);
         inventory.put(BAKER, InitialState.STORAGE_INITIAL_BAKER);
         inventory.put(STORAGE_WORKER, InitialState.STORAGE_INITIAL_STORAGE_WORKER);
+        inventory.put(FISHERMAN, InitialState.STORAGE_INITIAL_FISHERMAN);
     }
 
     @Override

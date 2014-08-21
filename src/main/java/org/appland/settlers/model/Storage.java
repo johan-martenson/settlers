@@ -308,6 +308,9 @@ public class Storage extends Building implements Actor {
         case STORAGE_WORKER:
             w = new StorageWorker(map);
             break;
+        case FISHERMAN:
+            w = new Fisherman(map);
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
