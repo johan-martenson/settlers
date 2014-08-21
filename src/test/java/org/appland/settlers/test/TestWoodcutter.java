@@ -332,16 +332,12 @@ public class TestWoodcutter {
         int i;
         for (i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
+            assertTrue(map.isTreeAtPoint(point));
             gameLogic.gameLoop(map);
             map.stepTime();
         }
 
-        assertTrue(wcWorker.isCuttingTree());
-        assertTrue(map.isTreeAtPoint(point));
-
-        /* Verify that the woodcutter stops cutting */
-        map.stepTime();
-        
+        /* Verify that the woodcutter stopped cutting */
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
@@ -409,12 +405,7 @@ public class TestWoodcutter {
         assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
-        
-        assertFalse(wcWorker.isInsideBuilding());
-        
-        map.stepTime();
-        
-        /* Woodcutter enter building but does not store the cargo yet */
+                
         assertTrue(wcWorker.isInsideBuilding());
         assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
@@ -523,13 +514,7 @@ public class TestWoodcutter {
         assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
-
-        assertFalse(wcWorker.isInsideBuilding());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
-        map.stepTime();
-        
-        /* Woodcutter enter building but does not store the cargo yet */
         assertTrue(wcWorker.isInsideBuilding());
         assertNotNull(wcWorker.getCargo());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
@@ -733,8 +718,6 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, wc.getPosition());
 
-        map.stepTime();
-        
         /* Woodcutter enters building but does not store the cargo yet */
         assertTrue(wcWorker.isInsideBuilding());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
