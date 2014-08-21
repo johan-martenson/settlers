@@ -87,8 +87,6 @@ public class Fisherman extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        System.out.println("ON IDLE " + state);
-        
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point p = getFishingSpot();
@@ -124,8 +122,6 @@ public class Fisherman extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
-        System.out.println("ON ARRIVAL " + state);
-        
         if (state == GOING_OUT_TO_FISH) {
             state = FISHING;
             
@@ -155,7 +151,5 @@ public class Fisherman extends Worker {
 
             state = GOING_BACK_TO_HOUSE;
         }
-        
-        System.out.println("END OF ARRIVAL " + state);
     }
 }
