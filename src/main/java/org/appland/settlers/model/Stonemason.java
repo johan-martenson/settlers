@@ -65,7 +65,7 @@ public class Stonemason extends Worker {
             setHome(b);
         }
         
-        state = States.RESTING_IN_HOUSE;
+        state = RESTING_IN_HOUSE;
 
         countdown.countFrom(99);
     }
@@ -161,7 +161,7 @@ public class Stonemason extends Worker {
                 Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (state == GOING_BACK_TO_HOUSE) {
-            state = States.RESTING_IN_HOUSE;
+            state = RESTING_IN_HOUSE;
 
             enterBuilding(getHome());
 
