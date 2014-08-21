@@ -290,7 +290,7 @@ public class Utils {
     }
 
     static Worker occupyBuilding(Worker worker, Building building, GameMap map) throws Exception {
-        map.placeWorker(worker, building.getFlag());
+        map.placeWorker(worker, building);
         building.assignWorker(worker);
         worker.enterBuilding(building);
 
