@@ -72,8 +72,6 @@ public class Stonemason extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        System.out.println("ON IDLE " + state);
-        
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point accessPoint = null;
@@ -111,12 +109,7 @@ public class Stonemason extends Worker {
                     return;
                 }
                 
-                System.out.println("  BEFORE SET OFFROAD TARGET");
-                System.out.println("  WORKER IS AT " + getPosition());
-                System.out.println("  HOME IS AT " + getHome().getPosition());
-                
                 setOffroadTarget(accessPoint);
-                System.out.println("  AFTER SET OFFROAD TARGET");
 
                 state = GOING_OUT_TO_GET_STONE;
             } else {
@@ -157,8 +150,6 @@ public class Stonemason extends Worker {
 
     @Override
     public void onArrival() throws Exception {
-        System.out.println("ON ARRIVAL " + state);
-        
         if (state == GOING_OUT_TO_PUT_CARGO) {
             try {
                 Storage stg = map.getClosestStorage(getPosition());
