@@ -9,7 +9,6 @@ package org.appland.settlers.test;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
@@ -61,17 +60,11 @@ public class TestQuarry {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
 
-        GameLogic gameLogic = new GameLogic();
-        
         /* Finish the woodcutter */
         Utils.constructSmallHouse(quarry);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
         List<Worker> workers = map.getAllWorkers();
         assertTrue(map.getAllWorkers().size() == 3);
@@ -108,13 +101,10 @@ public class TestQuarry {
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(mason.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -151,12 +141,9 @@ public class TestQuarry {
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -198,12 +185,9 @@ public class TestQuarry {
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 10 times and make sure the stonemason stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-
+        /* Run the game logic 99 times and make sure the stonemason stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -255,12 +239,9 @@ public class TestQuarry {
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 10 times and make sure the stonemason stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-
+        /* Run the game logic 99 times and make sure the stonemason stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -287,14 +268,10 @@ public class TestQuarry {
         
         assertTrue(mason.isArrived());
         assertTrue(mason.getPosition().isAdjacent(point2));
-
-        map.stepTime();
-        
         assertTrue(mason.isGettingStone());
         
         for (i = 0; i < 49; i++) {
             assertTrue(mason.isGettingStone());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -331,12 +308,9 @@ public class TestQuarry {
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -360,15 +334,11 @@ public class TestQuarry {
         
         assertTrue(mason.isArrived());
         assertTrue(mason.getPosition().isAdjacent(point3));
-
-        map.stepTime();
-        
         assertTrue(mason.isGettingStone());
         assertNull(mason.getCargo());
         
         for (i = 0; i < 49; i++) {
             assertTrue(mason.isGettingStone());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -385,10 +355,6 @@ public class TestQuarry {
         assertNotNull(mason.getCargo());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry.getPosition());
-        
-        assertFalse(mason.isInsideBuilding());
-        
-        map.stepTime();
 
         assertTrue(mason.isInsideBuilding());
         assertNotNull(mason.getCargo());
@@ -464,13 +430,10 @@ public class TestQuarry {
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(mason.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         

@@ -13,12 +13,14 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,6 +34,23 @@ import org.junit.Test;
  * @author johan
  */
 public class TestCourier {
+    
+    @Test
+    public void testNewStorageHasCouriers() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+
+        Storage storage = new Storage();
+        
+        Point point1 = new Point(10, 10);
+        map.placeBuilding(storage, point1);
+        
+        Utils.constructMediumHouse(storage);
+        
+        assertTrue(storage.getAmount(COURIER) > 0);
+    }
     
     @Test
     public void testCourierWalksToIntendedRoad() throws Exception {

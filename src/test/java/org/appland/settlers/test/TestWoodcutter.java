@@ -10,14 +10,12 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Building.ConstructionState;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.ForesterHut;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
-import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
@@ -83,18 +81,12 @@ public class TestWoodcutter {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         /* Finish the woodcutter */
         Utils.constructSmallHouse(wc);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
 
         boolean foundWoodcutter = false;
         for (Worker w : map.getAllWorkers()) {
@@ -121,24 +113,17 @@ public class TestWoodcutter {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
 
-        GameLogic gameLogic = new GameLogic();
-
         /* Construct the forester hut */
         constructSmallHouse(wc);
         
         /* Run game logic twice, once to place courier and once to place forester */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
 
         int nrWorkers = map.getAllWorkers().size();
 
         /* Keep running the gameloop and make sure no more workers are allocated */
         int i;
         for (i = 0; i < 20; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
 
@@ -152,13 +137,15 @@ public class TestWoodcutter {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        /* Place and grow tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
 
-        /* Grow tree */
         Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
 
         /* Construct the forester hut */
         constructSmallHouse(wc);
@@ -168,13 +155,10 @@ public class TestWoodcutter {
         
         assertTrue(wcWorker.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(wcWorker.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -195,17 +179,18 @@ public class TestWoodcutter {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        /* Place and grow tree */
         Point point2 = new Point(12, 4);
-
         Tree tree = map.placeTree(point2);
         
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
+
         /* Construct the forester hut */
         constructSmallHouse(wc);
-        
-        /* Grow tree */
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
         
         /* Manually place forester */
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(map), wc, map);
@@ -240,20 +225,22 @@ public class TestWoodcutter {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
+        /* Place and grow tree */
+        Point point2 = new Point(12, 4);        
+        Tree tree = map.placeTree(point2);
+
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place the woodcutter */
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
-        Point point2 = new Point(12, 4);
-        
-        Tree tree = map.placeTree(point2);
         
         /* Construct the forester hut */
         constructSmallHouse(wc);
         
-        /* Grow tree */
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
-        
         /* Manually place forester */
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(map), wc, map);
+
         
         /* Wait for woodcutter worker to rest */
         Utils.fastForward(99, map);
@@ -285,20 +272,22 @@ public class TestWoodcutter {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         /* Construct the forester hut */
         constructSmallHouse(wc);
         
-        /* Grow tree */
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
-        
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
         Utils.occupyBuilding(wcWorker, wc, map);
+
 
         /* Wait for the woodcutter to rest */        
         Utils.fastForward(99, map);
@@ -326,14 +315,11 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isCuttingTree());
         assertNull(wcWorker.getCargo());
         
-        GameLogic gameLogic = new GameLogic();
-        
         /* Wait for the woodcutter to finish cutting the tree */
         int i;
         for (i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
             assertTrue(map.isTreeAtPoint(point));
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -348,10 +334,15 @@ public class TestWoodcutter {
         GameMap map = new GameMap(20, 20);
         Point point3 = new Point(6, 4);
         Building hq = map.placeBuilding(new Headquarter(), point3);
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+
+        /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);        
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         Point point4 = new Point(9, 3);
         
@@ -360,13 +351,11 @@ public class TestWoodcutter {
         /* Construct the forester hut */
         constructSmallHouse(wc);
         
-        /* Grow tree */
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
-        
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
 
         Utils.occupyBuilding(wcWorker, wc, map);
+
         
         /* Wait for the woodcutter to rest */        
         Utils.fastForward(99, map);
@@ -446,12 +435,18 @@ public class TestWoodcutter {
         GameMap map = new GameMap(20, 20);
         Point point3 = new Point(6, 4);
         Building hq = map.placeBuilding(new Headquarter(), point3);
-        Point point0 = new Point(14, 4);
-        Building hut = map.placeBuilding(new ForesterHut(), point0);
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place forester hut (is this needed for the test?) */
+        Point point0 = new Point(14, 4);
+        Building hut = map.placeBuilding(new ForesterHut(), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         Point point4 = new Point(2, 4);
         Building hut2 = map.placeBuilding(new ForesterHut(), point4);
@@ -467,13 +462,10 @@ public class TestWoodcutter {
         constructSmallHouse(hut);
         constructSmallHouse(hut2);
         
-        /* Grow tree */
-        Utils.fastForwardUntilTreeIsGrown(tree, map);
-        
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
-        
         Utils.occupyBuilding(wcWorker, wc, map);
+
         
         /* Wait for the woodcutter to rest */        
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
@@ -595,12 +587,10 @@ public class TestWoodcutter {
 
         Utils.occupyBuilding(wcWorker, wc, map);
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
 
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -652,35 +642,26 @@ public class TestWoodcutter {
         Point point3 = new Point(6, 4);
         Building hq = map.placeBuilding(new Headquarter(), point3);
 
-        Point point1 = new Point(10, 4);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
-
+        /* Plant and grow trees */
         Point point2 = new Point(12, 4);
         Tree tree0 = map.placeTree(point2);
+
+        Point point5 = new Point(11, 5);
+        Tree tree1 = map.placeTree(point5);
+        
+        Utils.fastForwardUntilTreeIsGrown(tree0, map);
+        
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         Point point4 = new Point(9, 3);
         
         Road road0 = map.placeRoad(hq.getFlag().getPosition(), point4, wc.getFlag().getPosition());
         
-        Point point5 = new Point(11, 5);
-        Tree tree1 = map.placeTree(point5);
-        
+
         /* Construct the forester hut */
         constructSmallHouse(wc);
-        
-        /* Grow tree */
-        int i;
-        for (i = 0; i < 500; i++) {
-            map.stepTime();
-            
-            if (tree0.getSize() == LARGE) {
-                break;
-            }
-        }
-
-        assertTrue(tree0.getSize() == LARGE);
-        assertTrue(tree1.getSize() == LARGE);
-        
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -688,8 +669,6 @@ public class TestWoodcutter {
         Utils.occupyBuilding(wcWorker, wc, map);
         
         /* Wait for the woodcutter worker to leave the hut */
-        GameLogic gameLogic = new GameLogic();
-
         Utils.fastForward(100, map);
         
         assertFalse(wcWorker.isInsideBuilding());    
@@ -771,18 +750,12 @@ public class TestWoodcutter {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         /* Finish the woodcutter */
         Utils.constructSmallHouse(wc);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
         WoodcutterWorker wcWorker = null;
 

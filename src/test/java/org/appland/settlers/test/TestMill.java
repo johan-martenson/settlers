@@ -11,7 +11,6 @@ import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.FLOUR;
@@ -62,18 +61,12 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         /* Finish the well */
         Utils.constructMediumHouse(mill);
         
         /* Run game logic twice, once to place courier and once to place miller */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
         List<Worker> workers = map.getAllWorkers();
         assertTrue(map.getAllWorkers().size() == 3);
@@ -99,8 +92,6 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         /* Finish the well */
         Utils.constructMediumHouse(mill);
@@ -123,8 +114,6 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -134,8 +123,7 @@ public class TestMill {
         Utils.constructMediumHouse(mill);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
         /* Get the well worker */
         Miller miller = null;
@@ -149,6 +137,7 @@ public class TestMill {
         /* Let the well worker reach the well */
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, mill.getPosition());
         
+        assertNotNull(miller);
         assertTrue(miller.isInsideBuilding());
         assertEquals(mill.getWorker(), miller);
     }
@@ -164,8 +153,6 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -243,8 +230,6 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -293,8 +278,6 @@ public class TestMill {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());

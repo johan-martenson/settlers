@@ -18,7 +18,6 @@ import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
@@ -121,17 +120,11 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        GameLogic gameLogic = new GameLogic();
-
         /* Finish the forester hut */
         Utils.constructLargeHouse(farm);
         
         /* Run game logic twice, once to place courier and once to place forester */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
 
         List<Worker> workers = map.getAllWorkers();
         assertTrue(workers.size() == 3);
@@ -168,13 +161,10 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -210,21 +200,12 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
-        int i;
-        for (i = 0; i < 9; i++) {
-            assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Let the farmer rest */
+        Utils.fastForward(99, map);
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Step once and make sure the forester goes out of the hut */
+        /* Step once and make sure the farmer goes out of the farm */
         map.stepTime();        
         
         assertFalse(farmer.isInsideBuilding());
@@ -242,9 +223,9 @@ public class TestFarm {
         
         assertTrue(farmer.isPlanting());
         
+        int i;
         for (i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -280,13 +261,10 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -314,7 +292,6 @@ public class TestFarm {
         
         for (i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -344,12 +321,7 @@ public class TestFarm {
         Building hq = map.placeBuilding(new Headquarter(), point0);
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point3);
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+
         Crop crop = map.placeCrop(point3.upRight().upRight());
 
         Utils.constructLargeHouse(farm);
@@ -371,12 +343,9 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         for (i = 0; i < 9; i++) {
             assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -407,7 +376,6 @@ public class TestFarm {
         for (i = 0; i < 19; i++) {
             assertFalse(farmer.isPlanting());
             assertTrue(farmer.isHarvesting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -437,16 +405,9 @@ public class TestFarm {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
         Crop crop = map.placeCrop(point3.upRight().upRight());
 
+        Utils.fastForwardUntilCropIsGrown(crop, map);
+        
         Utils.constructLargeHouse(farm);
-
-        int i;
-        for (i = 0; i < 500; i++) {
-            if (crop.getGrowthState() == FULL_GROWN) {
-                break;
-            }
-
-            map.stepTime();
-        }
         
         Farmer farmer = new Farmer(map);
         
@@ -454,12 +415,10 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
+        int i;
         for (i = 0; i < 9; i++) {
             assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -490,7 +449,6 @@ public class TestFarm {
         for (i = 0; i < 19; i++) {
             assertFalse(farmer.isPlanting());
             assertTrue(farmer.isHarvesting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -567,13 +525,10 @@ public class TestFarm {
         int j;
         for (j = 0; j < 5; j++) {
         
-            /* Run the game logic 10 times and make sure the forester stays in the hut */
-            GameLogic gameLogic = new GameLogic();
-
+            /* Run the game logic 99 times and make sure the forester stays in the hut */
             int i;
             for (i = 0; i < 9; i++) {
                 assertTrue(farmer.isInsideBuilding());
-                gameLogic.gameLoop(map);
                 Utils.fastForward(10, farmer);
             }
 
@@ -606,7 +561,6 @@ public class TestFarm {
             for (i = 0; i < 19; i++) {
                 assertTrue(farmer.isPlanting());
                 assertFalse(farmer.isHarvesting());
-                gameLogic.gameLoop(map);
                 farmer.stepTime();
             }
 
@@ -656,13 +610,10 @@ public class TestFarm {
 
         
         /* Run the game logic 20 times and make sure the farm doesn't produce any wheat */
-        GameLogic gameLogic = new GameLogic();
-        
         int i;
         for (i = 0; i < 20; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
             
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -716,13 +667,10 @@ public class TestFarm {
         
         assertTrue(farmer.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(farmer.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -753,7 +701,6 @@ public class TestFarm {
         
         for (i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 

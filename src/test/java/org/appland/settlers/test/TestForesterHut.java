@@ -11,7 +11,6 @@ import org.appland.settlers.model.Building.ConstructionState;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
@@ -127,17 +126,11 @@ public class TestForesterHut {
         Point point6 = new Point(11, 3);
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
 
-        GameLogic gameLogic = new GameLogic();
-
         /* Finish the forester hut */
         Utils.constructSmallHouse(foresterHut);
         
         /* Run game logic twice, once to place courier and once to place forester */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
 
         List<Worker> workers = map.getAllWorkers();
         assertTrue(workers.size() == 3);
@@ -166,24 +159,17 @@ public class TestForesterHut {
         Point point6 = new Point(11, 3);
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
 
-        GameLogic gameLogic = new GameLogic();
-
         /* Construct the forester hut */
         constructSmallHouse(foresterHut);
         
         /* Run game logic twice, once to place courier and once to place forester */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
 
         assertTrue(map.getAllWorkers().size() == 3);
 
         /* Keep running the gameloop and make sure no more workers are allocated */
         int i;
         for (i = 0; i < 20; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
 
@@ -210,13 +196,10 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 10 times and make sure the forester stays in the hut */        
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(forester.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -250,12 +233,9 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -296,12 +276,9 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -344,12 +321,9 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */        
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -377,7 +351,6 @@ public class TestForesterHut {
         
         for (i = 0; i < 19; i++) {
             assertTrue(forester.isPlanting());
-            gameLogic.gameLoop(map);
             map.stepTime();
         }
 
@@ -408,12 +381,9 @@ public class TestForesterHut {
 
         Utils.occupyBuilding(forester, foresterHut, map);
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */        
         int i;
         for (i = 0; i < 9; i++) {
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -441,7 +411,7 @@ public class TestForesterHut {
         
         for (i = 0; i < 19; i++) {
             assertTrue(forester.isPlanting());
-            gameLogic.gameLoop(map);
+
             map.stepTime();
         }
 
@@ -528,13 +498,10 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 199 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(forester.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         
@@ -581,13 +548,10 @@ public class TestForesterHut {
         
         assertTrue(forester.isInsideBuilding());
         
-        /* Run the game logic 10 times and make sure the forester stays in the hut */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
         for (i = 0; i < 9; i++) {
             assertTrue(forester.isInsideBuilding());
-            gameLogic.gameLoop(map);
             Utils.fastForward(10, map);
         }
         

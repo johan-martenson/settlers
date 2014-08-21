@@ -10,8 +10,6 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Forester;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WATER;
@@ -62,19 +60,12 @@ public class TestWell {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
 
-        GameLogic gameLogic = new GameLogic();
-        
         /* Finish the well */
         Utils.constructSmallHouse(well);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
-        
-        List<Worker> workers = map.getAllWorkers();
         assertTrue(map.getAllWorkers().size() == 3);
         boolean foundWellWorker = false;
         for (Worker w : map.getAllWorkers()) {
@@ -93,12 +84,6 @@ public class TestWell {
         Building building0 = map.placeBuilding(new Headquarter(), point0);
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         /* Finish the well */
         Utils.constructSmallHouse(well);
@@ -121,8 +106,6 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -132,8 +115,7 @@ public class TestWell {
         Utils.constructSmallHouse(well);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
-        gameLogic.gameLoop(map);
-        Utils.fastForward(10, map);
+        Utils.fastForward(2, map);
         
         /* Get the well worker */
         Worker ww = null;
@@ -163,8 +145,6 @@ public class TestWell {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
 
-        GameLogic gameLogic = new GameLogic();
-        
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
@@ -201,8 +181,6 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -246,8 +224,6 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        GameLogic gameLogic = new GameLogic();
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());

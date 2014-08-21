@@ -8,9 +8,12 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Military.Rank;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -28,13 +31,21 @@ public class TestInventory {
 
     @Before
     public void initTests() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+
         storage = new Storage();
+        
+        Point point1 = new Point(10, 10);
+        map.placeBuilding(storage, point1);
         
         Utils.constructMediumHouse(storage);
     }
 
     @Test
-    public void testInitialInventoryIsEmpty() {
+    public void testInitialInventoryIsEmptyExceptCouriers() {
         assertTrue(storage.getAmount(SWORD) == 0);
         assertTrue(storage.getAmount(SHIELD) == 0);
         assertTrue(storage.getAmount(PRIVATE) == 0);
@@ -46,7 +57,6 @@ public class TestInventory {
         assertTrue(storage.getAmount(PLANCK) == 0);
         assertTrue(storage.getAmount(STONE) == 0);
         assertTrue(storage.getAmount(WHEAT) == 0);
-        assertTrue(storage.getAmount(COURIER) == 0);
         assertTrue(storage.getAmount(FORESTER) == 0);
         
         assertFalse(storage.isInStock(SWORD));
@@ -60,7 +70,6 @@ public class TestInventory {
         assertFalse(storage.isInStock(PLANCK));
         assertFalse(storage.isInStock(STONE));
         assertFalse(storage.isInStock(WHEAT));
-        assertFalse(storage.isInStock(COURIER));
         assertFalse(storage.isInStock(FORESTER));
     }
     

@@ -14,7 +14,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -47,13 +46,6 @@ import org.junit.Test;
 
 public class TestScenarios {
 
-    private GameLogic gameLogic;
-
-    @Before
-    public void setup() {
-        gameLogic = new GameLogic();
-    }
-
     @Test
     public void productionAndTransportForWoodcutterAndSawmill() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
 
@@ -64,9 +56,6 @@ public class TestScenarios {
         GameMap map = new GameMap(30, 30);
         Storage hq = new Headquarter();
         Point startPosition = new Point(6, 6);
-
-        /* Game loop */
-        gameLogic.gameLoop(map);
 
         /* Player creates woodcutter, sawmill and quarry */
         Building wc = new Woodcutter();
@@ -117,15 +106,11 @@ public class TestScenarios {
         assertTrue(hq.getAmount(PLANCK) == 10);
         assertTrue(hq.getAmount(STONE) == 10);
 
-        /* Let the couriers reach their targeted roads */
-        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
-        
-        wc.assignWorker(wcr);
-        wcr.enterBuilding(wc);
-        
-        assertEquals(wc.getWorker(), wcr);
-        
+        Utils.occupyBuilding(wcr, wc, map);
         Utils.occupyBuilding(new SawmillWorker(map), sm, map);
+
+        /* Let the couriers reach their targeted roads */
+        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);        
         
         /*   --   START TEST   --   */
         
@@ -179,7 +164,6 @@ public class TestScenarios {
         assertTrue(wcToHqRoad.getCourier().isAt(hq.getPosition()));
 
         /* Cargo has arrived at the headquarter and stored */
-
         assertNull(wcToHqRoad.getCourier().getCargo());
         assertTrue(hq.getAmount(WOOD) == amountWood + 1);
 
@@ -208,21 +192,17 @@ public class TestScenarios {
         Cargo cargo = hq.getFlag().getStackedCargo().get(amountInStack);
 
         assertTrue(cargo.getTarget().equals(sm));
-        assertNull(courierSmToHq.getCargo());
-        assertTrue(smToHqRoad.getWayPoints().contains(cargo.getNextStep()));
         
-        /* Get the wood transported to the sawmill */
-        map.stepTime();
+        /* Wait for smToHqRoad's courier to pick up the cargo */
+        for (i = 0; i < 400; i++) {
+            if (cargo.equals(courierSmToHq.getCargo())) {
+                break;
+            }
+            
+            map.stepTime();
+        }
         
-        /* The courier starts walking to the HQ */
-
-        assertTrue(cargo.isDeliveryPromised());
-        assertTrue(courierSmToHq.isTraveling());
-        assertFalse(courierSmToHq.isArrived());
-        assertEquals(courierSmToHq.getTarget(), hq.getFlag().getPosition());
-        
-        /* The courier reaches the HQ */
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, hq.getFlag().getPosition());
+        assertEquals(cargo, courierSmToHq.getCargo());
         
         /* The courier has picked up the WOOD */
         assertFalse(courierSmToHq.isArrived());
@@ -233,13 +213,13 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getTarget(), sm.getPosition());
         assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
         assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
-        assertTrue(sm.getMaterialInQueue(WOOD) == 0);
         
         /* Get the wood transported to the sawmill and deliver it*/
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getPosition());
 
         /* Cargo has arrived at the sawmill and the courier has delivered it */
-        assertTrue(sm.getMaterialInQueue(WOOD) == 1);
+        assertTrue(sm.getMaterialInQueue(WOOD) > 0);
+        int amountInQueue = sm.getAmount(WOOD);
         
         /* Produce plancks in sawmill. 
         
@@ -257,10 +237,9 @@ public class TestScenarios {
         }
 
         assertNotNull(sm.getWorker().getCargo());
-        assertTrue(sm.getMaterialInQueue(WOOD) == 0);
+        assertTrue(sm.getMaterialInQueue(WOOD) == amountInQueue - 1);
 
         /* Let the sawmill worker leave the cargo at the flag */
-        
         assertEquals(sm.getWorker().getTarget(), sm.getFlag().getPosition());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
@@ -303,8 +282,6 @@ public class TestScenarios {
 
 
         /*   --   START TEST   --   */
-
-        gameLogic.gameLoop(map);
         fastForward(100, map);
 
         // TODO: assert that nothing happens
@@ -315,7 +292,6 @@ public class TestScenarios {
 
         map.placeBuilding(wc, wcSpot);
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
         /* Player creates road between hq and wc */
@@ -323,7 +299,6 @@ public class TestScenarios {
 
         // TODO: assert that the road is unoccupied
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
         // TODO: assert that the road is occupied
@@ -331,16 +306,12 @@ public class TestScenarios {
         /* The road is occupied so the delivery of plancks and stone to the wc can start  */
         // TODO: assert that the wc is under construction and has no material yet
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
         /* The woodcutter has all material so construction can finish */
@@ -367,7 +338,6 @@ public class TestScenarios {
 
         /*   --   User    --   */
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
         /*   --   Create woodcutter   --  */
@@ -384,16 +354,13 @@ public class TestScenarios {
         
         map.placeBuilding(wc, wcPoint);
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);
         
         /*   --   Create road to woodcutter   --   */
         map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
     
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*   --   Create sawmill   --   */
@@ -410,10 +377,8 @@ public class TestScenarios {
         
         map.placeBuilding(sm, smPoint);
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
     
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
         
         /*  - Build road carefully to samwill -  */
@@ -431,7 +396,6 @@ public class TestScenarios {
         /*  - Choose 17, 13 -  */
         chosenPointsForRoad.add(new Point(17, 13));
 
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
         
         /*  - List possible adjacent connections for the road -  */
@@ -442,7 +406,6 @@ public class TestScenarios {
         /*  - Choose 16, 12 -  */
         chosenPointsForRoad.add(new Point(16, 12));
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
@@ -453,7 +416,6 @@ public class TestScenarios {
         /*  - Choose 14, 12 -  */
         chosenPointsForRoad.add(new Point(14, 12));
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
@@ -464,7 +426,6 @@ public class TestScenarios {
         /*  - Choose 13, 11 -  */
         chosenPointsForRoad.add(new Point(13, 11));
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
@@ -475,7 +436,6 @@ public class TestScenarios {
         /*  - Choose 12, 10 -  */
         chosenPointsForRoad.add(new Point(12, 10));
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
@@ -485,8 +445,7 @@ public class TestScenarios {
         
         /*  - Choose 13, 9 -  */
         chosenPointsForRoad.add(new Point(13, 9));
-        
-        gameLogic.gameLoop(map);
+
         fastForward(100, map);        
 
         /*  - List possible adjacent connections for the road -  */
@@ -497,7 +456,6 @@ public class TestScenarios {
         /*  - Choose 12, 8 -  */
         chosenPointsForRoad.add(new Point(12, 8));
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /*  - Connect to sawmill's flag -  */
@@ -511,7 +469,6 @@ public class TestScenarios {
 
         map.placeRoad(chosenPointsForRoad);
         
-        gameLogic.gameLoop(map);
         fastForward(100, map);        
 
         /* Sawmill and woodcutter built and connected to headquarter */

@@ -129,14 +129,6 @@ public class Stonemason extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == GOING_OUT_TO_GET_STONE) {
-            state = GETTING_STONE;
-            
-            countdown.countFrom(49);
-        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            enterBuilding(getHome());
-            
-            state = IN_HOUSE_WITH_CARGO;
         } else if (state == IN_HOUSE_WITH_CARGO) {
             try {
                 setTarget(getHome().getFlag().getPosition());
@@ -174,6 +166,14 @@ public class Stonemason extends Worker {
             enterBuilding(getHome());
 
             countdown.countFrom(99);
-        }
+        } else if (state == GOING_OUT_TO_GET_STONE) {
+            state = GETTING_STONE;
+            
+            countdown.countFrom(49);
+        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+            enterBuilding(getHome());
+            
+            state = IN_HOUSE_WITH_CARGO;
+        } 
     } 
 }

@@ -2,7 +2,10 @@ package org.appland.settlers.test;
 
 import java.util.Map;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertTrue;
 
@@ -16,7 +19,15 @@ public class MilitaryCreationAndPromotionTest {
 
     @Before
     public void setupTest() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+
         storage = new Storage();
+        
+        Point point1 = new Point(10, 10);
+        map.placeBuilding(storage, point1);
         
         Utils.constructMediumHouse(storage);
     }

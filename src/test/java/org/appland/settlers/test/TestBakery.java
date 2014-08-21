@@ -8,7 +8,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BAKER;
@@ -98,11 +97,7 @@ public class TestBakery {
         assertTrue(bakery.needsWorker(BAKER));
 
         /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        map.stepTime();
         
         assertTrue(map.getAllWorkers().size() == 3);
 
@@ -147,30 +142,8 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
-
-        /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 3);
-
-        /* Let the bakery worker reach the bakery */
-        Baker baker = null;
-
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
-            }
-        }
-
-        assertEquals(baker.getTarget(), bakery.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        /* Populate the bakery */        
+        Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
@@ -230,30 +203,8 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
-
-        /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 3);
-
-        /* Let the bakery worker reach the bakery */
-        Baker baker = null;
-
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
-            }
-        }
-
-        assertEquals(baker.getTarget(), bakery.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        /* Populate the bakery */        
+        Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
@@ -301,30 +252,8 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
-
-        /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-        
-        assertTrue(map.getAllWorkers().size() == 3);
-
-        /* Let the bakery worker reach the bakery */
-        Baker baker = null;
-
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
-            }
-        }
-
-        assertEquals(baker.getTarget(), bakery.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        /* Populate the bakery */        
+        Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
@@ -385,28 +314,8 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
-
-        /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-
-        /* Let the bakery worker reach the bakery */
-        Baker baker = null;
-
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
-            }
-        }
-
-        assertEquals(baker.getTarget(), bakery.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+        /* Populate the bakery */        
+        Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
         /* Deliver wood to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
@@ -445,31 +354,11 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
-
-        /* Verify that a bakery worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
+        /* Populate the bakery */        
+        Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
-        assertTrue(map.getAllWorkers().size() == 1);
-        
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
-
-        /* Let the bakery worker reach the bakery */
-        Baker baker = null;
-
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
-            }
-        }
-
-        assertEquals(baker.getTarget(), bakery.getPosition());
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, baker);
-        
-        /* Fast forward so that the bakery worker would produced plancks
-           if it had had any wood
+        /* Fast forward so that the bakery worker would have produced bread
+           if it had had the ingredients
         */
         
         Utils.fastForward(150, map);

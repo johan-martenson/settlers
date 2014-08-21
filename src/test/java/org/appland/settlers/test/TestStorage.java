@@ -9,7 +9,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -94,10 +93,8 @@ public class TestStorage {
         /* Finish construction of the storage */
         Utils.constructMediumHouse(storage);
         
-        GameLogic gameLogic = new GameLogic();
-        
-        /* Run game logic once to let a storage worker get assigned to the storage */
-        gameLogic.gameLoop(map);
+        /* Run game logic once to let the headquarter assign a storage worker to the storage */
+        map.stepTime();
         
         Worker sw = null;
         

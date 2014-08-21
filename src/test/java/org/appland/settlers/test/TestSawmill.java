@@ -8,7 +8,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -96,12 +95,11 @@ public class TestSawmill {
         assertTrue(sawmill.needsWorker());
         assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
 
-        /* Verify that a sawmill worker leaves the hq */
-        GameLogic gameLogic = new GameLogic();
-        
+        /* Verify that a sawmill worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);
         
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        /* Step time to let the headquarter send new workers */
+        map.stepTime();
         
         assertTrue(map.getAllWorkers().size() == 3);
         boolean foundSawmillWorker = false;
@@ -142,14 +140,6 @@ public class TestSawmill {
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
-
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
@@ -352,14 +342,6 @@ public class TestSawmill {
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
-
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);

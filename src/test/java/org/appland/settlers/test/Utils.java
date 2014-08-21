@@ -14,6 +14,8 @@ import static org.appland.settlers.model.Building.ConstructionState;
 import static org.appland.settlers.model.Building.ConstructionState.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Crop;
+import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidMaterialException;
@@ -310,5 +312,18 @@ public class Utils {
         }
 
         assertEquals(tree.getSize(), LARGE);
+    }
+
+    static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) {
+        int i;
+        for (i = 0; i < 500; i++) {
+            if (crop.getGrowthState() == FULL_GROWN) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 }

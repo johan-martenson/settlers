@@ -10,7 +10,6 @@ import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -302,12 +301,30 @@ public class TestTransportation {
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(stge);
 
-        Utils.occupyBuilding(mason, qry, map);
-
         assertTrue(qry.getConstructionState() == DONE);
 
+        Utils.occupyBuilding(mason, qry, map);
+
         /* Production starts, wait for it to finish */
-        Utils.fastForward(250, map);
+        Utils.fastForward(100, map);
+        
+        assertFalse(mason.isInsideBuilding());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, mason.getTarget());
+        
+        assertTrue(mason.isGettingStone());
+        
+        Utils.fastForward(50, map);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getPosition());
+        
+        assertTrue(mason.isInsideBuilding());
+        
+        map.stepTime();
+        
+        assertEquals(mason.getTarget(), qry.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getFlag().getPosition());
 
         assertFalse(qry.getFlag().getStackedCargo().isEmpty());
 
@@ -319,7 +336,6 @@ public class TestTransportation {
 
     @Test
     public void testDeliverWithHandover() throws Exception {
-        GameLogic gameLogic = new GameLogic();
         GameMap map = new GameMap(40, 40);
         Storage storage = new Headquarter();
         Point hqPoint = new Point(6, 4);
@@ -404,7 +420,6 @@ public class TestTransportation {
 
     @Test
     public void testCourierIsAssignedToNewRoad() throws Exception {
-        GameLogic gameLogic = new GameLogic();
         GameMap map = new GameMap(30, 30);
         Storage storage = new Headquarter();
         Point hqPoint = new Point(5, 5);
@@ -421,7 +436,8 @@ public class TestTransportation {
         assertTrue(map.getRoadsThatNeedCouriers().contains(hqToMiddleRoad));
         assertTrue(map.getClosestStorage(hqToMiddleRoad.getStart()).equals(storage));
 
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        /* Step time to let the headquarter send new workers */
+        map.stepTime();
 
         assertFalse(hqToMiddleRoad.needsCourier());
 

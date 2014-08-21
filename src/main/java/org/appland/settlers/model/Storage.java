@@ -1,11 +1,13 @@
 package org.appland.settlers.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
@@ -80,6 +82,91 @@ public class Storage extends Building implements Actor {
                 draftCountdown = ProductionDelays.DRAFT_DELAY;
             } else {
                 draftCountdown--;
+            }
+        }
+        
+        /* Send out new workers */
+        try {
+            assignNewWorkerToUnoccupiedPlaces(map);
+        } catch (Exception ex) {
+            Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
+        /* Handle unoccupied roads */
+        List<Road> roads = map.getRoadsThatNeedCouriers();
+        
+        for (Road r : roads) {
+            Storage stg = map.getClosestStorage(r.getStart());
+
+            if (!equals(stg)) {
+                continue;
+            }
+
+            if (!hasAtLeastOne(COURIER)) {
+                return;
+            }
+            
+            Courier w = stg.retrieveCourier();
+
+            w.setMap(map);
+
+            map.placeWorker(w, stg.getFlag());
+
+            w.assignToRoad(r);
+        }
+
+        /* Handle unoccupied regular buildings and military buildings*/
+        List<Building> buildings = map.getBuildings();
+
+        for (Building b : buildings) {
+            if (b.isMilitaryBuilding()) {
+                if (b.needMilitaryManning()) {
+                    Storage stg = map.getClosestStorage(b.getPosition());
+
+                    if (!equals(stg)) {
+                        continue;
+                    }
+                    
+                    if (!hasMilitary()) {
+                        continue;
+                    }
+                    
+                    Military m = stg.retrieveAnyMilitary();
+
+                    m.setMap(map);
+
+                    map.placeWorker(m, stg.getFlag());
+                    
+                    m.setTargetBuilding(b);
+
+                    b.promiseMilitary(m);
+                }
+            } else {
+                if (b.needsWorker()) {
+                    Material m = b.getWorkerType();
+
+                    Storage stg = map.getClosestStorage(b.getPosition(), b);
+
+                    if (!equals(stg)) {
+                        continue;
+                    }
+                    
+                    if (!hasAtLeastOne(m)) {
+                        continue;
+                    }
+                    
+                    Worker w = stg.retrieveWorker(m);
+
+                    w.setMap(map);
+
+                    map.placeWorker(w, stg.getFlag());
+
+                    w.setTargetBuilding(b);
+                    
+                    b.promiseWorker(w);
+                }
             }
         }
     }
@@ -294,22 +381,39 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean hasAtLeastOne(Material m) {
+        if (m == COURIER) {
+            return true;
+        }
+        
         return inventory.get(m) > 0;
     }
 
     private void retrieveOneFromInventory(Material m) {
+        if (m == COURIER) {
+            return;
+        }
+        
         int amount = inventory.get(m);
 
         inventory.put(m, amount - 1);
     }
 
     private void storeOneInInventory(Material m) {
+        if (m == COURIER) {
+            return;
+        }
+        
         int amount = inventory.get(m);
 
         inventory.put(m, amount + 1);
     }
 
+    @Override
     public int getAmount(Material m) {
+        if (m == COURIER) {
+            return 1;
+        }
+        
         return inventory.get(m);
     }
 

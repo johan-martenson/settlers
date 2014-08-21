@@ -13,7 +13,6 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.GameLogic;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -927,6 +926,7 @@ public class TestRoads {
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
         GameMap map = new GameMap(20, 20);
         Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
@@ -951,13 +951,21 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Split road */
+        assertTrue(map.getRoads().size() == 2);
+        
         map.placeFlag(new Flag(middlePoint2));
 
+        assertTrue(map.getRoads().size() == 3);
         assertTrue(map.getAllWorkers().size() == 2);
         
-        GameLogic gameLogic = new GameLogic();
-        gameLogic.gameLoop(map);
-
+        /* Step time to let the headquarter assign a courier to the new road */
+        assertTrue(map.getRoadsThatNeedCouriers().size() == 1);
+        Road r = map.getRoadsThatNeedCouriers().get(0);
+        
+        assertEquals(map.getClosestStorage(r.getStart()), hq);
+        
+        map.stepTime();
+        
         assertTrue(map.getAllWorkers().size() == 3);
         
         Worker w2 = null;
@@ -1071,8 +1079,6 @@ public class TestRoads {
         Point point5 = new Point(12, 4);
         Point point6 = new Point(13, 5);
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
-
-        GameLogic gameLogic = new GameLogic();
         
         assertTrue(road0.needsCourier());
         assertTrue(map.getAllWorkers().size() == 1);
@@ -1080,7 +1086,8 @@ public class TestRoads {
         List<Worker> workersBefore = new LinkedList<>();
         workersBefore.addAll(map.getAllWorkers());
         
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        /* Step time to let the headquarter send new workers */
+        map.stepTime();
         
         /* Let the new courier reach its road */
         assertTrue(map.getAllWorkers().size() == 2);
@@ -1122,10 +1129,9 @@ public class TestRoads {
 
         assertTrue(road0.needsCourier());
         assertTrue(map.getAllWorkers().size() == 1);
-
-        GameLogic gameLogic = new GameLogic();
         
-        gameLogic.assignNewWorkerToUnoccupiedPlaces(map);
+        /* Step time to let the headquarter send new workers */
+        map.stepTime();
         
         assertTrue(road0.needsCourier());
         assertTrue(map.getAllWorkers().size() == 1);
@@ -1141,9 +1147,6 @@ public class TestRoads {
         Point point2 = new Point(13, 5);
         Flag flag0 = map.placeFlag(point2);
 
-        GameLogic gameLogic = new GameLogic();
-        
-        gameLogic.gameLoop(map);
         Utils.fastForward(100, map);
         
         Point point3 = new Point(6, 4);
@@ -1155,7 +1158,6 @@ public class TestRoads {
         assertTrue(map.getAllWorkers().size() == 1);
         assertTrue(road0.needsCourier());
 
-        gameLogic.gameLoop(map);
         map.stepTime();
         
         assertTrue(map.getAllWorkers().size() == 2);
@@ -1170,19 +1172,15 @@ public class TestRoads {
         assertTrue(road1.needsCourier());
         assertTrue(map.getAllWorkers().size() == 2);
         
-        gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
         assertFalse(road0.needsCourier());
         
-        gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
 
-        gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
 
-        gameLogic.gameLoop(map);
         Utils.fastForward(10, map);
 
 
