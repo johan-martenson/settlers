@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Courier;
@@ -51,10 +50,13 @@ public class TestWell {
     @Test
     public void testWellWorkerIsAssignedToFinishedHouse() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -67,27 +69,24 @@ public class TestWell {
         Utils.fastForward(2, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
-        boolean foundWellWorker = false;
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof WellWorker) {
-                foundWellWorker = true;
-            }
-        }
         
-        assertTrue(foundWellWorker);    
+        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), WellWorker.class);
     }
 
     @Test
     public void testUnoccupiedWellProducesNothing() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
         
         /* Finish the well */
         Utils.constructSmallHouse(well);
         
+        /* Verify that the unoccupied well produces nothing */
         int i;
         for (i = 0; i < 200; i++) {
             assertTrue(well.getFlag().getStackedCargo().isEmpty());
@@ -96,12 +95,15 @@ public class TestWell {
     }
 
     @Test
-    public void testWellWorkerEntersTheWell() throws Exception {
+    public void testAssignedWellWorkerEntersTheWell() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -129,6 +131,7 @@ public class TestWell {
         /* Let the well worker reach the well */
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getPosition());
         
+        assertNotNull(ww);
         assertTrue(ww.isInsideBuilding());
         assertEquals(well.getWorker(), ww);
     }
@@ -136,29 +139,25 @@ public class TestWell {
     @Test
     public void testWellWorkerRests() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
-
-        Courier courier = new Courier(map);
-        map.placeWorker(courier, hq.getFlag());
-        courier.assignToRoad(road0);
         
         /* Finish the well */
         Utils.constructSmallHouse(well);
         
-        /* Put the worker in the well */
+        /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
         
-        map.placeWorker(ww, well.getFlag());
-        ww.setTargetBuilding(well);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, ww);
+        Utils.occupyBuilding(ww, well, map);
         
         assertTrue(ww.isInsideBuilding());
 
@@ -182,20 +181,13 @@ public class TestWell {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
         
-        Courier courier = new Courier(map);
-        map.placeWorker(courier, hq.getFlag());
-        courier.assignToRoad(road0);
-        
         /* Finish the well */
         Utils.constructSmallHouse(well);
         
-        /* Put the worker in the well */
+        /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
         
-        map.placeWorker(ww, well.getFlag());
-        ww.setTargetBuilding(well);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, ww);
+        Utils.occupyBuilding(ww, well, map);
         
         assertTrue(ww.isInsideBuilding());
 
@@ -216,36 +208,32 @@ public class TestWell {
     @Test
     public void testWellWorkerPlacesWaterCargoAtTheFlag() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
         
-        Courier courier = new Courier(map);
-        map.placeWorker(courier, hq.getFlag());
-        courier.assignToRoad(road0);
-        
         /* Finish the well */
         Utils.constructSmallHouse(well);
         
-        /* Put the worker in the well */
+        /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
         
-        map.placeWorker(ww, well.getFlag());
-        ww.setTargetBuilding(well);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, ww);
+        Utils.occupyBuilding(ww, well, map);
         
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
         
-        /* Verify that it the worker produces water at the right time */
+        /* Wait for the well worker to produce water */
         Utils.fastForward(50, map);
         
         assertNotNull(ww.getCargo());

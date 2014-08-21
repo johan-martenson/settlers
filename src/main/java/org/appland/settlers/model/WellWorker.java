@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.WellWorker.States.DRAWING_WATER;
 import static org.appland.settlers.model.WellWorker.States.GOING_BACK_TO_HOUSE;
@@ -54,7 +52,7 @@ public class WellWorker extends Worker {
     }
 
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = DRAWING_WATER;
@@ -65,17 +63,13 @@ public class WellWorker extends Worker {
             }
         } else if (state == DRAWING_WATER) {
             if (countdown.reachedZero()) {
-                try {
-                    Cargo cargo = new Cargo(WATER, map);
+                Cargo cargo = new Cargo(WATER, map);
                     
-                    setCargo(cargo);
+                setCargo(cargo);
                     
-                    setTarget(getHome().getFlag().getPosition());
+                setTarget(getHome().getFlag().getPosition());
                     
-                    state = GOING_TO_FLAG_WITH_CARGO;
-                } catch (InvalidRouteException ex) {
-                    Logger.getLogger(WellWorker.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                state = GOING_TO_FLAG_WITH_CARGO;
             } else {
                 countdown.step();
             }
@@ -101,14 +95,10 @@ public class WellWorker extends Worker {
 
             state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
-            try {
-                enterBuilding(getHome());
+            enterBuilding(getHome());
                 
-                state = RESTING_IN_HOUSE;
-                countdown.countFrom(RESTING_TIME);
-            } catch (Exception ex) {
-                Logger.getLogger(WellWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = RESTING_IN_HOUSE;
+            countdown.countFrom(RESTING_TIME);
         }
     }
 }
