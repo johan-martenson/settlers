@@ -55,7 +55,7 @@ public class SawmillWorker extends Worker {
 
     @Override
     protected void onIdle() {
-        if (state == RESTING_IN_HOUSE) {
+        if (state == RESTING_IN_HOUSE) {            
             if (countdown.reachedZero()) {
                 state = CUTTING_WOOD;
                 countdown.countFrom(PRODUCTION_TIME);
