@@ -51,10 +51,13 @@ public class TestQuarry {
     @Test
     public void testStonemasonIsAssignedToFinishedHouse() throws Exception {
         GameMap map = new GameMap(20, 20);
+
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
+
         Point point1 = new Point(8, 6);
         Building quarry = map.placeBuilding(new Quarry(), point1);
+
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -66,17 +69,11 @@ public class TestQuarry {
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
         
-        List<Worker> workers = map.getAllWorkers();
+        /* Verify that the right amount of workers are added to the map */
         assertTrue(map.getAllWorkers().size() == 3);
-        Stonemason stonemason = null;
 
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Stonemason) {
-                stonemason = (Stonemason)w;
-            }
-        }
-    
-        assertNotNull(stonemason);
+        /* Verify that the map contains a stonemason */
+        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Stonemason.class);
     }
 
     @Test
@@ -91,10 +88,10 @@ public class TestQuarry {
         Point point2 = new Point(12, 4);
         Stone stone = map.placeStone(point2);
 
-        /* Construct the forester hut */
+        /* Construct the quarry */
         constructSmallHouse(quarry);
         
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
@@ -103,12 +100,10 @@ public class TestQuarry {
         
         /* Run the game logic 99 times and make sure the forester stays in the hut */
         int i;
-        for (i = 0; i < 9; i++) {
+        for (i = 0; i < 99; i++) {
             assertTrue(mason.isInsideBuilding());
-            Utils.fastForward(10, map);
+            map.stepTime();
         }
-        
-        Utils.fastForward(9, map);
         
         assertTrue(mason.isInsideBuilding());
         
@@ -127,27 +122,22 @@ public class TestQuarry {
         
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
+
         Point point2 = new Point(12, 4);
         Stone stone = map.placeStone(point2);
         
         /* Construct the quarry */
         constructSmallHouse(quarry);
 
-        
-        /* Manually place stonemason */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
         
         Utils.occupyBuilding(mason, quarry, map);
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
@@ -160,6 +150,7 @@ public class TestQuarry {
         Point point = mason.getTarget();
         assertNotNull(point);
         
+        /* Verify that the stonemason has chosen a correct spot */
         assertTrue(point.isAdjacent(point2));
         assertTrue(mason.isTraveling() || point.equals(mason.getPosition()));
         assertFalse(map.isBuildingAtPoint(point));
@@ -174,29 +165,25 @@ public class TestQuarry {
         
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
+
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2);
         
         /* Construct the forester hut */
         constructSmallHouse(quarry);
         
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry*/
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 99 times and make sure the stonemason stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
         
-        /* Step once and make sure the stonemason goes out of the hut */
+        /* Step once to let the stonemason go out to get stone */
         map.stepTime();
         
         assertFalse(mason.isInsideBuilding());    
@@ -209,6 +196,7 @@ public class TestQuarry {
 
         map.stepTime();
         
+        /* Wait for the stonemason to arrive if it isn't already at the right spot */
         if (!mason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, mason);
         }
@@ -228,29 +216,25 @@ public class TestQuarry {
         
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
+
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2);
         
-        /* Construct the forester hut */
+        /* Construct the quarry */
         constructSmallHouse(quarry);
 
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 99 times and make sure the stonemason stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
         
-        /* Step once and make sure the stonemason goes out of the hut */
+        /* Step once to let the stonemason go out to get stone */
         map.stepTime();
         
         assertFalse(mason.isInsideBuilding());
@@ -262,6 +246,7 @@ public class TestQuarry {
         
         map.stepTime();
         
+        /* Let the stonemason reach the chosen spot if it isn't already there */
         if (!mason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, mason);
         }
@@ -270,6 +255,8 @@ public class TestQuarry {
         assertTrue(mason.getPosition().isAdjacent(point2));
         assertTrue(mason.isGettingStone());
         
+        /* Verify that the stonemason gets stone */
+        int i;
         for (i = 0; i < 49; i++) {
             assertTrue(mason.isGettingStone());
             map.stepTime();
@@ -278,6 +265,7 @@ public class TestQuarry {
         assertTrue(mason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
 
+        /* Verify that the stonemason is done getting stone at the correct time */
         map.stepTime();
         
         assertFalse(mason.isGettingStone());
@@ -293,41 +281,39 @@ public class TestQuarry {
         
         Point point1 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point1);
+
         Point point2 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point2);
+
         map.placeAutoSelectedRoad(hq.getFlag(), quarry.getFlag());
         
         Point point3 = new Point(13, 5);
         Stone stone = map.placeStone(point3);
         
-        /* Construct the forester hut */
+        /* Construct the quarry */
         constructSmallHouse(quarry);
 
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Step once and make sure the forester goes out of the hut */
+        /* Step once to let the stonemason go out to get stone */
         map.stepTime();
         
-        assertFalse(mason.isInsideBuilding());    
+        assertFalse(mason.isInsideBuilding());
 
         Point point = mason.getTarget();
 
         assertTrue(point.isAdjacent(point3));
         assertTrue(mason.isTraveling());
         
+        /* Let the stonemason reach the chosen spot if it isn't already there */
         if (!mason.isArrived()) {
             Utils.fastForwardUntilWorkersReachTarget(map, mason);
         }
@@ -337,10 +323,8 @@ public class TestQuarry {
         assertTrue(mason.isGettingStone());
         assertNull(mason.getCargo());
         
-        for (i = 0; i < 49; i++) {
-            assertTrue(mason.isGettingStone());
-            map.stepTime();
-        }
+        /* Wait for the stonemason to get some stone */
+        Utils.fastForward(49, map);
 
         assertTrue(mason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
@@ -389,11 +373,10 @@ public class TestQuarry {
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
-        /* Construct the forester hut */
-        
+        /* Construct the quarry */
         constructSmallHouse(quarry);
         
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
@@ -401,12 +384,13 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
         assertNull(mason.getCargo());
 
+        /* Verify that no stone is available from the quarry or its flag */
         int i;
         for (i = 0; i < 100; i++) {
             map.stepTime();
+            assertTrue(quarry.getStackedCargo().isEmpty());
             assertNull(mason.getCargo());
         }
-        
     }
 
     @Test
@@ -418,30 +402,23 @@ public class TestQuarry {
         
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(), point1);
-        Point point2 = new Point(12, 4);
 
-        /* Construct the forester hut */
+        /* Construct the quarry */
         constructSmallHouse(quarry);
         
-        /* Manually place forester */
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
-            assertTrue(mason.isInsideBuilding());
-            Utils.fastForward(10, map);
-        }
-        
-        Utils.fastForward(9, map);
+        /* Wait for the stonemason to rest */
+        Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
         
-        /* Step once and make sure the forester goes out of the hut */
+        /* Step once to verify that the stonemason stays inside */
         map.stepTime();
         
         assertTrue(mason.isInsideBuilding());
