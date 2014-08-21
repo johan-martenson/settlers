@@ -235,7 +235,7 @@ public class TestSawmill {
         }
 
         map.stepTime();
-        
+
         assertNotNull(sw.getCargo());
         assertEquals(sw.getCargo().getMaterial(), PLANCK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
