@@ -43,14 +43,6 @@ public class TestSawmill {
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
         /* Unfinished samwill doesn't need worker */
         assertFalse(sawmill.needsWorker());
         assertFalse(sawmill.needsWorker(SAWMILL_WORKER));
@@ -97,19 +89,12 @@ public class TestSawmill {
 
         /* Verify that a sawmill worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);
-        
-        /* Step time to let the headquarter send new workers */
+
         map.stepTime();
         
         assertTrue(map.getAllWorkers().size() == 3);
-        boolean foundSawmillWorker = false;
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof SawmillWorker) {
-                foundSawmillWorker = true;
-            }
-        }
-        
-        assertTrue(foundSawmillWorker);
+
+        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), SawmillWorker.class);
         
         /* Let the sawmill worker reach the sawmill */
         SawmillWorker sw = null;
@@ -120,6 +105,7 @@ public class TestSawmill {
             }
         }
         
+        assertNotNull(sw);
         assertEquals(sw.getTarget(), sawmill.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, sw);
@@ -155,6 +141,7 @@ public class TestSawmill {
         int i;
         for (i = 0; i < 500; i++) {
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
+            assertNull(sw.getCargo());
             map.stepTime();
         }
     }
@@ -193,14 +180,6 @@ public class TestSawmill {
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
-
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
@@ -305,14 +284,6 @@ public class TestSawmill {
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        //Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
         
@@ -352,7 +323,6 @@ public class TestSawmill {
         /* Fast forward so that the sawmill worker would produced plancks
            if it had had any wood
         */
-        
         Utils.fastForward(150, map);
         
         assertNull(sw.getCargo());

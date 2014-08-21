@@ -110,6 +110,7 @@ public class TestBakery {
             }
         }
 
+        assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, baker);
@@ -120,7 +121,7 @@ public class TestBakery {
     }
     
     @Test
-    public void testOccupiedBakeryWithoutWoodProducesNothing() throws Exception {
+    public void testOccupiedBakeryWithoutIngredientsProducesNothing() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* 0 ticks from start */
@@ -131,18 +132,10 @@ public class TestBakery {
         Point point3 = new Point(7, 9);
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
-        /* Populate the bakery */        
+        /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
         assertTrue(baker.isInsideBuilding());
@@ -153,6 +146,7 @@ public class TestBakery {
         int i;
         for (i = 0; i < 500; i++) {
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertNull(baker.getCargo());
             map.stepTime();
         }
     }
@@ -181,7 +175,7 @@ public class TestBakery {
     }
 
     @Test
-    public void testOccupiedBakeryWithWoodProducesPlancks() throws Exception {
+    public void testOccupiedBakeryWithIngredientsProducesBread() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* 0 ticks from start */
@@ -214,7 +208,7 @@ public class TestBakery {
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
         
-        /* Verify that the bakery produces plancks */
+        /* Verify that the bakery produces bread */
         int i;
         for (i = 0; i < 149; i++) {
             map.stepTime();
@@ -230,7 +224,7 @@ public class TestBakery {
     }
 
     @Test
-    public void testBakerLeavesPlancksAtTheFlag() throws Exception {
+    public void testBakerLeavesBreadAtTheFlag() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* 0 ticks from start */
@@ -259,11 +253,11 @@ public class TestBakery {
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);        
 
-        /* Deliver wood to the bakery */
+        /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
         
-        /* Verify that the bakery produces plancks */
+        /* Verify that the bakery produces bread */
         int i;
         for (i = 0; i < 149; i++) {
             map.stepTime();
@@ -286,13 +280,14 @@ public class TestBakery {
         assertNull(baker.getCargo());
         assertEquals(baker.getTarget(), bakery.getPosition());
         
+        /* Verify that the baker goes back to the bakery */
         Utils.fastForwardUntilWorkersReachTarget(map, baker);
         
         assertTrue(baker.isInsideBuilding());
     }
 
     @Test
-    public void testProductionOfOnePlanckConsumesOneWood() throws Exception {
+    public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* 0 ticks from start */
@@ -303,25 +298,17 @@ public class TestBakery {
         Point point3 = new Point(7, 9);
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
         
-        /* Deliver wood to the bakery */
+        /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
         
-        /* Wait until the bakery worker produces a planck */
+        /* Wait until the bakery worker produces a bread */
         assertTrue(bakery.getAmount(WATER) == 1);
         assertTrue(bakery.getAmount(FLOUR) == 1);
         
@@ -332,7 +319,7 @@ public class TestBakery {
     }
 
     @Test
-    public void testProductionCountdownStartsWhenWoodIsAvailable() throws Exception {
+    public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* 0 ticks from start */
@@ -343,14 +330,6 @@ public class TestBakery {
         Point point3 = new Point(7, 9);
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
@@ -359,8 +338,7 @@ public class TestBakery {
         
         /* Fast forward so that the bakery worker would have produced bread
            if it had had the ingredients
-        */
-        
+        */        
         Utils.fastForward(150, map);
         
         assertNull(baker.getCargo());
