@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.GoldMine;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Farm;
@@ -19,11 +20,15 @@ import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Woodcutter;
+import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -561,6 +566,24 @@ public class TestPlacement {
         assertFalse(t1.equals(t2));
     }
 
+    @Test
+    public void testSetTileToMountainTerrain() throws Exception {
+        GameMap map = new GameMap(10, 10);
+        Point left  = new Point(1, 1);
+        Point top   = new Point(2, 2);        
+        Point right = new Point(3, 1);
+    
+        Tile t1 = map.getTerrain().getTile(left, right, top);
+
+        t1.setVegetationType(MOUNTAIN);
+
+        map.terrainIsUpdated();
+        
+        t1 = map.getTerrain().getTile(left, right, top);
+        
+        assertEquals(t1.getVegetationType(), MOUNTAIN);
+    }
+    
     @Test
     public void testTreeCannotBePlacedOnStone() throws Exception {
         GameMap map   = new GameMap(10, 10);

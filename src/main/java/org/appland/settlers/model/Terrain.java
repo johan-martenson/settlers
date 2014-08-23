@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 
@@ -83,6 +84,10 @@ public class Terrain {
         }
     }
 
+    protected boolean isOnMountain(Point p) {
+        return isSurroundedBy(p, MOUNTAIN);
+    }
+    
     boolean isInWater(Point p) {
         return isSurroundedBy(p, WATER);
     }
@@ -109,7 +114,7 @@ public class Terrain {
         return isSurrounded;
     }
 
-    List<Tile> getSurroundingTiles(Point center) {
+    public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> allTiles = new LinkedList<>();
         List<Tile> result   = new LinkedList<>();
         

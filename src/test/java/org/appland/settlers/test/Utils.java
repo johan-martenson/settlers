@@ -34,6 +34,7 @@ import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Worker;
@@ -347,6 +348,14 @@ public class Utils {
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
         
         waterTile.setVegetationType(WATER);
+
+        map.terrainIsUpdated();
+    }
+
+    static void surroundPointWithMountain(Point point0, GameMap map) {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setVegetationType(MOUNTAIN);
+        }
 
         map.terrainIsUpdated();
     }

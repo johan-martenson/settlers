@@ -993,15 +993,19 @@ public class GameMap {
     private boolean canPlaceHouse(Building house, Point site) throws Exception {
         Size size = house.getHouseSize();
     
-        switch (size) {
-        case SMALL:
-            return canBuildSmallHouse(site);
-        case MEDIUM:
-            return canBuildMediumHouse(site);
-        case LARGE:
-            return canBuildLargeHouse(site);
-        default:
-            throw new Exception("Can't handle house with unexpected size " + size);
+        if (house instanceof GoldMine) {
+            return terrain.isOnMountain(site) && !isPointCovered(site);
+        } else {        
+            switch (size) {
+            case SMALL:
+                return canBuildSmallHouse(site);
+            case MEDIUM:
+                return canBuildMediumHouse(site);
+            case LARGE:
+                return canBuildLargeHouse(site);
+            default:
+                throw new Exception("Can't handle house with unexpected size " + size);
+            }
         }
     }
 
@@ -1531,5 +1535,9 @@ public class GameMap {
         }
         
         return false;
+    }
+
+    public Object getGoldQuantityAtPoint(Point point) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

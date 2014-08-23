@@ -26,7 +26,7 @@ public class Tile {
     }
 
     public enum Vegetation {
-        WATER, GRASS, SWAMP
+        WATER, GRASS, SWAMP, MOUNTAIN
     }
 
     @Override

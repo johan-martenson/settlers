@@ -27,6 +27,7 @@ public enum Material {
     BAKER, 
     STORAGE_WORKER, 
     FISHERMAN,
-    FISH
+    FISH,
+    MINER
 
 }
