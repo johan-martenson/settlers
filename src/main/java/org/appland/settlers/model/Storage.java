@@ -58,7 +58,7 @@ public class Storage extends Building implements Actor {
     @Override
     public void stepTime() {
         super.stepTime();
-
+        
         /* Handle promotion with delay */
         if (isPromotionPossible(inventory)) {
             if (promotionCountdown == 0) {
