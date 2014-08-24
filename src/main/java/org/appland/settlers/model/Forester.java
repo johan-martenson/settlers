@@ -21,10 +21,9 @@ public class Forester extends Worker {
     
     private States state;
     private Countdown countdown;
-    private Building hut;
 
     private Point getTreeSpot() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(hut.getPosition(), 4);
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
         
         for (Point p : adjacentPoints) {
             if (map.isBuildingAtPoint(p)) {
@@ -67,8 +66,6 @@ public class Forester extends Worker {
         state = WALKING_TO_TARGET;
         
         countdown = new Countdown();
-        
-        hut = null;
     }
 
     public boolean isPlanting() {
@@ -77,7 +74,9 @@ public class Forester extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        hut = b;
+        if (b instanceof ForesterHut) {
+            setHome(b);
+        }
         
         state = RESTING_IN_HOUSE;
         
