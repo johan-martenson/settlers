@@ -16,15 +16,12 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
-import org.appland.settlers.model.DeliveryNotPossibleException;
-import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 
 import static org.appland.settlers.model.Material.*;
+import org.appland.settlers.model.Military;
 
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -33,7 +30,6 @@ import org.appland.settlers.model.SawmillWorker;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tile;
-import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
@@ -361,7 +357,7 @@ public class Utils {
     }
 
     static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2000; i++) {
             if (building.getConstructionState() == DONE) {
                 break;
             }
@@ -382,5 +378,13 @@ public class Utils {
         }
     
         assertNotNull(building.getWorker());
+    }
+
+    static Military occupyMilitaryBuilding(Military m, Building building, GameMap map) throws Exception {
+        map.placeWorker(m, building);
+        building.hostMilitary(m);
+        m.enterBuilding(building);
+
+        return m;
     }
 }
