@@ -25,16 +25,17 @@ import org.appland.settlers.policy.ProductionDelays;
 public class Storage extends Building implements Actor {
 
     protected Map<Material, Integer> inventory;
-    private int promotionCountdown;
-    private int draftCountdown;
+    
+    private final Countdown promotionalCountdown;
+    private final Countdown draftCountdown;
 
     private static final Logger log = Logger.getLogger(Storage.class.getName());
 
     public Storage() {
         inventory = createEmptyMaterialIntMap();
-
-        promotionCountdown = -1;
-        draftCountdown = -1;
+        
+        promotionalCountdown = new Countdown();
+        draftCountdown = new Countdown();
     }
 
     /* This method updates the inventory as a side effect, without any locking */
@@ -61,27 +62,25 @@ public class Storage extends Building implements Actor {
         
         /* Handle promotion with delay */
         if (isPromotionPossible(inventory)) {
-            if (promotionCountdown == 0) {
+            if (promotionalCountdown.reachedZero()) {
                 doPromoteMilitary();
-                promotionCountdown = ProductionDelays.PROMOTION_DELAY;
-            } else if (promotionCountdown == -1) {
-                promotionCountdown = ProductionDelays.PROMOTION_DELAY;
+                promotionalCountdown.countFrom(ProductionDelays.PROMOTION_DELAY);
+            } else if (promotionalCountdown.isCounting()) {
+                promotionalCountdown.step();
             } else {
-                promotionCountdown--;
+                promotionalCountdown.countFrom(ProductionDelays.PROMOTION_DELAY);
             }
-        } else {
-            promotionCountdown = -1;
         }
 
         /* Handle draft with delay */
         if (isDraftPossible(inventory)) {
-            if (draftCountdown == 0) {
+            if (draftCountdown.reachedZero()) {
                 draftMilitary();
-                draftCountdown = ProductionDelays.DRAFT_DELAY;
-            } else if (draftCountdown == -1) {
-                draftCountdown = ProductionDelays.DRAFT_DELAY;
+                draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
+            } else if (draftCountdown.isCounting()) {
+                draftCountdown.step();
             } else {
-                draftCountdown--;
+                draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
             }
         }
         
