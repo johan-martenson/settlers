@@ -18,6 +18,10 @@ import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FISH;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Tile.Vegetation;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -575,5 +579,150 @@ public class TestFishery {
             assertTrue(fisherman.isInsideBuilding());
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testPlaceFisherySoFirstMatchIsMiddleOfLake() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Place a water tile */
+        Point point0 = new Point(10, 4);
+        Point point1 = new Point(8, 4);
+        Point point2 = new Point(9, 5);
+        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point3 = new Point(11, 5);
+        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point4 = new Point(12, 4);
+        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point5 = new Point(11, 3);
+        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point6 = new Point(9, 3);
+        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point7 = new Point(5, 13);
+        Point point8 = new Point(3, 13);
+        Point point9 = new Point(4, 14);
+        map.getTerrain().getTile(point7, point8, point9).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point10 = new Point(6, 14);
+        map.getTerrain().getTile(point7, point9, point10).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point11 = new Point(7, 13);
+        map.getTerrain().getTile(point7, point10, point11).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point12 = new Point(6, 12);
+        map.getTerrain().getTile(point7, point11, point12).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point13 = new Point(4, 12);
+        map.getTerrain().getTile(point7, point12, point13).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        map.getTerrain().getTile(point7, point13, point8).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point14 = new Point(8, 14);
+        Point point15 = new Point(7, 15);
+        map.getTerrain().getTile(point14, point10, point15).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point16 = new Point(9, 15);
+        map.getTerrain().getTile(point14, point15, point16).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point17 = new Point(10, 14);
+        map.getTerrain().getTile(point14, point16, point17).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        Point point18 = new Point(9, 13);
+        map.getTerrain().getTile(point14, point17, point18).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        map.getTerrain().getTile(point14, point18, point11).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Place a mountain tile */
+        map.getTerrain().getTile(point14, point11, point10).setVegetationType(MOUNTAIN);
+        map.terrainIsUpdated();
+
+        /* Placing stone */
+        Point point19 = new Point(12, 12);
+        Stone stone0 = map.placeStone(point19);
+
+        /* Placing stone */
+        Point point20 = new Point(13, 11);
+        Stone stone1 = map.placeStone(point20);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* 7 ticks from start */
+        for (int i = 0; i < 7; i++) {
+            map.stepTime();
+        }
+
+        /* Placing fishery */
+        Point point22 = new Point(10, 8);
+        Building fishery0 = map.placeBuilding(new Fishery(), point22);
+
+        /* 20 ticks from start */
+        for (int i = 0; i < 13; i++) {
+            map.stepTime();
+        }
+
+        /* Placing road between (11, 7) and (6, 4) */
+        Point point23 = new Point(11, 7);
+        Point point24 = new Point(10, 6);
+        Point point25 = new Point(7, 5);
+        Point point26 = new Point(6, 4);
+        Road road0 = map.placeRoad(point23, point24, point2, point25, point26);
+
+        /* Wait for the fishery to be finished */
+        Utils.fastForwardUntilBuildingIsConstructed(fishery0, map);
+        
+        /* Wait for the fishery to get occupied */
+        Utils.fastForwardUntilBuildingIsOccupied(fishery0, map);
+    
+        /* Wait for the fisherman to rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that the fisherman leaves the hut */
+        Worker fisher = fishery0.getWorker();
+        
+        assertNotNull(fisher.getTarget());
     }
 }

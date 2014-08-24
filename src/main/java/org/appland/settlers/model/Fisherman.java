@@ -45,6 +45,13 @@ public class Fisherman extends Worker {
                 continue;
             }
             
+            /* Filter out points that the fisherman can't reach */
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), p, null) == null) {
+                System.out.println("   CAN'T REACH " + p);
+                
+                continue;
+            }
+            
             return p;
         }
 
