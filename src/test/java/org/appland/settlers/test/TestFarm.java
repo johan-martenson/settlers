@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Crop;
-import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import org.appland.settlers.model.Farm;
