@@ -44,7 +44,6 @@ public class TestWell {
 
         assertTrue(well.getConstructionState() == DONE);
         assertTrue(well.needsWorker());
-        assertTrue(well.needsWorker(WELL_WORKER));
     }
     
     @Test

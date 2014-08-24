@@ -94,7 +94,6 @@ public class TestGoldMine {
         
         /* Verify that the unfinished mine does not need a worker */
         assertFalse(mine.needsWorker());
-        assertFalse(mine.needsWorker(MINER));
     }
     
     @Test
@@ -116,7 +115,6 @@ public class TestGoldMine {
         
         /* Verify that the finished mine needs a worker */
         assertTrue(mine.needsWorker());
-        assertTrue(mine.needsWorker(MINER));        
     }
     
     @Test

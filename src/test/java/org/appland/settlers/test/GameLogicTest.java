@@ -317,7 +317,7 @@ public class GameLogicTest {
          * hut needs a forester so a forester should be dispatched from the hq
          */
         assertTrue(hq.getAmount(FORESTER) == 3);
-        assertTrue(fHut.needsWorker(FORESTER));
+        assertTrue(fHut.needsWorker());
 
         /* Step time to make the headquarter assign new workers */
         map.stepTime();

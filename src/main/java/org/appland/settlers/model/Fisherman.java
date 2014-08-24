@@ -29,7 +29,7 @@ public class Fisherman extends Worker {
 
     private States state;
 
-    private Point getFishingSpot() {
+    private Point getFishingSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
         
         for (Point p : adjacentPoints) {

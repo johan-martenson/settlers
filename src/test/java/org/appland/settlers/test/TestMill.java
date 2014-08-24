@@ -47,7 +47,6 @@ public class TestMill {
 
         assertTrue(mill.getConstructionState() == DONE);
         assertTrue(mill.needsWorker());
-        assertTrue(mill.needsWorker(MILLER));
     }
     
     @Test

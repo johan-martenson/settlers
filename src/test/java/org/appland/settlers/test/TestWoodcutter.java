@@ -48,7 +48,6 @@ public class TestWoodcutter {
         assertTrue(wc.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
 
         assertFalse(wc.needsWorker());
-        assertFalse(wc.needsWorker(Material.WOODCUTTER_WORKER));
     }
 
     @Test
@@ -64,7 +63,6 @@ public class TestWoodcutter {
         Utils.constructSmallHouse(wc);
         
         assertTrue(wc.needsWorker());
-        assertTrue(wc.needsWorker(Material.WOODCUTTER_WORKER));
     }
     
     @Test

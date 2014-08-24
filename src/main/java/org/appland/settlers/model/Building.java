@@ -226,14 +226,6 @@ public class Building implements Actor, EndPoint {
         return receivedMaterial;
     }
 
-    public boolean needsWorker(Material material) throws Exception {
-        if (!needsWorker()) {
-            return false;
-        }
-        
-        return getWorkerType() == material;
-    }
-
     @Override
     public void putCargo(Cargo c) throws Exception {
         log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});

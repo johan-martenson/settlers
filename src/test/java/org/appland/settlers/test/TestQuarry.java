@@ -6,18 +6,15 @@
 
 package org.appland.settlers.test;
 
-import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -45,7 +42,6 @@ public class TestQuarry {
 
         assertTrue(quarry.getConstructionState() == DONE);
         assertTrue(quarry.needsWorker());
-        assertTrue(quarry.needsWorker(Material.STONEMASON));
     }
     
     @Test

@@ -344,7 +344,7 @@ public class Utils {
         assertTrue(found);
     }
 
-    static void surroundPointWithWater(Point p1, Point p2, Point p3, GameMap map) {        
+    static void surroundPointWithWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {        
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
         
         waterTile.setVegetationType(WATER);
@@ -352,7 +352,7 @@ public class Utils {
         map.terrainIsUpdated();
     }
 
-    static void surroundPointWithMountain(Point point0, GameMap map) {
+    static void surroundPointWithMountain(Point point0, GameMap map) throws Exception {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
             t.setVegetationType(MOUNTAIN);
         }

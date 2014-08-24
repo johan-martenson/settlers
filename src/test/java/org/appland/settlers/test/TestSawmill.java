@@ -45,13 +45,11 @@ public class TestSawmill {
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(sawmill.needsWorker());
-        assertFalse(sawmill.needsWorker(SAWMILL_WORKER));
         
         /* Finish construction of the sawmill */
         Utils.constructMediumHouse(sawmill);
         
         assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
     }
 
     @Test
@@ -85,7 +83,6 @@ public class TestSawmill {
         Utils.constructMediumHouse(sawmill);
         
         assertTrue(sawmill.needsWorker());
-        assertTrue(sawmill.needsWorker(SAWMILL_WORKER));
 
         /* Verify that a sawmill worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);

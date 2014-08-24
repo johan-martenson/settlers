@@ -54,13 +54,11 @@ public class TestBakery {
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(bakery.needsWorker());
-        assertFalse(bakery.needsWorker(BAKER));
         
         /* Finish construction of the bakery */
         Utils.constructMediumHouse(bakery);
         
         assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
     }
 
     @Test
@@ -94,7 +92,6 @@ public class TestBakery {
         Utils.constructMediumHouse(bakery);
         
         assertTrue(bakery.needsWorker());
-        assertTrue(bakery.needsWorker(BAKER));
 
         /* Verify that a bakery worker leaves the hq */
         map.stepTime();

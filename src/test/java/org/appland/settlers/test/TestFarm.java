@@ -84,7 +84,6 @@ public class TestFarm {
 
         assertTrue(farm.getConstructionState() == Building.ConstructionState.UNDER_CONSTRUCTION);
         assertFalse(farm.needsWorker());
-        assertFalse(farm.needsWorker(Material.FARMER));        
     }
 
     @Test
@@ -101,7 +100,6 @@ public class TestFarm {
         
         assertTrue(farm.getConstructionState() == Building.ConstructionState.DONE);
         assertTrue(farm.needsWorker());
-        assertTrue(farm.needsWorker(Material.FARMER));
     }
 
     @Test

@@ -46,7 +46,6 @@ public class TestStorage {
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(storage.needsWorker());
-        assertFalse(storage.needsWorker(STORAGE_WORKER));
     }
     
     @Test
@@ -67,7 +66,6 @@ public class TestStorage {
         assertEquals(storage.getConstructionState(), DONE);
         
         assertTrue(storage.needsWorker());
-        assertTrue(storage.needsWorker(STORAGE_WORKER));
     }
     
     @Test
