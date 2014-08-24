@@ -10,6 +10,7 @@ import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -266,6 +267,8 @@ public class TestQuarry {
         
         assertFalse(mason.isGettingStone());
         assertFalse(map.isStoneAtPoint(point));
+        assertNotNull(mason.getCargo());
+        assertEquals(mason.getCargo().getMaterial(), STONE);
     }
 
     @Test

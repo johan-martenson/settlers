@@ -14,7 +14,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
@@ -61,23 +60,15 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
         
-        List<Worker> workers = map.getAllWorkers();
         assertTrue(map.getAllWorkers().size() == 3);
-        Miller miller = null;
 
-        for (Worker w : map.getAllWorkers()) {
-            if (w instanceof Miller) {
-                miller = (Miller)w;
-            }
-        }
-    
-        assertNotNull(miller);
+        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Miller.class);
     }
 
     @Test
@@ -92,7 +83,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(point2, point3, point4);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
         int i;
@@ -103,7 +94,7 @@ public class TestMill {
     }
 
     @Test
-    public void testWellWorkerEntersTheWell() throws Exception {
+    public void testMillerEntersTheMill() throws Exception {
         GameMap map = new GameMap(20, 20);
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
@@ -118,13 +109,13 @@ public class TestMill {
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
-        /* Run game logic twice, once to place courier and once to place woodcutter worker */
+        /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
         
-        /* Get the well worker */
+        /* Get the miller */
         Miller miller = null;
 
         for (Worker w : map.getAllWorkers()) {
@@ -133,7 +124,7 @@ public class TestMill {
             }
         }
 
-        /* Let the well worker reach the well */
+        /* Let the miller reach the mill */
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, mill.getPosition());
         
         assertNotNull(miller);
@@ -142,7 +133,7 @@ public class TestMill {
     }
     
     @Test
-    public void testWellWorkerRests() throws Exception {
+    public void testMillWorkerRests() throws Exception {
         GameMap map = new GameMap(20, 20);
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
@@ -157,16 +148,13 @@ public class TestMill {
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
-        /* Put the worker in the well */
+        /* Put the miller in the mill */
         Miller miller = new Miller(map);
         
-        map.placeWorker(miller, mill.getFlag());
-        miller.setTargetBuilding(mill);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, miller);
+        Utils.occupyBuilding(miller, mill, map);
         
         assertTrue(miller.isInsideBuilding());
 
@@ -194,16 +182,13 @@ public class TestMill {
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
-        /* Put the worker in the well */
+        /* Put the miller in the mill */
         Miller miller = new Miller(map);
         
-        map.placeWorker(miller, mill.getFlag());
-        miller.setTargetBuilding(mill);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, miller);
+        Utils.occupyBuilding(miller, mill, map);
         
         assertTrue(miller.isInsideBuilding());
 
@@ -234,7 +219,7 @@ public class TestMill {
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
         
         /* Deliver wheat to the mill */
@@ -242,13 +227,10 @@ public class TestMill {
         
         mill.putCargo(cargo);
         
-        /* Put the worker in the well */
+        /* Put the worker in the mill */
         Miller miller = new Miller(map);
         
-        map.placeWorker(miller, mill.getFlag());
-        miller.setTargetBuilding(mill);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, miller);
+        Utils.occupyBuilding(miller, mill, map);
         
         assertTrue(miller.isInsideBuilding());
 
@@ -282,7 +264,7 @@ public class TestMill {
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
-        /* Finish the well */
+        /* Finish the mill */
         Utils.constructMediumHouse(mill);
 
         /* Deliver wheat to the mill */
@@ -290,13 +272,10 @@ public class TestMill {
         
         mill.putCargo(cargo);
         
-        /* Put the worker in the well */
+        /* Put the worker in the mill */
         Miller miller = new Miller(map);
         
-        map.placeWorker(miller, mill.getFlag());
-        miller.setTargetBuilding(mill);
-        
-        Utils.fastForwardUntilWorkersReachTarget(map, miller);
+        Utils.occupyBuilding(miller, mill, map);
         
         assertTrue(miller.isInsideBuilding());
 
@@ -316,7 +295,7 @@ public class TestMill {
 
         assertFalse(mill.getFlag().getStackedCargo().isEmpty());
         
-        /* Let the worker walk back to the well */
+        /* Let the worker walk back to the mill */
         assertEquals(miller.getTarget(), mill.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, miller);

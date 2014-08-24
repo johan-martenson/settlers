@@ -12,7 +12,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
@@ -325,6 +325,7 @@ public class TestWoodcutter {
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
+        assertEquals(wcWorker.getCargo().getMaterial(), WOOD);
     }
 
     @Test

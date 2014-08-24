@@ -14,7 +14,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.GOLD;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -253,6 +253,7 @@ public class TestGoldMine {
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
+        assertEquals(miner.getCargo().getMaterial(), GOLD);
     }
 
     @Test

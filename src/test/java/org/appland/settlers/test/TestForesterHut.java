@@ -331,6 +331,7 @@ public class TestForesterHut {
         
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
+        assertNull(forester.getCargo());
     }
 
     @Test

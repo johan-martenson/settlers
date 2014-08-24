@@ -19,7 +19,7 @@ import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import static org.junit.Assert.assertEquals;
@@ -366,6 +366,7 @@ public class TestFarm {
         assertFalse(farmer.isHarvesting());
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());
+        assertEquals(farmer.getCargo().getMaterial(), WHEAT);
     }
 
     @Test
