@@ -8,7 +8,7 @@ public class InitialState {
 	public static final int STORAGE_INIITAL_SWORDS = 0;
 	public static final int STORAGE_INITIAL_BEER = 0;
 	public static final int STORAGE_INITIAL_GOLD = 0;
-	public static final int STORAGE_INITIAL_PRIVATE = 0;
+	public static final int STORAGE_INITIAL_PRIVATE = 10;
 	public static final int STORAGE_INITIAL_SERGEANT = 0;
 	public static final int STORAGE_INITIAL_GENERAL = 0;
         
