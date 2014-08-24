@@ -249,7 +249,7 @@ public class TestTransportation {
         assertTrue(forester.getPosition().equals(hut.getPosition()));
     }
 
-    @Test(expected = InvalidRouteException.class)
+    @Test(expected = Exception.class)
     public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
         GameMap map = new GameMap(20, 20);
         

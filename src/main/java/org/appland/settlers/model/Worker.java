@@ -260,7 +260,6 @@ public abstract class Worker implements Actor {
         
         if (state == IDLE_INSIDE) {
             wasInside = true;
-            leaveBuilding();
         }
 
         if (position.equals(p)) {
@@ -294,20 +293,21 @@ public abstract class Worker implements Actor {
     }
     
     protected void setTarget(Point p) throws InvalidRouteException {
-        setTarget(p, null);
+        if (state == IDLE_INSIDE) {
+            if (!p.equals(home.getFlag().getPosition())) {        
+                setTarget(p, home.getFlag().getPosition());
+            } else {
+                setTarget(p, null);
+            }
+        } else {
+            setTarget(p, null);
+        }
     }
     
     protected void setTarget(Point p, Point via) throws InvalidRouteException {
-        boolean wasInside = false;
-        
         log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
         
         target = p;
-
-        if (state == IDLE_INSIDE) {
-            wasInside = true;
-            leaveBuilding();
-        }
 
         if (position.equals(p)) {
             try {
@@ -317,21 +317,17 @@ public abstract class Worker implements Actor {
             } catch (Exception ex) {
                 Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else {        
-            if (wasInside && !target.equals(home.getFlag().getPosition())) {
-                if (via != null) {
-                    path = map.findWayWithExistingRoads(home.getFlag().getPosition(), target, via);
-                } else {
-                    path = map.findWayWithExistingRoads(home.getFlag().getPosition(), target);
-                }
-                
-                path.add(0, home.getPosition());
-            } else {
-                if (via != null) {
-                    path = map.findWayWithExistingRoads(getPosition(), target, via);
-                } else {
-                    path = map.findWayWithExistingRoads(getPosition(), target);
-                }
+        } else {
+            Point start = getPosition();
+            
+            if (via != null) {
+                path = map.findWayWithExistingRoads(start, target, via);
+            } else  {
+                path = map.findWayWithExistingRoads(start, target);
+            }
+            
+            if (path == null) {
+                throw new InvalidRouteException("No way on existing roads from " + start + " to " + target);
             }
                 
             log.log(Level.FINE, "Way to target is {0}", path);
@@ -341,9 +337,6 @@ public abstract class Worker implements Actor {
     
     public Point getTarget() {
         return target;
-    }
-
-    private void leaveBuilding() {
     }
 
     public Building getHome() {

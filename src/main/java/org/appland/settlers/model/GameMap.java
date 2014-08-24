@@ -369,11 +369,6 @@ public class GameMap {
         
         List<Point> result = findWayWithMemory(start, end, new ArrayList<Point>());
 
-        if (result == null) {
-            log.log(Level.WARNING, "Failed to find a way from {0} to {1}", new Object[]{start, end});
-            throw new InvalidRouteException("No route found from " + start + " to " + end + ".");
-        }
-
         log.log(Level.FINE, "Returning found way {0}", result);
         return result;
     }
@@ -572,6 +567,10 @@ public class GameMap {
                     }
                     
                     List<Point> path = findWayWithExistingRoads(p, b.getFlag().getPosition());
+                    
+                    if (path == null) {
+                        continue;
+                    }
                     
                     if (path.size() < distance) {
                         distance = path.size();

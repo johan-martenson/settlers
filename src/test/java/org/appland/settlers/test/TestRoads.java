@@ -66,8 +66,7 @@ public class TestRoads {
 
         Road r = map.placeAutoSelectedRoad(f1, f2);
 
-        thrown.expect(InvalidRouteException.class);
-        map.findWayWithExistingRoads(f1.getPosition(), new Point(3, 3));
+        assertNull(map.findWayWithExistingRoads(f1.getPosition(), new Point(3, 3)));
     }
 
     @Test
