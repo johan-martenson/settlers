@@ -73,7 +73,7 @@ public class Miner extends Worker {
             }
         } else if (state == MINING_GOLD) {
             if (countdown.reachedZero()) {
-                Cargo cargo = new Cargo(GOLD, map);
+                Cargo cargo = map.mineGoldAtPoint(getPosition());
                 
                 setCargo(cargo);
                 

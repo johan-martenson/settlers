@@ -390,7 +390,7 @@ public class Storage extends Building implements Actor {
         if (m == COURIER) {
             return true;
         }
-        
+
         return inventory.get(m) > 0;
     }
 

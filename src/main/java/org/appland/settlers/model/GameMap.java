@@ -15,6 +15,8 @@ import static org.appland.settlers.model.Building.ConstructionState.BURNING;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
+import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -1552,7 +1554,47 @@ public class GameMap {
         return false;
     }
 
-    public Object getGoldQuantityAtPoint(Point point) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getAmountGoldAtPoint(Point point) throws Exception {
+        int amount = 0;
+        
+        for (Tile t : terrain.getSurroundingTiles(point)) {
+            amount += t.getAmountGold();
+        }
+        
+        return amount;
+    }
+
+    public int getAmountFishAtPoint(Point point) throws Exception {
+        int amount = 0;
+        
+        for (Tile t : terrain.getSurroundingTiles(point)) {
+            amount += t.getAmountFish();
+        }
+        
+        return amount;
+    }
+
+    Cargo catchFishAtPoint(Point position) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(position)) {
+            if (t.getAmountFish() > 0) {
+                t.consumeFish();
+                
+                return new Cargo(FISH, this);
+            }
+        }
+    
+        throw new Exception("Can't find any fish to catch at " + position);
+    }
+
+    Cargo mineGoldAtPoint(Point position) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(position)) {
+            if (t.getAmountGold() > 0) {
+                t.mineGold();
+                
+                return new Cargo(GOLD, this);
+            }
+        }
+
+        throw new Exception("Can't find any gold to mine at " + position);
     }
 }

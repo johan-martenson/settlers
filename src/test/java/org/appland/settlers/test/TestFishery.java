@@ -361,6 +361,8 @@ public class TestFishery {
         assertTrue(fisherman.isTraveling());
         
         /* Let the fisherman reach the spot and start fishing */
+        int amountOfFish = map.getAmountFishAtPoint(point);
+        
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
         
         assertTrue(fisherman.isArrived());
@@ -385,7 +387,7 @@ public class TestFishery {
         assertFalse(fisherman.isFishing());
         assertNotNull(fisherman.getCargo());
         assertEquals(fisherman.getCargo().getMaterial(), FISH);
-        // TODO: verify that the amount of fish has decreased
+        assertTrue(map.getAmountFishAtPoint(point) < amountOfFish);
     }
 
     @Test

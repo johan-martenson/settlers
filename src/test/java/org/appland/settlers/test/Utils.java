@@ -27,6 +27,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tile;
@@ -386,5 +387,11 @@ public class Utils {
         m.enterBuilding(building);
 
         return m;
+    }
+
+    static void putGoldAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setAmountGold(size);
+        }
     }
 }

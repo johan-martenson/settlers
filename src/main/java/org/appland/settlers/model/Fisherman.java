@@ -108,8 +108,8 @@ public class Fisherman extends Worker {
             }
         } else if (state == FISHING) {
             if (countdown.reachedZero()) {
-                
-                Cargo cargo = new Cargo(FISH, map);
+
+                Cargo cargo = map.catchFishAtPoint(getPosition());
                 
                 setCargo(cargo);
                 

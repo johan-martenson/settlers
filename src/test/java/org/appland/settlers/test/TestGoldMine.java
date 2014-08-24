@@ -18,6 +18,7 @@ import static org.appland.settlers.model.Material.GOLD;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -217,7 +218,8 @@ public class TestGoldMine {
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -243,6 +245,8 @@ public class TestGoldMine {
         Utils.fastForward(100, map);
         
         /* Verify that the miner mines for gold */
+        int amountGold = map.getAmountGoldAtPoint(point0);
+        
         int i;
         for (i = 0; i < 50; i++) {
             assertTrue(miner.isMining());
@@ -254,6 +258,7 @@ public class TestGoldMine {
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
         assertEquals(miner.getCargo().getMaterial(), GOLD);
+        assertTrue(map.getAmountGoldAtPoint(point0) < amountGold);
     }
 
     @Test
@@ -263,6 +268,7 @@ public class TestGoldMine {
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
