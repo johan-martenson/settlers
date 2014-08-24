@@ -17,7 +17,6 @@ public class Headquarter extends Storage {
 
         try {
             setHeadquarterDefaultInventory(inventory);
-            
             constructionState = DONE;
         } catch (Exception ex) {
             Logger.getLogger(Headquarter.class.getName()).log(Level.SEVERE, null, ex);
