@@ -197,6 +197,16 @@ public class Building implements Actor, EndPoint {
     }
 
     public void hostMilitary(Military military) {
+        if (hostedMilitary.isEmpty()) {
+            if (isMilitaryBuilding()) {
+                try {
+                    map.updateBorder();
+                } catch (Exception ex) {
+                    Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
     }
@@ -308,14 +318,6 @@ public class Building implements Actor, EndPoint {
                     consumeConstructionMaterial();
                     
                     constructionState = DONE;
-
-                    if (isMilitaryBuilding()) {
-                        try {
-                            map.updateBorder();
-                        } catch (Exception ex) {
-                            Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
                 }
             } else {
                 constructionCountdown.step();

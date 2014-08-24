@@ -19,6 +19,8 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.Military;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -429,30 +431,6 @@ public class TestGameMap {
         assertTrue(map.getBuildings().size() == 2);
         assertTrue(wc.getConstructionState() == BURNING);
     }
-    
-    @Test
-    public void testBuildingBarracksExtendsBorder() throws Exception {
-        GameMap map = new GameMap(100, 100);
-        Point point0 = new Point(50, 50);
-        map.placeBuilding(new Headquarter(), point0);
-        
-        assertTrue(map.getBorders().size() == 1);
-        Collection<Point> border = map.getBorders().get(0);
-        
-        assertTrue(border.contains(new Point(50, 70)));
-        assertFalse(border.contains(new Point(50, 74)));
-        
-        Point point1 = new Point(50, 68);
-        Building barracks = map.placeBuilding(new Barracks(), point1);
-        
-        Utils.constructSmallHouse(barracks);
-        
-        assertTrue(map.getBorders().size() == 1);
-        border = map.getBorders().get(0);
-        
-        assertFalse(border.contains(new Point(50, 70)));
-        assertTrue(border.contains(new Point(50, 74)));
-    }
 
     @Test
     public void testRemovingRemoteBarracksSplitsBorder() throws Exception {
@@ -470,7 +448,8 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(), point1);
         
         Utils.constructSmallHouse(barracks0);
-        
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
+
         assertTrue(map.getBorders().size() == 1);
         border = map.getBorders().get(0);
         
@@ -481,6 +460,7 @@ public class TestGameMap {
         Building barracks1 = map.placeBuilding(new Barracks(), point2);
 
         Utils.constructSmallHouse(barracks1);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks1, map);
         
         assertTrue(map.getBorders().size() == 1);
         border = map.getBorders().get(0);
@@ -492,6 +472,7 @@ public class TestGameMap {
         Building barracks2 = map.placeBuilding(new Barracks(), point3);
         
         Utils.constructSmallHouse(barracks2);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks2, map);
         
         assertTrue(map.getBorders().size() == 1);
         border = map.getBorders().get(0);
@@ -521,11 +502,13 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(), point1);
         
         Utils.constructSmallHouse(barracks0);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
         
         Point point2 = new Point(50, 72);
         Building wc = map.placeBuilding(new Woodcutter(), point2);
         
         Utils.constructSmallHouse(wc);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
         
         assertTrue(map.getBuildings().contains(wc));
         assertEquals(wc.getConstructionState(), DONE);
@@ -552,6 +535,7 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(), point1);
         
         Utils.constructSmallHouse(barracks0);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
         
         Point point2 = new Point(50, 72);
         Flag flag0 = map.placeFlag(point2);
@@ -579,6 +563,7 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(), point1);
         
         Utils.constructSmallHouse(barracks0);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
         
         Point point2 = new Point(50, 72);
         Flag flag0 = map.placeFlag(point2);
@@ -608,24 +593,28 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(), point3);
 
         Utils.constructSmallHouse(building1);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building1, map);
         
         /* 55 ticks from start */
         Point point4 = new Point(19, 19);
         Building building2 = map.placeBuilding(new Barracks(), point4);
 
         Utils.constructSmallHouse(building2);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building2, map);
         
         /* 951 ticks from start */
         Point point39 = new Point(20, 24);
         Building building3 = map.placeBuilding(new Barracks(), point39);
 
         Utils.constructSmallHouse(building3);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building3, map);
         
         /* 1957 ticks from start */
         Point point45 = new Point(24, 28);
         Building building4 = map.placeBuilding(new Barracks(), point45);
         
         Utils.constructSmallHouse(building4);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building4, map);
 
         assertTrue(map.getBorders().size() == 1);
         
@@ -690,6 +679,7 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(), point3);
 
         Utils.constructSmallHouse(building1);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building1, map);
         
         Collection<Point> fieldOfViewBefore = map.getFieldOfView();
         
@@ -717,6 +707,7 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(), point2);
 
         Utils.constructSmallHouse(building1);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), building1, map);
         
         Collection<Point> newFieldOfView = map.getFieldOfView();
 

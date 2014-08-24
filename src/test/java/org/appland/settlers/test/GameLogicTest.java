@@ -218,11 +218,7 @@ public class GameLogicTest {
         assertTrue(map.getAllWorkers().size() == 1);
 
         /* Prep the headquarter's inventory */
-        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
-        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
-        hq.depositWorker(new Military(Rank.PRIVATE_RANK));
-
-        assertTrue(hq.getAmount(PRIVATE) == 3);
+        assertTrue(hq.getAmount(PRIVATE) == 10);
 
         hq.depositWorker(new Forester());
 
@@ -264,7 +260,7 @@ public class GameLogicTest {
         /* Construct the barracks */
         assertTrue(bk.getConstructionState() == UNDER_CONSTRUCTION);
         assertTrue(bk.isMilitaryBuilding());
-        assertTrue(hq.getAmount(Material.PRIVATE) == 3);
+        assertTrue(hq.getAmount(Material.PRIVATE) == 10);
 
         map.placeBuilding(bk, wcPoint);
         Utils.constructSmallHouse(bk);
@@ -280,7 +276,7 @@ public class GameLogicTest {
         assertFalse(map.getAllWorkers().get(3).isArrived());
         assertTrue(map.getAllWorkers().get(3).isTraveling());
 
-        assertTrue(hq.getAmount(Material.PRIVATE) == 2);
+        assertTrue(hq.getAmount(Material.PRIVATE) == 9);
 
         /* Let the military reach the barracks */
         Utils.fastForwardUntilWorkersReachTarget(map, map.getAllWorkers().get(3));
