@@ -8,16 +8,20 @@ package org.appland.settlers.test;
 
 import java.util.List;
 import java.util.Map;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -667,5 +671,112 @@ public class TestPlacement {
         assertTrue(map.getBuildings().size() == 1);
         assertTrue(map.getFlags().size() == 1);
         assertTrue(map.getTrees().size() == 1);
+    }
+
+    @Test(expected = Exception.class)
+    public void testCannotPlaceRoadAcrossLake() throws Exception {
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Place a water tile */
+        Point point0 = new Point(10, 4);
+        Point point1 = new Point(8, 4);
+        Point point2 = new Point(9, 5);
+        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* 1 ticks from start */
+        Utils.fastForward(1, map);
+
+        /* Place a water tile */
+        Point point3 = new Point(11, 5);
+        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point4 = new Point(12, 4);
+        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point5 = new Point(11, 3);
+        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point6 = new Point(9, 3);
+        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing flag */
+        Flag flag0 = map.placeFlag(point1);
+
+        /* Placing flag */
+        Flag flag1 = map.placeFlag(point4);
+
+        /* Placing road between (8, 4) and (12, 4) */
+        Road road0 = map.placeRoad(point1, point0, point4);
+    }
+
+    @Test
+    public void testRoadConnectionSuggestionsDoNotIncludePointsInWater() throws Exception {
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Place a water tile */
+        Point point0 = new Point(10, 4);
+        Point point1 = new Point(8, 4);
+        Point point2 = new Point(9, 5);
+        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point3 = new Point(11, 5);
+        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point4 = new Point(12, 4);
+        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point5 = new Point(11, 3);
+        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        Point point6 = new Point(9, 3);
+        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Place a water tile */
+        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        map.terrainIsUpdated();
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing flag */
+        Flag flag0 = map.placeFlag(point1);
+
+        /* Placing flag */
+        Flag flag1 = map.placeFlag(point4);
+
+        /* Verify that suggested connections from flag0 don't include a point in the water */
+        assertFalse(map.getPossibleAdjacentRoadConnections(point1, point4).contains(point1.right()));
+
+        assertFalse(map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point1).contains(point1.right()));
+        
+        assertFalse(map.getPossibleRoadConnectionsExcludingEndpoints(point1).contains(point1.right()));
     }
 }

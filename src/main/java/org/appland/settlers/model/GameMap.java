@@ -53,7 +53,13 @@ public class GameMap {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                return getPossibleAdjacentRoadConnections(start, goal);
+                try {
+                    return getPossibleAdjacentRoadConnections(start, goal);
+                } catch (Exception ex) {
+                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                return new LinkedList<>();
             }
         });
     }
@@ -873,7 +879,7 @@ public class GameMap {
         return availableHouseSites;
     }
 
-    public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) {
+    public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
@@ -1070,7 +1076,7 @@ public class GameMap {
         return mp.getFlag();
     }
     
-    private boolean isPossibleAsEndPointInRoad(Point p) {
+    private boolean isPossibleAsEndPointInRoad(Point p) throws Exception {
         if (!isWithinMap(p)) {
             return false;
         }
@@ -1088,7 +1094,7 @@ public class GameMap {
         return false;
     }
 
-    private boolean isPossibleAsAnyPointInRoad(Point p) {
+    private boolean isPossibleAsAnyPointInRoad(Point p) throws Exception {
         MapPoint mp = pointToGameObject.get(p);
 
         if (!isWithinBorder(p)) {
@@ -1115,10 +1121,14 @@ public class GameMap {
             return false;
         }
         
+        if (terrain.isInWater(p)) {
+            return false;
+        }
+        
         return true;
     }
 
-    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Point point) {
+    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
@@ -1135,7 +1145,7 @@ public class GameMap {
         return resultList;        
     }
     
-    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Point point) {
+    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
