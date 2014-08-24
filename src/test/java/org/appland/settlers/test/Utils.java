@@ -359,4 +359,28 @@ public class Utils {
 
         map.terrainIsUpdated();
     }
+
+    static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
+        for (int i = 0; i < 1000; i++) {
+            if (building.getConstructionState() == DONE) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+    
+        assertEquals(building.getConstructionState(), DONE);
+    }
+
+    static void fastForwardUntilBuildingIsOccupied(Building building, GameMap map) {
+        for (int i = 0; i < 1000; i++) {
+            if (building.getWorker() != null) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+    
+        assertNotNull(building.getWorker());
+    }
 }
