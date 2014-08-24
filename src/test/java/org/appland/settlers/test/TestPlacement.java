@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.GoldMine;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Farm;
@@ -23,12 +22,9 @@ import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Woodcutter;
-import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
