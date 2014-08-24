@@ -64,7 +64,7 @@ public class Courier extends Worker {
         intendedCargo = null;
         assignedRoad  = null;
 
-        state = States.WALKING_TO_ROAD;
+        state = WALKING_TO_ROAD;
     }
 
     @Override
@@ -191,15 +191,15 @@ public class Courier extends Worker {
             
             intendedCargo = null;
             
-            setTarget(idlePoint);
-
             state = WALKING_TO_ROAD;
+
+            setTarget(idlePoint);
         
         /* For the other states, just go to the new road */
         } else {
-            setTarget(idlePoint);
-
             state = WALKING_TO_ROAD;
+
+            setTarget(idlePoint);
         }
     }
 

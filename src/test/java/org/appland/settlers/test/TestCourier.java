@@ -10,6 +10,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
@@ -20,8 +21,11 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tile.Vegetation;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -780,5 +784,130 @@ public class TestCourier {
         assertEquals(courier.getPosition(), wc.getPosition());
         assertTrue(wc.getAmount(PLANCK) == 1);
         
+    }
+
+    @Test
+    public void testCouriersStopCarryingThingsAtSplittingRoads() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* 133 ticks from start */
+        Utils.fastForward(133, map);
+
+        /* Placing forester */
+        Point point22 = new Point(22, 4);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point22);
+
+        /* 147 ticks from start */
+        Utils.fastForward(14, map);
+
+        /* Placing woodcutter */
+        Point point23 = new Point(19, 5);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point23);
+
+        /* 185 ticks from start */
+        Utils.fastForward(38, map);
+
+        /* Placing quarry */
+        Point point24 = new Point(10, 12);
+        Building quarry0 = map.placeBuilding(new Quarry(), point24);
+
+        /* 206 ticks from start */
+        Utils.fastForward(21, map);
+
+        /* Placing road between (23, 3) and (20, 4) */
+        Point point25 = new Point(23, 3);
+        Point point26 = new Point(21, 3);
+        Point point27 = new Point(20, 4);
+        Road road0 = map.placeRoad(point25, point26, point27);
+
+        /* 227 ticks from start */
+        Utils.fastForward(21, map);
+
+        /* Placing road between (20, 4) and (11, 11) */
+        Point point28 = new Point(18, 4);
+        Point point29 = new Point(17, 5);
+        Point point30 = new Point(16, 6);
+        Point point31 = new Point(15, 7);
+        Point point32 = new Point(14, 8);
+        Point point33 = new Point(13, 9);
+        Point point34 = new Point(12, 10);
+        Point point35 = new Point(11, 11);
+        Road road1 = map.placeRoad(point27, point28, point29, point30, point31, point32, point33, point34, point35);
+
+        /* 254 ticks from start */
+        Utils.fastForward(27, map);
+
+        /* Placing road between (11, 11) and (6, 4) */
+        Point point36 = new Point(10, 10);
+        Point point37 = new Point(9, 9);
+        Point point38 = new Point(8, 8);
+        Point point39 = new Point(7, 7);
+        Point point40 = new Point(8, 6);
+        Point point41 = new Point(7, 5);
+        Point point42 = new Point(6, 4);
+        Road road2 = map.placeRoad(point35, point36, point37, point38, point39, point40, point41, point42);
+
+        /* 269 ticks from start */
+        Utils.fastForward(15, map);
+
+        /* Placing flag */
+        Flag flag0 = map.placeFlag(point40);
+
+        /* 282 ticks from start */
+        Utils.fastForward(13, map);
+
+        /* Placing flag */
+        Flag flag1 = map.placeFlag(point38);
+
+        /* 297 ticks from start */
+        Utils.fastForward(15, map);
+
+        /* Placing flag */
+        Flag flag2 = map.placeFlag(point33);
+
+        /* 311 ticks from start */
+        Utils.fastForward(14, map);
+
+        /* Placing flag */
+        Flag flag3 = map.placeFlag(point31);
+
+        /* 329 ticks from start */
+        Utils.fastForward(18, map);
+
+        /* Placing flag */
+        Flag flag4 = map.placeFlag(point29);
+
+        /* Wait for all couriers to become idle */
+        for (int i = 0; i < 2000; i++) {
+            boolean allIdle = true;
+            
+            for (Worker w : map.getAllWorkers()) {
+                if (w instanceof Courier && w.isTraveling()) {
+                    allIdle = false;
+                }
+            }
+            
+            if (allIdle) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Courier) {
+                Courier c = (Courier)w;
+                
+                assertFalse(c.isTraveling());
+                assertFalse(c.isWalkingToRoad());
+            }
+        }
+
     }
 }
