@@ -78,7 +78,7 @@ public class GameMap {
         return null;
     }
 
-    private void removeRoad(Road r) throws Exception {        
+    public void removeRoad(Road r) throws Exception {        
         roads.remove(r);
         
         for (Point p : r.getWayPoints()) {
