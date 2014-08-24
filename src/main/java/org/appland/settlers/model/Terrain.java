@@ -34,7 +34,11 @@ public class Terrain {
         constructDefaultTiles();
     }
     
-    public Tile getTile(Point p1, Point p3, Point p2) {
+    public Tile getTile(Point p1, Point p3, Point p2) throws Exception {
+        if (!isValidPoint(p1) || !isValidPoint(p2) || !isValidPoint(p3)) {
+            throw new Exception("Can't return tile by invalid points " + p1 + ", " + p2 + ", " + p3);
+        }
+        
         int leftMost  = Math.min(p1.x, p2.x);
         int rightMost = Math.max(p1.x, p2.x);
         int bottom    = Math.min(p1.y, p2.y);
@@ -84,23 +88,23 @@ public class Terrain {
         }
     }
 
-    protected boolean isOnMountain(Point p) {
+    protected boolean isOnMountain(Point p) throws Exception {
         return isSurroundedBy(p, MOUNTAIN);
     }
     
-    boolean isInWater(Point p) {
+    boolean isInWater(Point p) throws Exception {
         return isSurroundedBy(p, WATER);
     }
 
-    boolean isInSwamp(Point p) {
+    boolean isInSwamp(Point p) throws Exception {
         return isSurroundedBy(p, SWAMP);
     }
 
-    protected boolean isOnGrass(Point p) {
+    protected boolean isOnGrass(Point p) throws Exception {
         return isSurroundedBy(p, GRASS);
     }
     
-    private boolean isSurroundedBy(Point p, Vegetation vegetation) {
+    private boolean isSurroundedBy(Point p, Vegetation vegetation) throws Exception {
         boolean    isSurrounded = true;
         List<Tile> tiles        = getSurroundingTiles(p);
         
@@ -114,7 +118,7 @@ public class Terrain {
         return isSurrounded;
     }
 
-    public List<Tile> getSurroundingTiles(Point center) {
+    public List<Tile> getSurroundingTiles(Point center) throws Exception {
         List<Tile> allTiles = new LinkedList<>();
         List<Tile> result   = new LinkedList<>();
         
@@ -145,7 +149,7 @@ public class Terrain {
         return result;
     }
 
-    public boolean terrainMakesFlagPossible(Point p) {
+    public boolean terrainMakesFlagPossible(Point p) throws Exception {
         if (isInWater(p)) {
             return false;
         }
@@ -155,6 +159,10 @@ public class Terrain {
         }
     
         return true;
+    }
+
+    private boolean isValidPoint(Point p1) {
+        return (p1.x + p1.y) % 2 == 0;
     }
 
     public static class TileKey {

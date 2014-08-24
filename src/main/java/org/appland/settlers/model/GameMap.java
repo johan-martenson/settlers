@@ -707,7 +707,7 @@ public class GameMap {
         return result;
     }
     
-    private List<Point> calculateAvailableFlagPoints() {
+    private List<Point> calculateAvailableFlagPoints() throws Exception {
         List<Point> result      = new ArrayList<>();
         
         for (Point p : fullGrid) {
@@ -864,7 +864,7 @@ public class GameMap {
     
     }
 
-    public void terrainIsUpdated() {
+    public void terrainIsUpdated() throws Exception {
         availableFlagPoints = calculateAvailableFlagPoints();
         
         availableHouseSites = calculateAvailableHouseSites();
@@ -893,7 +893,7 @@ public class GameMap {
         return resultList;
     }
 
-    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point point) {
+    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
@@ -922,7 +922,7 @@ public class GameMap {
         return resultList;
     }
     
-    private Map<Point, Size> calculateAvailableHouseSites() {
+    private Map<Point, Size> calculateAvailableHouseSites() throws Exception {
         Map<Point, Size> result = new HashMap<>();
         
         for (Point p : fullGrid) {
@@ -938,11 +938,11 @@ public class GameMap {
         return result;
     }
 
-    private boolean canBuildSmallHouse(Point site) {
+    private boolean canBuildSmallHouse(Point site) throws Exception {
         return terrain.isOnGrass(site) && !isPointCovered(site);
     }
 
-    private boolean canBuildLargeHouse(Point site) {
+    private boolean canBuildLargeHouse(Point site) throws Exception {
         boolean closeAreaClear = terrain.isOnGrass(site);
         boolean wideAreaClear = true;
     
@@ -967,7 +967,7 @@ public class GameMap {
         return closeAreaClear && wideAreaClear;
     }
 
-    private boolean canBuildMediumHouse(Point site) {
+    private boolean canBuildMediumHouse(Point site) throws Exception {
         boolean areaClear;
         boolean borderClear;
         
@@ -1217,7 +1217,13 @@ public class GameMap {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                return getPossibleAdjacentOffRoadConnections(start);
+                try {
+                    return getPossibleAdjacentOffRoadConnections(start);
+                } catch (Exception ex) {
+                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                return new LinkedList<>();
             }
         });
     }
@@ -1527,7 +1533,7 @@ public class GameMap {
         return GameUtils.hullWanderer(discoveredLand);
     }
 
-    boolean isNextToWater(Point p) {
+    boolean isNextToWater(Point p) throws Exception {
         for (Tile t : terrain.getSurroundingTiles(p)) {
             if (t.getVegetationType() == Vegetation.WATER) {
                 return true;
