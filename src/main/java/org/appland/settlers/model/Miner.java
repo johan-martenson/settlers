@@ -49,6 +49,16 @@ public class Miner extends Worker {
         return state == MINING_GOLD;
     }
     
+    private void consumeFood() {
+        Building home = getHome();
+        
+        if (home.getAmount(BREAD) > 0) {
+            home.consumeOne(BREAD);
+        } else if (home.getAmount(FISH) > 0) {
+            home.consumeOne(FISH);
+        }
+    }
+
     @Override
     protected void onEnterBuilding(Building b) {
         if (b instanceof GoldMine) {
@@ -73,13 +83,17 @@ public class Miner extends Worker {
             }
         } else if (state == MINING_GOLD) {
             if (countdown.reachedZero()) {
-                Cargo cargo = map.mineGoldAtPoint(getPosition());
-                
-                setCargo(cargo);
-                
-                setTarget(getHome().getFlag().getPosition());
-                
-                state = GOING_OUT_TO_FLAG;
+                if (map.getAmountGoldAtPoint(getPosition()) > 0) {
+                    consumeFood();
+                    
+                    Cargo cargo = map.mineGoldAtPoint(getPosition());
+
+                    setCargo(cargo);
+
+                    setTarget(getHome().getFlag().getPosition());
+
+                    state = GOING_OUT_TO_FLAG;
+                }
             } else {
                 countdown.step();
             }

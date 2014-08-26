@@ -19,6 +19,7 @@ import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -335,22 +336,197 @@ public class TestGoldMine {
     }
 
     @Test
-    public void testGoldmineRunsOutOfGold() {
-        // TODO: Implement test
+    public void testGoldmineRunsOutOfGold() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, SMALL, map);
+
+        /* Remove all gold but one */
+        for (int i = 0; i < 1000; i++) {
+            if (map.getAmountGoldAtPoint(point0) > 1) {
+                map.mineGoldAtPoint(point0);
+            }
+        }
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new GoldMine(), point0);
+
+        /* Place a road from headquarter to mine */
+        map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        
+        /* Construct the gold mine */
+        constructSmallHouse(mine);
+
+        /* Deliver food to the miner */
+        Cargo food = new Cargo(BREAD, map);
+        mine.putCargo(food);
+
+        /* Manually place miner */
+        Miner miner = new Miner(map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+        
+        /* Wait for the miner to rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to mine gold */
+        Utils.fastForward(50, map);
+        
+        /* Wait for the miner to leave the gold at the flag */
+        assertEquals(miner.getTarget(), mine.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+        
+        assertNull(miner.getCargo());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getPosition());
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Verify that the gold is gone and that the miner gets no gold */
+        assertEquals(map.getAmountGoldAtPoint(point0), 0);
+
+        for (int i = 0; i < 200; i++) {
+            assertTrue(miner.isInsideBuilding());
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
     }
 
     @Test
-    public void testGoldmineWithoutGoldProducesNothing() {
-        // TODO: Implement test
+    public void testGoldmineWithoutGoldProducesNothing() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new GoldMine(), point0);
+
+        /* Place a road from headquarter to mine */
+        map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        
+        /* Construct the gold mine */
+        constructSmallHouse(mine);
+
+        /* Deliver food to the miner */
+        Cargo food = new Cargo(BREAD, map);
+        mine.putCargo(food);
+
+        /* Manually place miner */
+        Miner miner = new Miner(map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+        
+        /* Wait for the miner to rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that there is no gold and that the miner gets no gold */
+        assertEquals(map.getAmountGoldAtPoint(point0), 0);
+
+        for (int i = 0; i < 200; i++) {
+            assertTrue(miner.isInsideBuilding());
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
     }
     
     @Test
-    public void testGoldmineWithoutFoodProducesNothing() {
-        // TODO: Implement test
+    public void testGoldmineWithoutFoodProducesNothing() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new GoldMine(), point0);
+
+        /* Construct the gold mine */
+        constructSmallHouse(mine);
+
+        /* Manually place miner */
+        Miner miner = new Miner(map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+        
+        /* Wait for the miner to rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that the miner gets no gold */
+
+        for (int i = 0; i < 200; i++) {
+            assertTrue(miner.isInsideBuilding());
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
     }
 
     @Test
-    public void testMiningConsumesFood() {
+    public void testMiningConsumesFood() throws Exception {
+        GameMap map = new GameMap(20, 20);
         
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new GoldMine(), point0);
+
+        /* Construct the gold mine */
+        constructSmallHouse(mine);
+        
+        /* Deliver food to the miner */
+        Cargo food = new Cargo(BREAD, map);
+        mine.putCargo(food);
+        
+        /* Manually place miner */
+        Miner miner = new Miner(map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+        
+        /* Wait for the miner to rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that the miner mines for gold */
+        assertEquals(mine.getAmount(BREAD), 1);
+        
+        Utils.fastForward(50, map);
+        
+        /* Verify that the miner consumed the bread */
+        assertEquals(mine.getAmount(BREAD), 0);
     }
 }

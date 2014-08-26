@@ -1586,7 +1586,7 @@ public class GameMap {
         throw new Exception("Can't find any fish to catch at " + position);
     }
 
-    Cargo mineGoldAtPoint(Point position) throws Exception {
+    public Cargo mineGoldAtPoint(Point position) throws Exception {
         for (Tile t : terrain.getSurroundingTiles(position)) {
             if (t.getAmountGold() > 0) {
                 t.mineGold();
