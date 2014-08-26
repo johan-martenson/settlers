@@ -33,6 +33,7 @@ public enum Material {
     FISH,
     MINER,
     IRON_BAR,
-    IRON_FOUNDER
+    IRON_FOUNDER,
+    BREWER
 
 }

@@ -316,6 +316,9 @@ public class Storage extends Building implements Actor {
         case IRON_FOUNDER:
             w = new IronFounder(map);
             break;
+        case BREWER:
+            w = new Brewer(map);
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
