@@ -1000,7 +1000,7 @@ public class GameMap {
     private boolean canPlaceHouse(Building house, Point site) throws Exception {
         Size size = house.getHouseSize();
     
-        if (house instanceof GoldMine) {
+        if (house.isMine()) {
             return terrain.isOnMountain(site) && !isPointCovered(site);
         } else {        
             switch (size) {
@@ -1554,11 +1554,11 @@ public class GameMap {
         return false;
     }
 
-    public int getAmountGoldAtPoint(Point point) throws Exception {
+    public int getAmountOfMineralAtPoint(Material mineral, Point point) throws Exception {
         int amount = 0;
         
         for (Tile t : terrain.getSurroundingTiles(point)) {
-            amount += t.getAmountGold();
+            amount += t.getAmountOfMineral(mineral);
         }
         
         return amount;
@@ -1586,12 +1586,12 @@ public class GameMap {
         throw new Exception("Can't find any fish to catch at " + position);
     }
 
-    public Cargo mineGoldAtPoint(Point position) throws Exception {
+    public Cargo mineMineralAtPoint(Material mineral, Point position) throws Exception {
         for (Tile t : terrain.getSurroundingTiles(position)) {
-            if (t.getAmountGold() > 0) {
-                t.mineGold();
+            if (t.getAmountOfMineral(mineral) > 0) {
+                t.mine(mineral);
                 
-                return new Cargo(GOLD, this);
+                return new Cargo(mineral, this);
             }
         }
 

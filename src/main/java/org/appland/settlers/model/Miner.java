@@ -9,9 +9,10 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Miner.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.States.GOING_OUT_TO_FLAG;
-import static org.appland.settlers.model.Miner.States.MINING_GOLD;
+import static org.appland.settlers.model.Miner.States.MINING;
 import static org.appland.settlers.model.Miner.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
 
@@ -21,11 +22,12 @@ import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
  */
 @Walker (speed = 10)
 public class Miner extends Worker {
+    private Material mineral;
 
     enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
-        MINING_GOLD,
+        MINING,
         GOING_OUT_TO_FLAG,
         GOING_BACK_TO_HOUSE
     }
@@ -40,13 +42,15 @@ public class Miner extends Worker {
     public Miner(GameMap map) {
         super(map);
         
+        mineral = null;
+        
         countdown = new Countdown();
         
         state = WALKING_TO_TARGET;
     }
 
     public boolean isMining() {
-        return state == MINING_GOLD;
+        return state == MINING;
     }
     
     private void consumeFood() {
@@ -62,6 +66,10 @@ public class Miner extends Worker {
     @Override
     protected void onEnterBuilding(Building b) {
         if (b instanceof GoldMine) {
+            mineral = GOLD;
+            setHome(b);
+        } else if (b instanceof IronMine) {
+            mineral = IRON;
             setHome(b);
         }
         
@@ -75,18 +83,18 @@ public class Miner extends Worker {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 if (hasFood()) {
-                    state = MINING_GOLD;
+                    state = MINING;
                     countdown.countFrom(TIME_TO_MINE);
                 }
             } else {
                 countdown.step();
             }
-        } else if (state == MINING_GOLD) {
+        } else if (state == MINING) {
             if (countdown.reachedZero()) {
-                if (map.getAmountGoldAtPoint(getPosition()) > 0) {
+                if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
                     
-                    Cargo cargo = map.mineGoldAtPoint(getPosition());
+                    Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
 
                     setCargo(cargo);
 

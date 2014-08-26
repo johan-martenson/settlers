@@ -21,11 +21,13 @@ public class Tile {
     private Vegetation vegetationType;
     private int        amountGold;
     private int        amountFish;
+    private int        amountIron;
     
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;
         
         amountGold = 0;
+        amountIron = 0;
         amountFish = 0;
     }
 
@@ -45,8 +47,15 @@ public class Tile {
         amountFish--;
     }
 
-    void mineGold() {
-        amountGold--;
+    void mine(Material mineral) {
+        switch (mineral) {
+        case GOLD:
+            amountGold--;
+            break;
+        case IRON:
+            amountIron--;
+            break;
+        }
     }
 
     public enum Vegetation {
@@ -58,21 +67,41 @@ public class Tile {
         return vegetationType.name() + " tile";
     }
 
-    public void setAmountGold(Size amount) {
+    public void setAmountMineral(Material mineral, Size amount) {
+        int nrAmount = 0;
+        
         switch (amount) {
         case SMALL:
-            amountGold = SMALL_AMOUNT_OF_GOLD;
+            nrAmount = SMALL_AMOUNT_OF_GOLD;
             break;
         case MEDIUM:
-            amountGold = MEDIUM_AMOUNT_OF_GOLD;
+            nrAmount = MEDIUM_AMOUNT_OF_GOLD;
             break;
         case LARGE:
-            amountGold = LARGE_AMOUNT_OF_GOLD;
+            nrAmount = LARGE_AMOUNT_OF_GOLD;
+        }
+    
+        switch (mineral) {
+        case GOLD:
+            amountGold = nrAmount;
+            break;
+        case IRON:
+            amountIron = nrAmount;
+            break;
+        default:
+            
         }
     }
     
-    int getAmountGold() {
-        return amountGold;
+    int getAmountOfMineral(Material mineral) {
+        switch (mineral) {
+        case GOLD:
+            return amountGold;
+        case IRON:
+            return amountIron;
+        default:
+            return 0;
+        }
     }
     
     int getAmountFish() {

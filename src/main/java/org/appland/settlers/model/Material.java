@@ -9,6 +9,7 @@ public enum Material {
     SERGEANT, 
     BEER, 
     GOLD, 
+    IRON,
     WOOD, 
     PLANCK, 
     STONE, 

@@ -11,10 +11,10 @@ import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GoldMine;
+import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
-import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -32,10 +32,10 @@ import org.junit.Test;
  *
  * @author johan
  */
-public class TestGoldMine {
+public class TestIronMine {
     
     @Test
-    public void testConstructGoldMine() throws Exception {
+    public void testConstructIronMine() throws Exception {
         GameMap map   = new GameMap(10, 10);
         
         /* Put a small mountain on the map */
@@ -47,7 +47,7 @@ public class TestGoldMine {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a goldmine*/
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
         
         assertEquals(mine.getConstructionState(), UNDER_CONSTRUCTION);
         
@@ -57,7 +57,7 @@ public class TestGoldMine {
     }
     
     @Test
-    public void testGoldmineIsNotMilitary() throws Exception {
+    public void testIronmineIsNotMilitary() throws Exception {
         GameMap map   = new GameMap(10, 10);
 
         /* Put a small mountain on the map */
@@ -69,7 +69,7 @@ public class TestGoldMine {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
         
         /* Verify that the mine is not a military building */
         assertFalse(mine.isMilitaryBuilding());
@@ -80,7 +80,7 @@ public class TestGoldMine {
     }
     
     @Test
-    public void testGoldmineUnderConstructionNotNeedsMiner() throws Exception {
+    public void testIronmineUnderConstructionNotNeedsMiner() throws Exception {
         GameMap map   = new GameMap(10, 10);
 
         /* Put a small mountain on the map */
@@ -92,14 +92,14 @@ public class TestGoldMine {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine*/
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
         
         /* Verify that the unfinished mine does not need a worker */
         assertFalse(mine.needsWorker());
     }
     
     @Test
-    public void testFinishedGoldmineNeedsMiner() throws Exception {
+    public void testFinishedIronmineNeedsMiner() throws Exception {
         GameMap map   = new GameMap(10, 10);
 
         /* Put a small mountain on the map */
@@ -111,7 +111,7 @@ public class TestGoldMine {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine*/
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         Utils.constructSmallHouse(mine);
         
@@ -120,7 +120,7 @@ public class TestGoldMine {
     }
     
     @Test
-    public void testMinerIsAssignedToFinishedGoldmine() throws Exception {
+    public void testMinerIsAssignedToFinishedIronmine() throws Exception {
         GameMap map = new GameMap(20, 20);
 
         /* Place a headquarter */
@@ -132,7 +132,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
         
         /* Place a road between the headquarter and the goldmine */
         Road road0 = map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
@@ -168,7 +168,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
         
         assertTrue(map.getBuildings().size() == 2);
     }
@@ -186,7 +186,7 @@ public class TestGoldMine {
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Construct the gold mine */
         constructSmallHouse(mine);
@@ -213,20 +213,20 @@ public class TestGoldMine {
     }
 
     @Test
-    public void testMinerMinesGold() throws Exception {
+    public void testMinerMinesIron() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Construct the gold mine */
         constructSmallHouse(mine);
@@ -246,7 +246,7 @@ public class TestGoldMine {
         Utils.fastForward(100, map);
         
         /* Verify that the miner mines for gold */
-        int amountGold = map.getAmountOfMineralAtPoint(GOLD, point0);
+        int amountIron = map.getAmountOfMineralAtPoint(IRON, point0);
         
         int i;
         for (i = 0; i < 50; i++) {
@@ -258,25 +258,25 @@ public class TestGoldMine {
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
-        assertEquals(miner.getCargo().getMaterial(), GOLD);
-        assertTrue(map.getAmountOfMineralAtPoint(GOLD, point0) < amountGold);
+        assertEquals(miner.getCargo().getMaterial(), IRON);
+        assertTrue(map.getAmountOfMineralAtPoint(IRON, point0) < amountIron);
     }
 
     @Test
-    public void testGoldmineGoesToFlagWithCargoAndBack() throws Exception {
+    public void testIronmineGoesToFlagWithCargoAndBack() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
@@ -328,7 +328,7 @@ public class TestGoldMine {
         
         Point point0 = new Point(2, 2);
         try {
-            map.placeBuilding(new GoldMine(), point0);
+            map.placeBuilding(new IronMine(), point0);
             assertFalse(true);
         } catch (Exception e) {}
         
@@ -336,18 +336,18 @@ public class TestGoldMine {
     }
 
     @Test
-    public void testGoldmineRunsOutOfGold() throws Exception {
+    public void testIronmineRunsOutOfIron() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-        Utils.putGoldAtSurroundingTiles(point0, SMALL, map);
+        Utils.putIronAtSurroundingTiles(point0, SMALL, map);
 
         /* Remove all gold but one */
         for (int i = 0; i < 1000; i++) {
-            if (map.getAmountOfMineralAtPoint(GOLD, point0) > 1) {
-                map.mineMineralAtPoint(GOLD, point0);
+            if (map.getAmountOfMineralAtPoint(IRON, point0) > 1) {
+                map.mineMineralAtPoint(IRON, point0);
             }
         }
         
@@ -356,7 +356,7 @@ public class TestGoldMine {
         Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
@@ -393,7 +393,7 @@ public class TestGoldMine {
         assertTrue(miner.isInsideBuilding());
 
         /* Verify that the gold is gone and that the miner gets no gold */
-        assertEquals(map.getAmountOfMineralAtPoint(GOLD, point0), 0);
+        assertEquals(map.getAmountOfMineralAtPoint(IRON, point0), 0);
 
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
@@ -404,7 +404,7 @@ public class TestGoldMine {
     }
 
     @Test
-    public void testGoldmineWithoutGoldProducesNothing() throws Exception {
+    public void testIronmineWithoutIronProducesNothing() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         /* Put a small mountain on the map */
@@ -416,7 +416,7 @@ public class TestGoldMine {
         Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
@@ -439,7 +439,7 @@ public class TestGoldMine {
         Utils.fastForward(100, map);
         
         /* Verify that there is no gold and that the miner gets no gold */
-        assertEquals(map.getAmountOfMineralAtPoint(GOLD, point0), 0);
+        assertEquals(map.getAmountOfMineralAtPoint(IRON, point0), 0);
 
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
@@ -450,20 +450,20 @@ public class TestGoldMine {
     }
     
     @Test
-    public void testGoldmineWithoutFoodProducesNothing() throws Exception {
+    public void testIronmineWithoutFoodProducesNothing() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Construct the gold mine */
         constructSmallHouse(mine);
@@ -495,14 +495,14 @@ public class TestGoldMine {
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
-        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(), point0);
 
         /* Construct the gold mine */
         constructSmallHouse(mine);

@@ -57,6 +57,10 @@ public class Building implements Actor, EndPoint {
         return map.getPointsWithinRadius(getPosition(), mb.defenceRadius() + 2);
     }
 
+    boolean isMine() {
+        return (this instanceof GoldMine || this instanceof IronMine);
+    }
+
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }

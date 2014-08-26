@@ -391,7 +391,13 @@ public class Utils {
 
     static void putGoldAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setAmountGold(size);
+            t.setAmountMineral(GOLD, size);
+        }
+    }
+
+    static void putIronAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setAmountMineral(IRON, size);
         }
     }
 }
