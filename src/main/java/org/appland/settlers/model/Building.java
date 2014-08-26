@@ -58,7 +58,10 @@ public class Building implements Actor, EndPoint {
     }
 
     boolean isMine() {
-        return (this instanceof GoldMine || this instanceof IronMine);
+        return (this instanceof GoldMine || 
+                this instanceof IronMine ||
+                this instanceof CoalMine ||
+                this instanceof GraniteMine);
     }
 
     public enum ConstructionState {

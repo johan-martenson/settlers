@@ -7,9 +7,11 @@ public enum Material {
     PRIVATE, 
     GENERAL, 
     SERGEANT, 
-    BEER, 
+    BEER,
+    
     GOLD, 
     IRON,
+    COAL,
     WOOD, 
     PLANCK, 
     STONE, 

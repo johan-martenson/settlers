@@ -22,12 +22,17 @@ public class Tile {
     private int        amountGold;
     private int        amountFish;
     private int        amountIron;
+    private int amountGranite;
+    private int amountCoal;
     
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;
         
-        amountGold = 0;
-        amountIron = 0;
+        amountGold    = 0;
+        amountIron    = 0;
+        amountCoal    = 0;
+        amountGranite = 0;
+        
         amountFish = 0;
     }
 
@@ -55,6 +60,10 @@ public class Tile {
         case IRON:
             amountIron--;
             break;
+        case COAL:
+            amountCoal--;
+        case STONE:
+            amountGranite--;
         }
     }
 
@@ -88,6 +97,10 @@ public class Tile {
         case IRON:
             amountIron = nrAmount;
             break;
+        case COAL:
+            amountCoal = nrAmount;
+        case STONE:
+            amountGranite = nrAmount;
         default:
             
         }
@@ -99,6 +112,10 @@ public class Tile {
             return amountGold;
         case IRON:
             return amountIron;
+        case COAL:
+            return amountCoal;
+        case STONE:
+            return amountGranite;
         default:
             return 0;
         }

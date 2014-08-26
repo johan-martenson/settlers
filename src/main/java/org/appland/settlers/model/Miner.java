@@ -7,9 +7,11 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.BREAD;
+import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Miner.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.States.GOING_OUT_TO_FLAG;
 import static org.appland.settlers.model.Miner.States.MINING;
@@ -65,12 +67,18 @@ public class Miner extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        if (b instanceof GoldMine) {
-            mineral = GOLD;
+        if (b.isMine()) {
             setHome(b);
+        }
+        
+        if (b instanceof GoldMine) {
+            mineral = GOLD;    
         } else if (b instanceof IronMine) {
             mineral = IRON;
-            setHome(b);
+        } else if (b instanceof CoalMine) {
+            mineral = COAL;
+        } else if (b instanceof GraniteMine) {
+            mineral = STONE;
         }
         
         state = RESTING_IN_HOUSE;

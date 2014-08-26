@@ -400,4 +400,16 @@ public class Utils {
             t.setAmountMineral(IRON, size);
         }
     }
+
+    static void putCoalAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setAmountMineral(COAL, size);
+        }
+    }
+
+    static void putGraniteAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setAmountMineral(STONE, size);
+        }
+    }
 }
