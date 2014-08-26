@@ -14,7 +14,6 @@ import static org.appland.settlers.model.Fisherman.States.GOING_TO_FLAG;
 import static org.appland.settlers.model.Fisherman.States.IN_HOUSE_WITH_FISH;
 import static org.appland.settlers.model.Fisherman.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Fisherman.States.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.FISH;
 
 /**
  *
@@ -47,6 +46,10 @@ public class Fisherman extends Worker {
             
             /* Filter out points that the fisherman can't reach */
             if (map.findWayOffroad(getHome().getFlag().getPosition(), p, null) == null) {
+                continue;
+            }
+            
+            if (map.getAmountFishAtPoint(p) == 0) {
                 continue;
             }
             
@@ -152,7 +155,7 @@ public class Fisherman extends Worker {
 
             setCargo(null);
 
-            setTarget(getHome().getPosition());
+            returnHome();
 
             state = GOING_BACK_TO_HOUSE;
         }

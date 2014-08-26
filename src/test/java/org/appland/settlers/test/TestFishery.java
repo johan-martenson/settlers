@@ -727,4 +727,99 @@ public class TestFishery {
         
         assertNotNull(fisher.getTarget());
     }
+
+    @Test
+    public void testFishermanCanRunOutOfFish() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        /* Place water on one tile */
+        Point point0 = new Point(4, 4);
+        Point point1 = new Point(6, 4);
+        Point point2 = new Point(5, 5);
+
+        Utils.surroundPointWithWater(point0, point1, point2, map);
+
+        /* Remove fishes until there is only one left */
+        for (int i = 0; i < 1000; i++) {
+            if (map.getAmountFishAtPoint(point0) == 1) {
+                break;
+            }
+        
+            map.catchFishAtPoint(point0);
+        }
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place fishery */
+        Point point3 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(), point3);
+
+        /* Place a road from the headquarter to the fishery */
+        map.placeAutoSelectedRoad(hq.getFlag(), fishery.getFlag());
+        
+        /* Construct the fisherman hut */
+        constructSmallHouse(fishery);
+        
+        /* Manually place fisherman */
+        Fisherman fisherman = new Fisherman(map);
+
+        Utils.occupyBuilding(fisherman, fishery, map);
+        
+        /* Let the fisherman rest */
+        Utils.fastForward(99, map);
+                
+        assertTrue(fisherman.isInsideBuilding());
+        
+        /* Step once and make sure the fisherman goes out of the hut */
+        map.stepTime();
+        
+        assertFalse(fisherman.isInsideBuilding());
+
+        Point point = fisherman.getTarget();
+
+        assertTrue(fisherman.isTraveling());
+        
+        /* Let the fisherman reach the spot and start fishing */
+        int amountOfFish = map.getAmountFishAtPoint(point);
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        
+        assertTrue(fisherman.isArrived());
+        assertTrue(fisherman.isAt(point));        
+        assertTrue(fisherman.isFishing());
+        
+        /* Wait for the fisherman to finish fishing */
+        Utils.fastForward(20, map);
+        
+        /* Let the fisherman go back to the fishery */
+        assertEquals(fisherman.getTarget(), fishery.getPosition());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        
+        /* Wait for the fisherman to leave the cargo of fish at the flag */
+        map.stepTime();
+
+        assertEquals(fisherman.getTarget(), fishery.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery.getFlag().getPosition());
+        
+        assertNull(fisherman.getCargo());
+        assertEquals(fisherman.getTarget(), fishery.getPosition());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
+        
+        /* Verify that there is no more fish and that the fisherman statys at home */
+        assertEquals(map.getAmountFishAtPoint(point0), 0);
+        assertEquals(map.getAmountFishAtPoint(point1), 0);
+        assertEquals(map.getAmountFishAtPoint(point2), 0);
+        
+        for (int i = 0; i < 200; i++) {
+            assertTrue(fisherman.isInsideBuilding());
+            assertNull(fisherman.getCargo());
+            
+            map.stepTime();
+        }
+    }
 }
