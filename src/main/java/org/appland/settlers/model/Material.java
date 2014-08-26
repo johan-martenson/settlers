@@ -31,6 +31,8 @@ public enum Material {
     STORAGE_WORKER, 
     FISHERMAN,
     FISH,
-    MINER
+    MINER,
+    IRON_BAR,
+    IRON_FOUNDER
 
 }

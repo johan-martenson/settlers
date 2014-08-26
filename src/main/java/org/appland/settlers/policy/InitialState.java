@@ -28,4 +28,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_STORAGE_WORKER = 1;
         public static final int STORAGE_INITIAL_FISHERMAN = 1;
         public static final int STORAGE_INITIAL_MINER = 1;
+        public static final int STORAGE_INITIAL_IRON_FOUNDER = 1;
 }
