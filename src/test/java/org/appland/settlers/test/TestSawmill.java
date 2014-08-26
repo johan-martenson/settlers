@@ -35,11 +35,11 @@ public class TestSawmill {
     public void testSawmillNeedsWorker() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
@@ -63,15 +63,15 @@ public class TestSawmill {
     public void testSawmillGetsAssignedWorker() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
-        /* 64 ticks from start */
+        /* Place a road between the headquarter and the sawmill */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -116,11 +116,11 @@ public class TestSawmill {
     public void testOccupiedSawmillWithoutWoodProducesNothing() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
@@ -147,11 +147,11 @@ public class TestSawmill {
     public void testUnoccupiedSawmillProducesNothing() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
@@ -170,11 +170,11 @@ public class TestSawmill {
     public void testOccupiedSawmillWithWoodProducesPlancks() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
@@ -211,15 +211,15 @@ public class TestSawmill {
     public void testSawmillWorkerLeavesPlancksAtTheFlag() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
-        /* 64 ticks from start */
+        /* Place a road between the headquarter and the sawmill */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -273,11 +273,11 @@ public class TestSawmill {
     public void testProductionOfOnePlanckConsumesOneWood() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
@@ -303,11 +303,11 @@ public class TestSawmill {
     public void testProductionCountdownStartsWhenWoodIsAvailable() throws Exception {
         GameMap map = new GameMap(40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
