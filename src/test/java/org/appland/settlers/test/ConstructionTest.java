@@ -83,8 +83,8 @@ public class ConstructionTest {
         assertFalse(wc.isMilitaryBuilding());
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(wc.getMaterialInQueue(PLANCK) == 0);
-        assertTrue(wc.getMaterialInQueue(STONE) == 0);
+        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertTrue(wc.getAmount(STONE) == 0);
 
         /* Verify that the woodcutter doesn't need any material when it's finished */
         for (Material m : Material.values()) {
@@ -163,8 +163,8 @@ public class ConstructionTest {
         assertTrue(sm.getConstructionState() == DONE);
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(sm.getMaterialInQueue(PLANCK) == 0);
-        assertTrue(sm.getMaterialInQueue(STONE) == 0);
+        assertTrue(sm.getAmount(PLANCK) == 0);
+        assertTrue(sm.getAmount(STONE) == 0);
 
         /* Verify that the sawmill needs only WOOD when it's finished */
         assertTrue(sm.needsMaterial(WOOD));
@@ -205,8 +205,8 @@ public class ConstructionTest {
         assertTrue(farm.getConstructionState() == DONE);
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(farm.getMaterialInQueue(PLANCK) == 0);
-        assertTrue(farm.getMaterialInQueue(STONE) == 0);
+        assertTrue(farm.getAmount(PLANCK) == 0);
+        assertTrue(farm.getAmount(STONE) == 0);
 
         farm.tearDown();
 

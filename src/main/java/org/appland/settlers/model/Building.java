@@ -393,10 +393,6 @@ public class Building implements Actor, EndPoint {
         return requiredGoods;
     }
 
-    public int getMaterialInQueue(Material material) throws InvalidMaterialException {
-        return receivedMaterial.get(material);
-    }
-
     /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  */
     private void consumeConstructionMaterial() {
         Map<Material, Integer> materialToConsume = getMaterialsToBuildHouse();

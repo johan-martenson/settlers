@@ -20,7 +20,6 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
-import org.appland.settlers.model.Military.Rank;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
@@ -33,7 +32,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class GameLogicTest {
@@ -183,7 +181,7 @@ public class GameLogicTest {
         /* Verify the worker delivers the cargo when it has reached the target */
         assertNull(w.getCargo());
         assertTrue(w.isAt(wc.getPosition()));
-        assertTrue(wc.getMaterialInQueue(PLANCK) == 1);
+        assertTrue(wc.getAmount(PLANCK) == 1);
     }
 
     @Test

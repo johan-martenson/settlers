@@ -218,7 +218,7 @@ public class TestScenarios {
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getPosition());
 
         /* Cargo has arrived at the sawmill and the courier has delivered it */
-        assertTrue(sm.getMaterialInQueue(WOOD) > 0);
+        assertTrue(sm.getAmount(WOOD) > 0);
         int amountInQueue = sm.getAmount(WOOD);
         
         /* Produce plancks in sawmill. 
@@ -237,7 +237,7 @@ public class TestScenarios {
         }
 
         assertNotNull(sm.getWorker().getCargo());
-        assertTrue(sm.getMaterialInQueue(WOOD) == amountInQueue - 1);
+        assertTrue(sm.getAmount(WOOD) == amountInQueue - 1);
 
         /* Let the sawmill worker leave the cargo at the flag */
         assertEquals(sm.getWorker().getTarget(), sm.getFlag().getPosition());

@@ -1574,7 +1574,7 @@ public class GameMap {
         return amount;
     }
 
-    Cargo catchFishAtPoint(Point position) throws Exception {
+    public Cargo catchFishAtPoint(Point position) throws Exception {
         for (Tile t : terrain.getSurroundingTiles(position)) {
             if (t.getAmountFish() > 0) {
                 t.consumeFish();
