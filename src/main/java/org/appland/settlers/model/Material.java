@@ -34,6 +34,8 @@ public enum Material {
     MINER,
     IRON_BAR,
     IRON_FOUNDER,
-    BREWER
+    BREWER,
+    MINTER,
+    COIN
 
 }
