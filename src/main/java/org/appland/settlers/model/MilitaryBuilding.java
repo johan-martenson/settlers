@@ -18,4 +18,6 @@ public @interface MilitaryBuilding {
     int maxHostedMilitary();
     
     int defenceRadius();
+    
+    int maxCoins() default 0;
 }

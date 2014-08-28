@@ -18,6 +18,7 @@ import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor, EndPoint {
+    private int nrCoins;
 
     void setFlag(Flag flagAtPoint) {
         flag = flagAtPoint;
@@ -62,6 +63,16 @@ public class Building implements Actor, EndPoint {
                 this instanceof IronMine ||
                 this instanceof CoalMine ||
                 this instanceof GraniteMine);
+    }
+
+    private boolean needsCoins() {
+        return nrCoins < getMaxCoins();
+    }
+
+    private int getMaxCoins() {
+        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        
+        return mb.maxCoins();
     }
 
     public enum ConstructionState {
@@ -515,6 +526,10 @@ public class Building implements Actor, EndPoint {
     private boolean needsMaterialForProduction(Material material) {
         Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
 
+        if (isMilitaryBuilding() && needsCoins() && material == COIN) {
+            return true;
+        }
+        
         if (!requiredGoods.containsKey(material)) {
             /* Building does not accept the material */
             log.log(Level.FINE, "This building does not accept {0}", material);

@@ -10,6 +10,7 @@ import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PRIVATE;
 import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -257,5 +258,41 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         
         assertTrue(map.getBorders().get(0).contains(new Point(6, 28)));
+    }
+    
+    @Test
+    public void testBarracksNeedsCoin() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+
+        assertTrue(barracks0.needsMaterial(COIN));
+    }
+    
+    @Test
+    public void testUnfinishedBarracksNotNeedsCoin() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        assertFalse(barracks0.needsMaterial(COIN));
     }
 }
