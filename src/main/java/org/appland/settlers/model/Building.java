@@ -80,12 +80,12 @@ public class Building implements Actor, EndPoint {
     protected ConstructionState constructionState;
     protected GameMap           map;
     
-    private boolean isWorkerNeeded;
     private Worker  worker;
     private Worker  promisedWorker;
     private Point   position;
     private Flag    flag;
 
+    private final boolean                isWorkerNeeded;
     private final Countdown              constructionCountdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final Countdown              destructionCountdown;
