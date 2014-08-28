@@ -160,6 +160,8 @@ public class TestBarracks {
         /* Placing barracks */
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
 
         /* Occupy the barracks with two militaries */
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
@@ -167,6 +169,35 @@ public class TestBarracks {
         
         /* Verify that the barracks does not need another military */
         assertFalse(barracks0.needMilitaryManning());
+    }
+
+    @Test
+    public void testBarracksCannotHoldMilitariesBeforeFinished() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+
+        /* Verify that the barracks can't hold militaries before it's finished */
+        assertFalse(barracks0.needMilitaryManning());
+        
+        Military military = new Military(PRIVATE_RANK, map);
+        
+        map.placeWorker(military, barracks0);
+        
+        try {
+            barracks0.hostMilitary(military);
+            assertFalse(true);
+        } catch (Exception e) {}
+        
+        assertFalse(military.isInsideBuilding());
     }
 
     @Test
@@ -182,6 +213,8 @@ public class TestBarracks {
         /* Placing barracks */
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
 
         /* Occupy the barracks with two militaries */
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
@@ -199,5 +232,30 @@ public class TestBarracks {
         
         assertFalse(military.isInsideBuilding());
         assertEquals(barracks0.getHostedMilitary(), 2);
+    }
+
+    @Test
+    public void testBarracksRadiusIsCorrect() throws Exception{
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+
+        /* Verify that the border is grown with the correct radius */
+        assertTrue(map.getBorders().get(0).contains(new Point(6, 24)));
+        
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        assertTrue(map.getBorders().get(0).contains(new Point(6, 28)));
     }
 }

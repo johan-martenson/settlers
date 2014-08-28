@@ -204,6 +204,10 @@ public class Building implements Actor, EndPoint {
     }
 
     public void hostMilitary(Military military) throws Exception {
+        if (!ready()) {
+            throw new Exception("Cannot assign military when the building is not ready");
+        }
+        
         if (hostedMilitary.isEmpty()) {
             if (isMilitaryBuilding()) {
                 try {
