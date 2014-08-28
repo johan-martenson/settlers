@@ -37,7 +37,6 @@ public class Building implements Actor, EndPoint {
     private Point   position;
     private Flag    flag;
 
-    private final boolean                isWorkerNeeded;
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final List<Military>         hostedMilitary;
@@ -47,7 +46,6 @@ public class Building implements Actor, EndPoint {
     private static final Logger log = Logger.getLogger(Building.class.getName());
 
     public Building() {
-        state     = UNDER_CONSTRUCTION;
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
         countdown             = new Countdown();
@@ -59,10 +57,9 @@ public class Building implements Actor, EndPoint {
         position              = null;
         map                   = null;
 
-        /* Check and remember if this building requires a worker */
-        isWorkerNeeded = isWorkerRequired();
-        
         countdown.countFrom(getConstructionCountdown());
+
+        state     = UNDER_CONSTRUCTION;
     }
     
     void setFlag(Flag flagAtPoint) {
@@ -149,15 +146,11 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsWorker() {
-        if (!ready()) {
+        if (!unoccupied()) {
             return false;
         }
 
-        if (worker != null || promisedWorker != null) {
-            return false;
-        }
-
-        return isWorkerNeeded;
+        return worker == null && promisedWorker == null;
     }
 
     public Material getWorkerType() throws Exception {
@@ -562,6 +555,10 @@ public class Building implements Actor, EndPoint {
     @Override
     public Cargo getCargoWaitingForRoad(Road r) {
         return null;
+    }
+
+    private boolean unoccupied() {
+        return state == UNOCCUPIED;
     }
 
     public boolean occupied() {
