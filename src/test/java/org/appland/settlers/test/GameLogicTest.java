@@ -256,7 +256,7 @@ public class GameLogicTest {
         assertTrue(map.getAllWorkers().size() == 3);
 
         /* Construct the barracks */
-        assertTrue(bk.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(bk.underConstruction());
         assertTrue(bk.isMilitaryBuilding());
         assertTrue(hq.getAmount(Material.PRIVATE) == 10);
 

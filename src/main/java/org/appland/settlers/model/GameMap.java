@@ -16,7 +16,6 @@ import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -223,7 +222,7 @@ public class GameMap {
 
         /* Destroy buildings now outside of the borders */
         for (Building b : buildings) {
-            if (b.getConstructionState() == BURNING) {
+            if (b.burningDown()) {
                 continue;
             }
             
@@ -1420,7 +1419,7 @@ public class GameMap {
         List<Building> militaryBuildings = new LinkedList<>();
         
         for (Building b : getMilitaryBuildings()) {
-            if (b.getConstructionState() == DONE) {
+            if (b.ready()) {
                 militaryBuildings.add(b);
             }
         }
@@ -1438,7 +1437,7 @@ public class GameMap {
                 List<Building> buildingsAlreadyAdded = new LinkedList<>();
 
                 for (Building b : militaryBuildings) {
-                    if (b.getConstructionState() == DONE && land.contains(b.getPosition())) {
+                    if (b.ready() && land.contains(b.getPosition())) {
                         land.addAll(b.getDefendedLand());
 
                         addedToBorder = true;

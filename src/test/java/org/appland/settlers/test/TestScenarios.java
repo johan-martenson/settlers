@@ -98,9 +98,9 @@ public class TestScenarios {
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(sm);
 
-        assertTrue(wc.getConstructionState() == DONE);
-        assertTrue(qry.getConstructionState() == DONE);
-        assertTrue(sm.getConstructionState() == DONE);
+        assertTrue(wc.ready());
+        assertTrue(qry.ready());
+        assertTrue(sm.ready());
 
         assertTrue(hq.getAmount(WOOD) == 4);
         assertTrue(hq.getAmount(PLANCK) == 10);

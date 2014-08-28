@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.util.List;
 import org.appland.settlers.model.Building;
 import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import org.appland.settlers.model.Cargo;
@@ -44,7 +43,7 @@ public class TestMill {
 
         Utils.constructMediumHouse(mill);
 
-        assertTrue(mill.getConstructionState() == DONE);
+        assertTrue(mill.ready());
         assertTrue(mill.needsWorker());
     }
     

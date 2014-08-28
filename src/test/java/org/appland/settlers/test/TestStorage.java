@@ -12,7 +12,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
@@ -63,7 +62,7 @@ public class TestStorage {
         /* Finish construction of the storage */
         Utils.constructMediumHouse(storage);
         
-        assertEquals(storage.getConstructionState(), DONE);
+        assertTrue(storage.ready());
         
         assertTrue(storage.needsWorker());
     }

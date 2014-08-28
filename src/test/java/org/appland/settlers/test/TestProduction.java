@@ -1,11 +1,9 @@
 package org.appland.settlers.test;
 
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.WOOD;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.appland.settlers.model.Building;
@@ -13,7 +11,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
-import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
@@ -33,7 +30,7 @@ public class TestProduction {
 
         Utils.constructMediumHouse(sawmill);
 
-        assertTrue(DONE == sawmill.getConstructionState());
+        assertTrue(sawmill.ready());
 
         sawmill.putCargo(new Cargo(GOLD, null));
     }

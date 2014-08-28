@@ -3,8 +3,6 @@ package org.appland.settlers.test;
 import java.util.Map;
 import org.appland.settlers.model.Barracks;
 import static org.appland.settlers.model.Building.ConstructionState.BURNING;
-import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
 import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -37,7 +35,7 @@ public class ConstructionTest {
 
         assertTrue(wc.getAmount(WOOD) == 0);
         assertTrue(wc.getAmount(PLANCK) == 0);
-        assertTrue(wc.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(wc.underConstruction());
 
         assertTrue(wc.needsMaterial(PLANCK));
         assertTrue(wc.needsMaterial(STONE));
@@ -64,7 +62,11 @@ public class ConstructionTest {
         assertFalse(wc.needsMaterial(STONE));
 
         /* Verify that construction doesn't finish before material is delivered */
-        Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
+        int i;
+        for (i = 0; i < 1000; i++) {
+            assertTrue(wc.underConstruction());
+            wc.stepTime();
+        }
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -72,13 +74,16 @@ public class ConstructionTest {
         wc.putCargo(planckCargo);
         wc.putCargo(stoneCargo);
 
-        Utils.assertConstructionStateDuringFastForward(1000, wc, UNDER_CONSTRUCTION);
+        for (i = 0; i < 1000; i++) {
+            assertTrue(wc.underConstruction());
+            wc.stepTime();
+        }
 
         /* Verify that construction can finish when all material is delivered */
         wc.putCargo(stoneCargo);
         wc.stepTime();
 
-        assertTrue(wc.getConstructionState() == DONE);
+        assertTrue(wc.ready());
 
         assertFalse(wc.isMilitaryBuilding());
 
@@ -93,22 +98,21 @@ public class ConstructionTest {
 
         wc.tearDown();
 
-        assertTrue(wc.getConstructionState() == BURNING);
+        assertTrue(wc.burningDown());
 
-        int i;
         for (i = 0; i < 50; i++) {
-            assertTrue(wc.getConstructionState() == BURNING);
+            assertTrue(wc.burningDown());
             wc.stepTime();
         }
 
-        assertTrue(wc.getConstructionState() == DESTROYED);
+        assertTrue(wc.destroyed());
     }
 
     @Test
     public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Barracks brks = new Barracks();
 
-        assertTrue(brks.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(brks.underConstruction());
 
         assertTrue(brks.isMilitaryBuilding());
         assertTrue(brks.getMaxHostedMilitary() == 2);
@@ -128,7 +132,7 @@ public class ConstructionTest {
         Utils.constructSmallHouse(brks);
 
         assertTrue(brks.isMilitaryBuilding());
-        assertTrue(brks.getConstructionState() == DONE);
+        assertTrue(brks.ready());
         assertTrue(brks.getHostedMilitary() == 0);
         assertTrue(brks.getMaxHostedMilitary() == 2);
         assertTrue(brks.needMilitaryManning());
@@ -140,10 +144,13 @@ public class ConstructionTest {
     public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Sawmill sm = new Sawmill();
 
-        assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(sm.underConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
-        Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(sm.underConstruction());
+            sm.stepTime();
+        }
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -154,13 +161,16 @@ public class ConstructionTest {
         sm.putCargo(stoneCargo);
         sm.putCargo(stoneCargo);
 
-        Utils.assertConstructionStateDuringFastForward(1000, sm, UNDER_CONSTRUCTION);
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(sm.underConstruction());
+            sm.stepTime();
+        }
 
         /* Verify that construction can finish when all material is delivered */
         sm.putCargo(stoneCargo);
         sm.stepTime();
 
-        assertTrue(sm.getConstructionState() == DONE);
+        assertTrue(sm.ready());
 
         /* Verify that all material was consumed by the construction */
         assertTrue(sm.getAmount(PLANCK) == 0);
@@ -173,18 +183,26 @@ public class ConstructionTest {
 
         sm.tearDown();
 
-        Utils.assertConstructionStateDuringFastForward(50, sm, BURNING);
+        for (int i = 0; i < 50; i++) {
+            assertTrue(sm.burningDown());
+            sm.stepTime();
+        }
 
-        assertTrue(sm.getConstructionState() == DESTROYED);
+
+        assertTrue(sm.destroyed());
     }
 
     @Test
     public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         Farm farm = new Farm();
-        assertTrue(farm.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(farm.underConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
-        Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(farm.underConstruction());
+            farm.stepTime();
+        }
+
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -196,13 +214,16 @@ public class ConstructionTest {
         farm.putCargo(stoneCargo);
         farm.putCargo(stoneCargo);
 
-        Utils.assertConstructionStateDuringFastForward(1000, farm, UNDER_CONSTRUCTION);
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(farm.underConstruction());
+            farm.stepTime();
+        }
 
         /* Verify that construction can finish when all material is delivered */
         farm.putCargo(stoneCargo);
         farm.stepTime();
 
-        assertTrue(farm.getConstructionState() == DONE);
+        assertTrue(farm.ready());
 
         /* Verify that all material was consumed by the construction */
         assertTrue(farm.getAmount(PLANCK) == 0);
@@ -210,9 +231,13 @@ public class ConstructionTest {
 
         farm.tearDown();
 
-        Utils.assertConstructionStateDuringFastForward(50, farm, BURNING);
+        for (int i = 0; i < 50; i++) {
+            assertTrue(farm.burningDown());
+            farm.stepTime();
+        }
 
-        assertTrue(farm.getConstructionState() == DESTROYED);
+
+        assertTrue(farm.destroyed());
     }
 
     @Test(expected = InvalidMaterialException.class)
@@ -228,7 +253,7 @@ public class ConstructionTest {
 
         Utils.constructMediumHouse(sm);
 
-        assertTrue(sm.getConstructionState() == DONE);
+        assertTrue(sm.ready());
 
         sm.tearDown();
 
@@ -241,7 +266,7 @@ public class ConstructionTest {
 
         Utils.constructMediumHouse(sm);
 
-        assertTrue(sm.getConstructionState() == DONE);
+        assertTrue(sm.ready());
 
         sm.tearDown();
 

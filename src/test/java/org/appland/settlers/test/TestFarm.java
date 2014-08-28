@@ -82,7 +82,7 @@ public class TestFarm {
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point0);
 
-        assertTrue(farm.getConstructionState() == Building.ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(farm.underConstruction());
         assertFalse(farm.needsWorker());
     }
 
@@ -98,7 +98,7 @@ public class TestFarm {
 
         Utils.constructLargeHouse(farm);
         
-        assertTrue(farm.getConstructionState() == Building.ConstructionState.DONE);
+        assertTrue(farm.ready());
         assertTrue(farm.needsWorker());
     }
 

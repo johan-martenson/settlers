@@ -301,7 +301,7 @@ public class TestTransportation {
         Utils.constructSmallHouse(qry);
         Utils.constructMediumHouse(stge);
 
-        assertTrue(qry.getConstructionState() == DONE);
+        assertTrue(qry.ready());
 
         Utils.occupyBuilding(mason, qry, map);
 

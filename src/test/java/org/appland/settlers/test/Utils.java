@@ -69,14 +69,6 @@ public class Utils {
         }
     }
 
-    public static void assertConstructionStateDuringFastForward(int time, Building b, ConstructionState state) {
-        int i;
-        for (i = 0; i < time; i++) {
-            assertTrue(b.getConstructionState() == state);
-            b.stepTime();
-        }
-    }
-
     public static List<Building> getNeedForMaterial(Material wood, List<Building> buildings) {
         log.log(Level.INFO, "Finding buildings requiring {0} in list {1}", new Object[]{wood, buildings});
 
@@ -93,7 +85,7 @@ public class Utils {
     }
 
     static void constructMediumHouse(Building sm) throws Exception {
-        assertTrue(sm.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(sm.underConstruction());
 
         Cargo woodCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -117,11 +109,11 @@ public class Utils {
 
         Utils.fastForward(150, sm);
         
-        assertEquals(sm.getConstructionState(), DONE);
+        assertTrue(sm.ready());
     }
 
     static void constructSmallHouse(Building house) throws Exception {
-        assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(house.underConstruction());
 
         Cargo woodCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -139,7 +131,7 @@ public class Utils {
 
         Utils.fastForward(100, house);
         
-        assertTrue(house.getConstructionState() == DONE);
+        assertTrue(house.ready());
     }
 
     static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
@@ -196,7 +188,7 @@ public class Utils {
     }
 
     static void constructLargeHouse(Building house) throws Exception {
-        assertTrue(house.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(house.underConstruction());
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
@@ -359,14 +351,14 @@ public class Utils {
 
     static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
         for (int i = 0; i < 2000; i++) {
-            if (building.getConstructionState() == DONE) {
+            if (building.ready()) {
                 break;
             }
             
             map.stepTime();
         }
     
-        assertEquals(building.getConstructionState(), DONE);
+        assertTrue(building.ready());
     }
 
     static void fastForwardUntilBuildingIsOccupied(Building building, GameMap map) {

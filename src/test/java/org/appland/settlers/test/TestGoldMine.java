@@ -49,11 +49,11 @@ public class TestGoldMine {
         /* Place a goldmine*/
         Building mine = map.placeBuilding(new GoldMine(), point0);
         
-        assertEquals(mine.getConstructionState(), UNDER_CONSTRUCTION);
+        assertTrue(mine.underConstruction());
         
         Utils.constructSmallHouse(mine);
         
-        assertEquals(mine.getConstructionState(), DONE);
+        assertTrue(mine.ready());
     }
     
     @Test
@@ -140,7 +140,7 @@ public class TestGoldMine {
         /* Construct the mine */
         constructSmallHouse(mine);
         
-        assertEquals(mine.getConstructionState(), DONE);
+        assertTrue(mine.ready());
 
         /* Run game logic twice, once to place courier and once to place miner */
         Utils.fastForward(2, map);

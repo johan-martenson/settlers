@@ -30,7 +30,7 @@ public class TestForesterHut {
     public void testConstructForester() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         ForesterHut f = new ForesterHut();
 
-        assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         assertFalse(f.needsWorker());
 
@@ -55,7 +55,7 @@ public class TestForesterHut {
     public void testPromiseWorkerToUnfinishedForester() throws Exception {
         ForesterHut f = new ForesterHut();
 
-        assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         f.promiseWorker(new Forester());
     }
@@ -64,7 +64,7 @@ public class TestForesterHut {
     public void testAssignWorkerToUnfinishedForester() throws Exception {
         ForesterHut f = new ForesterHut();
 
-        assertTrue(f.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         f.assignWorker(new Forester());
     }

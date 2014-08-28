@@ -42,7 +42,7 @@ public class TestFishery {
         
         Fishery f = new Fishery();
 
-        assertTrue(f.getConstructionState() == Building.ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         assertFalse(f.needsWorker());
 
@@ -69,7 +69,7 @@ public class TestFishery {
         
         Fishery f = new Fishery();
 
-        assertTrue(f.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         f.promiseWorker(new Fisherman(map));
     }
@@ -80,7 +80,7 @@ public class TestFishery {
         
         Fishery f = new Fishery();
 
-        assertTrue(f.getConstructionState() == UNDER_CONSTRUCTION);
+        assertTrue(f.underConstruction());
 
         f.assignWorker(new Fisherman(map));
     }

@@ -429,7 +429,7 @@ public class TestGameMap {
         assertTrue(map.getFlags().size() == 1);
         assertTrue(map.getRoads().size() == 1);
         assertTrue(map.getBuildings().size() == 2);
-        assertTrue(wc.getConstructionState() == BURNING);
+        assertTrue(wc.burningDown());
     }
 
     @Test
@@ -511,12 +511,12 @@ public class TestGameMap {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK), barracks0, map);
         
         assertTrue(map.getBuildings().contains(wc));
-        assertEquals(wc.getConstructionState(), DONE);
+        assertTrue(wc.ready());
         
         barracks0.tearDown();
         
         assertTrue(map.getBuildings().contains(wc));
-        assertEquals(wc.getConstructionState(), BURNING);
+        assertTrue(wc.burningDown());
     }
 
     @Test

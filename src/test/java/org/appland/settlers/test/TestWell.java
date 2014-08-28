@@ -12,7 +12,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.Material.WELL_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Well;
@@ -42,7 +41,7 @@ public class TestWell {
 
         Utils.constructSmallHouse(well);
 
-        assertTrue(well.getConstructionState() == DONE);
+        assertTrue(well.ready());
         assertTrue(well.needsWorker());
     }
     

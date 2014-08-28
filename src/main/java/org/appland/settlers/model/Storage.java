@@ -456,6 +456,6 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isWorking() {
-        return getConstructionState() == DONE;
+        return ready();
     }
 }

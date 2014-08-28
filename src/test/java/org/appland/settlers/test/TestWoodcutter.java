@@ -45,7 +45,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
-        assertTrue(wc.getConstructionState() == ConstructionState.UNDER_CONSTRUCTION);
+        assertTrue(wc.underConstruction());
 
         assertFalse(wc.needsWorker());
     }

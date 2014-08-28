@@ -7,14 +7,12 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Building.ConstructionState;
-import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
@@ -47,7 +45,7 @@ public class TestHeadquarter {
 
         map.placeBuilding(hq, hqPoint);
 
-        assertTrue(hq.getConstructionState() == ConstructionState.DONE);
+        assertTrue(hq.ready());
     }
 
     @Test

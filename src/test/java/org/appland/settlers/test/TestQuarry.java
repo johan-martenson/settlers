@@ -41,7 +41,7 @@ public class TestQuarry {
 
         Utils.constructSmallHouse(quarry);
 
-        assertTrue(quarry.getConstructionState() == DONE);
+        assertTrue(quarry.ready());
         assertTrue(quarry.needsWorker());
     }
     

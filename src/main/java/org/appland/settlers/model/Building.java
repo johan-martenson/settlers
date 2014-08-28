@@ -76,7 +76,7 @@ public class Building implements Actor, EndPoint {
     public enum ConstructionState {
         UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
     }
-    
+
     protected ConstructionState constructionState;
     protected GameMap           map;
     
@@ -363,12 +363,8 @@ public class Building implements Actor, EndPoint {
         return flag;
     }
 
-    public ConstructionState getConstructionState() {
-        return constructionState;
-    }
-
     public void tearDown() throws Exception {
-        constructionState = ConstructionState.BURNING;
+        constructionState = BURNING;
         destructionCountdown.countFrom(49);
         
         if (isMilitaryBuilding()) {
@@ -495,19 +491,19 @@ public class Building implements Actor, EndPoint {
         return !requiredGoods.keySet().isEmpty();
     }
 
-    private boolean underConstruction() {
+    public boolean underConstruction() {
         return constructionState == UNDER_CONSTRUCTION;
     }
 
-    private boolean ready() {
+    public boolean ready() {
         return constructionState == DONE;
     }
 
-    private boolean burningDown() {
+    public boolean burningDown() {
         return constructionState == BURNING;
     }
 
-    private boolean destroyed() {
+    public boolean destroyed() {
         return constructionState == DESTROYED;
     }
 
