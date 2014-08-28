@@ -86,9 +86,8 @@ public class Building implements Actor, EndPoint {
     private Flag    flag;
 
     private final boolean                isWorkerNeeded;
-    private final Countdown              constructionCountdown;
+    private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
-    private final Countdown              destructionCountdown;
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
@@ -99,8 +98,7 @@ public class Building implements Actor, EndPoint {
         constructionState     = UNDER_CONSTRUCTION;
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
-        constructionCountdown = new Countdown();
-        destructionCountdown  = new Countdown();
+        countdown             = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
         flag                  = new Flag(null);
@@ -112,7 +110,7 @@ public class Building implements Actor, EndPoint {
         /* Check and remember if this building requires a worker */
         isWorkerNeeded = getWorkerRequired();
         
-        constructionCountdown.countFrom(getConstructionCountdown());
+        countdown.countFrom(getConstructionCountdown());
     }
     
     protected void setMap(GameMap m) {
@@ -339,7 +337,7 @@ public class Building implements Actor, EndPoint {
         log.log(Level.FINE, "Stepping time in building");
 
         if (underConstruction()) {
-            if (constructionCountdown.reachedZero()) {
+            if (countdown.reachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
@@ -348,13 +346,13 @@ public class Building implements Actor, EndPoint {
                     constructionState = DONE;
                 }
             } else {
-                constructionCountdown.step();
+                countdown.step();
             }
         } else if (burningDown()) {
-            if (destructionCountdown.reachedZero()) {
+            if (countdown.reachedZero()) {
                 constructionState = DESTROYED;
             } else {
-                destructionCountdown.step();
+                countdown.step();
             }
         }
     }
@@ -365,7 +363,7 @@ public class Building implements Actor, EndPoint {
 
     public void tearDown() throws Exception {
         constructionState = BURNING;
-        destructionCountdown.countFrom(49);
+        countdown.countFrom(49);
         
         if (isMilitaryBuilding()) {
             map.updateBorder();
