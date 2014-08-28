@@ -203,7 +203,7 @@ public class Building implements Actor, EndPoint {
         promisedWorker = null;
     }
 
-    public void hostMilitary(Military military) {
+    public void hostMilitary(Military military) throws Exception {
         if (hostedMilitary.isEmpty()) {
             if (isMilitaryBuilding()) {
                 try {
@@ -212,6 +212,10 @@ public class Building implements Actor, EndPoint {
                     Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+        
+        if (hostedMilitary.size() >= getMaxHostedMilitary()) {
+            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
         }
         
         hostedMilitary.add(military);
