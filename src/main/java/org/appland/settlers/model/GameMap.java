@@ -42,7 +42,7 @@ public class GameMap {
     private List<Point>             fieldOfView;
     private List<Point>             discoveredLand;
 
-    private static Logger log = Logger.getLogger(GameMap.class.getName());
+    private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
@@ -586,28 +586,6 @@ public class GameMap {
         }
 
         return stg;
-    }
-
-    public List<Courier> getIdleWorkers() {
-        List<Courier> result = new ArrayList<>();
-
-        for (Worker w : allWorkers) {
-            if (!(w instanceof Courier)) {
-                continue;
-            }
-            
-            if (w.getCargo() != null) {
-                continue;
-            }
-
-            if (w.isTraveling()) {
-                continue;
-            }
-
-            result.add((Courier)w);
-        }
-
-        return result;
     }
 
     public List<Building> getBuildings() {
@@ -1161,30 +1139,6 @@ public class GameMap {
         resultList.remove(point.down());
         
         return resultList;
-    }
-
-    private List<Road> wayPointsToRoads(List<Point> path) throws Exception {
-        List<Road> result = new ArrayList<>();
-        
-        Point previous = null;
-
-        for (Point p : path) {
-            if (previous == null) {
-                previous = p;
-                
-                continue;
-            }
-            
-            if (!isFlagAtPoint(p)) {
-                continue;
-            }
-            
-            result.add(getRoad(previous, p));
-
-            previous = p;
-        }    
-
-        return result;
     }
 
     public Building getBuildingAtPoint(Point p) {
