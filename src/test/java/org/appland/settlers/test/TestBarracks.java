@@ -170,7 +170,7 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         
         /* Verify that the barracks does not need another military */
-        assertFalse(barracks0.needMilitaryManning());
+        assertFalse(barracks0.needsMilitaryManning());
     }
 
     @Test
@@ -188,14 +188,14 @@ public class TestBarracks {
         Building barracks0 = map.placeBuilding(new Barracks(), point22);
 
         /* Verify that the barracks can't hold militaries before it's finished */
-        assertFalse(barracks0.needMilitaryManning());
+        assertFalse(barracks0.needsMilitaryManning());
         
         Military military = new Military(PRIVATE_RANK, map);
         
         map.placeWorker(military, barracks0);
         
         try {
-            barracks0.hostMilitary(military);
+            barracks0.deployMilitary(military);
             assertFalse(true);
         } catch (Exception e) {}
         
@@ -228,7 +228,7 @@ public class TestBarracks {
         map.placeWorker(military, barracks0);
         
         try {
-            barracks0.hostMilitary(military);
+            barracks0.deployMilitary(military);
             assertFalse(true);
         } catch (Exception e) {}
         

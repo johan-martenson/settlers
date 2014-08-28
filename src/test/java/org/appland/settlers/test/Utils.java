@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.ConstructionState;
-import static org.appland.settlers.model.Building.ConstructionState.*;
+import static org.appland.settlers.model.Building.State;
+import static org.appland.settlers.model.Building.State.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
@@ -375,7 +375,7 @@ public class Utils {
 
     static Military occupyMilitaryBuilding(Military m, Building building, GameMap map) throws Exception {
         map.placeWorker(m, building);
-        building.hostMilitary(m);
+        building.deployMilitary(m);
         m.enterBuilding(building);
 
         return m;

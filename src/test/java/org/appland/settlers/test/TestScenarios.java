@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
+import static org.appland.settlers.model.Building.State.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;

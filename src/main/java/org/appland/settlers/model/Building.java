@@ -9,15 +9,61 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.Building.ConstructionState.BURNING;
-import static org.appland.settlers.model.Building.ConstructionState.DESTROYED;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
-import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
+import static org.appland.settlers.model.Building.State.BURNING;
+import static org.appland.settlers.model.Building.State.DESTROYED;
+import static org.appland.settlers.model.Building.State.DONE;
+import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
-
-import static org.appland.settlers.model.Material.*;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
 
 public class Building implements Actor, EndPoint {
+
+    public enum State {
+        UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
+    }
+
+    private static final int TIME_TO_BUILD_SMALL_HOUSE  = 99;
+    private static final int TIME_TO_BUILD_MEDIUM_HOUSE = 149;
+    private static final int TIME_TO_BUILD_LARGE_HOUSE  = 199;
+    
+    protected GameMap map;
+    
+    private State   state;
+    private Worker  worker;
+    private Worker  promisedWorker;
+    private Point   position;
+    private Flag    flag;
+
+    private final boolean                isWorkerNeeded;
+    private final Countdown              countdown;
+    private final Map<Material, Integer> promisedDeliveries;
+    private final List<Military>         hostedMilitary;
+    private final List<Military>         promisedMilitary;
+    private final Map<Material, Integer> receivedMaterial;
+
+    private static final Logger log = Logger.getLogger(Building.class.getName());
+
+    public Building() {
+        state     = UNDER_CONSTRUCTION;
+        receivedMaterial      = createEmptyMaterialIntMap();
+        promisedDeliveries    = createEmptyMaterialIntMap();
+        countdown             = new Countdown();
+        hostedMilitary        = new ArrayList<>();
+        promisedMilitary      = new ArrayList<>();
+        flag                  = new Flag(null);
+        worker                = null;
+        promisedWorker        = null;
+        position              = null;
+        map                   = null;
+
+        /* Check and remember if this building requires a worker */
+        isWorkerNeeded = isWorkerRequired();
+        
+        countdown.countFrom(getConstructionCountdown());
+    }
+    
     void setFlag(Flag flagAtPoint) {
         flag = flagAtPoint;
     }
@@ -37,13 +83,13 @@ public class Building implements Actor, EndPoint {
     }
 
     public int getAmount(Material material) {
-        return getInQueue().get(material);
+        return receivedMaterial.get(material);
     }
 
     void consumeOne(Material material) {
-        int amount = getInQueue().get(material);
+        int amount = getAmount(material);
         
-        getInQueue().put(material, amount - 1);
+        receivedMaterial.put(material, amount - 1);
     }
 
     Collection<Point> getDiscoveredLand() {
@@ -73,46 +119,6 @@ public class Building implements Actor, EndPoint {
         return mb.maxCoins();
     }
 
-    public enum ConstructionState {
-        UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
-    }
-
-    protected ConstructionState constructionState;
-    protected GameMap           map;
-    
-    private Worker  worker;
-    private Worker  promisedWorker;
-    private Point   position;
-    private Flag    flag;
-
-    private final boolean                isWorkerNeeded;
-    private final Countdown              countdown;
-    private final Map<Material, Integer> promisedDeliveries;
-    private final List<Military>         hostedMilitary;
-    private final List<Military>         promisedMilitary;
-    private final Map<Material, Integer> receivedMaterial;
-
-    private static final Logger log = Logger.getLogger(Building.class.getName());
-
-    public Building() {
-        constructionState     = UNDER_CONSTRUCTION;
-        receivedMaterial      = createEmptyMaterialIntMap();
-        promisedDeliveries    = createEmptyMaterialIntMap();
-        countdown             = new Countdown();
-        hostedMilitary        = new ArrayList<>();
-        promisedMilitary      = new ArrayList<>();
-        flag                  = new Flag(null);
-        worker                = null;
-        promisedWorker        = null;
-        position              = null;
-        map                   = null;
-
-        /* Check and remember if this building requires a worker */
-        isWorkerNeeded = getWorkerRequired();
-        
-        countdown.countFrom(getConstructionCountdown());
-    }
-    
     protected void setMap(GameMap m) {
         map = m;
     }
@@ -169,7 +175,7 @@ public class Building implements Actor, EndPoint {
 
     public void promiseWorker(Worker w) throws Exception {
         if (!ready()) {
-            throw new Exception("Can't promise worker to building in state " + constructionState);
+            throw new Exception("Can't promise worker to building in state " + state);
         }
 
         if (promisedWorker != null) {
@@ -179,7 +185,7 @@ public class Building implements Actor, EndPoint {
         promisedWorker = w;
     }
 
-    public boolean needMilitaryManning() {
+    public boolean needsMilitaryManning() {
         if (ready()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
@@ -210,30 +216,26 @@ public class Building implements Actor, EndPoint {
         promisedWorker = null;
     }
 
-    public void hostMilitary(Military military) throws Exception {
+    public void deployMilitary(Military military) throws Exception {
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
         }
         
-        if (hostedMilitary.isEmpty()) {
-            if (isMilitaryBuilding()) {
-                try {
-                    map.updateBorder();
-                } catch (Exception ex) {
-                    Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        if (isMilitaryBuilding()) {
+            if (hostedMilitary.size() >= getMaxHostedMilitary()) {
+                throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
             }
-        }
-        
-        if (hostedMilitary.size() >= getMaxHostedMilitary()) {
-            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
+
+            if (hostedMilitary.isEmpty()) {
+                map.updateBorder();
+            }
         }
         
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
     }
 
-    private boolean getWorkerRequired() {
+    private boolean isWorkerRequired() {
         log.log(Level.FINE, "Checking if {0} requires a worker", this);
 
         RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
@@ -252,10 +254,6 @@ public class Building implements Actor, EndPoint {
 
     void setPosition(Point p) {
         position = p;
-    }
-
-    private Map<Material, Integer> getInQueue() {
-        return receivedMaterial;
     }
 
     @Override
@@ -298,9 +296,11 @@ public class Building implements Actor, EndPoint {
 
         if (underConstruction()) {
             return moreMaterialNeededForConstruction(material);
-        } else {
+        } else if (ready()) {
             return needsMaterialForProduction(material);
         }
+    
+        return false;
     }
 
     @Override
@@ -343,14 +343,14 @@ public class Building implements Actor, EndPoint {
 
                     consumeConstructionMaterial();
                     
-                    constructionState = DONE;
+                    state = DONE;
                 }
             } else {
                 countdown.step();
             }
         } else if (burningDown()) {
             if (countdown.reachedZero()) {
-                constructionState = DESTROYED;
+                state = DESTROYED;
             } else {
                 countdown.step();
             }
@@ -362,18 +362,12 @@ public class Building implements Actor, EndPoint {
     }
 
     public void tearDown() throws Exception {
-        constructionState = BURNING;
+        state = BURNING;
         countdown.countFrom(49);
         
         if (isMilitaryBuilding()) {
             map.updateBorder();
         }
-    }
-
-    public Material[] getProductionMaterial() {
-        Production p = getClass().getAnnotation(Production.class);
-
-        return p.output();
     }
 
     public Size getHouseSize() {
@@ -411,7 +405,6 @@ public class Building implements Actor, EndPoint {
         return requiredGoods;
     }
 
-    /* ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  */
     private void consumeConstructionMaterial() {
         Map<Material, Integer> materialToConsume = getMaterialsToBuildHouse();
 
@@ -446,26 +439,22 @@ public class Building implements Actor, EndPoint {
 
     private int getConstructionCountdown() {
         HouseSize sizeAnnotation = getClass().getAnnotation(HouseSize.class);
-        int constructionTime = 100;
 
         switch (sizeAnnotation.size()) {
         case SMALL:
-            constructionTime = 100 - 1;
-            break;
+            return TIME_TO_BUILD_SMALL_HOUSE;
         case MEDIUM:
-            constructionTime = 150 - 1;
-            break;
+            return TIME_TO_BUILD_MEDIUM_HOUSE;
         case LARGE:
-            constructionTime = 200 - 1;
-            break;
+            return TIME_TO_BUILD_LARGE_HOUSE;
+        default:
+            return 0;
         }
-
-        return constructionTime;
     }
 
     private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
-
+        
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
             Material m = entry.getKey();
 
@@ -490,23 +479,23 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean underConstruction() {
-        return constructionState == UNDER_CONSTRUCTION;
+        return state == UNDER_CONSTRUCTION;
     }
 
     public boolean ready() {
-        return constructionState == DONE;
+        return state == DONE;
     }
 
     public boolean burningDown() {
-        return constructionState == BURNING;
+        return state == BURNING;
     }
 
     public boolean destroyed() {
-        return constructionState == DESTROYED;
+        return state == DESTROYED;
     }
 
     protected void setConstructionReady() {
-        constructionState = DONE;
+        state = DONE;
     }
 
     private boolean moreMaterialNeededForConstruction(Material material) {

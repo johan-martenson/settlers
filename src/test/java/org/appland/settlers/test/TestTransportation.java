@@ -3,7 +3,7 @@ package org.appland.settlers.test;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
+import static org.appland.settlers.model.Building.State.DONE;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;

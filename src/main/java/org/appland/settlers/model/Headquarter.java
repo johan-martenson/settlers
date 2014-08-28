@@ -3,7 +3,6 @@ package org.appland.settlers.model;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
 
 import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.policy.InitialState;
@@ -17,7 +16,7 @@ public class Headquarter extends Storage {
 
         try {
             setHeadquarterDefaultInventory(inventory);
-            constructionState = DONE;
+            setConstructionReady();
         } catch (Exception ex) {
             Logger.getLogger(Headquarter.class.getName()).log(Level.SEVERE, null, ex);
         }

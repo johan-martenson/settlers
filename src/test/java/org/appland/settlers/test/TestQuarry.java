@@ -7,7 +7,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
+import static org.appland.settlers.model.Building.State.DONE;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.STONE;

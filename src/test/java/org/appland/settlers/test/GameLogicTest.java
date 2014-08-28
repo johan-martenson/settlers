@@ -1,7 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
-import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
+import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -263,7 +263,7 @@ public class GameLogicTest {
         map.placeBuilding(bk, wcPoint);
         Utils.constructSmallHouse(bk);
 
-        assertTrue(bk.needMilitaryManning());
+        assertTrue(bk.needsMilitaryManning());
         assertTrue(bk.getHostedMilitary() == 0);
 
         /* Step time to make the headquarter assign new workers */
@@ -287,7 +287,7 @@ public class GameLogicTest {
 
         Utils.fastForwardUntilWorkersReachTarget(map, map.getAllWorkers().get(4));
         
-        assertFalse(bk.needMilitaryManning());
+        assertFalse(bk.needsMilitaryManning());
         assertTrue(bk.getHostedMilitary() == 2);
 
         /* Assign new workers to unoccupied buildings again. There is building

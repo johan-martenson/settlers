@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.Building.ConstructionState.DONE;
+import static org.appland.settlers.model.Building.State.DONE;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COURIER;
@@ -121,7 +121,7 @@ public class Storage extends Building implements Actor {
 
         for (Building b : buildings) {
             if (b.isMilitaryBuilding()) {
-                if (b.needMilitaryManning()) {
+                if (b.needsMilitaryManning()) {
                     Storage stg = map.getClosestStorage(b.getPosition());
 
                     if (!equals(stg)) {

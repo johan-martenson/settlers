@@ -2,8 +2,8 @@ package org.appland.settlers.test;
 
 import java.util.Map;
 import org.appland.settlers.model.Barracks;
-import static org.appland.settlers.model.Building.ConstructionState.BURNING;
-import static org.appland.settlers.model.Building.ConstructionState.UNDER_CONSTRUCTION;
+import static org.appland.settlers.model.Building.State.BURNING;
+import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Farm;
@@ -119,7 +119,7 @@ public class ConstructionTest {
         assertTrue(brks.getHostedMilitary() == 0);
         assertTrue(brks.getPromisedMilitary() == 0);
 
-        assertFalse(brks.needMilitaryManning());
+        assertFalse(brks.needsMilitaryManning());
 
         /* brks needs a reference to the game map and this is set implicityly when it's placed on the map */
         GameMap map = new GameMap(30, 30);
@@ -135,7 +135,7 @@ public class ConstructionTest {
         assertTrue(brks.ready());
         assertTrue(brks.getHostedMilitary() == 0);
         assertTrue(brks.getMaxHostedMilitary() == 2);
-        assertTrue(brks.needMilitaryManning());
+        assertTrue(brks.needsMilitaryManning());
 
         assertTrue(brks.isMilitaryBuilding());
     }

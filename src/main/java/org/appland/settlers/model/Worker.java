@@ -141,7 +141,7 @@ public abstract class Worker implements Actor {
             Building building = getTargetBuilding();
 
             if (this instanceof Military) {
-                building.hostMilitary((Military) this);
+                building.deployMilitary((Military) this);
                 enterBuilding(building);
             } else {
                 building.assignWorker(this);
