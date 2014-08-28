@@ -3,16 +3,15 @@
  */
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+
 /**
  * @author johan
  *
  */
 @Walker(speed = 10)
 public class Military extends Worker {
-
-    Rank getRank() {
-        return rank;
-    }
 
     public enum Rank {
 
@@ -21,7 +20,7 @@ public class Military extends Worker {
         GENERAL_RANK
     }
 
-    private final Rank rank;
+    private Rank rank;
 
     public Military(Rank r) {
         this(r, null);
@@ -31,6 +30,22 @@ public class Military extends Worker {
         super(map);
 
         rank = r;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    void promote() {
+        switch (rank) {
+        case PRIVATE_RANK:
+            rank = SERGEANT_RANK;
+            break;
+        case SERGEANT_RANK:
+            rank = GENERAL_RANK;
+            break;
+        default:
+        }
     }
 
     @Override

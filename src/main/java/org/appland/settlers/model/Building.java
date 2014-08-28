@@ -18,6 +18,8 @@ import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
+import org.appland.settlers.model.Military.Rank;
+import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements Actor, EndPoint {
 
@@ -59,7 +61,7 @@ public class Building implements Actor, EndPoint {
 
         countdown.countFrom(getConstructionCountdown());
 
-        state     = UNDER_CONSTRUCTION;
+        state = UNDER_CONSTRUCTION;
     }
     
     void setFlag(Flag flagAtPoint) {
@@ -233,7 +235,7 @@ public class Building implements Actor, EndPoint {
         
         if (previousState == UNOCCUPIED) {
             map.updateBorder();
-        }        
+        }
     }
 
     private boolean isWorkerRequired() {
@@ -290,6 +292,11 @@ public class Building implements Actor, EndPoint {
 
         existingQuantity = promisedDeliveries.get(material);
         promisedDeliveries.put(material, existingQuantity - 1);
+        
+        /* Start the promotion countdown if it's a coin */
+        if (material == COIN && isMilitaryBuilding()) {
+            countdown.countFrom(PROMOTION_DELAY - 1);
+        }
     }
 
     public boolean needsMaterial(Material material) {
@@ -354,6 +361,14 @@ public class Building implements Actor, EndPoint {
                 state = DESTROYED;
             } else {
                 countdown.step();
+            }
+        } else if (occupied()) {            
+            if (isMilitaryBuilding() && getAmount(COIN) > 0) {
+                if (countdown.reachedZero()) {
+                    doPromotion();
+                } else {
+                    countdown.step();
+                }
             }
         }
     }
@@ -563,5 +578,25 @@ public class Building implements Actor, EndPoint {
 
     public boolean occupied() {
         return state == OCCUPIED;
+    }
+
+    private void doPromotion() {
+        Collection<Military> promoted = new LinkedList<>();
+        
+        for (Rank rank : Rank.values()) {
+            for (Military m : hostedMilitary) {
+                if (promoted.contains(m)) {
+                    continue;
+                }
+                
+                if (m.getRank() == rank) {
+                    m.promote();
+                    
+                    promoted.add(m);
+                    
+                    break;
+                }
+            }
+        }
     }
 }

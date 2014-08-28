@@ -11,16 +11,22 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PRIVATE;
 import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -330,5 +336,107 @@ public class TestBarracks {
         } catch (Exception e) {}
         
         assertEquals(barracks0.getAmount(COIN), 1);
+    }
+
+    @Test
+    public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        /* Deliver one coin to the barracks */
+        Cargo cargo = new Cargo(COIN, map);
+        
+        barracks0.putCargo(cargo);
+
+        /* Occupy the barracks with one private */
+        Military military = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Verify that the private is promoted at the right time */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(military.getRank(), PRIVATE_RANK);
+            map.stepTime();
+        }
+
+        assertEquals(military.getRank(), SERGEANT_RANK);
+    }
+
+    @Test
+    public void testOnlyOnePrivateIsPromoted() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        /* Deliver one coin to the barracks */
+        Cargo cargo = new Cargo(COIN, map);
+        
+        barracks0.putCargo(cargo);
+
+        /* Occupy the barracks with one private */
+        Military military1 = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military military2 = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Wait for the promotion to happen */
+        Utils.fastForward(100, map);
+
+        assertTrue((military1.getRank() == SERGEANT_RANK && military2.getRank() == PRIVATE_RANK) ||
+                   (military1.getRank() == PRIVATE_RANK  && military2.getRank() == SERGEANT_RANK));
+    }
+
+    @Test
+    public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
+        
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        /* Deliver one coin to the barracks */
+        Cargo cargo = new Cargo(COIN, map);
+        
+        barracks0.putCargo(cargo);
+
+        /* Wait before the barracks is populated */
+        Utils.fastForward(200, map);
+        
+        /* Occupy the barracks with one private */
+        Military military = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+
+        /* Verify that it still takes the same time for the private to get promoted */
+        Utils.fastForward(99, map);
+        
+        assertEquals(military.getRank(), PRIVATE_RANK);
+        
+        map.stepTime();
+
+        assertEquals(military.getRank(), SERGEANT_RANK);
     }
 }
