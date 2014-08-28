@@ -18,8 +18,6 @@ import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.*;
 
 public class Building implements Actor, EndPoint {
-    private int nrCoins;
-
     void setFlag(Flag flagAtPoint) {
         flag = flagAtPoint;
     }
@@ -66,7 +64,7 @@ public class Building implements Actor, EndPoint {
     }
 
     private boolean needsCoins() {
-        return nrCoins < getMaxCoins();
+        return getAmount(COIN) < getMaxCoins();
     }
 
     private int getMaxCoins() {
@@ -278,6 +276,10 @@ public class Building implements Actor, EndPoint {
             throw new InvalidStateForProduction(this);
         }
 
+        if (ready() && material == COIN && isMilitaryBuilding() && !needsCoins()) {
+            throw new Exception("This building doesn't need any more coins");
+        }
+        
         if (ready() && !canAcceptGoods()) {
             throw new DeliveryNotPossibleException();
         }
@@ -392,9 +394,12 @@ public class Building implements Actor, EndPoint {
         Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
+        if (isMilitaryBuilding() && getMaxCoins() > 0) {
+            requiredGoods.put(COIN, getMaxCoins());
+        }
+        
         log.log(Level.FINER, "Found annotations for {0} in class", requiredGoods);
 
-        /* Return empty map if the annotation isn't there */
         if (p == null) {
             return requiredGoods;
         }

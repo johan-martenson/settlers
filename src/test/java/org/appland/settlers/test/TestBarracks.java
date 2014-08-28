@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.COIN;
@@ -294,5 +295,40 @@ public class TestBarracks {
         Building barracks0 = map.placeBuilding(new Barracks(), point22);
         
         assertFalse(barracks0.needsMaterial(COIN));
+    }
+    
+    @Test
+    public void testBarracksCanHoldOnlyOneCoin() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+
+        assertTrue(barracks0.needsMaterial(COIN));
+        
+        /* Deliver one coin to the barracks */
+        Cargo cargo = new Cargo(COIN, map);
+        
+        barracks0.putCargo(cargo);
+        
+        /* Verify that the barracks can't hold another coin */
+        assertFalse(barracks0.needsMaterial(COIN));
+        assertEquals(barracks0.getAmount(COIN), 1);
+        
+        try {
+            barracks0.putCargo(cargo);
+            assertFalse(true);
+        } catch (Exception e) {}
+        
+        assertEquals(barracks0.getAmount(COIN), 1);
     }
 }
