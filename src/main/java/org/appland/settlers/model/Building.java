@@ -11,8 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Building.State.BURNING;
 import static org.appland.settlers.model.Building.State.DESTROYED;
-import static org.appland.settlers.model.Building.State.DONE;
+import static org.appland.settlers.model.Building.State.OCCUPIED;
 import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
+import static org.appland.settlers.model.Building.State.UNOCCUPIED;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -20,8 +21,8 @@ import static org.appland.settlers.model.Material.STONE;
 
 public class Building implements Actor, EndPoint {
 
-    public enum State {
-        UNDER_CONSTRUCTION, DONE, BURNING, DESTROYED
+    enum State {
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
     }
 
     private static final int TIME_TO_BUILD_SMALL_HOUSE  = 99;
@@ -202,11 +203,9 @@ public class Building implements Actor, EndPoint {
     }
 
     public void assignWorker(Worker w) throws Exception {
-        if (!ready()) {
+        if (underConstruction()) {
             throw new Exception("Can't assign " + w + " to unfinished " + this);
-        }
-
-        if (worker != null) {
+        } else if (occupied()) {
             throw new Exception("Building " + this + " is already occupied.");
         }
 
@@ -214,6 +213,8 @@ public class Building implements Actor, EndPoint {
 
         worker = w;
         promisedWorker = null;
+        
+        state = OCCUPIED;
     }
 
     public void deployMilitary(Military military) throws Exception {
@@ -221,18 +222,25 @@ public class Building implements Actor, EndPoint {
             throw new Exception("Cannot assign military when the building is not ready");
         }
         
-        if (isMilitaryBuilding()) {
-            if (hostedMilitary.size() >= getMaxHostedMilitary()) {
-                throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
-            }
-
-            if (hostedMilitary.isEmpty()) {
-                map.updateBorder();
-            }
+        if (!isMilitaryBuilding()) {
+            throw new Exception("Cannot assign military to non-military building");
         }
-        
+
+        if (hostedMilitary.size() >= getMaxHostedMilitary()) {
+            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
+        }
+
+        State previousState = state;
+
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
+        
+        state = OCCUPIED;
+
+        
+        if (previousState == UNOCCUPIED) {
+            map.updateBorder();
+        }        
     }
 
     private boolean isWorkerRequired() {
@@ -343,7 +351,7 @@ public class Building implements Actor, EndPoint {
 
                     consumeConstructionMaterial();
                     
-                    state = DONE;
+                    state = UNOCCUPIED;
                 }
             } else {
                 countdown.step();
@@ -483,7 +491,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean ready() {
-        return state == DONE;
+        return state == UNOCCUPIED || state == OCCUPIED;
     }
 
     public boolean burningDown() {
@@ -495,7 +503,7 @@ public class Building implements Actor, EndPoint {
     }
 
     protected void setConstructionReady() {
-        state = DONE;
+        state = UNOCCUPIED;
     }
 
     private boolean moreMaterialNeededForConstruction(Material material) {
@@ -554,5 +562,9 @@ public class Building implements Actor, EndPoint {
     @Override
     public Cargo getCargoWaitingForRoad(Road r) {
         return null;
+    }
+
+    public boolean occupied() {
+        return state == OCCUPIED;
     }
 }

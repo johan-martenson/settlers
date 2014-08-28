@@ -10,8 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.State;
-import static org.appland.settlers.model.Building.State.*;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;

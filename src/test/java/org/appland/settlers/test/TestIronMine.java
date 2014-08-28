@@ -7,8 +7,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.State.DONE;
-import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.IronMine;

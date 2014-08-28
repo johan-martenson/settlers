@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;

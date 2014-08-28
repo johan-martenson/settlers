@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
-import static org.appland.settlers.model.Building.State.BURNING;
-import static org.appland.settlers.model.Building.State.DONE;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;

@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.Building.State.BURNING;
-import static org.appland.settlers.model.Building.State.DONE;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Material.FISH;
@@ -1437,7 +1435,7 @@ public class GameMap {
                 List<Building> buildingsAlreadyAdded = new LinkedList<>();
 
                 for (Building b : militaryBuildings) {
-                    if (b.ready() && land.contains(b.getPosition())) {
+                    if (b.occupied() && land.contains(b.getPosition())) {
                         land.addAll(b.getDefendedLand());
 
                         addedToBorder = true;

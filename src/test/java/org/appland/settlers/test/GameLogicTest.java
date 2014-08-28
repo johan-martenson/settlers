@@ -1,7 +1,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
-import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;

@@ -6,7 +6,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Building.State;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;

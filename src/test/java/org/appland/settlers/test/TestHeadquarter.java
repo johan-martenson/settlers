@@ -6,7 +6,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Building.State;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;

@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Building.State;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
