@@ -31,4 +31,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_IRON_FOUNDER = 1;
         public static final int STORAGE_INITIAL_BREWER = 1;
         public static final int STORAGE_INITIAL_MINTER = 1;
+        public static final int STORAGE_INITIAL_ARMORER = 1;
 }

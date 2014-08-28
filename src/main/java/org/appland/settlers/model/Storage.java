@@ -322,6 +322,9 @@ public class Storage extends Building implements Actor {
         case MINTER:
             w = new Minter(map);
             break;
+        case ARMORER:
+            w = new Armorer(map);
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }

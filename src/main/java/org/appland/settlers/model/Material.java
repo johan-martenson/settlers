@@ -36,6 +36,7 @@ public enum Material {
     IRON_FOUNDER,
     BREWER,
     MINTER,
+    ARMORER,
     COIN
 
 }

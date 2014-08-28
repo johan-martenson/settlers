@@ -355,7 +355,7 @@ public class Building implements Actor, EndPoint {
         }
     }
 
-    public Material getProductionMaterial() {
+    public Material[] getProductionMaterial() {
         Production p = getClass().getAnnotation(Production.class);
 
         return p.output();
