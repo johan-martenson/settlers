@@ -44,7 +44,7 @@ public class TestIronSmelter {
         Point point3 = new Point(7, 9);
         Building ironFounder = map.placeBuilding(new IronSmelter(), point3);
 
-        /* Unfinished samwill doesn't need worker */
+        /* Unfinished iron smelter doesn't need worker */
         assertFalse(ironFounder.needsWorker());
         
         /* Finish construction of the iron smelter */
@@ -114,7 +114,7 @@ public class TestIronSmelter {
     }
     
     @Test
-    public void testOccupiedIronSmelterWithoutWoodProducesNothing() throws Exception {
+    public void testOccupiedIronSmelterWithoutCoalAndIronProducesNothing() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* Place headquarter */
@@ -168,7 +168,7 @@ public class TestIronSmelter {
     }
 
     @Test
-    public void testOccupiedIronSmelterWithWoodProducesIronBars() throws Exception {
+    public void testOccupiedIronSmelterWithIronAndCoalProducesIronBars() throws Exception {
         GameMap map = new GameMap(40, 40);
 
         /* Place headquarter */
@@ -400,5 +400,4 @@ public class TestIronSmelter {
             map.stepTime();
         }
     }
-
 }
