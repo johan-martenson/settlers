@@ -39,6 +39,7 @@ public class Building implements Actor, EndPoint {
     private Worker  promisedWorker;
     private Point   position;
     private Flag    flag;
+    private boolean enablePromotions;
 
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
@@ -59,6 +60,7 @@ public class Building implements Actor, EndPoint {
         promisedWorker        = null;
         position              = null;
         map                   = null;
+        enablePromotions      = true;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -111,6 +113,10 @@ public class Building implements Actor, EndPoint {
     }
 
     private boolean needsCoins() {
+        if (!enablePromotions) {
+            return false;
+        }
+        
         return getAmount(COIN) < getMaxCoins();
     }
 
@@ -399,7 +405,7 @@ public class Building implements Actor, EndPoint {
         Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
-        if (isMilitaryBuilding() && getMaxCoins() > 0) {
+        if (isMilitaryBuilding() && getMaxCoins() > 0 && enablePromotions) {
             requiredGoods.put(COIN, getMaxCoins());
         }
         
@@ -530,21 +536,21 @@ public class Building implements Actor, EndPoint {
 
     private boolean needsMaterialForProduction(Material material) {
         Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
-
+        
         if (isMilitaryBuilding() && needsCoins() && material == COIN) {
             return true;
         }
-        
-        if (!requiredGoods.containsKey(material)) {
-            /* Building does not accept the material */
+
+        /* Building does not accept the material */
+        if (!requiredGoods.containsKey(material)) {            
             log.log(Level.FINE, "This building does not accept {0}", material);
             return false;
         }
 
         int neededAmount = requiredGoods.get(material);
 
+        /* Building has all the cargos it needs of the material */
         if (receivedMaterial.get(material) >= neededAmount) {
-            /* Building has all the cargos it needs of the material */
             log.log(Level.FINE, "This building has all the {0} it needs", material);
             return false;
         }
@@ -617,5 +623,9 @@ public class Building implements Actor, EndPoint {
         }
     
         return false;
+    }
+
+    public void disablePromotions() {
+        enablePromotions = false;
     }
 }

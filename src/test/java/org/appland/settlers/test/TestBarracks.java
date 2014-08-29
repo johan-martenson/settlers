@@ -500,4 +500,29 @@ public class TestBarracks {
 
         assertEquals(barracks0.getAmount(COIN), 1);
     }
+    
+    @Test
+    public void testCanDisableCoinsToBarracks() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        Utils.constructSmallHouse(barracks0);
+        
+        /* Deliver one coin to the barracks */
+        assertTrue(barracks0.needsMaterial(COIN));
+        
+        /* Disable coins to the barracks and verify that it doesn't need coins*/
+        barracks0.disablePromotions();
+        
+        assertFalse(barracks0.needsMaterial(COIN));
+    }
 }
