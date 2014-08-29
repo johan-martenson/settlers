@@ -21,10 +21,6 @@ public class Military extends Worker {
     }
 
     private Rank rank;
-
-    public Military(Rank r) {
-        this(r, null);
-    }
     
     public Military(Rank r, GameMap map) {
         super(map);

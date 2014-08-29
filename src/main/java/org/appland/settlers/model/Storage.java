@@ -15,7 +15,9 @@ import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.SWORD;
-import org.appland.settlers.model.Military.Rank;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.policy.ProductionDelays;
 
@@ -380,13 +382,13 @@ public class Storage extends Building implements Actor {
 
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);
-            m = new Military(Rank.PRIVATE_RANK);
+            m = new Military(PRIVATE_RANK, map);
         } else if (hasAtLeastOne(SERGEANT)) {
             retrieveOneFromInventory(SERGEANT);
-            m = new Military(Rank.SERGEANT_RANK);
+            m = new Military(SERGEANT_RANK, map);
         } else if (hasAtLeastOne(GENERAL)) {
             retrieveOneFromInventory(GENERAL);
-            m = new Military(Rank.GENERAL_RANK);
+            m = new Military(GENERAL_RANK, map);
         } else {
             throw new Exception("No militaries available");
         }

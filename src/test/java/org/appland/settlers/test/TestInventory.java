@@ -12,7 +12,9 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military;
-import org.appland.settlers.model.Military.Rank;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertFalse;
@@ -147,21 +149,21 @@ public class TestInventory {
     public void testDepositRetriveMilitary() throws Exception {
 
         assertNoMilitaryInInventory(storage);
-        storage.depositWorker(new Military(Rank.PRIVATE_RANK));
+        storage.depositWorker(new Military(PRIVATE_RANK, null));
         assertTrue(storage.getAmount(PRIVATE) == 1);
         assertTrue(storage.isInStock(PRIVATE));
         storage.retrieveMilitary(PRIVATE);
         assertNoMilitaryInInventory(storage);
         assertFalse(storage.isInStock(PRIVATE));
 
-        storage.depositWorker(new Military(Rank.GENERAL_RANK));
+        storage.depositWorker(new Military(GENERAL_RANK, null));
         assertTrue(storage.getAmount(GENERAL) == 1);
         assertTrue(storage.isInStock(GENERAL));
         storage.retrieveMilitary(GENERAL);
         assertNoMilitaryInInventory(storage);
         assertFalse(storage.isInStock(GENERAL));
 
-        storage.depositWorker(new Military(Rank.SERGEANT_RANK));
+        storage.depositWorker(new Military(SERGEANT_RANK, null));
         assertTrue(storage.getAmount(SERGEANT) == 1);
         assertTrue(storage.isInStock(SERGEANT));
         storage.retrieveMilitary(SERGEANT);
@@ -192,19 +194,19 @@ public class TestInventory {
 
     @Test
     public void testRetrieveAnyMilitary() throws Exception {
-        storage.depositWorker(new Military(Rank.PRIVATE_RANK));
+        storage.depositWorker(new Military(PRIVATE_RANK, null));
         assertTrue(storage.isInStock(PRIVATE));
         
         Military m = storage.retrieveAnyMilitary();
         assertNotNull(m);
         
-        storage.depositWorker(new Military(Rank.SERGEANT_RANK));
+        storage.depositWorker(new Military(SERGEANT_RANK, null));
         assertTrue(storage.isInStock(SERGEANT));
         
         m = storage.retrieveAnyMilitary();
         assertNotNull(m);
         
-        storage.depositWorker(new Military(Rank.GENERAL_RANK));
+        storage.depositWorker(new Military(GENERAL_RANK, null));
         assertTrue(storage.isInStock(GENERAL));
         
         m = storage.retrieveAnyMilitary();
@@ -243,17 +245,17 @@ public class TestInventory {
     
     @Test
     public void testDepositAndRetrieveMilitaryOfEachKind() throws Exception {
-        storage.depositWorker(new Military(Rank.PRIVATE_RANK));
+        storage.depositWorker(new Military(PRIVATE_RANK, null));
         assertTrue(storage.getAmount(PRIVATE) == 1);
         storage.retrieveMilitary(PRIVATE);
         assertTrue(storage.getAmount(PRIVATE) == 0);
     
-        storage.depositWorker(new Military(Rank.SERGEANT_RANK));
+        storage.depositWorker(new Military(SERGEANT_RANK, null));
         assertTrue(storage.getAmount(SERGEANT) == 1);
         storage.retrieveMilitary(SERGEANT);
         assertTrue(storage.getAmount(SERGEANT) == 0);
         
-        storage.depositWorker(new Military(Rank.GENERAL_RANK));
+        storage.depositWorker(new Military(GENERAL_RANK, null));
         assertTrue(storage.getAmount(GENERAL) == 1);
         storage.retrieveMilitary(GENERAL);
         assertTrue(storage.getAmount(GENERAL) == 0);
@@ -261,14 +263,14 @@ public class TestInventory {
 
     @Test(expected=Exception.class)
     public void testRetrieveMilitaryAsWorker() throws Exception {
-        storage.depositWorker(new Military(Rank.PRIVATE_RANK));
+        storage.depositWorker(new Military(PRIVATE_RANK, null));
         
         storage.retrieveWorker(PRIVATE);
     }
     
     @Test(expected=Exception.class)
     public void testRetrieveMilitaryAsMaterial() throws Exception {
-        storage.depositWorker(new Military(Rank.PRIVATE_RANK));
+        storage.depositWorker(new Military(PRIVATE_RANK, null));
         
         storage.retrieve(PRIVATE);
     }
