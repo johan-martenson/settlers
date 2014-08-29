@@ -19,6 +19,7 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military.Rank;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements Actor, EndPoint {
@@ -363,7 +364,7 @@ public class Building implements Actor, EndPoint {
                 countdown.step();
             }
         } else if (occupied()) {            
-            if (isMilitaryBuilding() && getAmount(COIN) > 0) {
+            if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableMilitaries()) {
                 if (countdown.reachedZero()) {
                     doPromotion();
                 } else {
@@ -584,6 +585,10 @@ public class Building implements Actor, EndPoint {
         Collection<Military> promoted = new LinkedList<>();
         
         for (Rank rank : Rank.values()) {
+            if (rank == GENERAL_RANK) {
+                continue;
+            }
+            
             for (Military m : hostedMilitary) {
                 if (promoted.contains(m)) {
                     continue;
@@ -598,5 +603,19 @@ public class Building implements Actor, EndPoint {
                 }
             }
         }
+
+        if (!promoted.isEmpty()) {
+            consumeOne(COIN);
+        }
+    }
+
+    private boolean hostsPromotableMilitaries() {
+        for (Military m : hostedMilitary) {
+            if (m.getRank() != GENERAL_RANK) {
+                return true;
+            }
+        }
+    
+        return false;
     }
 }
