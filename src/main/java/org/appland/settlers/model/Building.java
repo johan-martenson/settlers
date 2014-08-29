@@ -245,14 +245,6 @@ public class Building implements Actor, EndPoint {
         }
     }
 
-    private boolean isWorkerRequired() {
-        log.log(Level.FINE, "Checking if {0} requires a worker", this);
-
-        RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
-
-        return rw != null;
-    }
-
     public Worker getWorker() {
         return worker;
     }
