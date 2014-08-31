@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Minter.State.MAKING_COIN;
 import static org.appland.settlers.model.Minter.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;

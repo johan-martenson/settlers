@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Miller.States.GOING_BACK_TO_HOUSE;

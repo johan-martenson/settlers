@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Brewer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Brewer.State.BREWING_BEER;

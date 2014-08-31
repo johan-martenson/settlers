@@ -9,8 +9,6 @@ package org.appland.settlers.model;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Stonemason.States.GETTING_STONE;
 import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE;

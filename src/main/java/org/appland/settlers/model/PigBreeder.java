@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.PigBreeder.States.FEEDING;
 import static org.appland.settlers.model.PigBreeder.States.GOING_BACK_TO_HOUSE;

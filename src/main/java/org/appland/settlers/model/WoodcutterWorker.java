@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.WoodcutterWorker.States.CUTTING_TREE;
@@ -25,7 +23,7 @@ import static org.appland.settlers.model.WoodcutterWorker.States.RESTING_IN_HOUS
 @Walker(speed = 10)
 public class WoodcutterWorker extends Worker {
     private States    state;
-    private Countdown countdown;
+    private final Countdown countdown;
 
     private Point getTreeToCutDown() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);

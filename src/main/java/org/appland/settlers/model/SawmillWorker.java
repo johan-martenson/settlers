@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.CUTTING_WOOD;
