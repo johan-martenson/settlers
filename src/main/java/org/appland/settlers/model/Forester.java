@@ -19,8 +19,8 @@ public class Forester extends Worker {
     private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_REST = 99;
     
+    private final Countdown countdown;
     private States state;
-    private Countdown countdown;
 
     private Point getTreeSpot() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
@@ -54,10 +54,6 @@ public class Forester extends Worker {
     
     enum States {
         WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_PLANT, PLANTING, GOING_BACK_TO_HOUSE
-    }
-    
-    public Forester() {
-        this(null);
     }
     
     public Forester(GameMap map) {

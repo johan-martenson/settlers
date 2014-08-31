@@ -217,7 +217,7 @@ public class GameLogicTest {
         /* Prep the headquarter's inventory */
         assertTrue(hq.getAmount(PRIVATE) == 10);
 
-        hq.depositWorker(new Forester());
+        hq.depositWorker(new Forester(map));
 
         assertTrue(hq.getAmount(FORESTER) == 3);
         assertTrue(map.getAllWorkers().size() == 1);

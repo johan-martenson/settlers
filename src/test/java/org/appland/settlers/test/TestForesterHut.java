@@ -41,7 +41,7 @@ public class TestForesterHut {
         /* Verify that the ForesterHut requires a worker */
         assertTrue(f.needsWorker());
 
-        Forester forester = new Forester();
+        Forester forester = new Forester(null);
 
         /* Assign worker */
         f.assignWorker(forester);
@@ -56,7 +56,7 @@ public class TestForesterHut {
 
         assertTrue(f.underConstruction());
 
-        f.promiseWorker(new Forester());
+        f.promiseWorker(new Forester(null));
     }
 
     @Test(expected = Exception.class)
@@ -65,7 +65,7 @@ public class TestForesterHut {
 
         assertTrue(f.underConstruction());
 
-        f.assignWorker(new Forester());
+        f.assignWorker(new Forester(null));
     }
 
     @Test(expected = Exception.class)
@@ -74,9 +74,9 @@ public class TestForesterHut {
 
         Utils.constructSmallHouse(f);
 
-        f.assignWorker(new Forester());
+        f.assignWorker(new Forester(null));
 
-        f.assignWorker(new Forester());
+        f.assignWorker(new Forester(null));
     }
 
     @Test(expected = Exception.class)
@@ -85,9 +85,9 @@ public class TestForesterHut {
 
         Utils.constructSmallHouse(f);
 
-        f.promiseWorker(new Forester());
+        f.promiseWorker(new Forester(null));
 
-        f.promiseWorker(new Forester());
+        f.promiseWorker(new Forester(null));
     }
 
     @Test

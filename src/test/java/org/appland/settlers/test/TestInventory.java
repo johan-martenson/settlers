@@ -137,7 +137,7 @@ public class TestInventory {
 
     @Test
     public void testDepositRetrieveWorkers() throws Exception {
-        storage.depositWorker(new Forester());
+        storage.depositWorker(new Forester(null));
         assertTrue(storage.getAmount(FORESTER) == 1);
         assertTrue(storage.isInStock(FORESTER));
         storage.retrieveWorker(FORESTER);
