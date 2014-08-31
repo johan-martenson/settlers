@@ -27,8 +27,8 @@ import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Stonemason extends Worker {
-    private States state;
     private final Countdown countdown;
+    private States state;
     private Point stoneTarget;
     
     enum States {
@@ -40,10 +40,6 @@ public class Stonemason extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE
-    }
-    
-    public Stonemason() {
-        this(null);
     }
     
     public Stonemason(GameMap map) {
@@ -130,36 +126,28 @@ public class Stonemason extends Worker {
                 countdown.step();
             }
         } else if (state == IN_HOUSE_WITH_CARGO) {
-            try {
-                setTarget(getHome().getFlag().getPosition());
+            setTarget(getHome().getFlag().getPosition());
 
-                state = GOING_OUT_TO_PUT_CARGO;
-            } catch (InvalidRouteException ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_OUT_TO_PUT_CARGO;
         }
     }
 
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            try {
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
-                getHome().getFlag().putCargo(cargo);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
+            getHome().getFlag().putCargo(cargo);
                                 
-                setCargo(null);
+            setCargo(null);
                 
-                setTarget(getHome().getPosition());
+            setTarget(getHome().getPosition());
                 
-                state = GOING_BACK_TO_HOUSE;
-            } catch (Exception ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
 

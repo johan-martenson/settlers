@@ -27,10 +27,6 @@ public class WoodcutterWorker extends Worker {
     private States    state;
     private Countdown countdown;
 
-    WoodcutterWorker() {
-        this(null);
-    }
-
     private Point getTreeToCutDown() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
 
@@ -87,7 +83,7 @@ public class WoodcutterWorker extends Worker {
     }
     
     @Override
-    protected void onIdle() {        
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
@@ -115,36 +111,28 @@ public class WoodcutterWorker extends Worker {
                 countdown.step();
             }
         } else if (state == IN_HOUSE_WITH_CARGO) {
-            try {
-                setTarget(getHome().getFlag().getPosition());
+            setTarget(getHome().getFlag().getPosition());
 
-                state = GOING_OUT_TO_PUT_CARGO;
-            } catch (InvalidRouteException ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_OUT_TO_PUT_CARGO;
         }
     }
 
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            try {
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
-                getHome().getFlag().putCargo(cargo);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
+            getHome().getFlag().putCargo(cargo);
                                 
-                setCargo(null);
+            setCargo(null);
                 
-                setTarget(getHome().getPosition());
+            setTarget(getHome().getPosition());
                 
-                state = GOING_BACK_TO_HOUSE;
-            } catch (Exception ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             

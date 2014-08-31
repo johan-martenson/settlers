@@ -35,7 +35,7 @@ public class Minter extends Worker {
         GOING_BACK_TO_HOUSE
     }
 
-    State state;
+    private State state;
     
     public Minter(GameMap m) {
         map = m;
@@ -66,20 +66,16 @@ public class Minter extends Worker {
         } else if (state == MAKING_COIN) {
             if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(COIN, map);
+                    Cargo cargo = new Cargo(COIN, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        getHome().consumeOne(GOLD);
-                        getHome().consumeOne(COAL);
+                    getHome().consumeOne(GOLD);
+                    getHome().consumeOne(COAL);
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
+                    state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    setTarget(getHome().getFlag().getPosition());
                 } else {
                     countdown.step();
                 }
@@ -90,26 +86,22 @@ public class Minter extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = map.getFlagAtPoint(getPosition());
+            Flag f = map.getFlagAtPoint(getPosition());
                 
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
                 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                state = GOING_BACK_TO_HOUSE;
+            state = GOING_BACK_TO_HOUSE;
                 
-                returnHome();
-            } catch (Exception ex) {
-                Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             

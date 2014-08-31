@@ -80,25 +80,21 @@ public class StorageWorker extends Worker {
     }
     
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
-                try {
-                    Cargo cargo = tryToStartDelivery();
+                Cargo cargo = tryToStartDelivery();
                     
-                    if (cargo != null) {
-                        try {
-                            setCargo(cargo);
+                if (cargo != null) {
+                    try {
+                        setCargo(cargo);
 
-                            setTarget(getHome().getFlag().getPosition());
+                        setTarget(getHome().getFlag().getPosition());
 
-                            state = DELIVERING_CARGO_TO_FLAG;
+                        state = DELIVERING_CARGO_TO_FLAG;
                         } catch (InvalidRouteException ex) {
                             Logger.getLogger(StorageWorker.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    }
-                } catch (Exception ex) {
-                    Logger.getLogger(StorageWorker.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 countdown.step();
@@ -109,19 +105,15 @@ public class StorageWorker extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == DELIVERING_CARGO_TO_FLAG) {
-            try {
-                Flag f = getHome().getFlag();
+            Flag f = getHome().getFlag();
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                returnHome();
+            returnHome();
                 
-                state = GOING_BACK_TO_HOUSE;
-            } catch (InvalidRouteException ex) {
-                Logger.getLogger(StorageWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             

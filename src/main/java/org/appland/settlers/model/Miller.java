@@ -22,8 +22,8 @@ import static org.appland.settlers.model.Miller.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Miller extends Worker {
-    private final int PRODUCTION_TIME = 49;
-    private final int RESTING_TIME = 99;
+    private final static int PRODUCTION_TIME = 49;
+    private final static int RESTING_TIME = 99;
     
     private final Countdown countdown;
 
@@ -45,7 +45,7 @@ public class Miller extends Worker {
     
     @Override
     protected void onEnterBuilding(Building b) {
-        if (b instanceof Well) {
+        if (b instanceof Mill) {
             setHome(b);
         }
 
@@ -55,7 +55,7 @@ public class Miller extends Worker {
     }
 
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = GRINDING_WHEAT;
@@ -67,19 +67,15 @@ public class Miller extends Worker {
         } else if (state == GRINDING_WHEAT) {
             if (getHome().getAmount(WHEAT) > 0) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(FLOUR, map);
+                    Cargo cargo = new Cargo(FLOUR, map);
 
-                        getHome().consumeOne(WHEAT);
+                    getHome().consumeOne(WHEAT);
                         
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        setTarget(getHome().getFlag().getPosition());
+                    setTarget(getHome().getFlag().getPosition());
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(WellWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    state = GOING_TO_FLAG_WITH_CARGO;
                 } else {
                     countdown.step();
                 }
@@ -90,25 +86,21 @@ public class Miller extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = getHome().getFlag();
-                Storage stg = map.getClosestStorage(getPosition());
+            Flag f = getHome().getFlag();
+            Storage stg = map.getClosestStorage(getPosition());
                 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                returnHome();
+            returnHome();
                 
-                state = GOING_BACK_TO_HOUSE;
-            } catch (Exception ex) {
-                Logger.getLogger(WellWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             

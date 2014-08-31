@@ -70,7 +70,6 @@ public class PigBreeder extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            
             if (countdown.reachedZero()) {
                 Point pointToFeedPigsAt = getHome().getPosition().downLeft();
 
@@ -107,23 +106,19 @@ public class PigBreeder extends Worker {
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            try {
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
-                getHome().getFlag().putCargo(cargo);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
+            getHome().getFlag().putCargo(cargo);
                                 
-                setCargo(null);
+            setCargo(null);
                 
-                setTarget(getHome().getPosition());
+            setTarget(getHome().getPosition());
                 
-                state = GOING_BACK_TO_HOUSE;
-            } catch (Exception ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             

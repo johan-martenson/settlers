@@ -24,7 +24,13 @@ import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
  */
 @Walker (speed = 10)
 public class Miner extends Worker {
+    private final static int RESTING_TIME = 99;
+    private final static int TIME_TO_MINE = 49;
+    
+    private final Countdown countdown;
+    
     private Material mineral;
+    private States state;
 
     enum States {
         WALKING_TO_TARGET,
@@ -34,12 +40,6 @@ public class Miner extends Worker {
         GOING_BACK_TO_HOUSE
     }
     
-    private final static int RESTING_TIME = 99;
-    private final static int TIME_TO_MINE = 49;
-    
-    private final Countdown countdown;
-    
-    private States state;
     
     public Miner(GameMap map) {
         super(map);

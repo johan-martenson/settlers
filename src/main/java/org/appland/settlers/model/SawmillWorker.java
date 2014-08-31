@@ -26,6 +26,8 @@ public class SawmillWorker extends Worker {
     private final int PRODUCTION_TIME = 49;
     private final int RESTING_TIME = 99;
 
+    private State state;
+
     enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -34,8 +36,6 @@ public class SawmillWorker extends Worker {
         GOING_BACK_TO_HOUSE
     }
 
-    State state;
-    
     public SawmillWorker(GameMap m) {
         map = m;
         
@@ -54,7 +54,7 @@ public class SawmillWorker extends Worker {
     }
 
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {            
             if (countdown.reachedZero()) {
                 state = CUTTING_WOOD;
@@ -65,19 +65,15 @@ public class SawmillWorker extends Worker {
         } else if (state == CUTTING_WOOD) {
             if (getHome().getAmount(WOOD) > 0) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(PLANCK, map);
+                    Cargo cargo = new Cargo(PLANCK, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        getHome().consumeOne(WOOD);
+                    getHome().consumeOne(WOOD);
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
+                    state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    setTarget(getHome().getFlag().getPosition());
                 } else {
                     countdown.step();
                 }
@@ -88,26 +84,22 @@ public class SawmillWorker extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = map.getFlagAtPoint(getPosition());
+            Flag f = map.getFlagAtPoint(getPosition());
                 
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
                 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                state = GOING_BACK_TO_HOUSE;
+            state = GOING_BACK_TO_HOUSE;
                 
-                returnHome();
-            } catch (Exception ex) {
-                Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             
