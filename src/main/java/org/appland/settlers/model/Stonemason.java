@@ -25,6 +25,8 @@ import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Stonemason extends Worker {
+    private final static int TIME_TO_REST      = 99;
+    private final static int TIME_TO_GET_STONE = 49;
     private final Countdown countdown;
     private States state;
     private Point stoneTarget;
@@ -61,7 +63,7 @@ public class Stonemason extends Worker {
         
         state = RESTING_IN_HOUSE;
 
-        countdown.countFrom(99);
+        countdown.countFrom(TIME_TO_REST);
     }
 
     @Override
@@ -151,11 +153,11 @@ public class Stonemason extends Worker {
 
             enterBuilding(getHome());
 
-            countdown.countFrom(99);
+            countdown.countFrom(TIME_TO_REST);
         } else if (state == GOING_OUT_TO_GET_STONE) {
             state = GETTING_STONE;
             
-            countdown.countFrom(49);
+            countdown.countFrom(TIME_TO_GET_STONE);
         } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
             

@@ -23,8 +23,8 @@ import static org.appland.settlers.model.Material.SWORD;
 @Walker(speed = 10)
 public class Armorer extends Worker {
     private final Countdown countdown;
-    private final int PRODUCTION_TIME = 49;
-    private final int RESTING_TIME = 99;
+    private final static int PRODUCTION_TIME = 49;
+    private final static int RESTING_TIME    = 99;
 
     private Material nextWeapon = SWORD;
     private State state;

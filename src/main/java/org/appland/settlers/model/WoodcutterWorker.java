@@ -22,6 +22,9 @@ import static org.appland.settlers.model.WoodcutterWorker.States.RESTING_IN_HOUS
  */
 @Walker(speed = 10)
 public class WoodcutterWorker extends Worker {
+    private final static int TIME_TO_REST = 99;
+    private final static int TIME_TO_CUT_TREE = 49;
+    
     private States    state;
     private final Countdown countdown;
 
@@ -77,7 +80,7 @@ public class WoodcutterWorker extends Worker {
         
         state = RESTING_IN_HOUSE;
         
-        countdown.countFrom(99);
+        countdown.countFrom(TIME_TO_REST);
     }
     
     @Override
@@ -136,11 +139,11 @@ public class WoodcutterWorker extends Worker {
             
             enterBuilding(getHome());
 
-            countdown.countFrom(99);
+            countdown.countFrom(TIME_TO_REST);
         } else if (state == GOING_OUT_TO_CUT_TREE) {
             state = CUTTING_TREE;
             
-            countdown.countFrom(49);
+            countdown.countFrom(TIME_TO_CUT_TREE);
         } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
                 

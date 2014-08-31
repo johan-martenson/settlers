@@ -21,8 +21,8 @@ import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
 @Walker(speed = 10)
 public class SawmillWorker extends Worker {
     private final Countdown countdown;
-    private final int PRODUCTION_TIME = 49;
-    private final int RESTING_TIME = 99;
+    private final static int PRODUCTION_TIME = 49;
+    private final static int RESTING_TIME    = 99;
 
     private State state;
 

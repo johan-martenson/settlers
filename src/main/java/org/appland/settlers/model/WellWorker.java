@@ -19,8 +19,8 @@ import static org.appland.settlers.model.WellWorker.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class WellWorker extends Worker {
-    private final int PRODUCTION_TIME = 49;
-    private final int RESTING_TIME = 99;
+    private final static int PRODUCTION_TIME = 49;
+    private final static int RESTING_TIME    = 99;
     
     private final Countdown countdown;
 

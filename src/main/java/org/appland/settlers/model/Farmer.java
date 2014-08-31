@@ -31,6 +31,10 @@ import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Farmer extends Worker {
+    private final static int TIME_TO_REST    = 99;
+    private final static int TIME_TO_PLANT   = 19;
+    private final static int TIME_TO_HARVEST = 19;
+    
     private final Countdown countdown;
     private States state;
 
@@ -132,7 +136,7 @@ public class Farmer extends Worker {
         
         state = RESTING_IN_HOUSE;
         
-        countdown.countFrom(99);
+        countdown.countFrom(TIME_TO_REST);
     }
     
     @Override
@@ -228,15 +232,15 @@ public class Farmer extends Worker {
             
             enterBuilding(getHome());
             
-            countdown.countFrom(99);
+            countdown.countFrom(TIME_TO_REST);
         } else if (state == GOING_OUT_TO_PLANT) {
             state = PLANTING;
             
-            countdown.countFrom(19);
+            countdown.countFrom(TIME_TO_PLANT);
         } else if (state == GOING_OUT_TO_HARVEST) {
             state = HARVESTING;
             
-            countdown.countFrom(19);
+            countdown.countFrom(TIME_TO_HARVEST);
         } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
                 
