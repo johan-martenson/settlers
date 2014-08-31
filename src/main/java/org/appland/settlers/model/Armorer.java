@@ -27,6 +27,7 @@ public class Armorer extends Worker {
     private final int RESTING_TIME = 99;
 
     private Material nextWeapon = SWORD;
+    private State state;
 
     enum State {
         WALKING_TO_TARGET,
@@ -36,7 +37,6 @@ public class Armorer extends Worker {
         GOING_BACK_TO_HOUSE
     }
 
-    State state;
     
     public Armorer(GameMap m) {
         map = m;
@@ -55,7 +55,7 @@ public class Armorer extends Worker {
     
     @Override
     protected void onEnterBuilding(Building b) {
-        if (b instanceof Sawmill) {
+        if (b instanceof Armory) {
             setHome(b);
         }
 
