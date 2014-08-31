@@ -27,6 +27,8 @@ public class Brewer extends Worker {
     private final int PRODUCTION_TIME = 49;
     private final int RESTING_TIME = 99;
 
+    private State state;
+
     enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -35,8 +37,6 @@ public class Brewer extends Worker {
         GOING_BACK_TO_HOUSE
     }
 
-    State state;
-    
     public Brewer(GameMap m) {
         map = m;
         
@@ -46,7 +46,7 @@ public class Brewer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        if (b instanceof Sawmill) {
+        if (b instanceof Brewery) {
             setHome(b);
         }
 
@@ -55,7 +55,7 @@ public class Brewer extends Worker {
     }
 
     @Override
-    protected void onIdle() {
+    protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {            
             if (countdown.reachedZero()) {
                 state = BREWING_BEER;
@@ -66,20 +66,16 @@ public class Brewer extends Worker {
         } else if (state == BREWING_BEER) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(BEER, map);
+                    Cargo cargo = new Cargo(BEER, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        getHome().consumeOne(WATER);
-                        getHome().consumeOne(WHEAT);
+                    getHome().consumeOne(WATER);
+                    getHome().consumeOne(WHEAT);
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
+                    state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    setTarget(getHome().getFlag().getPosition());
                 } else {
                     countdown.step();
                 }
@@ -90,26 +86,22 @@ public class Brewer extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = map.getFlagAtPoint(getPosition());
+            Flag f = map.getFlagAtPoint(getPosition());
                 
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
                 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                state = GOING_BACK_TO_HOUSE;
+            state = GOING_BACK_TO_HOUSE;
                 
-                returnHome();
-            } catch (Exception ex) {
-                Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             
