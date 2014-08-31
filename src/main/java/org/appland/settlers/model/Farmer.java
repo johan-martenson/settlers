@@ -35,10 +35,9 @@ import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
 public class Farmer extends Worker {
     private States state;
     private Countdown countdown;
-    private Farm hut;
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
-        Point hutPoint = hut.getPosition();
+        Point hutPoint = getHome().getPosition();
         
         Set<Point> possibleSpotsToPlant = new HashSet<>();
         
@@ -129,9 +128,9 @@ public class Farmer extends Worker {
     protected void onEnterBuilding(Building b) {
         if (b instanceof Storage) {
             return;
+        } else if (b instanceof Farm) {
+            setHome(b);
         }
-        
-        hut = (Farm)b;
         
         state = RESTING_IN_HOUSE;
         
@@ -141,7 +140,6 @@ public class Farmer extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            
             if (countdown.reachedZero()) {                
                 Crop cropToHarvest = findCropToHarvest();
 
@@ -165,15 +163,11 @@ public class Farmer extends Worker {
             }
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
-                try {
-                    Crop crop = map.placeCrop(getPosition());
+                Crop crop = map.placeCrop(getPosition());
                     
-                    state = GOING_BACK_TO_HOUSE;
+                state = GOING_BACK_TO_HOUSE;
                     
-                    returnHomeOffroad();
-                } catch (Exception ex) {
-                    Logger.getLogger(Farmer.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                returnHomeOffroad();
             } else {
                 countdown.step();
             }
@@ -193,13 +187,9 @@ public class Farmer extends Worker {
                 countdown.step();
             }
         } else if (state == IN_HOUSE_WITH_CARGO) {
-            try {
-                setTarget(getHome().getFlag().getPosition());
+            setTarget(getHome().getFlag().getPosition());
 
-                state = GOING_OUT_TO_PUT_CARGO;
-            } catch (InvalidRouteException ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            state = GOING_OUT_TO_PUT_CARGO;
         }
     }
 
@@ -222,23 +212,19 @@ public class Farmer extends Worker {
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            try {
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
 
-                Cargo cargo = getCargo();
-                
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
-                getHome().getFlag().putCargo(cargo);
-                                
-                setCargo(null);
-                
-                setTarget(getHome().getPosition());
-                
-                state = GOING_BACK_TO_HOUSE;
-            } catch (Exception ex) {
-                Logger.getLogger(WoodcutterWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Cargo cargo = getCargo();
+
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
+            getHome().getFlag().putCargo(cargo);
+
+            setCargo(null);
+
+            setTarget(getHome().getPosition());
+
+            state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             
