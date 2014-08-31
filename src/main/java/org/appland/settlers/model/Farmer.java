@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE;
@@ -33,8 +31,8 @@ import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Farmer extends Worker {
+    private final Countdown countdown;
     private States state;
-    private Countdown countdown;
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
         Point hutPoint = getHome().getPosition();
