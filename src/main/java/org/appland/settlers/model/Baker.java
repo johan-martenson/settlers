@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Baker.State.BAKING_BREAD;
 import static org.appland.settlers.model.Baker.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Baker.State.WALKING_TO_TARGET;
@@ -26,6 +24,8 @@ public class Baker extends Worker {
     private final Countdown countdown;
     private final int PRODUCTION_TIME = 49;
     private final int RESTING_TIME = 99;
+    
+    private State state;
 
     enum State {
         WALKING_TO_TARGET,
@@ -35,7 +35,6 @@ public class Baker extends Worker {
         GOING_BACK_TO_HOUSE
     }
 
-    State state;
     
     public Baker(GameMap m) {
         map = m;
@@ -46,7 +45,7 @@ public class Baker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building b) {
-        if (b instanceof Sawmill) {
+        if (b instanceof Bakery) {
             setHome(b);
         }
 
@@ -66,20 +65,16 @@ public class Baker extends Worker {
         } else if (state == BAKING_BREAD) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(FLOUR) > 0) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(BREAD, map);
+                    Cargo cargo = new Cargo(BREAD, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        getHome().consumeOne(WATER);
-                        getHome().consumeOne(FLOUR);
+                    getHome().consumeOne(WATER);
+                    getHome().consumeOne(FLOUR);
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
+                    state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    setTarget(getHome().getFlag().getPosition());
                 } else {
                     countdown.step();
                 }
@@ -90,26 +85,22 @@ public class Baker extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = map.getFlagAtPoint(getPosition());
+            Flag f = map.getFlagAtPoint(getPosition());
                 
-                Storage stg = map.getClosestStorage(getPosition());
+            Storage stg = map.getClosestStorage(getPosition());
                 
-                Cargo cargo = getCargo();
+            Cargo cargo = getCargo();
                 
-                cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+            cargo.setPosition(getPosition());
+            cargo.setTarget(stg);
                 
-                f.putCargo(getCargo());
+            f.putCargo(getCargo());
                 
-                setCargo(null);
+            setCargo(null);
                 
-                state = GOING_BACK_TO_HOUSE;
+            state = GOING_BACK_TO_HOUSE;
                 
-                returnHome();
-            } catch (Exception ex) {
-                Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             
