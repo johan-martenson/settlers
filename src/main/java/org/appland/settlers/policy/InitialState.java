@@ -33,4 +33,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_MINTER = 1;
         public static final int STORAGE_INITIAL_ARMORER = 1;
         public static final int STORAGE_INITIAL_PIG_BREEDER = 1;
+        public static final int STORAGE_INITIAL_BUTCHER = 1;
 }

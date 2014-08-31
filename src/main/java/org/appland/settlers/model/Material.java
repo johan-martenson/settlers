@@ -19,6 +19,7 @@ public enum Material {
     FISH,
     COIN,
     PIG,
+    MEAT,
     
     PRIVATE, 
     SERGEANT, 
@@ -39,6 +40,7 @@ public enum Material {
     BREWER,
     MINTER,
     ARMORER,
-    PIG_BREEDER
+    PIG_BREEDER,
+    BUTCHER
 
 }
