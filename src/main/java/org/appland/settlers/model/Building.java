@@ -31,6 +31,7 @@ public class Building implements Actor, EndPoint {
     private static final int TIME_TO_BUILD_SMALL_HOUSE  = 99;
     private static final int TIME_TO_BUILD_MEDIUM_HOUSE = 149;
     private static final int TIME_TO_BUILD_LARGE_HOUSE  = 199;
+    private static final int TIME_TO_BURN_DOWN          = 49;
     
     protected GameMap map;
     
@@ -378,7 +379,7 @@ public class Building implements Actor, EndPoint {
 
     public void tearDown() throws Exception {
         state = BURNING;
-        countdown.countFrom(49);
+        countdown.countFrom(TIME_TO_BURN_DOWN);
         
         if (isMilitaryBuilding()) {
             map.updateBorder();
