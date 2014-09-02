@@ -63,6 +63,7 @@ public class Building implements Actor, EndPoint {
         position              = null;
         map                   = null;
         enablePromotions      = true;
+        evacuated             = false;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -191,6 +192,10 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsMilitaryManning() {
+        if (evacuated) {
+            return false;
+        }
+        
         if (ready()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
@@ -629,5 +634,9 @@ public class Building implements Actor, EndPoint {
         }
         
         evacuated = true;
+    }
+
+    public void cancelEvacuation() {
+        evacuated = false;
     }
 }

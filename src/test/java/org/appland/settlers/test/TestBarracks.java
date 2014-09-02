@@ -639,4 +639,80 @@ public class TestBarracks {
         assertTrue(m.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
+
+    @Test
+    public void testNoMilitaryIsDispatchedToEvacuatedBarracks() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Connect headquarters and barracks */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Evacuate the barracks */
+        barracks0.evacuate();
+
+        /* Verify that no militaries are assigned to the barracks */
+        for (int i = 0; i < 200; i++) {
+            assertEquals(barracks0.getHostedMilitary(), 0);
+            map.stepTime();
+        }
+    }
+    
+    @Test
+    public void testEvacuationCanBeCanceled() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Evacuate the barracks */
+        assertTrue(m.isInsideBuilding());
+        
+        barracks0.evacuate();
+        
+        map.stepTime();
+        
+        assertFalse(m.isInsideBuilding());
+        
+        /* Wait for the evacuated military to return to the storage */
+        assertEquals(m.getTarget(), headquarter0.getPosition());
+        int amount = headquarter0.getAmount(PRIVATE);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        
+        assertTrue(m.isInsideBuilding());
+        assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
+    
+        /* Cancel evacuation */
+        assertFalse(barracks0.needsMilitaryManning());
+        
+        barracks0.cancelEvacuation();
+        
+        assertTrue(barracks0.needsMilitaryManning());
+    }
 }
