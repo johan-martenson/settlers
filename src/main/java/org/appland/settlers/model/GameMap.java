@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
+import org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
@@ -366,52 +367,19 @@ public class GameMap {
     }
     
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
-        log.log(Level.FINE, "Finding way from {0} to {1}", new Object[]{start, end});
-
         if (start.equals(end)) {
             throw new InvalidRouteException("Start and end are the same.");
         }
-        
-        List<Point> result = findWayWithMemory(start, end, new ArrayList<Point>());
 
-        log.log(Level.FINE, "Returning found way {0}", result);
-        return result;
-    }
+        return findShortestPath(start, end, null, new ConnectionsProvider() {
 
-    private List<Point> findWayWithMemory(Point start, Point end, List<Point> visited) throws InvalidRouteException {
-        log.log(Level.FINE, "Finding way from {0} to {1}, already visited {2}", new Object[]{start, end, visited});
-
-        MapPoint mp = pointToGameObject.get(start);
-        
-        Collection<Point> connectingRoads = mp.getConnectedNeighbors();
-
-        for (Point otherEnd : connectingRoads) {
-            List<Point> result = new ArrayList<>();
-
-            if (visited.contains(otherEnd)) {
-                continue;
+            @Override
+            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+                MapPoint mp = pointToGameObject.get(start);
+                    
+                return mp.getConnectedNeighbors();
             }
-
-            if (otherEnd.equals(end)) {
-                result.add(start);
-                result.add(end);
-                return result;
-            } else {
-                visited.add(start);
-            }
-
-            List<Point> tmp = findWayWithMemory(otherEnd, end, visited);
-
-            if (tmp != null) {
-                result.add(start);
-
-                result.addAll(tmp);
-
-                return result;
-            }
-        }
-
-        return null;
+        });
     }
 
     public Road getRoad(Point start, Point end) throws Exception {
