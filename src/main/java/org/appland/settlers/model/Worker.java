@@ -20,7 +20,11 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
 public abstract class Worker implements Actor {
 
     enum States {
-        WALKING_AND_EXACTLY_AT_POINT, WALKING_BETWEEN_POINTS, IDLE_OUTSIDE, IDLE_INSIDE
+        WALKING_AND_EXACTLY_AT_POINT, 
+        WALKING_BETWEEN_POINTS, 
+        IDLE_OUTSIDE, 
+        IDLE_INSIDE,
+        RETURNING_TO_STORAGE
     }
     
     private final static Logger log = Logger.getLogger(Worker.class.getName());

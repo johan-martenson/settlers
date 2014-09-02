@@ -525,4 +525,118 @@ public class TestBarracks {
         
         assertFalse(barracks0.needsMaterial(COIN));
     }
+
+    @Test
+    public void testOccupiedBarracksCanBeEvacuated() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Connect headquarter and barracks */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Evacuate the barracks and verify that the military leaves the barracks */
+        assertTrue(m.isInsideBuilding());
+        
+        barracks0.evacuate();
+        
+        map.stepTime();
+        
+        assertFalse(m.isInsideBuilding());        
+    }
+
+    @Test
+    public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Connect headquarter and barracks */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Evacuate the barracks */
+        assertTrue(m.isInsideBuilding());
+        
+        barracks0.evacuate();
+        
+        map.stepTime();
+        
+        assertFalse(m.isInsideBuilding());
+        
+        /* Verify that the evacuated military returns to the storage */
+        assertEquals(m.getTarget(), headquarter0.getPosition());
+        int amount = headquarter0.getAmount(PRIVATE);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        
+        assertTrue(m.isInsideBuilding());
+        assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
+    }
+
+    @Test
+    public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Evacuate the barracks */
+        assertTrue(m.isInsideBuilding());
+        
+        barracks0.evacuate();
+        
+        map.stepTime();
+        
+        assertFalse(m.isInsideBuilding());
+        
+        /* Verify that the evacuated military returns to the storage */
+        assertEquals(m.getTarget(), headquarter0.getPosition());
+        int amount = headquarter0.getAmount(PRIVATE);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        
+        assertTrue(m.isInsideBuilding());
+        assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
+    }
 }

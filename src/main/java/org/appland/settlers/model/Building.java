@@ -41,6 +41,7 @@ public class Building implements Actor, EndPoint {
     private Point   position;
     private Flag    flag;
     private boolean enablePromotions;
+    private boolean evacuated;
 
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
@@ -620,5 +621,13 @@ public class Building implements Actor, EndPoint {
 
     public void disablePromotions() {
         enablePromotions = false;
+    }
+
+    public void evacuate() throws InvalidRouteException {
+        for (Military m : hostedMilitary) {
+            m.returnToStorage();
+        }
+        
+        evacuated = true;
     }
 }
