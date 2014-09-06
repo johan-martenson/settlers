@@ -120,19 +120,19 @@ public class Geologist extends Worker {
         Terrain terrain = map.getTerrain();
 
         if (terrain.isOnGrass(point)) {
-            map.placeSign(new Sign(WATER, LARGE), point);
+            map.placeSign(WATER, LARGE, point);
         } else if (terrain.isOnMountain(point)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 
                 if (amount > 10) {
-                    map.placeSign(new Sign(mineral, LARGE), point);
+                    map.placeSign(mineral, LARGE, point);
                     break;
                 } else if (amount > 5) {
-                    map.placeSign(new Sign(mineral, MEDIUM), point);
+                    map.placeSign(mineral, MEDIUM, point);
                     break;
                 } else if (amount > 0) {
-                    map.placeSign(new Sign(mineral, SMALL), point);
+                    map.placeSign(mineral, SMALL, point);
                     break;
                 }
             }

@@ -14,10 +14,12 @@ public class Sign {
 
     private final Material type;
     private final Size     size;
+    private final Point    position;
     
-    Sign(Material m, Size s) {
-        type = m;
-        size = s;
+    Sign(Material m, Size s, Point p) {
+        position = p;
+        type     = m;
+        size     = s;
     }    
 
     public Material getType() {
@@ -26,5 +28,9 @@ public class Sign {
 
     public Size getSize() {
         return size;
+    }
+
+    public Point getPosition() {
+        return position;
     }
 }

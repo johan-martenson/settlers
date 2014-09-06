@@ -25,6 +25,7 @@ public class GameMap {
     private List<Building>          buildings;
     private List<Road>              roads;
     private List<Flag>              flags;
+    private List<Sign>              signs;
     private List<Worker>            allWorkers;
     private String                  theLeader = "Mai Thi Van Anh";
     private final int               height;
@@ -105,6 +106,7 @@ public class GameMap {
         buildings           = new ArrayList<>();
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
+        signs               = new ArrayList<>();
         allWorkers          = new ArrayList<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
@@ -1525,11 +1527,19 @@ public class GameMap {
         return pointToGameObject.get(point);
     }
 
-    void placeSign(Sign sign, Point point) {
+    void placeSign(Material mineral, Size amount, Point point) {
+        Sign sign = new Sign(mineral, amount, point);
+        
         getMapPoint(point).setSign(sign);
+        
+        signs.add(sign);
     }
 
     public boolean isSignAtPoint(Point point) {
         return getMapPoint(point).getSign() != null;
+    }
+
+    public Iterable<Sign> getSigns() {
+        return signs;
     }
 }
