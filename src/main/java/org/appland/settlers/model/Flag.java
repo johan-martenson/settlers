@@ -16,10 +16,6 @@ public class Flag implements EndPoint {
     private int     geologistCalled;
     private int     geologistPromised;
 
-    public Flag(int x, int y) {
-        this(new Point(x, y));
-    }
-
     public Flag(Point p) {
         position          = p;
         stackedCargo      = new ArrayList<>();

@@ -85,7 +85,7 @@ public class TestTransportation {
 
         map.placeBuilding(s, new Point(4, 6));
 
-        map.placeAutoSelectedRoad(new Flag(5, 7), new Flag(4, 6));
+        map.placeAutoSelectedRoad(new Flag(new Point(5, 7)), new Flag(new Point(4, 6)));
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -99,7 +99,7 @@ public class TestTransportation {
 
         map.placeBuilding(wc, new Point(3, 3));
 
-        map.placeAutoSelectedRoad(new Flag(8, 6), new Flag(3, 3));
+        map.placeAutoSelectedRoad(new Flag(new Point(8, 6)), new Flag(new Point(3, 3)));
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -109,7 +109,7 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeAutoSelectedRoad(new Flag(1, 1), new Flag(3, 5));
+        map.placeAutoSelectedRoad(new Flag(new Point(1, 1)), new Flag(new Point(3, 5)));
     }
 
     @Test
@@ -119,8 +119,8 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag middleFlag = new Flag(7, 7);
-        Flag endFlag = new Flag(10, 10);
+        Flag middleFlag = new Flag(new Point(7, 7));
+        Flag endFlag = new Flag(new Point(10, 10));
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(3, 3);
 
@@ -141,8 +141,8 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeFlag(new Flag(3, 3));
-        map.placeAutoSelectedRoad(new Flag(3, 3), new Flag(3, 3));
+        map.placeFlag(new Flag(new Point(3, 3)));
+        map.placeAutoSelectedRoad(new Flag(new Point(3, 3)), new Flag(new Point(3, 3)));
     }
 
     @Test(expected = InvalidRouteException.class)
@@ -255,8 +255,8 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag away = new Flag(6, 2);
-        Flag start = new Flag(2, 2);
+        Flag away = new Flag(new Point(6, 2));
+        Flag start = new Flag(new Point(2, 2));
         Flag end = map.placeFlag(new Point(4, 2));
         
         Point middle = new Point(3, 3);

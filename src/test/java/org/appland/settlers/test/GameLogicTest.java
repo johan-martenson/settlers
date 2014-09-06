@@ -90,7 +90,7 @@ public class GameLogicTest {
         GameMap map   = new GameMap(30, 30);
         Sawmill sm    = new Sawmill();
         Point smPoint = new Point(5, 5);
-        Flag f        = new Flag(10, 10);
+        Flag f        = new Flag(new Point(10, 10));
         Courier courier     = new Courier(map);
         Road r;
                 
@@ -137,7 +137,7 @@ public class GameLogicTest {
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         GameMap map   = new GameMap(30, 30);
         Woodcutter wc = new Woodcutter();
-        Flag src      = new Flag(5, 5);
+        Flag src      = new Flag(new Point(5, 5));
         Point wcPoint = new Point(11, 5);
         Courier w     = new Courier(map);
         Cargo c;

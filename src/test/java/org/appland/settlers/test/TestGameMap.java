@@ -200,7 +200,7 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag    f1        = new Flag(1, 1);
+        Flag    f1        = new Flag(new Point(1, 1));
         Farm    farm      = new Farm();
         Point   farmPoint = new Point(3, 3);
         
