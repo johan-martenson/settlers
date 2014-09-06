@@ -114,10 +114,6 @@ public class MapPoint {
         return !connectedNeighbors.isEmpty();
     }
 
-    private boolean hasRoadTo(Point next) {
-        return connectedNeighbors.contains(next); 
-    }
-
     public Iterable<Road> getConnectedRoads() {
         return connectedRoads;
     }
