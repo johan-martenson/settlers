@@ -88,7 +88,7 @@ public class TestIronSmelter {
         /* Verify that a iron smelter worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);
 
-        map.stepTime();
+        Utils.fastForward(3, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
 

@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,6 +8,7 @@ import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -94,38 +94,44 @@ public class Storage extends Building implements Actor {
     }
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
-        /* Handle unoccupied roads */
-        List<Road> roads = map.getRoadsThatNeedCouriers();
-        
-        for (Road r : roads) {
-            Storage stg = map.getClosestStorage(r.getStart());
-
-            if (!equals(stg)) {
-                continue;
-            }
-
-            if (!hasAtLeastOne(COURIER)) {
-                return;
-            }
-            
-            Courier w = stg.retrieveCourier();
-
-            w.setMap(map);
-
-            map.placeWorker(w, stg.getFlag());
-
-            w.assignToRoad(r);
+        if (assignCouriers()) {
+            return;
         }
 
-        /* Handle unoccupied regular buildings and military buildings*/
-        List<Building> buildings = map.getBuildings();
+        if (assignWorkerToUnoccupiedBuildings()) {
+            return;
+        }
+    
+        if (assignGeologists()) {
+            return;
+        }
+    }
 
-        for (Building b : buildings) {
+    private boolean assignGeologists() throws Exception {
+        for (Flag f : map.getFlags()) {
+            if (f.needsGeologist()) {
+                if (!isClosestStorage(this)) {
+                    continue;
+                }
+            
+                Geologist geologist = (Geologist)retrieveWorker(GEOLOGIST);
+
+                map.placeWorker(geologist, this);
+                geologist.setTarget(f.getPosition());
+                f.promiseGeologist(geologist);
+                
+                return true;
+            }
+        }
+    
+        return false;
+    }
+    
+    private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
+        for (Building b : map.getBuildings()) {
             if (b.isMilitaryBuilding()) {
                 if (b.needsMilitaryManning()) {
-                    Storage stg = map.getClosestStorage(b.getPosition());
-
-                    if (!equals(stg)) {
+                    if (!isClosestStorage(b)) {
                         continue;
                     }
                     
@@ -133,22 +139,18 @@ public class Storage extends Building implements Actor {
                         continue;
                     }
                     
-                    Military m = stg.retrieveAnyMilitary();
-
-                    m.setMap(map);
-
-                    map.placeWorker(m, stg.getFlag());
-                    
+                    Military m = retrieveAnyMilitary();
+                    map.placeWorker(m, this);
                     m.setTargetBuilding(b);
-
                     b.promiseMilitary(m);
+                    
+                    return true;
                 }
             } else {
                 if (b.needsWorker()) {
                     Material m = b.getWorkerType();
-
                     Storage stg = map.getClosestStorage(b.getPosition(), b);
-
+                    
                     if (!equals(stg)) {
                         continue;
                     }
@@ -158,27 +160,47 @@ public class Storage extends Building implements Actor {
                     }
                     
                     Worker w = stg.retrieveWorker(m);
-
-                    w.setMap(map);
-
                     map.placeWorker(w, stg.getFlag());
-
                     w.setTargetBuilding(b);
-                    
                     b.promiseWorker(w);
+                    
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
-    /* TODO: Write unit tests */
+    private boolean assignCouriers() throws Exception {
+        for (Road r : map.getRoadsThatNeedCouriers()) {
+            Storage stg = map.getClosestStorage(r.getStart());
+
+            if (!equals(stg)) {
+                continue;
+            }
+
+            if (!hasAtLeastOne(COURIER)) {
+                return true;
+            }
+
+            Courier w = stg.retrieveCourier();
+            w.setMap(map);
+            map.placeWorker(w, stg.getFlag());
+            w.assignToRoad(r);
+            
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean isDraftPossible(Map<Material, Integer> inventory) {
         return inventory.get(BEER) > 0
                 && inventory.get(SWORD) > 0
                 && inventory.get(SHIELD) > 0;
     }
 
-    /* TODO: Write unit tests */
     public boolean isPromotionPossible(Map<Material, Integer> inventory) {
         return inventory.get(GOLD) > 0
                 && (inventory.get(PRIVATE) > 0
@@ -332,6 +354,9 @@ public class Storage extends Building implements Actor {
         case BUTCHER:
             w = new Butcher(map);
             break;
+        case GEOLOGIST:
+            w = new Geologist(map);
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
@@ -464,5 +489,11 @@ public class Storage extends Building implements Actor {
 
     private boolean isWorking() {
         return ready();
+    }
+
+    private boolean isClosestStorage(Building b) {
+        Storage stg = map.getClosestStorage(b.getPosition());
+                    
+        return equals(stg);
     }
 }

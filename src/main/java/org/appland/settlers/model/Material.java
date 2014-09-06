@@ -1,5 +1,8 @@
 package org.appland.settlers.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public enum Material {
 
     SWORD, 
@@ -41,6 +44,21 @@ public enum Material {
     MINTER,
     ARMORER,
     PIG_BREEDER,
-    BUTCHER
+    BUTCHER,
+    GEOLOGIST;
 
+    private static List<Material> minerals = null;
+    
+    static Iterable<Material> getMinerals() {
+        if (minerals == null) {
+            minerals = new LinkedList<>();
+            
+            minerals.add(GOLD);
+            minerals.add(IRON);
+            minerals.add(COAL);
+            minerals.add(STONE);
+        }
+        
+        return minerals;
+    }
 }

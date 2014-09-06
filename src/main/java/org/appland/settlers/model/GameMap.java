@@ -1143,7 +1143,7 @@ public class GameMap {
     }
     
     public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
-        return GameUtils.findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
+        return GameUtils.findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
@@ -1515,5 +1515,21 @@ public class GameMap {
         }
 
         throw new Exception("Can't find any gold to mine at " + position);
+    }
+
+    public Sign getSignAtPoint(Point point) {
+        return getMapPoint(point).getSign();
+    }
+
+    private MapPoint getMapPoint(Point point) {
+        return pointToGameObject.get(point);
+    }
+
+    void placeSign(Sign sign, Point point) {
+        getMapPoint(point).setSign(sign);
+    }
+
+    public boolean isSignAtPoint(Point point) {
+        return getMapPoint(point).getSign() != null;
     }
 }

@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Brewer;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
@@ -89,7 +88,7 @@ public class TestBrewery {
         /* Verify that a brewery worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);
 
-        map.stepTime();
+        Utils.fastForward(3, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
 

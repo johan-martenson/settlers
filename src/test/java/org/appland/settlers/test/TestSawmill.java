@@ -87,7 +87,7 @@ public class TestSawmill {
         /* Verify that a sawmill worker leaves the hq */        
         assertTrue(map.getAllWorkers().size() == 1);
 
-        map.stepTime();
+        Utils.fastForward(3, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
 

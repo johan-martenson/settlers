@@ -94,7 +94,7 @@ public class TestBakery {
         assertTrue(bakery.needsWorker());
 
         /* Verify that a bakery worker leaves the hq */
-        map.stepTime();
+        Utils.fastForward(3, map);
         
         assertTrue(map.getAllWorkers().size() == 3);
 

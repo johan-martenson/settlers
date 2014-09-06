@@ -3,9 +3,13 @@ package org.appland.settlers.test;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
@@ -28,6 +32,7 @@ import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -401,5 +406,35 @@ public class Utils {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
             t.setAmountMineral(STONE, size);
         }
+    }
+
+    static void createMountainWithinRadius(Point point1, int i, GameMap map) throws Exception {
+        Set<Tile> tiles = new HashSet<>();
+        Terrain terrain = map.getTerrain();
+        
+        for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
+            tiles.addAll(terrain.getSurroundingTiles(p));
+        }
+
+        for (Tile t : tiles) {
+            t.setVegetationType(MOUNTAIN);
+        }
+
+        map.terrainIsUpdated();
+    }
+
+    static void putMineralWithinRadius(Material mineral, Point point1, int i, GameMap map) throws Exception {
+        Set<Tile> tiles = new HashSet<>();
+        Terrain terrain = map.getTerrain();
+        
+        for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
+            tiles.addAll(terrain.getSurroundingTiles(p));
+        }
+
+        for (Tile t : tiles) {
+            t.setAmountMineral(mineral, LARGE);
+        }
+
+        map.terrainIsUpdated();
     }
 }

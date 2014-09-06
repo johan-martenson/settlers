@@ -14,15 +14,16 @@ import java.util.Set;
  * @author johan
  */
 public class MapPoint {
-    private Building   building;
-    private Flag       flag;
-    private Point      point;
-    private Set<Point> connectedNeighbors;
-    private boolean    isRoad;
-    private Set<Road>  connectedRoads;
-    private Tree       tree;
-    private Stone      stone;
-    private Crop       crop;
+    private final Point      point;
+    private final Set<Point> connectedNeighbors;
+    private final Set<Road>  connectedRoads;
+
+    private Building building;
+    private Flag     flag;
+    private Tree     tree;
+    private Stone    stone;
+    private Crop     crop;
+    private Sign     sign;
 
     public MapPoint(Point p) {
         point              = p;
@@ -31,6 +32,7 @@ public class MapPoint {
         tree               = null;
         stone              = null;
         crop               = null;
+        sign               = null;
         connectedNeighbors = new HashSet<>();
         connectedRoads     = new HashSet<>();
     }
@@ -170,5 +172,13 @@ public class MapPoint {
 
     void removeFlag() {
         flag = null;
+    }
+
+    Sign getSign() {
+        return sign;
+    }
+
+    void setSign(Sign s) {
+        sign = s;
     }
 }

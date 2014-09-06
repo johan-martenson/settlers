@@ -204,7 +204,7 @@ public class GameLogicTest {
         assertTrue(map.getAllWorkers().size() == 1);
         
         /* Step time to make the headquarter assign new workers */
-        map.stepTime();
+        Utils.fastForward(3, map);
         
         assertTrue(map.getAllWorkers().size() == 1);
 
@@ -226,7 +226,7 @@ public class GameLogicTest {
          * worker designated for the road. There should be no worker for the 
          * barracks as it's not finished yet
          */
-        map.stepTime();
+        Utils.fastForward(3, map);
 
         // TODO: Ensure that only one worker is dispatched even though there are two unassigned roads
         assertTrue(map.getAllWorkers().size() == 3);

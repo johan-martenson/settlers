@@ -7,18 +7,24 @@ import java.util.logging.Logger;
 
 public class Flag implements EndPoint {
 
-    private Point position;
+    private final static Logger log = Logger.getLogger(Flag.class.getName());
+
     private final List<Cargo> stackedCargo;
 
-    private static Logger log = Logger.getLogger(Flag.class.getName());
+    private GameMap map;
+    private Point   position;
+    private int     geologistCalled;
+    private int     geologistPromised;
 
     public Flag(int x, int y) {
         this(new Point(x, y));
     }
 
     public Flag(Point p) {
-        this.position = p;
-        stackedCargo = new ArrayList<>();
+        position          = p;
+        stackedCargo      = new ArrayList<>();
+        geologistCalled   = 0;
+        geologistPromised = 0;
     }
 
     @Override
@@ -90,5 +96,26 @@ public class Flag implements EndPoint {
         }
 
         return null;
+    }
+
+    void setMap(GameMap m) {
+        map = m;
+    }
+    
+    public void callGeologist() {
+        geologistCalled++;
+    }
+
+    void geologistHasArrived(Geologist g) {
+        geologistCalled--;
+        geologistPromised--;
+    }
+
+    void promiseGeologist(Geologist g) {
+        geologistPromised++;
+    }
+
+    boolean needsGeologist() {
+        return geologistCalled > geologistPromised;
     }
 }
