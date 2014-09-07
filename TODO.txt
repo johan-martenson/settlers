@@ -6,7 +6,6 @@ RE-FACTOR
 
   add Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)
 
-  remove new Flag(int, int)
 
 
 TEST
@@ -304,3 +303,4 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
   Test geologist places sign even if it didn't find anything - DONE
 
+  remove new Flag(int, int) - DONE
