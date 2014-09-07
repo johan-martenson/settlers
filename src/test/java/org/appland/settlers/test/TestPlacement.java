@@ -12,6 +12,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -19,7 +20,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
-import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
@@ -778,5 +778,56 @@ public class TestPlacement {
         assertFalse(map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point1).contains(point1.right()));
         
         assertFalse(map.getPossibleRoadConnectionsExcludingEndpoints(point1).contains(point1.right()));
+    }
+
+    @Test
+    public void testFlagCanBePlacedOnSign() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        /* Place headquarter */
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place sign */
+        map.placeEmptySign(point0);
+        
+        assertFalse(map.getSigns().isEmpty());
+        assertTrue(map.isSignAtPoint(point0));
+        
+        /* Place flag on the sign */
+        map.placeFlag(point0);
+        
+        /* Verify that the sign is gone and the flag exists */
+        assertTrue(map.isFlagAtPoint(point0));
+        assertFalse(map.isSignAtPoint(point0));
+        assertTrue(map.getSigns().isEmpty());
+    }
+
+    @Test
+    public void testMineCanBePlacedOnSign() throws Exception {
+        GameMap map   = new GameMap(10, 10);
+        Point point0  = new Point(3, 3);
+    
+        /* Place headquarter */
+        Point hqPoint = new Point(6, 6);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Put a small mountain on point0 */
+        Utils.surroundPointWithMountain(point0, map);
+        
+        /* Place sign */
+        map.placeEmptySign(point0);
+        
+        assertFalse(map.getSigns().isEmpty());
+        assertTrue(map.isSignAtPoint(point0));
+        
+        /* Build a mine on the sign */
+        map.placeBuilding(new GoldMine(), point0);
+        
+        /* Verify that the sign is gone and the mine exists */
+        assertTrue(map.isBuildingAtPoint(point0));
+        assertFalse(map.isSignAtPoint(point0));
+        assertTrue(map.getSigns().isEmpty());
     }
 }

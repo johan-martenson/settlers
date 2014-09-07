@@ -177,6 +177,11 @@ public class GameMap {
             throw new Exception("Can't place building on " + p + ".");
         }
         
+        /* Handle the case where there is a sign at the site */
+        if (isSignAtPoint(p)) {
+            removeSign(getSignAtPoint(p));
+        }
+        
         /* Use the existing flag if it exists, otherwise place a new flag */
         if (isFlagAtPoint(p.downRight())) {
             house.setFlag(getFlagAtPoint(p.downRight()));
@@ -358,6 +363,12 @@ public class GameMap {
     }
 
     public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
+        if (start.equals(via)) {
+            return findWayWithExistingRoads(start, end);
+        } else if (via.equals(end)) {
+            return findWayWithExistingRoads(start, end);
+        }
+        
         List<Point> path1 = findWayWithExistingRoads(start, via);
         List<Point> path2 = findWayWithExistingRoads(via, end);
         
@@ -422,6 +433,11 @@ public class GameMap {
         
         if (checkBorder && !isWithinBorder(f.getPosition())) {
             throw new Exception("Can't place flag at " + f.getPosition() + " outside of the border");
+        }
+        
+        /* Handle the case where the flag is placed on a sign */
+        if (isSignAtPoint(flagPoint)) {
+            removeSign(getSignAtPoint(flagPoint));
         }
         
         /* Handle the case where the flag is on an existing road that will be split */
@@ -1275,7 +1291,7 @@ public class GameMap {
         return new Cargo(Material.STONE, this);
     }
 
-    public Collection<Point> getPointsWithinRadius(Point point, int radius) {
+    public List<Point> getPointsWithinRadius(Point point, int radius) {
         List<Point> result = new ArrayList<>();
     
         int x;
@@ -1527,7 +1543,7 @@ public class GameMap {
         return pointToGameObject.get(point);
     }
 
-    void placeSign(Material mineral, Size amount, Point point) {
+    public void placeSign(Material mineral, Size amount, Point point) {
         Sign sign = new Sign(mineral, amount, point);
         
         getMapPoint(point).setSign(sign);
@@ -1539,7 +1555,19 @@ public class GameMap {
         return getMapPoint(point).getSign() != null;
     }
 
-    public Iterable<Sign> getSigns() {
+    public Collection<Sign> getSigns() {
         return signs;
+    }
+
+    public void placeEmptySign(Point point) {
+        placeSign(null, null, point);
+    }
+
+    private void removeSign(Sign sign) {
+        MapPoint mp = getMapPoint(sign.getPosition());
+        
+        mp.setSign(null);
+        
+        signs.remove(sign);
     }
 }

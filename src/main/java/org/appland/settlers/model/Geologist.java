@@ -6,12 +6,14 @@
 
 package org.appland.settlers.model;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import static org.appland.settlers.model.Geologist.State.GOING_TO_NEXT_SITE;
 import static org.appland.settlers.model.Geologist.State.INVESTIGATING;
 import static org.appland.settlers.model.Geologist.State.RETURNING_TO_FLAG;
 import static org.appland.settlers.model.Geologist.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Geologist.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -41,6 +43,7 @@ public class Geologist extends Worker {
     private State state;
     private int   nrSitesInvestigated;
     private Point flagPoint;
+    private boolean searchFlip;
     
     public Geologist(GameMap m) {
         super(m);
@@ -49,6 +52,8 @@ public class Geologist extends Worker {
         nrSitesInvestigated = 0;
 
         state = WALKING_TO_TARGET;
+        
+        searchFlip = true;
     }
 
     public boolean isInvestigating() {
@@ -99,7 +104,7 @@ public class Geologist extends Worker {
             if (point == null) {
                 state = RETURNING_TO_STORAGE;
                 
-                setTarget(map.getClosestStorage(getPosition()).getPosition(), flagPoint);
+                setTarget(map.getClosestStorage(flagPoint).getPosition(), flagPoint);
             } else {            
                 state = GOING_TO_NEXT_SITE;
             
@@ -113,36 +118,61 @@ public class Geologist extends Worker {
             state = RETURNING_TO_STORAGE;
             
             setTarget(map.getClosestStorage(flagPoint).getPosition());
+        } else if (state == RETURNING_TO_STORAGE) {
+            Building storage = map.getBuildingAtPoint(getPosition());
+            
+            storage.putCargo(new Cargo(GEOLOGIST, map));
+            
+            enterBuilding(storage);
         }
     }
 
     private void placeSignWithResult(Point point) throws Exception {
         Terrain terrain = map.getTerrain();
+        boolean placedSign = false;
 
         if (terrain.isOnGrass(point)) {
             map.placeSign(WATER, LARGE, point);
+            placedSign = true;
         } else if (terrain.isOnMountain(point)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
 
                 if (amount > 10) {
                     map.placeSign(mineral, LARGE, point);
+                    placedSign = true;
                     break;
                 } else if (amount > 5) {
                     map.placeSign(mineral, MEDIUM, point);
+                    placedSign = true;
                     break;
                 } else if (amount > 0) {
                     map.placeSign(mineral, SMALL, point);
+                    placedSign = true;
                     break;
                 }
             }
+        } 
+        
+        if (!placedSign) {
+            map.placeEmptySign(point);
         }
     }
 
     private Point findSiteToExamine() {
-        Collection<Point> points = map.getPointsWithinRadius(getPosition(), RADIUS_TO_INVESTIGATE);
+        List<Point> points = map.getPointsWithinRadius(getPosition(), RADIUS_TO_INVESTIGATE);
+        
+        if (searchFlip) {
+            Collections.reverse(points);
+        }
+        
+        searchFlip = !searchFlip;
         
         for (Point p : points) {
+            if (p.equals(getPosition())) {
+                continue;
+            }
+            
             if (map.isSignAtPoint(p)) {
                 continue;
             }
@@ -152,6 +182,10 @@ public class Geologist extends Worker {
             }
             
             if (map.isStoneAtPoint(p)) {
+                continue;
+            }
+            
+            if (map.isFlagAtPoint(p)) {
                 continue;
             }
             

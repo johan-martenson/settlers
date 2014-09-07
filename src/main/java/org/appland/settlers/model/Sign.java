@@ -33,4 +33,9 @@ public class Sign {
     public Point getPosition() {
         return position;
     }
+
+    public boolean isEmpty() {
+        return type == null;
+    }
+    
 }
