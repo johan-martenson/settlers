@@ -80,12 +80,10 @@ public class WellWorker extends Worker {
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag f = getHome().getFlag();
-            Storage stg = map.getClosestStorage(getPosition());
-
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
 
             f.putCargo(getCargo());
 

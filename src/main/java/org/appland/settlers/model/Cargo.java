@@ -96,4 +96,26 @@ public class Cargo {
     void clearPromisedDelivery() {
         deliveryPromised = false;
     }
+
+    void transportToStorage() throws Exception {
+        Storage stg = map.getClosestStorage(getPosition());
+
+        if (stg != null) {
+            setTarget(stg);
+        } else {
+            target = null;
+        }
+    }
+
+    void resumeTransport() {
+        Storage stg = map.getClosestStorage(getPosition());
+        
+        if (stg != null) {
+            try {
+                setTarget(stg);
+            } catch (Exception ex) {
+                Logger.getLogger(Cargo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }

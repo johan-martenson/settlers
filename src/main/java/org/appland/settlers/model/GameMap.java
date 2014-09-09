@@ -149,6 +149,15 @@ public class GameMap {
         for (Stone s : stonesToRemove) {
             removeStone(s);
         }
+    
+        /* Resume transport of stuck cargos */
+        for (Flag f : flags) {
+            for (Cargo cargo : f.getStackedCargo()) {
+                if (cargo.getTarget() == null) {
+                    cargo.resumeTransport();
+                }
+            }
+        }
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
