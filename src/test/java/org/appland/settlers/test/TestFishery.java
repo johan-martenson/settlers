@@ -7,6 +7,8 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;
@@ -820,5 +822,186 @@ public class TestFishery {
             
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testFisheryWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Place water on one tile */
+        Point point0 = new Point(8, 6);
+        Point point1 = new Point(10, 6);
+        Point point2 = new Point(9, 7);
+
+        Utils.surroundPointWithWater(point0, point1, point2, map);
+        
+        /* Placing fishery */
+        Point point26 = new Point(8, 8);
+        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+
+        /* Finish construction of the fishery */
+        Utils.constructSmallHouse(fishery0);
+
+        /* Occupy the fishery */
+        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+
+        /* Let the fisherman rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the fisherman to produce a new fish cargo */
+        Worker ww = fishery0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.isAt(fishery0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the fisherman puts the fish cargo at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), fishery0.getFlag().getPosition());
+        assertTrue(fishery0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, fishery0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(fishery0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the fishery */
+        assertEquals(ww.getTarget(), fishery0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, fishery0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.isAt(fishery0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), fishery0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, fishery0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(fishery0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Place water on one tile */
+        Point point0 = new Point(8, 6);
+        Point point1 = new Point(10, 6);
+        Point point2 = new Point(9, 7);
+
+        Utils.surroundPointWithWater(point0, point1, point2, map);
+        
+        /* Placing fishery */
+        Point point26 = new Point(8, 8);
+        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+
+        /* Finish construction of the fishery */
+        Utils.constructSmallHouse(fishery0);
+
+        /* Occupy the fishery */
+        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+
+        /* Let the fisherman rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the fisherman to produce a new fish cargo */
+        Worker ww = fishery0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.isAt(fishery0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the fisherman puts the fish cargo at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), fishery0.getFlag().getPosition());
+        assertTrue(fishery0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, fishery0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(fishery0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = fishery0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), fishery0.getFlag().getPosition());
+    
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), fishery0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(fishery0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), fishery0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+    
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(FISH);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(FISH), amount + 1);
     }
 }

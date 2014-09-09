@@ -145,12 +145,10 @@ public class Fisherman extends Worker {
 
             state = IN_HOUSE_WITH_FISH;            
         } else if (state == GOING_TO_FLAG) {
-            Storage stg = map.getClosestStorage(getPosition());
-
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);
