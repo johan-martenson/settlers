@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
@@ -22,6 +24,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -678,5 +681,175 @@ public class TestFarm {
         Crop crop = map.placeCrop(point0);
 
         map.placeCrop(point0);        
+    }
+
+    @Test
+    public void testFarmWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing farm */
+        Point point26 = new Point(8, 8);
+        Building farm0 = map.placeBuilding(new Farm(), point26);
+
+        /* Finish construction of the farm */
+        Utils.constructLargeHouse(farm0);
+
+        /* Occupy the farm */
+        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        
+        /* Let the farmer rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the farmer to plant and harvest a new crop */
+        Worker ww = farm0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+        
+        /* Wait one tick for the farmer to start walking to the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+
+        /* Verify that the farmer puts the wheat cargo at the flag */
+        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the farm */
+        assertEquals(ww.getTarget(), farm0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(farm0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing farm */
+        Point point26 = new Point(8, 8);
+        Building farm0 = map.placeBuilding(new Farm(), point26);
+
+        /* Finish construction of the farm */
+        Utils.constructLargeHouse(farm0);
+
+        /* Occupy the farm */
+        Utils.occupyBuilding(new Farmer(map), farm0, map);
+
+        /* Let the farmer rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the farmer to produce a new wheat cargo */
+        Worker ww = farm0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the farmer puts the wheat cargo at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = farm0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), farm0.getFlag().getPosition());
+    
+        /* Connect the farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), farm0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(farm0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), farm0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(WHEAT);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(WHEAT), amount + 1);
     }
 }

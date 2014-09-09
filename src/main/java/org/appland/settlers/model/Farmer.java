@@ -24,6 +24,7 @@ import static org.appland.settlers.model.Farmer.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.States.PLANTING;
 import static org.appland.settlers.model.Farmer.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.WHEAT;
 
 /**
  *
@@ -180,7 +181,7 @@ public class Farmer extends Worker {
                 crop.harvest();
                 
                 /* Create a crop cargo to make sure the map is set correctly */
-                setCargo(new Cargo(Material.WHEAT, map));
+                setCargo(new Cargo(WHEAT, map));
                 
                 state = GOING_BACK_TO_HOUSE_WITH_CARGO;
                 
@@ -214,19 +215,17 @@ public class Farmer extends Worker {
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            Storage stg = map.getClosestStorage(getPosition());
-
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);
 
-            setTarget(getHome().getPosition());
-
             state = GOING_BACK_TO_HOUSE;
+
+            setTarget(getHome().getPosition());
         } else if (state == GOING_BACK_TO_HOUSE) {
             state = RESTING_IN_HOUSE;
             

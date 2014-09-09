@@ -68,6 +68,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 
+  Change farmer to not have a tick at home before they go out with the cargo
+
   Add buttons to create iron, coal and stone mines to the app
 
   Fix so workers go back to closest storage when their building is destroyed
