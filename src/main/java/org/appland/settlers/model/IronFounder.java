@@ -93,12 +93,10 @@ public class IronFounder extends Worker {
             try {
                 Flag f = map.getFlagAtPoint(getPosition());
                 
-                Storage stg = map.getClosestStorage(getPosition());
-                
                 Cargo cargo = getCargo();
                 
                 cargo.setPosition(getPosition());
-                cargo.setTarget(stg);
+                cargo.transportToStorage();
                 
                 f.putCargo(getCargo());
                 
