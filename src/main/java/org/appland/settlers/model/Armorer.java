@@ -99,12 +99,10 @@ public class Armorer extends Worker {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag f = map.getFlagAtPoint(getPosition());
 
-            Storage stg = map.getClosestStorage(getPosition());
-
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
 
             f.putCargo(getCargo());
 

@@ -15,6 +15,8 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Armorer;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
@@ -411,5 +413,170 @@ public class TestArmory {
         Utils.fastForward(150, map);
         
         assertEquals(armorer.getCargo().getMaterial(), SHIELD);
+    }
+
+    @Test
+    public void testArmoryWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing armory */
+        Point point26 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(), point26);
+
+        /* Finish construction of the armory */
+        Utils.constructMediumHouse(armory0);
+
+        /* Occupy the armory */
+        Utils.occupyBuilding(new Armorer(map), armory0, map);
+
+        /* Deliver material to the armory */
+        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo coalCargo = new Cargo(COAL, map);
+        
+        armory0.putCargo(ironCargo);
+        armory0.putCargo(ironCargo);
+
+        armory0.putCargo(coalCargo);
+        armory0.putCargo(coalCargo);
+        
+        /* Let the armorer rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the armorer to produce a new weapon cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = armory0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the armorer puts the weapon cargo at the flag */
+        assertEquals(ww.getTarget(), armory0.getFlag().getPosition());
+        assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, armory0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the armory */
+        assertEquals(ww.getTarget(), armory0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, armory0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        Utils.fastForward(150, map);
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        assertEquals(ww.getTarget(), armory0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, armory0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(armory0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing armory */
+        Point point26 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(), point26);
+
+        /* Finish construction of the armory */
+        Utils.constructMediumHouse(armory0);
+
+        /* Deliver material to the armory */
+        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo coalCargo = new Cargo(COAL, map);
+        
+        armory0.putCargo(ironCargo);
+        armory0.putCargo(ironCargo);
+
+        armory0.putCargo(coalCargo);
+        armory0.putCargo(coalCargo);
+
+        /* Occupy the armory */
+        Utils.occupyBuilding(new Armorer(map), armory0, map);
+
+        /* Let the armorer rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the armorer to produce a new weapon cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = armory0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the armorer puts the weapon cargo at the flag */
+        assertEquals(ww.getTarget(), armory0.getFlag().getPosition());
+        assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, armory0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = armory0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), armory0.getFlag().getPosition());
+    
+        /* Connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), armory0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(armory0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), armory0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        assertTrue(cargo.getMaterial() == SWORD || cargo.getMaterial() == SHIELD);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        Material material = cargo.getMaterial();
+        int amount = headquarter0.getAmount(material);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(material), amount + 1);
     }
 }
