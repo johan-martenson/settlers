@@ -10,6 +10,8 @@ RE-FACTOR
 
 TEST
 
+  Test for all workers except well worker that it will produce cargos with no storage attached and that the cargos will get delivered once the building is connected
+
   Test signs can be placed outside border
 
   Test signs expire and eventually disappear
