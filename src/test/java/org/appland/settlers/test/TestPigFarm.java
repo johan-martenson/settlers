@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.PigBreeder;
@@ -18,6 +19,7 @@ import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -410,5 +412,186 @@ public class TestPigFarm {
         }
 
         assertTrue(farm.getFlag().getStackedCargo().isEmpty());
+    }
+
+    @Test
+    public void testPigFarmWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+
+        /* Finish construction of the pig farm */
+        Utils.constructLargeHouse(pigFarm0);
+
+        /* Occupy the pig farm */
+        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+
+        /* Deliver material to the pig farm */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        Cargo waterCargo = new Cargo(WATER, map);
+
+        pigFarm0.putCargo(wheatCargo);
+        pigFarm0.putCargo(wheatCargo);
+
+        pigFarm0.putCargo(waterCargo);
+        pigFarm0.putCargo(waterCargo);
+        
+        /* Let the pig breeder rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the pig breeder to produce a new meat cargo */
+        Worker ww = pigFarm0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(pigFarm0.getPosition())) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the pig breeder puts the meat cargo at the flag */
+        assertEquals(ww.getTarget(), pigFarm0.getFlag().getPosition());
+        assertTrue(pigFarm0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the pig farm */
+        assertEquals(ww.getTarget(), pigFarm0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(pigFarm0.getPosition())) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        assertEquals(ww.getTarget(), pigFarm0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(pigFarm0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+
+        /* Finish construction of the pig farm */
+        Utils.constructLargeHouse(pigFarm0);
+
+        /* Deliver material to the pig farm */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        Cargo waterCargo = new Cargo(WATER, map);
+        
+        pigFarm0.putCargo(wheatCargo);
+        pigFarm0.putCargo(wheatCargo);
+
+        pigFarm0.putCargo(waterCargo);
+        pigFarm0.putCargo(waterCargo);
+        
+        /* Occupy the pig farm */
+        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+
+        /* Let the pig breeder rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the pig breeder to produce a new meat cargo */
+        Worker ww = pigFarm0.getWorker();
+
+        for (int i = 0; i < 1000; i++) {
+            if (ww.getCargo() != null && ww.getPosition().equals(pigFarm0.getPosition())) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the pig breeder puts the meat cargo at the flag */
+        assertEquals(ww.getTarget(), pigFarm0.getFlag().getPosition());
+        assertTrue(pigFarm0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(pigFarm0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = pigFarm0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), pigFarm0.getFlag().getPosition());
+    
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), pigFarm0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(pigFarm0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), pigFarm0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(PIG);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(PIG), amount + 1);
     }
 }
