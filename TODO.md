@@ -5,7 +5,7 @@ REMOVE
 RE-FACTOR
 =========
 
-*  add Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)
+*  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
 
 
@@ -24,7 +24,7 @@ TEST
 
 *  Test that the pig farmer goes to the right place when he feeds the pigs
 
-*  Exception caused by org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:422)
+*  Exception caused by    org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:422)    
 
 *  test re-routing of cargos when a road is removed 
 
@@ -38,7 +38,7 @@ TEST
 
 *  worker takes exactly 10 ticks to reach next step
 
-*  worker isExactlyAtPoint() seems wrong
+*  worker    isExactlyAtPoint()    seems wrong
 
 *  test that barracks can only be built close to border
 
@@ -50,7 +50,7 @@ TEST
 
 *  Q: how often does the storages/headquarter assign new workers?
 
-*  fix exception: (ALLVARLIG: null
+*  fix exception:    (ALLVARLIG: null
 org.appland.settlers.model.DeliveryNotPossibleException: This building does not accept deliveries.
 	at org.appland.settlers.model.Building.putCargo(Building.java:254)
 	at org.appland.settlers.model.Courier.onArrival(Courier.java:263)
@@ -58,7 +58,7 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 	at org.appland.settlers.model.Worker.stepTime(Worker.java:69)
 	at org.appland.settlers.model.GameMap.stepTime(GameMap.java:119)
 	at org.appland.settlers.test.Utils.fastForward(Utils.java:71)
-	at org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:405))
+	at org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:405))   
 
 *  Test that several geologists can be called concurrently
 
@@ -90,7 +90,7 @@ TO IMPLEMENT
 
 *  implement tree conservation program
 
-*  change Storage::retrieveWorker() to use a Map<Material, ? extends Worker>
+*  change    Storage::retrieveWorker()    to use a Map<Material, ? extends Worker>
 
 *  add to app that 'S' dumps both state and code
 
@@ -191,7 +191,7 @@ DONE
 
 *  clean up TestBakery, TestSawmill similar to TestWoodcutter - DONE
 
-*  fix NPE in Fisherman (ALLVARLIG: null
+*  fix NPE in Fisherman    (ALLVARLIG: null
 java.lang.NullPointerException
 	at org.appland.settlers.model.Worker.setOffroadTarget(Worker.java:282)
 	at org.appland.settlers.model.Worker.setOffroadTarget(Worker.java:251)
@@ -199,7 +199,7 @@ java.lang.NullPointerException
 	at org.appland.settlers.model.Worker.stepTime(Worker.java:93)
 	at org.appland.settlers.model.GameMap.stepTime(GameMap.java:119)
 	at org.appland.settlers.javaview.App$GameCanvas$2.run(App.java:878)
-	at java.lang.Thread.run(Thread.java:745)) - DONE
+	at java.lang.Thread.run(Thread.java:745))    - DONE
 
 *  move app's "new Miller()" to API recorder - DONE
 
