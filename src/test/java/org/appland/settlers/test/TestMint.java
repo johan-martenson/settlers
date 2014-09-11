@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Point;
@@ -354,4 +355,166 @@ public class TestMint {
         assertNotNull(minter.getCargo());
     }
 
+    @Test
+    public void testMintWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+
+        /* Finish construction of the mint */
+        Utils.constructMediumHouse(mint0);
+
+        /* Occupy the mint */
+        Utils.occupyBuilding(new Minter(map), mint0, map);
+
+        /* Deliver material to the mint */
+        Cargo coalCargo = new Cargo(COAL, map);
+        Cargo goldCargo = new Cargo(GOLD, map);
+        
+        mint0.putCargo(coalCargo);
+        mint0.putCargo(coalCargo);
+
+        mint0.putCargo(goldCargo);
+        mint0.putCargo(goldCargo);
+        
+        /* Let the minter rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the minter to produce a new coin cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = mint0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the minter puts the coin cargo at the flag */
+        assertEquals(ww.getTarget(), mint0.getFlag().getPosition());
+        assertTrue(mint0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(mint0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the mint */
+        assertEquals(ww.getTarget(), mint0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        Utils.fastForward(150, map);
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        assertEquals(ww.getTarget(), mint0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(mint0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+
+        /* Finish construction of the mint */
+        Utils.constructMediumHouse(mint0);
+
+        /* Deliver material to the mint */
+        Cargo coalCargo = new Cargo(COAL, map);
+        Cargo goldCargo = new Cargo(GOLD, map);
+        
+        mint0.putCargo(coalCargo);
+        mint0.putCargo(coalCargo);
+
+        mint0.putCargo(goldCargo);
+        mint0.putCargo(goldCargo);
+
+        /* Occupy the mint */
+        Utils.occupyBuilding(new Minter(map), mint0, map);
+
+        /* Let the minter rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the minter to produce a new coin cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = mint0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the minter puts the coin cargo at the flag */
+        assertEquals(ww.getTarget(), mint0.getFlag().getPosition());
+        assertTrue(mint0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(mint0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = mint0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), mint0.getFlag().getPosition());
+    
+        /* Connect the mint with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), mint0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(mint0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), mint0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(COIN);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(COIN), amount + 1);
+    }
 }
