@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -769,5 +770,200 @@ public class TestWoodcutter {
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
         
         assertEquals(wcWorker.getPosition(), wc.getPosition());
+    }
+
+    @Test
+    public void testWoodcutterWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Plant and grow trees */
+        Point point2 = new Point(10, 8);
+        Tree tree0 = map.placeTree(point2);
+
+        Point point3 = new Point(11, 7);
+        Tree tree1 = map.placeTree(point3);
+
+        Utils.fastForwardUntilTreeIsGrown(tree0, map);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructSmallHouse(woodcutter0);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
+
+        /* Let the woodcutter worker rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the woodcutter worker to go to the tree */
+        Worker ww = woodcutter0.getWorker();
+
+        assertTrue(ww.getTarget().equals(tree0.getPosition()) || ww.getTarget().equals(tree1.getPosition()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+
+        /* Wait for the woodcutter to cut the tree */
+        Utils.fastForward(50, map);
+        
+        assertNotNull(ww.getCargo());
+        assertEquals(ww.getTarget(), woodcutter0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getPosition());
+
+        /* Verify that the woodcutter worker puts the wood cargo at the flag */
+        map.stepTime();
+
+        assertEquals(ww.getTarget(), woodcutter0.getFlag().getPosition());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
+
+        /* Wait for the worker to go back to the woodcutter */
+        assertEquals(ww.getTarget(), woodcutter0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getPosition());
+
+        /* Let the woodcutter worker rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the woodcutter worker to go to the next tree */
+        assertTrue(ww.getTarget().equals(tree0.getPosition()) || ww.getTarget().equals(tree1.getPosition()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+
+        /* Wait for the woodcutter to cut the tree */
+        Utils.fastForward(50, map);
+
+        assertNotNull(ww.getCargo());
+
+        /* Wait for the woodcutter worker to go back to the woodcutter */
+        assertEquals(ww.getTarget(), woodcutter0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getPosition());
+
+        /* Verify that the second cargo is put at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), woodcutter0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(woodcutter0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Plant and grow trees */
+        Point point2 = new Point(10, 8);
+        Tree tree0 = map.placeTree(point2);
+
+        Utils.fastForwardUntilTreeIsGrown(tree0, map);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructSmallHouse(woodcutter0);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
+
+        /* Let the woodcutter worker rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the woodcutter worker to go to the tree */
+        Worker ww = woodcutter0.getWorker();
+
+        assertEquals(ww.getTarget(), tree0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, tree0.getPosition());
+
+        /* Wait for the woodcutter to cut the tree */
+        Utils.fastForward(50, map);
+
+        assertNotNull(ww.getCargo());
+        
+        /* Wait for the woodcutter worker to go back to the woodcutter */
+        assertEquals(ww.getTarget(), woodcutter0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getPosition());
+
+        /* Verify that the woodcutter worker puts the wood cargo at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), woodcutter0.getFlag().getPosition());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = woodcutter0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), woodcutter0.getFlag().getPosition());
+    
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), woodcutter0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(woodcutter0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), woodcutter0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(WOOD);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(WOOD), amount + 1);
     }
 }
