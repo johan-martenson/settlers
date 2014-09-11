@@ -14,6 +14,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.SlaughterHouse;
 import org.appland.settlers.model.Butcher;
+import org.appland.settlers.model.Courier;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
@@ -347,4 +348,157 @@ public class TestSlaughterHouse {
         assertNotNull(butcher.getCargo());
     }
 
+    @Test
+    public void testSlaughterHouseWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+
+        /* Finish construction of the slaughter house */
+        Utils.constructMediumHouse(slaughterHouse0);
+
+        /* Occupy the slaughter house */
+        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+
+        /* Deliver material to the slaughter house */
+        Cargo pigCargo = new Cargo(PIG, map);
+        
+        slaughterHouse0.putCargo(pigCargo);
+        slaughterHouse0.putCargo(pigCargo);
+        
+        /* Let the butcher rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the butcher to produce a new meat cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = slaughterHouse0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the butcher puts the meat cargo at the flag */
+        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertTrue(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the slaughter house */
+        assertEquals(ww.getTarget(), slaughterHouse0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        Utils.fastForward(150, map);
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(slaughterHouse0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+
+        /* Finish construction of the slaughter house */
+        Utils.constructMediumHouse(slaughterHouse0);
+
+        /* Deliver material to the slaughter house */
+        Cargo pigCargo = new Cargo(PIG, map);
+        
+        slaughterHouse0.putCargo(pigCargo);
+        slaughterHouse0.putCargo(pigCargo);
+
+        /* Occupy the slaughter house */
+        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+
+        /* Let the butcher rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the butcher to produce a new meat cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = slaughterHouse0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the butcher puts the meat cargo at the flag */
+        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertTrue(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = slaughterHouse0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), slaughterHouse0.getFlag().getPosition());
+    
+        /* Connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), slaughterHouse0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(slaughterHouse0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), slaughterHouse0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(MEAT);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(MEAT), amount + 1);
+    }
 }
