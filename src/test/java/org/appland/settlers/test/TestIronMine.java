@@ -8,16 +8,19 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
+import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.IRON;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
+import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -526,5 +529,167 @@ public class TestIronMine {
         
         /* Verify that the miner consumed the bread */
         assertEquals(mine.getAmount(BREAD), 0);
+    }
+
+    @Test
+    public void testIronMineWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+
+        /* Finish construction of the iron mine */
+        Utils.constructSmallHouse(ironMine0);
+
+        /* Occupy the iron mine */
+        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+
+        /* Deliver material to the iron mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        ironMine0.putCargo(fishCargo);
+        ironMine0.putCargo(fishCargo);
+        
+        /* Let the miner rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the miner to produce a new iron cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = ironMine0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the miner puts the iron cargo at the flag */
+        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        assertTrue(ironMine0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(ironMine0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the iron mine */
+        assertEquals(ww.getTarget(), ironMine0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        Utils.fastForward(150, map);
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(ironMine0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+
+        /* Finish construction of the iron mine */
+        Utils.constructSmallHouse(ironMine0);
+
+        /* Deliver material to the iron mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        ironMine0.putCargo(fishCargo);
+        ironMine0.putCargo(fishCargo);
+
+        /* Occupy the iron mine */
+        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+
+        /* Let the miner rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the miner to produce a new iron cargo */
+        Utils.fastForward(50, map);
+
+        Worker ww = ironMine0.getWorker();
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the miner puts the iron cargo at the flag */
+        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        assertTrue(ironMine0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(ironMine0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = ironMine0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), ironMine0.getFlag().getPosition());
+    
+        /* Connect the iron mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), ironMine0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(ironMine0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), ironMine0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(IRON);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(IRON), amount + 1);
     }
 }

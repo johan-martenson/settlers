@@ -119,12 +119,10 @@ public class Miner extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_OUT_TO_FLAG) {
-            Storage stg = map.getClosestStorage(getPosition());
-            
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
             getHome().getFlag().putCargo(cargo);
 
             setCargo(null);
