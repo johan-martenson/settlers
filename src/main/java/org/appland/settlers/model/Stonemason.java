@@ -135,12 +135,10 @@ public class Stonemason extends Worker {
     @Override
     public void onArrival() throws Exception {
         if (state == GOING_OUT_TO_PUT_CARGO) {
-            Storage stg = map.getClosestStorage(getPosition());
-
             Cargo cargo = getCargo();
                 
             cargo.setPosition(getPosition());
-            cargo.setTarget(stg);
+            cargo.transportToStorage();
             getHome().getFlag().putCargo(cargo);
                                 
             setCargo(null);

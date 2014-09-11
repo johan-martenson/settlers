@@ -7,6 +7,8 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.STONE;
@@ -15,6 +17,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
+import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -285,6 +288,7 @@ public class TestQuarry {
 
         map.placeAutoSelectedRoad(hq.getFlag(), quarry.getFlag());
         
+        /* Place stone */
         Point point3 = new Point(13, 5);
         Stone stone = map.placeStone(point3);
         
@@ -450,5 +454,195 @@ public class TestQuarry {
         map.stepTime();
         
         assertFalse(map.isStoneAtPoint(point1));
+    }
+
+    @Test
+    public void testQuarryWithoutConnectedStorageKeepsProducing() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Place stone */
+        Point point3 = new Point(12, 8);
+        Stone stone = map.placeStone(point3);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructSmallHouse(quarry0);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+
+        /* Let the stone mason rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the stone mason to produce a new stone cargo */
+        Worker ww = quarry0.getWorker();
+
+        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        
+        /* Wait for the stone mason to get a new stone */
+        Utils.fastForward(50, map);
+        
+        assertNotNull(ww.getCargo());
+        
+        /* Wait for the stone mason to go back to the quarry */
+        assertEquals(ww.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        
+        /* Verify that the stone mason puts the stone cargo at the flag */
+        map.stepTime();
+
+        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait for the worker to go back to the quarry */
+        assertEquals(ww.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+
+        /* Wait for the worker to rest and produce another cargo */
+        Utils.fastForward(100, map);
+        
+        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        
+        /* Wait for the stone mason to get a new stone */
+        Utils.fastForward(50, map);
+        
+        assertNotNull(ww.getCargo());
+        
+        /* Wait for the stone mason to go back to the quarry */
+        assertEquals(ww.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+
+        assertNotNull(ww.getCargo());
+
+        /* Verify that the second cargo is put at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+        
+        assertNull(ww.getCargo());
+        assertEquals(quarry0.getFlag().getStackedCargo().size(), 2);
+    }
+
+    @Test
+    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Place stone */
+        Point point3 = new Point(12, 8);
+        Stone stone = map.placeStone(point3);
+        
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructSmallHouse(quarry0);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+
+        /* Let the stone mason rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the stone mason to go to the stone */
+        Worker ww = quarry0.getWorker();
+
+        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        
+        /* Wait for the stone mason to get a new stone */
+        Utils.fastForward(50, map);
+        
+        assertNotNull(ww.getCargo());
+        
+        /* Wait for the stone mason to go back to the quarry */
+        assertEquals(ww.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        
+        /* Verify that the stone mason puts the stone cargo at the flag */
+        map.stepTime();
+        
+        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+
+        assertNull(ww.getCargo());
+        assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
+        
+        /* Wait to let the cargo remain at the flag without any connection to the storage */
+        Cargo cargo = quarry0.getFlag().getStackedCargo().get(0);
+        
+        Utils.fastForward(50, map);
+        
+        assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
+    
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), quarry0.getFlag());
+    
+        /* Assign a courier to the road */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, headquarter0.getFlag());
+        courier.assignToRoad(road0);
+    
+        /* Wait for the courier to reach the idle point of the road */
+        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
+        assertFalse(courier.getTarget().equals(quarry0.getFlag().getPosition()));
+        assertTrue(road0.getWayPoints().contains(courier.getTarget()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+    
+        /* Verify that the courier walks to pick up the cargo */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), quarry0.getFlag().getPosition());
+    
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        /* Verify that the courier has picked up the cargo */
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getCargo(), cargo);
+        
+        /* Verify that the courier delivers the cargo to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+        
+        int amount = headquarter0.getAmount(STONE);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+        
+        /* Verify that the courier has delivered the cargo to the headquarter */
+        assertNull(courier.getCargo());
+        assertEquals(headquarter0.getAmount(STONE), amount + 1);
     }
 }
