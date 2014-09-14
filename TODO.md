@@ -68,6 +68,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Better indicators of possible road points in the app
+
 *  Add buttons to create iron, coal and stone mines to the app
 
 *  Fix so workers go back to closest storage when their building is destroyed
