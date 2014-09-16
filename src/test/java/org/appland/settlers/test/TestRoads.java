@@ -1329,7 +1329,7 @@ public class TestRoads {
         Point point25 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
 
-        /* Placing well */
+        /* Placing road */
         Point point26 = new Point(8, 8);
         Flag flag0 = map.placeFlag(point26);
         Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
@@ -1360,7 +1360,7 @@ public class TestRoads {
         Point point25 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
 
-        /* Placing well */
+        /* Place road */
         Point point0 = new Point(8, 6);
         Flag flag0 = map.placeFlag(point0);
         
@@ -1370,10 +1370,10 @@ public class TestRoads {
         Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
         Road road1 = map.placeAutoSelectedRoad(flag0, flag1);
 
-        /* Occupy the well */
+        /* Occupy the road */
         Utils.occupyRoad(new Courier(map), road1, map);
         
-        /* Remove the road*/
+        /* Remove the road */
         Worker ww = road1.getCourier();
 
         assertTrue(road1.getWayPoints().contains(ww.getPosition()));
