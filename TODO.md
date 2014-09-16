@@ -68,9 +68,7 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
-*  Better indicators of possible road points in the app
-
-*  Add buttons to create iron, coal and stone mines to the app
+*  Send home workers and militaries when buildings are torn down
 
 *  Fix so workers go back to closest storage when their building is destroyed
 
@@ -313,4 +311,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  workers produce cargos and place on flag even if there is no road connected to it - DONE
 
 *  cargos produced when no storage is available should resume delivery when a storage can be reached - DONE
+
+*  Better indicators of possible road points in the app - DONE
+
+*  Add buttons to create iron, coal and stone mines to the app - DONE
 
