@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
 import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
@@ -292,8 +291,9 @@ public class Courier extends Worker {
 
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
             } else {
-                setTarget(idlePoint);
                 state = RETURNING_TO_IDLE_SPOT;
+
+                setTarget(idlePoint);
             }
         } else if (state == GOING_BACK_TO_ROAD) {
             Point currentPosition = getPosition();
@@ -303,9 +303,9 @@ public class Courier extends Worker {
             if (flag.hasCargoWaitingForRoad(getAssignedRoad())) {
                 pickUpCargoForRoad(flag, assignedRoad);
 
-                setTarget(otherEnd.getPosition());
-
                 state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+
+                setTarget(otherEnd.getPosition());
             } else if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
                 Cargo cargoToPickUp = otherEnd.getCargoWaitingForRoad(assignedRoad);
 
@@ -313,14 +313,15 @@ public class Courier extends Worker {
 
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
             } else {
-                setTarget(idlePoint);
                 state = RETURNING_TO_IDLE_SPOT;
+
+                setTarget(idlePoint);
             }
         } else if (state == RETURNING_TO_IDLE_SPOT) {
             state = IDLE_AT_ROAD;
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -328,10 +329,10 @@ public class Courier extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : map.getBuildings()) {
