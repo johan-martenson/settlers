@@ -62,15 +62,13 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Test that several geologists can be called concurrently
 
-*  Test courier goes back to storage when its road is destroyed
-
 
 
 
 TO IMPLEMENT
 ============
 
-*  Fix so workers go back to closest storage when their building is destroyed
+*  Fix so workers go back to _closest_ storage when their building is destroyed
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
 
@@ -317,4 +315,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  it should not be possible to create cargo without a position and a map reference - DONE
 
 *  it should not be possible to create a courier without a position and a map reference - DONE
+
+*  Test courier goes back to storage when its road is destroyed - DONE
 
