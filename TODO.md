@@ -68,8 +68,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
-*  Send home workers and militaries when buildings are torn down
-
 *  Fix so workers go back to closest storage when their building is destroyed
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
@@ -315,4 +313,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Better indicators of possible road points in the app - DONE
 
 *  Add buttons to create iron, coal and stone mines to the app - DONE
+
+*  Send home workers and militaries when buildings are torn down - DONE
 
