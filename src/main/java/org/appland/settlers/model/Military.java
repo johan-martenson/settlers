@@ -85,7 +85,7 @@ public class Military extends Worker {
         }
     }
     
-    protected void returnToStorage() throws InvalidRouteException {
+    protected void onReturnToStorage() throws Exception {
         Building stg = map.getClosestStorage(getPosition(), getHome());
         
         state = RETURNING_TO_STORAGE;

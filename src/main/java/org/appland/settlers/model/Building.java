@@ -390,6 +390,11 @@ public class Building implements Actor, EndPoint {
         if (isMilitaryBuilding()) {
             map.updateBorder();
         }
+    
+        /* Send home the worker */
+        if (worker != null) {
+            worker.returnToStorage();
+        }
     }
 
     public Size getHouseSize() {
@@ -628,7 +633,7 @@ public class Building implements Actor, EndPoint {
         enablePromotions = false;
     }
 
-    public void evacuate() throws InvalidRouteException {
+    public void evacuate() throws Exception {
         for (Military m : hostedMilitary) {
             m.returnToStorage();
         }

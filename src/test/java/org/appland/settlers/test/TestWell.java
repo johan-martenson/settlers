@@ -12,6 +12,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.WELL_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Well;
@@ -396,5 +397,86 @@ public class TestWell {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WATER), amount + 1);
+    }
+
+    @Test
+    public void testWellWorkerGoesBackToStorageWhenWellIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point26 = new Point(8, 8);
+        Building well0 = map.placeBuilding(new Well(), point26);
+
+        /* Finish construction of the well */
+        Utils.constructSmallHouse(well0);
+
+        /* Occupy the well */
+        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        
+        /* Destroy the well */
+        Worker ww = well0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), well0.getPosition());
+
+        well0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(WELL_WORKER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the well worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWellWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenWellIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point26 = new Point(8, 8);
+        Building well0 = map.placeBuilding(new Well(), point26);
+
+        /* Connect the well with the headquarter */
+        map.placeAutoSelectedRoad(well0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the well */
+        Utils.constructSmallHouse(well0);
+
+        /* Occupy the well */
+        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        
+        /* Destroy the well */
+        Worker ww = well0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), well0.getPosition());
+
+        well0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

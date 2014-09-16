@@ -23,8 +23,7 @@ public abstract class Worker implements Actor {
         WALKING_AND_EXACTLY_AT_POINT, 
         WALKING_BETWEEN_POINTS, 
         IDLE_OUTSIDE, 
-        IDLE_INSIDE,
-        RETURNING_TO_STORAGE
+        IDLE_INSIDE
     }
     
     private final static Logger log = Logger.getLogger(Worker.class.getName());
@@ -139,7 +138,7 @@ public abstract class Worker implements Actor {
             
     private void handleArrival() throws Exception {
         log.log(Level.FINE, "Arrived at target: {0}", target);
-
+        
         /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
@@ -376,5 +375,13 @@ public abstract class Worker implements Actor {
 
     protected void setHome(Building h) {
         home = h;
+    }
+
+    void returnToStorage() throws Exception {
+        onReturnToStorage();
+    }
+
+    protected void onReturnToStorage() throws Exception {
+        
     }
 }

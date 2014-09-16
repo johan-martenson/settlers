@@ -15,6 +15,7 @@ import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
@@ -292,6 +293,8 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(material);
         } else if (w instanceof Forester) {
             storeOneInInventory(FORESTER);
+        } else if (w instanceof WellWorker) {
+            storeOneInInventory(WELL_WORKER);
         }
     }
 

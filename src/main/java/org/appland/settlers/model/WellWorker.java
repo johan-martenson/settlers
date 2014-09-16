@@ -11,6 +11,7 @@ import static org.appland.settlers.model.WellWorker.States.DRAWING_WATER;
 import static org.appland.settlers.model.WellWorker.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.WellWorker.States.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.WellWorker.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.WellWorker.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.WellWorker.States.WALKING_TO_TARGET;
 
 /**
@@ -37,7 +38,8 @@ public class WellWorker extends Worker {
         RESTING_IN_HOUSE,
         DRAWING_WATER,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     @Override
@@ -94,9 +96,34 @@ public class WellWorker extends Worker {
             state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-                
+
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }
