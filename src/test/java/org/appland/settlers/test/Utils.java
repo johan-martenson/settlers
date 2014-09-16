@@ -435,4 +435,13 @@ public class Utils {
 
         map.terrainIsUpdated();
     }
+
+    static Courier occupyRoad(Courier courier, Road road1, GameMap map) throws Exception {
+        map.placeWorker(courier, road1.getFlags()[0]);
+        courier.assignToRoad(road1);
+
+        assertEquals(road1.getCourier(), courier);
+        
+        return courier;
+    }
 }

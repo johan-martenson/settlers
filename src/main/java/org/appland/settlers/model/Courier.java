@@ -10,6 +10,7 @@ import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
 import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
+import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
@@ -55,7 +56,8 @@ public class Courier extends Worker {
     enum States {
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO, 
         GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,
-        GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD
+        GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD, 
+        RETURNING_TO_STORAGE
     }
     
     public Courier(GameMap map) {
@@ -215,7 +217,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onArrival() {
+    protected void onArrival() throws Exception {
         if (state == WALKING_TO_ROAD) {
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
@@ -265,7 +267,7 @@ public class Courier extends Worker {
                 setCargo(null);
                 
                 setTarget(targetBuilding.getFlag().getPosition());
-                
+
                 state = GOING_BACK_TO_ROAD;
             } catch (Exception ex) {
                 Logger.getLogger(Courier.class.getName()).log(Level.SEVERE, null, ex);
@@ -340,6 +342,32 @@ public class Courier extends Worker {
             
         } else if (state == RETURNING_TO_IDLE_SPOT) {
             state = IDLE_AT_ROAD;
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 

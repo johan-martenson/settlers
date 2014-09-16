@@ -62,6 +62,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Test that several geologists can be called concurrently
 
+*  Test courier goes back to storage when its road is destroyed
+
 
 
 
@@ -95,10 +97,6 @@ TO IMPLEMENT
 *  adjust the defense radius of barracks and the headquarter
 
 *  possible road connections returns straight down|up. Fix this
-
-*  it should not be possible to create cargo without a position and a map reference
-
-*  it should not be possible to create a courier without a position and a map reference
 
 *  worker setTarget and setTargetOffroad should share much more code
 
@@ -315,4 +313,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add buttons to create iron, coal and stone mines to the app - DONE
 
 *  Send home workers and militaries when buildings are torn down - DONE
+
+*  it should not be possible to create cargo without a position and a map reference - DONE
+
+*  it should not be possible to create a courier without a position and a map reference - DONE
 

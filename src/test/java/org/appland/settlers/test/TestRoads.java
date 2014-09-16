@@ -1318,4 +1318,74 @@ public class TestRoads {
         assertTrue(map.getRoads().size() == 2);
         assertNotNull(map.getRoad(start, end));
     }
+
+    @Test
+    public void testCourierGoesBackToStorageWhenRoadIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point26 = new Point(8, 8);
+        Flag flag0 = map.placeFlag(point26);
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
+
+        /* Occupy the road */
+        Utils.occupyRoad(new Courier(map), road0, map);
+        
+        /* Remove the road */
+        Worker ww = road0.getCourier();
+
+        assertTrue(road0.getWayPoints().contains(ww.getPosition()));
+
+        map.removeRoad(road0);
+
+        /* Verify that the worker goes back to the headquarter */
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCourierGoesBackToStorageOnRoadsIfPossibleWhenRoadIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point0 = new Point(8, 6);
+        Flag flag0 = map.placeFlag(point0);
+        
+        Point point26 = new Point(8, 8);
+        Flag flag1 = map.placeFlag(point26);
+
+        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
+        Road road1 = map.placeAutoSelectedRoad(flag0, flag1);
+
+        /* Occupy the well */
+        Utils.occupyRoad(new Courier(map), road1, map);
+        
+        /* Remove the road*/
+        Worker ww = road1.getCourier();
+
+        assertTrue(road1.getWayPoints().contains(ww.getPosition()));
+
+        map.removeRoad(road1);
+
+        /* Verify that the worker leaves goes back to the headquarter */
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

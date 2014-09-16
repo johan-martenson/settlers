@@ -85,16 +85,24 @@ public class GameMap {
         return null;
     }
 
-    public void removeRoad(Road r) throws Exception {        
+    public void removeRoad(Road r) throws Exception {
+        if (r.getCourier() != null) {
+            r.getCourier().returnToStorage();
+        }
+
+        removeRoadButNotWorker(r);
+    }
+
+    private void removeRoadButNotWorker(Road r) throws Exception {
         roads.remove(r);
-        
+
         for (Point p : r.getWayPoints()) {
             MapPoint mp = pointToGameObject.get(p);
-            
+
             mp.removeConnectingRoad(r);
         }
     }
-    
+
     public GameMap(int w, int h) throws Exception {
         width = w;
         height = h;
@@ -462,7 +470,7 @@ public class GameMap {
                 throw new Exception("Splitting road creates too short roads");
             }
             
-            removeRoad(existingRoad);
+            removeRoadButNotWorker(existingRoad);
 
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);
