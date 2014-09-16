@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.WoodcutterWorker.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.WoodcutterWorker.States.CUTTING_TREE;
 import static org.appland.settlers.model.WoodcutterWorker.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.WoodcutterWorker.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
@@ -58,7 +59,8 @@ public class WoodcutterWorker extends Worker {
         GOING_BACK_TO_HOUSE_WITH_CARGO, 
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
-        GOING_BACK_TO_HOUSE 
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     public WoodcutterWorker(GameMap map) {
@@ -146,6 +148,31 @@ public class WoodcutterWorker extends Worker {
             enterBuilding(getHome());
                 
             state = IN_HOUSE_WITH_CARGO;
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }

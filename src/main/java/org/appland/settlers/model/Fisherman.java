@@ -13,6 +13,7 @@ import static org.appland.settlers.model.Fisherman.States.GOING_OUT_TO_FISH;
 import static org.appland.settlers.model.Fisherman.States.GOING_TO_FLAG;
 import static org.appland.settlers.model.Fisherman.States.IN_HOUSE_WITH_FISH;
 import static org.appland.settlers.model.Fisherman.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Fisherman.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Fisherman.States.WALKING_TO_TARGET;
 
 /**
@@ -67,7 +68,8 @@ public class Fisherman extends Worker {
         GOING_BACK_TO_HOUSE_WITH_FISH,
         IN_HOUSE_WITH_FISH,
         GOING_TO_FLAG,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     public Fisherman(GameMap map) {
@@ -156,6 +158,32 @@ public class Fisherman extends Worker {
             returnHome();
 
             state = GOING_BACK_TO_HOUSE;
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
     }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
+    }
+
 }

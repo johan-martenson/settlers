@@ -11,6 +11,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
@@ -287,6 +288,87 @@ public class TestStorage {
         for (i = 0; i < 20; i++) {
             assertTrue(sw.isInsideBuilding());
             map.stepTime();
+        }
+    }
+
+    @Test
+    public void testStorageWorkerGoesBackToStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(8, 8);
+        Building storage0 = map.placeBuilding(new Storage(), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructMediumHouse(storage0);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(map), storage0, map);
+        
+        /* Destroy the storage */
+        Worker ww = storage0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(STORAGE_WORKER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the storage worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testStorageWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(8, 8);
+        Building storage0 = map.placeBuilding(new Storage(), point26);
+
+        /* Connect the storage with the headquarter */
+        map.placeAutoSelectedRoad(storage0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the storage */
+        Utils.constructMediumHouse(storage0);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(map), storage0, map);
+        
+        /* Destroy the storage */
+        Worker ww = storage0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
         }
     }
 }

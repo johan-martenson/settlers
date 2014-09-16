@@ -15,6 +15,7 @@ import static org.appland.settlers.model.PigBreeder.States.GOING_OUT_TO_PUT_CARG
 import static org.appland.settlers.model.PigBreeder.States.PREPARING_PIG_FOR_DELIVERY;
 import static org.appland.settlers.model.PigBreeder.States.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.PigBreeder.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.PigBreeder.States.RETURNING_TO_STORAGE;
 
 /**
  *
@@ -39,6 +40,7 @@ public class PigBreeder extends Worker {
         PREPARING_PIG_FOR_DELIVERY,
         GOING_BACK_TO_HOUSE, 
         GOING_OUT_TO_PUT_CARGO,
+        RETURNING_TO_STORAGE
     }
     
     public PigBreeder(GameMap map) {
@@ -131,6 +133,31 @@ public class PigBreeder extends Worker {
             countdown.countFrom(TIME_TO_FEED);
             
             state = FEEDING;
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition(), getHome());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage && !b.equals(getHome())) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }

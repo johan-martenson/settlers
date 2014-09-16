@@ -4,18 +4,32 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
+import static org.appland.settlers.model.Material.ARMORER;
+import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.FARMER;
+import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON_FOUNDER;
+import static org.appland.settlers.model.Material.MILLER;
+import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.MINTER;
+import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WELL_WORKER;
+import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
@@ -295,6 +309,38 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(FORESTER);
         } else if (w instanceof WellWorker) {
             storeOneInInventory(WELL_WORKER);
+        } else if (w instanceof WoodcutterWorker) {
+            storeOneInInventory(WOODCUTTER_WORKER);
+        } else if (w instanceof StorageWorker) {
+            storeOneInInventory(STORAGE_WORKER);
+        } else if (w instanceof Butcher) {
+            storeOneInInventory(BUTCHER);
+        } else if (w instanceof SawmillWorker) {
+            storeOneInInventory(SAWMILL_WORKER);
+        } else if (w instanceof Stonemason) {
+            storeOneInInventory(STONEMASON);
+        } else if (w instanceof PigBreeder) {
+            storeOneInInventory(PIG_BREEDER);
+        } else if (w instanceof Minter) {
+            storeOneInInventory(MINTER);
+        } else if (w instanceof Miller) {
+            storeOneInInventory(MILLER);
+        } else if (w instanceof IronFounder) {
+            storeOneInInventory(IRON_FOUNDER);
+        } else if (w instanceof Miner) {
+            storeOneInInventory(MINER);
+        } else if (w instanceof Forester) {
+            storeOneInInventory(FORESTER);
+        } else if (w instanceof Fisherman) {
+            storeOneInInventory(FISHERMAN);
+        } else if (w instanceof Farmer) {
+            storeOneInInventory(FARMER);
+        } else if (w instanceof Brewer) {
+            storeOneInInventory(BREWER);
+        } else if (w instanceof Baker) {
+            storeOneInInventory(BAKER);
+        } else if (w instanceof Armorer) {
+            storeOneInInventory(ARMORER);
         }
     }
 

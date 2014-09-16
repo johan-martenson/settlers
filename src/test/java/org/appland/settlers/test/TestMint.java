@@ -517,4 +517,85 @@ public class TestMint {
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(COIN), amount + 1);
     }
+
+    @Test
+    public void testMinterGoesBackToStorageWhenMintIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+
+        /* Finish construction of the mint */
+        Utils.constructMediumHouse(mint0);
+
+        /* Occupy the mint */
+        Utils.occupyBuilding(new Minter(map), mint0, map);
+        
+        /* Destroy the mint */
+        Worker ww = mint0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), mint0.getPosition());
+
+        mint0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(MINTER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the minter is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MINTER), amount + 1);
+    }
+
+    @Test
+    public void testMinterGoesBackOnToStorageOnRoadsIfPossibleWhenMintIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+
+        /* Connect the mint with the headquarter */
+        map.placeAutoSelectedRoad(mint0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the mint */
+        Utils.constructMediumHouse(mint0);
+
+        /* Occupy the mint */
+        Utils.occupyBuilding(new Minter(map), mint0, map);
+        
+        /* Destroy the mint */
+        Worker ww = mint0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), mint0.getPosition());
+
+        mint0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

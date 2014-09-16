@@ -21,6 +21,7 @@ import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -851,5 +852,86 @@ public class TestFarm {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WHEAT), amount + 1);
+    }
+
+    @Test
+    public void testFarmerGoesBackToStorageWhenFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing farm */
+        Point point26 = new Point(8, 8);
+        Building farm0 = map.placeBuilding(new Farm(), point26);
+
+        /* Finish construction of the farm */
+        Utils.constructLargeHouse(farm0);
+
+        /* Occupy the farm */
+        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        
+        /* Destroy the farm */
+        Worker ww = farm0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), farm0.getPosition());
+
+        farm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(FARMER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the farmer is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FARMER), amount + 1);
+    }
+
+    @Test
+    public void testFarmerGoesBackOnToStorageOnRoadsIfPossibleWhenFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing farm */
+        Point point26 = new Point(8, 8);
+        Building farm0 = map.placeBuilding(new Farm(), point26);
+
+        /* Connect the farm with the headquarter */
+        map.placeAutoSelectedRoad(farm0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the farm */
+        Utils.constructLargeHouse(farm0);
+
+        /* Occupy the farm */
+        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        
+        /* Destroy the farm */
+        Worker ww = farm0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), farm0.getPosition());
+
+        farm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

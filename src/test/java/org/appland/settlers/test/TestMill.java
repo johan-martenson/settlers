@@ -12,6 +12,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.FLOUR;
+import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
@@ -454,5 +455,86 @@ public class TestMill {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(FLOUR), amount + 1);
+    }
+
+    @Test
+    public void testMillerGoesBackToStorageWhenMillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mill */
+        Point point26 = new Point(8, 8);
+        Building mill0 = map.placeBuilding(new Mill(), point26);
+
+        /* Finish construction of the mill */
+        Utils.constructSmallHouse(mill0);
+
+        /* Occupy the mill */
+        Utils.occupyBuilding(new Miller(map), mill0, map);
+        
+        /* Destroy the mill */
+        Worker ww = mill0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), mill0.getPosition());
+
+        mill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(MILLER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the miller is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MILLER), amount + 1);
+    }
+
+    @Test
+    public void testMillerGoesBackOnToStorageOnRoadsIfPossibleWhenMillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mill */
+        Point point26 = new Point(8, 8);
+        Building mill0 = map.placeBuilding(new Mill(), point26);
+
+        /* Connect the mill with the headquarter */
+        map.placeAutoSelectedRoad(mill0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the mill */
+        Utils.constructSmallHouse(mill0);
+
+        /* Occupy the mill */
+        Utils.occupyBuilding(new Miller(map), mill0, map);
+        
+        /* Destroy the mill */
+        Worker ww = mill0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), mill0.getPosition());
+
+        mill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

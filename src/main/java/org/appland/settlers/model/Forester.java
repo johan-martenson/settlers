@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import static org.appland.settlers.model.Forester.States.GOING_OUT_TO_PLANT;
 import static org.appland.settlers.model.Forester.States.PLANTING;
 import static org.appland.settlers.model.Forester.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Forester.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
 
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
@@ -53,7 +54,12 @@ public class Forester extends Worker {
     }
     
     enum States {
-        WALKING_TO_TARGET, RESTING_IN_HOUSE, GOING_OUT_TO_PLANT, PLANTING, GOING_BACK_TO_HOUSE
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE,
+        GOING_OUT_TO_PLANT,
+        PLANTING,
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     public Forester(GameMap map) {
@@ -123,6 +129,32 @@ public class Forester extends Worker {
             enterBuilding(getHome());
             
             countdown.countFrom(TIME_TO_REST);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PIG;
+import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
@@ -593,5 +594,86 @@ public class TestPigFarm {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(PIG), amount + 1);
+    }
+
+    @Test
+    public void testPigBreederGoesBackToStorageWhenWellIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+
+        /* Finish construction of the pig farm */
+        Utils.constructLargeHouse(pigFarm0);
+
+        /* Occupy the pig farm */
+        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        
+        /* Destroy the pig farm */
+        Worker ww = pigFarm0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), pigFarm0.getPosition());
+
+        pigFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(PIG_BREEDER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the pig breeder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
+    }
+
+    @Test
+    public void testPigBreederGoesBackOnToStorageOnRoadsIfPossibleWhenWellIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+
+        /* Connect the pig farm with the headquarter */
+        map.placeAutoSelectedRoad(pigFarm0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the pig farm */
+        Utils.constructLargeHouse(pigFarm0);
+
+        /* Occupy the pig farm */
+        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        
+        /* Destroy the pig farm */
+        Worker ww = pigFarm0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), pigFarm0.getPosition());
+
+        pigFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

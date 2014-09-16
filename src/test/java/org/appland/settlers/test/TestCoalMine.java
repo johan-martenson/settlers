@@ -15,6 +15,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.MINER;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -693,5 +694,94 @@ public class TestCoalMine {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(COAL), amount + 1);
+    }
+
+    @Test
+    public void testMinerGoesBackToStorageWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(), point0);
+
+        /* Finish construction of the coal mine */
+        Utils.constructSmallHouse(coalMine0);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(map), coalMine0, map);
+        
+        /* Destroy the coal mine */
+        Worker ww = coalMine0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(MINER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MINER), amount + 1);
+    }
+
+    @Test
+    public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putCoalAtSurroundingTiles(point0, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(), point0);
+
+        /* Connect the coal mine with the headquarter */
+        map.placeAutoSelectedRoad(coalMine0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the coal mine */
+        Utils.constructSmallHouse(coalMine0);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(map), coalMine0, map);
+        
+        /* Destroy the coal mine */
+        Worker ww = coalMine0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

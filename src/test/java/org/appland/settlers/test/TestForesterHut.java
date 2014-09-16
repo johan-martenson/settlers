@@ -13,8 +13,10 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
+import static org.appland.settlers.model.Material.FORESTER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -505,5 +507,86 @@ public class TestForesterHut {
         map.stepTime();
         
         assertTrue(forester.isInsideBuilding());
+    }
+
+    @Test
+    public void testForesterGoesBackToStorageWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(8, 8);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point26);
+
+        /* Finish construction of the forester hut */
+        Utils.constructSmallHouse(foresterHut0);
+
+        /* Occupy the forester hut */
+        Utils.occupyBuilding(new Forester(map), foresterHut0, map);
+        
+        /* Destroy the forester hut */
+        Worker ww = foresterHut0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(FORESTER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
+    }
+
+    @Test
+    public void testForesterGoesBackOnToStorageOnRoadsIfPossibleWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(8, 8);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point26);
+
+        /* Connect the forester hut with the headquarter */
+        map.placeAutoSelectedRoad(foresterHut0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the forester hut */
+        Utils.constructSmallHouse(foresterHut0);
+
+        /* Occupy the forester hut */
+        Utils.occupyBuilding(new Forester(map), foresterHut0, map);
+        
+        /* Destroy the forester hut */
+        Worker ww = foresterHut0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

@@ -14,6 +14,7 @@ import static org.appland.settlers.model.Minter.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Minter.State.RETURNING_TO_STORAGE;
 
 /**
  *
@@ -30,7 +31,8 @@ public class Minter extends Worker {
         RESTING_IN_HOUSE,
         MAKING_COIN,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
 
     private State state;
@@ -104,11 +106,37 @@ public class Minter extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
+
     }
 
     @Override
     public String toString() {
         return "Minter " + state;
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
     }
 }

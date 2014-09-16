@@ -12,6 +12,7 @@ import static org.appland.settlers.model.Miller.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miller.States.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Miller.States.GRINDING_WHEAT;
 import static org.appland.settlers.model.Miller.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Miller.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Miller.States.WALKING_TO_TARGET;
 
 /**
@@ -38,7 +39,8 @@ public class Miller extends Worker {
         RESTING_IN_HOUSE,
         GRINDING_WHEAT,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     @Override
@@ -103,6 +105,31 @@ public class Miller extends Worker {
             
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
     }    
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
+    }
 }

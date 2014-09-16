@@ -564,4 +564,85 @@ public class TestBrewery {
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(BEER), amount + 1);
     }
+
+    @Test
+    public void testBrewerGoesBackToStorageWhenBreweryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing brewery */
+        Point point26 = new Point(8, 8);
+        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+
+        /* Finish construction of the brewery */
+        Utils.constructMediumHouse(brewery0);
+
+        /* Occupy the brewery */
+        Utils.occupyBuilding(new Brewer(map), brewery0, map);
+        
+        /* Destroy the brewery */
+        Worker ww = brewery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), brewery0.getPosition());
+
+        brewery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(BREWER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the brewer is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BREWER), amount + 1);
+    }
+
+    @Test
+    public void testBrewerGoesBackOnToStorageOnRoadsIfPossibleWhenBreweryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing brewery */
+        Point point26 = new Point(8, 8);
+        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+
+        /* Connect the brewery with the headquarter */
+        map.placeAutoSelectedRoad(brewery0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the brewery */
+        Utils.constructMediumHouse(brewery0);
+
+        /* Occupy the brewery */
+        Utils.occupyBuilding(new Brewer(map), brewery0, map);
+        
+        /* Destroy the brewery */
+        Worker ww = brewery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), brewery0.getPosition());
+
+        brewery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

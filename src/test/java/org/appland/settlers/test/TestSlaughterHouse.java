@@ -501,4 +501,85 @@ public class TestSlaughterHouse {
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(MEAT), amount + 1);
     }
+
+    @Test
+    public void testButcherGoesBackToStorageWhenSlaughterHouseIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+
+        /* Finish construction of the slaughter house */
+        Utils.constructMediumHouse(slaughterHouse0);
+
+        /* Occupy the slaughter house */
+        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        
+        /* Destroy the slaughter house */
+        Worker ww = slaughterHouse0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), slaughterHouse0.getPosition());
+
+        slaughterHouse0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(BUTCHER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the butcher is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BUTCHER), amount + 1);
+    }
+
+    @Test
+    public void testButcherGoesBackOnToStorageOnRoadsIfPossibleWhenSlaughterHouseIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+
+        /* Connect the slaughter house with the headquarter */
+        map.placeAutoSelectedRoad(slaughterHouse0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the slaughter house */
+        Utils.constructMediumHouse(slaughterHouse0);
+
+        /* Occupy the slaughter house */
+        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        
+        /* Destroy the slaughter house */
+        Worker ww = slaughterHouse0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), slaughterHouse0.getPosition());
+
+        slaughterHouse0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

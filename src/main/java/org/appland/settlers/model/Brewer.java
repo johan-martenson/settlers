@@ -10,6 +10,7 @@ import static org.appland.settlers.model.Brewer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Brewer.State.BREWING_BEER;
 import static org.appland.settlers.model.Brewer.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Brewer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Brewer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.WATER;
@@ -32,7 +33,8 @@ public class Brewer extends Worker {
         RESTING_IN_HOUSE,
         BREWING_BEER,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
 
     public Brewer(GameMap m) {
@@ -104,6 +106,32 @@ public class Brewer extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
     }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
+    }
+
 }

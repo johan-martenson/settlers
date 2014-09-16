@@ -12,6 +12,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.STONEMASON;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -20,9 +21,14 @@ import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructSmallHouse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -644,5 +650,86 @@ public class TestQuarry {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(STONE), amount + 1);
+    }
+
+    @Test
+    public void testStonemasonGoesBackToStorageWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructSmallHouse(quarry0);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        
+        /* Destroy the quarry */
+        Worker ww = quarry0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(STONEMASON);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the stonemason is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
+    }
+
+    @Test
+    public void testStonemasonGoesBackOnToStorageOnRoadsIfPossibleWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+
+        /* Connect the quarry with the headquarter */
+        map.placeAutoSelectedRoad(quarry0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the quarry */
+        Utils.constructSmallHouse(quarry0);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        
+        /* Destroy the quarry */
+        Worker ww = quarry0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

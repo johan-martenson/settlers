@@ -16,6 +16,7 @@ import static org.appland.settlers.model.Miner.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.States.GOING_OUT_TO_FLAG;
 import static org.appland.settlers.model.Miner.States.MINING;
 import static org.appland.settlers.model.Miner.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Miner.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
 
 /**
@@ -37,7 +38,8 @@ public class Miner extends Worker {
         RESTING_IN_HOUSE,
         MINING,
         GOING_OUT_TO_FLAG,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     
@@ -136,6 +138,10 @@ public class Miner extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
     }
     
@@ -143,5 +149,26 @@ public class Miner extends Worker {
         Building home = getHome();
         
         return home.getAmount(BREAD) > 0 || home.getAmount(FISH) > 0;
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
     }
 }

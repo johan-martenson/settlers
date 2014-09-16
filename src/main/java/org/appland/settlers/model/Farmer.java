@@ -23,6 +23,7 @@ import static org.appland.settlers.model.Farmer.States.HARVESTING;
 import static org.appland.settlers.model.Farmer.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.States.PLANTING;
 import static org.appland.settlers.model.Farmer.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Farmer.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -105,7 +106,8 @@ public class Farmer extends Worker {
         HARVESTING,
         GOING_BACK_TO_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
-        IN_HOUSE_WITH_CARGO
+        IN_HOUSE_WITH_CARGO,
+        RETURNING_TO_STORAGE
     }
 
     public Farmer() {
@@ -244,6 +246,31 @@ public class Farmer extends Worker {
             enterBuilding(getHome());
                 
             state = IN_HOUSE_WITH_CARGO;
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }

@@ -564,4 +564,85 @@ public class TestIronSmelter {
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(IRON_BAR), amount + 1);
     }
+
+    @Test
+    public void testIronFounderGoesBackToStorageWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(8, 8);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(), point26);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructMediumHouse(ironSmelter);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        
+        /* Destroy the iron smelter */
+        Worker ww = ironSmelter.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), ironSmelter.getPosition());
+
+        ironSmelter.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(IRON_FOUNDER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the iron founder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
+    }
+
+    @Test
+    public void testIronFounderGoesBackOnToStorageOnRoadsIfPossibleWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(8, 8);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(), point26);
+
+        /* Connect the iron smelter with the headquarter */
+        map.placeAutoSelectedRoad(ironSmelter.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the iron smelter */
+        Utils.constructMediumHouse(ironSmelter);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        
+        /* Destroy the iron smelter */
+        Worker ww = ironSmelter.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), ironSmelter.getPosition());
+
+        ironSmelter.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

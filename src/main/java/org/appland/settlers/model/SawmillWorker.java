@@ -12,6 +12,7 @@ import static org.appland.settlers.model.SawmillWorker.State.CUTTING_WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.SawmillWorker.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.SawmillWorker.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.SawmillWorker.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
 
 /**
@@ -31,7 +32,8 @@ public class SawmillWorker extends Worker {
         RESTING_IN_HOUSE,
         CUTTING_WOOD,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
 
     public SawmillWorker(GameMap m) {
@@ -102,11 +104,37 @@ public class SawmillWorker extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
+
     }
 
     @Override
     public String toString() {
         return "Sawmill worker " + state;
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
     }
 }

@@ -12,6 +12,7 @@ import static org.appland.settlers.model.IronFounder.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.IronFounder.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.IronFounder.State.MELTING_IRON;
 import static org.appland.settlers.model.IronFounder.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.IronFounder.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.IronFounder.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
@@ -32,7 +33,8 @@ public class IronFounder extends Worker {
         RESTING_IN_HOUSE,
         MELTING_IRON,
         GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
 
     State state;
@@ -114,6 +116,10 @@ public class IronFounder extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
         }
     }
 
@@ -122,4 +128,24 @@ public class IronFounder extends Worker {
         return "Iron founder " + state;
     }
 
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
+    }
 }

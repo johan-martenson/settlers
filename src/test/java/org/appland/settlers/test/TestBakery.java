@@ -517,4 +517,85 @@ public class TestBakery {
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(BREAD), amount + 1);
     }
+
+    @Test
+    public void testBakerGoesBackToStorageWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(8, 8);
+        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+
+        /* Finish construction of the bakery */
+        Utils.constructMediumHouse(bakery0);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(map), bakery0, map);
+        
+        /* Destroy the bakery */
+        Worker ww = bakery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(BAKER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the baker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BAKER), amount + 1);
+    }
+
+    @Test
+    public void testBakerGoesBackOnToStorageOnRoadsIfPossibleWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(8, 8);
+        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+
+        /* Connect the bakery with the headquarter */
+        map.placeAutoSelectedRoad(bakery0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the bakery */
+        Utils.constructMediumHouse(bakery0);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(map), bakery0, map);
+        
+        /* Destroy the bakery */
+        Worker ww = bakery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }

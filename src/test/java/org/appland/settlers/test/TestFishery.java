@@ -17,6 +17,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.FISHERMAN;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
@@ -1003,5 +1004,86 @@ public class TestFishery {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(FISH), amount + 1);
+    }
+
+    @Test
+    public void testFishermanGoesBackToStorageWhenFisheryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing fishery */
+        Point point26 = new Point(8, 8);
+        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+
+        /* Finish construction of the fishery */
+        Utils.constructSmallHouse(fishery0);
+
+        /* Occupy the fishery */
+        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        
+        /* Destroy the fishery */
+        Worker ww = fishery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), fishery0.getPosition());
+
+        fishery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(FISHERMAN);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the fisherman is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
+    }
+
+    @Test
+    public void testFishermanGoesBackOnToStorageOnRoadsIfPossibleWhenFisheryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing fishery */
+        Point point26 = new Point(8, 8);
+        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+
+        /* Connect the fishery with the headquarter */
+        map.placeAutoSelectedRoad(fishery0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the fishery */
+        Utils.constructSmallHouse(fishery0);
+
+        /* Occupy the fishery */
+        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        
+        /* Destroy the fishery */
+        Worker ww = fishery0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), fishery0.getPosition());
+
+        fishery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

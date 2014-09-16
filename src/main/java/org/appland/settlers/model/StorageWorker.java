@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import static org.appland.settlers.model.StorageWorker.State.DELIVERING_CARGO_TO_FLAG;
 import static org.appland.settlers.model.StorageWorker.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.StorageWorker.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.StorageWorker.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.StorageWorker.State.WALKING_TO_TARGET;
 
 /**
@@ -33,6 +34,7 @@ public class StorageWorker extends Worker {
         RESTING_IN_HOUSE,
         DELIVERING_CARGO_TO_FLAG,
         GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
     
     public StorageWorker(GameMap m) {
@@ -120,6 +122,31 @@ public class StorageWorker extends Worker {
             state = RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition(), getHome());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage && !b.equals(getHome())) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
         }
     }
 }

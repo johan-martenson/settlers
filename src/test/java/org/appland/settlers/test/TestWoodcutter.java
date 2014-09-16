@@ -13,6 +13,7 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
@@ -965,5 +966,86 @@ public class TestWoodcutter {
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WOOD), amount + 1);
+    }
+
+    @Test
+    public void testWoodcutterWorkerGoesBackToStorageWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructSmallHouse(woodcutter0);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
+        
+        /* Destroy the woodcutter */
+        Worker ww = woodcutter0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the woodcutter worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWoodcutterWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+
+        /* Connect the woodcutter with the headquarter */
+        map.placeAutoSelectedRoad(woodcutter0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the woodcutter */
+        Utils.constructSmallHouse(woodcutter0);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
+        
+        /* Destroy the woodcutter */
+        Worker ww = woodcutter0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
     }
 }

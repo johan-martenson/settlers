@@ -17,6 +17,7 @@ import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_GET_STON
 import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_PUT_CARGO;
 import static org.appland.settlers.model.Stonemason.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Stonemason.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Stonemason.States.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
 
 /**
@@ -39,9 +40,10 @@ public class Stonemason extends Worker {
         GOING_BACK_TO_HOUSE_WITH_CARGO, 
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
-        GOING_BACK_TO_HOUSE
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE
     }
-    
+
     public Stonemason(GameMap map) {
         super(map);
         
@@ -160,6 +162,32 @@ public class Stonemason extends Worker {
             enterBuilding(getHome());
             
             state = IN_HOUSE_WITH_CARGO;
-        } 
+        } else if (state == RETURNING_TO_STORAGE) {
+            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+        
+            storage.depositWorker(this);
+        }
+
     } 
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building storage = map.getClosestStorage(getPosition());
+    
+        if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+            
+            setTarget(storage.getPosition());
+        } else {
+            for (Building b : map.getBuildings()) {
+                if (b instanceof Storage) {
+                    state = RETURNING_TO_STORAGE;
+
+                    setOffroadTarget(b.getPosition());
+
+                    break;
+                }
+            }
+        }
+    }
 }

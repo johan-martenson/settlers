@@ -715,4 +715,85 @@ public class TestBarracks {
         
         assertTrue(barracks0.needsMilitaryManning());
     }
+
+    @Test
+    public void testMilitaryGoesBackToStorageWhenBarracksIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(8, 8);
+        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Destroy the barracks */
+        Worker ww = barracks0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), barracks0.getPosition());
+
+        barracks0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        int amount = headquarter0.getAmount(PRIVATE);
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the military is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
+    }
+
+    @Test
+    public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenBarracksIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(8, 8);
+        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+
+        /* Connect the barracks with the headquarter */
+        map.placeAutoSelectedRoad(barracks0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the barracks */
+        Utils.constructSmallHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        
+        /* Destroy the barracks */
+        Worker ww = barracks0.getWorker();
+        
+        assertTrue(ww.isInsideBuilding());
+        assertEquals(ww.getPosition(), barracks0.getPosition());
+
+        barracks0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ww.isInsideBuilding());
+        assertEquals(ww.getTarget(), headquarter0.getPosition());
+    
+        /* Verify that the worker plans to use the roads */
+        for (Point p : ww.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(p));
+        }
+    }
 }
