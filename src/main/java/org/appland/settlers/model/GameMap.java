@@ -116,7 +116,7 @@ public class GameMap {
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
-        workers          = new ArrayList<>();
+        workers             = new ArrayList<>();
         workersToRemove     = new LinkedList<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
