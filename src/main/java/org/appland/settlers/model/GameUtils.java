@@ -22,6 +22,31 @@ import java.util.Set;
  */
 public class GameUtils {
 
+    static boolean isUnique(List<Point> wayPoints) {
+        List<Point> safeCopy = new ArrayList<>();
+        
+        safeCopy.addAll(wayPoints);
+        
+        Collections.sort(safeCopy, new SortPointsByY());
+
+        Point prev = null;
+        for (Point iter : safeCopy) {
+            if (prev == null) {
+                prev = iter;
+                
+                continue;
+            }
+
+            if (prev == iter) {
+                return false;
+            }
+            
+            prev = iter;
+        }
+        
+        return true;
+    }
+
     public interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
     }

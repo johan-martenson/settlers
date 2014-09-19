@@ -1391,4 +1391,31 @@ public class TestRoads {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test(expected = Exception.class)
+    public void testRoadCannotBePlacedThroughExistingFlagThatIsAlsoEndpoint() throws Exception {
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+
+        /* 93 ticks from start */
+        Utils.fastForward(92, map);
+
+        /* Placing flag */
+        Point point39 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point39);
+
+        /* Placing road between (6, 4) and (10, 8) */
+        Point point40 = new Point(6, 4);
+        Point point41 = new Point(7, 5);
+        Point point42 = new Point(8, 6);
+        Point point43 = new Point(9, 7);
+        Point point44 = new Point(11, 9);
+        Point point45 = new Point(10, 10);
+        Point point46 = new Point(9, 9);
+        Road road0 = map.placeRoad(point40, point41, point42, point43, point39, point44, point45, point46, point39);
+    }
 }

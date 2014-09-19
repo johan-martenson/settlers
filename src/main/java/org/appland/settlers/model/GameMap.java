@@ -332,6 +332,11 @@ public class GameMap {
             }
         }
         
+        /* Verify that the road does not overlap itself */
+        if (!GameUtils.isUnique(wayPoints)) {
+            throw new Exception("Cannot create a road that overlaps itself");
+        }
+        
         /* 
            Verify that the road has at least one free point between the 
            endpoints so the courier has somewhere to stand

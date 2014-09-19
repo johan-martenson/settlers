@@ -70,8 +70,6 @@ TO IMPLEMENT
 
 *  Add pack() after each change to the control tab in the app
 
-*  Fix app to not suggest using a previous part of the road-to-be as the next step
-
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
@@ -335,4 +333,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Make sure courier enters the storage instead of standing on top - DONE
 
 *  Add "unoccupied" label to app drawing - DONE
+
+*  Fix app to not suggest using a previous part of the road-to-be as the next step - DONE
+
+*  Fix so a road cannot connect to a flag that is placed on itself (creating a loop and placing a new flag on the road-to-be) - DONE
 
