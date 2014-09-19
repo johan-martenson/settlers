@@ -1348,6 +1348,9 @@ public class TestRoads {
         assertEquals(ww.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        /* Verify that the worker is no longer on the map */
+        assertFalse(map.getAllWorkers().contains(ww));
     }
 
     @Test

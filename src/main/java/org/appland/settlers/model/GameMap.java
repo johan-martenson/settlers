@@ -27,6 +27,7 @@ public class GameMap {
     private List<Flag>              flags;
     private List<Sign>              signs;
     private List<Worker>            allWorkers;
+    private List<Worker>            workersToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
     private final int               height;
     private final int               width;
@@ -116,6 +117,7 @@ public class GameMap {
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
         allWorkers          = new ArrayList<>();
+        workersToRemove     = new LinkedList<>();
         terrain             = new Terrain(width, height);
         reservedPoints      = new ArrayList<>();
         trees               = new ArrayList<>();
@@ -131,6 +133,8 @@ public class GameMap {
     }
 
     public void stepTime() {
+        workersToRemove.clear();
+        
         for (Worker w : allWorkers) {
             w.stepTime();
         }
@@ -166,6 +170,9 @@ public class GameMap {
                 }
             }
         }
+
+        /* Remove workers that are invalid after the round */
+        allWorkers.removeAll(workersToRemove);
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
@@ -1586,5 +1593,9 @@ public class GameMap {
         mp.setSign(null);
         
         signs.remove(sign);
+    }
+
+    void removeWorker(Worker w) {
+        workersToRemove.add(w);
     }
 }

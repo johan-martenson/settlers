@@ -346,6 +346,8 @@ public class Storage extends Building implements Actor {
         } else if (w instanceof Armorer) {
             storeOneInInventory(ARMORER);
         }
+    
+        map.removeWorker(w);
     }
 
     public Worker retrieveWorker(Material material) throws Exception {
