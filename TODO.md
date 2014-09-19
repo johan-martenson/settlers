@@ -68,6 +68,16 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Remove exception when there is no geologist to retrieve. This is normal
+
+*  Set Control tab to default tab in app
+
+*  Fix so that the headquarter cannot be torn down
+
+*  Fix app to not suggest using a previous part of the road-to-be as the next step
+
+*  Make sure courier enters the storage instead of standing on top
+
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
@@ -317,4 +327,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  it should not be possible to create a courier without a position and a map reference - DONE
 
 *  Test courier goes back to storage when its road is destroyed - DONE
+
+*  Fix road building in the app so that connecting with a new flag in an existing road works - DONE
+
+*  Draw signs nicer in the app - DONE
 
