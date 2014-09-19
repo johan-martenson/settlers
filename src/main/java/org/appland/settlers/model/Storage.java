@@ -345,6 +345,8 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(BAKER);
         } else if (w instanceof Armorer) {
             storeOneInInventory(ARMORER);
+        } else if (w instanceof Geologist) {
+            storeOneInInventory(GEOLOGIST);
         }
     
         map.removeWorker(w);

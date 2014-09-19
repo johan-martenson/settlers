@@ -20,6 +20,7 @@ import static org.appland.settlers.model.Material.WATER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sign;
 import static org.appland.settlers.model.Size.LARGE;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -883,6 +884,65 @@ public class TestGeologist {
             assertNull(sign.getType());
             assertTrue(sign.isEmpty());
         }
+    }
+
+    @Test
+    public void testDepositingGeologistIncreasesAmountOfGeologists() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(), point0);
+
+        /* Add a geologist to the headquarter and verify that the amount goes up*/
+        int amount = headquarter0.getAmount(GEOLOGIST);
+        
+        headquarter0.depositWorker(new Geologist(map));
+        
+        assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
+    }
+    
+    @Test
+    public void testSeveralGeologistsCanBeCalled() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(point1);
+        
+        /* Add more geologists to the headquarter */
+        headquarter0.depositWorker(new Geologist(map));
+        
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+        
+        /* Call geologist from the flag */
+        int workers = map.getAllWorkers().size();
+        
+        flag.callGeologist();
+        
+        /* Wait for the geologist to leave the headquarter */
+        map.stepTime();
+
+        assertEquals(map.getAllWorkers().size(), workers + 1);
+        
+        /* Call for another geologist and verify that there is a new geologist on the way*/
+        flag.callGeologist();
+
+        map.stepTime();
+        
+        assertEquals(map.getAllWorkers().size(), workers + 2);
     }
 
 // TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
