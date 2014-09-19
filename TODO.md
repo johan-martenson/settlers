@@ -102,12 +102,6 @@ TO IMPLEMENT
 
 *  limit number of cargos on a flag
 
-*  draw stones with offset
-
-*  scale dimensions of game objects
-
-*  draw houses so they don't overlap their point
-
 
 
 
@@ -337,4 +331,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Fix app to not suggest using a previous part of the road-to-be as the next step - DONE
 
 *  Fix so a road cannot connect to a flag that is placed on itself (creating a loop and placing a new flag on the road-to-be) - DONE
+
+*  draw stones with offset - DONE
+
+*  scale dimensions of game objects - DONE
+
+*  draw houses so they don't overlap their point - DONE
 
