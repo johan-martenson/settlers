@@ -128,7 +128,7 @@ public class Storage extends Building implements Actor {
                 if (!isClosestStorage(this)) {
                     continue;
                 }
-            
+
                 if (!hasAtLeastOne(GEOLOGIST)) {
                     continue;
                 }

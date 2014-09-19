@@ -77,4 +77,9 @@ public class Headquarter extends Storage {
     public String toString() {
         return "Headquarter with inventory " + this.inventory;
     }
+
+    @Override
+    public void tearDown() throws Exception {
+        throw new Exception("Can not tear down headquarter");
+    }
 }

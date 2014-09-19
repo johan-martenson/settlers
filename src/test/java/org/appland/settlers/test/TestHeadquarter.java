@@ -81,8 +81,6 @@ public class TestHeadquarter {
         Point point1 = new Point(11, 9);
         Building wc = map.placeBuilding(new Woodcutter(), point1.upLeft());
         
-        Point point2 = new Point(9, 9);
-
         map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
                 
         /* The storage worker rests */
@@ -109,5 +107,17 @@ public class TestHeadquarter {
         
         assertNull(sw.getCargo());
         assertFalse(hq.getFlag().getStackedCargo().isEmpty());
+    }
+
+    @Test(expected = Exception.class)
+    public void testHeadquarterCannotBeTornDown() throws Exception {
+        GameMap map = new GameMap(40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Verify that trying to tear it down causes an exception */
+        hq.tearDown();
     }
 }
