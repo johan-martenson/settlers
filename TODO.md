@@ -68,9 +68,9 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
-*  Remove exception when there is no geologist to retrieve. This is normal
+*  Re-add button to tear down building to the app
 
-*  Set Control tab to default tab in app
+*  Add pack() after each change to the control tab in the app
 
 *  Fix so that the headquarter cannot be torn down
 
@@ -331,4 +331,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Fix road building in the app so that connecting with a new flag in an existing road works - DONE
 
 *  Draw signs nicer in the app - DONE
+
+*  Remove exception when there is no geologist to retrieve. This is normal - DONE
+
+*  Set Control tab to default tab in app - DONE
 
