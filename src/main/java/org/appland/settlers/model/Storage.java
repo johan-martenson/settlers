@@ -129,6 +129,10 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
             
+                if (!hasAtLeastOne(GEOLOGIST)) {
+                    continue;
+                }
+                
                 Geologist geologist = (Geologist)retrieveWorker(GEOLOGIST);
 
                 map.placeWorker(geologist, this);
