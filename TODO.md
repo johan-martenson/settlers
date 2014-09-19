@@ -72,13 +72,9 @@ TO IMPLEMENT
 
 *  Fix app to not suggest using a previous part of the road-to-be as the next step
 
-*  Make sure courier enters the storage instead of standing on top
-
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
-
-*  Add "unoccupied" label to app drawing
 
 *  Add messages
 
@@ -335,4 +331,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Re-add button to tear down building to the app - DONE
 
 *  Fix so that the headquarter cannot be torn down - DONE
+
+*  Make sure courier enters the storage instead of standing on top - DONE
+
+*  Add "unoccupied" label to app drawing - DONE
 
