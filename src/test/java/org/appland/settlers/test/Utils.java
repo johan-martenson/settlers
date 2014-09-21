@@ -444,4 +444,21 @@ public class Utils {
         
         return courier;
     }
+
+    static void adjustInventoryTo(Storage storage, Material material, int amount, GameMap map) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+        
+            if (storage.getAmount(material) == amount) {
+                break;
+            }
+
+            if (storage.getAmount(material) > amount) {
+                storage.retrieve(material);
+            } else if (storage.getAmount(material) < amount) {
+                storage.putCargo(new Cargo(material, map));
+            }
+        }
+
+        assertEquals(storage.getAmount(material), amount);
+    }
 }

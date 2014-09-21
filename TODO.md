@@ -68,6 +68,14 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Merge construct[Small|Medium|Large]House into one method that handles all buildings dynamically
+
+*  Adjust the price for constructing foresterhut, woodcutter, quarry and sawmill
+
+*  Make measurement used for tree conservation program consider all storages
+
+*  Make tree conservation program optional
+
 *  Add pack() after each change to the control tab in the app
 
 *  Fix so workers go back to _closest_ storage when their building is destroyed

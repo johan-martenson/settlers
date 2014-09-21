@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.StorageWorker.State.DELIVERING_CARGO_TO_FLAG;
 import static org.appland.settlers.model.StorageWorker.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.StorageWorker.State.RESTING_IN_HOUSE;
@@ -22,6 +23,7 @@ import static org.appland.settlers.model.StorageWorker.State.WALKING_TO_TARGET;
 public class StorageWorker extends Worker {
 
     private final static int RESTING_TIME = 19;
+    private final static int TREE_CONSERVATION_LIMIT = 10;
     
     private final Countdown countdown;
     
@@ -56,6 +58,13 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
+                if (ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
+                    !(b instanceof Sawmill)     &&
+                    !(b instanceof ForesterHut) &&
+                    !(b instanceof Woodcutter)) {
+                    continue;
+                }
+                
                 if (b.needsMaterial(m) && ownStorage.isInStock(m)) {
                     b.promiseDelivery(m);
 

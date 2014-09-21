@@ -101,7 +101,7 @@ public class TestScenarios {
         assertTrue(sm.ready());
 
         assertTrue(hq.getAmount(WOOD) == 4);
-        assertTrue(hq.getAmount(PLANCK) == 10);
+        assertTrue(hq.getAmount(PLANCK) == 15);
         assertTrue(hq.getAmount(STONE) == 10);
 
         Utils.occupyBuilding(wcr, wc, map);

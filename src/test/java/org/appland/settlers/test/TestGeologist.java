@@ -903,7 +903,7 @@ public class TestGeologist {
         
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
     }
-    
+
     @Test
     public void testSeveralGeologistsCanBeCalled() throws Exception {
 
