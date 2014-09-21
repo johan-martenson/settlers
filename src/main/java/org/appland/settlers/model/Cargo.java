@@ -118,4 +118,16 @@ public class Cargo {
             }
         }
     }
+
+    void returnToStorage() {
+        Storage stg = map.getClosestStorage(getPosition());
+
+        if (stg != null) {
+            try {
+                setTarget(stg);
+            } catch (Exception ex) {
+                Logger.getLogger(Cargo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }

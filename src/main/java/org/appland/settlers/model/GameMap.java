@@ -167,6 +167,12 @@ public class GameMap {
             for (Cargo cargo : f.getStackedCargo()) {
                 if (cargo.getTarget() == null) {
                     cargo.resumeTransport();
+                } else if (!getBuildings().contains(cargo.getTarget())) {
+                    cargo.returnToStorage();
+                } else if (cargo.getTarget().burningDown()) {
+                    cargo.returnToStorage();
+                } else if (cargo.getTarget().destroyed()) {
+                    cargo.returnToStorage();
                 }
             }
         }

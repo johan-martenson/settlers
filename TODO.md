@@ -62,24 +62,24 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Test the initial amount of all materials
 
-*  Handle cargo whose target building is removed
-
 *  It should not be possible to place building that overlaps the border - verify occupied points in game
-
-*  Verify that pig farm doesn't produce anything if it doesn't have both wheat and water
 
 *  Check that road cannot be built in bad angle to a building's flag (directly to left?) - check with game
 
-*  Test pigfarm consumes water and wheat
+*  Verify that destroyed buildings are removed completely after a suitable timeout
+
+*  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
 
 
 
 TO IMPLEMENT
 ============
 
+*  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
+
 *  Add ability to stop production
 
-*  Make pig pink
+*  Make pig pink in the app
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -376,4 +376,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that several geologists can be called concurrently - DONE
 
 *  water from the well seems to not get delivered the whole way to the headquarter - DONE
+
+*  Verify that pig farm doesn't produce anything if it doesn't have both wheat and water - DONE
+
+*  Test pigfarm consumes water and wheat - DONE
+
+*  Handle cargo whose target building is torn down - DONE
 

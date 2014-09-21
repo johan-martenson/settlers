@@ -8,7 +8,9 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -17,7 +19,9 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -71,5 +75,81 @@ public class TestCargo {
         flag0.putCargo(cargo);
         
         assertEquals(cargo.getPosition(), point1);
+    }
+
+    @Test
+    public void testCargoIsReturnedToStorageWhenTargetBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+
+        /* Placing forester */
+        Point point39 = new Point(10, 8);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point39);
+
+        /* Placing flag */
+        Point point2 = new Point(9, 5);
+        Flag flag0 = map.placeFlag(point2);
+
+        /* Placing road between (11, 7) and (9, 5) */
+        Point point40 = new Point(11, 7);
+        Point point41 = new Point(10, 6);
+        Point point42 = new Point(7, 5);
+        Point point43 = new Point(6, 4);
+        Road road0 = map.placeRoad(point40, point41, point2);
+        
+        /* Placing road between (9, 5) and (6, 4) */
+        Road road1 = map.placeRoad(point2, point42, point43);
+
+        /* Place couriers on the roads */
+        Utils.occupyRoad(new Courier(map), road0, map);
+        Utils.occupyRoad(new Courier(map), road1, map);
+        
+        /* Wait for a cargo with the forester hut as target to get picked up by the first courier */
+        for (int i = 0; i < 2000; i++) {
+            
+            Cargo c = road1.getCourier().getCargo();
+            
+            if (c != null && c.getTarget().equals(foresterHut0)) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+    
+        /* Remove the forester hut */
+        foresterHut0.tearDown();
+        
+        /* Verify that the courier delivers the cargo to the next flag */
+        Courier courier = road1.getCourier();
+        Cargo cargo = courier.getCargo();
+        
+        assertEquals(courier.getTarget(), point2);
+        assertTrue(flag0.getStackedCargo().isEmpty());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+
+        assertFalse(flag0.getStackedCargo().isEmpty());
+        
+        /* Verify that the courier picks up the cargo again and returns it to the storage */
+        for (int i = 0; i < 200; i++) {
+            
+            if (cargo.equals(courier.getCargo())) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertEquals(courier.getCargo(), cargo);
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        assertNull(courier.getCargo());
     }
 }
