@@ -44,11 +44,11 @@ TEST
 
 *  farmer doesn't pass by the flag on the way back from planting/harvesting
 
-*  water from the well seems to not get delivered the whole way to the headquarter
-
 *  do storages get a worker traveling from the hq or is it magically available directly?
 
 *  Q: how often does the storages/headquarter assign new workers?
+
+*  Q: does tree conservation program also apply to stones?
 
 *  fix exception:    (ALLVARLIG: null
 org.appland.settlers.model.DeliveryNotPossibleException: This building does not accept deliveries.
@@ -60,13 +60,40 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 	at org.appland.settlers.test.Utils.fastForward(Utils.java:71)
 	at org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:405))   
 
-*  Test that several geologists can be called concurrently
+*  Test the initial amount of all materials
 
+*  Handle cargo whose target building is removed
+
+*  It should not be possible to place building that overlaps the border - verify occupied points in game
+
+*  Verify that pig farm doesn't produce anything if it doesn't have both wheat and water
+
+*  Check that road cannot be built in bad angle to a building's flag (directly to left?) - check with game
 
 
 
 TO IMPLEMENT
 ============
+
+*  Add ability to stop production
+
+*  Make pig pink
+
+*  Change drawing in app to go from back to front instead of drawing all elements of each type
+
+*  Add list of all possible building types to the model
+
+*  Add construction of pig farm to the app
+
+*  Draw cargo in front of the flagpole
+
+*  Don't draw suggestions for next road connection over houses, verify limits next to small, medium and large houses
+
+*  Implement support for several players
+
+*  Implement option to set delivery priority for materials
+
+*  Change cost of producing a barracks to only two plancks
 
 *  Merge construct[Small|Medium|Large]House into one method that handles all buildings dynamically
 
@@ -75,8 +102,6 @@ TO IMPLEMENT
 *  Make measurement used for tree conservation program consider all storages
 
 *  Make tree conservation program optional
-
-*  Add pack() after each change to the control tab in the app
 
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
@@ -93,8 +118,6 @@ TO IMPLEMENT
 *  Change name of test.Utils::surroundPointWithWater
 
 *  extract app's canvas to its own class
-
-*  implement tree conservation program
 
 *  change    Storage::retrieveWorker()    to use a Map<Material, ? extends Worker>
 
@@ -345,4 +368,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  scale dimensions of game objects - DONE
 
 *  draw houses so they don't overlap their point - DONE
+
+*  implement tree conservation program - DONE
+
+*  Test that several geologists can be called concurrently - DONE
+
+*  water from the well seems to not get delivered the whole way to the headquarter - DONE
 
