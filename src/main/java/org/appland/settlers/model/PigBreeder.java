@@ -86,6 +86,9 @@ public class PigBreeder extends Worker {
         } else if (state == FEEDING) {
             if (countdown.reachedZero()) {
                     
+                getHome().consumeOne(WATER);
+                getHome().consumeOne(WHEAT);
+                
                 state = GOING_BACK_TO_HOUSE_AFTER_FEEDING;
                     
                 returnHomeOffroad();

@@ -758,4 +758,66 @@ public class TestPigFarm {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testPigBreederFeedsPigsWithWaterAndWheat() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place pig farm */
+        Point point3 = new Point(10, 6);
+        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        
+        Utils.constructLargeHouse(pigFarm);
+        
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm.putCargo(waterCargo);
+        pigFarm.putCargo(wheatCargo);
+
+        /* Assign a pigBreeder to the farm */
+        PigBreeder pigBreeder = new PigBreeder(map);
+        
+        Utils.occupyBuilding(pigBreeder, pigFarm, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Let the pigBreeder rest */
+        Utils.fastForward(99, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Step once and to let the pigBreeder go out to feed */
+        map.stepTime();        
+        
+        assertFalse(pigBreeder.isInsideBuilding());
+
+        Point point = pigBreeder.getTarget();
+        
+        assertTrue(pigBreeder.isTraveling());
+        
+        /* Let the pigBreeder reach the intended spot */
+        Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
+        
+        assertTrue(pigBreeder.isArrived());
+        assertTrue(pigBreeder.isAt(point));
+        assertTrue(pigBreeder.isFeeding());
+        
+        /* Wait for the pigBreeder to feed the pigs */
+        Utils.fastForward(19, map);
+        
+        assertTrue(pigBreeder.isFeeding());
+        
+        map.stepTime();
+        
+        /* Verify that the pig breeder is done feeding and has consumed the water and wheat */
+        assertFalse(pigBreeder.isFeeding());
+        assertEquals(pigFarm.getAmount(WATER), 0);
+        assertEquals(pigFarm.getAmount(WHEAT), 0);
+    }
 }
