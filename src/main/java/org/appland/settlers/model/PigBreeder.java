@@ -7,6 +7,8 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.PIG;
+import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.PigBreeder.States.FEEDING;
 import static org.appland.settlers.model.PigBreeder.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.PigBreeder.States.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
@@ -71,11 +73,13 @@ public class PigBreeder extends Worker {
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
-                Point pointToFeedPigsAt = getHome().getPosition().downLeft();
+                if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
+                    Point pointToFeedPigsAt = getHome().getPosition().downLeft();
 
-                state = GOING_OUT_TO_FEED;
-                
-                setOffroadTarget(pointToFeedPigsAt);
+                    state = GOING_OUT_TO_FEED;
+
+                    setOffroadTarget(pointToFeedPigsAt);
+                }
             } else {
                 countdown.step();
             }

@@ -70,6 +70,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Check that road cannot be built in bad angle to a building's flag (directly to left?) - check with game
 
+*  Test pigfarm consumes water and wheat
+
 
 
 TO IMPLEMENT

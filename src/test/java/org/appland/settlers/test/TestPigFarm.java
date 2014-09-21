@@ -9,7 +9,6 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.GameMap;
@@ -126,6 +125,13 @@ public class TestPigFarm {
         
         assertTrue(pigBreeder.isInsideBuilding());
         
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm.putCargo(waterCargo);
+        pigFarm.putCargo(wheatCargo);
+        
         /* Run the game logic 99 times and make sure the pig breeder stays in the pig farm */
         int i;
         for (i = 0; i < 99; i++) {
@@ -241,6 +247,13 @@ public class TestPigFarm {
         
         assertTrue(pigBreeder.isInsideBuilding());
         
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm.putCargo(waterCargo);
+        pigFarm.putCargo(wheatCargo);
+
         /* Wait for the pigBreeder to rest */
         Utils.fastForward(99, map);
         
@@ -291,7 +304,7 @@ public class TestPigFarm {
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
@@ -299,17 +312,20 @@ public class TestPigFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
-        Crop crop = map.placeCrop(point3.upRight().upRight());
-
-        Utils.fastForwardUntilCropIsGrown(crop, map);
         
-        Utils.constructLargeHouse(farm);
+        Utils.constructLargeHouse(pigFarm);
         
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm.putCargo(waterCargo);
+        pigFarm.putCargo(wheatCargo);
+
         /* Assign a pigBreeder to the farm */
         PigBreeder pigBreeder = new PigBreeder(map);
         
-        Utils.occupyBuilding(pigBreeder, farm, map);
+        Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
         assertTrue(pigBreeder.isInsideBuilding());
         
@@ -343,7 +359,7 @@ public class TestPigFarm {
         
         /* PigBreeder is walking back to farm without carrying a cargo */
         assertFalse(pigBreeder.isFeeding());
-        assertEquals(pigBreeder.getTarget(), farm.getPosition());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
         assertNull(pigBreeder.getCargo());
         
         /* Let the pigBreeder reach the farm */
@@ -362,19 +378,19 @@ public class TestPigFarm {
         map.stepTime();
         
         assertFalse(pigBreeder.isInsideBuilding());
-        assertTrue(farm.getFlag().getStackedCargo().isEmpty());
+        assertTrue(pigFarm.getFlag().getStackedCargo().isEmpty());
         assertNotNull(pigBreeder.getCargo());
         assertEquals(pigBreeder.getCargo().getMaterial(), PIG);
-        assertEquals(pigBreeder.getTarget(), farm.getFlag().getPosition());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getFlag().getPosition());
         
         /* Let the pigBreeder reach the flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, farm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm.getFlag().getPosition());
         
-        assertFalse(farm.getFlag().getStackedCargo().isEmpty());
+        assertFalse(pigFarm.getFlag().getStackedCargo().isEmpty());
         assertNull(pigBreeder.getCargo());
         
         /* The pigBreeder goes back to the building */
-        assertEquals(pigBreeder.getTarget(), farm.getPosition());
+        assertEquals(pigBreeder.getTarget(), pigFarm.getPosition());
         
         Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
         
@@ -399,8 +415,6 @@ public class TestPigFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
-
-        Crop crop = map.placeCrop(point3.upRight().upRight());
 
         Utils.constructLargeHouse(farm);
         
@@ -674,6 +688,74 @@ public class TestPigFarm {
         /* Verify that the worker plans to use the roads */
         for (Point p : ww.getPlannedPath()) {
             assertTrue(map.isRoadAtPoint(p));
+        }
+    }
+
+    @Test
+    public void testPigBreederWithoutResourcesProducesNothing() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place pig farm */
+        Point point3 = new Point(10, 6);
+        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+
+        Utils.constructLargeHouse(pigFarm);
+
+        /* Occupy the pig farm with a pig breeder */
+        PigBreeder pigBreeder = new PigBreeder(map);
+        
+        Utils.occupyBuilding(pigBreeder, pigFarm, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Let the pigBreeder rest */
+        Utils.fastForward(99, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Verify that the pig breeder doesn't produce anything */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(pigBreeder.getCargo(), null);
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testPigBreederWithoutResourcesStaysInHouse() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place pig farm */
+        Point point3 = new Point(10, 6);
+        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+
+        Utils.constructLargeHouse(pigFarm);
+
+        /* Occupy the pig farm with a pig breeder */
+        PigBreeder pigBreeder = new PigBreeder(map);
+        
+        Utils.occupyBuilding(pigBreeder, pigFarm, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Let the pigBreeder rest */
+        Utils.fastForward(99, map);
+        
+        assertTrue(pigBreeder.isInsideBuilding());
+        
+        /* Verify that the pig breeder doesn't produce anything */
+        for (int i = 0; i < 300; i++) {
+            assertTrue(pigBreeder.isInsideBuilding());
+            
+            map.stepTime();
         }
     }
 }
