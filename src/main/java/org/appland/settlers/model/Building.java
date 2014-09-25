@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -444,21 +445,30 @@ public class Building implements Actor, EndPoint {
     }
 
     private Map<Material, Integer> getMaterialsToBuildHouse() {
+        HouseSize hs                     = getClass().getAnnotation(HouseSize.class);
+        Material[] materialsArray        = hs.material();
         Map<Material, Integer> materials = createEmptyMaterialIntMap();
-
-        switch (getHouseSize()) {
-        case SMALL:
-            materials.put(PLANCK, 2);
-            materials.put(STONE, 2);
-            break;
-        case MEDIUM:
-            materials.put(PLANCK, 4);
-            materials.put(STONE, 3);
-            break;
-        case LARGE:
-            materials.put(PLANCK, 4);
-            materials.put(STONE, 4);
-            break;
+        
+        if (materialsArray.length != 0) {
+            for (Material m : materialsArray) {
+                int amount = materials.get(m);
+                materials.put(m, amount + 1);
+            }
+        } else {
+            switch (getHouseSize()) {
+            case SMALL:
+                materials.put(PLANCK, 2);
+                materials.put(STONE, 2);
+                break;
+            case MEDIUM:
+                materials.put(PLANCK, 4);
+                materials.put(STONE, 3);
+                break;
+            case LARGE:
+                materials.put(PLANCK, 4);
+                materials.put(STONE, 4);
+                break;
+            }
         }
 
         return materials;

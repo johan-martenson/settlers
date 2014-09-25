@@ -71,16 +71,12 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
 
+*  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
+
 
 
 TO IMPLEMENT
 ============
-
-*  Change info view to show more of inventory in the app
-
-*  Change barracks to only require two plancks for construction
-
-*  Add ability to create mints to the app
 
 *  Add constructHouse method to Test Utils to replace the construct[Small|Medium|Large]House methods
 
@@ -395,4 +391,12 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Move replanning logic for cargos to Cargo from GameMap - DONE
 
 *  Change number of initial miners to three - DONE
+
+*  Change info view to show more of inventory in the app - DONE
+
+*  Add ability to create mints to the app - DONE
+
+*  Change barracks to only require two plancks for construction - DONE
+
+
 

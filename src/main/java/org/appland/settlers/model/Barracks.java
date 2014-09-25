@@ -5,9 +5,10 @@
  */
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Size.SMALL;
 
-@HouseSize(size = SMALL)
+@HouseSize(size = SMALL, material = {PLANCK, PLANCK})
 @MilitaryBuilding(maxHostedMilitary = 2, defenceRadius = 6, maxCoins = 1)
 public class Barracks extends Building {
 }

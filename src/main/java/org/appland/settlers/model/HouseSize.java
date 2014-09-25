@@ -7,4 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 public @interface HouseSize {
 
     Size size();
+
+    Material[] material() default {};
 }
