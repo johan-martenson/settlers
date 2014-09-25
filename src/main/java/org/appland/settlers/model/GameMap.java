@@ -165,15 +165,7 @@ public class GameMap {
         /* Resume transport of stuck cargos */
         for (Flag f : flags) {
             for (Cargo cargo : f.getStackedCargo()) {
-                if (cargo.getTarget() == null) {
-                    cargo.resumeTransport();
-                } else if (!getBuildings().contains(cargo.getTarget())) {
-                    cargo.returnToStorage();
-                } else if (cargo.getTarget().burningDown()) {
-                    cargo.returnToStorage();
-                } else if (cargo.getTarget().destroyed()) {
-                    cargo.returnToStorage();
-                }
+                cargo.rerouteIfNeeded();
             }
         }
 

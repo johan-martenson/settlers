@@ -9,6 +9,7 @@ RE-FACTOR
 
 
 
+
 TEST
 ====
 
@@ -382,4 +383,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test pigfarm consumes water and wheat - DONE
 
 *  Handle cargo whose target building is torn down - DONE
+
+*  Move replanning logic for cargos to Cargo from GameMap - DONE
 

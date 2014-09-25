@@ -130,4 +130,16 @@ public class Cargo {
             }
         }
     }
+
+    void rerouteIfNeeded() {
+        if (getTarget() == null) {
+            resumeTransport();
+        } else if (!map.getBuildings().contains(getTarget())) {
+            returnToStorage();
+        } else if (getTarget().burningDown()) {
+            returnToStorage();
+        } else if (getTarget().destroyed()) {
+            returnToStorage();
+        }
+    }
 }
