@@ -50,7 +50,7 @@ public class GameLogicTest {
 
         map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
 
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
 
         /* Since the woodcutter is finished it does not need any deliveries
          * Verify that no new deliveries are initiated
@@ -260,7 +260,7 @@ public class GameLogicTest {
         assertTrue(hq.getAmount(Material.PRIVATE) == 10);
 
         map.placeBuilding(bk, wcPoint);
-        Utils.constructSmallHouse(bk);
+        Utils.constructHouse(bk, map);
 
         assertTrue(bk.needsMilitaryManning());
         assertTrue(bk.getHostedMilitary() == 0);
@@ -302,7 +302,7 @@ public class GameLogicTest {
          * forester worker to function
          */
         map.placeBuilding(fHut, fhPoint);
-        Utils.constructSmallHouse(fHut);
+        Utils.constructHouse(fHut, map);
 
         assertTrue(fHut.needsWorker());
 

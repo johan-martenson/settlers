@@ -40,7 +40,7 @@ public class TestWell {
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
 
         assertTrue(well.ready());
         assertTrue(well.needsWorker());
@@ -62,7 +62,7 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
 
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -83,7 +83,7 @@ public class TestWell {
         Building well = map.placeBuilding(new Well(), point1);
         
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Verify that the unoccupied well produces nothing */
         int i;
@@ -113,7 +113,7 @@ public class TestWell {
         courier.assignToRoad(road0);
         
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -151,7 +151,7 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
@@ -181,7 +181,7 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
@@ -220,7 +220,7 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the well */
-        Utils.constructSmallHouse(well);
+        Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
@@ -271,7 +271,7 @@ public class TestWell {
         Building well0 = map.placeBuilding(new Well(), point26);
 
         /* Finish construction of the well */
-        Utils.constructSmallHouse(well0);
+        Utils.constructHouse(well0, map);
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(map), well0, map);
@@ -329,7 +329,7 @@ public class TestWell {
         Building well0 = map.placeBuilding(new Well(), point26);
 
         /* Finish construction of the well */
-        Utils.constructSmallHouse(well0);
+        Utils.constructHouse(well0, map);
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(map), well0, map);
@@ -414,7 +414,7 @@ public class TestWell {
         Building well0 = map.placeBuilding(new Well(), point26);
 
         /* Finish construction of the well */
-        Utils.constructSmallHouse(well0);
+        Utils.constructHouse(well0, map);
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(map), well0, map);
@@ -457,7 +457,7 @@ public class TestWell {
         map.placeAutoSelectedRoad(well0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the well */
-        Utils.constructSmallHouse(well0);
+        Utils.constructHouse(well0, map);
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(map), well0, map);

@@ -17,7 +17,7 @@ import static org.appland.settlers.model.Material.FORESTER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.constructSmallHouse;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -35,7 +35,7 @@ public class TestForesterHut {
 
         assertFalse(f.needsWorker());
 
-        Utils.constructSmallHouse(f);
+        Utils.constructHouse(f, null);
 
         /* Verify that the forrester is unoccupied when it's newly constructed */
         assertTrue(f.needsWorker());
@@ -74,7 +74,7 @@ public class TestForesterHut {
     public void testAssignWorkerTwice() throws Exception {
         ForesterHut f = new ForesterHut();
 
-        Utils.constructSmallHouse(f);
+        Utils.constructHouse(f, null);
 
         f.assignWorker(new Forester(null));
 
@@ -85,7 +85,7 @@ public class TestForesterHut {
     public void testPromiseWorkerTwice() throws Exception {
         ForesterHut f = new ForesterHut();
 
-        Utils.constructSmallHouse(f);
+        Utils.constructHouse(f, null);
 
         f.promiseWorker(new Forester(null));
 
@@ -96,7 +96,7 @@ public class TestForesterHut {
     public void testForesterHutIsNotMilitary() throws Exception {
         ForesterHut f = new ForesterHut();
 
-        Utils.constructSmallHouse(f);
+        Utils.constructHouse(f, null);
 
         assertFalse(f.isMilitaryBuilding());
         assertTrue(f.getHostedMilitary() == 0);
@@ -128,7 +128,7 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
 
         /* Finish the forester hut */
-        Utils.constructSmallHouse(foresterHut);
+        Utils.constructHouse(foresterHut, map);
         
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -153,7 +153,7 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -177,7 +177,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -212,7 +212,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -252,7 +252,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -292,7 +292,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -346,7 +346,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -405,7 +405,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
         
         /* Manually place forester */
         Forester forester = new Forester(map);
@@ -435,7 +435,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
         for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -476,7 +476,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(foresterHut);
+        constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
         for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -524,7 +524,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(), point26);
 
         /* Finish construction of the forester hut */
-        Utils.constructSmallHouse(foresterHut0);
+        Utils.constructHouse(foresterHut0, map);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(map), foresterHut0, map);
@@ -567,7 +567,7 @@ public class TestForesterHut {
         map.placeAutoSelectedRoad(foresterHut0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the forester hut */
-        Utils.constructSmallHouse(foresterHut0);
+        Utils.constructHouse(foresterHut0, map);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(map), foresterHut0, map);

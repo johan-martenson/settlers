@@ -209,7 +209,7 @@ public class TestCourier {
         Point point4 = new Point(11, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
@@ -255,7 +255,7 @@ public class TestCourier {
         Point point4 = new Point(11, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
@@ -319,7 +319,7 @@ public class TestCourier {
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
@@ -400,7 +400,7 @@ public class TestCourier {
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(), rightFlagPoint.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
         
-        Utils.constructSmallHouse(rightWoodcutter);
+        Utils.constructHouse(rightWoodcutter, map);
         
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, middleFlagPoint);
         Road road1 = map.placeRoad(middleFlagPoint, point3, rightFlagPoint);
@@ -480,7 +480,7 @@ public class TestCourier {
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlag.upLeft());
         
-        Utils.constructSmallHouse(rightWoodcutter);
+        Utils.constructHouse(rightWoodcutter, map);
         
         Road road0 = map.placeRoad(leftFlag, middlePoint, flagPoint);
         Road road1 = map.placeRoad(flagPoint, point3, point4);

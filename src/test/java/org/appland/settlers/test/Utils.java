@@ -113,28 +113,6 @@ public class Utils {
         assertTrue(sm.ready());
     }
 
-    static void constructSmallHouse(Building house) throws Exception {
-        assertTrue(house.underConstruction());
-
-        Cargo woodCargo = new Cargo(PLANCK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
-
-        /* Deliver 2 wood and 2 stone */
-        house.promiseDelivery(PLANCK);
-        house.promiseDelivery(PLANCK);
-        house.putCargo(woodCargo);
-        house.putCargo(woodCargo);
-
-        house.promiseDelivery(STONE);
-        house.promiseDelivery(STONE);
-        house.putCargo(stoneCargo);
-        house.putCargo(stoneCargo);
-
-        Utils.fastForward(100, house);
-        
-        assertTrue(house.ready());
-    }
-
     static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
         if (r.getStart().equals(p1) && r.getEnd().equals(p2)) {
             return true;
@@ -468,12 +446,20 @@ public class Utils {
         boolean delivered = false;
         for (int i = 0; i < 20; i++) {
             if (b.needsMaterial(PLANCK)) {
-                b.putCargo(new Cargo(PLANCK, map));
+                Cargo cargo = new Cargo(PLANCK, map);
+                
+                b.promiseDelivery(PLANCK);
+                
+                b.putCargo(cargo);
                 delivered = true;
             }
 
             if (b.needsMaterial(STONE)) {
-                b.putCargo(new Cargo(STONE, map));
+                Cargo cargo = new Cargo(STONE, map);
+                
+                b.promiseDelivery(STONE);
+                
+                b.putCargo(cargo);
                 delivered = true;
             }
         
@@ -487,7 +473,7 @@ public class Utils {
                 break;
             }
         
-            map.stepTime();
+            b.stepTime();
         }
         
         assertTrue(b.ready());

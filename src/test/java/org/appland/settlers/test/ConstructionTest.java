@@ -127,7 +127,7 @@ public class ConstructionTest {
         Point point1 = new Point(13, 13);
         map.placeBuilding(brks, point1);
         
-        Utils.constructSmallHouse(brks);
+        Utils.constructHouse(brks, map);
 
         assertTrue(brks.isMilitaryBuilding());
         assertTrue(brks.ready());

@@ -92,8 +92,8 @@ public class TestScenarios {
         wr3.assignToRoad(qryToHqRoad);
 
         /* Move forward in time until the small buildings are done */
-        Utils.constructSmallHouse(wc);
-        Utils.constructSmallHouse(qry);
+        Utils.constructHouse(wc, map);
+        Utils.constructHouse(qry, map);
         Utils.constructMediumHouse(sm);
 
         assertTrue(wc.ready());

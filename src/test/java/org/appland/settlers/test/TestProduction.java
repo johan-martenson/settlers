@@ -39,7 +39,7 @@ public class TestProduction {
     public void testDeliverMaterialToWoodcutter() throws Exception {
         Building woodcutter = new Woodcutter();
 
-        Utils.constructSmallHouse(woodcutter);
+        Utils.constructHouse(woodcutter, null);
 
         woodcutter.putCargo(new Cargo(WOOD, null));
     }
@@ -48,7 +48,7 @@ public class TestProduction {
     public void testDeliveryMaterialToQuarry() throws Exception {
         Quarry quarry = new Quarry();
 
-        Utils.constructSmallHouse(quarry);
+        Utils.constructHouse(quarry, null);
 
         quarry.putCargo(new Cargo(BEER, null));
     }

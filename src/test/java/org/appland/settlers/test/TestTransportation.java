@@ -195,7 +195,7 @@ public class TestTransportation {
         map.placeFlag(new Flag(new Point(10, 12)));
         map.placeRoad(new Point(8, 12), new Point(9, 13), new Point(10, 12));
 
-        Utils.constructSmallHouse(hut);
+        Utils.constructHouse(hut, map);
 
         Flag target = hut.getFlag();
 
@@ -297,7 +297,7 @@ public class TestTransportation {
 
         worker.setPosition(start.getPosition());
 
-        Utils.constructSmallHouse(qry);
+        Utils.constructHouse(qry, map);
         Utils.constructMediumHouse(stge);
 
         assertTrue(qry.ready());
@@ -490,11 +490,11 @@ public class TestTransportation {
         map.placeWorker(w, hq.getFlag());
         w.assignToRoad(r);
         
+        /* Construct barracks */
+        Utils.constructHouse(b, map);
+
         /* Let the courier get to its target road */
         Utils.fastForwardUntilWorkersReachTarget(map, w);
-
-        /* Construct barracks */
-        Utils.constructSmallHouse(b);
 
         /* Add a private to the hq */
         Military m = new Military(Rank.PRIVATE_RANK, map);

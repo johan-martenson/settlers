@@ -472,7 +472,7 @@ public class TestMill {
         Building mill0 = map.placeBuilding(new Mill(), point26);
 
         /* Finish construction of the mill */
-        Utils.constructSmallHouse(mill0);
+        Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
         Utils.occupyBuilding(new Miller(map), mill0, map);
@@ -515,7 +515,7 @@ public class TestMill {
         map.placeAutoSelectedRoad(mill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mill */
-        Utils.constructSmallHouse(mill0);
+        Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
         Utils.occupyBuilding(new Miller(map), mill0, map);

@@ -19,16 +19,11 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.constructSmallHouse;
-import static org.junit.Assert.assertEquals;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -47,7 +42,7 @@ public class TestQuarry {
         Point point1 = new Point(8, 6);
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
-        Utils.constructSmallHouse(quarry);
+        Utils.constructHouse(quarry, map);
 
         assertTrue(quarry.ready());
         assertTrue(quarry.needsWorker());
@@ -69,7 +64,7 @@ public class TestQuarry {
         Road road0 = map.placeRoad(point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructSmallHouse(quarry);
+        Utils.constructHouse(quarry, map);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -94,7 +89,7 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
 
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -132,7 +127,7 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
         
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -175,7 +170,7 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
         
         /* Construct the forester hut */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry*/
         Stonemason mason = new Stonemason(map);
@@ -226,7 +221,7 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
         
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -299,7 +294,7 @@ public class TestQuarry {
         Stone stone = map.placeStone(point3);
         
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -382,7 +377,7 @@ public class TestQuarry {
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -412,7 +407,7 @@ public class TestQuarry {
         Building quarry = map.placeBuilding(new Quarry(), point1);
 
         /* Construct the quarry */
-        constructSmallHouse(quarry);
+        constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(map);
@@ -481,7 +476,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructSmallHouse(quarry0);
+        Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);
@@ -571,7 +566,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructSmallHouse(quarry0);
+        Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);
@@ -667,7 +662,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructSmallHouse(quarry0);
+        Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);
@@ -710,7 +705,7 @@ public class TestQuarry {
         map.placeAutoSelectedRoad(quarry0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the quarry */
-        Utils.constructSmallHouse(quarry0);
+        Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);

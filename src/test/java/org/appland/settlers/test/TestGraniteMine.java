@@ -22,7 +22,7 @@ import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.constructSmallHouse;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -53,7 +53,7 @@ public class TestGraniteMine {
         
         assertTrue(mine.underConstruction());
         
-        Utils.constructSmallHouse(mine);
+        Utils.constructHouse(mine, map);
         
         assertTrue(mine.ready());
     }
@@ -76,7 +76,7 @@ public class TestGraniteMine {
         /* Verify that the mine is not a military building */
         assertFalse(mine.isMilitaryBuilding());
         
-        Utils.constructSmallHouse(mine);
+        Utils.constructHouse(mine, map);
         
         assertFalse(mine.isMilitaryBuilding());
     }
@@ -115,7 +115,7 @@ public class TestGraniteMine {
         /* Place a gold mine*/
         Building mine = map.placeBuilding(new GraniteMine(), point0);
 
-        Utils.constructSmallHouse(mine);
+        Utils.constructHouse(mine, map);
         
         /* Verify that the finished mine needs a worker */
         assertTrue(mine.needsWorker());
@@ -140,7 +140,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
         
         assertTrue(mine.ready());
 
@@ -191,7 +191,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(), point0);
 
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
         
         /* Manually place miner */
         Miner miner = new Miner(map);
@@ -231,7 +231,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(), point0);
 
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
         
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -284,7 +284,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -364,7 +364,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -424,7 +424,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -468,7 +468,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(), point0);
 
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
 
         /* Manually place miner */
         Miner miner = new Miner(map);
@@ -507,7 +507,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(), point0);
 
         /* Construct the gold mine */
-        constructSmallHouse(mine);
+        constructHouse(mine, map);
         
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -714,7 +714,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructSmallHouse(graniteMine0);
+        Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(map), graniteMine0, map);
@@ -761,7 +761,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(graniteMine0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the granite mine */
-        Utils.constructSmallHouse(graniteMine0);
+        Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(map), graniteMine0, map);

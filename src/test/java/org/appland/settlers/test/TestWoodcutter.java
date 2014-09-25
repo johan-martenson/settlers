@@ -22,7 +22,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.constructSmallHouse;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -61,7 +61,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         assertTrue(wc.needsWorker());
     }
@@ -82,7 +82,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the woodcutter */
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -113,7 +113,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(point2, point3, point4);
 
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -147,7 +147,7 @@ public class TestWoodcutter {
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */        
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(map), wc, map);
@@ -189,7 +189,7 @@ public class TestWoodcutter {
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(map), wc, map);
@@ -235,7 +235,7 @@ public class TestWoodcutter {
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(map), wc, map);
@@ -281,7 +281,7 @@ public class TestWoodcutter {
         Building wc = map.placeBuilding(new Woodcutter(), point1);
         
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -349,7 +349,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(hq.getFlag().getPosition(), point4, wc.getFlag().getPosition());
         
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -458,9 +458,9 @@ public class TestWoodcutter {
         Road road2 = map.placeAutoSelectedRoad(hut2.getFlag(), hq.getFlag());
         
         /* Construct the forester hut */
-        constructSmallHouse(wc);
-        constructSmallHouse(hut);
-        constructSmallHouse(hut2);
+        constructHouse(wc, map);
+        constructHouse(hut, map);
+        constructHouse(hut2, map);
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -547,7 +547,7 @@ public class TestWoodcutter {
 
         /* Construct the forester hut */
         
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -580,7 +580,7 @@ public class TestWoodcutter {
         Building wc = map.placeBuilding(new Woodcutter(), point1);
 
         /* Construct the woodcutter hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Place the woodcutter */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -661,7 +661,7 @@ public class TestWoodcutter {
         
 
         /* Construct the forester hut */
-        constructSmallHouse(wc);
+        constructHouse(wc, map);
         
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(map);
@@ -752,7 +752,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the woodcutter */
-        Utils.constructSmallHouse(wc);
+        Utils.constructHouse(wc, map);
         
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -797,7 +797,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructSmallHouse(woodcutter0);
+        Utils.constructHouse(woodcutter0, map);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
@@ -886,7 +886,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructSmallHouse(woodcutter0);
+        Utils.constructHouse(woodcutter0, map);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
@@ -983,7 +983,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructSmallHouse(woodcutter0);
+        Utils.constructHouse(woodcutter0, map);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
@@ -1026,7 +1026,7 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(woodcutter0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the woodcutter */
-        Utils.constructSmallHouse(woodcutter0);
+        Utils.constructHouse(woodcutter0, map);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(map), woodcutter0, map);
