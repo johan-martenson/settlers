@@ -85,34 +85,6 @@ public class Utils {
         return result;
     }
 
-    static void constructMediumHouse(Building sm) throws Exception {
-        assertTrue(sm.underConstruction());
-
-        Cargo woodCargo = new Cargo(PLANCK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
-
-        /* Deliver 4 wood and 3 stone */
-        sm.promiseDelivery(PLANCK);
-        sm.promiseDelivery(PLANCK);
-        sm.promiseDelivery(PLANCK);
-        sm.promiseDelivery(PLANCK);
-        sm.putCargo(woodCargo);
-        sm.putCargo(woodCargo);
-        sm.putCargo(woodCargo);
-        sm.putCargo(woodCargo);
-
-        sm.promiseDelivery(STONE);
-        sm.promiseDelivery(STONE);
-        sm.promiseDelivery(STONE);
-        sm.putCargo(stoneCargo);
-        sm.putCargo(stoneCargo);
-        sm.putCargo(stoneCargo);
-
-        Utils.fastForward(150, sm);
-        
-        assertTrue(sm.ready());
-    }
-
     static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
         if (r.getStart().equals(p1) && r.getEnd().equals(p2)) {
             return true;
@@ -164,34 +136,6 @@ public class Utils {
         }
 
         return isEmpty;
-    }
-
-    static void constructLargeHouse(Building house) throws Exception {
-        assertTrue(house.underConstruction());
-
-        Cargo planckCargo = new Cargo(PLANCK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
-
-        /* Deliver 4 wood and 3 stone */
-        house.promiseDelivery(PLANCK);
-        house.promiseDelivery(PLANCK);
-        house.promiseDelivery(PLANCK);
-        house.promiseDelivery(PLANCK);
-        house.putCargo(planckCargo);
-        house.putCargo(planckCargo);
-        house.putCargo(planckCargo);
-        house.putCargo(planckCargo);
-
-        house.promiseDelivery(STONE);
-        house.promiseDelivery(STONE);
-        house.promiseDelivery(STONE);
-        house.promiseDelivery(STONE);
-        house.putCargo(stoneCargo);
-        house.putCargo(stoneCargo);
-        house.putCargo(stoneCargo);
-        house.putCargo(stoneCargo);
-        
-        fastForward(200, house);
     }
 
     static void assertNoStepDirectlyUpwards(List<Point> route) {
@@ -440,31 +384,26 @@ public class Utils {
         assertEquals(storage.getAmount(material), amount);
     }
 
-    static void constructHouse(Building b, GameMap map) throws Exception {
+    static void constructHouse(Building b, GameMap map) {
         assertTrue(b.underConstruction());
 
-        boolean delivered = false;
         for (int i = 0; i < 20; i++) {
             if (b.needsMaterial(PLANCK)) {
-                Cargo cargo = new Cargo(PLANCK, map);
-                
-                b.promiseDelivery(PLANCK);
-                
-                b.putCargo(cargo);
-                delivered = true;
+                try {
+                    Cargo cargo = new Cargo(PLANCK, map);
+                    b.putCargo(cargo);
+                } catch (Exception ex) {
+                    Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
-            if (b.needsMaterial(STONE)) {
-                Cargo cargo = new Cargo(STONE, map);
-                
-                b.promiseDelivery(STONE);
-                
-                b.putCargo(cargo);
-                delivered = true;
-            }
-        
-            if (!delivered) {
-                break;
+            if (b.needsMaterial(STONE)) {                
+                try {
+                    Cargo cargo = new Cargo(STONE, map);
+                    b.putCargo(cargo);
+                } catch (Exception ex) {
+                    Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         

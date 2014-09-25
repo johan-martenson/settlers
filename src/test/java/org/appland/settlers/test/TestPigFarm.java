@@ -61,7 +61,7 @@ public class TestPigFarm {
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new PigFarm(), point0);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         assertTrue(farm.ready());
         assertTrue(farm.needsWorker());
@@ -87,7 +87,7 @@ public class TestPigFarm {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish the pig farm */
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         /* Run game logic twice, once to place courier and once to place pig breeder */
         Utils.fastForward(2, map);
@@ -117,7 +117,7 @@ public class TestPigFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
 
         PigBreeder pigBreeder = new PigBreeder(map);
         
@@ -166,7 +166,7 @@ public class TestPigFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
 
         /* Deliver wheat and water to the farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -238,7 +238,7 @@ public class TestPigFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
 
         /* Assign a pigBreeder to the farm */
         PigBreeder pigBreeder = new PigBreeder(map);
@@ -313,7 +313,7 @@ public class TestPigFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
         
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
         
         /* Deliver resources to the pig farm */
         Cargo waterCargo = new Cargo(WATER, map);
@@ -416,7 +416,7 @@ public class TestPigFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         /* Verify that the farm does not produce any wheat */
         int i;
@@ -444,7 +444,7 @@ public class TestPigFarm {
         Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
 
         /* Finish construction of the pig farm */
-        Utils.constructLargeHouse(pigFarm0);
+        Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
         Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
@@ -524,7 +524,7 @@ public class TestPigFarm {
         Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
 
         /* Finish construction of the pig farm */
-        Utils.constructLargeHouse(pigFarm0);
+        Utils.constructHouse(pigFarm0, map);
 
         /* Deliver material to the pig farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -625,7 +625,7 @@ public class TestPigFarm {
         Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
 
         /* Finish construction of the pig farm */
-        Utils.constructLargeHouse(pigFarm0);
+        Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
         Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
@@ -668,7 +668,7 @@ public class TestPigFarm {
         map.placeAutoSelectedRoad(pigFarm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the pig farm */
-        Utils.constructLargeHouse(pigFarm0);
+        Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
         Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
@@ -703,7 +703,7 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(), point3);
 
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
 
         /* Occupy the pig farm with a pig breeder */
         PigBreeder pigBreeder = new PigBreeder(map);
@@ -737,7 +737,7 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(), point3);
 
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
 
         /* Occupy the pig farm with a pig breeder */
         PigBreeder pigBreeder = new PigBreeder(map);
@@ -771,7 +771,7 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(), point3);
         
-        Utils.constructLargeHouse(pigFarm);
+        Utils.constructHouse(pigFarm, map);
         
         /* Deliver resources to the pig farm */
         Cargo waterCargo = new Cargo(WATER, map);

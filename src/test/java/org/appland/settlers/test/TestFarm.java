@@ -100,7 +100,7 @@ public class TestFarm {
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point0);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         assertTrue(farm.ready());
         assertTrue(farm.needsWorker());
@@ -124,7 +124,7 @@ public class TestFarm {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish the forester hut */
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -152,7 +152,7 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
 
         Farmer farmer = new Farmer(map);
         
@@ -192,7 +192,7 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
 
         Farmer farmer = new Farmer(map);
         
@@ -256,7 +256,7 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
 
         /* Assign a farmer to the farm */
         Farmer farmer = new Farmer(map);
@@ -319,7 +319,7 @@ public class TestFarm {
 
         Crop crop = map.placeCrop(point3.upRight().upRight());
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
 
         Utils.fastForwardUntilCropIsGrown(crop, map);
         
@@ -383,19 +383,12 @@ public class TestFarm {
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new Farm(), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Utils.constructHouse(farm, map);
 
+        /* Wait for the crop to grow */
         Crop crop = map.placeCrop(point3.upRight().upRight());
-
         Utils.fastForwardUntilCropIsGrown(crop, map);
-        
-        Utils.constructLargeHouse(farm);
-        
+
         /* Assign a farmer to the farm */
         Farmer farmer = new Farmer(map);
         
@@ -484,7 +477,7 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         /* Assign a farmer to the farm */
         Farmer farmer = new Farmer(map);
@@ -558,7 +551,7 @@ public class TestFarm {
 
         Crop crop = map.placeCrop(point3.upRight().upRight());
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
         
         /* Verify that the farm does not produce any wheat */
         int i;
@@ -588,7 +581,7 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
-        Utils.constructLargeHouse(farm);
+        Utils.constructHouse(farm, map);
 
         /* Fill all available points to plant with harvested crops */
         Set<Point> possibleSpotsToPlant = new HashSet<>();
@@ -699,7 +692,7 @@ public class TestFarm {
         Building farm0 = map.placeBuilding(new Farm(), point26);
 
         /* Finish construction of the farm */
-        Utils.constructLargeHouse(farm0);
+        Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
         Utils.occupyBuilding(new Farmer(map), farm0, map);
@@ -776,7 +769,7 @@ public class TestFarm {
         Building farm0 = map.placeBuilding(new Farm(), point26);
 
         /* Finish construction of the farm */
-        Utils.constructLargeHouse(farm0);
+        Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
         Utils.occupyBuilding(new Farmer(map), farm0, map);
@@ -869,7 +862,7 @@ public class TestFarm {
         Building farm0 = map.placeBuilding(new Farm(), point26);
 
         /* Finish construction of the farm */
-        Utils.constructLargeHouse(farm0);
+        Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
         Utils.occupyBuilding(new Farmer(map), farm0, map);
@@ -912,7 +905,7 @@ public class TestFarm {
         map.placeAutoSelectedRoad(farm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the farm */
-        Utils.constructLargeHouse(farm0);
+        Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
         Utils.occupyBuilding(new Farmer(map), farm0, map);
