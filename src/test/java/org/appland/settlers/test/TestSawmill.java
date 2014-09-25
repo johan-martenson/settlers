@@ -48,7 +48,7 @@ public class TestSawmill {
         assertFalse(sawmill.needsWorker());
         
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
         
         assertTrue(sawmill.needsWorker());
     }
@@ -81,7 +81,7 @@ public class TestSawmill {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
         
         assertTrue(sawmill.needsWorker());
 
@@ -126,7 +126,7 @@ public class TestSawmill {
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
 
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
@@ -157,7 +157,7 @@ public class TestSawmill {
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
 
         /* Verify that the sawmill doesn't produce anything */
         int i;
@@ -180,7 +180,7 @@ public class TestSawmill {
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
@@ -229,7 +229,7 @@ public class TestSawmill {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
 
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
@@ -283,7 +283,7 @@ public class TestSawmill {
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
@@ -313,7 +313,7 @@ public class TestSawmill {
         Building sawmill = map.placeBuilding(new Sawmill(), point3);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
@@ -353,7 +353,7 @@ public class TestSawmill {
         Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill0);
+        Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
         Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
@@ -417,7 +417,7 @@ public class TestSawmill {
         Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill0);
+        Utils.constructHouse(sawmill0, map);
 
         /* Deliver material to the sawmill */
         Cargo woodCargo = new Cargo(WOOD, map);
@@ -508,7 +508,7 @@ public class TestSawmill {
         Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
 
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill0);
+        Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
         Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
@@ -551,7 +551,7 @@ public class TestSawmill {
         map.placeAutoSelectedRoad(sawmill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the sawmill */
-        Utils.constructMediumHouse(sawmill0);
+        Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
         Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);

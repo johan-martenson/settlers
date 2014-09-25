@@ -59,7 +59,7 @@ public class TestArmory {
         assertFalse(armory.needsWorker());
         
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         assertTrue(armory.needsWorker());
     }
@@ -92,7 +92,7 @@ public class TestArmory {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         assertTrue(armory.needsWorker());
 
@@ -133,7 +133,7 @@ public class TestArmory {
         Building armory = map.placeBuilding(new Armory(), point3);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -164,7 +164,7 @@ public class TestArmory {
         Building armory = map.placeBuilding(new Armory(), point3);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
 
         /* Verify that the armory doesn't produce anything */
         int i;
@@ -195,7 +195,7 @@ public class TestArmory {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */        
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -244,7 +244,7 @@ public class TestArmory {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */        
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -299,7 +299,7 @@ public class TestArmory {
         Building armory = map.placeBuilding(new Armory(), point3);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */        
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -331,7 +331,7 @@ public class TestArmory {
         Building armory = map.placeBuilding(new Armory(), point3);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */        
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -378,7 +378,7 @@ public class TestArmory {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory);
+        Utils.constructHouse(armory, map);
         
         /* Populate the armory */        
         Worker armorer = Utils.occupyBuilding(new Armorer(map), armory, map);
@@ -430,7 +430,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(), point26);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory0);
+        Utils.constructHouse(armory0, map);
 
         /* Occupy the armory */
         Utils.occupyBuilding(new Armorer(map), armory0, map);
@@ -498,7 +498,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(), point26);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory0);
+        Utils.constructHouse(armory0, map);
 
         /* Deliver material to the armory */
         Cargo ironCargo = new Cargo(IRON, map);
@@ -595,7 +595,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(), point26);
 
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory0);
+        Utils.constructHouse(armory0, map);
 
         /* Occupy the armory */
         Utils.occupyBuilding(new Armorer(map), armory0, map);
@@ -638,7 +638,7 @@ public class TestArmory {
         map.placeAutoSelectedRoad(armory0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the armory */
-        Utils.constructMediumHouse(armory0);
+        Utils.constructHouse(armory0, map);
 
         /* Occupy the armory */
         Utils.occupyBuilding(new Armorer(map), armory0, map);

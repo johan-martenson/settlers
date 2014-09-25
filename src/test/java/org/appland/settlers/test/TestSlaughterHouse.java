@@ -56,7 +56,7 @@ public class TestSlaughterHouse {
         assertFalse(slaughterHouse.needsWorker());
         
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         assertTrue(slaughterHouse.needsWorker());
     }
@@ -89,7 +89,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         assertTrue(slaughterHouse.needsWorker());
 
@@ -130,7 +130,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
@@ -161,7 +161,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
 
         /* Verify that the slaughterHouse doesn't produce anything */
         int i;
@@ -192,7 +192,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
         Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
@@ -240,7 +240,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
         Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
@@ -294,7 +294,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
         Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
@@ -323,7 +323,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructMediumHouse(slaughterHouse);
+        Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
         Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
@@ -363,7 +363,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructMediumHouse(slaughterHouse0);
+        Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
         Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
@@ -427,7 +427,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructMediumHouse(slaughterHouse0);
+        Utils.constructHouse(slaughterHouse0, map);
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -517,7 +517,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructMediumHouse(slaughterHouse0);
+        Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
         Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
@@ -560,7 +560,7 @@ public class TestSlaughterHouse {
         map.placeAutoSelectedRoad(slaughterHouse0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the slaughter house */
-        Utils.constructMediumHouse(slaughterHouse0);
+        Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
         Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);

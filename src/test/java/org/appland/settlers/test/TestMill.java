@@ -41,7 +41,7 @@ public class TestMill {
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(), point1);
 
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
 
         assertTrue(mill.ready());
         assertTrue(mill.needsWorker());
@@ -60,7 +60,7 @@ public class TestMill {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
@@ -83,7 +83,7 @@ public class TestMill {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         int i;
         for (i = 0; i < 200; i++) {
@@ -109,7 +109,7 @@ public class TestMill {
         courier.assignToRoad(road0);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
@@ -148,7 +148,7 @@ public class TestMill {
         courier.assignToRoad(road0);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         /* Put the miller in the mill */
         Miller miller = new Miller(map);
@@ -182,7 +182,7 @@ public class TestMill {
         courier.assignToRoad(road0);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         /* Put the miller in the mill */
         Miller miller = new Miller(map);
@@ -219,7 +219,7 @@ public class TestMill {
         courier.assignToRoad(road0);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
         
         /* Deliver wheat to the mill */
         Cargo cargo = new Cargo(WHEAT, map);
@@ -264,7 +264,7 @@ public class TestMill {
         courier.assignToRoad(road0);
         
         /* Finish the mill */
-        Utils.constructMediumHouse(mill);
+        Utils.constructHouse(mill, map);
 
         /* Deliver wheat to the mill */
         Cargo cargo = new Cargo(WHEAT, map);
@@ -317,7 +317,7 @@ public class TestMill {
         Building mill0 = map.placeBuilding(new Mill(), point26);
 
         /* Finish construction of the mill */
-        Utils.constructMediumHouse(mill0);
+        Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
         Utils.occupyBuilding(new Miller(map), mill0, map);
@@ -381,7 +381,7 @@ public class TestMill {
         Building mill0 = map.placeBuilding(new Mill(), point26);
 
         /* Finish construction of the mill */
-        Utils.constructMediumHouse(mill0);
+        Utils.constructHouse(mill0, map);
 
         /* Deliver material to the mill */
         Cargo wheatCargo = new Cargo(WHEAT, map);

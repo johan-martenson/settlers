@@ -57,7 +57,7 @@ public class TestMint {
         assertFalse(mint.needsWorker());
         
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         assertTrue(mint.needsWorker());
     }
@@ -90,7 +90,7 @@ public class TestMint {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         assertTrue(mint.needsWorker());
 
@@ -131,7 +131,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(), point3);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(map), mint, map);
@@ -162,7 +162,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(), point3);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
 
         /* Verify that the mint doesn't produce anything */
         int i;
@@ -193,7 +193,7 @@ public class TestMint {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         /* Populate the mint */        
         Worker minter = Utils.occupyBuilding(new Minter(map), mint, map);
@@ -242,7 +242,7 @@ public class TestMint {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         /* Populate the mint */        
         Worker minter = Utils.occupyBuilding(new Minter(map), mint, map);
@@ -297,7 +297,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(), point3);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         /* Populate the mint */        
         Worker minter = Utils.occupyBuilding(new Minter(map), mint, map);
@@ -329,7 +329,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(), point3);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint);
+        Utils.constructHouse(mint, map);
         
         /* Populate the mint */        
         Worker minter = Utils.occupyBuilding(new Minter(map), mint, map);
@@ -370,7 +370,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(), point26);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint0);
+        Utils.constructHouse(mint0, map);
 
         /* Occupy the mint */
         Utils.occupyBuilding(new Minter(map), mint0, map);
@@ -438,7 +438,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(), point26);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint0);
+        Utils.constructHouse(mint0, map);
 
         /* Deliver material to the mint */
         Cargo coalCargo = new Cargo(COAL, map);
@@ -533,7 +533,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(), point26);
 
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint0);
+        Utils.constructHouse(mint0, map);
 
         /* Occupy the mint */
         Utils.occupyBuilding(new Minter(map), mint0, map);
@@ -576,7 +576,7 @@ public class TestMint {
         map.placeAutoSelectedRoad(mint0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mint */
-        Utils.constructMediumHouse(mint0);
+        Utils.constructHouse(mint0, map);
 
         /* Occupy the mint */
         Utils.occupyBuilding(new Minter(map), mint0, map);

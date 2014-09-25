@@ -298,7 +298,7 @@ public class TestTransportation {
         worker.setPosition(start.getPosition());
 
         Utils.constructHouse(qry, map);
-        Utils.constructMediumHouse(stge);
+        Utils.constructHouse(stge, map);
 
         assertTrue(qry.ready());
 

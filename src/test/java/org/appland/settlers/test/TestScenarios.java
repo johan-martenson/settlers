@@ -94,7 +94,7 @@ public class TestScenarios {
         /* Move forward in time until the small buildings are done */
         Utils.constructHouse(wc, map);
         Utils.constructHouse(qry, map);
-        Utils.constructMediumHouse(sm);
+        Utils.constructHouse(sm, map);
 
         assertTrue(wc.ready());
         assertTrue(qry.ready());

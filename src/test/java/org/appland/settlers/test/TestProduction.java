@@ -28,7 +28,7 @@ public class TestProduction {
     public void testWrongMaterialToSawmill() throws Exception {
         Sawmill sawmill = new Sawmill();
 
-        Utils.constructMediumHouse(sawmill);
+        Utils.constructHouse(sawmill, null);
 
         assertTrue(sawmill.ready());
 

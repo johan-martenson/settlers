@@ -249,7 +249,7 @@ public class ConstructionTest {
     public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
         Sawmill sm = new Sawmill();
 
-        Utils.constructMediumHouse(sm);
+        Utils.constructHouse(sm, null);
 
         assertTrue(sm.ready());
 
@@ -262,7 +262,7 @@ public class ConstructionTest {
     public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
         Sawmill sm = new Sawmill();
 
-        Utils.constructMediumHouse(sm);
+        Utils.constructHouse(sm, null);
 
         assertTrue(sm.ready());
 

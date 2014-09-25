@@ -60,7 +60,7 @@ public class TestStorage {
         Building storage = map.placeBuilding(new Storage(), point3);
         
         /* Finish construction of the storage */
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         assertTrue(storage.ready());
         
@@ -88,7 +88,7 @@ public class TestStorage {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the storage */
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         /* Run game logic once to let the headquarter assign a storage worker to the storage */
         map.stepTime();
@@ -124,7 +124,7 @@ public class TestStorage {
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(), point3);
 
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         StorageWorker sw = new StorageWorker(map);
         
@@ -157,7 +157,7 @@ public class TestStorage {
 
         map.placeRoad(point1, point2, point3);
         
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         StorageWorker sw = new StorageWorker(map);
         
@@ -204,7 +204,7 @@ public class TestStorage {
 
         map.placeRoad(point1, point2, point3);
         
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         StorageWorker sw = new StorageWorker(map);
         
@@ -254,7 +254,7 @@ public class TestStorage {
 
         map.placeRoad(point1, point2, point3);
         
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         StorageWorker sw = new StorageWorker(map);
         
@@ -306,7 +306,7 @@ public class TestStorage {
         Building storage0 = map.placeBuilding(new Storage(), point26);
 
         /* Finish construction of the storage */
-        Utils.constructMediumHouse(storage0);
+        Utils.constructHouse(storage0, map);
 
         /* Occupy the storage */
         Utils.occupyBuilding(new StorageWorker(map), storage0, map);
@@ -349,7 +349,7 @@ public class TestStorage {
         map.placeAutoSelectedRoad(storage0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the storage */
-        Utils.constructMediumHouse(storage0);
+        Utils.constructHouse(storage0, map);
 
         /* Occupy the storage */
         Utils.occupyBuilding(new StorageWorker(map), storage0, map);

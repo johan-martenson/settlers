@@ -551,7 +551,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructMediumHouse(graniteMine0);
+        Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(map), graniteMine0, map);
@@ -619,7 +619,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructMediumHouse(graniteMine0);
+        Utils.constructHouse(graniteMine0, map);
 
         /* Deliver material to the granite mine */
         Cargo fishCargo = new Cargo(FISH, map);

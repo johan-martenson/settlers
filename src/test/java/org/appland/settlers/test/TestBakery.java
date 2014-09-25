@@ -57,7 +57,7 @@ public class TestBakery {
         assertFalse(bakery.needsWorker());
         
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         assertTrue(bakery.needsWorker());
     }
@@ -90,7 +90,7 @@ public class TestBakery {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         assertTrue(bakery.needsWorker());
 
@@ -131,7 +131,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
@@ -162,7 +162,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
 
         /* Verify that the bakery doesn't produce anything */
         int i;
@@ -193,7 +193,7 @@ public class TestBakery {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
@@ -242,7 +242,7 @@ public class TestBakery {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
@@ -297,7 +297,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
@@ -329,7 +329,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(), point3);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery);
+        Utils.constructHouse(bakery, map);
         
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(map), bakery, map);
@@ -370,7 +370,7 @@ public class TestBakery {
         Building bakery0 = map.placeBuilding(new Bakery(), point26);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery0);
+        Utils.constructHouse(bakery0, map);
 
         /* Occupy the bakery */
         Utils.occupyBuilding(new Baker(map), bakery0, map);
@@ -438,7 +438,7 @@ public class TestBakery {
         Building bakery0 = map.placeBuilding(new Bakery(), point26);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery0);
+        Utils.constructHouse(bakery0, map);
 
         /* Deliver material to the bakery */
         Cargo ironCargo = new Cargo(FLOUR, map);
@@ -533,7 +533,7 @@ public class TestBakery {
         Building bakery0 = map.placeBuilding(new Bakery(), point26);
 
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery0);
+        Utils.constructHouse(bakery0, map);
 
         /* Occupy the bakery */
         Utils.occupyBuilding(new Baker(map), bakery0, map);
@@ -576,7 +576,7 @@ public class TestBakery {
         map.placeAutoSelectedRoad(bakery0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the bakery */
-        Utils.constructMediumHouse(bakery0);
+        Utils.constructHouse(bakery0, map);
 
         /* Occupy the bakery */
         Utils.occupyBuilding(new Baker(map), bakery0, map);

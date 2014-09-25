@@ -49,7 +49,7 @@ public class TestBrewery {
         assertFalse(brewery.needsWorker());
         
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         assertTrue(brewery.needsWorker());
     }
@@ -82,7 +82,7 @@ public class TestBrewery {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         assertTrue(brewery.needsWorker());
 
@@ -127,7 +127,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -158,7 +158,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
 
         /* Verify that the brewery doesn't produce anything */
         int i;
@@ -181,7 +181,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -230,7 +230,7 @@ public class TestBrewery {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -284,7 +284,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -318,7 +318,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -357,7 +357,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -386,7 +386,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery);
+        Utils.constructHouse(brewery, map);
         
         /* Occupy the brewery */
         Worker sw = Utils.occupyBuilding(new Brewer(map), brewery, map);
@@ -417,7 +417,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery0);
+        Utils.constructHouse(brewery0, map);
 
         /* Occupy the brewery */
         Utils.occupyBuilding(new Brewer(map), brewery0, map);
@@ -485,7 +485,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery0);
+        Utils.constructHouse(brewery0, map);
 
         /* Deliver material to the brewery */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -580,7 +580,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery0);
+        Utils.constructHouse(brewery0, map);
 
         /* Occupy the brewery */
         Utils.occupyBuilding(new Brewer(map), brewery0, map);
@@ -623,7 +623,7 @@ public class TestBrewery {
         map.placeAutoSelectedRoad(brewery0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the brewery */
-        Utils.constructMediumHouse(brewery0);
+        Utils.constructHouse(brewery0, map);
 
         /* Occupy the brewery */
         Utils.occupyBuilding(new Brewer(map), brewery0, map);

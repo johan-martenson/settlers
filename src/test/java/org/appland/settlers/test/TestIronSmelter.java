@@ -49,7 +49,7 @@ public class TestIronSmelter {
         assertFalse(ironFounder.needsWorker());
         
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironFounder);
+        Utils.constructHouse(ironFounder, map);
         
         assertTrue(ironFounder.needsWorker());
     }
@@ -82,7 +82,7 @@ public class TestIronSmelter {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         assertTrue(ironSmelter.needsWorker());
 
@@ -127,7 +127,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -158,7 +158,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
 
         /* Verify that the iron smelter doesn't produce anything */
         int i;
@@ -181,7 +181,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -230,7 +230,7 @@ public class TestIronSmelter {
         Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -284,7 +284,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -318,7 +318,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -357,7 +357,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -386,7 +386,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point3);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
         Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -417,7 +417,7 @@ public class TestIronSmelter {
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point26);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter0);
+        Utils.constructHouse(ironSmelter0, map);
 
         /* Occupy the iron smelter */
         Utils.occupyBuilding(new IronFounder(map), ironSmelter0, map);
@@ -485,7 +485,7 @@ public class TestIronSmelter {
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point26);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter0);
+        Utils.constructHouse(ironSmelter0, map);
 
         /* Deliver material to the iron smelter */
         Cargo ironCargo = new Cargo(COAL, map);
@@ -580,7 +580,7 @@ public class TestIronSmelter {
         Building ironSmelter = map.placeBuilding(new IronSmelter(), point26);
 
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
         Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
@@ -623,7 +623,7 @@ public class TestIronSmelter {
         map.placeAutoSelectedRoad(ironSmelter.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the iron smelter */
-        Utils.constructMediumHouse(ironSmelter);
+        Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
         Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);

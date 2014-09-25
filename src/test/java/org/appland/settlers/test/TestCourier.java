@@ -49,7 +49,7 @@ public class TestCourier {
         Point point1 = new Point(10, 10);
         map.placeBuilding(storage, point1);
         
-        Utils.constructMediumHouse(storage);
+        Utils.constructHouse(storage, map);
         
         assertTrue(storage.getAmount(COURIER) > 0);
     }
