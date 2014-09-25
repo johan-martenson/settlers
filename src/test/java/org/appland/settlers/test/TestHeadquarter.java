@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -31,9 +32,11 @@ public class TestHeadquarter {
     public void testInitialInventory() {
         Headquarter hq = new Headquarter();
 
-        assertTrue(hq.getAmount(WOOD) == 4);
-        assertTrue(hq.getAmount(PLANCK) == 15);
-        assertTrue(hq.getAmount(STONE) == 10);
+        assertEquals(hq.getAmount(WOOD),    4);
+        assertEquals(hq.getAmount(PLANCK), 15);
+        assertEquals(hq.getAmount(STONE),  10);
+
+        assertEquals(hq.getAmount(MINER),   3);
 
         // TODO: add all other material
     }

@@ -76,6 +76,14 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Change info view to show more of inventory in the app
+
+*  Change barracks to only require two plancks for construction
+
+*  Add ability to create mints to the app
+
+*  Add constructHouse method to Test Utils to replace the construct[Small|Medium|Large]House methods
+
 *  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
 
 *  Add ability to stop production
@@ -385,4 +393,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Handle cargo whose target building is torn down - DONE
 
 *  Move replanning logic for cargos to Cargo from GameMap - DONE
+
+*  Change number of initial miners to three - DONE
 
