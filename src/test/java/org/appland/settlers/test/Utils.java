@@ -461,4 +461,35 @@ public class Utils {
 
         assertEquals(storage.getAmount(material), amount);
     }
+
+    static void constructHouse(Building b, GameMap map) throws Exception {
+        assertTrue(b.underConstruction());
+
+        boolean delivered = false;
+        for (int i = 0; i < 20; i++) {
+            if (b.needsMaterial(PLANCK)) {
+                b.putCargo(new Cargo(PLANCK, map));
+                delivered = true;
+            }
+
+            if (b.needsMaterial(STONE)) {
+                b.putCargo(new Cargo(STONE, map));
+                delivered = true;
+            }
+        
+            if (!delivered) {
+                break;
+            }
+        }
+        
+        for (int i = 0; i < 500; i++) {
+            if (b.ready()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertTrue(b.ready());
+    }
 }
