@@ -12,14 +12,21 @@ package org.appland.settlers.model;
  */
 public class Sign {
 
+    private final static int SIGN_EXPIRATION_TIME = 999;
+    
     private final Material type;
     private final Size     size;
     private final Point    position;
+    private final GameMap  map;
+
+    private int age;
     
-    Sign(Material m, Size s, Point p) {
+    Sign(Material m, Size s, Point p, GameMap mapToSet) {
         position = p;
         type     = m;
         size     = s;
+        map      = mapToSet;
+        age      = 0;
     }    
 
     public Material getType() {
@@ -37,5 +44,12 @@ public class Sign {
     public boolean isEmpty() {
         return type == null;
     }
-    
+
+    void stepTime() {
+        age++;
+        
+        if (age > SIGN_EXPIRATION_TIME) {
+            map.removeSign(this);
+        }
+    }
 }

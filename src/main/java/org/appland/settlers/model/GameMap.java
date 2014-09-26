@@ -26,6 +26,7 @@ public class GameMap {
     private List<Road>              roads;
     private List<Flag>              flags;
     private List<Sign>              signs;
+    private List<Sign>              signsToRemove;
     private List<Worker>            workers;
     private List<Worker>            workersToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
@@ -116,6 +117,7 @@ public class GameMap {
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
+        signsToRemove       = new LinkedList<>();
         workers             = new ArrayList<>();
         workersToRemove     = new LinkedList<>();
         terrain             = new Terrain(width, height);
@@ -134,6 +136,7 @@ public class GameMap {
 
     public void stepTime() {
         workersToRemove.clear();
+        signsToRemove.clear();
         
         for (Worker w : workers) {
             w.stepTime();
@@ -151,6 +154,10 @@ public class GameMap {
             c.stepTime();
         }
 
+        for (Sign s : signs) {
+            s.stepTime();
+        }
+        
         List<Stone> stonesToRemove = new ArrayList<>();
         for (Stone s : stones) {
             if (s.noMoreStone()) {
@@ -171,6 +178,9 @@ public class GameMap {
 
         /* Remove workers that are invalid after the round */
         workers.removeAll(workersToRemove);
+
+        /* Remove signs that have expired during this round */
+        signs.removeAll(signsToRemove);
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
@@ -1571,7 +1581,7 @@ public class GameMap {
     }
 
     public void placeSign(Material mineral, Size amount, Point point) {
-        Sign sign = new Sign(mineral, amount, point);
+        Sign sign = new Sign(mineral, amount, point, this);
         
         getMapPoint(point).setSign(sign);
         
@@ -1590,12 +1600,12 @@ public class GameMap {
         placeSign(null, null, point);
     }
 
-    private void removeSign(Sign sign) {
+    void removeSign(Sign sign) {
         MapPoint mp = getMapPoint(sign.getPosition());
         
         mp.setSign(null);
         
-        signs.remove(sign);
+        signsToRemove.add(sign);
     }
 
     void removeWorker(Worker w) {
