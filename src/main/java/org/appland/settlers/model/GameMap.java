@@ -23,6 +23,7 @@ import org.appland.settlers.model.Tile.Vegetation;
 public class GameMap {
 
     private List<Building>          buildings;
+    private List<Building>          buildingsToRemove;
     private List<Road>              roads;
     private List<Flag>              flags;
     private List<Sign>              signs;
@@ -114,6 +115,7 @@ public class GameMap {
         }
         
         buildings           = new ArrayList<>();
+        buildingsToRemove   = new LinkedList<>();
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
@@ -137,6 +139,7 @@ public class GameMap {
     public void stepTime() {
         workersToRemove.clear();
         signsToRemove.clear();
+        buildingsToRemove.clear();
         
         for (Worker w : workers) {
             w.stepTime();
@@ -181,6 +184,9 @@ public class GameMap {
 
         /* Remove signs that have expired during this round */
         signs.removeAll(signsToRemove);
+        
+        /* Remove buildings that have been destroyed some time ago */
+        buildings.removeAll(buildingsToRemove);
     }
 
     public Building placeBuilding(Building house, Point p) throws Exception {
@@ -1600,15 +1606,31 @@ public class GameMap {
         placeSign(null, null, point);
     }
 
+    void removeSignWithinStepTime(Sign sign) {
+        MapPoint mp = getMapPoint(sign.getPosition());
+        
+        mp.setSign(null);
+    
+        signsToRemove.add(sign);
+    }
+    
     void removeSign(Sign sign) {
         MapPoint mp = getMapPoint(sign.getPosition());
         
         mp.setSign(null);
         
-        signsToRemove.add(sign);
+        signs.remove(sign);
     }
 
     void removeWorker(Worker w) {
         workersToRemove.add(w);
+    }
+
+    void removeBuilding(Building b) {
+        MapPoint mp = getMapPoint(b.getPosition());
+
+        mp.removeBuilding();
+        
+        buildingsToRemove.add(b);
     }
 }

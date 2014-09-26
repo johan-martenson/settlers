@@ -49,7 +49,7 @@ public class Sign {
         age++;
         
         if (age > SIGN_EXPIRATION_TIME) {
-            map.removeSign(this);
+            map.removeSignWithinStepTime(this);
         }
     }
 }

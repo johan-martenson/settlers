@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import java.util.Map;
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Farm;
@@ -260,9 +261,13 @@ public class ConstructionTest {
 
     @Test(expected = InvalidStateForProduction.class)
     public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
-        Sawmill sm = new Sawmill();
+        GameMap map = new GameMap(20, 20);
+        
+        map.placeBuilding(new Headquarter(), new Point(10, 10));
+        
+        Building sm = map.placeBuilding(new Sawmill(), new Point(4, 4));
 
-        Utils.constructHouse(sm, null);
+        Utils.constructHouse(sm, map);
 
         assertTrue(sm.ready());
 

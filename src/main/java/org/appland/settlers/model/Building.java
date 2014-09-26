@@ -29,10 +29,11 @@ public class Building implements Actor, EndPoint {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
     }
 
-    private static final int TIME_TO_BUILD_SMALL_HOUSE  = 99;
-    private static final int TIME_TO_BUILD_MEDIUM_HOUSE = 149;
-    private static final int TIME_TO_BUILD_LARGE_HOUSE  = 199;
-    private static final int TIME_TO_BURN_DOWN          = 49;
+    private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
+    private static final int TIME_TO_BUILD_MEDIUM_HOUSE            = 149;
+    private static final int TIME_TO_BUILD_LARGE_HOUSE             = 199;
+    private static final int TIME_TO_BURN_DOWN                     = 49;
+    private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
     
     protected GameMap map;
     
@@ -366,6 +367,8 @@ public class Building implements Actor, EndPoint {
         } else if (burningDown()) {
             if (countdown.reachedZero()) {
                 state = DESTROYED;
+                
+                countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
             } else {
                 countdown.step();
             }
@@ -376,6 +379,12 @@ public class Building implements Actor, EndPoint {
                 } else {
                     countdown.step();
                 }
+            }
+        } else if (destroyed()) {
+            if (countdown.reachedZero()) {
+                map.removeBuilding(this);
+            } else {
+                countdown.step();
             }
         }
     }

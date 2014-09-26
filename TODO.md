@@ -13,9 +13,11 @@ RE-FACTOR
 TEST
 ====
 
-*  Test signs can be placed outside border
+*  Test that it's possible to build a new house on a destroyed house that is no longer burning
 
-*  Test signs expire and eventually disappear
+*  Test houses are removed completely after a while
+
+*  Test signs can be placed outside border
 
 *  Test geologist has an ok movement pattern
 
@@ -397,6 +399,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add ability to create mints to the app - DONE
 
 *  Change barracks to only require two plancks for construction - DONE
+
+*  Test signs expire and eventually disappear - DONE
+
+
 
 
 

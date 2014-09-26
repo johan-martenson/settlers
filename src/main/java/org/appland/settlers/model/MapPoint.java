@@ -177,4 +177,8 @@ public class MapPoint {
     void setSign(Sign s) {
         sign = s;
     }
+
+    void removeBuilding() {
+        building = null;
+    }
 }
