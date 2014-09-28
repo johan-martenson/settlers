@@ -15,8 +15,6 @@ TEST
 
 *  Test that it's possible to build a new house on a destroyed house that is no longer burning
 
-*  Test houses are removed completely after a while
-
 *  Test signs can be placed outside border
 
 *  Test geologist has an ok movement pattern
@@ -69,8 +67,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Check that road cannot be built in bad angle to a building's flag (directly to left?) - check with game
 
-*  Verify that destroyed buildings are removed completely after a suitable timeout
-
 *  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
 
 *  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
@@ -79,8 +75,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
-
-*  Add constructHouse method to Test Utils to replace the construct[Small|Medium|Large]House methods
 
 *  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
 
@@ -401,6 +395,12 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Change barracks to only require two plancks for construction - DONE
 
 *  Test signs expire and eventually disappear - DONE
+
+*  Test houses are removed completely after a while - DONE
+
+*  Verify that destroyed buildings are removed completely after a suitable timeout - DONE
+
+*  Add constructHouse method to Test Utils to replace the construct[Small|Medium|Large]House methods - DONE
 
 
 
