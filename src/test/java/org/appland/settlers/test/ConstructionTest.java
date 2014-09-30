@@ -277,20 +277,4 @@ public class ConstructionTest {
 
         sm.putCargo(new Cargo(WOOD, null));
     }
-
-    private boolean matchesRequiredMaterialForSmallHouse(Map<Material, Integer> requiredMaterialToFinish) {
-        boolean matches = true;
-
-        for (Material m : Material.values()) {
-            if (m == PLANCK && requiredMaterialToFinish.get(m) != 2) {
-                matches = false;
-            } else if (m == STONE && requiredMaterialToFinish.get(m) != 2) {
-                matches = false;
-            } else if (requiredMaterialToFinish.get(m) != 0) {
-                matches = false;
-            }
-        }
-
-        return matches;
-    }
 }
