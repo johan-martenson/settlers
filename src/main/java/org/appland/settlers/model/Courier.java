@@ -253,6 +253,8 @@ public class Courier extends Worker {
 
             setCargo(null);
 
+            assignedRoad.registerUsage();
+            
             state = GOING_BACK_TO_ROAD;
 
             setTarget(targetBuilding.getFlag().getPosition());
@@ -260,6 +262,8 @@ public class Courier extends Worker {
             putDownCargo();
 
             setCargo(null);
+            
+            assignedRoad.registerUsage();
 
             Point currentPosition = getPosition();
             EndPoint flag = getEndPointAtPoint(currentPosition);

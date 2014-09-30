@@ -7,7 +7,7 @@ RE-FACTOR
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
-
+*  Clean up in courier to reduce duplication
 
 
 TEST
@@ -71,16 +71,24 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
 
+*  Sometimes cargos for the headquarter are left by the flag instead of being delivered the whole way. Verify and fix!
+
 
 
 TO IMPLEMENT
 ============
 
+*  Draw main roads with a darker color in the app
+
+*  Add button to stop production in building to the sideview in the app
+
+*  Add button to empty military buildings to the sideview in the app
+
+*  Make sure donkeys get assigned to old roads
+
 *  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
 
 *  Add ability to stop production
-
-*  Make pig pink in the app
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -401,6 +409,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Verify that destroyed buildings are removed completely after a suitable timeout - DONE
 
 *  Add constructHouse method to Test Utils to replace the construct[Small|Medium|Large]House methods - DONE
+
+*  Make pig pink in the app - DONE
+
+*  Make roads age - DONE
 
 
 

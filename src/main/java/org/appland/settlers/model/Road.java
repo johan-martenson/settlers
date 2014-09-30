@@ -5,6 +5,9 @@ import java.util.List;
 
 public class Road {
 
+    private static final int MAIN_ROAD_THRESHOLD = 99;
+    
+    private int usage;
     private EndPoint start;
     private EndPoint end;
     private Courier courier;
@@ -25,6 +28,8 @@ public class Road {
         steps.addAll(wayPoints);
         
         needsCourier = true;
+        
+        usage = 0;
     }
 
     @Override
@@ -145,5 +150,15 @@ public class Road {
 
     void setNeedsCourier(boolean b) {
         needsCourier = b;
+    }
+
+    public boolean isMainRoad() {
+        return usage > MAIN_ROAD_THRESHOLD;
+    }
+
+    void registerUsage() {        
+        if (usage <= MAIN_ROAD_THRESHOLD) {
+            usage++;
+        }
     }
 }

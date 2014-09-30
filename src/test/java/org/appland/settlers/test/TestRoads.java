@@ -18,6 +18,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.COIN;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
@@ -1418,4 +1419,171 @@ public class TestRoads {
         Point point46 = new Point(9, 9);
         Road road0 = map.placeRoad(point40, point41, point42, point43, point39, point44, point45, point46, point39);
     }
+
+    @Test
+    public void testRoadBecomesAgedWithDeliveryToBuilding() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(point2);
+        
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(flag0, headquarter0.getFlag());
+    
+        /* Place a worker on the road */
+        Courier courier = Utils.occupyRoad(new Courier(map), road0, map);
+    
+        /* Deliver 99 cargos and verify that the road does not become a main road */
+        for (int i = 0; i < 99; i++) {
+            Cargo cargo = new Cargo(COIN, map);
+ 
+            flag0.putCargo(cargo);
+
+            cargo.setTarget(headquarter0);
+            
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier.getCargo());
+            
+            for (int j = 0; j < 1000; j++) {
+                if (cargo.equals(courier.getCargo())) {
+                    break;
+                }
+            
+                map.stepTime();
+            }
+            
+            assertEquals(courier.getCargo(), cargo);
+            
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier.getTarget(), headquarter0.getPosition());
+            
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+            
+            assertNull(courier.getCargo());
+            
+            assertFalse(road0.isMainRoad());
+        }
+    
+        /* Deliver one more cargo and verify that the road becomes a main road */    
+        Cargo cargo = new Cargo(COIN, map);
+ 
+        flag0.putCargo(cargo);
+ 
+        cargo.setTarget(headquarter0);
+
+        /* Wait for the courier to pick up the cargo */
+        assertNull(courier.getCargo());
+
+        for (int j = 0; j < 1000; j++) {
+            if (cargo.equals(courier.getCargo())) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertEquals(courier.getCargo(), cargo);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+    
+        assertTrue(road0.isMainRoad());
+    }
+
+    @Test
+    public void testRoadBecomesAgedWithDeliveryToFlag() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(point2);
+        
+        /* Place flag */
+        Point point3 = new Point(5, 13);
+        Flag flag1 = map.placeFlag(point3);
+        
+        /* Place road between the headquarter and the first flag */
+        Road road0 = map.placeAutoSelectedRoad(flag0, headquarter0.getFlag());
+    
+        /* Place road between the headquarter and the second flag */
+        Road road1 = map.placeAutoSelectedRoad(flag0, flag1);
+        
+        /* Place workers on the roads */
+        Courier courier0 = Utils.occupyRoad(new Courier(map), road0, map);
+        Courier courier1 = Utils.occupyRoad(new Courier(map), road1, map);
+    
+        /* Deliver 99 cargos and verify that the road does not become a main road */
+        for (int i = 0; i < 99; i++) {
+            Cargo cargo = new Cargo(COIN, map);
+ 
+            flag1.putCargo(cargo);
+
+            cargo.setTarget(headquarter0);
+            
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier1.getCargo());
+            
+            for (int j = 0; j < 1000; j++) {
+                if (cargo.equals(courier1.getCargo())) {
+                    break;
+                }
+            
+                map.stepTime();
+            }
+            
+            assertEquals(courier1.getCargo(), cargo);
+            
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier1.getTarget(), flag0.getPosition());
+            
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+            
+            assertNull(courier1.getCargo());
+            
+            assertFalse(road1.isMainRoad());
+        }
+    
+        /* Deliver one more cargo and verify that the road becomes a main road */    
+        Cargo cargo = new Cargo(COIN, map);
+ 
+        flag1.putCargo(cargo);
+ 
+        cargo.setTarget(headquarter0);
+
+        /* Wait for the courier to pick up the cargo */
+        assertNull(courier1.getCargo());
+
+        for (int j = 0; j < 1000; j++) {
+            if (cargo.equals(courier1.getCargo())) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertEquals(courier1.getCargo(), cargo);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier1.getTarget(), flag0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+    
+        assertTrue(road1.isMainRoad());
+    }
 }
+
