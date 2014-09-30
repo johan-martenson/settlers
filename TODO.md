@@ -9,6 +9,8 @@ RE-FACTOR
 
 *  Clean up in courier to reduce duplication
 
+*  Add common interface for all actors to get getPosition() unified
+
 
 TEST
 ====
@@ -73,18 +75,28 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Sometimes cargos for the headquarter are left by the flag instead of being delivered the whole way. Verify and fix!
 
+*  Problem creating a gold mine next to where a flag and signs were before
+
+*  Geologist gets stuck when its flag is removed
+
+*  Remove house in the app doesn't seem to work
+
+*  There is too little stone on the map
+
+*  Removing a building doesn't seem to remove the driveway to its flag
+
+*  Quarry seems to always get its stone late
+
 
 
 TO IMPLEMENT
 ============
 
-*  Draw main roads with a darker color in the app
-
 *  Add button to stop production in building to the sideview in the app
 
 *  Add button to empty military buildings to the sideview in the app
 
-*  Make sure donkeys get assigned to old roads
+*  Make sure donkeys get assigned to main roads
 
 *  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
 
@@ -413,6 +425,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Make pig pink in the app - DONE
 
 *  Make roads age - DONE
+
+*  Draw main roads with a darker color in the app - DONE
+
+*  Add button and key combo to build slaughterhouse in the app - DONE
 
 
 
