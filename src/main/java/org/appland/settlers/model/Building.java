@@ -382,7 +382,11 @@ public class Building implements Actor, EndPoint {
             }
         } else if (destroyed()) {
             if (countdown.reachedZero()) {
-                map.removeBuilding(this);
+                try {
+                    map.removeBuilding(this);
+                } catch (Exception ex) {
+                    Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 countdown.step();
             }

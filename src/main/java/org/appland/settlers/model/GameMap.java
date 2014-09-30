@@ -1626,10 +1626,14 @@ public class GameMap {
         workersToRemove.add(w);
     }
 
-    void removeBuilding(Building b) {
+    void removeBuilding(Building b) throws Exception {
         MapPoint mp = getMapPoint(b.getPosition());
 
         mp.removeBuilding();
+        
+        Road driveway = getRoad(b.getPosition(), b.getFlag().getPosition());
+        
+        removeRoad(driveway);
         
         buildingsToRemove.add(b);
     }
