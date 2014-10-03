@@ -1631,10 +1631,6 @@ public class GameMap {
 
         mp.removeBuilding();
         
-        Road driveway = getRoad(b.getPosition(), b.getFlag().getPosition());
-        
-        removeRoad(driveway);
-        
         buildingsToRemove.add(b);
     }
 }

@@ -780,7 +780,13 @@ public class TestCoalMine {
         assertEquals(ww.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
+        boolean firstStep = true;
         for (Point p : ww.getPlannedPath()) {
+            if (firstStep) {
+                firstStep = false;
+                continue;
+            }
+
             assertTrue(map.isRoadAtPoint(p));
         }
     }

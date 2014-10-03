@@ -475,7 +475,13 @@ public class TestWell {
         assertEquals(ww.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
+        boolean firstStep = true;
         for (Point p : ww.getPlannedPath()) {
+            if (firstStep) {
+                firstStep = false;
+                continue;
+            }
+
             assertTrue(map.isRoadAtPoint(p));
         }
     }
@@ -523,7 +529,7 @@ public class TestWell {
     }
 
     @Test
-    public void testDrivewayIsRemovedTogetherWithDestroyedWell() throws Exception {
+    public void testDrivewayIsRemovedTogetherWhenWellIsTornDown() throws Exception {
 
         /* Creating new game map with size 40x40 */
         GameMap map = new GameMap(40, 40);
@@ -547,19 +553,57 @@ public class TestWell {
 
         assertTrue(well0.burningDown());
 
-        /* Wait for the well to stop burning */
-        Utils.fastForward(50, map);
-        
-        assertTrue(well0.destroyed());
-        
-        /* Wait for the well to disappear */
-        for (int i = 0; i < 100; i++) {
-            assertNotNull(map.getRoad(point26, point26.downRight()));
-            
-            map.stepTime();
-        }
-        
         assertNull(map.getRoad(point26, point26.downRight()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point26 = new Point(8, 8);
+        Building well0 = map.placeBuilding(new Well(), point26);
+        
+        /* Finish construction of the well */
+        Utils.constructHouse(well0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
+        
+        map.removeFlag(well0.getFlag());
+
+        assertNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing well */
+        Point point26 = new Point(8, 8);
+        Building well0 = map.placeBuilding(new Well(), point26);
+        
+        /* Finish construction of the well */
+        Utils.constructHouse(well0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
+        
+        well0.tearDown();
+
+        assertNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
     }
 }
 

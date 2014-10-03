@@ -67,8 +67,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  It should not be possible to place building that overlaps the border - verify occupied points in game
 
-*  Check that road cannot be built in bad angle to a building's flag (directly to left?) - check with game
-
 *  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
 
 *  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
@@ -83,9 +81,9 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  There is too little stone on the map
 
-*  Removing a building doesn't seem to remove the driveway to its flag
-
 *  Quarry seems to always get its stone late
+
+*  Q: When is the driveway of a building removed if the building is torn down?
 
 
 
@@ -147,8 +145,6 @@ TO IMPLEMENT
 *  add to app that 'S' dumps both state and code
 
 *  adjust the defense radius of barracks and the headquarter
-
-*  possible road connections returns straight down|up. Fix this
 
 *  worker setTarget and setTargetOffroad should share much more code
 
@@ -429,6 +425,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Draw main roads with a darker color in the app - DONE
 
 *  Add button and key combo to build slaughterhouse in the app - DONE
+
+*  Removing a building doesn't seem to remove the driveway to its flag - DONE
+
+*  possible road connections returns straight down|up. Fix this - DONE
 
 
 

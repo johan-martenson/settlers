@@ -409,6 +409,13 @@ public class Building implements Actor, EndPoint {
         if (worker != null) {
             worker.returnToStorage();
         }
+
+        /* Remove driveway */
+        Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
+        
+        if (driveway != null) {
+            map.removeRoad(driveway);
+        }
     }
 
     public Size getHouseSize() {

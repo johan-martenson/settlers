@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import java.util.Map;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -20,6 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -28,7 +28,17 @@ public class ConstructionTest {
 
     @Test
     public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        Woodcutter wc = new Woodcutter();
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point1 = new Point(9, 9);
+        Building wc = map.placeBuilding(new Woodcutter(), point1);
 
         assertFalse(wc.isMilitaryBuilding());
 
@@ -141,7 +151,17 @@ public class ConstructionTest {
 
     @Test
     public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        Sawmill sm = new Sawmill();
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point1 = new Point(9, 9);
+        Building sm = map.placeBuilding(new Sawmill(), point1);
 
         assertTrue(sm.underConstruction());
 
@@ -187,13 +207,23 @@ public class ConstructionTest {
             sm.stepTime();
         }
 
-
         assertTrue(sm.destroyed());
     }
 
     @Test
     public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        Farm farm = new Farm();
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point1 = new Point(9, 9);
+        Building farm = map.placeBuilding(new Farm(), point1);
+
         assertTrue(farm.underConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
@@ -248,7 +278,17 @@ public class ConstructionTest {
 
     @Test(expected = InvalidStateForProduction.class)
     public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
-        Sawmill sm = new Sawmill();
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point1 = new Point(9, 9);
+        Building sm = map.placeBuilding(new Sawmill(), point1);
 
         Utils.constructHouse(sm, null);
 
@@ -273,7 +313,7 @@ public class ConstructionTest {
 
         sm.tearDown();
 
-        Utils.fastForward(1000, sm);
+        Utils.fastForward(1000, map);
 
         sm.putCargo(new Cargo(WOOD, null));
     }
