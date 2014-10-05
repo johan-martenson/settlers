@@ -579,7 +579,7 @@ public class Storage extends Building implements Actor {
                 continue;
             }
             
-            Donkey d = retrieveDonkey(DONKEY);
+            Donkey d = retrieveDonkey();
             map.placeWorker(d, getFlag());
             d.assignToRoad(r);
 
@@ -589,7 +589,7 @@ public class Storage extends Building implements Actor {
         return false;
     }
 
-    private Donkey retrieveDonkey(Material material) {
+    private Donkey retrieveDonkey() {
         if (hasAtLeastOne(DONKEY)) {
             consumeOne(DONKEY);
             
