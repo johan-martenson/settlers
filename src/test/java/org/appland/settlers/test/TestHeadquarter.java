@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
@@ -35,9 +36,10 @@ public class TestHeadquarter {
         assertEquals(hq.getAmount(WOOD),    4);
         assertEquals(hq.getAmount(PLANCK), 15);
         assertEquals(hq.getAmount(STONE),  10);
+        assertEquals(hq.getAmount(DONKEY), 1);
 
         assertEquals(hq.getAmount(MINER),   3);
-
+        
         // TODO: add all other material
     }
 

@@ -1450,16 +1450,8 @@ public class TestRoads {
             
             /* Wait for the courier to pick up the cargo */
             assertNull(courier.getCargo());
-            
-            for (int j = 0; j < 1000; j++) {
-                if (cargo.equals(courier.getCargo())) {
-                    break;
-                }
-            
-                map.stepTime();
-            }
-            
-            assertEquals(courier.getCargo(), cargo);
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
             
             /* Wait for the courier to deliver the cargo */
             assertEquals(courier.getTarget(), headquarter0.getPosition());
@@ -1481,15 +1473,7 @@ public class TestRoads {
         /* Wait for the courier to pick up the cargo */
         assertNull(courier.getCargo());
 
-        for (int j = 0; j < 1000; j++) {
-            if (cargo.equals(courier.getCargo())) {
-                break;
-            }
-        
-            map.stepTime();
-        }
-
-        assertEquals(courier.getCargo(), cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
         /* Wait for the courier to deliver the cargo */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
@@ -1537,16 +1521,8 @@ public class TestRoads {
             
             /* Wait for the courier to pick up the cargo */
             assertNull(courier1.getCargo());
-            
-            for (int j = 0; j < 1000; j++) {
-                if (cargo.equals(courier1.getCargo())) {
-                    break;
-                }
-            
-                map.stepTime();
-            }
-            
-            assertEquals(courier1.getCargo(), cargo);
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
             
             /* Wait for the courier to deliver the cargo */
             assertEquals(courier1.getTarget(), flag0.getPosition());
@@ -1568,15 +1544,7 @@ public class TestRoads {
         /* Wait for the courier to pick up the cargo */
         assertNull(courier1.getCargo());
 
-        for (int j = 0; j < 1000; j++) {
-            if (cargo.equals(courier1.getCargo())) {
-                break;
-            }
-        
-            map.stepTime();
-        }
-
-        assertEquals(courier1.getCargo(), cargo);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
 
         /* Wait for the courier to deliver the cargo */
         assertEquals(courier1.getTarget(), flag0.getPosition());

@@ -16,6 +16,7 @@ public class InitialState {
         public static final int STORAGE_INITIAL_PLANCKS = 15;
         public static final int STORAGE_INITIAL_STONES = 10;
         public static final int STORAGE_INITIAL_FISH = 0;
+        public static final int STORAGE_INITIAL_DONKEY = 1;
         
         public static final int STORAGE_INITIAL_FORESTER = 2;
         public static final int STORAGE_INITIAL_WOODCUTTER_WORKER = 4;

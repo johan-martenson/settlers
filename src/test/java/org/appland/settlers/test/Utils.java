@@ -417,4 +417,16 @@ public class Utils {
         
         assertTrue(b.ready());
     }
+
+    static void fastForwardUntilWorkerCarriesCargo(GameMap map, Courier courier1, Cargo cargo) {
+        for (int j = 0; j < 1000; j++) {
+            if (cargo.equals(courier1.getCargo())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(courier1.getCargo(), cargo);
+    }
 }

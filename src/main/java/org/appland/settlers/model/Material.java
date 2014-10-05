@@ -23,6 +23,7 @@ public enum Material {
     COIN,
     PIG,
     MEAT,
+    DONKEY,
     
     PRIVATE, 
     SERGEANT, 

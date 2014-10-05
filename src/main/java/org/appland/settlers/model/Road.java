@@ -7,12 +7,13 @@ public class Road {
 
     private static final int MAIN_ROAD_THRESHOLD = 99;
     
-    private int usage;
-    private EndPoint start;
-    private EndPoint end;
-    private Courier courier;
+    private int         usage;
+    private EndPoint    start;
+    private EndPoint    end;
+    private Courier     courier;
+    private Donkey      donkey;
     private List<Point> steps;
-    private boolean  needsCourier;
+    private boolean     needsCourier;
 
     Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
         if (roadStepsTooLong(wayPoints)) {
@@ -23,6 +24,7 @@ public class Road {
         this.end = end;
 
         courier = null;
+        donkey  = null;
         
         steps = new ArrayList<>();
         steps.addAll(wayPoints);
@@ -92,6 +94,10 @@ public class Road {
     }
 
     void setCourier(Courier wr) {
+        if (wr instanceof Donkey) {
+            donkey = (Donkey) wr;
+        }
+        
         courier = wr;
     }
 
@@ -160,5 +166,17 @@ public class Road {
         if (usage <= MAIN_ROAD_THRESHOLD) {
             usage++;
         }
+    }
+
+    public Donkey getDonkey() {
+        return donkey;
+    }
+
+    public boolean needsDonkey() {
+        if (isMainRoad() && donkey == null) {
+            return true;
+        }
+
+        return false;
     }
 }

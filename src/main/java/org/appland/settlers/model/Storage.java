@@ -10,6 +10,7 @@ import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FORESTER;
@@ -110,9 +111,15 @@ public class Storage extends Building implements Actor {
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
         if (assignCouriers()) {
+            System.out.println("ASSIGNED COURIER");
             return;
         }
 
+        if (assignDonkeys()) {
+            System.out.println("ASSIGNED DONKEY");
+            return;
+        }
+        
         if (assignWorkerToUnoccupiedBuildings()) {
             return;
         }
@@ -552,5 +559,47 @@ public class Storage extends Building implements Actor {
         Storage stg = map.getClosestStorage(b.getPosition());
                     
         return equals(stg);
+    }
+
+    private boolean assignDonkeys() throws Exception {
+        for (Road r : map.getRoads()) {
+            if (!r.isMainRoad()) {
+                continue;
+            }
+
+            if (!r.needsDonkey()) {
+                System.out.println("DOES NOT NEED DONKEY");
+                continue;
+            }
+        
+            if (!hasAtLeastOne(DONKEY)) {
+                System.out.println("HAS AT LEAST ONE DONKEY");
+                continue;
+            }
+        
+            Storage stg = map.getClosestStorage(r.getStart());
+            
+            if (stg != null && !this.equals(stg)) {
+                continue;
+            }
+            
+            Donkey d = retrieveDonkey(DONKEY);
+            map.placeWorker(d, getFlag());
+            d.assignToRoad(r);
+
+            return true;
+        }
+    
+        return false;
+    }
+
+    private Donkey retrieveDonkey(Material material) {
+        if (hasAtLeastOne(DONKEY)) {
+            consumeOne(DONKEY);
+            
+            return new Donkey(map);
+        }
+    
+        return null;
     }
 }

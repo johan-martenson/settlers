@@ -52,6 +52,7 @@ public class Headquarter extends Storage {
         inventory.put(PLANCK, InitialState.STORAGE_INITIAL_PLANCKS);
         inventory.put(STONE, InitialState.STORAGE_INITIAL_STONES);
         inventory.put(FISH, InitialState.STORAGE_INITIAL_FISH);
+        inventory.put(DONKEY, InitialState.STORAGE_INITIAL_DONKEY);
 
         inventory.put(FORESTER, InitialState.STORAGE_INITIAL_FORESTER);
         inventory.put(WOODCUTTER_WORKER, InitialState.STORAGE_INITIAL_WOODCUTTER_WORKER);

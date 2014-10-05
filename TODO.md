@@ -11,9 +11,29 @@ RE-FACTOR
 
 *  Add common interface for all actors to get getPosition() unified
 
+*  Fix TestCourier and TestDonkey to use occupyRoad() instead of manually placing courier or donkey
+
+*  Fix "courier" comments in TestDonkey
+
+*  Remove GameMap::getRoadsThatNeedCouriers()
+
+*  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
+
 
 TEST
 ====
+
+*  Test that courier and donkey can't be assigned to a road twice
+
+*  Q: Do donkeys get carried or do they walk themselves to the HQ when they have been produced?
+
+*  Test that splitting a main road results in two main roads (verify?)
+
+*  Test that both a courier and a donkey can be assigned to a road
+
+*  Test that two couriers or donkeys cannot be assigned to a road
+
+*  Test that it's not possible to assign a donkey to a small road
 
 *  Test that it's possible to build a new house on a destroyed house that is no longer burning
 
@@ -89,6 +109,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Draw donkeys in the app
 
 *  Add button to stop production in building to the sideview in the app
 
