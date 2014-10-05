@@ -111,12 +111,10 @@ public class Storage extends Building implements Actor {
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
         if (assignCouriers()) {
-            System.out.println("ASSIGNED COURIER");
             return;
         }
 
         if (assignDonkeys()) {
-            System.out.println("ASSIGNED DONKEY");
             return;
         }
         
@@ -568,12 +566,10 @@ public class Storage extends Building implements Actor {
             }
 
             if (!r.needsDonkey()) {
-                System.out.println("DOES NOT NEED DONKEY");
                 continue;
             }
         
             if (!hasAtLeastOne(DONKEY)) {
-                System.out.println("HAS AT LEAST ONE DONKEY");
                 continue;
             }
         
