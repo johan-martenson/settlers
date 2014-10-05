@@ -19,9 +19,16 @@ RE-FACTOR
 
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
+*  Remove Material argument to retrieveDonkey in Storage
+
+
 
 TEST
 ====
+
+*  Test the count of donkeys gets decreased when a donkey is assigned.
+
+*  Test that no donkey gets assigned if there are no donkeys available
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -101,7 +108,7 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  There is too little stone on the map
 
-*  Quarry seems to always get its stone late
+*  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely
 
 *  Q: When is the driveway of a building removed if the building is torn down?
 
