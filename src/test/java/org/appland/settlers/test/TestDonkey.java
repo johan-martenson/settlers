@@ -14,6 +14,7 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -104,6 +105,7 @@ public class TestDonkey {
         assertNull(road1.getDonkey());
         
         int amount = map.getAllWorkers().size();
+        int donkeysInHq = headquarter0.getAmount(DONKEY);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
 
@@ -112,6 +114,7 @@ public class TestDonkey {
         map.stepTime();
 
         assertEquals(map.getAllWorkers().size(), amount + 1);
+        assertEquals(headquarter0.getAmount(DONKEY), donkeysInHq - 1);
         assertNotNull(road1.getDonkey());
         assertFalse(road1.needsDonkey());
     }

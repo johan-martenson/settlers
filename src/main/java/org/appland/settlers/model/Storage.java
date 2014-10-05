@@ -591,7 +591,7 @@ public class Storage extends Building implements Actor {
 
     private Donkey retrieveDonkey() {
         if (hasAtLeastOne(DONKEY)) {
-            consumeOne(DONKEY);
+            retrieveOneFromInventory(DONKEY);
             
             return new Donkey(map);
         }

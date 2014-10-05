@@ -19,14 +19,10 @@ RE-FACTOR
 
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
-*  Remove Material argument to retrieveDonkey in Storage
-
 
 
 TEST
 ====
-
-*  Test the count of donkeys gets decreased when a donkey is assigned.
 
 *  Test that no donkey gets assigned if there are no donkeys available
 
@@ -458,6 +454,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Removing a building doesn't seem to remove the driveway to its flag - DONE
 
 *  possible road connections returns straight down|up. Fix this - DONE
+
+*  Remove Material argument to retrieveDonkey in Storage - DONE
+
+*  Test the count of donkeys gets decreased when a donkey is assigned. - DONE
 
 
 
