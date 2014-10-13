@@ -658,6 +658,10 @@ public class GameMap {
             return false;
         }
 
+        if (isStoneAtPoint(p)) {
+            return false;
+        }
+        
         if (terrain.isInWater(p)) {
             return false;
         }
@@ -687,19 +691,19 @@ public class GameMap {
         }
 
         if (isWithinBorder(p.downRight()) && isBuildingAtPoint(p.downRight())) {
-            if (getBuildingAtPoint(p.downRight()).getHouseSize() == LARGE) {
+            if (getBuildingAtPoint(p.downRight()).getSize() == LARGE) {
                 return false;
             }
         }
 
         if (isWithinBorder(p.right()) && isBuildingAtPoint(p.right())) {
-            if (getBuildingAtPoint(p.right()).getHouseSize() == LARGE) {
+            if (getBuildingAtPoint(p.right()).getSize() == LARGE) {
                 return false;
             }
         }
 
         if (isWithinBorder(p.downLeft()) && isBuildingAtPoint(p.downLeft())) {
-            if (getBuildingAtPoint(p.downLeft()).getHouseSize() == LARGE) {
+            if (getBuildingAtPoint(p.downLeft()).getSize() == LARGE) {
                 return false;
             }
         }
@@ -779,6 +783,10 @@ public class GameMap {
                     continue;
                 }
                 
+                if (isStoneAtPoint(point)) {
+                    continue;
+                }
+                
                 if (terrain.isInWater(point)) {
                     continue;
                 }
@@ -804,25 +812,25 @@ public class GameMap {
                 }
 
                 if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-                    if (getBuildingAtPoint(point.up().right()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.up().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
-                    if (getBuildingAtPoint(point.down()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.down()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
-                    if (getBuildingAtPoint(point.downRight().right()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.downRight().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
-                    if (getBuildingAtPoint(point.down().right()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.down().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
@@ -847,25 +855,25 @@ public class GameMap {
                 }
                 
                 if (isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
-                    if (getBuildingAtPoint(point.upRight().right()).getHouseSize() != SMALL) {
+                    if (getBuildingAtPoint(point.upRight().right()).getSize() != SMALL) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-                    if (getBuildingAtPoint(point.up().right()).getHouseSize() != SMALL) {
+                    if (getBuildingAtPoint(point.up().right()).getSize() != SMALL) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
-                    if (getBuildingAtPoint(point.right().right()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
                 if (isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
-                    if (getBuildingAtPoint(point.downRight().down()).getHouseSize() == LARGE) {
+                    if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
                         continue;
                     }
                 }
@@ -926,7 +934,7 @@ public class GameMap {
     }
 
     private boolean isVegetationCorrect(Building house, Point site) throws Exception {
-        Size size = house.getHouseSize();
+        Size size = house.getSize();
     
         if (house.isMine()) {
             return terrain.isOnMountain(site);

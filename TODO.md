@@ -7,8 +7,9 @@ RE-FACTOR
 
 *  Clean up getAvailableHousePoints!
 
-    *  Rename Building::getHouseSize() to getSize() Are
-    *  canBuild(Small|Medium|Large)House() needed?
+*  Rename Building::getHouseSize() to getSize() Are
+
+*  canBuild(Small|Medium|Large)House() needed?
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
@@ -20,8 +21,6 @@ RE-FACTOR
 
 *  Fix "courier" comments in TestDonkey
 
-*  Remove GameMap::getRoadsThatNeedCouriers()
-
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
 
@@ -30,8 +29,6 @@ TEST
 ====
 
 *  Test that there are no available flags or buildings on stones or trees
-
-*  Test that there are no available flags or buildings on water
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -112,8 +109,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 *  There is too little stone on the map
 
 *  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely
-
-*  Q: When is the driveway of a building removed if the building is torn down?
 
 
 
@@ -477,6 +472,12 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove terrainIsUpdated() method - DONE
 
 *  Remove isPointCovered() - DONE
+
+*  Remove GameMap::getRoadsThatNeedCouriers() - DONE
+
+*  Test that there are no available flags or buildings on water - DONE
+
+*  Q: When is the driveway of a building removed if the building is torn down? - DONE
 
 
 

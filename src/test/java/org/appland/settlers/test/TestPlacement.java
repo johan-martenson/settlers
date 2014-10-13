@@ -171,6 +171,42 @@ public class TestPlacement {
         
         assertFalse(possibleBuildings.containsKey(waterPoint));
     }
+
+    @Test
+    public void testNoAvailableFlagOnStone() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+
+        /* Place a stone */
+        Point point1 = new Point(2, 2);
+        map.placeStone(point1);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        /* Verify that there is no available spot for a flag on the stone */
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertFalse(possibleFlags.contains(point1));
+    }
+
+    @Test
+    public void testNoAvailableBuildingSpotOnStone() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+
+        /* Place a stone */
+        Point point1 = new Point(2, 2);
+        map.placeStone(point1);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Verify that there is no available spot for a building on the stone */
+        Map<Point, Size> possibleBuildings = map.getAvailableHousePoints();
+        
+        assertFalse(possibleBuildings.containsKey(point1));
+    }
     
     @Test
     public void testAvailableFlagsNextToFlag() throws Exception {

@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -418,7 +417,7 @@ public class Building implements Actor, EndPoint {
         }
     }
 
-    public Size getHouseSize() {
+    public Size getSize() {
         HouseSize hs = getClass().getAnnotation(HouseSize.class);
 
         return hs.size();
@@ -475,7 +474,7 @@ public class Building implements Actor, EndPoint {
                 materials.put(m, amount + 1);
             }
         } else {
-            switch (getHouseSize()) {
+            switch (getSize()) {
             case SMALL:
                 materials.put(PLANCK, 2);
                 materials.put(STONE, 2);
