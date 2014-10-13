@@ -12,6 +12,7 @@ RE-FACTOR
     *  Remove terrainIsUpdated() method
     *  Remove isPointCovered()
     *  Rename Building::getHouseSize() to getSize()
+    *  Are canBuild(Small|Medium|Large)House() needed?
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 

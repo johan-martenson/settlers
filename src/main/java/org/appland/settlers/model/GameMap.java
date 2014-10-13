@@ -35,7 +35,6 @@ public class GameMap {
     private final int               width;
     private Terrain                 terrain;
     private List<Point>             fullGrid;
-    private List<Point>             reservedPoints;
     private Map<Point, MapPoint>    pointToGameObject;
     private List<Tree>              trees;
     private List<Stone>             stones;
@@ -121,7 +120,6 @@ public class GameMap {
         workers               = new ArrayList<>();
         workersToRemove       = new LinkedList<>();
         terrain               = new Terrain(width, height);
-        reservedPoints        = new ArrayList<>();
         trees                 = new ArrayList<>();
         stones                = new ArrayList<>();
         crops                 = new ArrayList<>();
@@ -797,14 +795,6 @@ public class GameMap {
         pointToGameObject.get(housePoint).setBuilding(house);
     }
 
-    private boolean isPointCovered(Point point) {
-        return reservedPoints.contains(point);
-    }
-
-    public void terrainIsUpdated() throws Exception {
-        // TODO: remove method
-    }
-
     public Map<Point, Size> getAvailableHousePoints() throws Exception {
         Map<Point, Size> housePoints = new HashMap<>();
         boolean diagonalHouse;
@@ -964,25 +954,15 @@ public class GameMap {
     }
     
     private boolean canBuildSmallHouse(Point site) throws Exception {
-        return terrain.isOnGrass(site) && !isPointCovered(site);
+        return terrain.isOnGrass(site);
     }
 
     private boolean canBuildLargeHouse(Point site) throws Exception {
         boolean closeAreaClear = terrain.isOnGrass(site);
         boolean wideAreaClear = true;
     
-        if (isPointCovered(site)) {
-            return false;
-        }
-        
         for (Point p : site.getAdjacentPoints()) {
             if (!terrain.isOnGrass(p)) {
-                wideAreaClear = false;
-                
-                break;
-            }
-        
-            if (isPointCovered(p)) {
                 wideAreaClear = false;
                 
                 break;
@@ -993,33 +973,14 @@ public class GameMap {
     }
 
     private boolean canBuildMediumHouse(Point site) throws Exception {
-        boolean areaClear;
-        boolean borderClear;
-        
-        if (isPointCovered(site)) {
-            return false;
-        }
-        
-        areaClear = terrain.isOnGrass(site);
-        
-        borderClear = true;
-        
-        for(Point p : site.getAdjacentPoints()) {
-            if (isPointCovered(p)) {
-                borderClear = false;
-                
-                break;
-            }
-        }
-        
-        return areaClear && borderClear;
+        return terrain.isOnGrass(site);
     }
 
     private boolean canPlaceHouse(Building house, Point site) throws Exception {
         Size size = house.getHouseSize();
     
         if (house.isMine()) {
-            return terrain.isOnMountain(site) && !isPointCovered(site);
+            return terrain.isOnMountain(site);
         } else {        
             switch (size) {
             case SMALL:

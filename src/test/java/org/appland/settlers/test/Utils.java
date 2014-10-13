@@ -260,16 +260,12 @@ public class Utils {
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
         
         waterTile.setVegetationType(WATER);
-
-        map.terrainIsUpdated();
     }
 
     static void surroundPointWithMountain(Point point0, GameMap map) throws Exception {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
             t.setVegetationType(MOUNTAIN);
         }
-
-        map.terrainIsUpdated();
     }
 
     static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
@@ -339,8 +335,6 @@ public class Utils {
         for (Tile t : tiles) {
             t.setVegetationType(MOUNTAIN);
         }
-
-        map.terrainIsUpdated();
     }
 
     static void putMineralWithinRadius(Material mineral, Point point1, int i, GameMap map) throws Exception {
@@ -354,8 +348,6 @@ public class Utils {
         for (Tile t : tiles) {
             t.setAmountMineral(mineral, LARGE);
         }
-
-        map.terrainIsUpdated();
     }
 
     static Courier occupyRoad(Courier courier, Road road1, GameMap map) throws Exception {

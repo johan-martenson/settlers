@@ -491,8 +491,6 @@ public class TestPlacement {
         waterTile.setVegetationType(WATER);
         grassTile.setVegetationType(GRASS);
 
-        map.terrainIsUpdated();
-        
         List<Point> possibleFlags = map.getAvailableFlagPoints();
         
         assertTrue(possibleFlags.contains(sharedPoint1));
@@ -524,9 +522,7 @@ public class TestPlacement {
         waterTile4.setVegetationType(WATER);
         waterTile5.setVegetationType(WATER);
         waterTile6.setVegetationType(WATER);
-        
-        map.terrainIsUpdated();
-        
+
         List<Point> possibleFlags = map.getAvailableFlagPoints();
         
         assertFalse(possibleFlags.contains(centerPoint));
@@ -579,8 +575,6 @@ public class TestPlacement {
 
         t1.setVegetationType(MOUNTAIN);
 
-        map.terrainIsUpdated();
-        
         t1 = map.getTerrain().getTile(left, right, top);
         
         assertEquals(t1.getVegetationType(), MOUNTAIN);
@@ -685,34 +679,25 @@ public class TestPlacement {
         Point point1 = new Point(8, 4);
         Point point2 = new Point(9, 5);
         map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
-
-        /* 1 ticks from start */
-        Utils.fastForward(1, map);
 
         /* Place a water tile */
         Point point3 = new Point(11, 5);
         map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point4 = new Point(12, 4);
         map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point5 = new Point(11, 3);
         map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point6 = new Point(9, 3);
         map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
@@ -738,31 +723,25 @@ public class TestPlacement {
         Point point1 = new Point(8, 4);
         Point point2 = new Point(9, 5);
         map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point3 = new Point(11, 5);
         map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point4 = new Point(12, 4);
         map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point5 = new Point(11, 3);
         map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         Point point6 = new Point(9, 3);
         map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Place a water tile */
         map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
-        map.terrainIsUpdated();
 
         /* Placing headquarter */
         Point point21 = new Point(10, 10);
