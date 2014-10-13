@@ -7,12 +7,8 @@ RE-FACTOR
 
 *  Clean up getAvailableHousePoints!
 
-*  Remove the static list of available flag/house sites and calculate it dynamically
-
-    *  Remove terrainIsUpdated() method
-    *  Remove isPointCovered()
-    *  Rename Building::getHouseSize() to getSize()
-    *  Are canBuild(Small|Medium|Large)House() needed?
+    *  Rename Building::getHouseSize() to getSize() Are
+    *  canBuild(Small|Medium|Large)House() needed?
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
@@ -32,6 +28,10 @@ RE-FACTOR
 
 TEST
 ====
+
+*  Test that there are no available flags or buildings on stones or trees
+
+*  Test that there are no available flags or buildings on water
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -120,15 +120,13 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
-*  Improve the drawing of the selected spot
+*  Use information about available flags and buildings to show the right buttons in the app
 
-*  Draw donkeys in the app
+*  Improve the drawing of the selected spot
 
 *  Add button to stop production in building to the sideview in the app
 
 *  Add button to empty military buildings to the sideview in the app
-
-*  Make sure donkeys get assigned to main roads
 
 *  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
 
@@ -470,7 +468,15 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Test that no donkey gets assigned if there are no donkeys available - DONE
 
+*  Draw donkeys in the app - DONE
 
+*  Make sure donkeys get assigned to main roads - DONE
+
+*  Remove the static list of available flag/house sites and calculate it dynamically - DONE
+
+*  Remove terrainIsUpdated() method - DONE
+
+*  Remove isPointCovered() - DONE
 
 
 

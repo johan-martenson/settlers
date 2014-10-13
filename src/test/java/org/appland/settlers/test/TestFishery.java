@@ -197,7 +197,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
 
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -239,7 +239,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -283,7 +283,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -332,7 +332,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
 
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -401,7 +401,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
@@ -466,7 +466,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
@@ -721,7 +721,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
 
         /* Remove fishes until there is only one left */
         for (int i = 0; i < 1000; i++) {
@@ -822,7 +822,7 @@ public class TestFishery {
         Point point1 = new Point(10, 6);
         Point point2 = new Point(9, 7);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         /* Placing fishery */
         Point point26 = new Point(8, 8);
@@ -903,7 +903,7 @@ public class TestFishery {
         Point point1 = new Point(10, 6);
         Point point2 = new Point(9, 7);
 
-        Utils.surroundPointWithWater(point0, point1, point2, map);
+        Utils.setTileToWater(point0, point1, point2, map);
         
         /* Placing fishery */
         Point point26 = new Point(8, 8);

@@ -206,7 +206,7 @@ public class GameMap {
             throw new Exception("Can't place building on " + p + " because it's outside the border");
         }
 
-        if (!canPlaceHouse(house, p)) {
+        if (!isVegetationCorrect(house, p)) {
             throw new Exception("Can't place building on " + p + ".");
         }
         
@@ -242,7 +242,7 @@ public class GameMap {
             updateBorder();
         }
 
-        reserveSpaceForBuilding(house);
+        getMapPoint(p).setBuilding(house);
         
         placeDriveWay(house);
         
@@ -649,9 +649,8 @@ public class GameMap {
         return storages;
     }
 
-    public List<Point> getAvailableFlagPoints() {
+    public List<Point> getAvailableFlagPoints() throws Exception {
         List<Point> points = new LinkedList<>();
-        boolean diagonalFlagExists;
 
         for (Collection<Point> pointsWithinOneBorder : allPointsWithinBorder) {
             for (Point p : pointsWithinOneBorder) {
@@ -666,11 +665,15 @@ public class GameMap {
         return points;
     }
     
-    private boolean isAvailableFlagPoint(Point p) {
+    private boolean isAvailableFlagPoint(Point p) throws Exception {
         if (isFlagAtPoint(p)) {
             return false;
         }
 
+        if (terrain.isInWater(p)) {
+            return false;
+        }
+        
         boolean diagonalFlagExists = false;
 
         for (Point d : p.getDiagonalPoints()) {
@@ -771,29 +774,6 @@ public class GameMap {
         
         return result;
     }
-    
-    private List<Point> calculateAvailableFlagPoints() throws Exception {
-        List<Point> result      = new ArrayList<>();
-        
-        for (Point p : fullGrid) {
-            /* Remove spots surrounded by water */
-            if (!terrain.terrainMakesFlagPossible(p)) {
-                continue;
-            }            
-
-            result.add(p);
-        }
-    
-        return result;
-    }
-
-    private void reserveSpaceForBuilding(Building house) throws Exception {
-        Point flagPoint  = house.getFlag().getPosition();
-        Point housePoint = flagPoint.upLeft();
-
-        /* Exact point points to house */
-        pointToGameObject.get(housePoint).setBuilding(house);
-    }
 
     public Map<Point, Size> getAvailableHousePoints() throws Exception {
         Map<Point, Size> housePoints = new HashMap<>();
@@ -808,6 +788,10 @@ public class GameMap {
                 }
 
                 if (isFlagAtPoint(point)) {
+                    continue;
+                }
+                
+                if (terrain.isInWater(point)) {
                     continue;
                 }
                 
@@ -952,31 +936,8 @@ public class GameMap {
         
         return resultList;
     }
-    
-    private boolean canBuildSmallHouse(Point site) throws Exception {
-        return terrain.isOnGrass(site);
-    }
 
-    private boolean canBuildLargeHouse(Point site) throws Exception {
-        boolean closeAreaClear = terrain.isOnGrass(site);
-        boolean wideAreaClear = true;
-    
-        for (Point p : site.getAdjacentPoints()) {
-            if (!terrain.isOnGrass(p)) {
-                wideAreaClear = false;
-                
-                break;
-            }
-        }
-    
-        return closeAreaClear && wideAreaClear;
-    }
-
-    private boolean canBuildMediumHouse(Point site) throws Exception {
-        return terrain.isOnGrass(site);
-    }
-
-    private boolean canPlaceHouse(Building house, Point site) throws Exception {
+    private boolean isVegetationCorrect(Building house, Point site) throws Exception {
         Size size = house.getHouseSize();
     
         if (house.isMine()) {
@@ -984,11 +945,20 @@ public class GameMap {
         } else {        
             switch (size) {
             case SMALL:
-                return canBuildSmallHouse(site);
             case MEDIUM:
-                return canBuildMediumHouse(site);
+                return terrain.isOnGrass(site);
             case LARGE:
-                return canBuildLargeHouse(site);
+                boolean wideAreaClear = true;
+
+                for (Point p : site.getAdjacentPoints()) {
+                    if (!terrain.isOnGrass(p)) {
+                        wideAreaClear = false;
+
+                        break;
+                    }
+                }
+
+                return terrain.isOnGrass(site) && wideAreaClear;
             default:
                 throw new Exception("Can't handle house with unexpected size " + size);
             }
@@ -1406,7 +1376,7 @@ public class GameMap {
         return GameUtils.hullWanderer(occupiedPoints);
     }
     
-    private boolean isPossibleFlagPoint(Point flagPoint) {
+    private boolean isPossibleFlagPoint(Point flagPoint) throws Exception {
         MapPoint mp = pointToGameObject.get(flagPoint);
         
         if (mp.isStone() || mp.isTree() || mp.isBuilding()) {

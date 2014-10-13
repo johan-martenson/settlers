@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.HouseSize;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -131,6 +132,44 @@ public class TestPlacement {
         /* Points on right, sampled*/
         assertFalse(possibleHouses.containsKey(new Point(7, 5)));
         assertFalse(possibleHouses.containsKey(new Point(8, 4)));
+    }
+    
+    @Test
+    public void testNoAvailableFlagOnLake() throws Exception {
+        GameMap map        = new GameMap(20, 20);
+
+        Point waterPoint   = new Point(2, 2);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        /* Create mini-lake */
+        Utils.surroundPointWithWater(waterPoint, map);
+
+        /* Verify that there is no available spot for a flag on the lake */
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertFalse(possibleFlags.contains(waterPoint));
+    }
+
+    @Test
+    public void testNoAvailableBuildingSpotOnLake() throws Exception {
+        GameMap map        = new GameMap(20, 20);
+
+        Point waterPoint   = new Point(2, 2);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        /* Create mini-lake */
+        Utils.surroundPointWithWater(waterPoint, map);
+
+        /* Verify that there is no available spot for a building on the lake */
+        Map<Point, Size> possibleBuildings = map.getAvailableHousePoints();
+        
+        assertFalse(possibleBuildings.containsKey(waterPoint));
     }
     
     @Test

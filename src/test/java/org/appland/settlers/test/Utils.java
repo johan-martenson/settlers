@@ -256,7 +256,13 @@ public class Utils {
         assertTrue(found);
     }
 
-    static void surroundPointWithWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {        
+    static void surroundPointWithWater(Point point0, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setVegetationType(WATER);
+        }
+    }
+    
+    static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {        
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
         
         waterTile.setVegetationType(WATER);
