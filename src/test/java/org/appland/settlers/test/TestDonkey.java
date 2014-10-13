@@ -129,13 +129,13 @@ public class TestDonkey {
         Point point0 = new Point(8, 4);
         Flag flag0 = map.placeFlag(point0);
 
-        Point point1 = new Point(10, 4);
+        Point point1 = new Point(11, 3);
         Flag flag1 = map.placeFlag(point1);
 
-        Point point2 = new Point(6, 4);
+        Point point2 = new Point(4, 4);
         Flag flag2 = map.placeFlag(point2);
         
-        Point point3 = new Point(7, 3);
+        Point point3 = new Point(6, 4);
         Point point4 = new Point(9, 3);
         
         Road road0 = map.placeRoad(point2, point3, point0);
@@ -263,15 +263,15 @@ public class TestDonkey {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middle = new Point(7, 3);
-        Point point1 = new Point(8, 4);
+        Point middle = new Point(8, 4);
+        Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(9, 5);
-        Point point4 = new Point(11, 5);
+        Point point3 = new Point(11, 5);
+        Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
         Utils.constructHouse(wc, map);
@@ -309,15 +309,15 @@ public class TestDonkey {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middle = new Point(7, 3);
-        Point point1 = new Point(8, 4);
+        Point middle = new Point(8, 4);
+        Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(9, 5);
-        Point point4 = new Point(11, 5);
+        Point point3 = new Point(11, 5);
+        Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
 
         Utils.constructHouse(wc, map);

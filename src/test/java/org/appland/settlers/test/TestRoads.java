@@ -113,38 +113,38 @@ public class TestRoads {
         Point[] points = new Point[]{
             new Point(1,  3), // F
             new Point(5,  3), // F1
-            new Point(7, 3), // F2
-            new Point(9, 3), // F3
-            new Point(11, 3), // F4
+            new Point(9,  3), // F2
+            new Point(13, 3), // F3
+            new Point(17, 3), // F4
             new Point(4,  10), // F5
-            new Point(6,  10), // F6
+            new Point(8,  10), // F6
             new Point(4,  16), // F7
-            new Point(6,  16), // F8
-            new Point(7,  5), // F9
-            new Point(13, 3)};  // F10
+            new Point(8,  16), // F8
+            new Point(12,  6), // F9
+            new Point(21, 3)};  // F10
 
         int i;
         for (i = 0; i < points.length; i++) {
             map.placeFlag(points[i]);
         }
 
-        Point target = new Point(9, 5);
+        Point target = new Point(16, 6);
         
         map.placeFlag(target);
 
         map.placeRoad(points[0], new Point(3, 3), points[1]);
-        map.placeRoad(points[1], points[1].upRight(), points[2]);
+        map.placeRoad(points[1], points[1].right(), points[2]);
         
-        map.placeRoad(points[2], points[2].downRight(), points[3]);
+        map.placeRoad(points[2], points[2].right(), points[3]);
         
-        map.placeRoad(points[3], points[3].upRight(), points[4]);
-        map.placeRoad(points[4], points[4].upRight(), points[10]);
-        map.placeRoad(points[2], points[2].upRight(), points[9]);
-        map.placeRoad(points[9], points[9].upRight(), target);
+        map.placeRoad(points[3], points[3].right(), points[4]);
+        map.placeRoad(points[4], points[4].right(), points[10]);
+        map.placeRoad(points[2], points[2].upRight(), points[9].downLeft(), points[9]);
+        map.placeRoad(points[9], points[9].right(), target);
         map.placeAutoSelectedRoad(points[1], points[5]);
-        map.placeRoad(points[5], points[5].upRight(), points[6]);
+        map.placeRoad(points[5], points[5].right(), points[6]);
         map.placeAutoSelectedRoad(points[1], points[7]);
-        map.placeRoad(points[7], points[7].upRight(), points[8]);
+        map.placeRoad(points[7], points[7].right(), points[8]);
 
         /* Test route with List<Point> */
         List<Point> route = map.findWayWithExistingRoads(points[0], target);
@@ -152,7 +152,7 @@ public class TestRoads {
         assertNotNull(route);
         assertTrue(!route.isEmpty());
 
-        assertTrue(route.size() < 10);
+        assertTrue(route.size() < 11);
         assertEquals(route.get(0), points[0]);
         assertEquals(route.get(route.size() - 1), target);
 
@@ -160,7 +160,7 @@ public class TestRoads {
         
         route = map.findWayWithExistingRoads(target, points[0]);
 
-        assertTrue(route.size() < 10);
+        assertTrue(route.size() < 11);
         assertEquals(route.get(0), target);
         assertEquals(route.get(route.size() - 1), points[0]);
 
@@ -170,7 +170,7 @@ public class TestRoads {
 
         assertTrue(route.size() == 3);
         assertEquals(route.get(0), points[1]);
-        assertEquals(route.get(1), points[1].upRight());
+        assertEquals(route.get(1), points[1].right());
         assertEquals(route.get(2), points[2]);
     }
 
@@ -604,7 +604,7 @@ public class TestRoads {
     public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
         
-        Point point0 = new Point(10, 10);
+        Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(), point0);
         
         map.placeFlag(new Flag(new Point(9, 5)));

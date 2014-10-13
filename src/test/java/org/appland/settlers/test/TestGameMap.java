@@ -362,16 +362,18 @@ public class TestGameMap {
         Point point1 = new Point(49, 69);
         Point point2 = new Point(50, 70);
         Point point3 = new Point(51, 71);
-        Point point4 = new Point(50, 72);
-        Point point5 = new Point(49, 71);
-        Point point6 = new Point(48, 70);
-        Point point7 = new Point(47, 69);
+        Point point4 = new Point(52, 72);
+        Point point5 = new Point(53, 71);
+        Point point6 = new Point(54, 70);
+        Point point7 = new Point(53, 69);
+        Point point8 = new Point(54, 68);
+        Point point9 = new Point(53, 67);
         
         map.placeFlag(point1);
-        map.placeFlag(point7);
+        map.placeFlag(point9);
         
         try {
-            map.placeRoad(point1, point2, point3, point4, point5, point6, point7);
+            map.placeRoad(point1, point2, point3, point4, point5, point6, point7, point8, point9);
             assertFalse(true);
         } catch (Exception e) {}
         
@@ -399,12 +401,10 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         Building hq = map.placeBuilding(new Headquarter(), point0);
         
-        Point point1 = new Point(52, 50);
-        
-        Point point2 = new Point(53, 49);
+        Point point2 = new Point(57, 49);
         Flag flag0 = map.placeFlag(point2);
         
-        Road road0 = map.placeRoad(hq.getFlag().getPosition(), point1, point2);
+        Road road0 = map.placeAutoSelectedRoad(flag0, hq.getFlag());
         
         map.removeFlag(flag0);
         

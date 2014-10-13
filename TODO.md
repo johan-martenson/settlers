@@ -5,6 +5,14 @@ REMOVE
 RE-FACTOR
 =========
 
+*  Clean up getAvailableHousePoints!
+
+*  Remove the static list of available flag/house sites and calculate it dynamically
+
+    *  Remove terrainIsUpdated() method
+    *  Remove isPointCovered()
+    *  Rename Building::getHouseSize() to getSize()
+
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
 *  Clean up in courier to reduce duplication
@@ -23,8 +31,6 @@ RE-FACTOR
 
 TEST
 ====
-
-*  Test that no donkey gets assigned if there are no donkeys available
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -112,6 +118,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Improve the drawing of the selected spot
 
 *  Draw donkeys in the app
 
@@ -458,6 +466,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove Material argument to retrieveDonkey in Storage - DONE
 
 *  Test the count of donkeys gets decreased when a donkey is assigned. - DONE
+
+*  Test that no donkey gets assigned if there are no donkeys available - DONE
 
 
 

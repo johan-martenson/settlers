@@ -33,9 +33,7 @@ public class GameMap {
     private String                  theLeader = "Mai Thi Van Anh";
     private final int               height;
     private final int               width;
-    private List<Point>             availableFlagPoints;
     private Terrain                 terrain;
-    private Map<Point, Size>        availableHouseSites;
     private List<Point>             fullGrid;
     private List<Point>             reservedPoints;
     private Map<Point, MapPoint>    pointToGameObject;
@@ -114,26 +112,25 @@ public class GameMap {
             throw new Exception("Can't create too small map (" + width + "x" + height + ")");
         }
         
-        buildings           = new ArrayList<>();
-        buildingsToRemove   = new LinkedList<>();
-        roads               = new ArrayList<>();
-        flags               = new ArrayList<>();
-        signs               = new ArrayList<>();
-        signsToRemove       = new LinkedList<>();
-        workers             = new ArrayList<>();
-        workersToRemove     = new LinkedList<>();
-        terrain             = new Terrain(width, height);
-        reservedPoints      = new ArrayList<>();
-        trees               = new ArrayList<>();
-        stones              = new ArrayList<>();
-        crops               = new ArrayList<>();
-        
-        discoveredLand      = new LinkedList<>();
-        
+        buildings             = new ArrayList<>();
+        buildingsToRemove     = new LinkedList<>();
+        roads                 = new ArrayList<>();
+        flags                 = new ArrayList<>();
+        signs                 = new ArrayList<>();
+        signsToRemove         = new LinkedList<>();
+        workers               = new ArrayList<>();
+        workersToRemove       = new LinkedList<>();
+        terrain               = new Terrain(width, height);
+        reservedPoints        = new ArrayList<>();
+        trees                 = new ArrayList<>();
+        stones                = new ArrayList<>();
+        crops                 = new ArrayList<>();
+        borders               = new ArrayList<>();
+        discoveredLand        = new LinkedList<>();
+        allPointsWithinBorder = new LinkedList<>();
+
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
-        availableFlagPoints = calculateAvailableFlagPoints();
-        availableHouseSites = calculateAvailableHouseSites();
     }
 
     public void stepTime() {
@@ -501,8 +498,6 @@ public class GameMap {
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);
 
-            reserveSpaceForFlag(f);            
-            
             Road newRoad1 = placeRoad(points.subList(0, index + 1));
             Road newRoad2 = placeRoad(points.subList(index, points.size()));
             
@@ -573,8 +568,6 @@ public class GameMap {
         } else {
             pointToGameObject.get(f.getPosition()).setFlag(f);
             flags.add(f);
-
-            reserveSpaceForFlag(f);
         }
 
         return f;
@@ -659,9 +652,72 @@ public class GameMap {
     }
 
     public List<Point> getAvailableFlagPoints() {
-        return availableFlagPoints;
+        List<Point> points = new LinkedList<>();
+        boolean diagonalFlagExists;
+
+        for (Collection<Point> pointsWithinOneBorder : allPointsWithinBorder) {
+            for (Point p : pointsWithinOneBorder) {
+                if (!isAvailableFlagPoint(p)) {
+                    continue;
+                }
+                
+                points.add(p);
+            }
+        }
+    
+        return points;
     }
     
+    private boolean isAvailableFlagPoint(Point p) {
+        if (isFlagAtPoint(p)) {
+            return false;
+        }
+
+        boolean diagonalFlagExists = false;
+
+        for (Point d : p.getDiagonalPoints()) {
+            if (isWithinBorder(d) && isFlagAtPoint(d)) {
+                diagonalFlagExists = true;
+            }
+        }
+
+        if (diagonalFlagExists) {
+            return false;
+        }
+
+        if (isWithinBorder(p.right()) && isFlagAtPoint(p.right())) {
+            return false;
+        }
+
+        if (isWithinBorder(p.left()) && isFlagAtPoint(p.left())) {
+            return false;
+        }
+
+        if (isBuildingAtPoint(p)) {
+            return false;
+        }
+
+        if (isWithinBorder(p.downRight()) && isBuildingAtPoint(p.downRight())) {
+            if (getBuildingAtPoint(p.downRight()).getHouseSize() == LARGE) {
+                return false;
+            }
+        }
+
+        if (isWithinBorder(p.right()) && isBuildingAtPoint(p.right())) {
+            if (getBuildingAtPoint(p.right()).getHouseSize() == LARGE) {
+                return false;
+            }
+        }
+
+        if (isWithinBorder(p.downLeft()) && isBuildingAtPoint(p.downLeft())) {
+            if (getBuildingAtPoint(p.downLeft()).getHouseSize() == LARGE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
         List<Point> toEvaluate = new LinkedList<>();
         List<Point> visited = new LinkedList<>();
@@ -736,153 +792,127 @@ public class GameMap {
     private void reserveSpaceForBuilding(Building house) throws Exception {
         Point flagPoint  = house.getFlag().getPosition();
         Point housePoint = flagPoint.upLeft();
-        
+
         /* Exact point points to house */
         pointToGameObject.get(housePoint).setBuilding(house);
-        
-        switch(house.getHouseSize()) {
-        case SMALL:
-            reserveSpaceForSmallHouse(house, housePoint);
-            break;
-        case MEDIUM:
-            reserveSpaceForMediumHouse(house, housePoint);
-            break;
-        case LARGE:
-            reserveSpaceForLargeHouse(house, housePoint);
-            break;
-        }
     }
-    
-    private void reserveSpaceForFlag(Flag f) {
-        Point p = f.getPosition();
-        Point diag1 = new Point(p.x - 1, p.y - 1);
-        Point diag2 = new Point(p.x + 1, p.y - 1);
-        Point diag3 = new Point(p.x - 1, p.y + 1);
-        Point diag4 = new Point(p.x + 1, p.y + 1);
-        
-        markUnavailableForFlag(p);
-        markUnavailableForFlag(diag1);
-        markUnavailableForFlag(diag2);
-        markUnavailableForFlag(diag3);
-        markUnavailableForFlag(diag4);
-        
-        markUnavailableForHouse(p);
-        
-        setPointCovered(p);
-    }
-    
-    private void setPointCovered(Point p) {
-        reservedPoints.add(p);
-        markUnavailableForFlag(p);
-        markUnavailableForHouse(p);
-    }
-    
+
     private boolean isPointCovered(Point point) {
         return reservedPoints.contains(point);
     }
 
-    private void reserveSpaceForLargeHouse(Building house, Point site) throws Exception {
-
-        /* Mark map points that are covered by the house. The site itself is already marked */
-        pointToGameObject.get(site.upRight()).setBuilding(house);
-        pointToGameObject.get(site.upLeft()).setBuilding(house);
-        
-        /* Mark all points that this house covers */
-        setPointCovered(site);
-        
-        /* Houses and flags can't be placed exactly where this house is */
-        markUnavailableForFlag(site);
-        markUnavailableForHouse(site);
-        
-        /* Mark spots where flags can't be built */
-        markUnavailableForFlag(site.upLeft());
-        markUnavailableForFlag(site.downLeft());
-        markUnavailableForFlag(site.left());
-        markUnavailableForFlag(site.downRight());
-        markUnavailableForFlag(site.down());
-        markUnavailableForFlag(site.right());
-        markUnavailableForFlag(site.upRight());
-        
-        /* Mark spots where houses can't be built */
-        markMaxHouseSizeForSpot(site.left().downLeft(), MEDIUM);
-        markMaxHouseSizeForSpot(site.left().left(), MEDIUM);
-        markMaxHouseSizeForSpot(site.upLeft().up(), MEDIUM);
-        
-        markUnavailableForHouse(site.left().down());
-        markUnavailableForHouse(site.left().upLeft());
-        markUnavailableForHouse(site.left().up());
-        markUnavailableForHouse(site.up());
-        markUnavailableForHouse(site.upRight());
-        markUnavailableForHouse(site.upLeft());
-        markUnavailableForHouse(site.downLeft());
-        markUnavailableForHouse(site.left());
-        markUnavailableForHouse(site.down());
-        markUnavailableForHouse(site.right());
-    }
-
-    private void reserveSpaceForMediumHouse(Building house, Point site) throws Exception {
-        
-        /* Mark all points that this house covers */
-        setPointCovered(site);
-        setPointCovered(site.downRight());
-
-        /* Mark spots where flags can't be built */
-        markUnavailableForFlag(site.right().down());
-        markUnavailableForFlag(site.right().downRight());
-        markUnavailableForFlag(site.right());
-        markUnavailableForFlag(site.downLeft());
-        
-        /* Mark spots where houses can't be built */
-        markMaxHouseSizeForSpot(site.right().down(), MEDIUM);
-        markMaxHouseSizeForSpot(site.right().downRight(), MEDIUM);
-        markMaxHouseSizeForSpot(site.down(), MEDIUM);
-        markMaxHouseSizeForSpot(site.left().downLeft(), MEDIUM);
-        markMaxHouseSizeForSpot(site.left().down(), MEDIUM);
-        markMaxHouseSizeForSpot(site.up(), MEDIUM);
-        
-        markUnavailableForHouse(site.downLeft());
-        markUnavailableForHouse(site.left());
-        markUnavailableForHouse(site.upLeft());
-        markUnavailableForHouse(site.upRight());
-        markUnavailableForHouse(site.right());
-    }
-    
-    private void reserveSpaceForSmallHouse(Building house, Point site) throws Exception {
-        
-        /* Mark all points that this house covers */
-        setPointCovered(site);
-
-        /* Houses and flags can't be placed exactly where this house is */
-        markUnavailableForFlag(site);
-        markUnavailableForHouse(site);
-
-        /* Mark spots where houses can't be built */
-        markMaxHouseSizeForSpot(site.right().down(), MEDIUM);
-        markMaxHouseSizeForSpot(site.right().downRight(), MEDIUM);
-        markMaxHouseSizeForSpot(site.up(), MEDIUM);
-        
-        markUnavailableForHouse(site.down());
-        markUnavailableForHouse(site.downLeft());
-        markUnavailableForHouse(site.left());
-        markUnavailableForHouse(site.upLeft());
-        markUnavailableForHouse(site.upRight());
-        markUnavailableForHouse(site.right());
-        
-        /* Mark spots where flags can't be built */
-        markUnavailableForFlag(site.right().downRight());
-        markUnavailableForFlag(site.downLeft());
-    
-    
-    }
-
     public void terrainIsUpdated() throws Exception {
-        availableFlagPoints = calculateAvailableFlagPoints();
-        
-        availableHouseSites = calculateAvailableHouseSites();
+        // TODO: remove method
     }
 
-    public Map<Point, Size> getAvailableHousePoints() {
-        return availableHouseSites;
+    public Map<Point, Size> getAvailableHousePoints() throws Exception {
+        Map<Point, Size> housePoints = new HashMap<>();
+        boolean diagonalHouse;
+
+        for (Collection<Point> pointsWithinOneBorder : allPointsWithinBorder) {
+            for (Point point : pointsWithinOneBorder) {
+
+                /* ALL CONDITIONS FOR SMALL */
+                if (isBuildingAtPoint(point)) {
+                    continue;
+                }
+
+                if (isFlagAtPoint(point)) {
+                    continue;
+                }
+                
+                diagonalHouse = false;
+                
+                for (Point d : point.getDiagonalPointsAndSides()) {
+                    if (!isWithinBorder(d)) {
+                        continue;
+                    }
+                
+                    if (isBuildingAtPoint(d)) {
+                        diagonalHouse = true;
+                    }
+                }
+                
+                if (diagonalHouse) {
+                    continue;
+                }
+                
+                if (isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
+                    continue;
+                }
+
+                if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+                    if (getBuildingAtPoint(point.up().right()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+                    if (getBuildingAtPoint(point.down()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
+                    if (getBuildingAtPoint(point.downRight().right()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
+                    if (getBuildingAtPoint(point.down().right()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+                
+                housePoints.put(point, SMALL);
+                
+                /* ADDITIONAL CONDITIONS FOR MEDIUM */
+                
+                housePoints.put(point, MEDIUM);
+                
+                /* ADDITIONAL CONDITIONS FOR LARGE */
+                if (isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
+                    continue;
+                }
+
+                if (isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+                    continue;
+                }
+
+                if (isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
+                    continue;
+                }
+                
+                if (isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
+                    if (getBuildingAtPoint(point.upRight().right()).getHouseSize() != SMALL) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+                    if (getBuildingAtPoint(point.up().right()).getHouseSize() != SMALL) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
+                    if (getBuildingAtPoint(point.right().right()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+
+                if (isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
+                    if (getBuildingAtPoint(point.downRight().down()).getHouseSize() == LARGE) {
+                        continue;
+                    }
+                }
+
+                housePoints.put(point, LARGE);
+            }
+        }
+
+        return housePoints;
     }
 
     public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) throws Exception {
@@ -933,22 +963,6 @@ public class GameMap {
         return resultList;
     }
     
-    private Map<Point, Size> calculateAvailableHouseSites() throws Exception {
-        Map<Point, Size> result = new HashMap<>();
-        
-        for (Point p : fullGrid) {
-            if (canBuildLargeHouse(p)) {
-                result.put(p, LARGE);
-            } else if (canBuildMediumHouse(p)) {
-                result.put(p, MEDIUM);
-            } else if (canBuildSmallHouse(p)) {
-                result.put(p, SMALL);
-            }
-        }
-
-        return result;
-    }
-
     private boolean canBuildSmallHouse(Point site) throws Exception {
         return terrain.isOnGrass(site) && !isPointCovered(site);
     }
@@ -1020,34 +1034,12 @@ public class GameMap {
         }
     }
 
-    private void markUnavailableForHouse(Point point) {
-        availableHouseSites.remove(point);
-    }
-
-    private void markUnavailableForFlag(Point point) {
-        availableFlagPoints.remove(point);
-    }
-
     public boolean isFlagAtPoint(Point p) {
         return pointToGameObject.get(p).isFlag();
     }
 
     private boolean isAlreadyPlaced(Flag f) {
         return flags.contains(f);
-    }
-
-    private void markMaxHouseSizeForSpot(Point down, Size size) {
-        Size currentSize = availableHouseSites.get(down);
-
-        if (size == SMALL) {
-            availableHouseSites.put(down, size);
-        } else if (size == MEDIUM && currentSize == LARGE) {
-            availableHouseSites.put(down, size);
-        }
-    }
-
-    private boolean isAvailablePointForFlag(Point position) {
-        return availableFlagPoints.contains(position);
     }
 
     private boolean isWithinMap(Point p) {
@@ -1361,7 +1353,7 @@ public class GameMap {
         return result;
     }
 
-    public Iterable<Stone> getStones() {
+    public List<Stone> getStones() {
         return stones;
     }
 
@@ -1459,8 +1451,8 @@ public class GameMap {
         if (mp.isStone() || mp.isTree() || mp.isBuilding()) {
             return false;
         }
-        
-        if (!isAvailablePointForFlag(flagPoint)) {
+
+        if (!isAvailableFlagPoint(flagPoint)) {
             return false;
         }
 

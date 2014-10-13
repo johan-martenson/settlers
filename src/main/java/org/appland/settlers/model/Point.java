@@ -6,6 +6,8 @@
 package org.appland.settlers.model;
 
 import static java.lang.Math.abs;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -75,5 +77,29 @@ public class Point extends java.awt.Point {
         adjacentPoints[7] = new Point(x - 1, y - 1);
     
         return adjacentPoints;
+    }
+
+    Iterable<Point> getDiagonalPoints() {
+        List<Point> result = new ArrayList<>();
+        
+        result.add(upRight());
+        result.add(downRight());
+        result.add(upLeft());
+        result.add(downLeft());
+        
+        return result;
+    }
+
+    Iterable<Point> getDiagonalPointsAndSides() {
+        List<Point> result = new ArrayList<>();
+        
+        result.add(upRight());
+        result.add(downRight());
+        result.add(upLeft());
+        result.add(downLeft());
+        result.add(left());
+        result.add(right());
+        
+        return result;
     }
 }
