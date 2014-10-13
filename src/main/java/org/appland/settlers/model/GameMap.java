@@ -612,18 +612,6 @@ public class GameMap {
         return buildings;
     }
 
-    public List<Road> getRoadsThatNeedCouriers() {
-        List<Road> result = new ArrayList<>();
-
-        for (Road r : roads) {
-            if (r.needsCourier()) {
-                result.add(r);
-            }
-        }
-
-        return result;
-    }
-
     public List<Flag> getFlags() {
         return flags;
     }

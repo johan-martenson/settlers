@@ -431,7 +431,6 @@ public class TestTransportation {
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertTrue(map.getRoadsThatNeedCouriers().contains(hqToMiddleRoad));
         assertTrue(map.getClosestStorage(hqToMiddleRoad.getStart()).equals(storage));
 
         /* Step time to let the headquarter send new workers */

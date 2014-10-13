@@ -959,8 +959,13 @@ public class TestRoads {
         assertTrue(map.getAllWorkers().size() == 2);
         
         /* Step time to let the headquarter assign a courier to the new road */
-        assertTrue(map.getRoadsThatNeedCouriers().size() == 1);
-        Road r = map.getRoadsThatNeedCouriers().get(0);
+        Road r = map.getRoad(middlePoint2, endPoint);
+
+        if (!r.needsCourier()) {
+            r = map.getRoad(hq.getFlag().getPosition(), middlePoint2);
+        }
+
+        assertTrue(r.needsCourier());
         
         assertEquals(map.getClosestStorage(r.getStart()), hq);
         
