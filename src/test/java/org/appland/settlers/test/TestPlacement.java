@@ -14,7 +14,6 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.HouseSize;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -203,6 +202,42 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(), point0);
 
         /* Verify that there is no available spot for a building on the stone */
+        Map<Point, Size> possibleBuildings = map.getAvailableHousePoints();
+        
+        assertFalse(possibleBuildings.containsKey(point1));
+    }
+
+    @Test
+    public void testNoAvailableFlagOnTree() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+
+        /* Plant a tree */
+        Point point1 = new Point(2, 2);
+        map.placeTree(point1);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+        
+        /* Verify that there is no available spot for a flag on the tree */
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertFalse(possibleFlags.contains(point1));
+    }
+
+    @Test
+    public void testNoAvailableBuildingSpotOnTree() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+
+        /* Plant a tree */
+        Point point1 = new Point(2, 2);
+        map.placeTree(point1);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Verify that there is no available spot for a building on the tree */
         Map<Point, Size> possibleBuildings = map.getAvailableHousePoints();
         
         assertFalse(possibleBuildings.containsKey(point1));

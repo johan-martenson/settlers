@@ -98,8 +98,6 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
 
-*  Sometimes cargos for the headquarter are left by the flag instead of being delivered the whole way. Verify and fix!
-
 *  Problem creating a gold mine next to where a flag and signs were before
 
 *  Geologist gets stuck when its flag is removed
@@ -123,7 +121,7 @@ TO IMPLEMENT
 
 *  Add button to empty military buildings to the sideview in the app
 
-*  Consider changing stepTime to throw an Exception so erros will reach the top level and not get missed
+*  Consider changing stepTime to throw an Exception so errors will reach the top level and not get missed
 
 *  Add ability to stop production
 
@@ -478,6 +476,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Q: When is the driveway of a building removed if the building is torn down? - DONE
 
 *  Change name of test.Utils::surroundPointWithWater - DONE
+
+*  Sometimes cargos for the headquarter are left by the flag instead of being delivered the whole way. Verify and fix! - DONE
 
 
 

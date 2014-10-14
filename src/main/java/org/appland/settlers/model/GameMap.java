@@ -662,6 +662,10 @@ public class GameMap {
             return false;
         }
         
+        if (isTreeAtPoint(p)) {
+            return false;
+        }
+        
         if (terrain.isInWater(p)) {
             return false;
         }
@@ -784,6 +788,10 @@ public class GameMap {
                 }
                 
                 if (isStoneAtPoint(point)) {
+                    continue;
+                }
+                
+                if (isTreeAtPoint(point)) {
                     continue;
                 }
                 
