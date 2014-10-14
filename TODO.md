@@ -28,7 +28,7 @@ RE-FACTOR
 TEST
 ====
 
-*  Test that there are no available flags or buildings on stones or trees
+*  Test that there are no available flags or buildings on stones or trees or roads
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -162,8 +162,6 @@ TO IMPLEMENT
 *  Add scout
 
 *  fix building to use a single state variable
-
-*  Change name of test.Utils::surroundPointWithWater
 
 *  extract app's canvas to its own class
 
@@ -478,6 +476,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that there are no available flags or buildings on water - DONE
 
 *  Q: When is the driveway of a building removed if the building is torn down? - DONE
+
+*  Change name of test.Utils::surroundPointWithWater - DONE
 
 
 

@@ -236,19 +236,27 @@ public class TestScenarios {
 
         assertNotNull(sm.getWorker().getCargo());
         assertTrue(sm.getAmount(WOOD) == amountInQueue - 1);
+        
+        Cargo woodCargo = sm.getWorker().getCargo();
 
         /* Let the sawmill worker leave the cargo at the flag */
         assertEquals(sm.getWorker().getTarget(), sm.getFlag().getPosition());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
         
+        /* Wait for the courier to pick up the wood cargo */
+        for (i = 0; i < 200; i++) {
+            if (woodCargo.equals(courierSmToHq.getPromisedDelivery())) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertEquals(courierSmToHq.getPromisedDelivery(), woodCargo);
         assertNull(courierSmToHq.getCargo());
-        assertFalse(courierSmToHq.isTraveling());
-        assertFalse(courierWcToHq.isAt(wc.getFlag().getPosition()));
         
         /* Transport plancks and new wood to nearest storage*/
-        map.stepTime();
-
         assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getFlag().getPosition());

@@ -539,7 +539,7 @@ public class TestCourier {
     }
 
     @Test
-    public void testCourierDeliversToBuilding() throws Exception {
+    public void testCourierDeliversToBuildingAfterBeingIdle() throws Exception {
         GameMap map = new GameMap(20, 20);
         
         Point hqPoint = new Point(15, 15);
@@ -556,7 +556,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
         
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(wc);
         
@@ -699,6 +699,89 @@ public class TestCourier {
     }
 
     @Test
+    public void testCourierDeliversToBuildingAfterDeliveryToOtherBuilding() throws Exception {
+        
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), hqPoint);
+        
+        /* Place woodcutter */
+        Point point0 = new Point(6, 6);
+        Building wc = map.placeBuilding(new Woodcutter(), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point1);
+
+        /* Connect the woodcutter and the forester hut */
+        Point point2 = new Point(9, 5);
+        Road road0 = map.placeRoad(wc.getFlag().getPosition(), point2, foresterHut0.getFlag().getPosition());
+
+        /* Place cargo at the woodcutter's flag */
+        Cargo cargoForForesterHut = new Cargo(PLANCK, map);
+        wc.getFlag().putCargo(cargoForForesterHut);
+        cargoForForesterHut.setTarget(foresterHut0);
+
+        /* Place courier at the woodcutter's flag */
+        Courier courier = new Courier(map);
+        map.placeWorker(courier, wc.getFlag());
+
+        courier.assignToRoad(road0);
+
+        /* Wait for the courier to walk to the idle point of the road */
+        assertTrue(courier.isWalkingToRoad());
+        assertEquals(courier.getTarget(), point2);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+
+        assertEquals(courier.getPosition(), point2);
+        assertTrue(courier.isArrived());
+        assertTrue(courier.isIdle());
+
+        /* Courier detects the cargo at the woodcutter */
+        map.stepTime();
+        
+        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertTrue(courier.isTraveling());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
+        
+        assertTrue(courier.isAt(wc.getFlag().getPosition()));
+                
+        /* The courier picks up the cargo and starts walking to the other side */
+        assertEquals(courier.getCargo(), cargoForForesterHut);
+        assertEquals(courier.getTarget(), foresterHut0.getPosition());
+        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(courier.isIdle());
+        
+        /* Place a cargo at the forester hut's flag */
+        Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
+        foresterHut0.getFlag().putCargo(cargoForWoodcutter);
+        cargoForWoodcutter.setTarget(wc);
+
+        /* The courier delivers the cargo at the forester hut */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, foresterHut0.getPosition());
+        
+        /* Verify that courier delivers the cargo */
+        assertNull(courier.getCargo());
+        
+        /* Wait for the courier to go to the forester hut's flag and pick up the cargo */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, foresterHut0.getFlag().getPosition());
+
+        assertEquals(courier.getCargo(), cargoForWoodcutter);
+
+        /* Verify that the courier delivers the cargo to the woodcutter */
+        assertEquals(courier.getTarget(), wc.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+
+        assertNull(courier.getCargo());
+    }
+
+    @Test
     public void testCourierDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
         
@@ -780,8 +863,7 @@ public class TestCourier {
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), wc.getPosition());
-        assertTrue(wc.getAmount(PLANCK) == 1);
-        
+        assertTrue(wc.getAmount(PLANCK) == 1);        
     }
 
     @Test
