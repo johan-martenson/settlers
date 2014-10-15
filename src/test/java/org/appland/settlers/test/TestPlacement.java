@@ -242,7 +242,55 @@ public class TestPlacement {
         
         assertFalse(possibleBuildings.containsKey(point1));
     }
-    
+
+    @Test
+    public void testNoAvailableFlagOnRoad() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Place a road */
+        Point point1 = new Point(5, 5);
+        Point point2 = new Point(7, 5);
+        Point point3 = new Point(9, 5);
+        
+        map.placeFlag(point1);
+        map.placeFlag(point3);
+        
+        map.placeRoad(point1, point2, point3);
+        
+        /* Verify that there is no available spot for a flag on the tree */
+        List<Point> possibleFlags = map.getAvailableFlagPoints();
+        
+        assertFalse(possibleFlags.contains(point2));
+    }
+
+    @Test
+    public void testNoAvailableBuildingSpotOnRoad() throws Exception {
+        GameMap map  = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Place a road */
+        Point point1 = new Point(5, 5);
+        Point point2 = new Point(7, 5);
+        Point point3 = new Point(9, 5);
+        
+        map.placeFlag(point1);
+        map.placeFlag(point3);
+        
+        map.placeRoad(point1, point2, point3);
+        
+        /* Verify that there is no available spot for a building on the road */
+        Map<Point, Size> possibleBuildings = map.getAvailableHousePoints();
+        
+        assertFalse(possibleBuildings.containsKey(point2));
+    }
+
     @Test
     public void testAvailableFlagsNextToFlag() throws Exception {
         GameMap map   = new GameMap(20, 20);

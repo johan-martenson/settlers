@@ -799,6 +799,10 @@ public class GameMap {
                     continue;
                 }
                 
+                if (isRoadAtPoint(point)) {
+                    continue;
+                }
+                
                 diagonalHouse = false;
                 
                 for (Point d : point.getDiagonalPointsAndSides()) {
