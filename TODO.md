@@ -24,6 +24,14 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that production can be stopped for unoccupied building
+
+*  Test that production can't be stopped or resumed for non-productive building
+
+*  Test that production can't be stopped twice
+
+*  Test that production can't be resumed unless it's stopped
+
 *  Replicate additional tests in TestWell to the other buildings
 
 *  Test that courier and donkey can't be assigned to a road twice

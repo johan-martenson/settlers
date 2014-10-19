@@ -33,13 +33,19 @@ public class TestWell {
 
     @Test
     public void testFinishedWellNeedsWorker() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
+        /* Finish construction of the well */
         Utils.constructHouse(well, map);
 
         assertTrue(well.ready());
@@ -48,14 +54,19 @@ public class TestWell {
     
     @Test
     public void testWellWorkerIsAssignedToFinishedHouse() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
+        /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -74,11 +85,15 @@ public class TestWell {
 
     @Test
     public void testUnoccupiedWellProducesNothing() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(), point0);
 
+        /* Connect the well with the headquarter */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
         
@@ -95,14 +110,19 @@ public class TestWell {
 
     @Test
     public void testAssignedWellWorkerEntersTheWell() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
 
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
+        /* Connect well with headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -137,14 +157,19 @@ public class TestWell {
     
     @Test
     public void testWellWorkerRests() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
 
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
+        /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -170,11 +195,19 @@ public class TestWell {
 
     @Test
     public void testWellWorkerProducesWater() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+        
+        /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -206,14 +239,19 @@ public class TestWell {
 
     @Test
     public void testWellWorkerPlacesWaterCargoAtTheFlag() throws Exception {
+        
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
 
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
 
+        /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -611,14 +649,9 @@ public class TestWell {
         /* Let the worker rest */
         Utils.fastForward(100, map);
         
-        /* Verify that it the worker produces water at the right time */
-        int i;
-        for (i = 0; i < 50; i++) {
-            assertNull(ww.getCargo());
-            map.stepTime();
-        }
-    
-        assertNotNull(ww.getCargo());
+        /* Wait for the well worker to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
         assertEquals(ww.getCargo().getMaterial(), WATER);
 
         /* Wait for the worker to deliver the cargo */
@@ -629,7 +662,7 @@ public class TestWell {
         /* Stop production and verify that no water is produced */
         well.stopProduction();
         
-        for (i = 0; i < 300; i++) {
+        for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
             
             map.stepTime();
@@ -669,14 +702,9 @@ public class TestWell {
         /* Let the worker rest */
         Utils.fastForward(100, map);
         
-        /* Verify that it the worker produces water at the right time */
-        int i;
-        for (i = 0; i < 50; i++) {
-            assertNull(ww.getCargo());
-            map.stepTime();
-        }
-    
-        assertNotNull(ww.getCargo());
+        /* Wait for the well worker to produce water */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
         assertEquals(ww.getCargo().getMaterial(), WATER);
 
         /* Wait for the worker to deliver the cargo */
@@ -687,7 +715,7 @@ public class TestWell {
         /* Stop production */
         well.stopProduction();
 
-        for (i = 0; i < 300; i++) {
+        for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
             
             map.stepTime();
@@ -696,13 +724,7 @@ public class TestWell {
         /* Resume production and verify that the well produces water again */
         well.resumeProduction();
 
-        for (i = 0; i < 200; i++) {
-            if (ww.getCargo() != null) {
-                break;
-            }
-            
-            map.stepTime();
-        }
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
     }
