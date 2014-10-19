@@ -1284,13 +1284,7 @@ public class TestWoodcutter {
         /* Resume production and verify that the woodcutter produces wood again */
         woodcutter.resumeProduction();
 
-        for (int i = 0; i < 200; i++) {
-            if (ww.getCargo() != null) {
-                break;
-            }
-            
-            map.stepTime();
-        }
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
     }
