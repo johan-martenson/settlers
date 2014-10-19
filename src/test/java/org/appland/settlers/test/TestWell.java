@@ -529,34 +529,6 @@ public class TestWell {
     }
 
     @Test
-    public void testDrivewayIsRemovedTogetherWhenWellIsTornDown() throws Exception {
-
-        /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
-
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
-
-        /* Placing well */
-        Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
-
-        /* Connect the well with the headquarter */
-        map.placeAutoSelectedRoad(well0.getFlag(), headquarter0.getFlag());
-        
-        /* Finish construction of the well */
-        Utils.constructHouse(well0, map);
-
-        /* Destroy the well */
-        well0.tearDown();
-
-        assertTrue(well0.burningDown());
-
-        assertNull(map.getRoad(point26, point26.downRight()));
-    }
-
-    @Test
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
