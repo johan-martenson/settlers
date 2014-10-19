@@ -1054,4 +1054,244 @@ public class TestWoodcutter {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test
+    public void testDestroyedWoodcutterIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+
+        /* Connect the woodcutter with the headquarter */
+        map.placeAutoSelectedRoad(woodcutter0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Destroy the woodcutter */
+        woodcutter0.tearDown();
+
+        assertTrue(woodcutter0.burningDown());
+
+        /* Wait for the woodcutter to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(woodcutter0.destroyed());
+        
+        /* Wait for the woodcutter to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), woodcutter0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(woodcutter0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+        
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
+        
+        map.removeFlag(woodcutter0.getFlag());
+
+        assertNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(8, 8);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point26);
+        
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
+        
+        woodcutter0.tearDown();
+
+        assertNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInWoodcutterCanBeStopped() throws Exception {
+        
+        /* Create gamemap */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Plant and grow trees */
+        Point point12 = new Point(10, 8);
+        Tree tree0 = map.placeTree(point12);
+
+        Utils.fastForwardUntilTreeIsGrown(tree0, map);
+        
+        /* Place woodcutter */
+        Point point1 = new Point(8, 6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(), point1);
+        
+        /* Connect the woodcutter with the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the woodcutter */
+        Utils.constructHouse(woodcutter, map);
+        
+        /* Assign a worker to the woodcutter */
+        WoodcutterWorker ww = new WoodcutterWorker(map);
+        
+        Utils.occupyBuilding(ww, woodcutter, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the worker to produce wood */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), WOOD);
+
+        /* Wait for the worker to return to the woodcutter hut */
+        assertEquals(ww.getTarget(), woodcutter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter.getPosition());
+
+        /* Wait for the worker to deliver the cargo */
+        map.stepTime();
+
+        assertEquals(ww.getTarget(), woodcutter.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter.getFlag().getPosition());
+
+        /* Stop production and verify that no wood is produced */
+        woodcutter.stopProduction();
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInWoodcutterCanBeResumed() throws Exception {
+
+        /* Create gamemap */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Plant and grow trees */
+        Point point12 = new Point(10, 8);
+        Tree tree0 = map.placeTree(point12);
+
+        Point point13 = new Point(8, 8);
+        Tree tree1 = map.placeTree(point13);
+
+        Utils.fastForwardUntilTreeIsGrown(tree0, map);
+        
+        /* Place woodcutter */
+        Point point1 = new Point(8, 6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(), point1);
+        
+        /* Connect the woodcutter with the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the woodcutter */
+        Utils.constructHouse(woodcutter, map);
+        
+        /* Assign a worker to the woodcutter */
+        WoodcutterWorker ww = new WoodcutterWorker(map);
+        
+        Utils.occupyBuilding(ww, woodcutter, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the worker to produce wood */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), WOOD);
+
+        /* Wait for the worker to return to the woodcutter hut */
+        assertEquals(ww.getTarget(), woodcutter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter.getPosition());
+
+        /* Wait for the worker to deliver the cargo */
+        map.stepTime();
+
+        assertEquals(ww.getTarget(), woodcutter.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, woodcutter.getFlag().getPosition());
+
+        /* Stop production */
+        woodcutter.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the woodcutter produces wood again */
+        woodcutter.resumeProduction();
+
+        for (int i = 0; i < 200; i++) {
+            if (ww.getCargo() != null) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+    }
 }

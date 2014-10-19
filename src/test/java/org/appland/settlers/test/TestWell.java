@@ -580,11 +580,19 @@ public class TestWell {
 
     @Test
     public void testProductionInWellCanBeStopped() throws Exception {
+
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+        
+        /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
@@ -630,11 +638,19 @@ public class TestWell {
 
     @Test
     public void testProductionInWellCanBeResumed() throws Exception {
+
+        /* Create gamemap */
         GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(), point1);
+        
+        /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);

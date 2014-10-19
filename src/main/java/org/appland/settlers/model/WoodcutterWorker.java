@@ -16,6 +16,7 @@ import static org.appland.settlers.model.WoodcutterWorker.States.GOING_OUT_TO_CU
 import static org.appland.settlers.model.WoodcutterWorker.States.GOING_OUT_TO_PUT_CARGO;
 import static org.appland.settlers.model.WoodcutterWorker.States.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.WoodcutterWorker.States.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.WoodcutterWorker.States.WALKING_TO_TARGET;
 
 /**
  *
@@ -26,7 +27,8 @@ public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_CUT_TREE = 49;
     
-    private States    state;
+    private States  state;
+    private boolean productionEnabled;
     private final Countdown countdown;
 
     private Point getTreeToCutDown() {
@@ -66,8 +68,9 @@ public class WoodcutterWorker extends Worker {
     public WoodcutterWorker(GameMap map) {
         super(map);
         
-        state = States.WALKING_TO_TARGET;
-        countdown = new Countdown();
+        state             = WALKING_TO_TARGET;
+        countdown         = new Countdown();
+        productionEnabled = true;
     }
     
     public boolean isCuttingTree() {
@@ -87,7 +90,7 @@ public class WoodcutterWorker extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {
+        if (state == RESTING_IN_HOUSE && productionEnabled) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
                 
@@ -98,7 +101,7 @@ public class WoodcutterWorker extends Worker {
                 setOffroadTarget(p);
                 
                 state = GOING_OUT_TO_CUT_TREE;
-            } else {
+            } else if (productionEnabled) {
                 countdown.step();
             }
         } else if (state == CUTTING_TREE) {
@@ -174,5 +177,15 @@ public class WoodcutterWorker extends Worker {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onStopProduction() {
+        productionEnabled = false;
+    }
+
+    @Override
+    protected void onResumeProduction() {
+        productionEnabled = true;
     }
 }

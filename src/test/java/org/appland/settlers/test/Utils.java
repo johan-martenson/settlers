@@ -35,6 +35,7 @@ import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -426,5 +427,17 @@ public class Utils {
         }
 
         assertEquals(courier1.getCargo(), cargo);
+    }
+
+    static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) {
+        for (int i = 0; i < 300; i++) {
+            if (worker.getCargo() != null) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertNotNull(worker.getCargo());
     }
 }
