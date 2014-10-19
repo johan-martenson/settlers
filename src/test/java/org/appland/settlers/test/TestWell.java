@@ -605,5 +605,118 @@ public class TestWell {
 
         assertNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
     }
+
+    @Test
+    public void testProductionInWellCanBeStopped() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(8, 6);
+        Building well = map.placeBuilding(new Well(), point1);
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the well */
+        Utils.constructHouse(well, map);
+        
+        /* Assign a worker to the well */
+        WellWorker ww = new WellWorker(map);
+        
+        Utils.occupyBuilding(ww, well, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that it the worker produces water at the right time */
+        int i;
+        for (i = 0; i < 50; i++) {
+            assertNull(ww.getCargo());
+            map.stepTime();
+        }
+    
+        assertNotNull(ww.getCargo());
+        assertEquals(ww.getCargo().getMaterial(), WATER);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), well.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
+
+        /* Stop production and verify that no water is produced */
+        well.stopProduction();
+        
+        for (i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInWellCanBeResumed() throws Exception {
+        GameMap map = new GameMap(20, 20);
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Point point1 = new Point(8, 6);
+        Building well = map.placeBuilding(new Well(), point1);
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the well */
+        Utils.constructHouse(well, map);
+        
+        /* Assign a worker to the well */
+        WellWorker ww = new WellWorker(map);
+        
+        Utils.occupyBuilding(ww, well, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Verify that it the worker produces water at the right time */
+        int i;
+        for (i = 0; i < 50; i++) {
+            assertNull(ww.getCargo());
+            map.stepTime();
+        }
+    
+        assertNotNull(ww.getCargo());
+        assertEquals(ww.getCargo().getMaterial(), WATER);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), well.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
+
+        /* Stop production */
+        well.stopProduction();
+
+        for (i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the well produces water again */
+        well.resumeProduction();
+
+        for (i = 0; i < 200; i++) {
+            if (ww.getCargo() != null) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertNotNull(ww.getCargo());
+    }
 }
 

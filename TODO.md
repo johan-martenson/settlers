@@ -7,13 +7,9 @@ RE-FACTOR
 
 *  Clean up getAvailableHousePoints!
 
-*  Rename Building::getHouseSize() to getSize() Are
-
 *  canBuild(Small|Medium|Large)House() needed?
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
-
-*  Clean up in courier to reduce duplication
 
 *  Add common interface for all actors to get getPosition() unified
 
@@ -28,7 +24,7 @@ RE-FACTOR
 TEST
 ====
 
-*  Test that there are no available flags or buildings on stones or trees or roads
+*  Replicate additional tests in TestWell to the other buildings
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -123,7 +119,7 @@ TO IMPLEMENT
 
 *  Consider changing stepTime to throw an Exception so errors will reach the top level and not get missed
 
-*  Add ability to stop production
+*  Add ability to stop production for other buildings than Well
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -479,5 +475,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Sometimes cargos for the headquarter are left by the flag instead of being delivered the whole way. Verify and fix! - DONE
 
+*  Test that there are no available flags or buildings on stones or trees or roads - DONE
 
+*  Rename Building::getHouseSize() to getSize() - DONE
+
+*  Clean up in courier to reduce duplication - DONE
+
+*  Add ability to stop production in well - DONE
 

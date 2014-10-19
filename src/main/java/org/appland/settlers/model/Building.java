@@ -673,4 +673,12 @@ public class Building implements Actor, EndPoint {
     public void cancelEvacuation() {
         evacuated = false;
     }
+
+    public void stopProduction() {
+        getWorker().stopProduction();
+    }
+
+    public void resumeProduction() {
+        getWorker().resumeProduction();
+    }
 }
