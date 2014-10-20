@@ -65,7 +65,7 @@ public class Miller extends Worker {
                 countdown.step();
             }
         } else if (state == GRINDING_WHEAT) {
-            if (getHome().getAmount(WHEAT) > 0) {
+            if (getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(FLOUR, map);
 
@@ -76,7 +76,7 @@ public class Miller extends Worker {
                     setTarget(getHome().getFlag().getPosition());
 
                     state = GOING_TO_FLAG_WITH_CARGO;
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }

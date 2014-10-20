@@ -543,4 +543,225 @@ public class TestMill {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test
+    public void testDestroyedMillIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mill */
+        Point point26 = new Point(8, 8);
+        Building mill0 = map.placeBuilding(new Mill(), point26);
+
+        /* Connect the mill with the headquarter */
+        map.placeAutoSelectedRoad(mill0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+
+        /* Destroy the mill */
+        mill0.tearDown();
+
+        assertTrue(mill0.burningDown());
+
+        /* Wait for the mill to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(mill0.destroyed());
+        
+        /* Wait for the mill to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), mill0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(mill0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mill */
+        Point point26 = new Point(8, 8);
+        Building mill0 = map.placeBuilding(new Mill(), point26);
+        
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(mill0.getPosition(), mill0.getFlag().getPosition()));
+        
+        map.removeFlag(mill0.getFlag());
+
+        assertNull(map.getRoad(mill0.getPosition(), mill0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mill */
+        Point point26 = new Point(8, 8);
+        Building mill0 = map.placeBuilding(new Mill(), point26);
+        
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(mill0.getPosition(), mill0.getFlag().getPosition()));
+        
+        mill0.tearDown();
+
+        assertNull(map.getRoad(mill0.getPosition(), mill0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInMillCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place mill */
+        Point point1 = new Point(8, 6);
+        Building mill0 = map.placeBuilding(new Mill(), point1);
+        
+        /* Connect the mill and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the mill */
+        Utils.constructHouse(mill0, map);
+        
+        /* Deliver material to the mill */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        
+        mill0.putCargo(wheatCargo);
+        mill0.putCargo(wheatCargo);
+
+        /* Assign a worker to the mill */
+        Miller ww = new Miller(map);
+        
+        Utils.occupyBuilding(ww, mill0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miller to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
+        assertEquals(ww.getCargo().getMaterial(), FLOUR);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+
+        /* Stop production and verify that no flour is produced */
+        mill0.stopProduction();
+        
+        assertFalse(mill0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInMillCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place mill */
+        Point point1 = new Point(8, 6);
+        Building mill0 = map.placeBuilding(new Mill(), point1);
+        
+        /* Connect the mill and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the mill */
+        Utils.constructHouse(mill0, map);
+        
+        /* Assign a worker to the mill */
+        Miller ww = new Miller(map);
+        
+        Utils.occupyBuilding(ww, mill0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Deliver material to the mill */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        
+        mill0.putCargo(wheatCargo);
+        mill0.putCargo(wheatCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miller to produce flour */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), FLOUR);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+
+        /* Stop production */
+        mill0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the mill produces flour again */
+        mill0.resumeProduction();
+
+        assertTrue(mill0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertNotNull(ww.getCargo());
+    }
 }
