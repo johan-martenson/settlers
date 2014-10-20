@@ -438,35 +438,35 @@ public class TestIronSmelter {
         /* Wait for the iron founder to produce a new iron bar cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = ironSmelter0.getWorker();
+        Worker ironFounder = ironSmelter0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(ironFounder.getCargo());
 
         /* Verify that the iron founder puts the iron bar cargo at the flag */
-        assertEquals(ww.getTarget(), ironSmelter0.getFlag().getPosition());
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
         assertTrue(ironSmelter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(ironFounder.getCargo());
         assertFalse(ironSmelter0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the iron smelter */
-        assertEquals(ww.getTarget(), ironSmelter0.getPosition());
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironSmelter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(ironFounder.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), ironSmelter0.getFlag().getPosition());
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(ironFounder.getCargo());
         assertEquals(ironSmelter0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -506,17 +506,17 @@ public class TestIronSmelter {
         /* Wait for the iron founder to produce a new iron bar cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = ironSmelter0.getWorker();
+        Worker ironFounder = ironSmelter0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(ironFounder.getCargo());
 
         /* Verify that the iron founder puts the iron bar cargo at the flag */
-        assertEquals(ww.getTarget(), ironSmelter0.getFlag().getPosition());
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
         assertTrue(ironSmelter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironSmelter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(ironFounder.getCargo());
         assertFalse(ironSmelter0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -586,20 +586,20 @@ public class TestIronSmelter {
         Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
         
         /* Destroy the iron smelter */
-        Worker ww = ironSmelter.getWorker();
+        Worker ironFounder = ironSmelter.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), ironSmelter.getPosition());
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter.getPosition());
 
         ironSmelter.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(IRON_FOUNDER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
 
         /* Verify that the iron founder is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
@@ -629,20 +629,20 @@ public class TestIronSmelter {
         Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
         
         /* Destroy the iron smelter */
-        Worker ww = ironSmelter.getWorker();
+        Worker ironFounder = ironSmelter.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), ironSmelter.getPosition());
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter.getPosition());
 
         ironSmelter.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : ironFounder.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -650,5 +650,225 @@ public class TestIronSmelter {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testDestroyedIronSmelterIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(8, 8);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point26);
+
+        /* Connect the iron smelter with the headquarter */
+        map.placeAutoSelectedRoad(ironSmelter0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Destroy the iron smelter */
+        ironSmelter0.tearDown();
+
+        assertTrue(ironSmelter0.burningDown());
+
+        /* Wait for the iron smelter to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(ironSmelter0.destroyed());
+        
+        /* Wait for the iron smelter to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), ironSmelter0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(ironSmelter0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(8, 8);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point26);
+        
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(ironSmelter0.getPosition(), ironSmelter0.getFlag().getPosition()));
+        
+        map.removeFlag(ironSmelter0.getFlag());
+
+        assertNull(map.getRoad(ironSmelter0.getPosition(), ironSmelter0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(8, 8);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point26);
+        
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(ironSmelter0.getPosition(), ironSmelter0.getFlag().getPosition()));
+        
+        ironSmelter0.tearDown();
+
+        assertNull(map.getRoad(ironSmelter0.getPosition(), ironSmelter0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInIronSmelterCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place iron smelter */
+        Point point1 = new Point(8, 6);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point1);
+        
+        /* Connect the iron smelter and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+        
+        /* Deliver iron and coal to the iron smelter */
+        ironSmelter0.putCargo(new Cargo(COAL, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        
+        /* Assign a worker to the iron smelter */
+        IronFounder ironFounder = new IronFounder(map);
+        
+        Utils.occupyBuilding(ironFounder, ironSmelter0, map);
+        
+        assertTrue(ironFounder.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the iron founder to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+        
+        assertEquals(ironFounder.getCargo().getMaterial(), IRON_BAR);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+
+        /* Stop production and verify that no iron bar is produced */
+        ironSmelter0.stopProduction();
+        
+        assertFalse(ironSmelter0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ironFounder.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInIronSmelterCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place iron smelter */
+        Point point1 = new Point(8, 6);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(), point1);
+        
+        /* Connect the iron smelter and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+        
+        /* Assign a worker to the iron smelter */
+        IronFounder ironFounder = new IronFounder(map);
+        
+        Utils.occupyBuilding(ironFounder, ironSmelter0, map);
+        
+        assertTrue(ironFounder.isInsideBuilding());
+
+        /* Deliver iron and coal to the iron smelter */
+        ironSmelter0.putCargo(new Cargo(COAL, map));
+        ironSmelter0.putCargo(new Cargo(COAL, map));
+
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the iron founder to produce iron bar */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+
+        assertEquals(ironFounder.getCargo().getMaterial(), IRON_BAR);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+
+        /* Stop production */
+        ironSmelter0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ironFounder.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the iron smelter produces iron bar again */
+        ironSmelter0.resumeProduction();
+
+        assertTrue(ironSmelter0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
+
+        assertNotNull(ironFounder.getCargo());
     }
 }

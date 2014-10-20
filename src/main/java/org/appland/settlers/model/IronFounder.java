@@ -66,7 +66,7 @@ public class IronFounder extends Worker {
                 countdown.step();
             }
         } else if (state == MELTING_IRON) {
-            if (getHome().getAmount(COAL) > 0 && getHome().getAmount(IRON) > 0) {
+            if (getHome().getAmount(COAL) > 0 && getHome().getAmount(IRON) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     try {
                         Cargo cargo = new Cargo(IRON_BAR, map);
@@ -82,7 +82,7 @@ public class IronFounder extends Worker {
                     } catch (InvalidRouteException ex) {
                         Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }
