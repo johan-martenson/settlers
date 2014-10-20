@@ -370,35 +370,35 @@ public class TestSawmill {
         /* Wait for the sawmill worker to produce a new planck cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = sawmill0.getWorker();
+        Worker sawmillWorker = sawmill0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(sawmillWorker.getCargo());
 
         /* Verify that the sawmill worker puts the planck cargo at the flag */
-        assertEquals(ww.getTarget(), sawmill0.getFlag().getPosition());
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(sawmillWorker.getCargo());
         assertFalse(sawmill0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the sawmill */
-        assertEquals(ww.getTarget(), sawmill0.getPosition());
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, sawmill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(sawmillWorker.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), sawmill0.getFlag().getPosition());
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(sawmillWorker.getCargo());
         assertEquals(sawmill0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -434,17 +434,17 @@ public class TestSawmill {
         /* Wait for the sawmill worker to produce a new planck cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = sawmill0.getWorker();
+        Worker sawmillWorker = sawmill0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(sawmillWorker.getCargo());
 
         /* Verify that the sawmill worker puts the planck cargo at the flag */
-        assertEquals(ww.getTarget(), sawmill0.getFlag().getPosition());
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, sawmill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(sawmillWorker.getCargo());
         assertFalse(sawmill0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -514,20 +514,20 @@ public class TestSawmill {
         Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
         
         /* Destroy the sawmill */
-        Worker ww = sawmill0.getWorker();
+        Worker sawmillWorker = sawmill0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), sawmill0.getPosition());
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(SAWMILL_WORKER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
@@ -557,20 +557,20 @@ public class TestSawmill {
         Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
         
         /* Destroy the sawmill */
-        Worker ww = sawmill0.getWorker();
+        Worker sawmillWorker = sawmill0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), sawmill0.getPosition());
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
 
         sawmill0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : sawmillWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -578,5 +578,220 @@ public class TestSawmill {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testDestroyedSawmillIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(8, 8);
+        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+
+        /* Connect the sawmill with the headquarter */
+        map.placeAutoSelectedRoad(sawmill0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Destroy the sawmill */
+        sawmill0.tearDown();
+
+        assertTrue(sawmill0.burningDown());
+
+        /* Wait for the sawmill to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(sawmill0.destroyed());
+        
+        /* Wait for the sawmill to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), sawmill0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(sawmill0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(8, 8);
+        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(sawmill0.getPosition(), sawmill0.getFlag().getPosition()));
+        
+        map.removeFlag(sawmill0.getFlag());
+
+        assertNull(map.getRoad(sawmill0.getPosition(), sawmill0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(8, 8);
+        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(sawmill0.getPosition(), sawmill0.getFlag().getPosition()));
+        
+        sawmill0.tearDown();
+
+        assertNull(map.getRoad(sawmill0.getPosition(), sawmill0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInSawmillCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place sawmill */
+        Point point1 = new Point(8, 6);
+        Building sawmill0 = map.placeBuilding(new Sawmill(), point1);
+        
+        /* Connect the sawmill and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the sawmill */
+        Utils.constructHouse(sawmill0, map);
+        
+        /* Assign a worker to the sawmill */
+        SawmillWorker sawmillWorker = new SawmillWorker(map);
+        
+        Utils.occupyBuilding(sawmillWorker, sawmill0, map);
+        
+        assertTrue(sawmillWorker.isInsideBuilding());
+
+        /* Deliver wood to the sawmill */
+        sawmill0.putCargo(new Cargo(WOOD, map));
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the sawmill worker to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
+        
+        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANCK);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
+
+        /* Stop production and verify that no planck is produced */
+        sawmill0.stopProduction();
+        
+        assertFalse(sawmill0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(sawmillWorker.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInSawmillCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place sawmill */
+        Point point1 = new Point(8, 6);
+        Building sawmill0 = map.placeBuilding(new Sawmill(), point1);
+        
+        /* Connect the sawmill and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the sawmill */
+        Utils.constructHouse(sawmill0, map);
+        
+        /* Assign a worker to the sawmill */
+        SawmillWorker sawmillWorker = new SawmillWorker(map);
+        
+        Utils.occupyBuilding(sawmillWorker, sawmill0, map);
+        
+        assertTrue(sawmillWorker.isInsideBuilding());
+
+        /* Deliver wood to the sawmill */
+        sawmill0.putCargo(new Cargo(WOOD, map));
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the sawmill worker to produce planck */
+        Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
+
+        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANCK);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
+
+        /* Stop production */
+        sawmill0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(sawmillWorker.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the sawmill produces planck again */
+        sawmill0.resumeProduction();
+
+        assertTrue(sawmill0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
+
+        assertNotNull(sawmillWorker.getCargo());
     }
 }

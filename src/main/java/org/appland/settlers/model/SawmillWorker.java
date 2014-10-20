@@ -63,7 +63,7 @@ public class SawmillWorker extends Worker {
                 countdown.step();
             }
         } else if (state == CUTTING_WOOD) {
-            if (getHome().getAmount(WOOD) > 0) {
+            if (getHome().getAmount(WOOD) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(PLANCK, map);
 

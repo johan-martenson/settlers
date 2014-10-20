@@ -628,7 +628,7 @@ public class TestWell {
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well0 = map.placeBuilding(new Well(), point1);
         
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
@@ -637,12 +637,12 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the well */
-        Utils.constructHouse(well, map);
+        Utils.constructHouse(well0, map);
         
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
         
-        Utils.occupyBuilding(ww, well, map);
+        Utils.occupyBuilding(ww, well0, map);
         
         assertTrue(ww.isInsideBuilding());
 
@@ -655,14 +655,14 @@ public class TestWell {
         assertEquals(ww.getCargo().getMaterial(), WATER);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), well.getFlag().getPosition());
+        assertEquals(ww.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well0.getFlag().getPosition());
 
         /* Stop production and verify that no water is produced */
-        well.stopProduction();
+        well0.stopProduction();
         
-        assertFalse(well.isProductionEnabled());
+        assertFalse(well0.isProductionEnabled());
         
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
@@ -683,7 +683,7 @@ public class TestWell {
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well0 = map.placeBuilding(new Well(), point1);
         
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
@@ -692,12 +692,12 @@ public class TestWell {
         Road road0 = map.placeRoad(point2, point3, point4);
         
         /* Finish the well */
-        Utils.constructHouse(well, map);
+        Utils.constructHouse(well0, map);
         
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(map);
         
-        Utils.occupyBuilding(ww, well, map);
+        Utils.occupyBuilding(ww, well0, map);
         
         assertTrue(ww.isInsideBuilding());
 
@@ -710,12 +710,12 @@ public class TestWell {
         assertEquals(ww.getCargo().getMaterial(), WATER);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), well.getFlag().getPosition());
+        assertEquals(ww.getTarget(), well0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, well0.getFlag().getPosition());
 
         /* Stop production */
-        well.stopProduction();
+        well0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
@@ -724,9 +724,9 @@ public class TestWell {
         }
 
         /* Resume production and verify that the well produces water again */
-        well.resumeProduction();
+        well0.resumeProduction();
 
-        assertTrue(well.isProductionEnabled());
+        assertTrue(well0.isProductionEnabled());
 
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
