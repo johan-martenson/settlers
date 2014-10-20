@@ -312,20 +312,20 @@ public class TestStorage {
         Utils.occupyBuilding(new StorageWorker(map), storage0, map);
         
         /* Destroy the storage */
-        Worker ww = storage0.getWorker();
+        Worker storageWorker = storage0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), storage0.getPosition());
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
 
         storage0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(STORAGE_WORKER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
         /* Verify that the storage worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
@@ -355,20 +355,20 @@ public class TestStorage {
         Utils.occupyBuilding(new StorageWorker(map), storage0, map);
         
         /* Destroy the storage */
-        Worker ww = storage0.getWorker();
+        Worker storageWorker = storage0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), storage0.getPosition());
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
 
         storage0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : storageWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -376,5 +376,97 @@ public class TestStorage {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testDestroyedStorageIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(8, 8);
+        Building storage0 = map.placeBuilding(new Storage(), point26);
+
+        /* Connect the storage with the headquarter */
+        map.placeAutoSelectedRoad(storage0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        assertTrue(storage0.burningDown());
+
+        /* Wait for the storage to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(storage0.destroyed());
+        
+        /* Wait for the storage to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), storage0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(storage0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(8, 8);
+        Building storage0 = map.placeBuilding(new Storage(), point26);
+        
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
+        
+        map.removeFlag(storage0.getFlag());
+
+        assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(8, 8);
+        Building storage0 = map.placeBuilding(new Storage(), point26);
+        
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
+        
+        storage0.tearDown();
+
+        assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
     }
 }

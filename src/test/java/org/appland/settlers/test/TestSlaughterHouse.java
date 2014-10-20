@@ -201,7 +201,7 @@ public class TestSlaughterHouse {
         assertEquals(butcher.getHome(), slaughterHouse);
         assertEquals(slaughterHouse.getWorker(), butcher);        
 
-        /* Deliver wood to the slaughterHouse */
+        /* Deliver pig to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
         
         /* Verify that the slaughterHouse produces meat */
@@ -587,5 +587,227 @@ public class TestSlaughterHouse {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testDestroyedSlaughterHouseIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+
+        /* Connect the slaughter house with the headquarter */
+        map.placeAutoSelectedRoad(slaughterHouse0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Destroy the slaughter house */
+        slaughterHouse0.tearDown();
+
+        assertTrue(slaughterHouse0.burningDown());
+
+        /* Wait for the slaughter house to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(slaughterHouse0.destroyed());
+        
+        /* Wait for the slaughter house to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), slaughterHouse0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(slaughterHouse0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
+        
+        map.removeFlag(slaughterHouse0.getFlag());
+
+        assertNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing slaughter house */
+        Point point26 = new Point(8, 8);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
+        
+        slaughterHouse0.tearDown();
+
+        assertNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInSlaughterHouseCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place slaughter house */
+        Point point1 = new Point(8, 6);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point1);
+        
+        /* Connect the slaughter house and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+        
+        /* Assign a worker to the slaughter house */
+        Butcher ww = new Butcher(map);
+        
+        Utils.occupyBuilding(ww, slaughterHouse0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Deliver material to the slaughter house */
+        Cargo pigCargo = new Cargo(PIG, map);
+        
+        slaughterHouse0.putCargo(pigCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the butcher to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
+        assertEquals(ww.getCargo().getMaterial(), MEAT);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+
+        /* Stop production and verify that no meat is produced */
+        slaughterHouse0.stopProduction();
+        
+        assertFalse(slaughterHouse0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInSlaughterHouseCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place slaughter house */
+        Point point1 = new Point(8, 6);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point1);
+        
+        /* Connect the slaughter house and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Deliver material to the slaughter house */
+        Cargo pigCargo = new Cargo(PIG, map);
+        
+        slaughterHouse0.putCargo(pigCargo);
+
+        /* Assign a worker to the slaughter house */
+        Butcher ww = new Butcher(map);
+        
+        Utils.occupyBuilding(ww, slaughterHouse0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+
+        /* Deliver pig to the slaughterHouse */
+        slaughterHouse0.putCargo(new Cargo(PIG, map));
+
+        /* Wait for the butcher to produce meat */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), MEAT);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+
+        /* Stop production */
+        slaughterHouse0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the slaughter house produces meat again */
+        slaughterHouse0.resumeProduction();
+
+        assertTrue(slaughterHouse0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertNotNull(ww.getCargo());
     }
 }

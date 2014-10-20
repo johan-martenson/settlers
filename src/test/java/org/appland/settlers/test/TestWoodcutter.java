@@ -1205,7 +1205,9 @@ public class TestWoodcutter {
 
         /* Stop production and verify that no wood is produced */
         woodcutter.stopProduction();
-        
+
+        assertFalse(woodcutter.isProductionEnabled());
+
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
             
@@ -1284,6 +1286,8 @@ public class TestWoodcutter {
         /* Resume production and verify that the woodcutter produces wood again */
         woodcutter.resumeProduction();
 
+        assertTrue(woodcutter.isProductionEnabled());
+        
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());

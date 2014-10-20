@@ -63,7 +63,7 @@ public class Butcher extends Worker {
                 countdown.step();
             }
         } else if (state == SLAUGHTERING_PIG) {
-            if (getHome().getAmount(PIG) > 0) {
+            if (getHome().getAmount(PIG) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(MEAT, map);
 

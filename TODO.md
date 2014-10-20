@@ -117,6 +117,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Make it possible to stop storage of material in storage
+
 *  Use information about available flags and buildings to show the right buttons in the app
 
 *  Improve the drawing of the selected spot

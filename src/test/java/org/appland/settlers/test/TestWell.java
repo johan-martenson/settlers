@@ -619,7 +619,7 @@ public class TestWell {
     @Test
     public void testProductionInWellCanBeStopped() throws Exception {
 
-        /* Create gamemap */
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
         /* Place headquarter */
@@ -674,7 +674,7 @@ public class TestWell {
     @Test
     public void testProductionInWellCanBeResumed() throws Exception {
 
-        /* Create gamemap */
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
         /* Place headquarter */
