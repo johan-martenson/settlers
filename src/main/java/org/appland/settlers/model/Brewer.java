@@ -64,7 +64,7 @@ public class Brewer extends Worker {
                 countdown.step();
             }
         } else if (state == BREWING_BEER) {
-            if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
+            if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(BEER, map);
 
@@ -76,7 +76,7 @@ public class Brewer extends Worker {
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }

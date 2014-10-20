@@ -651,4 +651,141 @@ public class TestBrewery {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test
+    public void testProductionInBreweryCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place brewery */
+        Point point1 = new Point(8, 6);
+        Building brewery0 = map.placeBuilding(new Brewery(), point1);
+        
+        /* Connect the brewery and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the brewery */
+        Utils.constructHouse(brewery0, map);
+        
+        /* Deliver material to the brewery */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        Cargo waterCargo = new Cargo(WATER, map);
+        
+        brewery0.putCargo(wheatCargo);
+        brewery0.putCargo(wheatCargo);
+
+        brewery0.putCargo(waterCargo);
+        brewery0.putCargo(waterCargo);
+
+        /* Assign a worker to the brewery */
+        Brewer ww = new Brewer(map);
+        
+        Utils.occupyBuilding(ww, brewery0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the brewer to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
+        assertEquals(ww.getCargo().getMaterial(), BEER);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+
+        /* Stop production and verify that no beer is produced */
+        brewery0.stopProduction();
+        
+        assertFalse(brewery0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInBreweryCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place brewery */
+        Point point1 = new Point(8, 6);
+        Building brewery0 = map.placeBuilding(new Brewery(), point1);
+        
+        /* Connect the brewery and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the brewery */
+        Utils.constructHouse(brewery0, map);
+        
+        /* Assign a worker to the brewery */
+        Brewer ww = new Brewer(map);
+        
+        Utils.occupyBuilding(ww, brewery0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Deliver material to the brewery */
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+        Cargo waterCargo = new Cargo(WATER, map);
+        
+        brewery0.putCargo(wheatCargo);
+        brewery0.putCargo(wheatCargo);
+
+        brewery0.putCargo(waterCargo);
+        brewery0.putCargo(waterCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the brewer to produce beer */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), BEER);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+
+        /* Stop production */
+        brewery0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the brewery produces water again */
+        brewery0.resumeProduction();
+
+        assertTrue(brewery0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertNotNull(ww.getCargo());
+    }
 }
