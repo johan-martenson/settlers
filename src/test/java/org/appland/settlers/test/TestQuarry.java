@@ -485,65 +485,65 @@ public class TestQuarry {
         Utils.fastForward(100, map);
 
         /* Wait for the stone mason to produce a new stone cargo */
-        Worker ww = quarry0.getWorker();
+        Worker stonemason = quarry0.getWorker();
 
-        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
         
         /* Wait for the stone mason to get a new stone */
         Utils.fastForward(50, map);
         
-        assertNotNull(ww.getCargo());
+        assertNotNull(stonemason.getCargo());
         
         /* Wait for the stone mason to go back to the quarry */
-        assertEquals(ww.getTarget(), quarry0.getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
         
         /* Verify that the stone mason puts the stone cargo at the flag */
         map.stepTime();
 
-        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the quarry */
-        assertEquals(ww.getTarget(), quarry0.getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(100, map);
         
-        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
         
         /* Wait for the stone mason to get a new stone */
         Utils.fastForward(50, map);
         
-        assertNotNull(ww.getCargo());
+        assertNotNull(stonemason.getCargo());
         
         /* Wait for the stone mason to go back to the quarry */
-        assertEquals(ww.getTarget(), quarry0.getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(stonemason.getCargo());
 
         /* Verify that the second cargo is put at the flag */
         map.stepTime();
         
-        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(stonemason.getCargo());
         assertEquals(quarry0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -575,31 +575,31 @@ public class TestQuarry {
         Utils.fastForward(100, map);
 
         /* Wait for the stone mason to go to the stone */
-        Worker ww = quarry0.getWorker();
+        Worker stonemason = quarry0.getWorker();
 
-        assertTrue(ww.getTarget().isAdjacent(stone.getPosition()));
+        assertTrue(stonemason.getTarget().isAdjacent(stone.getPosition()));
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ww.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
         
         /* Wait for the stone mason to get a new stone */
         Utils.fastForward(50, map);
         
-        assertNotNull(ww.getCargo());
+        assertNotNull(stonemason.getCargo());
         
         /* Wait for the stone mason to go back to the quarry */
-        assertEquals(ww.getTarget(), quarry0.getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
         
         /* Verify that the stone mason puts the stone cargo at the flag */
         map.stepTime();
         
-        assertEquals(ww.getTarget(), quarry0.getFlag().getPosition());
+        assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(stonemason.getCargo());
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -668,20 +668,20 @@ public class TestQuarry {
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);
         
         /* Destroy the quarry */
-        Worker ww = quarry0.getWorker();
+        Worker stonemason = quarry0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), quarry0.getPosition());
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(STONEMASON);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
 
         /* Verify that the stonemason is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
@@ -711,20 +711,20 @@ public class TestQuarry {
         Utils.occupyBuilding(new Stonemason(map), quarry0, map);
         
         /* Destroy the quarry */
-        Worker ww = quarry0.getWorker();
+        Worker stonemason = quarry0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), quarry0.getPosition());
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
 
         quarry0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : stonemason.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -732,5 +732,236 @@ public class TestQuarry {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testDestroyedQuarryIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+
+        /* Connect the quarry with the headquarter */
+        map.placeAutoSelectedRoad(quarry0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Destroy the quarry */
+        quarry0.tearDown();
+
+        assertTrue(quarry0.burningDown());
+
+        /* Wait for the quarry to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(quarry0.destroyed());
+        
+        /* Wait for the quarry to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), quarry0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(quarry0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
+        
+        map.removeFlag(quarry0.getFlag());
+
+        assertNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(8, 8);
+        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
+        
+        quarry0.tearDown();
+
+        assertNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInQuarryCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place stone */
+        Point point5 = new Point(10, 8);
+        Stone stone = map.placeStone(point5);
+        
+        /* Place quarry */
+        Point point1 = new Point(8, 6);
+        Building quarry0 = map.placeBuilding(new Quarry(), point1);
+        
+        /* Connect the quarry and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the quarry */
+        Utils.constructHouse(quarry0, map);
+        
+        /* Assign a worker to the quarry */
+        Stonemason stonemason = new Stonemason(map);
+        
+        Utils.occupyBuilding(stonemason, quarry0, map);
+        
+        assertTrue(stonemason.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the stonemason to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+        
+        assertEquals(stonemason.getCargo().getMaterial(), STONE);
+
+        /* Wait for the worker to go back to the quarry */
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
+        
+        /* Wait for the worker to deliver the cargo */
+        map.stepTime();
+        
+        assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+
+        /* Stop production and verify that no stone is produced */
+        quarry0.stopProduction();
+        
+        assertFalse(quarry0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(stonemason.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInQuarryCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place stone */
+        Point point5 = new Point(10, 8);
+        Stone stone = map.placeStone(point5);
+        
+        /* Place quarry */
+        Point point1 = new Point(8, 6);
+        Building quarry0 = map.placeBuilding(new Quarry(), point1);
+        
+        /* Connect the quarry and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the quarry */
+        Utils.constructHouse(quarry0, map);
+        
+        /* Assign a worker to the quarry */
+        Stonemason stonemason = new Stonemason(map);
+        
+        Utils.occupyBuilding(stonemason, quarry0, map);
+        
+        assertTrue(stonemason.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the stonemason to produce stone */
+        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+
+        assertEquals(stonemason.getCargo().getMaterial(), STONE);
+
+        /* Wait for the worker to go back to the quarry */
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
+        
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getPosition());
+        
+        /* Wait for the worker to deliver the cargo */
+        map.stepTime();
+        
+        assertEquals(stonemason.getTarget(), quarry0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+
+        /* Stop production */
+        quarry0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(stonemason.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the quarry produces stone again */
+        quarry0.resumeProduction();
+
+        assertTrue(quarry0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
+
+        assertNotNull(stonemason.getCargo());
     }
 }
