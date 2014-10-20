@@ -568,35 +568,35 @@ public class TestCoalMine {
         /* Wait for the miner to produce a new coal cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = coalMine0.getWorker();
+        Worker miner = coalMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the coal cargo at the flag */
-        assertEquals(ww.getTarget(), coalMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), coalMine0.getFlag().getPosition());
         assertTrue(coalMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, coalMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(coalMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the coal mine */
-        assertEquals(ww.getTarget(), coalMine0.getPosition());
+        assertEquals(miner.getTarget(), coalMine0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, coalMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), coalMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), coalMine0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, coalMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertEquals(coalMine0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -637,17 +637,17 @@ public class TestCoalMine {
         /* Wait for the miner to produce a new coal cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = coalMine0.getWorker();
+        Worker miner = coalMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the coal cargo at the flag */
-        assertEquals(ww.getTarget(), coalMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), coalMine0.getFlag().getPosition());
         assertTrue(coalMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, coalMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(coalMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -705,7 +705,7 @@ public class TestCoalMine {
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
-        
+
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
@@ -721,20 +721,20 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(map), coalMine0, map);
         
         /* Destroy the coal mine */
-        Worker ww = coalMine0.getWorker();
+        Worker miner = coalMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), coalMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
 
         coalMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(MINER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -768,20 +768,20 @@ public class TestCoalMine {
         Utils.occupyBuilding(new Miner(map), coalMine0, map);
         
         /* Destroy the coal mine */
-        Worker ww = coalMine0.getWorker();
+        Worker miner = coalMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), coalMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
 
         coalMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -789,5 +789,144 @@ public class TestCoalMine {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testProductionInCoalMineCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(), point1);
+        
+        /* Connect the coal mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the coal mine */
+        Utils.constructHouse(coalMine0, map);
+        
+        /* Assign a worker to the coal mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, coalMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Deliver material to the coal mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        coalMine0.putCargo(fishCargo);
+        coalMine0.putCargo(fishCargo);
+        
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        
+        assertEquals(miner.getCargo().getMaterial(), COAL);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), coalMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
+
+        /* Stop production and verify that no coal is produced */
+        coalMine0.stopProduction();
+        
+        assertFalse(coalMine0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInCoalMineCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(), point1);
+        
+        /* Connect the coal mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the coal mine */
+        Utils.constructHouse(coalMine0, map);
+        
+        /* Deliver material to the coal mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        coalMine0.putCargo(fishCargo);
+        coalMine0.putCargo(fishCargo);
+        
+        /* Assign a worker to the coal mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, coalMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce coal */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertEquals(miner.getCargo().getMaterial(), COAL);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), coalMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
+
+        /* Stop production */
+        coalMine0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the coal mine produces coal again */
+        coalMine0.resumeProduction();
+
+        assertTrue(coalMine0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertNotNull(miner.getCargo());
     }
 }

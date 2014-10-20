@@ -24,6 +24,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that production can be stopped in the farm
+
 *  Test that production can be stopped for unoccupied building
 
 *  Test that production can't be stopped or resumed for non-productive building
