@@ -100,7 +100,7 @@ public class Miner extends Worker {
                 countdown.step();
             }
         } else if (state == MINING) {
-            if (countdown.reachedZero()) {
+            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
                     
@@ -112,7 +112,7 @@ public class Miner extends Worker {
 
                     state = GOING_OUT_TO_FLAG;
                 }
-            } else {
+            } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
         }

@@ -568,35 +568,35 @@ public class TestIronMine {
         /* Wait for the miner to produce a new iron cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = ironMine0.getWorker();
+        Worker miner = ironMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the iron cargo at the flag */
-        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), ironMine0.getFlag().getPosition());
         assertTrue(ironMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(ironMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the iron mine */
-        assertEquals(ww.getTarget(), ironMine0.getPosition());
+        assertEquals(miner.getTarget(), ironMine0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), ironMine0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertEquals(ironMine0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -636,17 +636,17 @@ public class TestIronMine {
         /* Wait for the miner to produce a new iron cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = ironMine0.getWorker();
+        Worker miner = ironMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the iron cargo at the flag */
-        assertEquals(ww.getTarget(), ironMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), ironMine0.getFlag().getPosition());
         assertTrue(ironMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, ironMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(ironMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -719,20 +719,20 @@ public class TestIronMine {
         Utils.occupyBuilding(new Miner(map), ironMine0, map);
         
         /* Destroy the iron mine */
-        Worker ww = ironMine0.getWorker();
+        Worker miner = ironMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), ironMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), ironMine0.getPosition());
 
         ironMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(MINER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -766,20 +766,20 @@ public class TestIronMine {
         Utils.occupyBuilding(new Miner(map), ironMine0, map);
         
         /* Destroy the iron mine */
-        Worker ww = ironMine0.getWorker();
+        Worker miner = ironMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), ironMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), ironMine0.getPosition());
 
         ironMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -787,5 +787,144 @@ public class TestIronMine {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testProductionInMineCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(), point1);
+        
+        /* Connect the iron mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the iron mine */
+        Utils.constructHouse(ironMine0, map);
+        
+        /* Deliver material to the iron mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        ironMine0.putCargo(fishCargo);
+        ironMine0.putCargo(fishCargo);
+
+        /* Assign a worker to the iron mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, ironMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        
+        assertEquals(miner.getCargo().getMaterial(), IRON);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), ironMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getFlag().getPosition());
+
+        /* Stop production and verify that no iron is produced */
+        ironMine0.stopProduction();
+        
+        assertFalse(ironMine0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInMineCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(), point1);
+        
+        /* Connect the iron mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the iron mine */
+        Utils.constructHouse(ironMine0, map);
+        
+        /* Assign a worker to the iron mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, ironMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Deliver material to the iron mine */
+        Cargo fishCargo = new Cargo(FISH, map);
+        
+        ironMine0.putCargo(fishCargo);
+        ironMine0.putCargo(fishCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce iron */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertEquals(miner.getCargo().getMaterial(), IRON);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), ironMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, ironMine0.getFlag().getPosition());
+
+        /* Stop production */
+        ironMine0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the iron mine produces iron again */
+        ironMine0.resumeProduction();
+
+        assertTrue(ironMine0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertNotNull(miner.getCargo());
     }
 }
