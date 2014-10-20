@@ -75,7 +75,7 @@ public class Armorer extends Worker {
                 countdown.step();
             }
         } else if (state == PRODUCING_WEAPON) {
-            if (getHome().getAmount(IRON) > 0 && getHome().getAmount(COAL) > 0) {
+            if (getHome().getAmount(IRON) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(nextWeapon, map);
 
@@ -89,7 +89,7 @@ public class Armorer extends Worker {
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }
