@@ -530,20 +530,20 @@ public class TestForesterHut {
         Utils.occupyBuilding(new Forester(map), foresterHut0, map);
         
         /* Destroy the forester hut */
-        Worker ww = foresterHut0.getWorker();
+        Worker forester = foresterHut0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), foresterHut0.getPosition());
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
         foresterHut0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(FORESTER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
@@ -573,20 +573,20 @@ public class TestForesterHut {
         Utils.occupyBuilding(new Forester(map), foresterHut0, map);
         
         /* Destroy the forester hut */
-        Worker ww = foresterHut0.getWorker();
+        Worker forester = foresterHut0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), foresterHut0.getPosition());
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
         foresterHut0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : forester.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -594,5 +594,152 @@ public class TestForesterHut {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testProductionInForesterHutCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place forester hut */
+        Point point1 = new Point(8, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point1);
+        
+        /* Connect the forester hut and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+        
+        /* Assign a worker to the forester hut */
+        Forester forester = new Forester(map);
+        
+        Utils.occupyBuilding(forester, foresterHut0, map);
+        
+        assertTrue(forester.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the forester to leave the forester hut */
+        for (int i = 0; i < 300; i++) {
+            if (!forester.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertFalse(forester.isInsideBuilding());
+        
+        /* Wait for the forester to go back to the forester hut */
+        for (int i = 0; i < 300; i++) {
+            if (forester.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Stop production and verify that no tree is planted */
+        foresterHut0.stopProduction();
+        
+        assertFalse(foresterHut0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertTrue(forester.isInsideBuilding());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInForesterHutCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place forester hut */
+        Point point1 = new Point(8, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point1);
+        
+        /* Connect the forester hut and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+        
+        /* Assign a worker to the forester hut */
+        Forester forester = new Forester(map);
+        
+        Utils.occupyBuilding(forester, foresterHut0, map);
+        
+        assertTrue(forester.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the forester to leave the forester hut */
+        for (int i = 0; i < 300; i++) {
+            if (!forester.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertFalse(forester.isInsideBuilding());
+        
+        /* Wait for the forester to go back to the forester hut */
+        for (int i = 0; i < 300; i++) {
+            if (forester.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Stop production */
+        foresterHut0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(forester.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the forester plants trees again */
+        foresterHut0.resumeProduction();
+
+        assertTrue(foresterHut0.isProductionEnabled());
+
+        for (int i = 0; i < 300; i++) {
+            if (!forester.isInsideBuilding()) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+
+        assertFalse(forester.isInsideBuilding());
     }
 }
