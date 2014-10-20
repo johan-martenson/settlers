@@ -97,7 +97,7 @@ public class Fisherman extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {
+        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point p = getFishingSpot();
 
