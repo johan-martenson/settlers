@@ -568,35 +568,35 @@ public class TestGraniteMine {
         /* Wait for the miner to produce a new stone cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = graniteMine0.getWorker();
+        Worker miner = graniteMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the stone cargo at the flag */
-        assertEquals(ww.getTarget(), graniteMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the granite mine */
-        assertEquals(ww.getTarget(), graniteMine0.getPosition());
+        assertEquals(miner.getTarget(), graniteMine0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, graniteMine0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), graniteMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertEquals(graniteMine0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -636,17 +636,17 @@ public class TestGraniteMine {
         /* Wait for the miner to produce a new stone cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = graniteMine0.getWorker();
+        Worker miner = graniteMine0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(miner.getCargo());
 
         /* Verify that the miner puts the stone cargo at the flag */
-        assertEquals(ww.getTarget(), graniteMine0.getFlag().getPosition());
+        assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(graniteMine0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, graniteMine0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(miner.getCargo());
         assertFalse(graniteMine0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -720,20 +720,20 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(map), graniteMine0, map);
         
         /* Destroy the granite mine */
-        Worker ww = graniteMine0.getWorker();
+        Worker miner = graniteMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), graniteMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), graniteMine0.getPosition());
 
         graniteMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(MINER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(MINER), amount + 1);
@@ -767,20 +767,20 @@ public class TestGraniteMine {
         Utils.occupyBuilding(new Miner(map), graniteMine0, map);
         
         /* Destroy the granite mine */
-        Worker ww = graniteMine0.getWorker();
+        Worker miner = graniteMine0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), graniteMine0.getPosition());
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), graniteMine0.getPosition());
 
         graniteMine0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -788,5 +788,142 @@ public class TestGraniteMine {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testProductionInGraniteMineCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place granite mine */
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(), point1);
+        
+        /* Connect the granite mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the granite mine */
+        Utils.constructHouse(graniteMine0, map);
+        
+        /* Deliver food to the miner */
+        Cargo food = new Cargo(BREAD, map);
+        graniteMine0.putCargo(food);
+
+        /* Assign a worker to the granite mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, graniteMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+        
+        assertEquals(miner.getCargo().getMaterial(), STONE);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+
+        /* Stop production and verify that no stone is produced */
+        graniteMine0.stopProduction();
+        
+        assertFalse(graniteMine0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInGraniteMineCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place granite mine */
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(), point1);
+        
+        /* Connect the granite mine and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Point point5 = new Point(11, 5);
+        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        
+        /* Finish the granite mine */
+        Utils.constructHouse(graniteMine0, map);
+        
+        /* Deliver food to the miner */
+        Cargo food = new Cargo(BREAD, map);
+
+        graniteMine0.putCargo(food);
+        graniteMine0.putCargo(food);
+
+        /* Assign a worker to the granite mine */
+        Miner miner = new Miner(map);
+        
+        Utils.occupyBuilding(miner, graniteMine0, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the miner to produce stone */
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertEquals(miner.getCargo().getMaterial(), STONE);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(miner.getTarget(), graniteMine0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, graniteMine0.getFlag().getPosition());
+
+        /* Stop production */
+        graniteMine0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(miner.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the granite mine produces stone again */
+        graniteMine0.resumeProduction();
+
+        assertTrue(graniteMine0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, miner);
+
+        assertNotNull(miner.getCargo());
     }
 }
