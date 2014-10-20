@@ -604,4 +604,233 @@ public class TestMint {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test
+    public void testDestroyedMintIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+
+        /* Connect the mint with the headquarter */
+        map.placeAutoSelectedRoad(mint0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint0, map);
+
+        /* Destroy the mint */
+        mint0.tearDown();
+
+        assertTrue(mint0.burningDown());
+
+        /* Wait for the mint to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(mint0.destroyed());
+        
+        /* Wait for the mint to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), mint0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(mint0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+        
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
+        
+        map.removeFlag(mint0.getFlag());
+
+        assertNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing mint */
+        Point point26 = new Point(8, 8);
+        Building mint0 = map.placeBuilding(new Mint(), point26);
+        
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
+        
+        mint0.tearDown();
+
+        assertNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInMintCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place mint */
+        Point point1 = new Point(8, 6);
+        Building mint0 = map.placeBuilding(new Mint(), point1);
+        
+        /* Connect the mint and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the mint */
+        Utils.constructHouse(mint0, map);
+        
+        /* Deliver material to the mint */
+        Cargo coalCargo = new Cargo(COAL, map);
+        Cargo goldCargo = new Cargo(GOLD, map);
+        
+        mint0.putCargo(coalCargo);
+        mint0.putCargo(coalCargo);
+
+        mint0.putCargo(goldCargo);
+        mint0.putCargo(goldCargo);
+
+        /* Assign a worker to the mint */
+        Minter ww = new Minter(map);
+        
+        Utils.occupyBuilding(ww, mint0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the minter to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
+        assertEquals(ww.getCargo().getMaterial(), COIN);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), mint0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getFlag().getPosition());
+
+        /* Stop production and verify that no coin is produced */
+        mint0.stopProduction();
+        
+        assertFalse(mint0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInMintCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place mint */
+        Point point1 = new Point(8, 6);
+        Building mint0 = map.placeBuilding(new Mint(), point1);
+        
+        /* Connect the mint and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the mint */
+        Utils.constructHouse(mint0, map);
+        
+        /* Assign a worker to the mint */
+        Minter ww = new Minter(map);
+        
+        Utils.occupyBuilding(ww, mint0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Deliver material to the mint */
+        Cargo coalCargo = new Cargo(COAL, map);
+        Cargo goldCargo = new Cargo(GOLD, map);
+        
+        mint0.putCargo(coalCargo);
+        mint0.putCargo(coalCargo);
+
+        mint0.putCargo(goldCargo);
+        mint0.putCargo(goldCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the minter to produce coin */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), COIN);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), mint0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mint0.getFlag().getPosition());
+
+        /* Stop production */
+        mint0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the mint produces coin again */
+        mint0.resumeProduction();
+
+        assertTrue(mint0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertNotNull(ww.getCargo());
+    }
 }

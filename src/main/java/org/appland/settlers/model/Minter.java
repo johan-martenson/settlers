@@ -64,7 +64,7 @@ public class Minter extends Worker {
                 countdown.step();
             }
         } else if (state == MAKING_COIN) {
-            if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0) {
+            if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(COIN, map);
 
@@ -76,7 +76,7 @@ public class Minter extends Worker {
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }
