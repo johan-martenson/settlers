@@ -662,6 +662,8 @@ public class TestWell {
         /* Stop production and verify that no water is produced */
         well.stopProduction();
         
+        assertFalse(well.isProductionEnabled());
+        
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
             
@@ -724,9 +726,10 @@ public class TestWell {
         /* Resume production and verify that the well produces water again */
         well.resumeProduction();
 
+        assertTrue(well.isProductionEnabled());
+
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
     }
 }
-

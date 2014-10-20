@@ -19,14 +19,6 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  */
 public abstract class Worker implements Actor {
 
-    protected void onStopProduction() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    protected void onResumeProduction() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     enum States {
         WALKING_AND_EXACTLY_AT_POINT, 
         WALKING_BETWEEN_POINTS, 
@@ -391,13 +383,5 @@ public abstract class Worker implements Actor {
 
     protected void onReturnToStorage() throws Exception {
         
-    }
-
-    void resumeProduction() {
-        onResumeProduction();
-    }
-
-    void stopProduction() {
-        onStopProduction();
     }
 }

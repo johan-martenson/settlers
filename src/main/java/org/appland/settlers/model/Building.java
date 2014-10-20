@@ -43,6 +43,7 @@ public class Building implements Actor, EndPoint {
     private Flag    flag;
     private boolean enablePromotions;
     private boolean evacuated;
+    private boolean productionEnabled;
 
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
@@ -65,6 +66,7 @@ public class Building implements Actor, EndPoint {
         map                   = null;
         enablePromotions      = true;
         evacuated             = false;
+        productionEnabled     = true;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -675,10 +677,14 @@ public class Building implements Actor, EndPoint {
     }
 
     public void stopProduction() {
-        getWorker().stopProduction();
+        productionEnabled = false;
     }
 
     public void resumeProduction() {
-        getWorker().resumeProduction();
+        productionEnabled = true;
+    }
+
+    public boolean isProductionEnabled() {
+        return productionEnabled;
     }
 }

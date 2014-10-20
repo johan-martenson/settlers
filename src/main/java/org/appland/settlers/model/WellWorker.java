@@ -26,13 +26,11 @@ public class WellWorker extends Worker {
     private final Countdown countdown;
 
     private States  state;
-    private boolean productionEnabled;
 
     public WellWorker(GameMap m) {
         super(m);
-        countdown         = new Countdown();
-        state             = WALKING_TO_TARGET;
-        productionEnabled = true;
+        countdown = new Countdown();
+        state     = WALKING_TO_TARGET;
     }
     
     enum States {
@@ -58,11 +56,11 @@ public class WellWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero() && productionEnabled) {
+            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 state = DRAWING_WATER;
                 
                 countdown.countFrom(PRODUCTION_TIME);
-            } else if (productionEnabled) {
+            } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
         } else if (state == DRAWING_WATER) {
@@ -127,15 +125,5 @@ public class WellWorker extends Worker {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onStopProduction() {
-        productionEnabled = false;
-    }
-
-    @Override
-    protected void onResumeProduction() {
-        productionEnabled = true;
     }
 }

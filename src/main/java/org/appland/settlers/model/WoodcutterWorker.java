@@ -28,7 +28,6 @@ public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_CUT_TREE = 49;
     
     private States  state;
-    private boolean productionEnabled;
     private final Countdown countdown;
 
     private Point getTreeToCutDown() {
@@ -70,7 +69,6 @@ public class WoodcutterWorker extends Worker {
         
         state             = WALKING_TO_TARGET;
         countdown         = new Countdown();
-        productionEnabled = true;
     }
     
     public boolean isCuttingTree() {
@@ -90,7 +88,7 @@ public class WoodcutterWorker extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE && productionEnabled) {
+        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
                 
@@ -101,7 +99,7 @@ public class WoodcutterWorker extends Worker {
                 setOffroadTarget(p);
                 
                 state = GOING_OUT_TO_CUT_TREE;
-            } else if (productionEnabled) {
+            } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
         } else if (state == CUTTING_TREE) {
@@ -177,15 +175,5 @@ public class WoodcutterWorker extends Worker {
                 }
             }
         }
-    }
-
-    @Override
-    protected void onStopProduction() {
-        productionEnabled = false;
-    }
-
-    @Override
-    protected void onResumeProduction() {
-        productionEnabled = true;
     }
 }
