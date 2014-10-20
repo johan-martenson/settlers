@@ -65,7 +65,7 @@ public class Baker extends Worker {
                 countdown.step();
             }
         } else if (state == BAKING_BREAD) {
-            if (getHome().getAmount(WATER) > 0 && getHome().getAmount(FLOUR) > 0) {
+            if (getHome().getAmount(WATER) > 0 && getHome().getAmount(FLOUR) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(BREAD, map);
 
@@ -77,7 +77,7 @@ public class Baker extends Worker {
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
-                } else {
+                } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
             }
