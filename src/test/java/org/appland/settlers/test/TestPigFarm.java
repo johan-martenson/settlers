@@ -13,8 +13,8 @@ import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
+import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Point;
@@ -168,7 +168,7 @@ public class TestPigFarm {
 
         Utils.constructHouse(pigFarm, map);
 
-        /* Deliver wheat and water to the farm */
+        /* Deliver wheat and pig to the farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
         Cargo waterCargo = new Cargo(WATER, map);
         
@@ -611,7 +611,7 @@ public class TestPigFarm {
     }
 
     @Test
-    public void testPigBreederGoesBackToStorageWhenWellIsDestroyed() throws Exception {
+    public void testPigBreederGoesBackToStorageWhenPigFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         GameMap map = new GameMap(40, 40);
@@ -651,7 +651,7 @@ public class TestPigFarm {
     }
 
     @Test
-    public void testPigBreederGoesBackOnToStorageOnRoadsIfPossibleWhenWellIsDestroyed() throws Exception {
+    public void testPigBreederGoesBackOnToStorageOnRoadsIfPossibleWhenPigFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
         GameMap map = new GameMap(40, 40);
@@ -778,7 +778,7 @@ public class TestPigFarm {
         Building pigFarm = map.placeBuilding(new PigFarm(), point3);
         
         Utils.constructHouse(pigFarm, map);
-        
+
         /* Deliver resources to the pig farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -825,5 +825,231 @@ public class TestPigFarm {
         assertFalse(pigBreeder.isFeeding());
         assertEquals(pigFarm.getAmount(WATER), 0);
         assertEquals(pigFarm.getAmount(WHEAT), 0);
+    }
+
+    @Test
+    public void testDestroyedPigFarmIsRemovedAfterSomeTime() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+
+        /* Connect the pig farm with the headquarter */
+        map.placeAutoSelectedRoad(pigFarm0.getFlag(), headquarter0.getFlag());
+        
+        /* Finish construction of the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+
+        /* Destroy the pig farm */
+        pigFarm0.tearDown();
+
+        assertTrue(pigFarm0.burningDown());
+
+        /* Wait for the pig farm to stop burning */
+        Utils.fastForward(50, map);
+        
+        assertTrue(pigFarm0.destroyed());
+        
+        /* Wait for the pig farm to disappear */
+        for (int i = 0; i < 100; i++) {
+            assertEquals(map.getBuildingAtPoint(point26), pigFarm0);
+            
+            map.stepTime();
+        }
+        
+        assertFalse(map.isBuildingAtPoint(point26));
+        assertFalse(map.getBuildings().contains(pigFarm0));
+        assertNull(map.getBuildingAtPoint(point26));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        
+        /* Finish construction of the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+
+        /* Remove the flag and verify that the driveway is removed */
+        assertNotNull(map.getRoad(pigFarm0.getPosition(), pigFarm0.getFlag().getPosition()));
+        
+        map.removeFlag(pigFarm0.getFlag());
+
+        assertNull(map.getRoad(pigFarm0.getPosition(), pigFarm0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing pig farm */
+        Point point26 = new Point(8, 8);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        
+        /* Finish construction of the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+
+        /* Tear down the building and verify that the driveway is removed */
+        assertNotNull(map.getRoad(pigFarm0.getPosition(), pigFarm0.getFlag().getPosition()));
+        
+        pigFarm0.tearDown();
+
+        assertNull(map.getRoad(pigFarm0.getPosition(), pigFarm0.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testProductionInPigFarmCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place pig farm */
+        Point point1 = new Point(8, 6);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point1);
+        
+        /* Connect the pig farm and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+        
+        /* Assign a worker to the pig farm */
+        PigBreeder ww = new PigBreeder(map);
+        
+        Utils.occupyBuilding(ww, pigFarm0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm0.putCargo(waterCargo);
+        pigFarm0.putCargo(wheatCargo);
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the pig breeder to produce cargo */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        
+        assertEquals(ww.getCargo().getMaterial(), PIG);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), pigFarm0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getFlag().getPosition());
+
+        /* Stop production and verify that no pig is produced */
+        pigFarm0.stopProduction();
+        
+        assertFalse(pigFarm0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInPigFarmCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place pig farm */
+        Point point1 = new Point(8, 6);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(), point1);
+        
+        /* Connect the pig farm and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+        
+        /* Deliver resources to the pig farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        pigFarm0.putCargo(waterCargo);
+        pigFarm0.putCargo(waterCargo);
+
+        pigFarm0.putCargo(wheatCargo);
+        pigFarm0.putCargo(wheatCargo);
+
+        /* Assign a worker to the pig farm */
+        PigBreeder ww = new PigBreeder(map);
+        
+        Utils.occupyBuilding(ww, pigFarm0, map);
+        
+        assertTrue(ww.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the pig breeder to produce pig */
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertEquals(ww.getCargo().getMaterial(), PIG);
+
+        /* Wait for the worker to deliver the cargo */
+        assertEquals(ww.getTarget(), pigFarm0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ww, pigFarm0.getFlag().getPosition());
+
+        /* Stop production */
+        pigFarm0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertNull(ww.getCargo());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the pig farm produces pig again */
+        pigFarm0.resumeProduction();
+
+        assertTrue(pigFarm0.isProductionEnabled());
+
+        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+
+        assertNotNull(ww.getCargo());
     }
 }

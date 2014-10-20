@@ -72,7 +72,7 @@ public class PigBreeder extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
                     Point pointToFeedPigsAt = getHome().getPosition().downLeft();
 
@@ -80,7 +80,7 @@ public class PigBreeder extends Worker {
 
                     setOffroadTarget(pointToFeedPigsAt);
                 }
-            } else {
+            } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
         } else if (state == FEEDING) {
