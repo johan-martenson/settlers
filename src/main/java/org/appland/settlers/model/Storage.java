@@ -602,4 +602,9 @@ public class Storage extends Building implements Actor {
     
         return null;
     }
+
+    @Override
+    public void stopProduction() throws Exception {
+        throw new Exception("Can't stop production in storage");
+    }
 }

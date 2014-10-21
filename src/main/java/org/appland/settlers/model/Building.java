@@ -676,7 +676,7 @@ public class Building implements Actor, EndPoint {
         evacuated = false;
     }
 
-    public void stopProduction() {
+    public void stopProduction() throws Exception {
         productionEnabled = false;
     }
 

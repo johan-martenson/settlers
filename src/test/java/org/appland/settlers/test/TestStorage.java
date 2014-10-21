@@ -469,4 +469,36 @@ public class TestStorage {
 
         assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
     }
+
+    @Test (expected = Exception.class)
+    public void testProductionInStorageCannotBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place storage */
+        Point point1 = new Point(8, 6);
+        Building storage0 = map.placeBuilding(new Storage(), point1);
+        
+        /* Connect the storage and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the storage */
+        Utils.constructHouse(storage0, map);
+        
+        /* Assign a worker to the storage */
+        StorageWorker storageWorker = new StorageWorker(map);
+        
+        Utils.occupyBuilding(storageWorker, storage0, map);
+
+        /* Verify that production can't be stopped */
+        storage0.stopProduction();
+    }
 }
