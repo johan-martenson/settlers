@@ -719,4 +719,15 @@ public class TestGameMap {
     public void testBarracksCanOnlyBeBuiltCloseToBorder() {
         // TODO: Implement test
     }
+
+    @Test
+    public void testGetWidthAndHeight() throws Exception {
+        
+        /* Create game map */
+        GameMap map = new GameMap(20, 30);
+
+        /* Verify that the width and height are correct */
+        assertEquals(map.getWidth(), 20);
+        assertEquals(map.getHeight(), 30);
+    }
 }

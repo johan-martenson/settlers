@@ -6,14 +6,15 @@ import java.util.logging.Logger;
 
 public class Cargo {
 
-    private Material    material;
+    private static final Logger log = Logger.getLogger(GameMap.class.getName());
+
+    private final Material    material;
+    private final GameMap map;
+
     private Building    target;
     private Point       position;
     private List<Point> path;
-
-    private static final Logger log = Logger.getLogger(GameMap.class.getName());
     private boolean deliveryPromised;
-    private GameMap map;
 
     public Cargo(Material materialToSet, GameMap mapToSet) {
         log.log(Level.FINE, "Creating cargo of {0}", materialToSet);

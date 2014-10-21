@@ -117,6 +117,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 TO IMPLEMENT
 ============
 
+*  Scale drawing of workers and trees in the app
+
 *  Make sure all tests for stopped production have more material than necessary
 
 *  Make it possible to stop storage of material in storage
@@ -498,4 +500,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that production can be stopped in the farm - DONE
 
 *  Replicate additional tests in TestWell to the other buildings - DONE
+
+*  Test GameMap::get(Width|Height)() - DONE
 
