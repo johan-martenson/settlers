@@ -701,56 +701,56 @@ public class TestFarm {
         Utils.fastForward(100, map);
 
         /* Wait for the farmer to plant and harvest a new crop */
-        Worker ww = farm0.getWorker();
+        Worker farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
-            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
                 break;
             }
         
             map.stepTime();
         }
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(farmer.getCargo());
         
         /* Wait one tick for the farmer to start walking to the flag */
         map.stepTime();
         
-        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
 
         /* Verify that the farmer puts the wheat cargo at the flag */
-        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait for the worker to go back to the farm */
-        assertEquals(ww.getTarget(), farm0.getPosition());
+        assertEquals(farmer.getTarget(), farm0.getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         for (int i = 0; i < 1000; i++) {
-            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(farmer.getCargo());
 
         /* Verify that the second cargo is put at the flag */
         map.stepTime();
         
-        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
         
-        assertNull(ww.getCargo());
+        assertNull(farmer.getCargo());
         assertEquals(farm0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -778,27 +778,27 @@ public class TestFarm {
         Utils.fastForward(100, map);
 
         /* Wait for the farmer to produce a new wheat cargo */
-        Worker ww = farm0.getWorker();
+        Worker farmer = farm0.getWorker();
 
         for (int i = 0; i < 1000; i++) {
-            if (ww.getCargo() != null && ww.getPosition().equals(farm0.getPosition())) {
+            if (farmer.getCargo() != null && farmer.getPosition().equals(farm0.getPosition())) {
                 break;
             }
         
             map.stepTime();
         }
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(farmer.getCargo());
 
         /* Verify that the farmer puts the wheat cargo at the flag */
         map.stepTime();
         
-        assertEquals(ww.getTarget(), farm0.getFlag().getPosition());
+        assertEquals(farmer.getTarget(), farm0.getFlag().getPosition());
         assertTrue(farm0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, farm0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, farm0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(farmer.getCargo());
         assertFalse(farm0.getFlag().getStackedCargo().isEmpty());
         
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -868,20 +868,20 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(map), farm0, map);
         
         /* Destroy the farm */
-        Worker ww = farm0.getWorker();
+        Worker farmer = farm0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), farm0.getPosition());
+        assertTrue(farmer.isInsideBuilding());
+        assertEquals(farmer.getPosition(), farm0.getPosition());
 
         farm0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(farmer.isInsideBuilding());
+        assertEquals(farmer.getTarget(), headquarter0.getPosition());
     
         int amount = headquarter0.getAmount(FARMER);
         
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, farmer, headquarter0.getPosition());
 
         /* Verify that the farmer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(FARMER), amount + 1);
@@ -911,20 +911,20 @@ public class TestFarm {
         Utils.occupyBuilding(new Farmer(map), farm0, map);
         
         /* Destroy the farm */
-        Worker ww = farm0.getWorker();
+        Worker farmer = farm0.getWorker();
         
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), farm0.getPosition());
+        assertTrue(farmer.isInsideBuilding());
+        assertEquals(farmer.getPosition(), farm0.getPosition());
 
         farm0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(farmer.isInsideBuilding());
+        assertEquals(farmer.getTarget(), headquarter0.getPosition());
     
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : farmer.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -932,5 +932,152 @@ public class TestFarm {
 
             assertTrue(map.isRoadAtPoint(p));
         }
+    }
+
+    @Test
+    public void testProductionInFarmCanBeStopped() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place farm */
+        Point point1 = new Point(8, 6);
+        Building farm0 = map.placeBuilding(new Farm(), point1);
+        
+        /* Connect the farm and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the farm */
+        Utils.constructHouse(farm0, map);
+        
+        /* Assign a worker to the farm */
+        Farmer farmer = new Farmer(map);
+        
+        Utils.occupyBuilding(farmer, farm0, map);
+        
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+
+        /* Wait for the farmer to produce leave the farm */
+        for (int i = 0; i < 100; i++) {
+            if (!farmer.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertFalse(farmer.isInsideBuilding());
+        
+        /* Wait for the farmer to return to the farm */
+        for (int i = 0; i < 200; i++) {
+            if (farmer.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertTrue(farmer.isInsideBuilding());
+        
+        /* Stop production and verify that the farmer stays in the farm */
+        farm0.stopProduction();
+        
+        assertFalse(farm0.isProductionEnabled());
+        
+        for (int i = 0; i < 300; i++) {
+            assertTrue(farmer.isInsideBuilding());
+            
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testProductionInFarmCanBeResumed() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+        
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+        
+        /* Place farm */
+        Point point1 = new Point(8, 6);
+        Building farm0 = map.placeBuilding(new Farm(), point1);
+        
+        /* Connect the farm and the headquarter */
+        Point point2 = new Point(6, 4);
+        Point point3 = new Point(8, 4);
+        Point point4 = new Point(9, 5);
+        Road road0 = map.placeRoad(point2, point3, point4);
+        
+        /* Finish the farm */
+        Utils.constructHouse(farm0, map);
+        
+        /* Assign a worker to the farm */
+        Farmer farmer = new Farmer(map);
+        
+        Utils.occupyBuilding(farmer, farm0, map);
+        
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Let the worker rest */
+        Utils.fastForward(100, map);
+        
+        /* Wait for the farmer to produce leave the farm */
+        for (int i = 0; i < 100; i++) {
+            if (!farmer.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertFalse(farmer.isInsideBuilding());
+        
+        /* Wait for the farmer to return to the farm */
+        for (int i = 0; i < 200; i++) {
+            if (farmer.isInsideBuilding()) {
+                break;
+            }
+        
+            map.stepTime();
+        }
+        
+        assertTrue(farmer.isInsideBuilding());
+
+        /* Stop production */
+        farm0.stopProduction();
+
+        for (int i = 0; i < 300; i++) {
+            assertTrue(farmer.isInsideBuilding());
+            
+            map.stepTime();
+        }
+
+        /* Resume production and verify that the farmer leaves the farm */
+        farm0.resumeProduction();
+
+        assertTrue(farm0.isProductionEnabled());
+
+        for (int i = 0; i < 200; i++) {
+            if (!farmer.isInsideBuilding()) {
+                break;
+            }
+            
+            map.stepTime();
+        }
+    
+        assertFalse(farmer.isInsideBuilding());
     }
 }

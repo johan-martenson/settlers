@@ -145,7 +145,7 @@ public class Farmer extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {                
+            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 Crop cropToHarvest = findCropToHarvest();
 
                 if (cropToHarvest != null) {                    
@@ -163,7 +163,7 @@ public class Farmer extends Worker {
 
                     state = GOING_OUT_TO_PLANT;
                 }
-            } else {
+            } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
         } else if (state == PLANTING) {
