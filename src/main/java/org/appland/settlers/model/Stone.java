@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public class Stone {
+public class Stone implements Piece {
 
     private int amount;
     private final Point position;

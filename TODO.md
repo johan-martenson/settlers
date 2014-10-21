@@ -5,6 +5,8 @@ REMOVE
 RE-FACTOR
 =========
 
+*  Make fields in Cargo final
+
 *  Clean up getAvailableHousePoints!
 
 *  canBuild(Small|Medium|Large)House() needed?
@@ -24,17 +26,13 @@ RE-FACTOR
 TEST
 ====
 
-*  Test that production can be stopped in the farm
-
-*  Test that production can be stopped for unoccupied building
+*  Test that production can|cannot be stopped for unoccupied building
 
 *  Test that production can't be stopped or resumed for non-productive building
 
 *  Test that production can't be stopped twice
 
 *  Test that production can't be resumed unless it's stopped
-
-*  Replicate additional tests in TestWell to the other buildings
 
 *  Test that courier and donkey can't be assigned to a road twice
 
@@ -496,4 +494,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Clean up in courier to reduce duplication - DONE
 
 *  Add ability to stop production in well - DONE
+
+*  Test that production can be stopped in the farm - DONE
+
+*  Replicate additional tests in TestWell to the other buildings - DONE
 

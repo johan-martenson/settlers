@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Flag implements EndPoint {
+public class Flag implements EndPoint, Piece {
 
     private final static Logger log = Logger.getLogger(Flag.class.getName());
 

@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public class Sign {
+public class Sign implements Piece {
 
     private final static int SIGN_EXPIRATION_TIME = 999;
     

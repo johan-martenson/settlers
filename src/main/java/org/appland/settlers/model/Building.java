@@ -22,7 +22,7 @@ import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
-public class Building implements Actor, EndPoint {
+public class Building implements Actor, EndPoint, Piece {
 
     enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED

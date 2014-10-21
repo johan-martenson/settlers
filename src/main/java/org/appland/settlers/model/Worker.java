@@ -17,7 +17,7 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  *
  * @author johan
  */
-public abstract class Worker implements Actor {
+public abstract class Worker implements Actor, Piece {
 
     enum States {
         WALKING_AND_EXACTLY_AT_POINT, 

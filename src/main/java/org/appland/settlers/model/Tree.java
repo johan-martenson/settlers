@@ -14,7 +14,7 @@ import static org.appland.settlers.model.Size.SMALL;
  *
  * @author johan
  */
-public class Tree implements Actor {
+public class Tree implements Actor, Piece {
     Size size;
     Countdown countdown;
     private final Point position;
