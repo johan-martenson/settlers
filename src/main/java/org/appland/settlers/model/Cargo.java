@@ -8,13 +8,13 @@ public class Cargo {
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
-    private final Material    material;
-    private final GameMap map;
+    private final Material material;
+    private final GameMap  map;
 
     private Building    target;
     private Point       position;
     private List<Point> path;
-    private boolean deliveryPromised;
+    private boolean     deliveryPromised;
 
     public Cargo(Material materialToSet, GameMap mapToSet) {
         log.log(Level.FINE, "Creating cargo of {0}", materialToSet);
