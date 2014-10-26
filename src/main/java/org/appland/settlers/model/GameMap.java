@@ -1055,19 +1055,23 @@ public class GameMap {
         if (mp.isStone()) {
             return false;
         }
-        
+
         if (mp.isBuilding()) {
             return false;
         }
-        
+
         if (mp.isTree()) {
             return false;
         }
-        
+
         if (terrain.isInWater(p)) {
             return false;
         }
-        
+
+        if (mp.isCrop(p)) {
+            return false;
+        }
+
         return true;
     }
 

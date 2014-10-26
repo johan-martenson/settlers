@@ -5,8 +5,6 @@ REMOVE
 RE-FACTOR
 =========
 
-*  Make fields in Cargo final
-
 *  Clean up getAvailableHousePoints!
 
 *  canBuild(Small|Medium|Large)House() needed?
@@ -27,8 +25,6 @@ TEST
 ====
 
 *  Test size of each building (mill is wrong)
-
-*  Test that signs are removed when a building is placed on top of the sign
 
 *  Test that production can|cannot be stopped for unoccupied building
 
@@ -120,8 +116,6 @@ TO IMPLEMENT
 ============
 
 *  Implement limit so that buildings can not accept more resources than they can hold
-
-*  Fix so that there is no available spot for road at a crop
 
 *  Fix so that it's not possible to create a road through crops
 
@@ -516,5 +510,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour - DONE
 
 *  Fix so donkeys are only added once - DONE
+
+*  Make fields in Cargo final - DONE
+
+*  Test that signs are removed when a building is placed on top of the sign - DONE
+
+*  Fix so that there is no available spot for road at a crop - DONE
 
 

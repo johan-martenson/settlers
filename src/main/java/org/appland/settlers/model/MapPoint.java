@@ -181,4 +181,8 @@ public class MapPoint {
     void removeBuilding() {
         building = null;
     }
+
+    boolean isCrop(Point p) {
+        return crop != null;
+    }
 }

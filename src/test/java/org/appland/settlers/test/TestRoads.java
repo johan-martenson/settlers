@@ -12,6 +12,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -570,7 +571,30 @@ public class TestRoads {
         assertFalse(points.contains(point2));
         assertFalse(points.contains(point1));
     }
-    
+
+    @Test
+    public void testNoPossibleConnectionThroughNewCrop() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Place crop */
+        Point point2 = new Point(12, 8);
+        Crop crop0 = map.placeCrop(point2);
+
+        /* Place flag */
+        Point point3 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point3);
+
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+
+        assertFalse(points.contains(point2));
+    }
+
     @Test
     public void testPlaceRoadWithVarargs() throws Exception {
         GameMap map = new GameMap(15, 15);
