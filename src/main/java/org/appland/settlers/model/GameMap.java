@@ -135,6 +135,7 @@ public class GameMap {
 
     public void stepTime() {
         workersToRemove.clear();
+        workersToAdd.clear();
         signsToRemove.clear();
         buildingsToRemove.clear();
         

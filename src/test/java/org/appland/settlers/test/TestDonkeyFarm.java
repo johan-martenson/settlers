@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
@@ -365,14 +366,14 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Wait for the donkey breeder to prepare the donkey */
+        int amount = map.getAllWorkers().size();
+
         Utils.fastForward(20, map);
-        
+
         /* Verify that the donkey walks to the storage by itself and the donkey 
            breeder stays in the farm */
-        int amount = map.getAllWorkers().size();
-        
         map.stepTime();
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
         assertEquals(map.getAllWorkers().size(), amount + 1);
         assertNull(donkeyBreeder.getCargo());
@@ -1125,5 +1126,71 @@ public class TestDonkeyFarm {
 
             previous = p;
         }
+    }
+
+    @Test
+    public void testProducedDonkeyIsOnlyAddedOnce() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place donkey farm */
+        Point point3 = new Point(10, 6);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point3);
+
+        Point point4 = new Point(11, 5);
+        Point point5 = new Point(10, 4);
+        Point point6 = new Point(9, 3);
+        Point point7 = new Point(7, 3);
+        Point point8 = new Point(6, 4);
+        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        
+        Utils.constructHouse(donkeyFarm0, map);
+        
+        /* Deliver resources to the donkey farm */
+        Cargo waterCargo = new Cargo(WATER, map);
+        Cargo wheatCargo = new Cargo(WHEAT, map);
+
+        donkeyFarm0.putCargo(waterCargo);
+        donkeyFarm0.putCargo(wheatCargo);
+
+        /* Assign a donkey breeder to the farm */
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        
+        Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
+        
+        assertTrue(donkeyBreeder.isInsideBuilding());
+        
+        /* Wait for the donkey farm to create a donkey */
+        Donkey donkey = null;
+
+        for (int i = 0; i < 500; i++) {
+            for (Worker w : map.getAllWorkers()) {
+                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+                    donkey = (Donkey)w;
+
+                    break;
+                }
+
+            }
+
+            if (donkey != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(donkey);
+        
+        /* Verify that the donkey is only added once */
+        for (int i = 0; i < 600; i++) {
+            assertTrue(map.getAllWorkers().indexOf(donkey) == map.getAllWorkers().lastIndexOf(donkey));
+
+            map.stepTime();
+        }
+    
     }
 }

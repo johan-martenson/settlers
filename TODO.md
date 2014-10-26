@@ -26,6 +26,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test size of each building (mill is wrong)
+
 *  Test that signs are removed when a building is placed on top of the sign
 
 *  Test that production can|cannot be stopped for unoccupied building
@@ -116,6 +118,12 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Implement limit so that buildings can not accept more resources than they can hold
+
+*  Fix so that there is no available spot for road at a crop
+
+*  Fix so that it's not possible to create a road through crops
 
 *  Scale drawing of workers and trees in the app
 
@@ -507,6 +515,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour - DONE
 
-
+*  Fix so donkeys are only added once - DONE
 
 
