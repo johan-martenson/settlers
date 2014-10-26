@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
+import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FORESTER;
@@ -356,6 +357,8 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(ARMORER);
         } else if (w instanceof Geologist) {
             storeOneInInventory(GEOLOGIST);
+        } else if (w instanceof DonkeyBreeder) {
+            storeOneInInventory(DONKEY_BREEDER);
         }
     
         map.removeWorker(w);
@@ -422,6 +425,9 @@ public class Storage extends Building implements Actor {
             break;
         case GEOLOGIST:
             w = new Geologist(map);
+            break;
+        case DONKEY_BREEDER:
+            w = new DonkeyBreeder(map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);

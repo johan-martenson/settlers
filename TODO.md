@@ -26,6 +26,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that signs are removed when a building is placed on top of the sign
+
 *  Test that production can|cannot be stopped for unoccupied building
 
 *  Test that production can't be stopped or resumed for non-productive building
@@ -35,8 +37,6 @@ TEST
 *  Test that production can't be resumed unless it's stopped
 
 *  Test that courier and donkey can't be assigned to a road twice
-
-*  Q: Do donkeys get carried or do they walk themselves to the HQ when they have been produced?
 
 *  Test that splitting a main road results in two main roads (verify?)
 
@@ -161,7 +161,7 @@ TO IMPLEMENT
 
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
-*  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
+*  Implement GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
 
 *  Add messages
 
@@ -502,4 +502,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Replicate additional tests in TestWell to the other buildings - DONE
 
 *  Test GameMap::get(Width|Height)() - DONE
+
+*  Q: Do donkeys get carried or do they walk themselves to the HQ when they have been produced? - DONE
+
+*  Implement DonkeyFarm, GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour - DONE
+
+
+
 

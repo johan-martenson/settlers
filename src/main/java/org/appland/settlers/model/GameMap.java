@@ -43,6 +43,7 @@ public class GameMap {
     private List<Collection<Point>> allPointsWithinBorder;    
     private List<Point>             fieldOfView;
     private List<Point>             discoveredLand;
+    private List<Worker>            workersToAdd;
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -126,6 +127,7 @@ public class GameMap {
         borders               = new ArrayList<>();
         discoveredLand        = new LinkedList<>();
         allPointsWithinBorder = new LinkedList<>();
+        workersToAdd          = new LinkedList<>();
 
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -177,6 +179,9 @@ public class GameMap {
         /* Remove workers that are invalid after the round */
         workers.removeAll(workersToRemove);
 
+        /* Add workers that were placed during the round */
+        workers.addAll(workersToAdd);
+        
         /* Remove signs that have expired during this round */
         signs.removeAll(signsToRemove);
         
@@ -1571,5 +1576,10 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    void placeWorkerFromStepTime(Donkey donkey, Building home) {
+        donkey.setPosition(home.getPosition());
+        workersToAdd.add(donkey);
     }
 }

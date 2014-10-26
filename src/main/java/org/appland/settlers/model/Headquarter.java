@@ -72,6 +72,7 @@ public class Headquarter extends Storage {
         inventory.put(PIG_BREEDER, InitialState.STORAGE_INITIAL_PIG_BREEDER);
         inventory.put(BUTCHER, InitialState.STORAGE_INITIAL_BUTCHER);
         inventory.put(GEOLOGIST, InitialState.STORAGE_INITIAL_GEOLOGIST);
+        inventory.put(DONKEY_BREEDER, InitialState.STORAGE_INITIAL_DONKEY_BREEDER);
     }
 
     @Override

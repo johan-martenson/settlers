@@ -46,7 +46,8 @@ public enum Material {
     ARMORER,
     PIG_BREEDER,
     BUTCHER,
-    GEOLOGIST;
+    GEOLOGIST,
+    DONKEY_BREEDER;
 
     private static List<Material> minerals = null;
     
