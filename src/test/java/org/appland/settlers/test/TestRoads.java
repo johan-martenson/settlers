@@ -611,6 +611,32 @@ public class TestRoads {
         Road r = map.placeRoad(f1.getPosition(), new Point(3, 1), f2.getPosition());
     }
 
+    @Test (expected = Exception.class)
+    public void testNotPossibleToPlaceRoadThroughNewCrop() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(), point0);
+
+        /* Place crop */
+        Point point2 = new Point(12, 8);
+        Crop crop0 = map.placeCrop(point2);
+
+        /* Place flag */
+        Point point3 = new Point(10, 8);
+        Flag flag0 = map.placeFlag(point3);
+
+        /* Place flag */
+        Point point4 = new Point(14, 8);
+        Flag flag1 = map.placeFlag(point4);
+        
+        /* Verify that a road can't be placed through the new crop */
+        map.placeRoad(point3, point2, point4);
+    }
+
     @Test
     public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
         GameMap map = new GameMap(20, 20);

@@ -24,6 +24,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that roads cannot be built too close to buildings (farm is wrong)
+
 *  Test size of each building (mill is wrong)
 
 *  Test that production can|cannot be stopped for unoccupied building
@@ -117,8 +119,6 @@ TO IMPLEMENT
 
 *  Implement limit so that buildings can not accept more resources than they can hold
 
-*  Fix so that it's not possible to create a road through crops
-
 *  Scale drawing of workers and trees in the app
 
 *  Make sure all tests for stopped production have more material than necessary
@@ -134,8 +134,6 @@ TO IMPLEMENT
 *  Add button to empty military buildings to the sideview in the app
 
 *  Consider changing stepTime to throw an Exception so errors will reach the top level and not get missed
-
-*  Add ability to stop production for other buildings than Well
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -516,5 +514,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that signs are removed when a building is placed on top of the sign - DONE
 
 *  Fix so that there is no available spot for road at a crop - DONE
+
+*  Add ability to stop production for other buildings than Well - DONE
+
+*  Fix so that it's not possible to create a road through crops - DONE
 
 
