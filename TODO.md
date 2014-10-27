@@ -139,8 +139,6 @@ TO IMPLEMENT
 
 *  Add list of all possible building types to the model
 
-*  Add construction of pig farm to the app
-
 *  Draw cargo in front of the flagpole
 
 *  Don't draw suggestions for next road connection over houses, verify limits next to small, medium and large houses
@@ -148,8 +146,6 @@ TO IMPLEMENT
 *  Implement support for several players
 
 *  Implement option to set delivery priority for materials
-
-*  Change cost of producing a barracks to only two plancks
 
 *  Merge construct[Small|Medium|Large]House into one method that handles all buildings dynamically
 
@@ -518,5 +514,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add ability to stop production for other buildings than Well - DONE
 
 *  Fix so that it's not possible to create a road through crops - DONE
+
+*  Change cost of producing a barracks to only two plancks - DONE
+
+*  Add construction of pig farm to the app - DONE
 
 
