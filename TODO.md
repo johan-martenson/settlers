@@ -19,13 +19,12 @@ RE-FACTOR
 
 *  Remove depositWorker and use putCargo instead
 
-*  Add comments to TestDonkey
 
 
 TEST
 ====
 
-*  Test border is drawn for donut shaped land
+*  Test border is drawn for inside donut shaped land
 
 *  Test geologist does not place signs on flags (and on roads???)
 
@@ -54,8 +53,6 @@ TEST
 *  Test that production can't be resumed unless it's stopped
 
 *  Test that splitting a main road results in two main roads (verify?)
-
-*  Test that two couriers or donkeys cannot be assigned to a road
 
 *  Test that it's not possible to assign a donkey to a small road
 
@@ -543,5 +540,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test GameMap::getDiscoveredLand() - DONE
 
 *  Fix "courier" comments in TestDonkey - DONE
+
+*  Add comments to TestDonkey - DONE
+
+*  Test that two couriers or donkeys cannot be assigned to a road - DONE
 
 

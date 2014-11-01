@@ -833,4 +833,25 @@ public class TestBarracks {
             assertTrue(map.isRoadAtPoint(p));
         }
     }
+
+    @Test (expected = Exception.class)
+    public void testProductionCannotBeResumedInBarracks() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(8, 8);
+        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Verify that production cannot be resumed in barracks */
+        barracks0.resumeProduction();
+    }
 }

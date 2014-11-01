@@ -680,7 +680,7 @@ public class Building implements Actor, EndPoint, Piece {
         productionEnabled = false;
     }
 
-    public void resumeProduction() {
+    public void resumeProduction() throws Exception {
         productionEnabled = true;
     }
 
