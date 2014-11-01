@@ -148,7 +148,7 @@ public class Storage extends Building implements Actor {
 
                 map.placeWorker(geologist, this);
                 geologist.setTarget(f.getPosition());
-                f.promiseGeologist(geologist);
+                f.geologistSent(geologist);
                 
                 return true;
             }

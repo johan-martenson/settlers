@@ -13,16 +13,14 @@ public class Flag implements EndPoint, Piece {
 
     private GameMap map;
     private Point   position;
-    private int     geologistCalled;
+    private int     geologistsCalled;
     private int     scoutsCalled;
-    private int     geologistPromised;
 
     public Flag(Point p) {
         position          = p;
         stackedCargo      = new ArrayList<>();
-        geologistCalled   = 0;
+        geologistsCalled   = 0;
         scoutsCalled      = 0;
-        geologistPromised = 0;
     }
 
     @Override
@@ -101,20 +99,15 @@ public class Flag implements EndPoint, Piece {
     }
     
     public void callGeologist() {
-        geologistCalled++;
+        geologistsCalled++;
     }
 
-    void geologistHasArrived(Geologist g) {
-        geologistCalled--;
-        geologistPromised--;
-    }
-
-    void promiseGeologist(Geologist g) {
-        geologistPromised++;
+    void geologistSent(Geologist g) {
+        geologistsCalled--;
     }
 
     boolean needsGeologist() {
-        return geologistCalled > geologistPromised;
+        return geologistsCalled > 0;
     }
 
     public void callScout() {
