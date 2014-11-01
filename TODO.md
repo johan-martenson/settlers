@@ -56,8 +56,6 @@ TEST
 
 *  Test that it's not possible to assign a donkey to a small road
 
-*  Test that it's possible to build a new house on a destroyed house that is no longer burning
-
 *  Test signs can be placed outside border
 
 *  Test geologist has an ok movement pattern
@@ -544,5 +542,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add comments to TestDonkey - DONE
 
 *  Test that two couriers or donkeys cannot be assigned to a road - DONE
+
+*  Test that production can't be stopped or resumed for barracks - DONE
+
+*  Test that it's possible to build a new house on a destroyed house that is no longer burning - DONE
 
 

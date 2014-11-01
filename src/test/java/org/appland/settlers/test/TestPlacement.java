@@ -969,4 +969,39 @@ public class TestPlacement {
         assertFalse(map.isSignAtPoint(point0));
         assertTrue(map.getSigns().isEmpty());
     }
+
+    @Test
+    public void testPlaceHouseOnFullyDestroyedHouse() throws Exception {
+        
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(8, 6);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(), point1);
+        
+        /* Finish the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Destroy the house */
+        woodcutter0.tearDown();
+    
+        /* Wait for the house finish burning and disappear from the map */
+        for (int i = 0; i < 1000; i++) {
+            if (!map.isBuildingAtPoint(point1)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+    
+        assertFalse(map.isBuildingAtPoint(point1));
+
+        /* Verify that it's possible to place a house again */
+        Building woodcutter1 = map.placeBuilding(new Woodcutter(), point1);
+    }
 }
