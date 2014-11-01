@@ -15,8 +15,6 @@ RE-FACTOR
 
 *  Fix TestCourier and TestDonkey to use occupyRoad() instead of manually placing courier or donkey
 
-*  Fix "courier" comments in TestDonkey
-
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
 *  Remove depositWorker and use putCargo instead
@@ -42,8 +40,6 @@ TEST
 *  Test that the radius of the land a scout discovers is correct
 
 *  Test that field of view is updated when scout discovers new land
-
-*  Test GameMap::isWithinMap(Point), GameMap::getDiscoveredLand()
 
 *  Test that roads cannot be built too close to buildings (farm is wrong)
 
@@ -543,5 +539,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that both a courier and a donkey can be assigned to a road - DONE
 
 *  Test that courier and donkey can't be assigned to a road twice - DONE
+
+*  Test GameMap::getDiscoveredLand() - DONE
+
+*  Fix "courier" comments in TestDonkey - DONE
 
 

@@ -121,31 +121,40 @@ public class TestDonkey {
     
     @Test
     public void testDonkeyWalksToIntendedRoad() throws Exception {
+
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
+        /* Place flag */
         Point point0 = new Point(8, 4);
         Flag flag0 = map.placeFlag(point0);
 
+        /* Place flag */
         Point point1 = new Point(11, 3);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(4, 4);
         Flag flag2 = map.placeFlag(point2);
         
+        /* Place roads */
         Point point3 = new Point(6, 4);
         Point point4 = new Point(9, 3);
         
         Road road0 = map.placeRoad(point2, point3, point0);
         Road road1 = map.placeRoad(point0, point4, point1);
 
+        /* Assign a donkey to road1 */
         Donkey donkey = new Donkey(map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road1);
         
+        /* Verify that the donkey walks to the road */
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
         
         assertEquals(donkey.getAssignedRoad(), road1);
@@ -154,25 +163,33 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyGoesToMiddlePointOfRoad() throws Exception {
+
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(point2);
         
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(point2, point0, point1);
 
+        /* Place a donkey and assign it to the road */
         Donkey donkey = new Donkey(map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);        
         
+        /* Verify that the donkey goes to the middle point of the road */
         assertTrue(donkey.isWalkingToRoad());
         assertFalse(donkey.isIdle());
         
@@ -186,63 +203,81 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyIsIdleWhenMiddlePointIsReached() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(point2);
         
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(point2, point0, point1);
 
+        /* Assign a donkey to the road */
         Donkey donkey = new Donkey(map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);
-        
+
+        /* Wait for the donkey to walk to the road */
         assertTrue(donkey.isWalkingToRoad());
         assertFalse(donkey.isIdle());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
-        
+
         assertEquals(donkey.getPosition(), point0);
         assertTrue(donkey.isArrived());
+
+        /* Verify that the donkey is idle after reaching the middle point */
         assertTrue(donkey.isIdle());
     }
     
     @Test
     public void testDonkeyRemainsIdleWhenThereIsNoCargo() throws Exception {
+
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(point2);
         
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(point2, point0, point1);
 
+        /* Place a donkey and assign it to the road */
         Donkey donkey = new Donkey(map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);
         
+        /* Wait for the donkey to reach the road */
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
         
         assertEquals(donkey.getPosition(), point0);
         assertTrue(donkey.isArrived());
 
-        int i;
-        for (i = 0; i < 200; i++) {
+        /* Verify that the donkey stays idle when there is nothing to do */
+        for (int i = 0; i < 200; i++) {
             assertTrue(donkey.isArrived());
             assertTrue(donkey.isIdle());
             
@@ -258,36 +293,48 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
+
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(11, 5);
+        /* Place woodcutter */
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
+        /* Finish construction of the woodcutter */
         Utils.constructHouse(wc, map);
         
+        /* Place roads */
+        Point middle = new Point(8, 4);
+        Point point3 = new Point(11, 5);
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
         
+        /* Place a cargo for the woodcutter */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
         cargo.setTarget(wc);
         
+        /* Place a donkey and assign it to road0 */
         Donkey donkey = new Donkey(map);
         map.placeWorker(donkey, flag0);
 
         donkey.assignToRoad(road0);
         
+        /* Verify that the donkey walks to the middle of the road even when 
+           there are cargos available for pickup */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isWalkingToRoad());
         
@@ -304,24 +351,32 @@ public class TestDonkey {
     
     @Test
     public void testDonkeyPicksUpCargoFromFlag() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(11, 5);
+        /* Place woodcutter */
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
 
+        /* Finish construction of the woodcutter */
         Utils.constructHouse(wc, map);
 
+        /* Place roads */
+        Point point3 = new Point(11, 5);
+        Point middle = new Point(8, 4);
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
         
@@ -368,24 +423,32 @@ public class TestDonkey {
     
     @Test
     public void testDonkeyDeliversCargoAndBecomesIdle() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(point2);
         
-        Point point3 = new Point(12, 4);
+        /* Place woodcutter */
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(), point4.upLeft());
         
+        /* Finish construction of the woodcutter */
         Utils.constructHouse(wc, map);
         
+        /* Place roads */
+        Point point3 = new Point(12, 4);
+        Point middle = new Point(8, 4);
         Road road0 = map.placeRoad(point2, middle, point1);
         Road road1 = map.placeRoad(point1, point3, point4);
         
@@ -449,24 +512,32 @@ public class TestDonkey {
     
     @Test
     public void testDonkeyPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
+
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(middleFlagPoint);
 
+        /* Place left woodcutter */
         Point leftFlagPoint = new Point(6, 4);
-        
-        Point point3 = new Point(12, 4);
-        Point rightFlagPoint = new Point(13, 5);
-        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), rightFlagPoint.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
         
+        /* Place right woodcutter */
+        Point rightFlagPoint = new Point(13, 5);
+        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), rightFlagPoint.upLeft());
+        
+        /* Finish construction of the right woodcutter */
         Utils.constructHouse(rightWoodcutter, map);
         
+        /* Place roads */
+        Point point3 = new Point(12, 4);
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, middleFlagPoint);
         Road road1 = map.placeRoad(middleFlagPoint, point3, rightFlagPoint);
         
@@ -529,24 +600,32 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
-        GameMap map = new GameMap(20, 20);
         
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point flagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(flagPoint);
 
+        /* Place left woodcutter */
         Point leftFlag = new Point(6, 4);
-        
-        Point point3 = new Point(12, 4);
-        Point point4 = new Point(13, 5);
-        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(), leftFlag.upLeft());
         
+        /* Place right woodcutter */
+        Point point4 = new Point(13, 5);
+        Building rightWoodcutter = map.placeBuilding(new Woodcutter(), point4.upLeft());
+        
+        /* Finish construction of the right woodcutter */
         Utils.constructHouse(rightWoodcutter, map);
         
+        /* Place roads */
+        Point point3 = new Point(12, 4);
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(leftFlag, middlePoint, flagPoint);
         Road road1 = map.placeRoad(flagPoint, point3, point4);
         
@@ -605,19 +684,24 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyDeliversToBuilding() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(rightFlagPoint);
 
+        /* Place woodcutter */
         Point leftFlagPoint = new Point(6, 4);
-        
         Building wc = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
         
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
         
         /* Place cargo at flag0 */
@@ -681,19 +765,24 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(rightFlagPoint);
 
+        /* Place woodcutter */
         Point leftFlagPoint = new Point(6, 4);
-        
         Building wc = map.placeBuilding(new Woodcutter(), leftFlagPoint.upLeft());
         
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(leftFlagPoint, middlePoint, rightFlagPoint);
         
         /* Place cargo at flag0 */
@@ -765,25 +854,31 @@ public class TestDonkey {
 
     @Test
     public void testDonkeyDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
+        
+        /* Create game map */
         GameMap map = new GameMap(20, 20);
         
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(middleFlagPoint);
         
+        /* Place flag */
         Point rightFlagPoint = new Point(14, 4);
         Flag rightFlag = map.placeFlag(rightFlagPoint);
 
+        /* Place woodcutter */
         Point wcFlagPoint = new Point(6, 4);
-        
         Building wc = map.placeBuilding(new Woodcutter(), wcFlagPoint.upLeft());
-        
+
+        /* Place roads */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(wcFlagPoint, middlePoint, middleFlagPoint);
         Road road1 = map.placeRoad(middleFlagPoint, middleFlagPoint.right(), rightFlagPoint);
-        
+
         Building quarry = map.placeBuilding(new Quarry(), rightFlagPoint.upLeft());
                 
         /* Place cargo at the woodcutter's flag */

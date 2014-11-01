@@ -101,13 +101,13 @@ public class Road {
             }
 
             donkey = (Donkey) wr;
-        }
+        } else {
+            if (courier != null) {
+                throw new Exception("Can't assign courier, there is already a courier assigned.");
+            }
 
-        if (courier != null) {
-            throw new Exception("Can't assign courier, there is already a courier assigned.");
+            courier = wr;
         }
-
-        courier = wr;
     }
 
     public List<Point> getWayPoints() {
