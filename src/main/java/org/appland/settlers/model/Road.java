@@ -182,12 +182,8 @@ public class Road {
 
     Point getOtherPoint(Point position) {
         if (start.getPosition().equals(position)) {
-            System.out.println("  OTHER END FROM " + position + ": " + end);
-            
             return end.getPosition();
         } else {
-            System.out.println("  OTHER END FROM " + position + ": " + start);
-            
             return start.getPosition();
         }
     }

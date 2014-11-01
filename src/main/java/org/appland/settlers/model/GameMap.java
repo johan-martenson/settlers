@@ -987,7 +987,7 @@ public class GameMap {
         return flags.contains(f);
     }
 
-    private boolean isWithinMap(Point p) {
+    boolean isWithinMap(Point p) {
         return p.x > 0 && p.x < width && p.y > 0 && p.y < height;
     }
 
@@ -1326,7 +1326,7 @@ public class GameMap {
         return borders;
     }
 
-    private boolean isWithinBorder(Point position) {
+    public boolean isWithinBorder(Point position) {
         for (Collection<Point> land : allPointsWithinBorder) {
             if (land.contains(position)) {
                 return true;
@@ -1451,6 +1451,10 @@ public class GameMap {
 
     public List<Point> getFieldOfView() {
         return fieldOfView;
+    }
+
+    public List<Point> getDiscoveredLand() {
+        return discoveredLand;
     }
 
     private void updateDiscoveredLand() {
@@ -1586,5 +1590,15 @@ public class GameMap {
     void placeWorkerFromStepTime(Donkey donkey, Building home) {
         donkey.setPosition(home.getPosition());
         workersToAdd.add(donkey);
+    }
+
+    void discoverPointsWithinRadius(Point center, int radius) {
+        for (Point p : getPointsWithinRadius(center, radius)) {
+            if (!discoveredLand.contains(p)) {
+                discoveredLand.add(p);
+            }
+        }
+
+        fieldOfView = calculateFieldOfView(discoveredLand);
     }
 }

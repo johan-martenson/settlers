@@ -25,6 +25,7 @@ import static org.appland.settlers.model.Material.MINTER;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
+import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONEMASON;
@@ -126,6 +127,10 @@ public class Storage extends Building implements Actor {
         if (assignGeologists()) {
             return;
         }
+    
+        if (assignScouts()) {
+            return;
+        }
     }
 
     private boolean assignGeologists() throws Exception {
@@ -145,6 +150,30 @@ public class Storage extends Building implements Actor {
                 geologist.setTarget(f.getPosition());
                 f.promiseGeologist(geologist);
                 
+                return true;
+            }
+        }
+    
+        return false;
+    }
+
+    private boolean assignScouts() throws Exception {
+        for (Flag f : map.getFlags()) {
+            if (f.needsScout()) {
+                if (!isClosestStorage(this)) {
+                    continue;
+                }
+            
+                if (!hasAtLeastOne(SCOUT)) {
+                    continue;
+                }
+            
+                Scout scout = (Scout)retrieveWorker(SCOUT);
+            
+                map.placeWorker(scout, this);
+                scout.setTarget(f.getPosition());
+                f.scoutSent();
+            
                 return true;
             }
         }
@@ -359,6 +388,8 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(GEOLOGIST);
         } else if (w instanceof DonkeyBreeder) {
             storeOneInInventory(DONKEY_BREEDER);
+        } else if (w instanceof Scout) {
+            storeOneInInventory(SCOUT);
         }
     
         map.removeWorker(w);
@@ -428,6 +459,9 @@ public class Storage extends Building implements Actor {
             break;
         case DONKEY_BREEDER:
             w = new DonkeyBreeder(map);
+            break;
+        case SCOUT:
+            w = new Scout(map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);

@@ -19,10 +19,22 @@ RE-FACTOR
 
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
+*  Remove depositWorker and use putCargo instead
 
+*  Remove geologistsPromised in Flag and align with called scouts
 
 TEST
 ====
+
+*  Add extra scout tests to geologist
+
+*  Test that workers are removed from the map when they are stored in storage
+
+*  Test that the radius of the land a scout discovers is correct
+
+*  Test that field of view is updated when scout discovers new land
+
+*  Test GameMap::isWithinMap(Point), GameMap::getDiscoveredLand()
 
 *  Test that roads cannot be built too close to buildings (farm is wrong)
 
@@ -162,8 +174,6 @@ TO IMPLEMENT
 *  Add messages
 
 *  Add wild animals
-
-*  Add scout
 
 *  fix building to use a single state variable
 
@@ -518,5 +528,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Change cost of producing a barracks to only two plancks - DONE
 
 *  Add construction of pig farm to the app - DONE
+
+*  Add scout - DONE
 
 

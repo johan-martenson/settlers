@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
@@ -848,9 +847,6 @@ public class TestDonkeyFarm {
             for (Worker w : map.getAllWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-
-                    System.out.println("TARGET " + w.getTarget());
-                    System.out.println(w);
                     
                     break;
                 }
