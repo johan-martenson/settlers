@@ -11,7 +11,6 @@ public class Flag implements EndPoint, Piece {
 
     private final List<Cargo> stackedCargo;
 
-    private GameMap map;
     private Point   position;
     private int     geologistsCalled;
     private int     scoutsCalled;
@@ -92,10 +91,6 @@ public class Flag implements EndPoint, Piece {
         }
 
         return null;
-    }
-
-    void setMap(GameMap m) {
-        map = m;
     }
     
     public void callGeologist() {
