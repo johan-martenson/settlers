@@ -57,8 +57,6 @@ TEST
 
 *  Test that production can't be resumed unless it's stopped
 
-*  Test that courier and donkey can't be assigned to a road twice
-
 *  Test that splitting a main road results in two main roads (verify?)
 
 *  Test that two couriers or donkeys cannot be assigned to a road
@@ -543,5 +541,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add extra scout tests to geologist - DONE
 
 *  Test that both a courier and a donkey can be assigned to a road - DONE
+
+*  Test that courier and donkey can't be assigned to a road twice - DONE
 
 

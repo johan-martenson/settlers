@@ -990,4 +990,33 @@ public class TestCourier {
         }
 
     }
+
+    @Test (expected = Exception.class)
+    public void testCannotAssignTwoCouriersToSameRoad() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(point1);
+
+        /* Place road between flags */
+        Point point2 = new Point(8, 4);
+        Road road0 = map.placeRoad(headquarter0.getFlag().getPosition(), point2, point1);
+
+        /* Verify that two couriers can't be assigned to the road */
+        Courier courier0 = new Courier(map);
+        Courier courier1 = new Courier(map);
+
+        map.placeWorker(courier0, flag0);
+        map.placeWorker(courier1, flag0);
+
+        courier0.assignToRoad(road0);
+        courier1.assignToRoad(road0);
+    }
 }

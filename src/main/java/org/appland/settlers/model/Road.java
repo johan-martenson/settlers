@@ -95,14 +95,18 @@ public class Road {
 
     void setCourier(Courier wr) throws Exception {
         if (wr instanceof Donkey) {
-            
+
             if (donkey != null) {
                 throw new Exception("Can't assign donkey, there is already a donkey assigned.");
             }
 
             donkey = (Donkey) wr;
         }
-        
+
+        if (courier != null) {
+            throw new Exception("Can't assign courier, there is already a courier assigned.");
+        }
+
         courier = wr;
     }
 
