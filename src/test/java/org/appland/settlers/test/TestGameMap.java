@@ -730,4 +730,38 @@ public class TestGameMap {
         assertEquals(map.getWidth(), 20);
         assertEquals(map.getHeight(), 30);
     }
+
+    @Test
+    public void testPointWithinBorderAreDiscovered() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Verify that a point within the border is discovered */
+        Point point1 = new Point(10, 12);
+
+        assertTrue(map.isWithinBorder(point1));
+        assertTrue(map.getDiscoveredLand().contains(point1));
+    }
+
+    @Test
+    public void testRemotePointOutsideBorderIsNotDiscovered() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Verify that a point far outside the border is not yet discovered */
+        Point point1 = new Point(39, 39);
+
+        assertFalse(map.isWithinBorder(point1));
+        assertFalse(map.getDiscoveredLand().contains(point1));
+    }
 }
