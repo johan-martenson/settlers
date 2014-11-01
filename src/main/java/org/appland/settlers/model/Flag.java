@@ -19,7 +19,7 @@ public class Flag implements EndPoint, Piece {
     public Flag(Point p) {
         position          = p;
         stackedCargo      = new ArrayList<>();
-        geologistsCalled   = 0;
+        geologistsCalled  = 0;
         scoutsCalled      = 0;
     }
 

@@ -25,6 +25,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that the scout takes another route if it's called again to the same flag
+
 *  Test that workers are removed from the map when they are stored in storage
 
 *  Test that the radius of the land a scout discovers is correct
