@@ -971,6 +971,63 @@ public class TestDonkey {
                 assertFalse(c.isWalkingToRoad());
             }
         }
+    }
 
+    @Test
+    public void testBothDonkeyAndCourierCanBeAssignedToSameRoad() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(point1);
+
+        /* Place road between flags */
+        Point point2 = new Point(8, 4);
+        Road road0 = map.placeRoad(headquarter0.getFlag().getPosition(), point2, point1);
+
+        /* Verify that both a courier and a donkey can be assigned to the road */
+        Courier courier0 = new Courier(map);
+        Donkey donkey0 = new Donkey(map);
+
+        map.placeWorker(courier0, flag0);
+        map.placeWorker(donkey0, flag0);
+
+        courier0.assignToRoad(road0);
+        donkey0.assignToRoad(road0);
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotAssignTwoDonkeysToSameRoad() throws Exception {
+
+        /* Create game map */
+        GameMap map = new GameMap(20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(point1);
+
+        /* Place road between flags */
+        Point point2 = new Point(8, 4);
+        Road road0 = map.placeRoad(headquarter0.getFlag().getPosition(), point2, point1);
+
+        /* Verify that two donkeys can't be assigned to the road */
+        Donkey donkey0 = new Donkey(map);
+        Donkey donkey1 = new Donkey(map);
+
+        map.placeWorker(donkey0, flag0);
+        map.placeWorker(donkey1, flag0);
+
+        donkey0.assignToRoad(road0);
+        donkey1.assignToRoad(road0);
     }
 }

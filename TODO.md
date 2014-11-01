@@ -21,9 +21,19 @@ RE-FACTOR
 
 *  Remove depositWorker and use putCargo instead
 
+*  Add comments to TestDonkey
+
 
 TEST
 ====
+
+*  Test border is drawn for donut shaped land
+
+*  Test geologist does not place signs on flags (and on roads???)
+
+*  Test that a donkey can't be assigned to a non-main road
+
+*  Add Utils.ageRoad() and update tests in donkey to use it before assigning donkeys
 
 *  Test that the scout takes another route if it's called again to the same flag
 
@@ -50,8 +60,6 @@ TEST
 *  Test that courier and donkey can't be assigned to a road twice
 
 *  Test that splitting a main road results in two main roads (verify?)
-
-*  Test that both a courier and a donkey can be assigned to a road
 
 *  Test that two couriers or donkeys cannot be assigned to a road
 
@@ -533,5 +541,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove geologistsPromised in Flag and align with called scouts - DONE
 
 *  Add extra scout tests to geologist - DONE
+
+*  Test that both a courier and a donkey can be assigned to a road - DONE
 
 
