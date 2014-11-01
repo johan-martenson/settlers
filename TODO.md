@@ -21,12 +21,9 @@ RE-FACTOR
 
 *  Remove depositWorker and use putCargo instead
 
-*  Remove geologistsPromised in Flag and align with called scouts
 
 TEST
 ====
-
-*  Add extra scout tests to geologist
 
 *  Test that workers are removed from the map when they are stored in storage
 
@@ -530,5 +527,9 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add construction of pig farm to the app - DONE
 
 *  Add scout - DONE
+
+*  Remove geologistsPromised in Flag and align with called scouts - DONE
+
+*  Add extra scout tests to geologist - DONE
 
 

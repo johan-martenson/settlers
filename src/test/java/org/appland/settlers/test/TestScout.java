@@ -503,8 +503,6 @@ public class TestScout {
         /* Verify that the scout leaves again */
         scout = null;
 
-        System.out.println(" SCOUTS IN STORAGE " + headquarter0.getAmount(SCOUT));
-        
         for (int i = 0; i < 100; i++) {
             for (Worker w : map.getAllWorkers()) {
                 if (w instanceof Scout && flag.getPosition().equals(w.getTarget())) {

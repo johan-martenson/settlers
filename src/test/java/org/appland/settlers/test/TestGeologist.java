@@ -945,6 +945,158 @@ public class TestGeologist {
         assertEquals(map.getAllWorkers().size(), workers + 2);
     }
 
+    @Test
+    public void testGeologistGoesOutAgainIfNeeded() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(22, 8);
+        Flag flag = map.placeFlag(point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Ensure there is exactly one geologist in the headquarter */
+        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        map.stepTime();
+
+        Geologist geologist = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Geologist) {
+                geologist = (Geologist) w;
+            }
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Call for a second geologist */
+        flag.callGeologist();
+        
+        /* Wait for the geologist to explore and then return to the flag */
+        for (int i = 0; i < 1000; i++) {
+            if (flag.getPosition().equals(geologist.getTarget())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        /* Let the geologist go back to the headquarter */
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+
+        /* Verify that the geologist leaves again */
+        geologist = null;
+
+        for (int i = 0; i < 100; i++) {
+            for (Worker w : map.getAllWorkers()) {
+                if (w instanceof Geologist && flag.getPosition().equals(w.getTarget())) {
+                    geologist = (Geologist)w;
+
+                    break;
+                }
+            }
+
+            if (geologist != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+    }
+
+    @Test
+    public void testReturningGeologistIncreasesAmountInStorage() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(22, 8);
+        Flag flag = map.placeFlag(point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Ensure there is exactly one geologist in the headquarter */
+        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        map.stepTime();
+
+        Geologist geologist = null;
+
+        for (Worker w : map.getAllWorkers()) {
+            if (w instanceof Geologist) {
+                geologist = (Geologist) w;
+            }
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Verify that the amount of geologists in the headquarter is 0 */
+        assertEquals(headquarter0.getAmount(GEOLOGIST), 0);
+
+        /* Wait for the geologist to explore and then return to the flag */
+        for (int i = 0; i < 1000; i++) {
+            if (flag.getPosition().equals(geologist.getTarget())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        /* Let the geologist go back to the headquarter */
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+
+        /* Verify that the amount of geologists is 1 */
+        assertEquals(headquarter0.getAmount(GEOLOGIST), 1);
+    }
 // TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
     // TODO: test that geologist goes via the flag when it returns to the storage
 }
