@@ -176,6 +176,49 @@ public class TestFarm {
     }
 
     @Test
+    public void testFarmerGoesOutViaFlag() throws Exception {
+        GameMap map = new GameMap(20, 20);
+
+        Point point0 = new Point(5, 5);
+        Building hq = map.placeBuilding(new Headquarter(), point0);
+
+        Point point3 = new Point(10, 6);
+        Building farm = map.placeBuilding(new Farm(), point3);
+
+        Point point4 = new Point(11, 5);
+        Point point5 = new Point(10, 4);
+        Point point6 = new Point(9, 3);
+        Point point7 = new Point(7, 3);
+        Point point8 = new Point(6, 4);
+        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+
+        Utils.constructHouse(farm, map);
+
+        Farmer farmer = new Farmer(map);
+        
+        Utils.occupyBuilding(farmer, farm, map);
+        
+        assertTrue(farmer.isInsideBuilding());
+        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
+        int i;
+        for (i = 0; i < 99; i++) {
+            assertTrue(farmer.isInsideBuilding());
+            map.stepTime();
+        }
+        
+        assertTrue(farmer.isInsideBuilding());
+        
+        /* Step once and make sure the forester goes out of the hut */
+        map.stepTime();        
+        
+        assertFalse(farmer.isInsideBuilding());
+
+        /* Verify that the farmer goes out via the flag */
+        assertTrue(farmer.getPlannedPath().contains(farm.getFlag().getPosition()));
+    }
+
+    @Test
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
         GameMap map = new GameMap(20, 20);
 
@@ -240,7 +283,7 @@ public class TestFarm {
     }
 
     @Test
-    public void testFarmerReturnsAfterPlanting() throws Exception {
+    public void testFarmerReturnsViaFlagAfterPlanting() throws Exception {
         GameMap map = new GameMap(20, 20);
 
         Point point0 = new Point(5, 5);
@@ -306,7 +349,7 @@ public class TestFarm {
         assertTrue(farmer.isArrived());        
         assertTrue(farmer.isInsideBuilding());
     }
-    
+
     @Test
     public void testFarmerHarvestsWhenPossible() throws Exception {
         GameMap map = new GameMap(20, 20);
@@ -374,7 +417,7 @@ public class TestFarm {
     }
 
     @Test
-    public void testFarmerReturnsAfterHarvesting() throws Exception {
+    public void testFarmerReturnsViaFlagAfterHarvesting() throws Exception {
         GameMap map = new GameMap(20, 20);
 
         Point point0 = new Point(5, 5);

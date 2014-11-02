@@ -84,8 +84,6 @@ TEST
 
 *  test that barracks can only be built close to border
 
-*  farmer doesn't pass by the flag on the way back from planting/harvesting
-
 *  do storages get a worker traveling from the hq or is it magically available directly?
 
 *  Q: how often does the storages/headquarter assign new workers?
@@ -110,11 +108,7 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 *  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
 
-*  Problem creating a gold mine next to where a flag and signs were before
-
 *  Geologist gets stuck when its flag is removed
-
-*  Remove house in the app doesn't seem to work
 
 *  There is too little stone on the map
 
@@ -124,6 +118,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Fix so that farmer can't walk through his own house when he goes out to plan or harvest
 
 *  Implement limit so that buildings can not accept more resources than they can hold
 
@@ -546,5 +542,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that production can't be stopped or resumed for barracks - DONE
 
 *  Test that it's possible to build a new house on a destroyed house that is no longer burning - DONE
+
+*  Remove house in the app doesn't seem to work - DONE
+
+*  Problem creating a gold mine next to where a flag and signs were before - DONE
+
+*  farmer doesn't pass by the flag on the way back from planting/harvesting - DONE
 
 
