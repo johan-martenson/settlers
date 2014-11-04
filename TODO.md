@@ -60,7 +60,7 @@ TEST
 
 *  Test geologist has an ok movement pattern
 
-*  Test geologist goes directly back to storage if flag is removed
+*  Test geologist goes directly back to storage if flag is removed - is this true??
 
 *  Test geologist doesn't investigate points with house, tree, stone, flag, water
 

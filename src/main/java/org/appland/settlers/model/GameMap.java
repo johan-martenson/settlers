@@ -38,9 +38,8 @@ public class GameMap {
     private Map<Point, MapPoint>    pointToGameObject;
     private List<Tree>              trees;
     private List<Stone>             stones;
-    private List<Crop>              crops;    
-    private List<Collection<Point>> borders;
-    private List<Collection<Point>> allPointsWithinBorder;    
+    private List<Crop>              crops;
+    private List<Land>              ownedLands;
     private List<Point>             fieldOfView;
     private List<Point>             discoveredLand;
     private List<Worker>            workersToAdd;
@@ -124,10 +123,9 @@ public class GameMap {
         trees                 = new ArrayList<>();
         stones                = new ArrayList<>();
         crops                 = new ArrayList<>();
-        borders               = new ArrayList<>();
         discoveredLand        = new LinkedList<>();
-        allPointsWithinBorder = new LinkedList<>();
         workersToAdd          = new LinkedList<>();
+        ownedLands            = new LinkedList<>();
 
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -258,8 +256,7 @@ public class GameMap {
     void updateBorder() throws Exception {
         
         /* Re-calculate borders */
-        allPointsWithinBorder = calculateAllPointsWithinBorders();
-        borders = calculateBorders(allPointsWithinBorder);
+        ownedLands = Land.calculateLandWithinBorders(getBuildings());
         
         /* Update field of view */
         updateDiscoveredLand();
@@ -507,7 +504,7 @@ public class GameMap {
             
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
-                Road roadToAssign = newRoad1;
+                Road roadToAssign = null;
                 
                 /* Of the courier is idle, place it on the road it is on */
                 if (courier.isIdle()) {
@@ -646,8 +643,8 @@ public class GameMap {
     public List<Point> getAvailableFlagPoints() throws Exception {
         List<Point> points = new LinkedList<>();
 
-        for (Collection<Point> pointsWithinOneBorder : allPointsWithinBorder) {
-            for (Point p : pointsWithinOneBorder) {
+        for (Land land : ownedLands) {
+            for (Point p : land.getPointsInLand()) {
                 if (!isAvailableFlagPoint(p)) {
                     continue;
                 }
@@ -781,8 +778,8 @@ public class GameMap {
         Map<Point, Size> housePoints = new HashMap<>();
         boolean diagonalHouse;
 
-        for (Collection<Point> pointsWithinOneBorder : allPointsWithinBorder) {
-            for (Point point : pointsWithinOneBorder) {
+        for (Land land : ownedLands) {
+            for (Point point : land.getPointsInLand()) {
 
                 /* ALL CONDITIONS FOR SMALL */
                 if (isBuildingAtPoint(point)) {
@@ -1323,77 +1320,25 @@ public class GameMap {
     }
 
     public List<Collection<Point>> getBorders() {
-        return borders;
+        List<Collection<Point>> result = new LinkedList<>();
+
+        for (Land land : ownedLands) {
+            result.add(land.getBorder());
+        }
+
+        return result;
     }
 
     public boolean isWithinBorder(Point position) {
-        for (Collection<Point> land : allPointsWithinBorder) {
-            if (land.contains(position)) {
+        for (Land land : ownedLands) {
+            if (land.isWithinBorder(position)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    private List<Collection<Point>> calculateAllPointsWithinBorders() {
-        List<Collection<Point>> result = new LinkedList<>();
-        List<Building> militaryBuildings = new LinkedList<>();
-        
-        for (Building b : getMilitaryBuildings()) {
-            if (b.ready()) {
-                militaryBuildings.add(b);
-            }
-        }
-        
-        while (!militaryBuildings.isEmpty()) {
-            Building root = militaryBuildings.get(0);
-            militaryBuildings.remove(0);
 
-            Set<Point> land = new HashSet<>();
-            
-            land.addAll(root.getDefendedLand());
-            
-            while (true) {
-                boolean addedToBorder = false;
-                List<Building> buildingsAlreadyAdded = new LinkedList<>();
-
-                for (Building b : militaryBuildings) {
-                    if (b.occupied() && land.contains(b.getPosition())) {
-                        land.addAll(b.getDefendedLand());
-
-                        addedToBorder = true;
-                        buildingsAlreadyAdded.add(b);
-                    }
-                }
-
-                militaryBuildings.removeAll(buildingsAlreadyAdded);
-                
-                if (!addedToBorder) {
-                    break;
-                }
-            }
-            
-            result.add(land);
-        }
-
-        return result;
-    }
-    
-    private List<Collection<Point>> calculateBorders(List<Collection<Point>> occupiedPoints) {
-        List<Collection<Point>> result = new LinkedList<>();
-        
-        for (Collection<Point> occupiedLand : occupiedPoints) {
-            result.add(calculateBorder(occupiedLand));
-        }
-        
-        return result;
-    }
-
-    private Collection<Point> calculateBorder(Collection<Point> occupiedPoints) {
-        return GameUtils.hullWanderer(occupiedPoints);
-    }
-    
     private boolean isPossibleFlagPoint(Point flagPoint) throws Exception {
         MapPoint mp = pointToGameObject.get(flagPoint);
         
@@ -1435,18 +1380,6 @@ public class GameMap {
         mp.removeFlag();
         
         flags.remove(flag);
-    }
-
-    private Collection<Building> getMilitaryBuildings() {
-        Collection<Building> result = new LinkedList<>();
-        
-        for (Building b : buildings) {
-            if (b.isMilitaryBuilding()) {
-                result.add(b);
-            }
-        }
-
-        return result;
     }
 
     public List<Point> getFieldOfView() {
