@@ -86,18 +86,18 @@ public class TestSawmill {
         assertTrue(sawmill.needsWorker());
 
         /* Verify that a sawmill worker leaves the hq */        
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), SawmillWorker.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), SawmillWorker.class);
         
         /* Let the sawmill worker reach the sawmill */
         SawmillWorker sw = null;
         
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof SawmillWorker) {
                 sw = (SawmillWorker)w;
             }

@@ -104,7 +104,7 @@ public class TestDonkey {
         assertEquals(courier1.getTarget(), flag0.getPosition());
         assertNull(road1.getDonkey());
         
-        int amount = map.getAllWorkers().size();
+        int amount = map.getWorkers().size();
         int donkeysInHq = headquarter0.getAmount(DONKEY);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
@@ -113,7 +113,7 @@ public class TestDonkey {
 
         map.stepTime();
 
-        assertEquals(map.getAllWorkers().size(), amount + 1);
+        assertEquals(map.getWorkers().size(), amount + 1);
         assertEquals(headquarter0.getAmount(DONKEY), donkeysInHq - 1);
         assertNotNull(road1.getDonkey());
         assertFalse(road1.needsDonkey());
@@ -1045,7 +1045,7 @@ public class TestDonkey {
         for (int i = 0; i < 2000; i++) {
             boolean allIdle = true;
             
-            for (Worker w : map.getAllWorkers()) {
+            for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.isTraveling()) {
                     allIdle = false;
                 }
@@ -1058,7 +1058,7 @@ public class TestDonkey {
             map.stepTime();
         }
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Donkey) {
                 Donkey c = (Donkey)w;
                 

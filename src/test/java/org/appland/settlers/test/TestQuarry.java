@@ -70,10 +70,10 @@ public class TestQuarry {
         Utils.fastForward(2, map);
         
         /* Verify that the right amount of workers are added to the map */
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
         /* Verify that the map contains a stonemason */
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Stonemason.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);
     }
 
     @Test

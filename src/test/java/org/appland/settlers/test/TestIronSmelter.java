@@ -87,18 +87,18 @@ public class TestIronSmelter {
         assertTrue(ironSmelter.needsWorker());
 
         /* Verify that a iron smelter worker leaves the hq */        
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), IronFounder.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
         
         /* Let the iron smelter worker reach the iron smelter */
         IronFounder sw = null;
         
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof IronFounder) {
                 sw = (IronFounder)w;
             }

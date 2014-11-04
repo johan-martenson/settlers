@@ -130,9 +130,9 @@ public class TestFarm {
         Utils.fastForward(2, map);
 
         /* Verify that there was a farmer added */
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Farmer.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
     }
 
     @Test

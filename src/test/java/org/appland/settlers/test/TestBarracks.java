@@ -88,10 +88,10 @@ public class TestBarracks {
         /* Verify that a military is sent from the headquarter */
         map.stepTime();
         
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
         
         Military m = null;
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Military) {
                 m = (Military)w;
             }
@@ -161,10 +161,10 @@ public class TestBarracks {
         
         map.stepTime();
         
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Military.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
         
         Military m = null;
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Military) {
                 m = (Military)w;
             }

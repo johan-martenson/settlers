@@ -97,12 +97,12 @@ public class TestMint {
         /* Verify that a minter leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
         /* Let the mint worker reach the mint */
         Minter minter = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Minter) {
                 minter = (Minter)w;
             }

@@ -95,7 +95,7 @@ public class TestStorage {
         
         Worker sw = null;
         
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof StorageWorker) {
                 sw = w;
             }

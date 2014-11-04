@@ -87,18 +87,18 @@ public class TestBrewery {
         assertTrue(brewery.needsWorker());
 
         /* Verify that a brewery worker leaves the hq */        
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Brewer.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Brewer.class);
         
         /* Let the brewery worker reach the brewery */
         Brewer sw = null;
         
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Brewer) {
                 sw = (Brewer)w;
             }

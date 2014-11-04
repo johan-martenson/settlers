@@ -65,9 +65,9 @@ public class TestMill {
         /* Run game logic twice, once to place courier and once to place miller */
         Utils.fastForward(2, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Miller.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Miller.class);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TestMill {
         /* Get the miller */
         Miller miller = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Miller) {
                 miller = (Miller)w;
             }

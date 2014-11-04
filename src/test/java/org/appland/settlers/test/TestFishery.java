@@ -154,7 +154,7 @@ public class TestFishery {
         /* Run game logic twice, once to place courier and once to place fisherman */
         Utils.fastForward(2, map);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Fisherman.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Fisherman.class);
     }
 
     @Test
@@ -180,12 +180,12 @@ public class TestFishery {
         /* Run game logic twice, once to place courier and once to place fisherman */
         Utils.fastForward(2, map);
 
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
         /* Keep running the game loop and make sure no more workers are allocated */
         Utils.fastForward(200, map);
 
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
     }
 
     @Test

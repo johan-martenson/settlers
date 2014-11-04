@@ -97,12 +97,12 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
         /* Let the bakery worker reach the bakery */
         Baker baker = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Baker) {
                 baker = (Baker)w;
             }

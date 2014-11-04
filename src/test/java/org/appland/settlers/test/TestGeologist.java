@@ -77,16 +77,16 @@ public class TestGeologist {
         Utils.fastForward(30, map);
         
         /* Call geologist from the flag */
-        int amountWorkers = map.getAllWorkers().size();
+        int amountWorkers = map.getWorkers().size();
         
         flag.callGeologist();
         
         /* Verify that a geologist is dispatched from the headquarter */
         map.stepTime();
         
-        assertEquals(map.getAllWorkers().size(), amountWorkers + 1);
+        assertEquals(map.getWorkers().size(), amountWorkers + 1);
         
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Geologist.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Geologist.class);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TestGeologist {
         
         Worker geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = w;
             }
@@ -162,7 +162,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -229,7 +229,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -279,7 +279,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -322,7 +322,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -418,7 +418,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -478,7 +478,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -538,7 +538,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -598,7 +598,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -658,7 +658,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -714,7 +714,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -798,7 +798,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -844,7 +844,7 @@ public class TestGeologist {
         
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist)w;
             }
@@ -928,21 +928,21 @@ public class TestGeologist {
         Utils.fastForward(30, map);
         
         /* Call geologist from the flag */
-        int workers = map.getAllWorkers().size();
+        int workers = map.getWorkers().size();
         
         flag.callGeologist();
         
         /* Wait for the geologist to leave the headquarter */
         map.stepTime();
 
-        assertEquals(map.getAllWorkers().size(), workers + 1);
+        assertEquals(map.getWorkers().size(), workers + 1);
         
         /* Call for another geologist and verify that there is a new geologist on the way*/
         flag.callGeologist();
 
         map.stepTime();
         
-        assertEquals(map.getAllWorkers().size(), workers + 2);
+        assertEquals(map.getWorkers().size(), workers + 2);
     }
 
     @Test
@@ -976,7 +976,7 @@ public class TestGeologist {
 
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist) w;
             }
@@ -1012,7 +1012,7 @@ public class TestGeologist {
         geologist = null;
 
         for (int i = 0; i < 100; i++) {
-            for (Worker w : map.getAllWorkers()) {
+            for (Worker w : map.getWorkers()) {
                 if (w instanceof Geologist && flag.getPosition().equals(w.getTarget())) {
                     geologist = (Geologist)w;
 
@@ -1062,7 +1062,7 @@ public class TestGeologist {
 
         Geologist geologist = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Geologist) {
                 geologist = (Geologist) w;
             }

@@ -99,12 +99,12 @@ public class TestArmory {
         /* Verify that a armory worker leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
 
         /* Let the armory worker reach the armory */
         Armorer armorer = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Armorer) {
                 armorer = (Armorer)w;
             }

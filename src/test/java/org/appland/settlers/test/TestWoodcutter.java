@@ -88,7 +88,7 @@ public class TestWoodcutter {
         Utils.fastForward(2, map);
 
         boolean foundWoodcutter = false;
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
             }
@@ -118,7 +118,7 @@ public class TestWoodcutter {
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
 
-        int nrWorkers = map.getAllWorkers().size();
+        int nrWorkers = map.getWorkers().size();
 
         /* Keep running the gameloop and make sure no more workers are allocated */
         int i;
@@ -126,7 +126,7 @@ public class TestWoodcutter {
             Utils.fastForward(10, map);
         }
 
-        assertTrue(map.getAllWorkers().size() == nrWorkers);
+        assertTrue(map.getWorkers().size() == nrWorkers);
     }
 
     @Test
@@ -759,7 +759,7 @@ public class TestWoodcutter {
         
         WoodcutterWorker wcWorker = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof WoodcutterWorker) {
                 wcWorker = (WoodcutterWorker)w;
             }

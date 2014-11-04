@@ -440,7 +440,7 @@ public class TestTransportation {
 
         /* Courier needs to walk to road before it's assigned */
         Courier c = null;
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Courier) {
                 c = (Courier)w;
             }

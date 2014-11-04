@@ -1006,7 +1006,7 @@ public class TestRoads {
         map.placeFlag(new Flag(middlePoint2));
 
         assertTrue(map.getRoads().size() == 3);
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getWorkers().size() == 2);
         
         /* Step time to let the headquarter assign a courier to the new road */
         Road r = map.getRoad(middlePoint2, endPoint);
@@ -1021,11 +1021,11 @@ public class TestRoads {
         
         map.stepTime();
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
         
         Worker w2 = null;
         
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (! (w instanceof Courier)) {
                 continue;
             }
@@ -1136,20 +1136,20 @@ public class TestRoads {
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
         
         assertTrue(road0.needsCourier());
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
         
         List<Worker> workersBefore = new LinkedList<>();
-        workersBefore.addAll(map.getAllWorkers());
+        workersBefore.addAll(map.getWorkers());
         
         /* Step time to let the headquarter send new workers */
         map.stepTime();
         
         /* Let the new courier reach its road */
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getWorkers().size() == 2);
         
         /* Find the added courier */
         List<Worker> workersAfter = new LinkedList<>();
-        workersAfter.addAll(map.getAllWorkers());
+        workersAfter.addAll(map.getWorkers());
         workersAfter.removeAll(workersBefore);
         
         Worker w = workersAfter.get(0);
@@ -1162,7 +1162,7 @@ public class TestRoads {
         Utils.fastForward(100, map);
         
         assertFalse(road0.needsCourier());
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getWorkers().size() == 2);
         assertEquals(road0.getCourier(), w);
     }
 
@@ -1183,13 +1183,13 @@ public class TestRoads {
         Road road0 = map.placeRoad(point2, point3, point4, point5);
 
         assertTrue(road0.needsCourier());
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
         
         /* Step time to let the headquarter send new workers */
         map.stepTime();
         
         assertTrue(road0.needsCourier());
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
     }
 
     @Test
@@ -1210,12 +1210,12 @@ public class TestRoads {
         Point point6 = new Point(12, 4);
         Road road0 = map.placeRoad(point3, point4, point5, point6, point2);
         
-        assertTrue(map.getAllWorkers().size() == 1);
+        assertTrue(map.getWorkers().size() == 1);
         assertTrue(road0.needsCourier());
 
         map.stepTime();
         
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getWorkers().size() == 2);
         assertFalse(road0.needsCourier());
         
         Point point7 = new Point(14, 6);
@@ -1225,11 +1225,11 @@ public class TestRoads {
         Road road1 = map.placeRoad(point2, point7, point8, point9, point10);
 
         assertTrue(road1.needsCourier());
-        assertTrue(map.getAllWorkers().size() == 2);
+        assertTrue(map.getWorkers().size() == 2);
         
         Utils.fastForward(10, map);
         
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
         assertFalse(road0.needsCourier());
         
         Utils.fastForward(10, map);
@@ -1239,7 +1239,7 @@ public class TestRoads {
         Utils.fastForward(10, map);
 
 
-        assertTrue(map.getAllWorkers().size() == 3);
+        assertTrue(map.getWorkers().size() == 3);
     }
 
     @Test
@@ -1406,7 +1406,7 @@ public class TestRoads {
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
 
         /* Verify that the worker is no longer on the map */
-        assertFalse(map.getAllWorkers().contains(ww));
+        assertFalse(map.getWorkers().contains(ww));
     }
 
     @Test

@@ -68,16 +68,16 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         /* Call scout from the flag */
-        int amountWorkers = map.getAllWorkers().size();
+        int amountWorkers = map.getWorkers().size();
 
         flag.callScout();
 
         /* Verify that a scout is dispatched from the headquarter */
         map.stepTime();
 
-        assertEquals(map.getAllWorkers().size(), amountWorkers + 1);
+        assertEquals(map.getWorkers().size(), amountWorkers + 1);
 
-        Utils.verifyListContainsWorkerOfType(map.getAllWorkers(), Scout.class);
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Scout.class);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class TestScout {
 
         Worker scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = w;
             }
@@ -153,7 +153,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -196,7 +196,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -244,7 +244,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -298,7 +298,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -350,7 +350,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -420,21 +420,21 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         /* Call scout from the flag */
-        int workers = map.getAllWorkers().size();
+        int workers = map.getWorkers().size();
 
         flag.callScout();
 
         /* Wait for the scout to leave the headquarter */
         map.stepTime();
 
-        assertEquals(map.getAllWorkers().size(), workers + 1);
+        assertEquals(map.getWorkers().size(), workers + 1);
 
         /* Call for another scout and verify that there is a new scout on the way*/
         flag.callScout();
 
         map.stepTime();
 
-        assertEquals(map.getAllWorkers().size(), workers + 2);
+        assertEquals(map.getWorkers().size(), workers + 2);
     }
 
     @Test
@@ -468,7 +468,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }
@@ -504,7 +504,7 @@ public class TestScout {
         scout = null;
 
         for (int i = 0; i < 100; i++) {
-            for (Worker w : map.getAllWorkers()) {
+            for (Worker w : map.getWorkers()) {
                 if (w instanceof Scout && flag.getPosition().equals(w.getTarget())) {
                     scout = (Scout)w;
 
@@ -554,7 +554,7 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getAllWorkers()) {
+        for (Worker w : map.getWorkers()) {
             if (w instanceof Scout) {
                 scout = (Scout) w;
             }

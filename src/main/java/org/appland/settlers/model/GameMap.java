@@ -624,7 +624,7 @@ public class GameMap {
         workers.add(w);
     }
 
-    public List<Worker> getAllWorkers() {
+    public List<Worker> getWorkers() {
         return workers;
     }
 
