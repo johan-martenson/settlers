@@ -64,6 +64,35 @@ public class TestBarracks {
     }
     
     @Test
+    public void testBarracksCannotBeConstructedWithOnePlanck() throws Exception {
+
+        /* Starting new game */
+        GameMap map = new GameMap(40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        
+        /* Deliver two plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        barracks0.putCargo(cargo);
+    
+        /* Verify that this is enough to construct the barracks */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(barracks0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(barracks0.ready());
+    }
+
+    @Test
     public void testBarracksGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
