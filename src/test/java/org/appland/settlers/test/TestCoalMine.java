@@ -147,14 +147,14 @@ public class TestCoalMine {
         /* Run game logic twice, once to place courier and once to place miner */
         Utils.fastForward(2, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Miner.class);
         
         /* Keep running the game loop and make sure no more workers are allocated */
         Utils.fastForward(200, map);
 
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
     }
     
     @Test
@@ -172,7 +172,7 @@ public class TestCoalMine {
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(), point0);
         
-        assertTrue(map.getBuildings().size() == 2);
+        assertEquals(map.getBuildings().size(), 2);
     }
 
     @Test
@@ -334,7 +334,7 @@ public class TestCoalMine {
             assertFalse(true);
         } catch (Exception e) {}
         
-        assertTrue(map.getBuildings().size() == 1);
+        assertEquals(map.getBuildings().size(), 1);
     }
 
     @Test

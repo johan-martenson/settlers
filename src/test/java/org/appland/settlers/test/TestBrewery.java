@@ -58,7 +58,7 @@ public class TestBrewery {
     public void testHeadquarterHasOneBrewerAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(BREWER) == 1);
+        assertEquals(hq.getAmount(BREWER), 1);
     }
     
     @Test
@@ -87,11 +87,11 @@ public class TestBrewery {
         assertTrue(brewery.needsWorker());
 
         /* Verify that a brewery worker leaves the hq */        
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Brewer.class);
         
@@ -294,13 +294,13 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WATER, map));
         
         /* Wait until the brewery worker produces an wheat bar */
-        assertTrue(brewery.getAmount(WHEAT) == 1);
-        assertTrue(brewery.getAmount(WATER) == 1);
+        assertEquals(brewery.getAmount(WHEAT), 1);
+        assertEquals(brewery.getAmount(WATER), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(brewery.getAmount(WHEAT) == 0);
-        assertTrue(brewery.getAmount(WATER) == 0);
+        assertEquals(brewery.getAmount(WHEAT), 0);
+        assertEquals(brewery.getAmount(WATER), 0);
         assertTrue(brewery.needsMaterial(WHEAT));
         assertTrue(brewery.needsMaterial(WATER));
     }

@@ -17,6 +17,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -48,18 +49,18 @@ public class TestInventory {
 
     @Test
     public void testInitialInventoryIsEmptyExceptCouriers() {
-        assertTrue(storage.getAmount(SWORD) == 0);
-        assertTrue(storage.getAmount(SHIELD) == 0);
-        assertTrue(storage.getAmount(PRIVATE) == 0);
-        assertTrue(storage.getAmount(GENERAL) == 0);
-        assertTrue(storage.getAmount(SERGEANT) == 0);
-        assertTrue(storage.getAmount(BEER) == 0);
-        assertTrue(storage.getAmount(GOLD) == 0);
-        assertTrue(storage.getAmount(WOOD) == 0);
-        assertTrue(storage.getAmount(PLANCK) == 0);
-        assertTrue(storage.getAmount(STONE) == 0);
-        assertTrue(storage.getAmount(WHEAT) == 0);
-        assertTrue(storage.getAmount(FORESTER) == 0);
+        assertEquals(storage.getAmount(SWORD), 0);
+        assertEquals(storage.getAmount(SHIELD), 0);
+        assertEquals(storage.getAmount(PRIVATE), 0);
+        assertEquals(storage.getAmount(GENERAL), 0);
+        assertEquals(storage.getAmount(SERGEANT), 0);
+        assertEquals(storage.getAmount(BEER), 0);
+        assertEquals(storage.getAmount(GOLD), 0);
+        assertEquals(storage.getAmount(WOOD), 0);
+        assertEquals(storage.getAmount(PLANCK), 0);
+        assertEquals(storage.getAmount(STONE), 0);
+        assertEquals(storage.getAmount(WHEAT), 0);
+        assertEquals(storage.getAmount(FORESTER), 0);
         
         assertFalse(storage.isInStock(SWORD));
         assertFalse(storage.isInStock(SHIELD));
@@ -79,69 +80,69 @@ public class TestInventory {
     public void testDepositRetrieveDeadMatter() throws Exception {
 
         storage.putCargo(new Cargo(SWORD, null));
-        assertTrue(storage.getAmount(SWORD) == 1);
+        assertEquals(storage.getAmount(SWORD), 1);
         assertTrue(storage.isInStock(SWORD));
         storage.retrieve(SWORD);
-        assertTrue(storage.getAmount(SWORD) == 0);
+        assertEquals(storage.getAmount(SWORD), 0);
         assertFalse(storage.isInStock(SWORD));
 
         storage.putCargo(new Cargo(SHIELD, null));
-        assertTrue(storage.getAmount(SHIELD) == 1);
+        assertEquals(storage.getAmount(SHIELD), 1);
         assertTrue(storage.isInStock(SHIELD));
         storage.retrieve(SHIELD);
-        assertTrue(storage.getAmount(SHIELD) == 0);
+        assertEquals(storage.getAmount(SHIELD), 0);
         assertFalse(storage.isInStock(SHIELD));
 
         storage.putCargo(new Cargo(BEER, null));
-        assertTrue(storage.getAmount(BEER) == 1);
+        assertEquals(storage.getAmount(BEER), 1);
         assertTrue(storage.isInStock(BEER));
         storage.retrieve(BEER);
-        assertTrue(storage.getAmount(BEER) == 0);
+        assertEquals(storage.getAmount(BEER), 0);
         assertFalse(storage.isInStock(BEER));
 
         storage.putCargo(new Cargo(GOLD, null));
-        assertTrue(storage.getAmount(GOLD) == 1);
+        assertEquals(storage.getAmount(GOLD), 1);
         assertTrue(storage.isInStock(GOLD));
         storage.retrieve(GOLD);
-        assertTrue(storage.getAmount(GOLD) == 0);
+        assertEquals(storage.getAmount(GOLD), 0);
         assertFalse(storage.isInStock(GOLD));
 
         storage.putCargo(new Cargo(WOOD, null));
-        assertTrue(storage.getAmount(WOOD) == 1);
+        assertEquals(storage.getAmount(WOOD), 1);
         assertTrue(storage.isInStock(WOOD));
         storage.retrieve(WOOD);
-        assertTrue(storage.getAmount(WOOD) == 0);
+        assertEquals(storage.getAmount(WOOD), 0);
         assertFalse(storage.isInStock(WOOD));
 
         storage.putCargo(new Cargo(PLANCK, null));
-        assertTrue(storage.getAmount(PLANCK) == 1);
+        assertEquals(storage.getAmount(PLANCK), 1);
         assertTrue(storage.isInStock(PLANCK));
         storage.retrieve(PLANCK);
-        assertTrue(storage.getAmount(PLANCK) == 0);
+        assertEquals(storage.getAmount(PLANCK), 0);
         assertFalse(storage.isInStock(PLANCK));
 
         storage.putCargo(new Cargo(STONE, null));
-        assertTrue(storage.getAmount(STONE) == 1);
+        assertEquals(storage.getAmount(STONE), 1);
         assertTrue(storage.isInStock(STONE));
         storage.retrieve(STONE);
-        assertTrue(storage.getAmount(STONE) == 0);
+        assertEquals(storage.getAmount(STONE), 0);
         assertFalse(storage.isInStock(STONE));
 
         storage.putCargo(new Cargo(WHEAT, null));
-        assertTrue(storage.getAmount(WHEAT) == 1);
+        assertEquals(storage.getAmount(WHEAT), 1);
         assertTrue(storage.isInStock(WHEAT));
         storage.retrieve(WHEAT);
-        assertTrue(storage.getAmount(WHEAT) == 0);
+        assertEquals(storage.getAmount(WHEAT), 0);
         assertFalse(storage.isInStock(WHEAT));
     }
 
     @Test
     public void testDepositRetrieveWorkers() throws Exception {
         storage.depositWorker(new Forester(null));
-        assertTrue(storage.getAmount(FORESTER) == 1);
+        assertEquals(storage.getAmount(FORESTER), 1);
         assertTrue(storage.isInStock(FORESTER));
         storage.retrieveWorker(FORESTER);
-        assertTrue(storage.getAmount(FORESTER) == 0);        
+        assertEquals(storage.getAmount(FORESTER), 0);        
         assertFalse(storage.isInStock(FORESTER));
     }
     
@@ -150,21 +151,21 @@ public class TestInventory {
 
         assertNoMilitaryInInventory(storage);
         storage.depositWorker(new Military(PRIVATE_RANK, null));
-        assertTrue(storage.getAmount(PRIVATE) == 1);
+        assertEquals(storage.getAmount(PRIVATE), 1);
         assertTrue(storage.isInStock(PRIVATE));
         storage.retrieveMilitary(PRIVATE);
         assertNoMilitaryInInventory(storage);
         assertFalse(storage.isInStock(PRIVATE));
 
         storage.depositWorker(new Military(GENERAL_RANK, null));
-        assertTrue(storage.getAmount(GENERAL) == 1);
+        assertEquals(storage.getAmount(GENERAL), 1);
         assertTrue(storage.isInStock(GENERAL));
         storage.retrieveMilitary(GENERAL);
         assertNoMilitaryInInventory(storage);
         assertFalse(storage.isInStock(GENERAL));
 
         storage.depositWorker(new Military(SERGEANT_RANK, null));
-        assertTrue(storage.getAmount(SERGEANT) == 1);
+        assertEquals(storage.getAmount(SERGEANT), 1);
         assertTrue(storage.isInStock(SERGEANT));
         storage.retrieveMilitary(SERGEANT);
         assertNoMilitaryInInventory(storage);
@@ -185,9 +186,9 @@ public class TestInventory {
 
     @Test(expected=Exception.class)
     public void testRetrieveAnyMilitaryFromEmptyInventory() throws Exception {
-        assertTrue(storage.getAmount(PRIVATE) == 0);
-        assertTrue(storage.getAmount(SERGEANT) == 0);
-        assertTrue(storage.getAmount(GENERAL) == 0);
+        assertEquals(storage.getAmount(PRIVATE), 0);
+        assertEquals(storage.getAmount(SERGEANT), 0);
+        assertEquals(storage.getAmount(GENERAL), 0);
         
         storage.retrieveAnyMilitary();
     }
@@ -246,19 +247,19 @@ public class TestInventory {
     @Test
     public void testDepositAndRetrieveMilitaryOfEachKind() throws Exception {
         storage.depositWorker(new Military(PRIVATE_RANK, null));
-        assertTrue(storage.getAmount(PRIVATE) == 1);
+        assertEquals(storage.getAmount(PRIVATE), 1);
         storage.retrieveMilitary(PRIVATE);
-        assertTrue(storage.getAmount(PRIVATE) == 0);
+        assertEquals(storage.getAmount(PRIVATE), 0);
     
         storage.depositWorker(new Military(SERGEANT_RANK, null));
-        assertTrue(storage.getAmount(SERGEANT) == 1);
+        assertEquals(storage.getAmount(SERGEANT), 1);
         storage.retrieveMilitary(SERGEANT);
-        assertTrue(storage.getAmount(SERGEANT) == 0);
+        assertEquals(storage.getAmount(SERGEANT), 0);
         
         storage.depositWorker(new Military(GENERAL_RANK, null));
-        assertTrue(storage.getAmount(GENERAL) == 1);
+        assertEquals(storage.getAmount(GENERAL), 1);
         storage.retrieveMilitary(GENERAL);
-        assertTrue(storage.getAmount(GENERAL) == 0);
+        assertEquals(storage.getAmount(GENERAL), 0);
     }
 
     @Test(expected=Exception.class)
@@ -276,8 +277,8 @@ public class TestInventory {
     }
     
     private void assertNoMilitaryInInventory(Storage storage) {
-        assertTrue(storage.getAmount(PRIVATE) == 0);
-        assertTrue(storage.getAmount(SERGEANT) == 0);
-        assertTrue(storage.getAmount(GENERAL) == 0);
+        assertEquals(storage.getAmount(PRIVATE), 0);
+        assertEquals(storage.getAmount(SERGEANT), 0);
+        assertEquals(storage.getAmount(GENERAL), 0);
     }
 }

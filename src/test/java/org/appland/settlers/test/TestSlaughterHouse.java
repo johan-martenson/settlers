@@ -65,7 +65,7 @@ public class TestSlaughterHouse {
     public void testHeadquarterHasOneButcherAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(BUTCHER) == 1);
+        assertEquals(hq.getAmount(BUTCHER), 1);
     }
     
     @Test
@@ -96,7 +96,7 @@ public class TestSlaughterHouse {
         /* Verify that a slaughterHouse worker leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Let the slaughterHouse worker reach the slaughterHouse */
         Butcher butcher = null;
@@ -303,11 +303,11 @@ public class TestSlaughterHouse {
         slaughterHouse.putCargo(new Cargo(PIG, map));
         
         /* Wait until the slaughterHouse worker produces meat*/
-        assertTrue(slaughterHouse.getAmount(PIG) == 1);
+        assertEquals(slaughterHouse.getAmount(PIG), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(slaughterHouse.getAmount(PIG) == 0);
+        assertEquals(slaughterHouse.getAmount(PIG), 0);
     }
 
     @Test

@@ -594,7 +594,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
         
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
@@ -604,14 +604,14 @@ public class TestCourier {
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
         assertEquals(courier.getTarget(), wc.getPosition());
-        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), wc.getPosition());
-        assertTrue(wc.getAmount(PLANCK) == 1);
+        assertEquals(wc.getAmount(PLANCK), 1);
     }
 
     @Test
@@ -670,7 +670,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
         
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         
@@ -856,14 +856,14 @@ public class TestCourier {
         assertFalse(middleFlag.getStackedCargo().isEmpty());
         assertEquals(courier.getCargo(), cargoForWoodcutter);
         assertEquals(courier.getTarget(), wc.getPosition());
-        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), wc.getPosition());
-        assertTrue(wc.getAmount(PLANCK) == 1);        
+        assertEquals(wc.getAmount(PLANCK), 1);        
     }
 
     @Test

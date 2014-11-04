@@ -7,7 +7,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,17 +43,17 @@ public class MilitaryCreationAndPromotionTest {
         storage.putCargo(new Cargo(Material.SHIELD, null));
         storage.putCargo(new Cargo(Material.SHIELD, null));
 
-        assertTrue(storage.getAmount(Material.PRIVATE) == numberOfPrivates);
-        assertTrue(storage.getAmount(Material.BEER) == 1);
-        assertTrue(storage.getAmount(Material.SWORD) == 2);
-        assertTrue(storage.getAmount(Material.SHIELD) == 3);
+        assertEquals(storage.getAmount(Material.PRIVATE), numberOfPrivates);
+        assertEquals(storage.getAmount(Material.BEER), 1);
+        assertEquals(storage.getAmount(Material.SWORD), 2);
+        assertEquals(storage.getAmount(Material.SHIELD), 3);
 
         Utils.fastForward(110, storage);
 
-        assertTrue(storage.getAmount(Material.PRIVATE) == numberOfPrivates + 1);
-        assertTrue(storage.getAmount(Material.BEER) == 0);
-        assertTrue(storage.getAmount(Material.SWORD) == 1);
-        assertTrue(storage.getAmount(Material.SHIELD) == 2);
+        assertEquals(storage.getAmount(Material.PRIVATE), numberOfPrivates + 1);
+        assertEquals(storage.getAmount(Material.BEER), 0);
+        assertEquals(storage.getAmount(Material.SWORD), 1);
+        assertEquals(storage.getAmount(Material.SHIELD), 2);
     }
 
     @Test
@@ -61,17 +61,17 @@ public class MilitaryCreationAndPromotionTest {
         storage.putCargo(new Cargo(Material.GOLD, null));
         storage.putCargo(new Cargo(Material.PRIVATE, null));
 
-        assertTrue(1 == storage.getAmount(Material.GOLD));
-        assertTrue(1 == storage.getAmount(Material.PRIVATE));
-        assertTrue(0 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(1, storage.getAmount(Material.GOLD));
+        assertEquals(1, storage.getAmount(Material.PRIVATE));
+        assertEquals(0, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
 
         Utils.fastForward(110, storage);
 
-        assertTrue(0 == storage.getAmount(Material.GOLD));
-        assertTrue(0 == storage.getAmount(Material.PRIVATE));
-        assertTrue(1 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(0, storage.getAmount(Material.GOLD));
+        assertEquals(0, storage.getAmount(Material.PRIVATE));
+        assertEquals(1, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
     }
 
     @Test
@@ -93,17 +93,17 @@ public class MilitaryCreationAndPromotionTest {
         storage.putCargo(new Cargo(Material.PRIVATE, null));
         storage.putCargo(new Cargo(Material.PRIVATE, null));
 
-        assertTrue(10 == storage.getAmount(Material.GOLD));
-        assertTrue(5 == storage.getAmount(Material.PRIVATE));
-        assertTrue(0 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(10, storage.getAmount(Material.GOLD));
+        assertEquals(5, storage.getAmount(Material.PRIVATE));
+        assertEquals(0, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
 
         Utils.fastForward(110, storage);
 
-        assertTrue(9 == storage.getAmount(Material.GOLD));
-        assertTrue(4 == storage.getAmount(Material.PRIVATE));
-        assertTrue(1 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(9, storage.getAmount(Material.GOLD));
+        assertEquals(4, storage.getAmount(Material.PRIVATE));
+        assertEquals(1, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
     }
 
     @Test
@@ -129,17 +129,17 @@ public class MilitaryCreationAndPromotionTest {
         storage.putCargo(new Cargo(Material.SERGEANT, null));
         storage.putCargo(new Cargo(Material.SERGEANT, null));
 
-        assertTrue(10 == storage.getAmount(Material.GOLD));
-        assertTrue(5 == storage.getAmount(Material.PRIVATE));
-        assertTrue(3 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(10, storage.getAmount(Material.GOLD));
+        assertEquals(5, storage.getAmount(Material.PRIVATE));
+        assertEquals(3, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
 
         Utils.fastForward(110, storage);
 
-        assertTrue(8 == storage.getAmount(Material.GOLD));
-        assertTrue(4 == storage.getAmount(Material.PRIVATE));
-        assertTrue(3 == storage.getAmount(Material.SERGEANT));
-        assertTrue(1 == storage.getAmount(Material.GENERAL));
+        assertEquals(8, storage.getAmount(Material.GOLD));
+        assertEquals(4, storage.getAmount(Material.PRIVATE));
+        assertEquals(3, storage.getAmount(Material.SERGEANT));
+        assertEquals(1, storage.getAmount(Material.GENERAL));
 
     }
 
@@ -158,10 +158,10 @@ public class MilitaryCreationAndPromotionTest {
 
         Utils.fastForward(100, storage);
 
-        assertTrue(10 == storage.getAmount(Material.GOLD));
-        assertTrue(0 == storage.getAmount(Material.PRIVATE));
-        assertTrue(0 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(10, storage.getAmount(Material.GOLD));
+        assertEquals(0, storage.getAmount(Material.PRIVATE));
+        assertEquals(0, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
     }
 
     @Test
@@ -190,10 +190,10 @@ public class MilitaryCreationAndPromotionTest {
 
         Utils.fastForward(100, storage);
 
-        assertTrue(10 == storage.getAmount(Material.GOLD));
-        assertTrue(0 == storage.getAmount(Material.PRIVATE));
-        assertTrue(0 == storage.getAmount(Material.SERGEANT));
-        assertTrue(10 == storage.getAmount(Material.GENERAL));
+        assertEquals(10, storage.getAmount(Material.GOLD));
+        assertEquals(0, storage.getAmount(Material.PRIVATE));
+        assertEquals(0, storage.getAmount(Material.SERGEANT));
+        assertEquals(10, storage.getAmount(Material.GENERAL));
 
     }
 
@@ -207,10 +207,10 @@ public class MilitaryCreationAndPromotionTest {
 
         Utils.fastForward(100, storage);
 
-        assertTrue(0 == storage.getAmount(Material.GOLD));
-        assertTrue(5 == storage.getAmount(Material.PRIVATE));
-        assertTrue(0 == storage.getAmount(Material.SERGEANT));
-        assertTrue(0 == storage.getAmount(Material.GENERAL));
+        assertEquals(0, storage.getAmount(Material.GOLD));
+        assertEquals(5, storage.getAmount(Material.PRIVATE));
+        assertEquals(0, storage.getAmount(Material.SERGEANT));
+        assertEquals(0, storage.getAmount(Material.GENERAL));
 
     }
 }

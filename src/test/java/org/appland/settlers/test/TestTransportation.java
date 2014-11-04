@@ -45,7 +45,7 @@ public class TestTransportation {
 
             assertNotNull(c);
 
-            assertTrue(c.getMaterial() == m);
+            assertEquals(c.getMaterial(), m);
         }
     }
 
@@ -63,15 +63,15 @@ public class TestTransportation {
 
         List<Road> roads = map.getRoads();
 
-        assertTrue(roads.size() == 2);
+        assertEquals(roads.size(), 2);
 
         Road r = map.getRoad(new Point(6, 4), new Point(11, 5));
 
-        assertTrue(r.getStart().x == 6);
-        assertTrue(r.getStart().y == 4);
+        assertEquals(r.getStart().x, 6);
+        assertEquals(r.getStart().y, 4);
 
-        assertTrue(r.getEnd().x == 11);
-        assertTrue(r.getEnd().y == 5);
+        assertEquals(r.getEnd().x, 11);
+        assertEquals(r.getEnd().y, 5);
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -329,7 +329,7 @@ public class TestTransportation {
         Cargo c = qry.getFlag().getCargoWaitingForRoad(map.getRoad(stge.getFlag().getPosition(), qry.getFlag().getPosition()));
         assertTrue(c.getPosition().equals(qry.getFlag().getPosition()));
         assertEquals(c.getTarget(), stge);
-        assertTrue(c.getMaterial() == STONE);
+        assertEquals(c.getMaterial(), STONE);
     }
 
     @Test
@@ -394,7 +394,7 @@ public class TestTransportation {
         assertFalse(mdlToEndCr.isIdle());
         assertNull(mdlToEndCr.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(c));
-        assertTrue(middleFlag.getStackedCargo().size() == 1);
+        assertEquals(middleFlag.getStackedCargo().size(), 1);
         assertTrue(middleFlag.getStackedCargo().get(0).equals(c));
         assertNull(hqToMdlCr.getCargo());
         assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
@@ -502,8 +502,8 @@ public class TestTransportation {
         assertTrue(b.isMilitaryBuilding());
         int hostedMilitary = b.getHostedMilitary();
         int maxHostedMilitary = b.getMaxHostedMilitary();
-        assertTrue(hostedMilitary == 0);
-        assertTrue(maxHostedMilitary == 2);
+        assertEquals(hostedMilitary, 0);
+        assertEquals(maxHostedMilitary, 2);
 
         /* Get military from the headquarter
          * - retrieve should set location of the worker
@@ -524,7 +524,7 @@ public class TestTransportation {
         assertTrue(m.isArrived());
 
         /* Make the military enter the barracks */
-        assertTrue(b.getHostedMilitary() == 1);
+        assertEquals(b.getHostedMilitary(), 1);
     }
 
     @Test

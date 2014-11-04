@@ -58,7 +58,7 @@ public class TestIronSmelter {
     public void testHeadquarterHasOneIronFounderAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(IRON_FOUNDER) == 1);
+        assertEquals(hq.getAmount(IRON_FOUNDER), 1);
     }
     
     @Test
@@ -87,11 +87,11 @@ public class TestIronSmelter {
         assertTrue(ironSmelter.needsWorker());
 
         /* Verify that a iron smelter worker leaves the hq */        
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
         
@@ -294,13 +294,13 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(COAL, map));
         
         /* Wait until the iron smelter worker produces an iron bar */
-        assertTrue(ironSmelter.getAmount(IRON) == 1);
-        assertTrue(ironSmelter.getAmount(COAL) == 1);
+        assertEquals(ironSmelter.getAmount(IRON), 1);
+        assertEquals(ironSmelter.getAmount(COAL), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(ironSmelter.getAmount(IRON) == 0);
-        assertTrue(ironSmelter.getAmount(COAL) == 0);
+        assertEquals(ironSmelter.getAmount(IRON), 0);
+        assertEquals(ironSmelter.getAmount(COAL), 0);
         assertTrue(ironSmelter.needsMaterial(IRON));
         assertTrue(ironSmelter.needsMaterial(COAL));
     }

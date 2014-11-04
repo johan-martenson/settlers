@@ -68,7 +68,7 @@ public class TestArmory {
     public void testHeadquarterHasOneArmorerAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(ARMORER) == 1);
+        assertEquals(hq.getAmount(ARMORER), 1);
     }
     
     @Test
@@ -99,7 +99,7 @@ public class TestArmory {
         /* Verify that a armory worker leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Let the armory worker reach the armory */
         Armorer armorer = null;
@@ -309,13 +309,13 @@ public class TestArmory {
         armory.putCargo(new Cargo(COAL, map));
         
         /* Wait until the armory worker produces a weapons */
-        assertTrue(armory.getAmount(IRON) == 1);
-        assertTrue(armory.getAmount(COAL) == 1);
+        assertEquals(armory.getAmount(IRON), 1);
+        assertEquals(armory.getAmount(COAL), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(armory.getAmount(COAL) == 0);
-        assertTrue(armory.getAmount(IRON) == 0);
+        assertEquals(armory.getAmount(COAL), 0);
+        assertEquals(armory.getAmount(IRON), 0);
     }
 
     @Test

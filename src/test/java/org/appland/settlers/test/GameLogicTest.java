@@ -180,7 +180,7 @@ public class GameLogicTest {
         /* Verify the worker delivers the cargo when it has reached the target */
         assertNull(w.getCargo());
         assertTrue(w.isAt(wc.getPosition()));
-        assertTrue(wc.getAmount(PLANCK) == 1);
+        assertEquals(wc.getAmount(PLANCK), 1);
     }
 
     @Test
@@ -201,26 +201,26 @@ public class GameLogicTest {
 
         /* Assign new workers to unocupied places. Since there are no places 
          * that require workers this should not do anything*/
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
         
         /* Step time to make the headquarter assign new workers */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
 
         /* Construct a road without any courier assigned */
         Road r  = map.placeAutoSelectedRoad(hq.getFlag(), bkFlag);
         Road r2 = map.placeAutoSelectedRoad(hq.getFlag(), hutFlag);
 
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
 
         /* Prep the headquarter's inventory */
-        assertTrue(hq.getAmount(PRIVATE) == 10);
+        assertEquals(hq.getAmount(PRIVATE), 10);
 
         hq.depositWorker(new Forester(map));
 
-        assertTrue(hq.getAmount(FORESTER) == 3);
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(hq.getAmount(FORESTER), 3);
+        assertEquals(map.getWorkers().size(), 1);
         
         /* Assign new workers to unoccupied places and verify that there is a 
          * worker designated for the road. There should be no worker for the 
@@ -229,7 +229,7 @@ public class GameLogicTest {
         Utils.fastForward(3, map);
 
         // TODO: Ensure that only one worker is dispatched even though there are two unassigned roads
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
         
         assertTrue(map.getWorkers().get(1) instanceof Courier);
         assertTrue(map.getWorkers().get(2) instanceof Courier);
@@ -251,33 +251,33 @@ public class GameLogicTest {
         assertTrue(r.getCourier().equals(w1));
         assertTrue(r.getCourier().getAssignedRoad().equals(r));
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Construct the barracks */
         assertTrue(bk.underConstruction());
         assertTrue(bk.isMilitaryBuilding());
-        assertTrue(hq.getAmount(Material.PRIVATE) == 10);
+        assertEquals(hq.getAmount(Material.PRIVATE), 10);
 
         map.placeBuilding(bk, wcPoint);
         Utils.constructHouse(bk, map);
 
         assertTrue(bk.needsMilitaryManning());
-        assertTrue(bk.getHostedMilitary() == 0);
+        assertEquals(bk.getHostedMilitary(), 0);
 
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
 
-        assertTrue(map.getWorkers().size() == 4);
+        assertEquals(map.getWorkers().size(), 4);
         assertTrue(map.getWorkers().get(3) instanceof Military);
         assertFalse(map.getWorkers().get(3).isArrived());
         assertTrue(map.getWorkers().get(3).isTraveling());
 
-        assertTrue(hq.getAmount(Material.PRIVATE) == 9);
+        assertEquals(hq.getAmount(Material.PRIVATE), 9);
 
         /* Let the military reach the barracks */
         Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(3));
 
-        assertTrue(map.getWorkers().size() == 5);
+        assertEquals(map.getWorkers().size(), 5);
         assertTrue(map.getWorkers().get(3).isArrived());
         assertFalse(map.getWorkers().get(3).isTraveling());
 
@@ -286,16 +286,16 @@ public class GameLogicTest {
         Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(4));
         
         assertFalse(bk.needsMilitaryManning());
-        assertTrue(bk.getHostedMilitary() == 2);
+        assertEquals(bk.getHostedMilitary(), 2);
 
         /* Assign new workers to unoccupied buildings again. There is building
          * or road that requires a worker so this should have no effect
          */
-        assertTrue(map.getWorkers().size() == 5);
+        assertEquals(map.getWorkers().size(), 5);
 
         map.stepTime();
         
-        assertTrue(map.getWorkers().size() == 5);
+        assertEquals(map.getWorkers().size(), 5);
 
         /* Finish construction of the forester hut which requires a 
          * forester worker to function
@@ -308,13 +308,13 @@ public class GameLogicTest {
         /* Assign new workers to unoccupied buildings and roads. The forester
          * hut needs a forester so a forester should be dispatched from the hq
          */
-        assertTrue(hq.getAmount(FORESTER) == 3);
+        assertEquals(hq.getAmount(FORESTER), 3);
         assertTrue(fHut.needsWorker());
 
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
 
-        assertTrue(map.getWorkers().size() == 6);
+        assertEquals(map.getWorkers().size(), 6);
         assertFalse(fHut.needsWorker());
         
         Worker forester = null;

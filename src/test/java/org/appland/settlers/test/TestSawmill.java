@@ -57,7 +57,7 @@ public class TestSawmill {
     public void testHeadquarterHasOneSawmillWorkerAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(SAWMILL_WORKER) == 1);
+        assertEquals(hq.getAmount(SAWMILL_WORKER), 1);
     }
     
     @Test
@@ -86,11 +86,11 @@ public class TestSawmill {
         assertTrue(sawmill.needsWorker());
 
         /* Verify that a sawmill worker leaves the hq */        
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), SawmillWorker.class);
         
@@ -292,11 +292,11 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
         
         /* Wait until the sawmill worker produces a planck */
-        assertTrue(sawmill.getAmount(WOOD) == 1);
+        assertEquals(sawmill.getAmount(WOOD), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(sawmill.getAmount(WOOD) == 0);
+        assertEquals(sawmill.getAmount(WOOD), 0);
         assertTrue(sawmill.needsMaterial(WOOD));
     }
 

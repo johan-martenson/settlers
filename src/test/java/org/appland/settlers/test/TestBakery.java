@@ -66,7 +66,7 @@ public class TestBakery {
     public void testHeadquarterHasOneBakerAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(BAKER) == 1);
+        assertEquals(hq.getAmount(BAKER), 1);
     }
     
     @Test
@@ -97,7 +97,7 @@ public class TestBakery {
         /* Verify that a bakery worker leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Let the bakery worker reach the bakery */
         Baker baker = null;
@@ -307,13 +307,13 @@ public class TestBakery {
         bakery.putCargo(new Cargo(FLOUR, map));
         
         /* Wait until the bakery worker produces a bread */
-        assertTrue(bakery.getAmount(WATER) == 1);
-        assertTrue(bakery.getAmount(FLOUR) == 1);
+        assertEquals(bakery.getAmount(WATER), 1);
+        assertEquals(bakery.getAmount(FLOUR), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(bakery.getAmount(FLOUR) == 0);
-        assertTrue(bakery.getAmount(WATER) == 0);
+        assertEquals(bakery.getAmount(FLOUR), 0);
+        assertEquals(bakery.getAmount(WATER), 0);
     }
 
     @Test

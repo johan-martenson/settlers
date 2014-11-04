@@ -18,8 +18,8 @@ import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -42,8 +42,8 @@ public class ConstructionTest {
 
         assertFalse(wc.isMilitaryBuilding());
 
-        assertTrue(wc.getAmount(WOOD) == 0);
-        assertTrue(wc.getAmount(PLANCK) == 0);
+        assertEquals(wc.getAmount(WOOD), 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
         assertTrue(wc.underConstruction());
 
         assertTrue(wc.needsMaterial(PLANCK));
@@ -97,8 +97,8 @@ public class ConstructionTest {
         assertFalse(wc.isMilitaryBuilding());
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(wc.getAmount(PLANCK) == 0);
-        assertTrue(wc.getAmount(STONE) == 0);
+        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(wc.getAmount(STONE), 0);
 
         /* Verify that the woodcutter doesn't need any material when it's finished */
         for (Material m : Material.values()) {
@@ -124,9 +124,9 @@ public class ConstructionTest {
         assertTrue(brks.underConstruction());
 
         assertTrue(brks.isMilitaryBuilding());
-        assertTrue(brks.getMaxHostedMilitary() == 2);
-        assertTrue(brks.getHostedMilitary() == 0);
-        assertTrue(brks.getPromisedMilitary() == 0);
+        assertEquals(brks.getMaxHostedMilitary(), 2);
+        assertEquals(brks.getHostedMilitary(), 0);
+        assertEquals(brks.getPromisedMilitary(), 0);
 
         assertFalse(brks.needsMilitaryManning());
 
@@ -142,8 +142,8 @@ public class ConstructionTest {
 
         assertTrue(brks.isMilitaryBuilding());
         assertTrue(brks.ready());
-        assertTrue(brks.getHostedMilitary() == 0);
-        assertTrue(brks.getMaxHostedMilitary() == 2);
+        assertEquals(brks.getHostedMilitary(), 0);
+        assertEquals(brks.getMaxHostedMilitary(), 2);
         assertTrue(brks.needsMilitaryManning());
 
         assertTrue(brks.isMilitaryBuilding());
@@ -192,8 +192,8 @@ public class ConstructionTest {
         assertTrue(sm.ready());
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(sm.getAmount(PLANCK) == 0);
-        assertTrue(sm.getAmount(STONE) == 0);
+        assertEquals(sm.getAmount(PLANCK), 0);
+        assertEquals(sm.getAmount(STONE), 0);
 
         /* Verify that the sawmill needs only WOOD when it's finished */
         assertTrue(sm.needsMaterial(WOOD));
@@ -255,8 +255,8 @@ public class ConstructionTest {
         assertTrue(farm.ready());
 
         /* Verify that all material was consumed by the construction */
-        assertTrue(farm.getAmount(PLANCK) == 0);
-        assertTrue(farm.getAmount(STONE) == 0);
+        assertEquals(farm.getAmount(PLANCK), 0);
+        assertEquals(farm.getAmount(STONE), 0);
 
         farm.tearDown();
 

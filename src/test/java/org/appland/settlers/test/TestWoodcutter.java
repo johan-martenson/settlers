@@ -126,7 +126,7 @@ public class TestWoodcutter {
             Utils.fastForward(10, map);
         }
 
-        assertTrue(map.getWorkers().size() == nrWorkers);
+        assertEquals(map.getWorkers().size(), nrWorkers);
     }
 
     @Test
@@ -601,7 +601,7 @@ public class TestWoodcutter {
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
         
-        assertTrue(tree.getSize() == Size.SMALL);
+        assertEquals(tree.getSize(), Size.SMALL);
         
         /* Step once and make sure the forester stays in the hut */
         map.stepTime();
@@ -617,7 +617,7 @@ public class TestWoodcutter {
             }
         }
 
-        assertTrue(tree.getSize() == MEDIUM);
+        assertEquals(tree.getSize(), MEDIUM);
 
         /* Step once and make sure the forester stays in the hut */
         

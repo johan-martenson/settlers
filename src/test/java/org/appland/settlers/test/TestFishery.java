@@ -120,8 +120,8 @@ public class TestFishery {
         Utils.constructHouse(f, null);
 
         assertFalse(f.isMilitaryBuilding());
-        assertTrue(f.getHostedMilitary() == 0);
-        assertTrue(f.getMaxHostedMilitary() == 0);
+        assertEquals(f.getHostedMilitary(), 0);
+        assertEquals(f.getMaxHostedMilitary(), 0);
     }
 
     @Test
@@ -180,12 +180,12 @@ public class TestFishery {
         /* Run game logic twice, once to place courier and once to place fisherman */
         Utils.fastForward(2, map);
 
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Keep running the game loop and make sure no more workers are allocated */
         Utils.fastForward(200, map);
 
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
     }
 
     @Test

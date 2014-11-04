@@ -78,7 +78,7 @@ public class TestWell {
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
         
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), WellWorker.class);
     }

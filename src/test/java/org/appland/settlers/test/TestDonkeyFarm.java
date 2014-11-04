@@ -1183,7 +1183,7 @@ public class TestDonkeyFarm {
         
         /* Verify that the donkey is only added once */
         for (int i = 0; i < 600; i++) {
-            assertTrue(map.getWorkers().indexOf(donkey) == map.getWorkers().lastIndexOf(donkey));
+            assertEquals(map.getWorkers().indexOf(donkey), map.getWorkers().lastIndexOf(donkey));
 
             map.stepTime();
         }

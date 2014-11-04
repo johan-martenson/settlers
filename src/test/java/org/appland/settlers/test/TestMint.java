@@ -66,7 +66,7 @@ public class TestMint {
     public void testHeadquarterHasOneMinterAtStart() {
         Headquarter hq = new Headquarter();
         
-        assertTrue(hq.getAmount(MINTER) == 1);
+        assertEquals(hq.getAmount(MINTER), 1);
     }
     
     @Test
@@ -97,7 +97,7 @@ public class TestMint {
         /* Verify that a minter leaves the hq */
         Utils.fastForward(3, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         /* Let the mint worker reach the mint */
         Minter minter = null;
@@ -307,13 +307,13 @@ public class TestMint {
         mint.putCargo(new Cargo(COAL, map));
         
         /* Wait until the mint worker produces a bread */
-        assertTrue(mint.getAmount(GOLD) == 1);
-        assertTrue(mint.getAmount(COAL) == 1);
+        assertEquals(mint.getAmount(GOLD), 1);
+        assertEquals(mint.getAmount(COAL), 1);
         
         Utils.fastForward(150, map);
         
-        assertTrue(mint.getAmount(GOLD) == 0);
-        assertTrue(mint.getAmount(COAL) == 0);
+        assertEquals(mint.getAmount(GOLD), 0);
+        assertEquals(mint.getAmount(COAL), 0);
     }
 
     @Test

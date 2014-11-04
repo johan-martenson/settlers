@@ -88,7 +88,7 @@ public class TestRoads {
         
         List<Point> way = map.findWayWithExistingRoads(f1.getPosition(), f2.getPosition());
         
-        assertTrue(way.size() == 3);
+        assertEquals(way.size(), 3);
         assertTrue(way.get(0).equals(f1.getPosition()));
         assertTrue(way.get(2).equals(f2.getPosition()));
     }
@@ -169,7 +169,7 @@ public class TestRoads {
         
         route = map.findWayWithExistingRoads(points[1], points[2]);
 
-        assertTrue(route.size() == 3);
+        assertEquals(route.size(), 3);
         assertEquals(route.get(0), points[1]);
         assertEquals(route.get(1), points[1].right());
         assertEquals(route.get(2), points[2]);
@@ -337,7 +337,7 @@ public class TestRoads {
         
         wayPoints = r.getWayPoints();
         
-	assertTrue(wayPoints.size() == 3);
+	assertEquals(wayPoints.size(), 3);
 	assertTrue(wayPoints.get(0).equals(start.getPosition()));
 	assertTrue(wayPoints.get(1).equals(middlePoint));
 	assertTrue(wayPoints.get(2).equals(end.getPosition()));
@@ -378,7 +378,7 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(f.getPosition());
         
-        assertTrue(points.size() == 6);
+        assertEquals(points.size(), 6);
         assertTrue(points.contains(new Point(2, 6)));
         assertTrue(points.contains(new Point(2, 4)));
         assertTrue(points.contains(new Point(4, 6)));
@@ -404,28 +404,28 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(downRight);
         
-        assertTrue(points.size() == 2);
+        assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(8, 2)));
         assertFalse(points.contains(new Point(9, 3)));
         assertTrue(points.contains(new Point(7, 1)));
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(downLeft);
     
-        assertTrue(points.size() == 2);
+        assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(2, 2)));
         assertFalse(points.contains(new Point(1, 3)));
         assertTrue(points.contains(new Point(3, 1)));
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(upRight);
         
-        assertTrue(points.size() == 2);
+        assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(8, 8)));
         assertTrue(points.contains(new Point(7, 9)));
         assertFalse(points.contains(new Point(9, 7)));
         
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(upLeft);
         
-        assertTrue(points.size() == 2);
+        assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(2, 8)));
         assertTrue(points.contains(new Point(3, 9)));
         assertFalse(points.contains(new Point(1, 7)));
@@ -445,7 +445,7 @@ public class TestRoads {
     
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(right);
         
-        assertTrue(points.size() == 3);
+        assertEquals(points.size(), 3);
         assertTrue(points.contains(new Point(8, 4)));
         assertTrue(points.contains(new Point(8, 6)));
         assertTrue(points.contains(new Point(7, 5)));
@@ -454,7 +454,7 @@ public class TestRoads {
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(left);
     
-        assertTrue(points.size() == 3);
+        assertEquals(points.size(), 3);
         assertTrue(points.contains(new Point(2, 4)));
         assertTrue(points.contains(new Point(2, 6)));
         assertTrue(points.contains(new Point(3, 5)));
@@ -463,7 +463,7 @@ public class TestRoads {
 
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(up);
         
-        assertTrue(points.size() == 4);
+        assertEquals(points.size(), 4);
         assertTrue(points.contains(new Point(4, 8)));
         assertTrue(points.contains(new Point(6, 8)));
         assertFalse(points.contains(new Point(5, 7)));
@@ -473,7 +473,7 @@ public class TestRoads {
         
         points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(down);
         
-        assertTrue(points.size() == 4);
+        assertEquals(points.size(), 4);
         assertTrue(points.contains(new Point(4, 2)));
         assertTrue(points.contains(new Point(6, 2)));
         assertFalse(points.contains(new Point(5, 3)));
@@ -667,11 +667,11 @@ public class TestRoads {
         Point m3 = new Point(12, 8);
         map.placeRoad(start, m1, m2, m3, end);
         
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         
         map.placeFlag(new Flag(m2));
 
-        assertTrue(map.getRoads().size() == 3);
+        assertEquals(map.getRoads().size(), 3);
         List<Road> roads = new ArrayList<>();
         roads.addAll(map.getRoads());
         
@@ -913,12 +913,12 @@ public class TestRoads {
         assertEquals(courier.getTarget(), hq.getPosition());
         
         /* Let the courier leave the cargo */
-        assertTrue(hq.getAmount(BEER) == 0);
+        assertEquals(hq.getAmount(BEER), 0);
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getPosition());
         
         assertNull(courier.getCargo());
-        assertTrue(hq.getAmount(BEER) == 1);
+        assertEquals(hq.getAmount(BEER), 1);
         
         /* Let the courier walk back to the hq's flag */
         assertEquals(courier.getTarget(), hq.getFlag().getPosition());
@@ -1001,12 +1001,12 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Split road */
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         
         map.placeFlag(new Flag(middlePoint2));
 
-        assertTrue(map.getRoads().size() == 3);
-        assertTrue(map.getWorkers().size() == 2);
+        assertEquals(map.getRoads().size(), 3);
+        assertEquals(map.getWorkers().size(), 2);
         
         /* Step time to let the headquarter assign a courier to the new road */
         Road r = map.getRoad(middlePoint2, endPoint);
@@ -1021,7 +1021,7 @@ public class TestRoads {
         
         map.stepTime();
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
         
         Worker w2 = null;
         
@@ -1099,12 +1099,12 @@ public class TestRoads {
         /* Split road with the courier close to the hq*/
         Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
         
-        assertTrue(hq.getAmount(BEER) == 0);
+        assertEquals(hq.getAmount(BEER), 0);
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, hq.getPosition());
         
         assertNull(courier.getCargo());
-        assertTrue(hq.getAmount(BEER) == 1);
+        assertEquals(hq.getAmount(BEER), 1);
     }
     
     @Test
@@ -1136,7 +1136,7 @@ public class TestRoads {
         Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
         
         assertTrue(road0.needsCourier());
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
         
         List<Worker> workersBefore = new LinkedList<>();
         workersBefore.addAll(map.getWorkers());
@@ -1145,7 +1145,7 @@ public class TestRoads {
         map.stepTime();
         
         /* Let the new courier reach its road */
-        assertTrue(map.getWorkers().size() == 2);
+        assertEquals(map.getWorkers().size(), 2);
         
         /* Find the added courier */
         List<Worker> workersAfter = new LinkedList<>();
@@ -1162,7 +1162,7 @@ public class TestRoads {
         Utils.fastForward(100, map);
         
         assertFalse(road0.needsCourier());
-        assertTrue(map.getWorkers().size() == 2);
+        assertEquals(map.getWorkers().size(), 2);
         assertEquals(road0.getCourier(), w);
     }
 
@@ -1183,13 +1183,13 @@ public class TestRoads {
         Road road0 = map.placeRoad(point2, point3, point4, point5);
 
         assertTrue(road0.needsCourier());
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
         
         /* Step time to let the headquarter send new workers */
         map.stepTime();
         
         assertTrue(road0.needsCourier());
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
     }
 
     @Test
@@ -1210,12 +1210,12 @@ public class TestRoads {
         Point point6 = new Point(12, 4);
         Road road0 = map.placeRoad(point3, point4, point5, point6, point2);
         
-        assertTrue(map.getWorkers().size() == 1);
+        assertEquals(map.getWorkers().size(), 1);
         assertTrue(road0.needsCourier());
 
         map.stepTime();
         
-        assertTrue(map.getWorkers().size() == 2);
+        assertEquals(map.getWorkers().size(), 2);
         assertFalse(road0.needsCourier());
         
         Point point7 = new Point(14, 6);
@@ -1225,11 +1225,11 @@ public class TestRoads {
         Road road1 = map.placeRoad(point2, point7, point8, point9, point10);
 
         assertTrue(road1.needsCourier());
-        assertTrue(map.getWorkers().size() == 2);
+        assertEquals(map.getWorkers().size(), 2);
         
         Utils.fastForward(10, map);
         
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
         assertFalse(road0.needsCourier());
         
         Utils.fastForward(10, map);
@@ -1239,7 +1239,7 @@ public class TestRoads {
         Utils.fastForward(10, map);
 
 
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
     }
 
     @Test
@@ -1251,19 +1251,19 @@ public class TestRoads {
         
         List<Point> path = map.findAutoSelectedRoad(new Point(2, 2), new Point(11, 11), null);
         
-        assertTrue(path.size() == 10);
+        assertEquals(path.size(), 10);
     
         path = map.findAutoSelectedRoad(new Point(11, 11), new Point(2, 2), null);
         
-        assertTrue(path.size() == 10);
+        assertEquals(path.size(), 10);
         
         path = map.findAutoSelectedRoad(new Point(3, 3), new Point(11, 3), null);
         
-        assertTrue(path.size() == 5);
+        assertEquals(path.size(), 5);
     
         path = map.findAutoSelectedRoad(new Point(11, 3), new Point(3, 3), null);
         
-        assertTrue(path.size() == 5);
+        assertEquals(path.size(), 5);
     }
 
     @Test(expected = Exception.class)
@@ -1336,14 +1336,14 @@ public class TestRoads {
         Point m3 = new Point(15, 5);
         map.placeRoad(start, m1, m2, m3, end);
         
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         
         try {
             map.placeFlag(new Flag(m1));
             assertFalse(true);
         } catch (Exception e) {}
 
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         assertNotNull(map.getRoad(start, end));
     }
 
@@ -1364,14 +1364,14 @@ public class TestRoads {
         Point m3 = new Point(15, 5);
         map.placeRoad(start, m1, m2, m3, end);
         
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         
         try {
             map.placeFlag(new Flag(m3));
             assertFalse(true);
         } catch (Exception e) {}
 
-        assertTrue(map.getRoads().size() == 2);
+        assertEquals(map.getRoads().size(), 2);
         assertNotNull(map.getRoad(start, end));
     }
 

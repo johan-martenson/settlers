@@ -126,7 +126,7 @@ public class TestPlacement {
         /* Points on top, sampled */
         assertFalse(possibleHouses.containsKey(new Point(4, 4)));
         assertFalse(possibleHouses.containsKey(new Point(5, 5)));
-        assertTrue(possibleHouses.get(new Point(6, 6)) == MEDIUM);
+        assertEquals(possibleHouses.get(new Point(6, 6)), MEDIUM);
         
         /* Points on right, sampled*/
         assertFalse(possibleHouses.containsKey(new Point(7, 5)));
@@ -393,11 +393,11 @@ public class TestPlacement {
         assertFalse(possibleHouseSizes.containsKey(new Point(8, 2)));
         
         /* Points in front, sampled */
-        assertTrue(possibleHouseSizes.get(new Point(9, 1)) == MEDIUM);
-        assertTrue(possibleHouseSizes.get(new Point(10, 2)) == MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(9, 1)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(10, 2)), MEDIUM);
 
         /* Points on left, sampled */
-//        assertTrue(possibleHouseSizes.get(new Point(7, 1)) == MEDIUM); // WEIRD!!
+//        assertEquals(possibleHouseSizes.get(new Point(7, 1)), MEDIUM); // WEIRD!!
         assertFalse(possibleHouseSizes.containsKey(new Point(6, 2)));
         assertFalse(possibleHouseSizes.containsKey(new Point(5, 3)));
         
@@ -406,7 +406,7 @@ public class TestPlacement {
 
         /* Points on top, sampled */
         assertFalse(possibleHouseSizes.containsKey(new Point(6, 4)));
-        assertTrue (possibleHouseSizes.get(new Point(7, 5)) == MEDIUM);
+        assertEquals (possibleHouseSizes.get(new Point(7, 5)), MEDIUM);
         
         /* Points on right, sampled */
         assertFalse(possibleHouseSizes.containsKey(new Point(8, 4)));
@@ -768,7 +768,7 @@ public class TestPlacement {
             assertFalse(true);
         } catch (Exception e) {}
         
-        assertTrue(map.getBuildings().size() == 1);
+        assertEquals(map.getBuildings().size(), 1);
     }
 
     @Test
@@ -786,7 +786,7 @@ public class TestPlacement {
             assertFalse(true);
         } catch (Exception e) {}
         
-        assertTrue(map.getBuildings().size() == 1);
+        assertEquals(map.getBuildings().size(), 1);
     }
 
     @Test
@@ -804,7 +804,7 @@ public class TestPlacement {
             assertFalse(true);
         } catch (Exception e) {}
 
-        assertTrue(map.getFlags().size() == 2);
+        assertEquals(map.getFlags().size(), 2);
     }
 
     @Test
@@ -822,9 +822,9 @@ public class TestPlacement {
             assertFalse(true);
         } catch (Exception e) {}
 
-        assertTrue(map.getBuildings().size() == 1);
-        assertTrue(map.getFlags().size() == 1);
-        assertTrue(map.getTrees().size() == 1);
+        assertEquals(map.getBuildings().size(), 1);
+        assertEquals(map.getFlags().size(), 1);
+        assertEquals(map.getTrees().size(), 1);
     }
 
     @Test(expected = Exception.class)

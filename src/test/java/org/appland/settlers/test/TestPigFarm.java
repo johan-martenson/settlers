@@ -93,7 +93,7 @@ public class TestPigFarm {
         Utils.fastForward(2, map);
 
         /* Verify that there was a pig breeder added */
-        assertTrue(map.getWorkers().size() == 3);
+        assertEquals(map.getWorkers().size(), 3);
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), PigBreeder.class);
     }

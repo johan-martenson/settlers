@@ -48,23 +48,23 @@ public class InitialModelTest {
         /* Verify that the initial game instance is valid */
         assertNotNull(game);
 
-        assertTrue(2 == game.getPlayers().size());
+        assertEquals(2, game.getPlayers().size());
 
         /* Verify that the number of players are correct */
         Player player = game.getPlayers().get(0);
 
         /* Verify that there is only a single storage when the game begins */
-        assertTrue(1 == player.getStorages().size());
+        assertEquals(1, player.getStorages().size());
 
         /* Verify that the initial inventory is correct */
         Storage storage = player.getStorages().get(0);
 
-        assertTrue(storage.getAmount(Material.SHIELD) == 0);
-        assertTrue(storage.getAmount(Material.SWORD) == 0);
-        assertTrue(storage.getAmount(Material.PRIVATE) == 0);
-        assertTrue(storage.getAmount(Material.SERGEANT) == 0);
-        assertTrue(storage.getAmount(Material.GENERAL) == 0);
-        assertTrue(storage.getAmount(Material.BEER) == 0);
-        assertTrue(storage.getAmount(Material.GOLD) == 0);
+        assertEquals(storage.getAmount(Material.SHIELD), 0);
+        assertEquals(storage.getAmount(Material.SWORD), 0);
+        assertEquals(storage.getAmount(Material.PRIVATE), 0);
+        assertEquals(storage.getAmount(Material.SERGEANT), 0);
+        assertEquals(storage.getAmount(Material.GENERAL), 0);
+        assertEquals(storage.getAmount(Material.BEER), 0);
+        assertEquals(storage.getAmount(Material.GOLD), 0);
     }
 }
