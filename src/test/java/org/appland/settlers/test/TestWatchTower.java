@@ -268,9 +268,6 @@ public class TestWatchTower {
         Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
         
         assertFalse(map.getBorders().get(0).contains(new Point(5, 25)));
-
-        System.out.println("BORDER: " + map.getBorders().get(0));
-        
         assertTrue(map.getBorders().get(0).contains(new Point(5, 39)));
     }
 
@@ -391,8 +388,6 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), watchTower0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), watchTower0, map);
 
-        System.out.println("BORDER: " + map.getBorders().get(0));
-        
         assertTrue(map.getBorders().get(0).contains(new Point(6, 38)));
     }
     
