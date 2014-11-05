@@ -352,8 +352,8 @@ public class Building implements Actor, EndPoint, Piece {
     @Override
     public void stepTime() {
         log.log(Level.FINE, "Stepping time in building");
-
-        if (underConstruction()) {
+        
+        if (underConstruction()) {            
             if (countdown.reachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
@@ -469,7 +469,7 @@ public class Building implements Actor, EndPoint, Piece {
         HouseSize hs                     = getClass().getAnnotation(HouseSize.class);
         Material[] materialsArray        = hs.material();
         Map<Material, Integer> materials = createEmptyMaterialIntMap();
-        
+
         if (materialsArray.length != 0) {
             for (Material m : materialsArray) {
                 int amount = materials.get(m);
