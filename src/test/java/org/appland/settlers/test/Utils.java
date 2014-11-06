@@ -276,7 +276,7 @@ public class Utils {
     }
 
     static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
-        for (int i = 0; i < 4000; i++) {
+        for (int i = 0; i < 10000; i++) {
             if (building.ready()) {
                 break;
             }

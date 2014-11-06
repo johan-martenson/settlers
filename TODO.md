@@ -19,10 +19,13 @@ RE-FACTOR
 
 *  Remove depositWorker and use putCargo instead
 
+*  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2
 
 
 TEST
 ====
+
+*  Find a way to test the size of each building
 
 *  Test border is drawn for inside donut shaped land
 
