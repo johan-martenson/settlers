@@ -164,7 +164,7 @@ TO IMPLEMENT
 
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
-*  Implement GuardHouse, WatchTower, Fortress, Hunter, MetalWorks, Shipyard, Harbour
+*  Implement Hunter, MetalWorks, Shipyard, Harbour, Ship
 
 *  Add messages
 
@@ -552,4 +552,4 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  farmer doesn't pass by the flag on the way back from planting/harvesting - DONE
 
-
+*  Implement GuardHouse, WatchTower, Fortress - DONE
