@@ -14,6 +14,7 @@ public class Road {
     private Donkey      donkey;
     private List<Point> steps;
     private boolean     needsCourier;
+    private Player      player;
 
     Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
         if (roadStepsTooLong(wayPoints)) {
@@ -195,5 +196,13 @@ public class Road {
         } else {
             return start.getPosition();
         }
+    }
+
+    public Object getPlayer() {
+        return player;
+    }
+
+    void setPlayer(Player p) {
+        player = p;
     }
 }

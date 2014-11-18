@@ -11,9 +11,10 @@ public class Flag implements EndPoint, Piece {
 
     private final List<Cargo> stackedCargo;
 
-    private Point   position;
-    private int     geologistsCalled;
-    private int     scoutsCalled;
+    private Point  position;
+    private int    geologistsCalled;
+    private int    scoutsCalled;
+    private Player player;
 
     public Flag(Point p) {
         position          = p;
@@ -115,5 +116,13 @@ public class Flag implements EndPoint, Piece {
 
     boolean needsScout() {
         return scoutsCalled > 0;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    void setPlayer(Player p) {
+        player = p;
     }
 }

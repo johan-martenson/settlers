@@ -21,9 +21,17 @@ RE-FACTOR
 
 *  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2
 
+*  Remove GameMap::placeFlag(Flag)
+
+*  Remove Game, Controller
+
+*  Remove storages from Player
+
 
 TEST
 ====
+
+*  Test that the new GameMap::place*(Player, ...) still places objects directly
 
 *  Find a way to test the size of each building
 

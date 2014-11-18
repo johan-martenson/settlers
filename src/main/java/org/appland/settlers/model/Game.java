@@ -19,7 +19,7 @@ public class Game {
         /* Create initial players */
         int i;
         for (i = 0; i < nrPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player(""));
         }
     }
 

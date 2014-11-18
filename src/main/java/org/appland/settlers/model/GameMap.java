@@ -43,6 +43,7 @@ public class GameMap {
     private List<Point>             fieldOfView;
     private List<Point>             discoveredLand;
     private List<Worker>            workersToAdd;
+    private List<Player>            players;
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -111,24 +112,28 @@ public class GameMap {
             throw new Exception("Can't create too small map (" + width + "x" + height + ")");
         }
         
-        buildings             = new ArrayList<>();
-        buildingsToRemove     = new LinkedList<>();
-        roads                 = new ArrayList<>();
-        flags                 = new ArrayList<>();
-        signs                 = new ArrayList<>();
-        signsToRemove         = new LinkedList<>();
-        workers               = new ArrayList<>();
-        workersToRemove       = new LinkedList<>();
-        terrain               = new Terrain(width, height);
-        trees                 = new ArrayList<>();
-        stones                = new ArrayList<>();
-        crops                 = new ArrayList<>();
-        discoveredLand        = new LinkedList<>();
-        workersToAdd          = new LinkedList<>();
-        ownedLands            = new LinkedList<>();
+        buildings         = new ArrayList<>();
+        buildingsToRemove = new LinkedList<>();
+        roads             = new ArrayList<>();
+        flags             = new ArrayList<>();
+        signs             = new ArrayList<>();
+        signsToRemove     = new LinkedList<>();
+        workers           = new ArrayList<>();
+        workersToRemove   = new LinkedList<>();
+        terrain           = new Terrain(width, height);
+        trees             = new ArrayList<>();
+        stones            = new ArrayList<>();
+        crops             = new ArrayList<>();
+        discoveredLand    = new LinkedList<>();
+        workersToAdd      = new LinkedList<>();
+        ownedLands        = new LinkedList<>();
+        players           = new LinkedList<>();
 
-        fullGrid            = buildFullGrid();
-        pointToGameObject   = populateMapPoints(fullGrid);
+        fullGrid          = buildFullGrid();
+        pointToGameObject = populateMapPoints(fullGrid);
+
+        /* Add default player */
+        players.add(new Player(theLeader));
     }
 
     public void stepTime() {
@@ -197,6 +202,11 @@ public class GameMap {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
 
+        /* Verify that the house's player is valid if it is set */
+        if (house.getPlayer() != null && !players.contains(house.getPlayer())) {
+            throw new Exception("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
+        }
+        
         /* Handle the first building separately */
         if (buildings.isEmpty()) {
             if (! (house instanceof Headquarter)) {
@@ -239,6 +249,9 @@ public class GameMap {
         
         buildings.add(house);
 
+        /* Set the player in the building */
+        house.setPlayer(players.get(0));
+        
         /* Initialize the border if it's the first house and it's a headquarter 
            or if it's a military building
         */
@@ -377,9 +390,14 @@ public class GameMap {
         Flag endFlag   = getFlagAtPoint(end);
 
         Road road = new Road(startFlag, wayPoints, endFlag);
-        
+
+        /* Set the default player if there is only one player */
+        if (players.size() == 1) {
+            road.setPlayer(players.get(0));
+        }
+
         roads.add(road);
-    
+
         addRoadToMapPoints(road);
         
         return road;
@@ -445,6 +463,16 @@ public class GameMap {
         }
         
         return null;
+    }
+
+    public Flag placeFlag(Player player, Point p) throws Exception {
+
+        /* Verify that the player is valid */
+        if (!players.contains(player)) {
+            throw new Exception("Can't place flag at " + p + " because the player is invalid.");
+        }
+
+        return placeFlag(new Flag(p));
     }
 
     public Flag placeFlag(Point p) throws Exception {
@@ -571,6 +599,11 @@ public class GameMap {
             flags.add(f);
         }
 
+        /* Set the default player if there is only one player */
+        if (players.size() == 1) {
+            f.setPlayer(players.get(0));
+        }
+        
         return f;
     }
 
@@ -1533,5 +1566,15 @@ public class GameMap {
         }
 
         fieldOfView = calculateFieldOfView(discoveredLand);
+    }
+
+    public void placeRoad(Player player1, Point... points) throws Exception {
+        if (!players.contains(player1)) {
+            throw new Exception("Can't place road at " + points + " because the player is invalid.");
+        }
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

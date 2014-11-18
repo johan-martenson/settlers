@@ -23,6 +23,7 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements Actor, EndPoint, Piece {
+    private Player player;
 
     enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -71,6 +72,12 @@ public class Building implements Actor, EndPoint, Piece {
         countdown.countFrom(getConstructionCountdown());
 
         state = UNDER_CONSTRUCTION;
+    }
+    
+    public Building(Player p) {
+        this();
+
+        player = p;
     }
     
     void setFlag(Flag flagAtPoint) {
@@ -686,5 +693,13 @@ public class Building implements Actor, EndPoint, Piece {
 
     public boolean isProductionEnabled() {
         return productionEnabled;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    void setPlayer(Player p) {
+        player = p;
     }
 }

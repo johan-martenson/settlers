@@ -14,14 +14,21 @@ public class Player {
 
     /* Buildings */
     List<Storage> storages;
+    private String name;
 
-    public Player() {
+    public Player(String n) {
         storages = new ArrayList<>();
 
         storages.add(new Storage());
+
+        name = n;
     }
 
     public List<Storage> getStorages() {
         return storages;
+    }
+
+    public String getName() {
+        return name;
     }
 }

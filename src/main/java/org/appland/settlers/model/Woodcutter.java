@@ -7,4 +7,12 @@ import static org.appland.settlers.model.Size.SMALL;
 @HouseSize(size = SMALL)
 @RequiresWorker(workerType = Material.WOODCUTTER_WORKER)
 public class Woodcutter extends Building {
+
+    public Woodcutter(Player p) {
+        super(p);
+    }
+
+    public Woodcutter() {
+        super();
+    }
 }
