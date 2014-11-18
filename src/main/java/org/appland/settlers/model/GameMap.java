@@ -104,6 +104,12 @@ public class GameMap {
         }
     }
 
+    public GameMap(List<Player> playersToSet, int w, int h) throws Exception {
+        this(w, h);
+
+        players = playersToSet;
+    }
+
     public GameMap(int w, int h) throws Exception {
         width = w;
         height = h;

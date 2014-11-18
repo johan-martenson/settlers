@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.test;
 
+import java.util.LinkedList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -168,5 +170,23 @@ public class TestDefaultPlayer {
         /* Place flag */
         Point point1 = new Point(15, 3);
         map.placeFlag(player1, point1);
+    }
+
+    @Test
+    public void testNoDefaultPlayerIsCreatedWhenExplicitPlayersAreChosen() throws Exception {
+
+        /* Create player list */
+        List<Player> players = new LinkedList<>();
+        Player player0       = new Player("Player 0");
+        players.add(player0);
+
+        /* Create map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Verify that there is only one player */
+        assertEquals(map.getPlayers().size(), 1);
+
+        /* Verify that the player is correct */
+        assertEquals(map.getPlayers().get(0), player0);
     }
 }

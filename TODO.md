@@ -21,7 +21,6 @@ RE-FACTOR
 
 *  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2
 
-*  Remove GameMap::placeFlag(Flag)
 
 
 
@@ -562,3 +561,5 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove storages from Player - DONE
 
 *  Remove Game, Controller - DONE
+
+*  Remove GameMap::placeFlag(Flag) - DONE
