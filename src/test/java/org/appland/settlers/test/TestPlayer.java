@@ -40,4 +40,21 @@ public class TestPlayer {
         /* Verify that the name is set */
         assertEquals(player0.getName(), "Player 0");
     }
+
+    @Test
+    public void testCreatePlayer() {
+        
+        /* Create player 'player one' */
+        Player p = new Player("Player one");
+    }
+    
+    @Test
+    public void testCreateHouseWithPlayer() {
+
+        /* Create player 'player one' */
+        Player p = new Player("Player one");
+        
+        /* Create house belonging to player one */
+        Woodcutter woodcutter0 = new Woodcutter(p);
+    }
 }
