@@ -119,15 +119,15 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag middleFlag = new Flag(new Point(7, 7));
-        Flag endFlag = new Flag(new Point(10, 10));
+        Point middleFlag = new Point(7, 7);
+        Point endFlag = new Point(10, 10);
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(3, 3);
 
         map.placeBuilding(wc, wcPoint);
         map.placeFlag(middleFlag);
 
-        map.placeAutoSelectedRoad(wc.getFlag(), middleFlag);
+        map.placeAutoSelectedRoad(wc.getFlag().getPosition(), middleFlag);
 
         map.placeFlag(endFlag);
 
@@ -141,7 +141,7 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeFlag(new Flag(new Point(3, 3)));
+        map.placeFlag(new Point(3, 3));
         map.placeAutoSelectedRoad(new Flag(new Point(3, 3)), new Flag(new Point(3, 3)));
     }
 
@@ -254,19 +254,19 @@ public class TestTransportation {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag away = new Flag(new Point(6, 2));
-        Flag start = new Flag(new Point(2, 2));
+        Point away = new Point(6, 2);
+        Point start = new Point(2, 2);
         Flag end = map.placeFlag(new Point(4, 2));
         
         Point middle = new Point(3, 3);
 
         map.placeFlag(start);
-        map.placeFlag(away);
+        Flag flag = map.placeFlag(away);
 
-        Road targetRoad = map.placeRoad(start.getPosition(), middle, end.getPosition());
+        Road targetRoad = map.placeRoad(start, middle, end.getPosition());
         Courier worker = new Courier(map);
 
-        map.placeWorker(worker, away);
+        map.placeWorker(worker, flag);
 
         worker.assignToRoad(targetRoad);
     }
@@ -334,21 +334,19 @@ public class TestTransportation {
 
     @Test
     public void testDeliverWithHandover() throws Exception {
-        GameMap map = new GameMap(40, 40);
-        Storage storage = new Headquarter();
-        Point hqPoint = new Point(6, 4);
+        GameMap map       = new GameMap(40, 40);
+        Storage storage   = new Headquarter();
+        Point hqPoint     = new Point(6, 4);
         Point middlePoint = new Point(10, 10); // hq to middle 6 steps
-        Point endPoint = new Point(10, 14); // end to middle 4 steps
+        Point endPoint    = new Point(10, 14); // end to middle 4 steps
         map.placeBuilding(storage, hqPoint);
-        Flag middleFlag = new Flag(middlePoint);
-        Flag endFlag = new Flag(endPoint);
         Courier mdlToEndCr = new Courier(map);
-        Courier hqToMdlCr = new Courier(map);
+        Courier hqToMdlCr  = new Courier(map);
 
-        map.placeFlag(middleFlag);
-        map.placeFlag(endFlag);
+        Flag middleFlag = map.placeFlag(middlePoint);
+        Flag endFlag = map.placeFlag(endPoint);
 
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag().getPosition(), middlePoint);
         Road middleToEndRoad = map.placeRoad(middlePoint, middlePoint.upRight(), middlePoint.upRight().upLeft(), endPoint.downLeft(), endPoint);
 
         map.placeWorker(hqToMdlCr, middleFlag);
@@ -422,12 +420,11 @@ public class TestTransportation {
         Storage storage = new Headquarter();
         Point hqPoint = new Point(5, 5);
         Point middlePoint = new Point(11, 5);
-        Flag middleFlag = new Flag(middlePoint);
 
         map.placeBuilding(storage, hqPoint);
-        map.placeFlag(middleFlag);
+        map.placeFlag(middlePoint);
 
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag(), middleFlag);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(storage.getFlag().getPosition(), middlePoint);
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
@@ -455,17 +452,17 @@ public class TestTransportation {
     @Test
     public void testEmptyRoadNeedsCourier() throws Exception {
         GameMap map = new GameMap(20, 20);
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(5, 1));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(5, 1);
         Point middle = new Point(3, 1);
         
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
 
-        Road r = map.placeRoad(f1.getPosition(), middle, f2.getPosition());
+        Road r = map.placeRoad(point1, middle, point2);
 
         assertTrue(r.needsCourier());
     }

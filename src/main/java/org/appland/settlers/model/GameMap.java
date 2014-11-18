@@ -479,7 +479,7 @@ public class GameMap {
         return placeFlag(new Flag(p));
     }
     
-    public Flag placeFlag(Flag f) throws Exception {
+    private Flag placeFlag(Flag f) throws Exception {
         return doPlaceFlag(f, true);
     }
     

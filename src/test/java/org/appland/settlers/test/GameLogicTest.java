@@ -90,14 +90,14 @@ public class GameLogicTest {
         GameMap map   = new GameMap(30, 30);
         Sawmill sm    = new Sawmill();
         Point smPoint = new Point(5, 5);
-        Flag f        = new Flag(new Point(10, 10));
+        Point fp      = new Point(10, 10);
         Courier courier     = new Courier(map);
         Road r;
                 
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeFlag(f);
+        Flag f = map.placeFlag(fp);
         map.placeBuilding(sm, smPoint);
         r = map.placeAutoSelectedRoad(f, sm.getFlag());
         map.placeWorker(courier, f);
@@ -137,7 +137,7 @@ public class GameLogicTest {
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
         GameMap map   = new GameMap(30, 30);
         Woodcutter wc = new Woodcutter();
-        Flag src      = new Flag(new Point(5, 5));
+        Point srcPnt  = new Point(5, 5);
         Point wcPoint = new Point(11, 5);
         Courier w     = new Courier(map);
         Cargo c;
@@ -146,7 +146,7 @@ public class GameLogicTest {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(), hqPoint);
         
-        map.placeFlag(src);
+        Flag src = map.placeFlag(srcPnt);
         map.placeBuilding(wc, wcPoint);
 
         r = map.placeAutoSelectedRoad(src, wc.getFlag());

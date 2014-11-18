@@ -60,15 +60,15 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
 
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
 
-        Road r = map.placeAutoSelectedRoad(f1, f2);
+        Road r = map.placeAutoSelectedRoad(point1, point2);
 
-        assertNull(map.findWayWithExistingRoads(f1.getPosition(), new Point(3, 3)));
+        assertNull(map.findWayWithExistingRoads(point1, new Point(3, 3)));
     }
 
     @Test
@@ -78,19 +78,19 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
 
-        map.placeAutoSelectedRoad(f1, f2);
+        map.placeAutoSelectedRoad(point1, point2);
         
-        List<Point> way = map.findWayWithExistingRoads(f1.getPosition(), f2.getPosition());
+        List<Point> way = map.findWayWithExistingRoads(point1, point2);
         
         assertEquals(way.size(), 3);
-        assertTrue(way.get(0).equals(f1.getPosition()));
-        assertTrue(way.get(2).equals(f2.getPosition()));
+        assertTrue(way.get(0).equals(point1));
+        assertTrue(way.get(2).equals(point2));
     }
 
     @Test
@@ -182,19 +182,19 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        Flag flag0 = map.placeFlag(point1);
+        map.placeFlag(point2);
 
-        Road r = map.placeAutoSelectedRoad(f1, f2);
+        Road r = map.placeAutoSelectedRoad(point1, point2);
 
         assertTrue(r.needsCourier());
 
         Courier c = new Courier(map);
 
-        map.placeWorker(c, f1);
+        map.placeWorker(c, flag0);
         c.assignToRoad(r);
         
         assertFalse(r.needsCourier());
@@ -211,16 +211,16 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        Flag flag0 = map.placeFlag(point1);
+        map.placeFlag(point2);
 
         Courier c = new Courier(map);
 
-        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
-        map.placeWorker(c, f1);
+        Road r = map.placeRoad(point1, point2);
+        map.placeWorker(c, flag0);
         c.assignToRoad(r);
     }
 
@@ -231,19 +231,19 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        Flag flag0 = map.placeFlag(point1);
+        map.placeFlag(point2);
 
         Courier c  = new Courier(map);
         Courier c2 = new Courier(map);
 
-        Road r = map.placeRoad(f1.getPosition(), f2.getPosition());
+        Road r = map.placeRoad(point1, point2);
         
-        map.placeWorker(c, f1);
-        map.placeWorker(c2, f1);
+        map.placeWorker(c, flag0);
+        map.placeWorker(c2, flag0);
         c.assignToRoad(r);
         
         c2.assignToRoad(r);
@@ -287,21 +287,21 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag  start1      = new Flag(new Point(1, 1));
-        Flag  end1        = new Flag(new Point(3, 3));
-        Flag  start2      = new Flag(new Point(1, 3));
-        Flag  end2        = new Flag(new Point(3, 1));
+        Point start1      = new Point(1, 1);
+        Point end1        = new Point(3, 3);
+        Point start2      = new Point(1, 3);
+        Point end2        = new Point(3, 1);
         Point middlePoint = new Point(2, 2);
         
         List<Point> wayPoints1 = new ArrayList<>();
         List<Point> wayPoints2 = new ArrayList<>();
-	wayPoints1.add(start1.getPosition());
+	wayPoints1.add(start1);
         wayPoints1.add(middlePoint);
-        wayPoints1.add(end1.getPosition());
+        wayPoints1.add(end1);
         
-	wayPoints2.add(start2.getPosition());
+	wayPoints2.add(start2);
         wayPoints2.add(middlePoint);
-        wayPoints2.add(end2.getPosition());
+        wayPoints2.add(end2);
 
         map.placeFlag(start1);
         map.placeFlag(start2);
@@ -319,28 +319,28 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag  start       = new Flag(new Point(1, 1));
-        Flag  end         = new Flag(new Point(3, 3));
+        Point start       = new Point(1, 1);
+        Point end         = new Point(3, 3);
         Point middlePoint = new Point(2, 2);
         
         List<Point> wayPoints = new ArrayList<>();
-	wayPoints.add(start.getPosition());
+	wayPoints.add(start);
         wayPoints.add(middlePoint);
-	wayPoints.add(end.getPosition());
+	wayPoints.add(end);
         
         map.placeFlag(start);
         map.placeFlag(end);
 
         map.placeRoad(wayPoints);
 
-	Road r = map.getRoad(start.getPosition(), end.getPosition());
+	Road r = map.getRoad(start, end);
         
         wayPoints = r.getWayPoints();
         
 	assertEquals(wayPoints.size(), 3);
-	assertTrue(wayPoints.get(0).equals(start.getPosition()));
+	assertTrue(wayPoints.get(0).equals(start));
 	assertTrue(wayPoints.get(1).equals(middlePoint));
-	assertTrue(wayPoints.get(2).equals(end.getPosition()));
+	assertTrue(wayPoints.get(2).equals(end));
     }
 
     @Test(expected = Exception.class)
@@ -350,14 +350,14 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag  start       = new Flag(new Point(1, 1));
-        Flag  end         = new Flag(new Point(4, 4));
+        Point start       = new Point(1, 1);
+        Point end         = new Point(4, 4);
         Point middlePoint = new Point(2, 2);
         
         List<Point> middlePoints = new ArrayList<>();
-        middlePoints.add(start.getPosition());
+        middlePoints.add(start);
         middlePoints.add(middlePoint);
-        middlePoints.add(end.getPosition());
+        middlePoints.add(end);
         
         map.placeFlag(start);
         map.placeFlag(end);
@@ -372,11 +372,11 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f = new Flag(new Point(3, 5));
+        Point point1 = new Point(3, 5);
 
-        map.placeFlag(f);
+        map.placeFlag(point1);
     
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(f.getPosition());
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point1);
         
         assertEquals(points.size(), 6);
         assertTrue(points.contains(new Point(2, 6)));
@@ -486,18 +486,18 @@ public class TestRoads {
         GameMap map = new GameMap(30, 30);
 
         map.placeBuilding(new Headquarter(), new Point(16, 10));
-        map.placeFlag(new Flag(new Point(16, 12)));
-        map.placeFlag(new Flag(new Point(20, 12)));
-        map.placeFlag(new Flag(new Point(12, 12)));
+        map.placeFlag(new Point(16, 12));
+        map.placeFlag(new Point(20, 12));
+        map.placeFlag(new Point(12, 12));
         map.placeRoad(Arrays.asList(new Point[] {new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)}));
 
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(16, 12));
     
         assertFalse(points.contains(new Point(16, 14)));
 
-        map.placeFlag(new Flag(new Point(21, 25)));
-        map.placeFlag(new Flag(new Point(25, 25)));
-        map.placeFlag(new Flag(new Point(17, 25)));
+        map.placeFlag(new Point(21, 25));
+        map.placeFlag(new Point(25, 25));
+        map.placeFlag(new Point(17, 25));
         map.placeRoad(Arrays.asList(new Point[] {new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)}));
 
         assertFalse(points.contains(new Point(21, 23)));
@@ -602,13 +602,13 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(4, 2));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(4, 2);
 
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
 
-        Road r = map.placeRoad(f1.getPosition(), new Point(3, 1), f2.getPosition());
+        Road r = map.placeRoad(point1, new Point(3, 1), point2);
     }
 
     @Test (expected = Exception.class)
@@ -641,12 +641,12 @@ public class TestRoads {
     public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
         GameMap map = new GameMap(20, 20);
         map.placeBuilding(new Headquarter(), new Point(5, 5));
-        map.placeFlag(new Flag(new Point(12, 4)));
-        map.placeFlag(new Flag(new Point(14, 6)));
+        map.placeFlag(new Point(12, 4));
+        map.placeFlag(new Point(14, 6));
         map.placeRoad(new Point(12, 4), new Point(13, 5), new Point(14, 6));
-        map.placeFlag(new Flag(new Point(16, 8)));
+        map.placeFlag(new Point(16, 8));
         map.placeRoad(new Point(14, 6), new Point(15, 7), new Point(16, 8));
-        map.placeFlag(new Flag(new Point(16, 4)));
+        map.placeFlag(new Point(16, 4));
         map.placeRoad(new Point(16, 4), new Point(15, 5), new Point(14, 6));
     }
 
@@ -657,8 +657,8 @@ public class TestRoads {
         Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(), point0);
         
-        map.placeFlag(new Flag(new Point(9, 5)));
-        map.placeFlag(new Flag(new Point(13, 9)));
+        map.placeFlag(new Point(9, 5));
+        map.placeFlag(new Point(13, 9));
         
         Point start = new Point(9, 5);
         Point end = new Point(13, 9);
@@ -669,7 +669,7 @@ public class TestRoads {
         
         assertEquals(map.getRoads().size(), 2);
         
-        map.placeFlag(new Flag(m2));
+        map.placeFlag(m2);
 
         assertEquals(map.getRoads().size(), 3);
         List<Road> roads = new ArrayList<>();
@@ -719,7 +719,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Split road */
-        map.placeFlag(new Flag(middlePoint2));
+        map.placeFlag(middlePoint2);
 
         assertTrue(courier.isWalkingToRoad());
         assertTrue(courier.getAssignedRoad().getStart().equals(middlePoint2) ||
@@ -772,7 +772,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), hq.getPosition());
         
         /* Split road with the courier on the road further away from the hq */
-        map.placeFlag(new Flag(middlePoint2));
+        map.placeFlag(middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -830,7 +830,7 @@ public class TestRoads {
         
         /* Split road with the courier on the new road further away from the 
            headquarter */
-        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+        Flag middleFlag = map.placeFlag(middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -904,7 +904,7 @@ public class TestRoads {
         
         /* Split road with the courier on the new road closer to the 
            headquarter */
-        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+        Flag middleFlag = map.placeFlag(middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -961,7 +961,7 @@ public class TestRoads {
         assertTrue(courier.isWalkingToRoad());
                 
         /* Split road */
-        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+        Flag middleFlag = map.placeFlag(middlePoint2);
 
         assertTrue(courier.isWalkingToRoad());
         assertTrue(courier.getTarget().equals(middlePoint1) ||
@@ -1003,7 +1003,7 @@ public class TestRoads {
         /* Split road */
         assertEquals(map.getRoads().size(), 2);
         
-        map.placeFlag(new Flag(middlePoint2));
+        map.placeFlag(middlePoint2);
 
         assertEquals(map.getRoads().size(), 3);
         assertEquals(map.getWorkers().size(), 2);
@@ -1097,7 +1097,7 @@ public class TestRoads {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
         
         /* Split road with the courier close to the hq*/
-        Flag middleFlag = map.placeFlag(new Flag(middlePoint2));
+        Flag middleFlag = map.placeFlag(middlePoint2);
         
         assertEquals(hq.getAmount(BEER), 0);
         
@@ -1111,11 +1111,11 @@ public class TestRoads {
     public void testRoadCanNotOverlapExistingFlag() throws Exception {
         GameMap map = new GameMap(20, 20);
         map.placeBuilding(new Headquarter(), new Point(5, 5));
-        map.placeFlag(new Flag(new Point(10, 4)));
-        map.placeFlag(new Flag(new Point(13, 7)));
+        map.placeFlag(new Point(10, 4));
+        map.placeFlag(new Point(13, 7));
         map.placeRoad(new Point(10, 4), new Point(11, 5), new Point(12, 6), new Point(13, 7));
-        map.placeFlag(new Flag(new Point(14, 4)));
-        map.placeFlag(new Flag(new Point(9, 7)));
+        map.placeFlag(new Point(14, 4));
+        map.placeFlag(new Point(9, 7));
 
         thrown.expect(Exception.class);
         map.placeRoad(new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
@@ -1326,8 +1326,8 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        map.placeFlag(new Flag(new Point(9, 5)));
-        map.placeFlag(new Flag(new Point(17, 5)));
+        map.placeFlag(new Point(9, 5));
+        map.placeFlag(new Point(17, 5));
         
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
@@ -1339,7 +1339,7 @@ public class TestRoads {
         assertEquals(map.getRoads().size(), 2);
         
         try {
-            map.placeFlag(new Flag(m1));
+            map.placeFlag(m1);
             assertFalse(true);
         } catch (Exception e) {}
 
@@ -1354,8 +1354,8 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(), point0);
         
-        map.placeFlag(new Flag(new Point(9, 5)));
-        map.placeFlag(new Flag(new Point(17, 5)));
+        map.placeFlag(new Point(9, 5));
+        map.placeFlag(new Point(17, 5));
         
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
@@ -1367,7 +1367,7 @@ public class TestRoads {
         assertEquals(map.getRoads().size(), 2);
         
         try {
-            map.placeFlag(new Flag(m3));
+            map.placeFlag(m3);
             assertFalse(true);
         } catch (Exception e) {}
 

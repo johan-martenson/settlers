@@ -564,9 +564,9 @@ public class TestPlacement {
         
         map.placeBuilding(wc, wcPoint);
 
-        Flag f = new Flag(new Point(6, 2));
+        Point point0 = new Point(6, 2);
         
-        map.placeFlag(f);
+        map.placeFlag(point0);
     }
 
     @Test(expected=Exception.class)
@@ -581,9 +581,9 @@ public class TestPlacement {
         
         map.placeBuilding(wc, wcPoint);
 
-        Flag f = new Flag(new Point(6, 4));
+        Point point0 = new Point(6, 4);
         
-        map.placeFlag(f);
+        map.placeFlag(point0);
     }
 
     @Test(expected=Exception.class) 
@@ -595,9 +595,9 @@ public class TestPlacement {
         
         Woodcutter wc = new Woodcutter();
         Point wcPoint = new Point(6, 4);
-        Flag f        = new Flag(new Point(6, 4));
+        Point point0  = new Point(6, 4);
         
-        map.placeFlag(f);
+        map.placeFlag(point0);
 
         map.placeBuilding(wc, wcPoint);
     }

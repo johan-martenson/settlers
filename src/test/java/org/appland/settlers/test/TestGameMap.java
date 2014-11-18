@@ -83,11 +83,11 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(1, 1));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(1, 1);
         
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
     }
     
     @Test(expected=Exception.class)
@@ -95,13 +95,13 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag f1 = new Flag(new Point(1, 1));
+        Point point1 = new Point(1, 1);
         
-        map.placeFlag(f1);
+        map.placeFlag(point1);
         
-        f1.getPosition().x = 3;
+        point1.x = 3;
         
-        map.placeFlag(f1);
+        map.placeFlag(point1);
     }
     
     @Test(expected=Exception.class)
@@ -109,13 +109,13 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(1, 1));
+        Point point1 = new Point(1, 1);
+        Point point2 = new Point(1, 1);
         
-        map.placeFlag(f1);
-        map.placeFlag(f2);
+        map.placeFlag(point1);
+        map.placeFlag(point2);
         
-        Road r = map.placeAutoSelectedRoad(f1, f2);
+        Road r = map.placeAutoSelectedRoad(point1, point2);
     }
     
     @Test(expected=Exception.class)
@@ -134,11 +134,11 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag f = new Flag(new Point(1, 1));
+        Point point1 = new Point(1, 1);
         
-        map.placeFlag(f);
+        map.placeFlag(point1);
         
-        map.findWayWithExistingRoads(f.getPosition(), f.getPosition());
+        map.findWayWithExistingRoads(point1, point1);
     }
       
     @Test
@@ -200,17 +200,17 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);
         
-        Flag    f1        = new Flag(new Point(1, 1));
+        Point   point1    = new Point(1, 1);
         Farm    farm      = new Farm();
         Point   farmPoint = new Point(3, 3);
         
-        map.placeFlag(f1);
+        Flag flag0 = map.placeFlag(point1);
         map.placeBuilding(farm, farmPoint);
 
         List<Flag> flags = map.getFlags();
 
         assertEquals(flags.size(), 3);
-        assertTrue(flags.contains(f1));
+        assertTrue(flags.contains(flag0));
         assertTrue(flags.contains(farm.getFlag()));
     }
 
@@ -230,9 +230,9 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(), hqPoint);        
         
-        Flag    f   = new Flag(new Point(4, 7));
+        Point point0 = new Point(4, 7);
 
-        map.placeFlag(f);
+        map.placeFlag(point0);
     }
 
     @Test
