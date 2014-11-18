@@ -11,6 +11,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -35,7 +36,7 @@ public class TestSeveralPlayers {
         List<Player> players = new LinkedList<>();
         players.add(new Player("Player 0"));
 
-        /* Create game map choosing no players */
+        /* Create game map choosing one players */
         GameMap map = new GameMap(players, 20, 20);
 
         /* Verify that there is one player in the game map */
@@ -43,5 +44,24 @@ public class TestSeveralPlayers {
 
         /* Verify that the one player is correct */
         assertEquals(map.getPlayers().get(0), players.get(0));
+    }
+
+    @Test
+    public void testChooseTwoPlayer() throws Exception {
+
+        /* Create player list with two players */
+        List<Player> players = new LinkedList<>();
+        players.add(new Player("Player 0"));
+        players.add(new Player("Player 1"));
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Verify that there is one player in the game map */
+        assertEquals(map.getPlayers().size(), 2);
+
+        /* Verify that the two players are correct */
+        assertTrue(map.getPlayers().contains(players.get(0)));
+        assertTrue(map.getPlayers().contains(players.get(1)));
     }
 }
