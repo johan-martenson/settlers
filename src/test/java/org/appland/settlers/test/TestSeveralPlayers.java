@@ -5,11 +5,10 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
+import java.util.LinkedList;
+import java.util.List;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -18,7 +17,17 @@ import org.junit.Test;
  * @author johan
  */
 public class TestSeveralPlayers {
-    
+
+    @Test(expected = Exception.class)
+    public void testChooseNoPlayers() throws Exception {
+
+        /* Create empty player list */
+        List<Player> players = new LinkedList<>();
+
+        /* Create game map choosing no players */
+        GameMap map = new GameMap(players, 20, 20);
+    }
+
     @Test
     public void testCreatePlayer() {
         

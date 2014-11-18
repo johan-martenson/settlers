@@ -107,6 +107,10 @@ public class GameMap {
     public GameMap(List<Player> playersToSet, int w, int h) throws Exception {
         this(w, h);
 
+        if (playersToSet.isEmpty()) {
+            throw new Exception("Can't create game map with no players");
+        }
+        
         players = playersToSet;
     }
 
