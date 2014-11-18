@@ -23,9 +23,6 @@ RE-FACTOR
 
 *  Remove GameMap::placeFlag(Flag)
 
-*  Remove Game, Controller
-
-*  Remove storages from Player
 
 
 TEST
@@ -561,3 +558,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  farmer doesn't pass by the flag on the way back from planting/harvesting - DONE
 
 *  Implement GuardHouse, WatchTower, Fortress - DONE
+
+*  Remove storages from Player - DONE
+
+*  Remove Game, Controller - DONE
