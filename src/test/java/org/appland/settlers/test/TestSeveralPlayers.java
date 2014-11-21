@@ -7,8 +7,11 @@ package org.appland.settlers.test;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -63,5 +66,76 @@ public class TestSeveralPlayers {
         /* Verify that the two players are correct */
         assertTrue(map.getPlayers().contains(players.get(0)));
         assertTrue(map.getPlayers().contains(players.get(1)));
+    }
+
+    @Test(expected = Exception.class)
+    public void testCannotPlacePlayersHeadquartersTogether() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter for first player */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the other player can't place a building close to the 
+           first player's headquarter
+        */
+        Point point1 = new Point(10, 10);
+        Building headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+    }
+
+    @Test
+    public void testPlacedHouseHasCorrectPlayerForSeveralPlayers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter for first player */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter for second player */
+        Point point1 = new Point(40, 40);
+        Building headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+    
+        /* Verify that the player is set correctly in both headquarters */
+        assertEquals(headquarter0.getPlayer(), player0);
+        assertEquals(headquarter1.getPlayer(), player1);
+    }
+
+    @Test(expected = Exception.class)
+    public void testCannotPlaceBuildingWithoutPlayerSetWithSeveralPlayers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter for first player */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
     }
 }

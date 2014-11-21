@@ -11,8 +11,8 @@ import org.appland.settlers.policy.InitialState;
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 20)
 public class Headquarter extends Storage {
 
-    public Headquarter() {
-        super();
+    public Headquarter(Player p) {
+        super(p);
 
         try {
             setHeadquarterDefaultInventory(inventory);
@@ -20,6 +20,10 @@ public class Headquarter extends Storage {
         } catch (Exception ex) {
             Logger.getLogger(Headquarter.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Headquarter() {
+        this(null);
     }
 
     @Override

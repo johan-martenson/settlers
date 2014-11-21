@@ -57,4 +57,17 @@ public class TestPlayer {
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(p);
     }
+
+    @Test
+    public void testPlayerIsAlsoSetInBuildingsFlag() {
+
+        /* Create player 'player one' */
+        Player p = new Player("Player one");
+        
+        /* Create house belonging to player one */
+        Woodcutter woodcutter0 = new Woodcutter(p);
+        
+        /* Verify that the building's flag has the player set correctly */
+        assertEquals(woodcutter0.getFlag().getPlayer(), p);
+    }
 }

@@ -37,19 +37,23 @@ public class Scout extends Worker {
     private int   directionX;
     private int   directionY;
     
-    public Scout(GameMap m) {
-        super(m);
+    public Scout(Player player, GameMap m) {
+        super(player, m);
     
         state        = WALKING_TO_TARGET;
         segmentCount = 0;
     }
-    
+
+    public Scout(GameMap m) {
+        this(null, m);
+    }
+
     @Override
     protected void onArrival() throws Exception {
         if (state == WALKING_TO_TARGET) {
             flagPoint = getPosition();
 
-            map.discoverPointsWithinRadius(getPosition(), DISCOVERY_RADIUS);
+            map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
             
             Point borderPoint = findDirectionToBorder();
             
@@ -69,7 +73,7 @@ public class Scout extends Worker {
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_NEXT_POINT) {
-            map.discoverPointsWithinRadius(getPosition(), DISCOVERY_RADIUS);
+            map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
             segmentCount++;
 

@@ -23,6 +23,12 @@ public class Flag implements EndPoint, Piece {
         scoutsCalled      = 0;
     }
 
+    Flag(Player player, Point p) {
+        this(p);
+    
+        this.player = player;
+    }
+
     @Override
     public List<Cargo> getStackedCargo() {
         return stackedCargo;

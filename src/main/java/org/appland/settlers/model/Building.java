@@ -78,10 +78,14 @@ public class Building implements Actor, EndPoint, Piece {
         this();
 
         player = p;
+        
+        flag.setPlayer(p);
     }
     
     void setFlag(Flag flagAtPoint) {
         flag = flagAtPoint;
+        
+        flag.setPlayer(player);
     }
 
     int getDefenceRadius() {
@@ -701,5 +705,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     void setPlayer(Player p) {
         player = p;
+
+        flag.setPlayer(p);
     }
 }

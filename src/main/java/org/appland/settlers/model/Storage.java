@@ -50,11 +50,17 @@ public class Storage extends Building implements Actor {
 
     private static final Logger log = Logger.getLogger(Storage.class.getName());
 
-    public Storage() {
+    public Storage(Player p) {
+        super(p);
+        
         inventory = createEmptyMaterialIntMap();
         
         promotionalCountdown = new Countdown();
         draftCountdown = new Countdown();
+    }
+
+    public Storage() {
+        this(null);
     }
 
     /* This method updates the inventory as a side effect, without any locking */
@@ -461,7 +467,7 @@ public class Storage extends Building implements Actor {
             w = new DonkeyBreeder(map);
             break;
         case SCOUT:
-            w = new Scout(map);
+            w = new Scout(getPlayer(), map);
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);

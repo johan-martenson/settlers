@@ -18,6 +18,7 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  * @author johan
  */
 public abstract class Worker implements Actor, Piece {
+    private Player player;
 
     enum States {
         WALKING_AND_EXACTLY_AT_POINT, 
@@ -56,6 +57,12 @@ public abstract class Worker implements Actor, Piece {
         state = IDLE_OUTSIDE;
     }
 
+    Worker(Player player, GameMap m) {
+        this(m);
+
+        this.player = player;
+    }
+    
     @Override
     public void stepTime() {
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
@@ -383,5 +390,9 @@ public abstract class Worker implements Actor, Piece {
 
     protected void onReturnToStorage() throws Exception {
         
+    }
+
+    protected Player getPlayer() {
+        return player;
     }
 }
