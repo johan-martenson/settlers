@@ -5,6 +5,8 @@ REMOVE
 RE-FACTOR
 =========
 
+*  Remove backward compatible mapping methods for pre-multiplayer tests
+
 *  Clean up getAvailableHousePoints!
 
 *  canBuild(Small|Medium|Large)House() needed?
@@ -26,6 +28,12 @@ RE-FACTOR
 
 TEST
 ====
+
+*  Test cannot create road with default player when players are set explicitly
+
+*  Test create road with default player
+
+*  Test players can not create roads on each other's land
 
 *  Player's discovered land is updated
 
