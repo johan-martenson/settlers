@@ -12,6 +12,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -137,5 +138,41 @@ public class TestSeveralPlayers {
         /* Place headquarter for first player */
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+    }
+
+    @Test
+    public void testSeveralPlayersCanPlaceAdditionalBuildingsAfterHeadquarter() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Building headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+    
+        /* Place player 1's headquarter far away from player 0 */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(90, 90);
+        map.placeBuilding(headquarter1, point1);
+    
+        /* Place woodcutter for player 0 */
+        Point point2 = new Point(10, 6);
+        Building woodcutter0 = new Woodcutter(player0);        
+        map.placeBuilding(woodcutter0, point2);
+
+        /* Place woodcutter for player 1 */
+        Point point3 = new Point(90, 80);
+        Building woodcutter1 = new Woodcutter(player1);
+        map.placeBuilding(woodcutter1, point3);
     }
 }

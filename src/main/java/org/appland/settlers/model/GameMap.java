@@ -239,7 +239,7 @@ public class GameMap {
             firstHouse = true;
         }
         
-        if (!firstHouse && !isWithinBorder(p)) {
+        if (!firstHouse && !house.getPlayer().isWithinBorder(p)) {
             throw new Exception("Can't place building on " + p + " because it's outside the border");
         }
 
@@ -529,7 +529,7 @@ public class GameMap {
             throw new Exception("Can't place " + flag + " on occupied point");
         }
         
-        if (checkBorder && !isWithinBorder(flag.getPosition())) {
+        if (checkBorder && !flag.getPlayer().isWithinBorder(flag.getPosition())) {
             throw new Exception("Can't place flag at " + flag.getPosition() + " outside of the border");
         }
         
