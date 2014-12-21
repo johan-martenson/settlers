@@ -51,9 +51,9 @@ public abstract class Worker implements Actor, Piece {
         buildingToEnter = null;
         home            = null;
         map             = m;
-        
+
         walkCountdown  = new Countdown();
-        
+
         state = IDLE_OUTSIDE;
     }
 

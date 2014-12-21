@@ -35,7 +35,6 @@ import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -366,7 +365,7 @@ public class Utils {
         return courier;
     }
 
-    static void adjustInventoryTo(Storage storage, Material material, int amount, GameMap map) throws Exception {
+    public static void adjustInventoryTo(Storage storage, Material material, int amount, GameMap map) throws Exception {
         for (int i = 0; i < 1000; i++) {
         
             if (storage.getAmount(material) == amount) {
