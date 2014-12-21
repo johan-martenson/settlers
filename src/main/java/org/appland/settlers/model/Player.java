@@ -39,7 +39,7 @@ public class Player {
         buildings.add(house);
     }
 
-    List<Building> getBuildings() {
+    public List<Building> getBuildings() {
         return buildings;
     }
 
