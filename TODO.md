@@ -27,6 +27,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Make sure there is a test that there cannot be more than one headquarter per player
+
 *  Test that the new GameMap::place*(Player, ...) still places objects directly
 
 *  Find a way to test the size of each building
@@ -125,6 +127,10 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Change app to create player
+
+*  Update recorder to explicitly create player list
 
 *  Fix so that farmer can't walk through his own house when he goes out to plan or harvest
 
