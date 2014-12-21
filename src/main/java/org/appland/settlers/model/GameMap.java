@@ -238,7 +238,22 @@ public class GameMap {
             
             firstHouse = true;
         }
-        
+
+        /* Only one headquarter can be placed per player */
+        if (house instanceof Headquarter) {
+            boolean headquarterPlaced = false;
+
+            for (Building b : house.getPlayer().getBuildings()) {
+                if (b instanceof Headquarter) {
+                    headquarterPlaced = true;
+                }
+            }
+
+            if (headquarterPlaced) {
+                throw new Exception("Can only have one headquarter placed per player");
+            }
+        }
+
         if (!firstHouse && !house.getPlayer().isWithinBorder(p)) {
             throw new Exception("Can't place building on " + p + " because it's outside the border");
         }

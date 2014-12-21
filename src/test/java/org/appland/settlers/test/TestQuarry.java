@@ -277,9 +277,6 @@ public class TestQuarry {
     @Test
     public void testStonemasonReturnsAndStoresStoneAsCargo() throws Exception {
         GameMap map = new GameMap(20, 20);
-
-        Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
         
         Point point1 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(), point1);

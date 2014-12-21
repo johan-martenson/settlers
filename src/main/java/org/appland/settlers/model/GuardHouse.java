@@ -10,7 +10,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.SMALL;
 
 @HouseSize(size = SMALL, material = {PLANCK, PLANCK, STONE, STONE, STONE})
-@MilitaryBuilding(maxHostedMilitary = 3, defenceRadius = 14, maxCoins = 2)
+@MilitaryBuilding(maxHostedMilitary = 3, defenceRadius = 14, maxCoins = 2, attackRadius = 28)
 public class GuardHouse extends Building {
 
     @Override

@@ -103,4 +103,29 @@ public class Player {
             fieldOfView = calculateFieldOfView(discoveredLand);
         }
     }    
+
+    public int getAvailableAttackersForBuilding(Building buildingToAttack) throws Exception {
+        int availableAttackers = 0;
+
+        if (!buildingToAttack.isMilitaryBuilding()) {
+            throw new Exception("Cannot get available attackers for non-military building");
+        }
+
+        if (equals(buildingToAttack.getPlayer())) {
+            throw new Exception("Cannot get available attackers for own building");
+        }
+
+        /* Count militaries in military buildings that can reach the building */
+        for (Building b : getBuildings()) {
+            if (!b.isMilitaryBuilding()) {
+                continue;
+            }
+
+            if (b.canAttack(buildingToAttack)) {
+                availableAttackers += b.getHostedMilitary() - 1;
+            }
+        }
+
+        return availableAttackers;
+    }
 }

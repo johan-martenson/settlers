@@ -88,4 +88,8 @@ class Land {
 
         return result;
     }
+
+    public String toString() {
+        return "Border: " + border + ", containing" + points;
+    }
 }

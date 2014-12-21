@@ -708,4 +708,22 @@ public class Building implements Actor, EndPoint, Piece {
 
         flag.setPlayer(p);
     }
+
+    boolean canAttack(Building buildingToAttack) {
+        if (isMilitaryBuilding()) {
+            double distance = getPosition().distance(buildingToAttack.getPosition());
+            
+            if (distance < getAttackRadius()) {
+                return true;
+            }
+        }
+    
+        return false;
+    }
+
+    private int getAttackRadius() {
+        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+    
+        return mb.attackRadius();
+    }
 }

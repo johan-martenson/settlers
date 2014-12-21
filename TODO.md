@@ -27,6 +27,10 @@ RE-FACTOR
 TEST
 ====
 
+*  Player's discovered land is updated
+
+*  Test get attack radius for each military building
+
 *  Make sure there is a test that there cannot be more than one headquarter per player
 
 *  Test that the new GameMap::place*(Player, ...) still places objects directly
@@ -127,6 +131,8 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Adjust attack radius in military buildings
 
 *  Change app to create player
 
