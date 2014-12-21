@@ -5,12 +5,15 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.SCOUT;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
@@ -378,6 +381,65 @@ public class TestScout {
         assertEquals(scout.getPosition(), flag.getPosition());
     }
 
+    @Test
+    public void testScoutDiscoversNewGroundForPlayer() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(22, 8);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to go to the flag */
+        map.stepTime();
+
+        Scout scout = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Scout) {
+                scout = (Scout) w;
+            }
+        }
+
+        assertNotNull(scout);
+        assertEquals(scout.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+
+        /* Verify that the scout discovers new ground */
+        for (int i = 0; i < 8; i++) {
+            assertFalse(scout.getTarget().equals(scout.getPosition()));
+            assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+
+            assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
+        }
+
+        assertEquals(scout.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+
+        assertEquals(scout.getPosition(), flag.getPosition());
+    }
+    
     @Test
     public void testDepositingScoutIncreasesAmountOfScouts() throws Exception {
 

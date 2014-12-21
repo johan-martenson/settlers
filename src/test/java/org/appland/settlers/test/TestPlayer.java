@@ -8,13 +8,16 @@ package org.appland.settlers.test;
 import java.util.ArrayList;
 import java.util.List;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -101,5 +104,91 @@ public class TestPlayer {
         /* Place second headquarter */
         Point point1 = new Point(15, 15);
         map.placeBuilding(headquarter1, point1);
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotPlaceFlagWithoutPlayerWhenPlayersAreDefined() throws Exception {
+
+        /* Create player 'player one' */
+        Player p = new Player("Player one");
+
+        /* Create headquarter belonging to player one */
+        Building headquarter0 = new Headquarter(p);
+
+        /* Create game map with one player */
+        List<Player> players = new ArrayList<>();
+        players.add(p);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+    
+        /* Verify that a flag cannot be placed without specifying the player*/
+        Point point1 = new Point(9, 5);
+        Flag flag0 = map.placeFlag(point1);
+    }
+
+    @Test
+    public void testCannotCreateRoadWithoutPlayerWhenPlayersAreDefined() throws Exception {
+
+        /* Create player 'player one' */
+        Player player = new Player("Player one");
+
+        /* Create headquarter belonging to player one */
+        Building headquarter0 = new Headquarter(player);
+
+        /* Create game map with one player */
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+    
+        /* Place flag */
+        Point point1 = new Point(9, 5);
+        Flag flag0 = map.placeFlag(player, point1);
+    
+        /* Verify that roads cannot be placed without specifying the player */
+        int roads = map.getRoads().size();
+
+        try {
+            map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
+            assertFalse(true);
+        } catch (Exception e) {}
+    
+        assertEquals(map.getRoads().size(), roads);
+
+        try {
+            map.placeAutoSelectedRoad(headquarter0.getFlag().getPosition(), point1);
+            assertFalse(true);
+        } catch (Exception e) {}
+    
+        assertEquals(map.getRoads().size(), roads);
+
+        try {
+            Point point2 = new Point(7, 5);
+            
+            map.placeRoad(headquarter0.getFlag().getPosition(), point2, flag0.getPosition());
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertEquals(map.getRoads().size(), roads);
+
+        try {
+            Point point2 = new Point(7, 5);
+            
+            List<Point> points = new ArrayList<>();
+            
+            points.add(headquarter0.getFlag().getPosition());
+            points.add(point2);
+            points.add(flag0.getPosition());
+            map.placeRoad(points);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertEquals(map.getRoads().size(), roads);
     }
 }

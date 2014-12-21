@@ -92,7 +92,7 @@ public class Player {
         }
     }
 
-    List<Point> getDiscoveredLand() {
+    public List<Point> getDiscoveredLand() {
         return discoveredLand;
     }
 

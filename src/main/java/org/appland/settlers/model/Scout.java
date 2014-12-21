@@ -131,7 +131,7 @@ public class Scout extends Worker {
     }
 
     private Point findDirectionToBorder() {
-        List<Collection<Point>> borders = map.getBorders();
+        List<Collection<Point>> borders = getPlayer().getBorders();
         Point closestPointOnBorder      = null;
         double distanceToBorder         = Integer.MAX_VALUE;
         

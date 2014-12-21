@@ -63,6 +63,22 @@ public class GameMap {
             }
         });
     }
+    
+    public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Collection<Point> avoid) {
+        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
+
+            @Override
+            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+                try {
+                    return getPossibleAdjacentRoadConnections(player, start, goal);
+                } catch (Exception ex) {
+                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                return new LinkedList<>();
+            }
+        });
+    }
 
     private boolean pointIsOnRoad(Point point) {
         return getRoadAtPoint(point) != null;
@@ -372,11 +388,23 @@ public class GameMap {
         return road;
     }
 
-    public Road placeRoad(Point... points) throws Exception {
-        return placeRoad(Arrays.asList(points));
+    public Road placeRoad(List<Point> points) throws Exception {
+        return placeRoad(getDefaultPlayer(), points);
     }
     
-    public Road placeRoad(List<Point> wayPoints) throws Exception {
+    public Road placeRoad(Point... points) throws Exception {
+        return placeRoad(getDefaultPlayer(), points);
+    }
+    
+    public Road placeRoad(Player player, Point... points) throws Exception {
+        if (!players.contains(player)) {
+            throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
+        }
+        
+        return placeRoad(player, Arrays.asList(points));
+    }
+    
+    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
         
         Point start = wayPoints.get(0);
@@ -396,7 +424,7 @@ public class GameMap {
 
         /* Verify that all points of the road are within the border */
         for (Point p : wayPoints) {
-            if (!isWithinBorder(p)) {
+            if (!player.isWithinBorder(p)) {
                 throw new Exception("Can't place road with " + p + " outside the border");
             }
         }
@@ -419,11 +447,11 @@ public class GameMap {
                 continue;
             }
             
-            if (p.equals(end) && isPossibleAsEndPointInRoad(p)) {
+            if (p.equals(end) && isPossibleAsEndPointInRoad(player, p)) {
                 continue;
             }
             
-            if (isPossibleAsAnyPointInRoad(p)) {
+            if (isPossibleAsAnyPointInRoad(player, p)) {
                 continue;
             }
 
@@ -447,18 +475,26 @@ public class GameMap {
         return road;
     }
 
-    public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
-        return placeAutoSelectedRoad(startFlag.getPosition(), endFlag.getPosition());
+    public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws Exception {
+        return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
     }
     
-    public Road placeAutoSelectedRoad(Point start, Point end) throws Exception {
-        List<Point> wayPoints = findAutoSelectedRoad(start, end, null);
+    public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
+        return placeAutoSelectedRoad(getDefaultPlayer(), startFlag.getPosition(), endFlag.getPosition());
+    }
+    
+    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
+        List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
         
 	if (wayPoints == null) {
             throw new InvalidEndPointException(end);
         }
 
-        return placeRoad(wayPoints);
+        return placeRoad(player, wayPoints);
+    }
+    
+    public Road placeAutoSelectedRoad(Point start, Point end) throws Exception {
+        return placeAutoSelectedRoad(getDefaultPlayer(), start, end);
     }
 
     public List<Road> getRoads() {
@@ -571,8 +607,8 @@ public class GameMap {
             pointToGameObject.get(flag.getPosition()).setFlag(flag);
             flags.add(flag);
 
-            Road newRoad1 = placeRoad(points.subList(0, index + 1));
-            Road newRoad2 = placeRoad(points.subList(index, points.size()));
+            Road newRoad1 = placeRoad(flag.getPlayer(), points.subList(0, index + 1));
+            Road newRoad2 = placeRoad(flag.getPlayer(), points.subList(index, points.size()));
             
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
@@ -978,13 +1014,17 @@ public class GameMap {
     }
 
     public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) throws Exception {
+        return getPossibleAdjacentRoadConnections(getDefaultPlayer(), point, end);
+    }
+
+    public List<Point> getPossibleAdjacentRoadConnections(Player player, Point point, Point end) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
-            if (p.equals(end) && isPossibleAsEndPointInRoad(p)) {
+            if (p.equals(end) && isPossibleAsEndPointInRoad(player, p)) {
                 resultList.add(p);
-            } else if (isPossibleAsAnyPointInRoad(p)) {
+            } else if (isPossibleAsAnyPointInRoad(player, p)) {
                 resultList.add(p);
             }
         }
@@ -1093,12 +1133,12 @@ public class GameMap {
         return mp.getFlag();
     }
     
-    private boolean isPossibleAsEndPointInRoad(Point p) throws Exception {
+    private boolean isPossibleAsEndPointInRoad(Player player, Point p) throws Exception {
         if (!isWithinMap(p)) {
             return false;
         }
 
-        if (isPossibleAsAnyPointInRoad(p)) {
+        if (isPossibleAsAnyPointInRoad(player, p)) {
             return true;
         }
         
@@ -1111,10 +1151,10 @@ public class GameMap {
         return false;
     }
 
-    private boolean isPossibleAsAnyPointInRoad(Point p) throws Exception {
+    private boolean isPossibleAsAnyPointInRoad(Player player, Point p) throws Exception {
         MapPoint mp = pointToGameObject.get(p);
 
-        if (!isWithinBorder(p)) {
+        if (!player.isWithinBorder(p)) {
             return false;
         }
         
@@ -1150,11 +1190,15 @@ public class GameMap {
     }
 
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Point point) throws Exception {
+        return getPossibleRoadConnectionsExcludingEndpoints(getDefaultPlayer(), point);
+    }
+    
+    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
-            if (isPossibleAsAnyPointInRoad(p)) {
+            if (isPossibleAsAnyPointInRoad(player, p)) {
                 resultList.add(p);
             }
         }
@@ -1167,13 +1211,17 @@ public class GameMap {
     }
     
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Point point) throws Exception {
+        return getPossibleAdjacentRoadConnectionsIncludingEndpoints(getDefaultPlayer(), point);
+    }
+    
+    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
         
         for (Point p : adjacentPoints) {
-            if (isPossibleAsEndPointInRoad(p)) {
+            if (isPossibleAsEndPointInRoad(player, p)) {
                 resultList.add(p);
-            } else if (isPossibleAsAnyPointInRoad(p)) {
+            } else if (isPossibleAsAnyPointInRoad(player, p)) {
                 resultList.add(p);
             }
         }
@@ -1581,12 +1629,6 @@ public class GameMap {
     void discoverPointsWithinRadius(Player player, Point center, int radius) {
         for (Point p : getPointsWithinRadius(center, radius)) {
             player.discover(p);
-        }
-    }
-
-    public void placeRoad(Player player1, Point... points) throws Exception {
-        if (!players.contains(player1)) {
-            throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
         }
     }
 
