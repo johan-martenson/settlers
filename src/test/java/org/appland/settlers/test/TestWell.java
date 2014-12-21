@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -13,6 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WELL_WORKER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Well;
@@ -35,15 +38,18 @@ public class TestWell {
     public void testFinishedWellNeedsWorker() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well, map);
@@ -56,21 +62,24 @@ public class TestWell {
     public void testWellWorkerIsAssignedToFinishedHouse() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the well */
         Utils.constructHouse(well, map);
@@ -87,15 +96,18 @@ public class TestWell {
     public void testUnoccupiedWellProducesNothing() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Connect the well with the headquarter */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
         
         /* Finish the well */
         Utils.constructHouse(well, map);
@@ -112,21 +124,24 @@ public class TestWell {
     public void testAssignedWellWorkerEntersTheWell() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect well with headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -159,21 +174,24 @@ public class TestWell {
     public void testWellWorkerRests() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the well */
         Utils.constructHouse(well, map);
@@ -197,21 +215,24 @@ public class TestWell {
     public void testWellWorkerProducesWater() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
         
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the well */
         Utils.constructHouse(well, map);
@@ -241,21 +262,24 @@ public class TestWell {
     public void testWellWorkerPlacesWaterCargoAtTheFlag() throws Exception {
         
         /* Create gamemap */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(), point1);
+        Building well = map.placeBuilding(new Well(player0), point1);
 
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the well */
         Utils.constructHouse(well, map);
@@ -298,15 +322,18 @@ public class TestWell {
     public void testWellWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -356,15 +383,18 @@ public class TestWell {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -399,7 +429,7 @@ public class TestWell {
         assertEquals(cargo.getPosition(), well0.getFlag().getPosition());
     
         /* Connect the well with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), well0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -441,15 +471,18 @@ public class TestWell {
     public void testWellWorkerGoesBackToStorageWhenWellIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -481,18 +514,21 @@ public class TestWell {
     public void testWellWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenWellIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Connect the well with the headquarter */
-        map.placeAutoSelectedRoad(well0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -528,18 +564,21 @@ public class TestWell {
     public void testDestroyedWellIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Connect the well with the headquarter */
-        map.placeAutoSelectedRoad(well0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -570,15 +609,18 @@ public class TestWell {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
         
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -595,15 +637,18 @@ public class TestWell {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
         Point point26 = new Point(8, 8);
-        Building well0 = map.placeBuilding(new Well(), point26);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
         
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
@@ -620,21 +665,24 @@ public class TestWell {
     public void testProductionInWellCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well0 = map.placeBuilding(new Well(), point1);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
         
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the well */
         Utils.constructHouse(well0, map);
@@ -675,21 +723,24 @@ public class TestWell {
     public void testProductionInWellCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well0 = map.placeBuilding(new Well(), point1);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
         
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the well */
         Utils.constructHouse(well0, map);

@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -19,6 +21,7 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MINTER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -35,15 +38,18 @@ public class TestMint {
     
     @Test
     public void testMintNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -51,7 +57,7 @@ public class TestMint {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Unfinished mint doesn't need minter */
         assertFalse(mint.needsWorker());
@@ -64,22 +70,25 @@ public class TestMint {
 
     @Test
     public void testHeadquarterHasOneMinterAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(MINTER), 1);
     }
     
     @Test
     public void testMintGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -87,7 +96,7 @@ public class TestMint {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -120,15 +129,18 @@ public class TestMint {
     
     @Test
     public void testOccupiedMintWithoutIngredientsProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -151,15 +163,18 @@ public class TestMint {
     
     @Test
     public void testUnoccupiedMintProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -174,15 +189,18 @@ public class TestMint {
 
     @Test
     public void testOccupiedMintWithGoldAndCoalProducesCoins() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -190,7 +208,7 @@ public class TestMint {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -223,15 +241,18 @@ public class TestMint {
 
     @Test
     public void testMinterLeavesBreadAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -239,7 +260,7 @@ public class TestMint {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -286,15 +307,18 @@ public class TestMint {
 
     @Test
     public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -318,15 +342,18 @@ public class TestMint {
 
     @Test
     public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(), point3);
+        Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
@@ -359,15 +386,18 @@ public class TestMint {
     public void testMintWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -427,15 +457,18 @@ public class TestMint {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -480,7 +513,7 @@ public class TestMint {
         assertEquals(cargo.getPosition(), mint0.getFlag().getPosition());
     
         /* Connect the mint with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), mint0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -522,15 +555,18 @@ public class TestMint {
     public void testMinterGoesBackToStorageWhenMintIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -562,18 +598,21 @@ public class TestMint {
     public void testMinterGoesBackOnToStorageOnRoadsIfPossibleWhenMintIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Connect the mint with the headquarter */
-        map.placeAutoSelectedRoad(mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -609,18 +648,21 @@ public class TestMint {
     public void testDestroyedMintIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Connect the mint with the headquarter */
-        map.placeAutoSelectedRoad(mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -651,15 +693,18 @@ public class TestMint {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
         
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -676,15 +721,18 @@ public class TestMint {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
-        Building mint0 = map.placeBuilding(new Mint(), point26);
+        Building mint0 = map.placeBuilding(new Mint(player0), point26);
         
         /* Finish construction of the mint */
         Utils.constructHouse(mint0, map);
@@ -701,21 +749,24 @@ public class TestMint {
     public void testProductionInMintCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place mint */
         Point point1 = new Point(8, 6);
-        Building mint0 = map.placeBuilding(new Mint(), point1);
+        Building mint0 = map.placeBuilding(new Mint(player0), point1);
         
         /* Connect the mint and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mint */
         Utils.constructHouse(mint0, map);
@@ -766,21 +817,24 @@ public class TestMint {
     public void testProductionInMintCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place mint */
         Point point1 = new Point(8, 6);
-        Building mint0 = map.placeBuilding(new Mint(), point1);
+        Building mint0 = map.placeBuilding(new Mint(player0), point1);
         
         /* Connect the mint and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mint */
         Utils.constructHouse(mint0, map);

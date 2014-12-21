@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
@@ -15,6 +17,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -33,15 +36,18 @@ public class TestDonkeyFarm {
 
     @Test
     public void testUnfinishedDonkeyFarmNeedsNoDonkeyBreeder() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place donkey farm */
         Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new DonkeyFarm(), point0);
+        Building farm = map.placeBuilding(new DonkeyFarm(player0), point0);
 
         assertTrue(farm.underConstruction());
         assertFalse(farm.needsWorker());
@@ -49,15 +55,18 @@ public class TestDonkeyFarm {
 
     @Test
     public void testFinishedDonkeyFarmNeedsDonkeyBreeder() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place donkey farm */
         Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new DonkeyFarm(), point0);
+        Building farm = map.placeBuilding(new DonkeyFarm(player0), point0);
 
         Utils.constructHouse(farm, map);
         
@@ -67,22 +76,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederIsAssignedToFinishedDonkeyFarm() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building farm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish the donkey farm */
         Utils.constructHouse(farm, map);
@@ -96,22 +108,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederRestsInDonkeyFarmThenLeaves() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -145,22 +160,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederFeedsTheDonkeysWhenItHasResources() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -217,22 +235,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederReturnsAfterFeeding() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -292,22 +313,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyWalksToStorageByItself() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
         
         Utils.constructHouse(donkeyFarm, map);
         
@@ -397,22 +421,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyFarmWithoutDonkeyBreederProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm0, map);
         
@@ -442,15 +469,18 @@ public class TestDonkeyFarm {
     public void testDonkeyFarmWithoutConnectedStorageDoesNotProduce() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -497,15 +527,18 @@ public class TestDonkeyFarm {
     public void testDonkeyBreederGoesBackToStorageWhenDonkeyFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -537,18 +570,21 @@ public class TestDonkeyFarm {
     public void testDonkeyBreederGoesBackOnToStorageOnRoadsIfPossibleWhenDonkeyFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
         /* Connect the donkey farm with the headquarter */
-        map.placeAutoSelectedRoad(donkeyFarm0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -582,15 +618,18 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederWithoutResourcesProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -616,15 +655,18 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederWithoutResourcesStaysInHouse() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -650,15 +692,18 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederFeedsDonkeysWithWaterAndWheat() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
         
         Utils.constructHouse(donkeyFarm, map);
 
@@ -714,18 +759,21 @@ public class TestDonkeyFarm {
     public void testDestroyedDonkeyFarmIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
         /* Connect the donkey farm with the headquarter */
-        map.placeAutoSelectedRoad(donkeyFarm0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -756,15 +804,18 @@ public class TestDonkeyFarm {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
         
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -781,15 +832,18 @@ public class TestDonkeyFarm {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point26);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
         
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -806,21 +860,24 @@ public class TestDonkeyFarm {
     public void testProductionInDonkeyFarmCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place donkey farm */
         Point point1 = new Point(8, 6);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point1);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
         
         /* Connect the donkey farm and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -895,21 +952,24 @@ public class TestDonkeyFarm {
     public void testProductionInDonkeyFarmCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point1 = new Point(8, 6);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point1);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
         /* Connect the donkey farm and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
@@ -1006,22 +1066,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederCarriesNoCargo() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm, map);
 
@@ -1049,22 +1112,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyWalksToStorageOnExistingRoads() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
         
         Utils.constructHouse(donkeyFarm0, map);
         
@@ -1126,22 +1192,25 @@ public class TestDonkeyFarm {
 
     @Test
     public void testProducedDonkeyIsOnlyAddedOnce() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
-        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(), point3);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
         
         Utils.constructHouse(donkeyFarm0, map);
         

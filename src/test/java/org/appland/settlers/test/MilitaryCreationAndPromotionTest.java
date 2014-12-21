@@ -1,10 +1,13 @@
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertEquals;
@@ -19,12 +22,15 @@ public class MilitaryCreationAndPromotionTest {
 
     @Before
     public void setupTest() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        storage = new Storage();
+        storage = new Storage(player0);
         
         Point point1 = new Point(10, 10);
         map.placeBuilding(storage, point1);

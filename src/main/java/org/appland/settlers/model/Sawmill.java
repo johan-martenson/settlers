@@ -9,4 +9,8 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @HouseSize(size = MEDIUM)
 @RequiresWorker(workerType = SAWMILL_WORKER)
 public class Sawmill extends Building {
+
+    public Sawmill(Player player0) {
+        super(player0);
+    }
 }

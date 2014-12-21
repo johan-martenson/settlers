@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -19,6 +21,7 @@ import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -38,15 +41,18 @@ public class TestFortress {
     public void testFortressNeedsFourPlancksAndSevenStonesForConstruction() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Deliver two plancks and three stones*/
         Cargo cargo = new Cargo(PLANCK, map);
@@ -80,15 +86,18 @@ public class TestFortress {
     public void testFortressCannotBeConstructedWithOnePlanckTooLittle() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Deliver one planck and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -124,15 +133,18 @@ public class TestFortress {
     public void testFortressCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Deliver four plancks and six stones */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -168,20 +180,23 @@ public class TestFortress {
     public void testFortressGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(7, 21);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the fortress to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
@@ -212,47 +227,53 @@ public class TestFortress {
     public void testBorderIsNotExtendedWhenFortressIsFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(5, 25);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(6, 24);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the fortress to finish construction */
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
         Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
 
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
     
     @Test
     public void testBorderIsExtendedWhenFortressIsPopulated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(50, 50);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 24);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Placing road between (7, 23) and (6, 4) */
         Point point23 = new Point(7, 23);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the fortress to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
@@ -275,28 +296,31 @@ public class TestFortress {
         
         /* Verify that the border is extended when the military reaches the fortress */
         assertEquals(m.getTarget(), fortress0.getPosition());
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
         
         Utils.fastForwardUntilWorkerReachesPoint(map, m, fortress0.getPosition());
         
-        assertFalse(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
 
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 41)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 41)));
     }
 
     @Test
     public void testFortressOnlyNeedsNineMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
 
@@ -319,15 +343,18 @@ public class TestFortress {
     public void testFortressCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Verify that the fortress can't hold militaries before it's finished */
         assertFalse(fortress0.needsMilitaryManning());
@@ -348,15 +375,18 @@ public class TestFortress {
     public void testFortressCannotHoldMoreThanNineMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
 
@@ -389,40 +419,46 @@ public class TestFortress {
     public void testFortressRadiusIsCorrect() throws Exception{
 
         /* Starting new game */
-        GameMap map = new GameMap(50, 50);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 24)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
         
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), fortress0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), fortress0, map);
 
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 40)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 40)));
     }
     
     @Test
     public void testFortressNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
 
@@ -433,15 +469,18 @@ public class TestFortress {
     public void testUnfinishedFortressNotNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         assertFalse(fortress0.needsMaterial(COIN));
     }
@@ -450,15 +489,18 @@ public class TestFortress {
     public void testFortressCanHoldFourCoins() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
 
@@ -488,15 +530,18 @@ public class TestFortress {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -521,15 +566,18 @@ public class TestFortress {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -553,15 +601,18 @@ public class TestFortress {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
         
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -590,15 +641,18 @@ public class TestFortress {
     public void testPromotionConsumesCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -622,15 +676,18 @@ public class TestFortress {
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -656,15 +713,18 @@ public class TestFortress {
     public void testFortressWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -689,15 +749,18 @@ public class TestFortress {
     public void testCanDisableCoinsToFortress() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         Utils.constructHouse(fortress0, map);
         
@@ -714,18 +777,21 @@ public class TestFortress {
     public void testOccupiedFortressCanBeEvacuated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Connect headquarter and fortress */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), fortress0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -747,18 +813,21 @@ public class TestFortress {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Connect headquarter and fortress */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), fortress0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -789,15 +858,18 @@ public class TestFortress {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -828,18 +900,21 @@ public class TestFortress {
     public void testNoMilitaryIsDispatchedToEvacuatedFortress() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Connect headquarters and fortress */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), fortress0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -858,15 +933,18 @@ public class TestFortress {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
         Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(), point22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -904,15 +982,18 @@ public class TestFortress {
     public void testMilitaryGoesBackToStorageWhenFortressIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing fortress */
         Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(), point26);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -944,18 +1025,21 @@ public class TestFortress {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenFortressIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing fortress */
         Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(), point26);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         /* Connect the fortress with the headquarter */
-        map.placeAutoSelectedRoad(fortress0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, fortress0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);
@@ -991,15 +1075,18 @@ public class TestFortress {
     public void testProductionCannotBeResumedInFortress() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing fortress */
         Point point26 = new Point(8, 8);
-        Building fortress0 = map.placeBuilding(new Fortress(), point26);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0, map);

@@ -26,7 +26,7 @@ public class TestProduction {
 
     @Test(expected = InvalidMaterialException.class)
     public void testWrongMaterialToSawmill() throws Exception {
-        Sawmill sawmill = new Sawmill();
+        Sawmill sawmill = new Sawmill(null);
 
         Utils.constructHouse(sawmill, null);
 
@@ -37,7 +37,7 @@ public class TestProduction {
 
     @Test(expected = DeliveryNotPossibleException.class)
     public void testDeliverMaterialToWoodcutter() throws Exception {
-        Building woodcutter = new Woodcutter();
+        Building woodcutter = new Woodcutter(null);
 
         Utils.constructHouse(woodcutter, null);
 
@@ -46,7 +46,7 @@ public class TestProduction {
 
     @Test(expected = DeliveryNotPossibleException.class)
     public void testDeliveryMaterialToQuarry() throws Exception {
-        Quarry quarry = new Quarry();
+        Quarry quarry = new Quarry(null);
 
         Utils.constructHouse(quarry, null);
 
@@ -55,7 +55,7 @@ public class TestProduction {
 
     @Test(expected=Exception.class)
     public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
 
         hq.getWorkerType();
     }

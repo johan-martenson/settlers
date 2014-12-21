@@ -15,5 +15,8 @@ import static org.appland.settlers.model.Material.FISHERMAN;
 @HouseSize(size = Size.SMALL)
 @RequiresWorker(workerType = FISHERMAN)
 public class Fishery extends Building {
-    
+
+    public Fishery(Player player0) {
+        super(player0);
+    }
 }

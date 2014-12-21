@@ -20,5 +20,8 @@ import static org.appland.settlers.model.Size.SMALL;
 @RequiresWorker(workerType = MINER)
 @Production(output = IRON, requiredGoods = {BREAD, FISH})
 public class IronMine extends Building {
-    
+
+    public IronMine(Player player0) {
+        super(player0);
+    }
 }

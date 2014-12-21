@@ -18,4 +18,9 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @HouseSize(size = MEDIUM)
 @Production(requiredGoods = {PIG}, output = MEAT)
 @RequiresWorker(workerType = BUTCHER)
-public class SlaughterHouse extends Building {}
+public class SlaughterHouse extends Building {
+
+    public SlaughterHouse(Player player0) {
+        super(player0);
+    }
+}

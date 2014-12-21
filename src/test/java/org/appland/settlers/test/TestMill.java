@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -16,6 +18,7 @@ import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.WHEAT;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -34,12 +37,15 @@ public class TestMill {
 
     @Test
     public void testFinishedMillNeedsWorker() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
 
         Utils.constructHouse(mill, map);
 
@@ -49,15 +55,18 @@ public class TestMill {
     
     @Test
     public void testMillerIsAssignedToFinishedHouse() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mill */
         Utils.constructHouse(mill, map);
@@ -72,15 +81,18 @@ public class TestMill {
 
     @Test
     public void testUnoccupiedMillProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mill */
         Utils.constructHouse(mill, map);
@@ -94,15 +106,18 @@ public class TestMill {
 
     @Test
     public void testMillerEntersTheMill() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -133,15 +148,18 @@ public class TestMill {
     
     @Test
     public void testMillWorkerRests() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -167,15 +185,18 @@ public class TestMill {
 
     @Test
     public void testMillWithoutWheatProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -204,15 +225,18 @@ public class TestMill {
 
     @Test
     public void testMillProducesFlour() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -249,15 +273,18 @@ public class TestMill {
 
     @Test
     public void testMillWorkerPlacesFlourCargoAtTheFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
-        Building mill = map.placeBuilding(new Mill(), point1);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         Courier courier = new Courier(map);
         map.placeWorker(courier, hq.getFlag());
@@ -306,15 +333,18 @@ public class TestMill {
     public void testMillWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
 
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -370,15 +400,18 @@ public class TestMill {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
 
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -419,7 +452,7 @@ public class TestMill {
         assertEquals(cargo.getPosition(), mill0.getFlag().getPosition());
     
         /* Connect the mill with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), mill0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -461,15 +494,18 @@ public class TestMill {
     public void testMillerGoesBackToStorageWhenMillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
 
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -501,18 +537,21 @@ public class TestMill {
     public void testMillerGoesBackOnToStorageOnRoadsIfPossibleWhenMillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
 
         /* Connect the mill with the headquarter */
-        map.placeAutoSelectedRoad(mill0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -548,18 +587,21 @@ public class TestMill {
     public void testDestroyedMillIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
 
         /* Connect the mill with the headquarter */
-        map.placeAutoSelectedRoad(mill0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, mill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -590,15 +632,18 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
         
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -615,15 +660,18 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mill */
         Point point26 = new Point(8, 8);
-        Building mill0 = map.placeBuilding(new Mill(), point26);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
         
         /* Finish construction of the mill */
         Utils.constructHouse(mill0, map);
@@ -640,21 +688,24 @@ public class TestMill {
     public void testProductionInMillCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place mill */
         Point point1 = new Point(8, 6);
-        Building mill0 = map.placeBuilding(new Mill(), point1);
+        Building mill0 = map.placeBuilding(new Mill(player0), point1);
         
         /* Connect the mill and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mill */
         Utils.constructHouse(mill0, map);
@@ -701,21 +752,24 @@ public class TestMill {
     public void testProductionInMillCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place mill */
         Point point1 = new Point(8, 6);
-        Building mill0 = map.placeBuilding(new Mill(), point1);
+        Building mill0 = map.placeBuilding(new Mill(player0), point1);
         
         /* Connect the mill and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the mill */
         Utils.constructHouse(mill0, map);

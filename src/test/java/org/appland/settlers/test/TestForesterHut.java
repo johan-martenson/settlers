@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Forester;
@@ -14,6 +16,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FORESTER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -29,7 +32,7 @@ public class TestForesterHut {
 
     @Test
     public void testConstructForester() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         assertTrue(f.underConstruction());
 
@@ -54,7 +57,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerToUnfinishedForester() throws Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         assertTrue(f.underConstruction());
 
@@ -63,7 +66,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerToUnfinishedForester() throws Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         assertTrue(f.underConstruction());
 
@@ -72,7 +75,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerTwice() throws Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         Utils.constructHouse(f, null);
 
@@ -83,7 +86,7 @@ public class TestForesterHut {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerTwice() throws Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         Utils.constructHouse(f, null);
 
@@ -94,7 +97,7 @@ public class TestForesterHut {
 
     @Test
     public void testForesterHutIsNotMilitary() throws Exception {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         Utils.constructHouse(f, null);
 
@@ -105,27 +108,30 @@ public class TestForesterHut {
 
     @Test
     public void testForesterHutUnderConstructionNotNeedsWorker() {
-        ForesterHut f = new ForesterHut();
+        ForesterHut f = new ForesterHut(null);
 
         assertFalse(f.needsWorker());
     }
 
     @Test
     public void testForesterIsAssignedToForesterHut() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         Point point2 = new Point(6, 4);
         Point point3 = new Point(7, 3);
         Point point4 = new Point(8, 2);
         Point point5 = new Point(10, 2);
         Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut, map);
@@ -138,19 +144,22 @@ public class TestForesterHut {
 
     @Test
     public void testOnlyOneForesterIsAssignedToForesterHut() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(7, 3);
         Point point4 = new Point(8, 2);
         Point point5 = new Point(10, 2);
         Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -168,13 +177,16 @@ public class TestForesterHut {
 
     @Test
     public void testArrivedForesterRestsInHutAndThenLeaves() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -203,13 +215,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterFindsSpotToPlantNewTree() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -243,13 +258,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterReachesPointToPlantTree() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -283,13 +301,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterPlantsTree() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -337,13 +358,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterReturnsHomeAfterPlantingTree() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -396,13 +420,16 @@ public class TestForesterHut {
     
     @Test
     public void testForesterHutProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -426,13 +453,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterStaysInsideWhenThereAreNoSpotsAvailable() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -467,13 +497,16 @@ public class TestForesterHut {
 
     @Test
     public void testForesterDoesNotPlantTreeOnStone() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building foresterHut = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -513,15 +546,18 @@ public class TestForesterHut {
     public void testForesterGoesBackToStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing forester hut */
         Point point26 = new Point(8, 8);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point26);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
         /* Finish construction of the forester hut */
         Utils.constructHouse(foresterHut0, map);
@@ -553,18 +589,21 @@ public class TestForesterHut {
     public void testForesterGoesBackOnToStorageOnRoadsIfPossibleWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing forester hut */
         Point point26 = new Point(8, 8);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point26);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
         /* Connect the forester hut with the headquarter */
-        map.placeAutoSelectedRoad(foresterHut0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the forester hut */
         Utils.constructHouse(foresterHut0, map);
@@ -600,21 +639,24 @@ public class TestForesterHut {
     public void testProductionInForesterHutCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place forester hut */
         Point point1 = new Point(8, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
         
         /* Connect the forester hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut0, map);
@@ -667,21 +709,24 @@ public class TestForesterHut {
     public void testProductionInForesterHutCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place forester hut */
         Point point1 = new Point(8, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point1);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
         
         /* Connect the forester hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut0, map);

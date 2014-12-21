@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -18,6 +20,7 @@ import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
@@ -40,9 +43,12 @@ public class TestFishery {
 
     @Test
     public void testConstructFisherman() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(player0);
 
         assertTrue(f.underConstruction());
 
@@ -67,9 +73,12 @@ public class TestFishery {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerToUnfinishedFishery() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(player0);
 
         assertTrue(f.underConstruction());
 
@@ -78,9 +87,12 @@ public class TestFishery {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerToUnfinishedFisherman() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(player0);
 
         assertTrue(f.underConstruction());
 
@@ -89,9 +101,12 @@ public class TestFishery {
 
     @Test(expected = Exception.class)
     public void testAssignWorkerTwice() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(player0);
 
         Utils.constructHouse(f, map);
 
@@ -102,9 +117,12 @@ public class TestFishery {
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerTwice() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(player0);
 
         Utils.constructHouse(f, map);
 
@@ -115,7 +133,7 @@ public class TestFishery {
 
     @Test
     public void testFisheryIsNotMilitary() throws Exception {
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(null);
 
         Utils.constructHouse(f, null);
 
@@ -126,27 +144,30 @@ public class TestFishery {
 
     @Test
     public void testFisheryUnderConstructionNotNeedsWorker() {
-        Fishery f = new Fishery();
+        Fishery f = new Fishery(null);
 
         assertFalse(f.needsWorker());
     }
 
     @Test
     public void testFishermanIsAssignedToFishery() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(10, 4);
-        Building fishery = map.placeBuilding(new Fishery(), point1);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
         Point point2 = new Point(6, 4);
         Point point3 = new Point(7, 3);
         Point point4 = new Point(8, 2);
         Point point5 = new Point(10, 2);
         Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish the fisherman hut */
         Utils.constructHouse(fishery, map);
@@ -159,20 +180,23 @@ public class TestFishery {
 
     @Test
     public void testOnlyOneFishermanIsAssignedToFishery() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(10, 4);
-        Building fishery = map.placeBuilding(new Fishery(), point1);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
         Point point2 = new Point(6, 4);
         Point point3 = new Point(7, 3);
         Point point4 = new Point(8, 2);
         Point point5 = new Point(10, 2);
         Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Construct the fisherman hut */
         constructHouse(fishery, map);
@@ -190,7 +214,10 @@ public class TestFishery {
 
     @Test
     public void testArrivedFishermanRestsInFisherytAndThenLeaves() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -200,10 +227,10 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
 
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(10, 4);
-        Building fishery = map.placeBuilding(new Fishery(), point3);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
 
         /* Construct the fisherman hut */
         constructHouse(fishery, map);
@@ -232,7 +259,10 @@ public class TestFishery {
 
     @Test
     public void testFishermanFindsSpotToFish() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -242,10 +272,10 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(6, 6);
-        Building fishery = map.placeBuilding(new Fishery(), point3);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
 
         /* Construct the fisherman fishery */
         constructHouse(fishery, map);
@@ -276,7 +306,10 @@ public class TestFishery {
 
     @Test
     public void testFishermanReachesPointToFish() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -286,10 +319,10 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(), point3);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut, map);
@@ -325,7 +358,10 @@ public class TestFishery {
 
     @Test
     public void testFishermanFishes() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -335,10 +371,10 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
 
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(), point3);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut, map);
@@ -394,7 +430,10 @@ public class TestFishery {
 
     @Test
     public void testFishermanReturnsHomeAfterFishing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -404,10 +443,10 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(), point3);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut, map);
@@ -459,7 +498,10 @@ public class TestFishery {
     
     @Test
     public void testFishermanPlacesFishAtFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -469,13 +511,13 @@ public class TestFishery {
         Utils.setTileToWater(point0, point1, point2, map);
         
         Point hqPoint = new Point(15, 15);
-        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(), point3);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
 
         /* Connect the hq with the fishery */
-        map.placeAutoSelectedRoad(hq.getFlag(), fishery.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), fishery.getFlag());
         
         /* Construct the fisherman hut */
         constructHouse(fishery, map);
@@ -546,13 +588,16 @@ public class TestFishery {
     
     @Test
     public void testFishermanStaysInsideWhenThereIsNoWaterClose() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(10, 4);
-        Building fishermanHut = map.placeBuilding(new Fishery(), point1);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point1);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut, map);
@@ -589,7 +634,10 @@ public class TestFishery {
     public void testPlaceFisherySoFirstMatchIsMiddleOfLake() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place a fish tile */
         Point point0 = new Point(10, 4);
@@ -674,7 +722,7 @@ public class TestFishery {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* 7 ticks from start */
         for (int i = 0; i < 7; i++) {
@@ -683,7 +731,7 @@ public class TestFishery {
 
         /* Placing fishery */
         Point point22 = new Point(10, 8);
-        Building fishery0 = map.placeBuilding(new Fishery(), point22);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
         /* 20 ticks from start */
         for (int i = 0; i < 13; i++) {
@@ -695,7 +743,7 @@ public class TestFishery {
         Point point24 = new Point(10, 6);
         Point point25 = new Point(7, 5);
         Point point26 = new Point(6, 4);
-        Road road0 = map.placeRoad(point23, point24, point2, point25, point26);
+        Road road0 = map.placeRoad(player0, point23, point24, point2, point25, point26);
 
         /* Wait for the fishery to be finished */
         Utils.fastForwardUntilBuildingIsConstructed(fishery0, map);
@@ -714,7 +762,10 @@ public class TestFishery {
 
     @Test
     public void testFishermanCanRunOutOfFish() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point0 = new Point(4, 4);
@@ -734,14 +785,14 @@ public class TestFishery {
 
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        Building hq = map.placeBuilding(new Headquarter(), hqPoint);
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place fishery */
         Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(), point3);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
 
         /* Place a road from the headquarter to the fishery */
-        map.placeAutoSelectedRoad(hq.getFlag(), fishery.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), fishery.getFlag());
         
         /* Construct the fisherman hut */
         constructHouse(fishery, map);
@@ -811,11 +862,14 @@ public class TestFishery {
     public void testFisheryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place fish on one tile */
         Point point0 = new Point(8, 6);
@@ -826,7 +880,7 @@ public class TestFishery {
         
         /* Placing fishery */
         Point point26 = new Point(8, 8);
-        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
         /* Finish construction of the fishery */
         Utils.constructHouse(fishery0, map);
@@ -892,11 +946,14 @@ public class TestFishery {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place fish on one tile */
         Point point0 = new Point(8, 6);
@@ -907,7 +964,7 @@ public class TestFishery {
         
         /* Placing fishery */
         Point point26 = new Point(8, 8);
-        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
         /* Finish construction of the fishery */
         Utils.constructHouse(fishery0, map);
@@ -950,7 +1007,7 @@ public class TestFishery {
         assertEquals(cargo.getPosition(), fishery0.getFlag().getPosition());
     
         /* Connect the fishery with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), fishery0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -992,15 +1049,18 @@ public class TestFishery {
     public void testFishermanGoesBackToStorageWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
-        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
         /* Finish construction of the fishery */
         Utils.constructHouse(fishery0, map);
@@ -1032,18 +1092,21 @@ public class TestFishery {
     public void testFishermanGoesBackOnToStorageOnRoadsIfPossibleWhenFisheryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
-        Building fishery0 = map.placeBuilding(new Fishery(), point26);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
 
         /* Connect the fishery with the headquarter */
-        map.placeAutoSelectedRoad(fishery0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the fishery */
         Utils.constructHouse(fishery0, map);
@@ -1079,7 +1142,10 @@ public class TestFishery {
     public void testProductionInFisheryCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place fish on one tile */
         Point point10 = new Point(10, 6);
@@ -1090,17 +1156,17 @@ public class TestFishery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place fishery */
         Point point1 = new Point(8, 6);
-        Building fishery0 = map.placeBuilding(new Fishery(), point1);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
         
         /* Connect the fishery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the fishery */
         Utils.constructHouse(fishery0, map);
@@ -1148,7 +1214,10 @@ public class TestFishery {
     public void testProductionInFisheryCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
         Point point10 = new Point(10, 6);
@@ -1159,17 +1228,17 @@ public class TestFishery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place fishery */
         Point point1 = new Point(8, 6);
-        Building fishery0 = map.placeBuilding(new Fishery(), point1);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
         
         /* Connect the fishery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the fishery */
         Utils.constructHouse(fishery0, map);

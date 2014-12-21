@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
@@ -18,6 +20,7 @@ import org.appland.settlers.model.Courier;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,15 +37,18 @@ public class TestSlaughterHouse {
     
     @Test
     public void testSlaughterHouseNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -50,7 +56,7 @@ public class TestSlaughterHouse {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Unfinished slaughter house doesn't need worker */
         assertFalse(slaughterHouse.needsWorker());
@@ -63,22 +69,25 @@ public class TestSlaughterHouse {
 
     @Test
     public void testHeadquarterHasOneButcherAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(BUTCHER), 1);
     }
     
     @Test
     public void testSlaughterHouseGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -86,7 +95,7 @@ public class TestSlaughterHouse {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -119,15 +128,18 @@ public class TestSlaughterHouse {
     
     @Test
     public void testOccupiedSlaughterHouseWithoutPigsProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -150,15 +162,18 @@ public class TestSlaughterHouse {
     
     @Test
     public void testUnoccupiedSlaughterHouseProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -173,15 +188,18 @@ public class TestSlaughterHouse {
 
     @Test
     public void testOccupiedSlaughterHouseWithPigsProducesMeat() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -189,7 +207,7 @@ public class TestSlaughterHouse {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -221,15 +239,18 @@ public class TestSlaughterHouse {
 
     @Test
     public void testButcherLeavesMeatAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -237,7 +258,7 @@ public class TestSlaughterHouse {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -283,15 +304,18 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionOfOneBreadConsumesOnePig() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -312,15 +336,18 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionCountdownStartsWhenMaterialIsAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
-        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(), point3);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
@@ -352,15 +379,18 @@ public class TestSlaughterHouse {
     public void testSlaughterHouseWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -416,15 +446,18 @@ public class TestSlaughterHouse {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -465,7 +498,7 @@ public class TestSlaughterHouse {
         assertEquals(cargo.getPosition(), slaughterHouse0.getFlag().getPosition());
     
         /* Connect the slaughter house with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), slaughterHouse0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -506,15 +539,18 @@ public class TestSlaughterHouse {
     public void testButcherGoesBackToStorageWhenSlaughterHouseIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -546,18 +582,21 @@ public class TestSlaughterHouse {
     public void testButcherGoesBackOnToStorageOnRoadsIfPossibleWhenSlaughterHouseIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Connect the slaughter house with the headquarter */
-        map.placeAutoSelectedRoad(slaughterHouse0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -593,18 +632,21 @@ public class TestSlaughterHouse {
     public void testDestroyedSlaughterHouseIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Connect the slaughter house with the headquarter */
-        map.placeAutoSelectedRoad(slaughterHouse0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -635,15 +677,18 @@ public class TestSlaughterHouse {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
         
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -660,15 +705,18 @@ public class TestSlaughterHouse {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing slaughter house */
         Point point26 = new Point(8, 8);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point26);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
         
         /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -685,21 +733,24 @@ public class TestSlaughterHouse {
     public void testProductionInSlaughterHouseCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place slaughter house */
         Point point1 = new Point(8, 6);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point1);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
         
         /* Connect the slaughter house and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
@@ -745,21 +796,24 @@ public class TestSlaughterHouse {
     public void testProductionInSlaughterHouseCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place slaughter house */
         Point point1 = new Point(8, 6);
-        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(), point1);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
         
         /* Connect the slaughter house and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);

@@ -1,5 +1,7 @@
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -19,6 +21,7 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
@@ -37,10 +40,13 @@ public class GameLogicTest {
 
     @Test
     public void testInitiateNewDeliveries() throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidEndPointException, Exception {
-        GameMap map = new GameMap(30, 30);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players,30, 30);
 
-        Headquarter hq = new Headquarter();
-        Woodcutter wc = new Woodcutter();
+        Headquarter hq = new Headquarter(player0);
+        Woodcutter wc = new Woodcutter(player0);
 
         Point hqPoint = new Point(5, 5);
         Point wcPoint = new Point(5, 11);
@@ -48,7 +54,7 @@ public class GameLogicTest {
         map.placeBuilding(hq, hqPoint);
         map.placeBuilding(wc, wcPoint);
 
-        map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
 
         Utils.constructHouse(wc, map);
 
@@ -67,13 +73,13 @@ public class GameLogicTest {
         Utils.fastForward(20, map);
         
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */
-        Sawmill sm = new Sawmill();
+        Sawmill sm = new Sawmill(player0);
 
         Point smPoint = new Point(10, 10);
 
         map.placeBuilding(sm, smPoint);
 
-        map.placeAutoSelectedRoad(hq.getFlag(), sm.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), sm.getFlag());
 
         /* Verify that a new delivery is initiated for the sawmill */
         assertTrue(sm.needsMaterial(PLANCK));
@@ -87,19 +93,23 @@ public class GameLogicTest {
 
     @Test
     public void testAssignWorkToIdleCouriers() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map   = new GameMap(30, 30);
-        Sawmill sm    = new Sawmill();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map   = new GameMap(players, 30, 30);
+        Sawmill sm    = new Sawmill(player0);
         Point smPoint = new Point(5, 5);
         Point fp      = new Point(10, 10);
         Courier courier     = new Courier(map);
         Road r;
                 
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        Flag f = map.placeFlag(fp);
+        Flag f = map.placeFlag(player0, fp);
         map.placeBuilding(sm, smPoint);
-        r = map.placeAutoSelectedRoad(f, sm.getFlag());
+        r = map.placeAutoSelectedRoad(player0, f, sm.getFlag());
         map.placeWorker(courier, f);
         courier.assignToRoad(r);
 
@@ -135,8 +145,12 @@ public class GameLogicTest {
 
     @Test
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        GameMap map   = new GameMap(30, 30);
-        Woodcutter wc = new Woodcutter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        
+        GameMap map   = new GameMap(players, 30, 30);
+        Woodcutter wc = new Woodcutter(player0);
         Point srcPnt  = new Point(5, 5);
         Point wcPoint = new Point(11, 5);
         Courier w     = new Courier(map);
@@ -144,12 +158,12 @@ public class GameLogicTest {
         Road r;
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        Flag src = map.placeFlag(srcPnt);
+        Flag src = map.placeFlag(player0, srcPnt);
         map.placeBuilding(wc, wcPoint);
 
-        r = map.placeAutoSelectedRoad(src, wc.getFlag());
+        r = map.placeAutoSelectedRoad(player0, src, wc.getFlag());
         map.placeWorker(w, src);
         w.assignToRoad(r);
 
@@ -185,19 +199,22 @@ public class GameLogicTest {
 
     @Test
     public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
-        GameMap map = new GameMap(30, 30);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players,30, 30);
 
-        Headquarter hq = new Headquarter();
-        Barracks bk = new Barracks();
-        ForesterHut fHut = new ForesterHut();
+        Headquarter hq = new Headquarter(player0);
+        Barracks bk = new Barracks(player0);
+        ForesterHut fHut = new ForesterHut(player0);
 
         Point hqPoint = new Point(5, 5);
         Point wcPoint = new Point(6, 10);
         Point fhPoint = new Point(5, 17);
 
         map.placeBuilding(hq, hqPoint);
-        Flag bkFlag = map.placeFlag(wcPoint.downRight());
-        Flag hutFlag = map.placeFlag(fhPoint.downRight());
+        Flag bkFlag = map.placeFlag(player0, wcPoint.downRight());
+        Flag hutFlag = map.placeFlag(player0, fhPoint.downRight());
 
         /* Assign new workers to unocupied places. Since there are no places 
          * that require workers this should not do anything*/
@@ -209,8 +226,8 @@ public class GameLogicTest {
         assertEquals(map.getWorkers().size(), 1);
 
         /* Construct a road without any courier assigned */
-        Road r  = map.placeAutoSelectedRoad(hq.getFlag(), bkFlag);
-        Road r2 = map.placeAutoSelectedRoad(hq.getFlag(), hutFlag);
+        Road r  = map.placeAutoSelectedRoad(player0, hq.getFlag(), bkFlag);
+        Road r2 = map.placeAutoSelectedRoad(player0, hq.getFlag(), hutFlag);
 
         assertEquals(map.getWorkers().size(), 1);
 

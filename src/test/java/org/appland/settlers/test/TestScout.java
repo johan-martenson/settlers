@@ -33,18 +33,21 @@ public class TestScout {
     public void testScoutCanBeCalledFromFlag() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Call scout from the flag */
         flag.callScout();
@@ -54,18 +57,21 @@ public class TestScout {
     public void testStorageDispatchesScoutWhenItHasBeenCalled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -87,18 +93,21 @@ public class TestScout {
     public void testScoutGetsToFlagThenLeavesToNearbySpot() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -132,18 +141,21 @@ public class TestScout {
     public void testScoutWalksEastTowardAndThroughTheBorder() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -175,18 +187,21 @@ public class TestScout {
     public void testScoutWalksNorthTowardAndThroughTheBorder() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(5, 23);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -223,18 +238,21 @@ public class TestScout {
     public void testScoutWalksEightByThreeSegmentsAndThenReturnsToFlag() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -277,18 +295,21 @@ public class TestScout {
     public void testScoutDoesNotGoOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(9, 3);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -314,8 +335,8 @@ public class TestScout {
 
         /* Verify that the scout does not go outside the map */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(map.isWithinBorder(scout.getTarget()));
-            assertTrue(map.isWithinBorder(scout.getPosition()));
+            assertTrue(player0.isWithinBorder(scout.getTarget()));
+            assertTrue(player0.isWithinBorder(scout.getPosition()));
 
             if (scout.getTarget().equals(headquarter0.getPosition())) {
                 break;
@@ -329,18 +350,21 @@ public class TestScout {
     public void testScoutDiscoversNewGround() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -371,7 +395,7 @@ public class TestScout {
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-            assertTrue(map.getDiscoveredLand().contains(scout.getPosition()));
+            assertTrue(player0.getDiscoveredLand().contains(scout.getPosition()));
         }
 
         assertEquals(scout.getTarget(), flag.getPosition());
@@ -444,11 +468,14 @@ public class TestScout {
     public void testDepositingScoutIncreasesAmountOfScouts() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage) map.placeBuilding(new Headquarter(), point0);
+        Storage headquarter0 = (Storage) map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add a scout to the headquarter and verify that the amount goes up*/
         int amount = headquarter0.getAmount(SCOUT);
@@ -462,21 +489,24 @@ public class TestScout {
     public void testSeveralScoutsCanBeCalled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage) map.placeBuilding(new Headquarter(), point0);
+        Storage headquarter0 = (Storage) map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Add more scouts to the headquarter */
         headquarter0.depositWorker(new Scout(map));
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -503,18 +533,21 @@ public class TestScout {
     public void testScoutGoesOutAgainIfNeeded() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -589,18 +622,21 @@ public class TestScout {
     public void testReturningScoutIncreasesAmountInStorage() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);

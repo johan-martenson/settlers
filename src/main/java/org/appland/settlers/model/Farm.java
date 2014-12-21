@@ -17,4 +17,8 @@ import static org.appland.settlers.model.Size.LARGE;
 @Production(output = WHEAT, requiredGoods = {})
 @RequiresWorker(workerType = FARMER)
 public class Farm extends Building {
+
+    public Farm(Player player0) {
+        super(player0);
+    }
 }

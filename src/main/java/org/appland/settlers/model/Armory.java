@@ -20,4 +20,9 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @HouseSize(size = MEDIUM)
 @Production(requiredGoods = {IRON, COAL}, output = {SWORD, SHIELD})
 @RequiresWorker(workerType = ARMORER)
-public class Armory extends Building {}
+public class Armory extends Building {
+
+    public Armory(Player player0) {
+        super(player0);
+    }
+}

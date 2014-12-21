@@ -5,9 +5,12 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.IRON;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.junit.Assert.assertFalse;
@@ -24,11 +27,14 @@ public class TestSign {
     public void testSignExpires() throws Exception {
         
         /* Create a new game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
     
         /* Place sign */
         Point point0 = new Point(6, 6);

@@ -54,7 +54,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     private static final Logger log = Logger.getLogger(Building.class.getName());
 
-    public Building() {
+    public Building(Player p) {
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
         countdown             = new Countdown();
@@ -72,11 +72,6 @@ public class Building implements Actor, EndPoint, Piece {
         countdown.countFrom(getConstructionCountdown());
 
         state = UNDER_CONSTRUCTION;
-    }
-    
-    public Building(Player p) {
-        this();
-
         player = p;
         
         flag.setPlayer(p);

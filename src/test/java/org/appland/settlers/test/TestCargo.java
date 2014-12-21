@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -15,6 +17,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
@@ -38,18 +41,21 @@ public class TestCargo {
 
     @Test
     public void testGetNextIsValidDirectlyAfterSetTarget() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(8, 6);
-        Building wc = map.placeBuilding(new Woodcutter(), point1);
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(6, 4);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Cargo cargo = new Cargo(PLANCK, map);
         
@@ -62,13 +68,16 @@ public class TestCargo {
 
     @Test
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point1 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(point1);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         Cargo cargo = new Cargo(PLANCK, map);
         
@@ -81,29 +90,32 @@ public class TestCargo {
     public void testCargoIsReturnedToStorageWhenTargetBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Placing forester */
         Point point39 = new Point(10, 8);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(), point39);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point39);
 
         /* Placing flag */
         Point point2 = new Point(9, 5);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
 
         /* Placing road between (11, 7) and (9, 5) */
         Point point40 = new Point(11, 7);
         Point point41 = new Point(10, 6);
         Point point42 = new Point(7, 5);
         Point point43 = new Point(6, 4);
-        Road road0 = map.placeRoad(point40, point41, point2);
+        Road road0 = map.placeRoad(player0, point40, point41, point2);
         
         /* Placing road between (9, 5) and (6, 4) */
-        Road road1 = map.placeRoad(point2, point42, point43);
+        Road road1 = map.placeRoad(player0, point2, point42, point43);
 
         /* Place couriers on the roads */
         Utils.occupyRoad(new Courier(map), road0, map);

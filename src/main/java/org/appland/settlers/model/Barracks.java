@@ -16,10 +16,6 @@ public class Barracks extends Building {
         super(p);
     }
 
-    public Barracks() {
-        super();
-    }
-
     @Override
     public void stopProduction() throws Exception {
         throw new Exception("Cannot stop production in barracks.");

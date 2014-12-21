@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -13,6 +15,7 @@ import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Woodcutter;
@@ -31,7 +34,7 @@ public class TestHeadquarter {
 
     @Test
     public void testInitialInventory() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
 
         assertEquals(hq.getAmount(WOOD),    4);
         assertEquals(hq.getAmount(PLANCK), 15);
@@ -45,8 +48,11 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterIsReadyDirectly() throws Exception {
-        GameMap map = new GameMap(15, 15);
-        Headquarter hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+        Headquarter hq = new Headquarter(player0);
         Point hqPoint = new Point(5, 5);
 
         map.placeBuilding(hq, hqPoint);
@@ -56,8 +62,11 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterNeedsNoWorker() throws Exception {
-        GameMap map = new GameMap(15, 15);
-        Headquarter hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+        Headquarter hq = new Headquarter(player0);
         Point hqPoint = new Point(5, 5);
 
         map.placeBuilding(hq, hqPoint);
@@ -67,8 +76,11 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterGetsWorkerAutomatically() throws Exception {
-        GameMap map = new GameMap(15, 15);
-        Headquarter hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
+        Headquarter hq = new Headquarter(player0);
         Point hqPoint = new Point(5, 5);
 
         map.placeBuilding(hq, hqPoint);
@@ -79,16 +91,19 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquartersStorageWorkerDeliversCargo() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(), point1.upLeft());
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
         
-        map.placeAutoSelectedRoad(hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
                 
         /* The storage worker rests */
         Utils.fastForward(19, map);
@@ -118,11 +133,14 @@ public class TestHeadquarter {
 
     @Test(expected = Exception.class)
     public void testHeadquarterCannotBeTornDown() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Verify that trying to tear it down causes an exception */
         hq.tearDown();

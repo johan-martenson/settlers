@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -35,15 +38,18 @@ public class TestPigFarm {
 
     @Test
     public void testUnfinishedPigFarmNeedsNoPigBreeder() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place pig farm */
         Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(), point0);
+        Building farm = map.placeBuilding(new PigFarm(player0), point0);
 
         assertTrue(farm.underConstruction());
         assertFalse(farm.needsWorker());
@@ -51,15 +57,18 @@ public class TestPigFarm {
 
     @Test
     public void testFinishedPigFarmNeedsPigBreeder() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place pig farm */
         Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(), point0);
+        Building farm = map.placeBuilding(new PigFarm(player0), point0);
 
         Utils.constructHouse(farm, map);
         
@@ -69,22 +78,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederIsAssignedToFinishedPigFarm() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(), point3);
+        Building farm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish the pig farm */
         Utils.constructHouse(farm, map);
@@ -100,22 +112,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederRestsInPigFarmThenLeaves() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(pigFarm, map);
 
@@ -149,22 +164,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederFeedsThePigsWhenItHasResources() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(pigFarm, map);
 
@@ -221,22 +239,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederReturnsAfterFeeding() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(pigFarm, map);
 
@@ -296,22 +317,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederDeliversPigToFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
         
         Utils.constructHouse(pigFarm, map);
         
@@ -399,22 +423,25 @@ public class TestPigFarm {
 
     @Test
     public void testPigFarmWithoutPigBreederProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(), point3);
+        Building farm = map.placeBuilding(new PigFarm(player0), point3);
 
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(farm, map);
         
@@ -433,15 +460,18 @@ public class TestPigFarm {
     public void testPigFarmWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -513,15 +543,18 @@ public class TestPigFarm {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -572,7 +605,7 @@ public class TestPigFarm {
         assertEquals(cargo.getPosition(), pigFarm0.getFlag().getPosition());
     
         /* Connect the pig farm with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), pigFarm0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -614,15 +647,18 @@ public class TestPigFarm {
     public void testPigBreederGoesBackToStorageWhenPigFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -654,18 +690,21 @@ public class TestPigFarm {
     public void testPigBreederGoesBackOnToStorageOnRoadsIfPossibleWhenPigFarmIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
         /* Connect the pig farm with the headquarter */
-        map.placeAutoSelectedRoad(pigFarm0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -699,15 +738,18 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederWithoutResourcesProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Utils.constructHouse(pigFarm, map);
 
@@ -733,15 +775,18 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederWithoutResourcesStaysInHouse() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
         Utils.constructHouse(pigFarm, map);
 
@@ -767,15 +812,18 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederFeedsPigsWithWaterAndWheat() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
-        Building pigFarm = map.placeBuilding(new PigFarm(), point3);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
         
         Utils.constructHouse(pigFarm, map);
 
@@ -831,18 +879,21 @@ public class TestPigFarm {
     public void testDestroyedPigFarmIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
 
         /* Connect the pig farm with the headquarter */
-        map.placeAutoSelectedRoad(pigFarm0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -873,15 +924,18 @@ public class TestPigFarm {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
         
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -898,15 +952,18 @@ public class TestPigFarm {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
         Point point26 = new Point(8, 8);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point26);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
         
         /* Finish construction of the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -923,21 +980,24 @@ public class TestPigFarm {
     public void testProductionInPigFarmCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place pig farm */
         Point point1 = new Point(8, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point1);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
         
         /* Connect the pig farm and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the pig farm */
         Utils.constructHouse(pigFarm0, map);
@@ -985,21 +1045,24 @@ public class TestPigFarm {
     public void testProductionInPigFarmCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place pig farm */
         Point point1 = new Point(8, 6);
-        Building pigFarm0 = map.placeBuilding(new PigFarm(), point1);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
         
         /* Connect the pig farm and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the pig farm */
         Utils.constructHouse(pigFarm0, map);

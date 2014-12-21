@@ -13,6 +13,10 @@ import static org.appland.settlers.model.Size.LARGE;
 @MilitaryBuilding(maxHostedMilitary = 9, defenceRadius = 18, maxCoins = 4, attackRadius = 36)
 public class Fortress extends Building {
 
+    public Fortress(Player player0) {
+        super(player0);
+    }
+
     @Override
     public void stopProduction() throws Exception {
         throw new Exception("Cannot stop production in barracks.");

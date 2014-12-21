@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
@@ -21,6 +23,7 @@ import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.SHIELD;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,15 +40,18 @@ public class TestArmory {
     
     @Test
     public void testArmoryNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -53,7 +59,7 @@ public class TestArmory {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Unfinished armory doesn't need worker */
         assertFalse(armory.needsWorker());
@@ -66,22 +72,25 @@ public class TestArmory {
 
     @Test
     public void testHeadquarterHasOneArmorerAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(ARMORER), 1);
     }
     
     @Test
     public void testArmoryGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -89,7 +98,7 @@ public class TestArmory {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -122,15 +131,18 @@ public class TestArmory {
     
     @Test
     public void testOccupiedArmoryWithoutCoalAndIronProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -153,15 +165,18 @@ public class TestArmory {
     
     @Test
     public void testUnoccupiedArmoryProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -176,15 +191,18 @@ public class TestArmory {
 
     @Test
     public void testOccupiedArmoryWithCoalAndIronProducesWeapon() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -192,7 +210,7 @@ public class TestArmory {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -225,15 +243,18 @@ public class TestArmory {
 
     @Test
     public void testArmorerLeavesWeaponAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -241,7 +262,7 @@ public class TestArmory {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -288,15 +309,18 @@ public class TestArmory {
 
     @Test
     public void testProductionOfOneSwordConsumesOneCoalAndOneIron() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -320,15 +344,18 @@ public class TestArmory {
 
     @Test
     public void testProductionCountdownStartsWhenMaterialsAreAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -359,15 +386,18 @@ public class TestArmory {
 
     @Test
     public void testArmoryShiftsBetweenProducingSwordsAndShields() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(), point3);
+        Building armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -375,7 +405,7 @@ public class TestArmory {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
@@ -419,15 +449,18 @@ public class TestArmory {
     public void testArmoryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing armory */
         Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(), point26);
+        Building armory0 = map.placeBuilding(new Armory(player0), point26);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -487,15 +520,18 @@ public class TestArmory {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing armory */
         Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(), point26);
+        Building armory0 = map.placeBuilding(new Armory(player0), point26);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -540,7 +576,7 @@ public class TestArmory {
         assertEquals(cargo.getPosition(), armory0.getFlag().getPosition());
     
         /* Connect the armory with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), armory0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -584,15 +620,18 @@ public class TestArmory {
     public void testArmorerGoesBackToStorageWhenArmoryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing armory */
         Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(), point26);
+        Building armory0 = map.placeBuilding(new Armory(player0), point26);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -624,18 +663,21 @@ public class TestArmory {
     public void testArmorerGoesBackOnToStorageOnRoadsIfPossibleWhenArmoryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing armory */
         Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(), point26);
+        Building armory0 = map.placeBuilding(new Armory(player0), point26);
 
         /* Connect the armory with the headquarter */
-        map.placeAutoSelectedRoad(armory0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -671,21 +713,24 @@ public class TestArmory {
     public void testProductionInArmoryCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place armory */
         Point point1 = new Point(8, 6);
-        Building armory0 = map.placeBuilding(new Armory(), point1);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
         
         /* Connect the armory and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the armory */
         Utils.constructHouse(armory0, map);
@@ -734,21 +779,24 @@ public class TestArmory {
     public void testProductionInArmoryCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place armory */
         Point point1 = new Point(8, 6);
-        Building armory0 = map.placeBuilding(new Armory(), point1);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
         
         /* Connect the armory and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the armory */
         Utils.constructHouse(armory0, map);

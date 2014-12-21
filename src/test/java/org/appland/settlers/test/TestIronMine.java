@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.MINER;
 import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
@@ -38,7 +41,10 @@ public class TestIronMine {
     
     @Test
     public void testConstructIronMine() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 2);
@@ -46,10 +52,10 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a goldmine*/
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         assertTrue(mine.underConstruction());
         
@@ -60,7 +66,10 @@ public class TestIronMine {
     
     @Test
     public void testIronmineIsNotMilitary() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 2);
@@ -68,10 +77,10 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         /* Verify that the mine is not a military building */
         assertFalse(mine.isMilitaryBuilding());
@@ -83,7 +92,10 @@ public class TestIronMine {
     
     @Test
     public void testIronmineUnderConstructionNotNeedsMiner() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 2);
@@ -91,10 +103,10 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine*/
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         /* Verify that the unfinished mine does not need a worker */
         assertFalse(mine.needsWorker());
@@ -102,7 +114,10 @@ public class TestIronMine {
     
     @Test
     public void testFinishedIronmineNeedsMiner() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(8, 2);
@@ -110,10 +125,10 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine*/
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         Utils.constructHouse(mine, map);
         
@@ -123,21 +138,24 @@ public class TestIronMine {
     
     @Test
     public void testMinerIsAssignedToFinishedIronmine() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
         Point hqPoint = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         /* Place a road between the headquarter and the goldmine */
-        Road road0 = map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
         constructHouse(mine, map);
@@ -159,25 +177,31 @@ public class TestIronMine {
     
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
         Point hqPoint = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         assertEquals(map.getBuildings().size(), 2);
     }
 
     @Test
     public void testArrivedMinerRests() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -185,10 +209,10 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -216,7 +240,10 @@ public class TestIronMine {
 
     @Test
     public void testMinerMinesIron() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -225,10 +252,10 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -266,7 +293,10 @@ public class TestIronMine {
 
     @Test
     public void testIronmineGoesToFlagWithCargoAndBack() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -275,13 +305,13 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -323,14 +353,17 @@ public class TestIronMine {
     
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
-        GameMap map   = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
         
         Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         Point point0 = new Point(2, 2);
         try {
-            map.placeBuilding(new IronMine(), point0);
+            map.placeBuilding(new IronMine(player0), point0);
             assertFalse(true);
         } catch (Exception e) {}
         
@@ -339,7 +372,10 @@ public class TestIronMine {
 
     @Test
     public void testIronmineRunsOutOfIron() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -355,13 +391,13 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -407,7 +443,10 @@ public class TestIronMine {
 
     @Test
     public void testIronmineWithoutIronProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -415,13 +454,13 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -453,7 +492,10 @@ public class TestIronMine {
     
     @Test
     public void testIronmineWithoutFoodProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -462,10 +504,10 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        Building building0 = map.placeBuilding(new Headquarter(), hqPoint);
+        Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -492,7 +534,10 @@ public class TestIronMine {
 
     @Test
     public void testMiningConsumesFood() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -501,10 +546,10 @@ public class TestIronMine {
         
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new IronMine(), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Construct the gold mine */
         constructHouse(mine, map);
@@ -536,7 +581,10 @@ public class TestIronMine {
     public void testIronMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -545,10 +593,10 @@ public class TestIronMine {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Finish construction of the iron mine */
         Utils.constructHouse(ironMine0, map);
@@ -604,7 +652,10 @@ public class TestIronMine {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -613,10 +664,10 @@ public class TestIronMine {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Finish construction of the iron mine */
         Utils.constructHouse(ironMine0, map);
@@ -657,7 +708,7 @@ public class TestIronMine {
         assertEquals(cargo.getPosition(), ironMine0.getFlag().getPosition());
     
         /* Connect the iron mine with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), ironMine0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -698,11 +749,14 @@ public class TestIronMine {
     public void testMinerGoesBackToStorageWhenIronMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -710,7 +764,7 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Finish construction of the iron mine */
         Utils.constructHouse(ironMine0, map);
@@ -742,11 +796,14 @@ public class TestIronMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenIronMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);
@@ -754,10 +811,10 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Placing iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point0);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Connect the iron mine with the headquarter */
-        map.placeAutoSelectedRoad(ironMine0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the iron mine */
         Utils.constructHouse(ironMine0, map);
@@ -793,7 +850,10 @@ public class TestIronMine {
     public void testProductionInMineCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
@@ -802,17 +862,17 @@ public class TestIronMine {
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point1);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
         
         /* Connect the iron mine and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
         
         /* Finish the iron mine */
         Utils.constructHouse(ironMine0, map);
@@ -859,7 +919,10 @@ public class TestIronMine {
     public void testProductionInMineCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
@@ -868,17 +931,17 @@ public class TestIronMine {
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(), point1);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
         
         /* Connect the iron mine and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
         
         /* Finish the iron mine */
         Utils.constructHouse(ironMine0, map);

@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -35,15 +38,18 @@ public class TestBrewery {
     
     @Test
     public void testBreweryNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(brewery.needsWorker());
@@ -56,22 +62,25 @@ public class TestBrewery {
 
     @Test
     public void testHeadquarterHasOneBrewerAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(BREWER), 1);
     }
     
     @Test
     public void testBreweryGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
         Point point4 = new Point(8, 8);
@@ -79,7 +88,7 @@ public class TestBrewery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -116,15 +125,18 @@ public class TestBrewery {
     
     @Test
     public void testOccupiedBreweryWithoutWheatAndWaterProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -147,15 +159,18 @@ public class TestBrewery {
     
     @Test
     public void testUnoccupiedBreweryProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -170,15 +185,18 @@ public class TestBrewery {
 
     @Test
     public void testOccupiedBreweryWithWaterAndWheatProducesBeer() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -211,15 +229,18 @@ public class TestBrewery {
 
     @Test
     public void testBrewerLeavesBeerAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
         Point point4 = new Point(8, 8);
@@ -227,7 +248,7 @@ public class TestBrewery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -273,15 +294,18 @@ public class TestBrewery {
 
     @Test
     public void testProductionOfOneBeerConsumesOneWheatAndOneWater() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -307,15 +331,18 @@ public class TestBrewery {
 
     @Test
     public void testProductionCountdownStartsWhenWheatAndWaterAreAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -346,15 +373,18 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWheat() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -375,15 +405,18 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWater() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
-        Building brewery = map.placeBuilding(new Brewery(), point3);
+        Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery, map);
@@ -406,15 +439,18 @@ public class TestBrewery {
     public void testBreweryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0, map);
@@ -474,15 +510,18 @@ public class TestBrewery {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0, map);
@@ -527,7 +566,7 @@ public class TestBrewery {
         assertEquals(cargo.getPosition(), brewery0.getFlag().getPosition());
     
         /* Connect the brewery with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), brewery0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -569,15 +608,18 @@ public class TestBrewery {
     public void testBrewerGoesBackToStorageWhenBreweryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0, map);
@@ -609,18 +651,21 @@ public class TestBrewery {
     public void testBrewerGoesBackOnToStorageOnRoadsIfPossibleWhenBreweryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing brewery */
         Point point26 = new Point(8, 8);
-        Building brewery0 = map.placeBuilding(new Brewery(), point26);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Connect the brewery with the headquarter */
-        map.placeAutoSelectedRoad(brewery0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery0, map);
@@ -656,21 +701,24 @@ public class TestBrewery {
     public void testProductionInBreweryCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place brewery */
         Point point1 = new Point(8, 6);
-        Building brewery0 = map.placeBuilding(new Brewery(), point1);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
         
         /* Connect the brewery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the brewery */
         Utils.constructHouse(brewery0, map);
@@ -721,21 +769,24 @@ public class TestBrewery {
     public void testProductionInBreweryCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place brewery */
         Point point1 = new Point(8, 6);
-        Building brewery0 = map.placeBuilding(new Brewery(), point1);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
         
         /* Connect the brewery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the brewery */
         Utils.constructHouse(brewery0, map);

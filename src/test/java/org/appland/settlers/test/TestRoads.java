@@ -20,6 +20,7 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COIN;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
@@ -48,43 +49,52 @@ public class TestRoads {
 
     @Test
     public void testGetNotExistingRoad() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         assertNull(map.getRoad(new Point(1, 1), new Point(2, 2)));
     }
 
     @Test
     public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        map.placeFlag(point1);
-        map.placeFlag(point2);
+        map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
-        Road r = map.placeAutoSelectedRoad(point1, point2);
+        Road r = map.placeAutoSelectedRoad(player0, point1, point2);
 
         assertNull(map.findWayWithExistingRoads(point1, new Point(3, 3)));
     }
 
     @Test
     public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        map.placeFlag(point1);
-        map.placeFlag(point2);
+        map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
-        map.placeAutoSelectedRoad(point1, point2);
+        map.placeAutoSelectedRoad(player0, point1, point2);
         
         List<Point> way = map.findWayWithExistingRoads(point1, point2);
         
@@ -106,10 +116,13 @@ public class TestRoads {
          *    |---F7---F8
          */
 
-        GameMap map = new GameMap(30, 30);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 30, 30);
 
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point[] points = new Point[]{
             new Point(1,  3), // F
@@ -126,26 +139,26 @@ public class TestRoads {
 
         int i;
         for (i = 0; i < points.length; i++) {
-            map.placeFlag(points[i]);
+            map.placeFlag(player0, points[i]);
         }
 
         Point target = new Point(16, 6);
         
-        map.placeFlag(target);
+        map.placeFlag(player0, target);
 
-        map.placeRoad(points[0], new Point(3, 3), points[1]);
-        map.placeRoad(points[1], points[1].right(), points[2]);
+        map.placeRoad(player0, points[0], new Point(3, 3), points[1]);
+        map.placeRoad(player0, points[1], points[1].right(), points[2]);
         
-        map.placeRoad(points[2], points[2].right(), points[3]);
+        map.placeRoad(player0, points[2], points[2].right(), points[3]);
         
-        map.placeRoad(points[3], points[3].right(), points[4]);
-        map.placeRoad(points[4], points[4].right(), points[10]);
-        map.placeRoad(points[2], points[2].upRight(), points[9].downLeft(), points[9]);
-        map.placeRoad(points[9], points[9].right(), target);
-        map.placeAutoSelectedRoad(points[1], points[5]);
-        map.placeRoad(points[5], points[5].right(), points[6]);
-        map.placeAutoSelectedRoad(points[1], points[7]);
-        map.placeRoad(points[7], points[7].right(), points[8]);
+        map.placeRoad(player0, points[3], points[3].right(), points[4]);
+        map.placeRoad(player0, points[4], points[4].right(), points[10]);
+        map.placeRoad(player0, points[2], points[2].upRight(), points[9].downLeft(), points[9]);
+        map.placeRoad(player0, points[9], points[9].right(), target);
+        map.placeAutoSelectedRoad(player0, points[1], points[5]);
+        map.placeRoad(player0, points[5], points[5].right(), points[6]);
+        map.placeAutoSelectedRoad(player0, points[1], points[7]);
+        map.placeRoad(player0, points[7], points[7].right(), points[8]);
 
         /* Test route with List<Point> */
         List<Point> route = map.findWayWithExistingRoads(points[0], target);
@@ -177,18 +190,21 @@ public class TestRoads {
 
     @Test
     public void testNeedsCourier() throws InvalidEndPointException, InvalidRouteException, Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        Flag flag0 = map.placeFlag(point1);
-        map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
-        Road r = map.placeAutoSelectedRoad(point1, point2);
+        Road r = map.placeAutoSelectedRoad(player0, point1, point2);
 
         assertTrue(r.needsCourier());
 
@@ -206,41 +222,47 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testAssignWorkerToRoadNotOnMap() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        Flag flag0 = map.placeFlag(point1);
-        map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
         Courier c = new Courier(map);
 
-        Road r = map.placeRoad(point1, point2);
+        Road r = map.placeRoad(player0, point1, point2);
         map.placeWorker(c, flag0);
         c.assignToRoad(r);
     }
 
     @Test(expected=Exception.class)
     public void testAssignTwoWorkersToRoad() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        Flag flag0 = map.placeFlag(point1);
-        map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
         Courier c  = new Courier(map);
         Courier c2 = new Courier(map);
 
-        Road r = map.placeRoad(point1, point2);
+        Road r = map.placeRoad(player0, point1, point2);
         
         map.placeWorker(c, flag0);
         map.placeWorker(c2, flag0);
@@ -251,10 +273,13 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testRoadCanNotShareSegment() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Flag  commonStart = new Flag(new Point(1, 1));
         Flag  end1        = new Flag(new Point(1, 3));
@@ -271,8 +296,8 @@ public class TestRoads {
         wayPoints2.add(middlePoint);
         wayPoints2.add(end2.getPosition());
 
-        map.placeRoad(wayPoints1);
-        map.placeRoad(wayPoints2);
+        map.placeRoad(player0, wayPoints1);
+        map.placeRoad(player0, wayPoints2);
     }
 
     @Test
@@ -282,10 +307,13 @@ public class TestRoads {
 
     @Test(expected=Exception.class)
     public void testRoadsCanNotCross() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point start1      = new Point(1, 1);
         Point end1        = new Point(3, 3);
@@ -303,21 +331,24 @@ public class TestRoads {
         wayPoints2.add(middlePoint);
         wayPoints2.add(end2);
 
-        map.placeFlag(start1);
-        map.placeFlag(start2);
-        map.placeFlag(end1);
-        map.placeFlag(end2);
+        map.placeFlag(player0, start1);
+        map.placeFlag(player0, start2);
+        map.placeFlag(player0, end1);
+        map.placeFlag(player0, end2);
 
-        map.placeRoad(wayPoints1);
-        map.placeRoad(wayPoints2);
+        map.placeRoad(player0, wayPoints1);
+        map.placeRoad(player0, wayPoints2);
     }
 
     @Test
     public void testWayPointsEqualsChosenRoad() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point start       = new Point(1, 1);
         Point end         = new Point(3, 3);
@@ -328,10 +359,10 @@ public class TestRoads {
         wayPoints.add(middlePoint);
 	wayPoints.add(end);
         
-        map.placeFlag(start);
-        map.placeFlag(end);
+        map.placeFlag(player0, start);
+        map.placeFlag(player0, end);
 
-        map.placeRoad(wayPoints);
+        map.placeRoad(player0, wayPoints);
 
 	Road r = map.getRoad(start, end);
         
@@ -345,10 +376,13 @@ public class TestRoads {
 
     @Test(expected = Exception.class)
     public void testLargerStepThanOneIsNotOk() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point start       = new Point(1, 1);
         Point end         = new Point(4, 4);
@@ -359,24 +393,27 @@ public class TestRoads {
         middlePoints.add(middlePoint);
         middlePoints.add(end);
         
-        map.placeFlag(start);
-        map.placeFlag(end);
+        map.placeFlag(player0, start);
+        map.placeFlag(player0, end);
 
-        map.placeRoad(middlePoints);
+        map.placeRoad(player0, middlePoints);
     }
     
     @Test
     public void testPossibleDirectConnectionsFromFlag() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(3, 5);
 
-        map.placeFlag(point1);
+        map.placeFlag(player0, point1);
     
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point1);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point1);
         
         assertEquals(points.size(), 6);
         assertTrue(points.contains(new Point(2, 6)));
@@ -392,38 +429,41 @@ public class TestRoads {
 
     @Test
     public void testPossibleDirectConnectionsInCorners() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         Point point0 = new Point(5, 5);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point downRight = new Point(9, 1);
         Point downLeft  = new Point(1, 1);
         Point upRight   = new Point(9, 9);
         Point upLeft    = new Point(1, 9);
     
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(downRight);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, downRight);
         
         assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(8, 2)));
         assertFalse(points.contains(new Point(9, 3)));
         assertTrue(points.contains(new Point(7, 1)));
 
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(downLeft);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, downLeft);
     
         assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(2, 2)));
         assertFalse(points.contains(new Point(1, 3)));
         assertTrue(points.contains(new Point(3, 1)));
 
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(upRight);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, upRight);
         
         assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(8, 8)));
         assertTrue(points.contains(new Point(7, 9)));
         assertFalse(points.contains(new Point(9, 7)));
         
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(upLeft);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, upLeft);
         
         assertEquals(points.size(), 2);
         assertTrue(points.contains(new Point(2, 8)));
@@ -433,17 +473,20 @@ public class TestRoads {
 
     @Test
     public void testPossibleDirectConnectionsOnSides() throws Exception {
-        GameMap map = new GameMap(10, 10);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 10, 10);
 
         Point point0 = new Point(5, 5);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point right = new Point(9, 5);
         Point left  = new Point(1, 5);
         Point up    = new Point(5, 9);
         Point down  = new Point(5, 1);
     
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(right);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, right);
         
         assertEquals(points.size(), 3);
         assertTrue(points.contains(new Point(8, 4)));
@@ -452,7 +495,7 @@ public class TestRoads {
         assertFalse(points.contains(new Point(9, 3)));
         assertFalse(points.contains(new Point(9, 7)));
 
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(left);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, left);
     
         assertEquals(points.size(), 3);
         assertTrue(points.contains(new Point(2, 4)));
@@ -461,7 +504,7 @@ public class TestRoads {
         assertFalse(points.contains(new Point(1, 3)));
         assertFalse(points.contains(new Point(1, 7)));
 
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(up);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, up);
         
         assertEquals(points.size(), 4);
         assertTrue(points.contains(new Point(4, 8)));
@@ -471,7 +514,7 @@ public class TestRoads {
         assertTrue(points.contains(new Point(7, 9)));
 
         
-        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(down);
+        points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, down);
         
         assertEquals(points.size(), 4);
         assertTrue(points.contains(new Point(4, 2)));
@@ -483,90 +526,105 @@ public class TestRoads {
 
     @Test
     public void testNoPossibleConnectionUpOrDownWithSurroundingRoads() throws Exception {
-        GameMap map = new GameMap(30, 30);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 30, 30);
 
-        map.placeBuilding(new Headquarter(), new Point(16, 10));
-        map.placeFlag(new Point(16, 12));
-        map.placeFlag(new Point(20, 12));
-        map.placeFlag(new Point(12, 12));
-        map.placeRoad(Arrays.asList(new Point[] {new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)}));
+        map.placeBuilding(new Headquarter(player0), new Point(16, 10));
+        map.placeFlag(player0, new Point(16, 12));
+        map.placeFlag(player0, new Point(20, 12));
+        map.placeFlag(player0, new Point(12, 12));
+        map.placeRoad(player0, Arrays.asList(new Point[] {new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)}));
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(new Point(16, 12));
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(16, 12));
     
         assertFalse(points.contains(new Point(16, 14)));
 
-        map.placeFlag(new Point(21, 25));
-        map.placeFlag(new Point(25, 25));
-        map.placeFlag(new Point(17, 25));
-        map.placeRoad(Arrays.asList(new Point[] {new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)}));
+        map.placeFlag(player0, new Point(21, 25));
+        map.placeFlag(player0, new Point(25, 25));
+        map.placeFlag(player0, new Point(17, 25));
+        map.placeRoad(player0, Arrays.asList(new Point[] {new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)}));
 
         assertFalse(points.contains(new Point(21, 23)));
     }
 
     @Test
     public void testNoPossibleConnectionUnderBuilding() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point2 = new Point(12, 8);
-        Building building1 = map.placeBuilding(new Woodcutter(), point2);
+        Building building1 = map.placeBuilding(new Woodcutter(player0), point2);
         Point point3 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
     
         assertFalse(points.contains(point2));
     }
 
     @Test
     public void testNoPossibleConnectionUnderStone() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point2 = new Point(12, 8);
         Stone stone0 = map.placeStone(point2);
         Point point3 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
     
         assertFalse(points.contains(point2));
     }
 
     @Test
     public void testNoPossibleConnectionUnderTree() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point2 = new Point(12, 8);
         Tree tree0 = map.placeTree(point2);
         Point point3 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
     
         assertFalse(points.contains(point2));
     }
     
     @Test
     public void testNoPossibleConnectionsOutsideBorder() throws Exception {
-        GameMap map = new GameMap(100, 100);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
         Point point0 = new Point(50, 50);
         
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(49, 71);
         Point point2 = new Point(51, 71);
         Point point3 = new Point(50, 70);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
         
         assertFalse(points.contains(point2));
         assertFalse(points.contains(point1));
@@ -576,11 +634,14 @@ public class TestRoads {
     public void testNoPossibleConnectionThroughNewCrop() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place crop */
         Point point2 = new Point(12, 8);
@@ -588,38 +649,44 @@ public class TestRoads {
 
         /* Place flag */
         Point point3 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
-        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(point3);
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
 
         assertFalse(points.contains(point2));
     }
 
     @Test
     public void testPlaceRoadWithVarargs() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(1, 1);
         Point point2 = new Point(4, 2);
 
-        map.placeFlag(point1);
-        map.placeFlag(point2);
+        map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
 
-        Road r = map.placeRoad(point1, new Point(3, 1), point2);
+        Road r = map.placeRoad(player0, point1, new Point(3, 1), point2);
     }
 
     @Test (expected = Exception.class)
     public void testNotPossibleToPlaceRoadThroughNewCrop() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place crop */
         Point point2 = new Point(12, 8);
@@ -627,49 +694,55 @@ public class TestRoads {
 
         /* Place flag */
         Point point3 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point3);
+        Flag flag0 = map.placeFlag(player0, point3);
 
         /* Place flag */
         Point point4 = new Point(14, 8);
-        Flag flag1 = map.placeFlag(point4);
+        Flag flag1 = map.placeFlag(player0, point4);
         
         /* Verify that a road can't be placed through the new crop */
-        map.placeRoad(point3, point2, point4);
+        map.placeRoad(player0, point3, point2, point4);
     }
 
     @Test
     public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        map.placeBuilding(new Headquarter(), new Point(5, 5));
-        map.placeFlag(new Point(12, 4));
-        map.placeFlag(new Point(14, 6));
-        map.placeRoad(new Point(12, 4), new Point(13, 5), new Point(14, 6));
-        map.placeFlag(new Point(16, 8));
-        map.placeRoad(new Point(14, 6), new Point(15, 7), new Point(16, 8));
-        map.placeFlag(new Point(16, 4));
-        map.placeRoad(new Point(16, 4), new Point(15, 5), new Point(14, 6));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        map.placeFlag(player0, new Point(12, 4));
+        map.placeFlag(player0, new Point(14, 6));
+        map.placeRoad(player0, new Point(12, 4), new Point(13, 5), new Point(14, 6));
+        map.placeFlag(player0, new Point(16, 8));
+        map.placeRoad(player0, new Point(14, 6), new Point(15, 7), new Point(16, 8));
+        map.placeFlag(player0, new Point(16, 4));
+        map.placeRoad(player0, new Point(16, 4), new Point(15, 5), new Point(14, 6));
     }
 
     @Test
     public void testPlaceFlagInExistingRoadSplitsTheRoad() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
-        map.placeFlag(new Point(9, 5));
-        map.placeFlag(new Point(13, 9));
+        map.placeFlag(player0, new Point(9, 5));
+        map.placeFlag(player0, new Point(13, 9));
         
         Point start = new Point(9, 5);
         Point end = new Point(13, 9);
         Point m1 = new Point(10, 6);
         Point m2 = new Point(11, 7);
         Point m3 = new Point(12, 8);
-        map.placeRoad(start, m1, m2, m3, end);
+        map.placeRoad(player0, start, m1, m2, m3, end);
         
         assertEquals(map.getRoads().size(), 2);
         
-        map.placeFlag(m2);
+        map.placeFlag(player0, m2);
 
         assertEquals(map.getRoads().size(), 3);
         List<Road> roads = new ArrayList<>();
@@ -693,14 +766,17 @@ public class TestRoads {
 
     @Test
     public void testIdleCourierIsAssignedWhenRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -719,7 +795,7 @@ public class TestRoads {
         assertTrue(courier.isAt(middlePoint2));
         
         /* Split road */
-        map.placeFlag(middlePoint2);
+        map.placeFlag(player0, middlePoint2);
 
         assertTrue(courier.isWalkingToRoad());
         assertTrue(courier.getAssignedRoad().getStart().equals(middlePoint2) ||
@@ -728,14 +804,17 @@ public class TestRoads {
     
     @Test
     public void testCourierDeliveringCargoFinishesDeliveryAndIsAssignedWhenRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -772,7 +851,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), hq.getPosition());
         
         /* Split road with the courier on the road further away from the hq */
-        map.placeFlag(middlePoint2);
+        map.placeFlag(player0, middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -784,15 +863,18 @@ public class TestRoads {
     
     @Test
     public void testCourierFarFromToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Storage hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Storage hq = new Headquarter(player0);
         map.placeBuilding(hq, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -830,7 +912,7 @@ public class TestRoads {
         
         /* Split road with the courier on the new road further away from the 
            headquarter */
-        Flag middleFlag = map.placeFlag(middlePoint2);
+        Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -855,15 +937,18 @@ public class TestRoads {
         
     @Test
     public void testCourierCloseToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Storage hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Storage hq = new Headquarter(player0);
         map.placeBuilding(hq, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -904,7 +989,7 @@ public class TestRoads {
         
         /* Split road with the courier on the new road closer to the 
            headquarter */
-        Flag middleFlag = map.placeFlag(middlePoint2);
+        Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
@@ -936,14 +1021,17 @@ public class TestRoads {
 
     @Test
     public void testCourierWalkingToAssignedRoadAdaptsWhenItsRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -961,7 +1049,7 @@ public class TestRoads {
         assertTrue(courier.isWalkingToRoad());
                 
         /* Split road */
-        Flag middleFlag = map.placeFlag(middlePoint2);
+        Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertTrue(courier.isWalkingToRoad());
         assertTrue(courier.getTarget().equals(middlePoint1) ||
@@ -974,15 +1062,18 @@ public class TestRoads {
     
     @Test
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Building hq = map.placeBuilding(new Headquarter(), new Point(5, 5));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -1003,7 +1094,7 @@ public class TestRoads {
         /* Split road */
         assertEquals(map.getRoads().size(), 2);
         
-        map.placeFlag(middlePoint2);
+        map.placeFlag(player0, middlePoint2);
 
         assertEquals(map.getRoads().size(), 3);
         assertEquals(map.getWorkers().size(), 2);
@@ -1049,15 +1140,18 @@ public class TestRoads {
 
     @Test
     public void testCourierDeliversCorrectlyToBuildingAfterItsRoadIsSplit() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        Storage hq = new Headquarter();
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        Storage hq = new Headquarter(player0);
         map.placeBuilding(hq, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
         Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(endPoint);
-        Road road = map.placeRoad(hq.getFlag().getPosition(), 
+        Flag endFlag = map.placeFlag(player0, endPoint);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(), 
                                   middlePoint1, 
                                   middlePoint2,
                                   middlePoint3,
@@ -1097,7 +1191,7 @@ public class TestRoads {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
         
         /* Split road with the courier close to the hq*/
-        Flag middleFlag = map.placeFlag(middlePoint2);
+        Flag middleFlag = map.placeFlag(player0, middlePoint2);
         
         assertEquals(hq.getAmount(BEER), 0);
         
@@ -1109,31 +1203,37 @@ public class TestRoads {
     
     @Test
     public void testRoadCanNotOverlapExistingFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
-        map.placeBuilding(new Headquarter(), new Point(5, 5));
-        map.placeFlag(new Point(10, 4));
-        map.placeFlag(new Point(13, 7));
-        map.placeRoad(new Point(10, 4), new Point(11, 5), new Point(12, 6), new Point(13, 7));
-        map.placeFlag(new Point(14, 4));
-        map.placeFlag(new Point(9, 7));
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        map.placeFlag(player0, new Point(10, 4));
+        map.placeFlag(player0, new Point(13, 7));
+        map.placeRoad(player0, new Point(10, 4), new Point(11, 5), new Point(12, 6), new Point(13, 7));
+        map.placeFlag(player0, new Point(14, 4));
+        map.placeFlag(player0, new Point(9, 7));
 
         thrown.expect(Exception.class);
-        map.placeRoad(new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
+        map.placeRoad(player0, new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
     }
     
     @Test
     public void testOnlyOneCourierIsAssignedToNewRoad() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(12, 6);
-        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(10, 4);
         Point point5 = new Point(12, 4);
         Point point6 = new Point(13, 5);
-        Road road0 = map.placeRoad(point2, point3, point4, point5, point6);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
         
         assertTrue(road0.needsCourier());
         assertEquals(map.getWorkers().size(), 1);
@@ -1169,18 +1269,21 @@ public class TestRoads {
     @Test
     public void testThatCourierIsNotDispatchedToNewRoadWithNoConnection() throws Exception {
 
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(13, 7);
-        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
 
         Point point3 = new Point(12, 4);
         Point point4 = new Point(13, 5);
         Point point5 = new Point(14, 6);
-        Road road0 = map.placeRoad(point2, point3, point4, point5);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
 
         assertTrue(road0.needsCourier());
         assertEquals(map.getWorkers().size(), 1);
@@ -1194,13 +1297,16 @@ public class TestRoads {
 
     @Test
     public void testOnlyTwoCouriersAreAssignedToTwoRoads() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(14, 10);
-        Building building1 = map.placeBuilding(new Woodcutter(), point1);
+        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(13, 5);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
 
         Utils.fastForward(100, map);
         
@@ -1208,7 +1314,7 @@ public class TestRoads {
         Point point4 = new Point(8, 4);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(12, 4);
-        Road road0 = map.placeRoad(point3, point4, point5, point6, point2);
+        Road road0 = map.placeRoad(player0, point3, point4, point5, point6, point2);
         
         assertEquals(map.getWorkers().size(), 1);
         assertTrue(road0.needsCourier());
@@ -1222,7 +1328,7 @@ public class TestRoads {
         Point point8 = new Point(15, 7);
         Point point9 = new Point(16, 8);
         Point point10 = new Point(15, 9);
-        Road road1 = map.placeRoad(point2, point7, point8, point9, point10);
+        Road road1 = map.placeRoad(player0, point2, point7, point8, point9, point10);
 
         assertTrue(road1.needsCourier());
         assertEquals(map.getWorkers().size(), 2);
@@ -1244,48 +1350,57 @@ public class TestRoads {
 
     @Test
     public void testFindShortestWay() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point hqPoint = new Point(5, 9);
-        map.placeBuilding(new Headquarter(), hqPoint);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        List<Point> path = map.findAutoSelectedRoad(new Point(2, 2), new Point(11, 11), null);
+        List<Point> path = map.findAutoSelectedRoad(player0, new Point(2, 2), new Point(11, 11), null);
         
         assertEquals(path.size(), 10);
     
-        path = map.findAutoSelectedRoad(new Point(11, 11), new Point(2, 2), null);
+        path = map.findAutoSelectedRoad(player0, new Point(11, 11), new Point(2, 2), null);
         
         assertEquals(path.size(), 10);
         
-        path = map.findAutoSelectedRoad(new Point(3, 3), new Point(11, 3), null);
+        path = map.findAutoSelectedRoad(player0, new Point(3, 3), new Point(11, 3), null);
         
         assertEquals(path.size(), 5);
     
-        path = map.findAutoSelectedRoad(new Point(11, 3), new Point(3, 3), null);
+        path = map.findAutoSelectedRoad(player0, new Point(11, 3), new Point(3, 3), null);
         
         assertEquals(path.size(), 5);
     }
 
     @Test(expected = Exception.class)
     public void testRoadCannotGoThroughSmallBuilding() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point2 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
 
         Point point3 = new Point(6, 4);
         Point point4 = new Point(5, 3);
         Point point5 = new Point(4, 4);
         Point point6 = new Point(6, 6);
-        Road road0 = map.placeRoad(point3, point4, point5, point0, point6, point2);
+        Road road0 = map.placeRoad(player0, point3, point4, point5, point0, point6, point2);
     }
 
     @Test
     public void testRoadIsCreatedBetweenHouseAndFlag() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point3 = new Point(6, 4);
 
@@ -1294,9 +1409,12 @@ public class TestRoads {
 
     @Test
     public void testRoadBetweenHouseAndFlagNeedsNoCourier() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point3 = new Point(6, 4);
 
@@ -1305,41 +1423,47 @@ public class TestRoads {
 
     @Test(expected = Exception.class)
     public void testCanNotCreateHorizontalRoadWithoutSpaceForCourier() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(3, 3);
         Point point2 = new Point(5, 3);
         
-        map.placeFlag(point1);
-        map.placeFlag(point2);
+        map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
         
-        map.placeRoad(point1, point2);
+        map.placeRoad(player0, point1, point2);
     }
 
     @Test
     public void testSplitHorisontalRoadInBeginningWithTooShortRemainingRoads() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
-        map.placeFlag(new Point(9, 5));
-        map.placeFlag(new Point(17, 5));
+        map.placeFlag(player0, new Point(9, 5));
+        map.placeFlag(player0, new Point(17, 5));
         
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
         Point m1 = new Point(11, 5);
         Point m2 = new Point(13, 5);
         Point m3 = new Point(15, 5);
-        map.placeRoad(start, m1, m2, m3, end);
+        map.placeRoad(player0, start, m1, m2, m3, end);
         
         assertEquals(map.getRoads().size(), 2);
         
         try {
-            map.placeFlag(m1);
+            map.placeFlag(player0, m1);
             assertFalse(true);
         } catch (Exception e) {}
 
@@ -1349,25 +1473,28 @@ public class TestRoads {
 
     @Test
     public void testSplitHorisontalRoadInEndWithTooShortRemainingRoads() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
-        map.placeFlag(new Point(9, 5));
-        map.placeFlag(new Point(17, 5));
+        map.placeFlag(player0, new Point(9, 5));
+        map.placeFlag(player0, new Point(17, 5));
         
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
         Point m1 = new Point(11, 5);
         Point m2 = new Point(13, 5);
         Point m3 = new Point(15, 5);
-        map.placeRoad(start, m1, m2, m3, end);
+        map.placeRoad(player0, start, m1, m2, m3, end);
         
         assertEquals(map.getRoads().size(), 2);
         
         try {
-            map.placeFlag(m3);
+            map.placeFlag(player0, m3);
             assertFalse(true);
         } catch (Exception e) {}
 
@@ -1379,16 +1506,19 @@ public class TestRoads {
     public void testCourierGoesBackToStorageWhenRoadIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing road */
         Point point26 = new Point(8, 8);
-        Flag flag0 = map.placeFlag(point26);
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
+        Flag flag0 = map.placeFlag(player0, point26);
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Occupy the road */
         Utils.occupyRoad(new Courier(map), road0, map);
@@ -1413,21 +1543,24 @@ public class TestRoads {
     public void testCourierGoesBackToStorageOnRoadsIfPossibleWhenRoadIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place road */
         Point point0 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(point0);
+        Flag flag0 = map.placeFlag(player0, point0);
         
         Point point26 = new Point(8, 8);
-        Flag flag1 = map.placeFlag(point26);
+        Flag flag1 = map.placeFlag(player0, point26);
 
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(flag0, flag1);
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         /* Occupy the road */
         Utils.occupyRoad(new Courier(map), road1, map);
@@ -1451,18 +1584,21 @@ public class TestRoads {
     @Test(expected = Exception.class)
     public void testRoadCannotBePlacedThroughExistingFlagThatIsAlsoEndpoint() throws Exception {
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* 93 ticks from start */
         Utils.fastForward(92, map);
 
         /* Placing flag */
         Point point39 = new Point(10, 8);
-        Flag flag0 = map.placeFlag(point39);
+        Flag flag0 = map.placeFlag(player0, point39);
 
         /* Placing road between (6, 4) and (10, 8) */
         Point point40 = new Point(6, 4);
@@ -1472,25 +1608,28 @@ public class TestRoads {
         Point point44 = new Point(11, 9);
         Point point45 = new Point(10, 10);
         Point point46 = new Point(9, 9);
-        Road road0 = map.placeRoad(point40, point41, point42, point43, point39, point44, point45, point46, point39);
+        Road road0 = map.placeRoad(player0, point40, point41, point42, point43, point39, point44, point45, point46, point39);
     }
 
     @Test
     public void testRoadBecomesAgedWithDeliveryToBuilding() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
         
         /* Place flag */
         Point point2 = new Point(5, 9);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
         
         /* Place road between the headquarter and the flag */
-        Road road0 = map.placeAutoSelectedRoad(flag0, headquarter0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
     
         /* Place a worker on the road */
         Courier courier = Utils.occupyRoad(new Courier(map), road0, map);
@@ -1542,25 +1681,28 @@ public class TestRoads {
     public void testRoadBecomesAgedWithDeliveryToFlag() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point38);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
         
         /* Place flag */
         Point point2 = new Point(5, 9);
-        Flag flag0 = map.placeFlag(point2);
+        Flag flag0 = map.placeFlag(player0, point2);
         
         /* Place flag */
         Point point3 = new Point(5, 13);
-        Flag flag1 = map.placeFlag(point3);
+        Flag flag1 = map.placeFlag(player0, point3);
         
         /* Place road between the headquarter and the first flag */
-        Road road0 = map.placeAutoSelectedRoad(flag0, headquarter0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
     
         /* Place road between the headquarter and the second flag */
-        Road road1 = map.placeAutoSelectedRoad(flag0, flag1);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
         
         /* Place workers on the roads */
         Courier courier0 = Utils.occupyRoad(new Courier(map), road0, map);

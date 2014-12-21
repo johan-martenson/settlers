@@ -14,10 +14,11 @@ import java.util.List;
 public class Player {
 
     private List<Land>           ownedLands;
+    private List<Point>          fieldOfView;
+
     private final String         name;
     private final List<Building> buildings;
-    private List<Point>          fieldOfView;
-    private List<Point>          discoveredLand;
+    private final List<Point>    discoveredLand;
 
     public Player(String n) {
         name           = n;
@@ -43,7 +44,7 @@ public class Player {
         return buildings;
     }
 
-    boolean isWithinBorder(Point position) {
+    public boolean isWithinBorder(Point position) {
         for (Land land : ownedLands) {
             if (land.isWithinBorder(position)) {
                 return true;
@@ -53,7 +54,7 @@ public class Player {
         return false;
     }
 
-    List<Collection<Point>> getBorders() {        
+    public List<Collection<Point>> getBorders() {        
         List<Collection<Point>> result = new LinkedList<>();
 
         for (Land land : ownedLands) {
@@ -64,11 +65,15 @@ public class Player {
     }
 
     void updateBorder() {
+        if (getBuildings().isEmpty()) {
+            return;
+        }
+        
         ownedLands = Land.calculateLandWithinBorders(getBuildings());
 
         /* Update field of view */
         updateDiscoveredLand();
-
+        
         fieldOfView = calculateFieldOfView(discoveredLand);
     }
 
@@ -76,7 +81,7 @@ public class Player {
         return ownedLands;
     }
 
-    List<Point> getFieldOfView() {
+    public List<Point> getFieldOfView() {
         return fieldOfView;
     }
 

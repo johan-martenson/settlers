@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Sign;
 import static org.appland.settlers.model.Size.LARGE;
@@ -39,18 +42,21 @@ public class TestGeologist {
     public void testGeologistCanBeCalledFromAFlag() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Call geologist from the flag */
         flag.callGeologist();
@@ -60,18 +66,21 @@ public class TestGeologist {
     public void testStorageDispatchesGeologistWhenItHasBeenCalled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -93,18 +102,21 @@ public class TestGeologist {
     public void testGeologistGetsToFlagThenLeavesToNearbySpot() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -138,18 +150,21 @@ public class TestGeologist {
     public void testGeologistDoesResearchAndPutsUpSign() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -198,18 +213,21 @@ public class TestGeologist {
     public void testGeologistWillNotInvestigateTrees() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -248,18 +266,21 @@ public class TestGeologist {
     public void testGeologistWillNotInvestigateStones() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -298,18 +319,21 @@ public class TestGeologist {
     public void testGeologistInvestigatesFiveSites() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -394,18 +418,21 @@ public class TestGeologist {
     public void testGeologistFindsWaterOnGrass() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -450,22 +477,25 @@ public class TestGeologist {
     public void testGeologistFindsGoldOnMountain() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
         Utils.createMountainWithinRadius(point1, 4, map);
         Utils.putMineralWithinRadius(GOLD, point1, 4, map);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -510,22 +540,25 @@ public class TestGeologist {
     public void testGeologistFindsCoalOnMountain() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
         Utils.createMountainWithinRadius(point1, 4, map);
         Utils.putMineralWithinRadius(COAL, point1, 4, map);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -570,22 +603,25 @@ public class TestGeologist {
     public void testGeologistFindsIronOnMountain() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
         Utils.createMountainWithinRadius(point1, 4, map);
         Utils.putMineralWithinRadius(IRON, point1, 4, map);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -630,22 +666,25 @@ public class TestGeologist {
     public void testGeologistFindsStoneOnMountain() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
         Utils.createMountainWithinRadius(point1, 4, map);
         Utils.putMineralWithinRadius(STONE, point1, 4, map);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -690,18 +729,21 @@ public class TestGeologist {
     public void testGeologistReturnsToStorageAfterInvestigationsAreDone() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -767,15 +809,18 @@ public class TestGeologist {
     public void testGeologistAvoisSitesWithSigns() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Surround the flag with signs */
         for (Point p : map.getPointsWithinRadius(point1, 5)) {
@@ -785,7 +830,7 @@ public class TestGeologist {
         }
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -817,21 +862,24 @@ public class TestGeologist {
     public void testGeologistPlacesEmptySignWhenItFindsNothing() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Place mountain without ore */
         Utils.createMountainWithinRadius(point1, 6, map);
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -890,11 +938,14 @@ public class TestGeologist {
     public void testDepositingGeologistIncreasesAmountOfGeologists() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(), point0);
+        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add a geologist to the headquarter and verify that the amount goes up*/
         int amount = headquarter0.getAmount(GEOLOGIST);
@@ -908,21 +959,24 @@ public class TestGeologist {
     public void testSeveralGeologistsCanBeCalled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(), point0);
+        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
         
         /* Add more geologists to the headquarter */
         headquarter0.depositWorker(new Geologist(map));
         
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
         
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -949,18 +1003,21 @@ public class TestGeologist {
     public void testGeologistGoesOutAgainIfNeeded() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);
@@ -1035,18 +1092,21 @@ public class TestGeologist {
     public void testReturningGeologistIncreasesAmountInStorage() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
-        Flag flag = map.placeFlag(point1);
+        Flag flag = map.placeFlag(player0, point1);
 
         /* Connect headquarter and flag */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), flag);
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
         /* Wait for the road to get occupied */
         Utils.fastForward(30, map);

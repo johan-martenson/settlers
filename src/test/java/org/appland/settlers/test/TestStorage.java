@@ -6,12 +6,15 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
@@ -33,15 +36,18 @@ public class TestStorage {
     
     @Test
     public void testUnfinishedStorageNotNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3);
+        Building storage = map.placeBuilding(new Storage(player0), point3);
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(storage.needsWorker());
@@ -49,15 +55,18 @@ public class TestStorage {
     
     @Test
     public void testStorageNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3);
+        Building storage = map.placeBuilding(new Storage(player0), point3);
         
         /* Finish construction of the storage */
         Utils.constructHouse(storage, map);
@@ -69,15 +78,18 @@ public class TestStorage {
     
     @Test
     public void testStorageWorkerGetsAssignedToFinishedStorage() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3);
+        Building storage = map.placeBuilding(new Storage(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -85,7 +97,7 @@ public class TestStorage {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage, map);
@@ -114,15 +126,18 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRests() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3);
+        Building storage = map.placeBuilding(new Storage(player0), point3);
 
         Utils.constructHouse(storage, map);
         
@@ -140,22 +155,25 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRestsThenDeliversCargo() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(), point1.upLeft());
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
         
         Point point2 = new Point(9, 9);
         
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3.upLeft());
+        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
-        map.placeRoad(point1, point2, point3);
+        map.placeRoad(player0, point1, point2, point3);
         
         Utils.constructHouse(storage, map);
         
@@ -187,22 +205,25 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerGoesBackToStorageAfterDelivery() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(), point1.upLeft());
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
         
         Point point2 = new Point(9, 9);
         
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3.upLeft());
+        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
-        map.placeRoad(point1, point2, point3);
+        map.placeRoad(player0, point1, point2, point3);
         
         Utils.constructHouse(storage, map);
         
@@ -237,22 +258,25 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRestsInStorageAfterDelivery() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(), point1.upLeft());
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
         
         Point point2 = new Point(9, 9);
         
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(), point3.upLeft());
+        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
-        map.placeRoad(point1, point2, point3);
+        map.placeRoad(player0, point1, point2, point3);
         
         Utils.constructHouse(storage, map);
         
@@ -295,15 +319,18 @@ public class TestStorage {
     public void testStorageWorkerGoesBackToStorageWhenStorageIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(), point26);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
@@ -335,18 +362,21 @@ public class TestStorage {
     public void testStorageWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenStorageIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(), point26);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
 
         /* Connect the storage with the headquarter */
-        map.placeAutoSelectedRoad(storage0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
@@ -382,18 +412,21 @@ public class TestStorage {
     public void testDestroyedStorageIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(), point26);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
 
         /* Connect the storage with the headquarter */
-        map.placeAutoSelectedRoad(storage0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
@@ -424,15 +457,18 @@ public class TestStorage {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(), point26);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
         
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
@@ -449,15 +485,18 @@ public class TestStorage {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(), point26);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
         
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
@@ -474,21 +513,24 @@ public class TestStorage {
     public void testProductionInStorageCannotBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place storage */
         Point point1 = new Point(8, 6);
-        Building storage0 = map.placeBuilding(new Storage(), point1);
+        Building storage0 = map.placeBuilding(new Storage(player0), point1);
         
         /* Connect the storage and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the storage */
         Utils.constructHouse(storage0, map);

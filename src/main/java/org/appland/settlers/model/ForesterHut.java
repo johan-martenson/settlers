@@ -8,4 +8,8 @@ package org.appland.settlers.model;
 @HouseSize(size = Size.SMALL)
 @RequiresWorker(workerType = Material.FORESTER)
 public class ForesterHut extends Building {
+
+    public ForesterHut(Player player0) {
+        super(player0);
+    }
 }

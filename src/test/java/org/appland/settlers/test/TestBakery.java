@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Baker;
 import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
@@ -17,6 +19,7 @@ import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WATER;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -35,15 +38,18 @@ public class TestBakery {
     
     @Test
     public void testBakeryNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -51,7 +57,7 @@ public class TestBakery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(bakery.needsWorker());
@@ -64,22 +70,25 @@ public class TestBakery {
 
     @Test
     public void testHeadquarterHasOneBakerAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(BAKER), 1);
     }
     
     @Test
     public void testBakeryGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -87,7 +96,7 @@ public class TestBakery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -120,15 +129,18 @@ public class TestBakery {
     
     @Test
     public void testOccupiedBakeryWithoutIngredientsProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -151,15 +163,18 @@ public class TestBakery {
     
     @Test
     public void testUnoccupiedBakeryProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -174,15 +189,18 @@ public class TestBakery {
 
     @Test
     public void testOccupiedBakeryWithIngredientsProducesBread() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -190,7 +208,7 @@ public class TestBakery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -223,15 +241,18 @@ public class TestBakery {
 
     @Test
     public void testBakerLeavesBreadAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -239,7 +260,7 @@ public class TestBakery {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -286,15 +307,18 @@ public class TestBakery {
 
     @Test
     public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -318,15 +342,18 @@ public class TestBakery {
 
     @Test
     public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building bakery = map.placeBuilding(new Bakery(), point3);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
@@ -359,15 +386,18 @@ public class TestBakery {
     public void testBakeryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing bakery */
         Point point26 = new Point(8, 8);
-        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
@@ -427,15 +457,18 @@ public class TestBakery {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing bakery */
         Point point26 = new Point(8, 8);
-        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
@@ -480,7 +513,7 @@ public class TestBakery {
         assertEquals(cargo.getPosition(), bakery0.getFlag().getPosition());
     
         /* Connect the bakery with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), bakery0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -522,15 +555,18 @@ public class TestBakery {
     public void testBakerGoesBackToStorageWhenBakeryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing bakery */
         Point point26 = new Point(8, 8);
-        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
@@ -562,18 +598,21 @@ public class TestBakery {
     public void testBakerGoesBackOnToStorageOnRoadsIfPossibleWhenBakeryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing bakery */
         Point point26 = new Point(8, 8);
-        Building bakery0 = map.placeBuilding(new Bakery(), point26);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
 
         /* Connect the bakery with the headquarter */
-        map.placeAutoSelectedRoad(bakery0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
@@ -609,21 +648,24 @@ public class TestBakery {
     public void testProductionInBakeryCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place bakery */
         Point point1 = new Point(8, 6);
-        Building bakery0 = map.placeBuilding(new Bakery(), point1);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
         
         /* Connect the bakery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the bakery */
         Utils.constructHouse(bakery0, map);
@@ -674,21 +716,24 @@ public class TestBakery {
     public void testProductionInBakeryCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place bakery */
         Point point1 = new Point(8, 6);
-        Building bakery0 = map.placeBuilding(new Bakery(), point1);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
         
         /* Connect the bakery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the bakery */
         Utils.constructHouse(bakery0, map);

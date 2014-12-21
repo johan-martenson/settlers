@@ -11,8 +11,4 @@ public class Woodcutter extends Building {
     public Woodcutter(Player p) {
         super(p);
     }
-
-    public Woodcutter() {
-        super();
-    }
 }

@@ -35,6 +35,12 @@ public class Road {
         usage = 0;
     }
 
+    Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
+        this(startFlag, wayPoints, endFlag);
+        
+        this.player = player;
+    }
+
     @Override
     public String toString() {
         if (courier == null) {
@@ -198,7 +204,7 @@ public class Road {
         }
     }
 
-    public Object getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 

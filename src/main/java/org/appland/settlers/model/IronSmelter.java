@@ -20,5 +20,8 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @Production(output = IRON_BAR, requiredGoods = {IRON, COAL})
 @RequiresWorker(workerType = IRON_FOUNDER)
 public class IronSmelter extends Building {
-    
+
+    public IronSmelter(Player player0) {
+        super(player0);
+    }
 }

@@ -6,10 +6,12 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Tile;
-import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 /**
@@ -20,7 +22,10 @@ public class TestTerrain {
 
     @Test(expected = Exception.class)
     public void testGetInvalidTile() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point p = new Point(5, 6);
         

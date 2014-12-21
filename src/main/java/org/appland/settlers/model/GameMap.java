@@ -41,29 +41,12 @@ public class GameMap {
     private List<Crop>              crops;
     private List<Worker>            workersToAdd;
     private List<Player>            players;
-    private boolean                 defaultPlayer;
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
 
-    public List<Point> findAutoSelectedRoad(Point start, Point goal, Collection<Point> avoid) {
-        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
-
-            @Override
-            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                try {
-                    return getPossibleAdjacentRoadConnections(start, goal);
-                } catch (Exception ex) {
-                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-                return new LinkedList<>();
-            }
-        });
-    }
-    
     public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
@@ -119,17 +102,12 @@ public class GameMap {
     }
 
     public GameMap(List<Player> playersToSet, int w, int h) throws Exception {
-        this(w, h);
 
         if (playersToSet.isEmpty()) {
             throw new Exception("Can't create game map with no players");
         }
         
         players = playersToSet;
-        defaultPlayer = false;
-    }
-
-    public GameMap(int w, int h) throws Exception {
         width = w;
         height = h;
 
@@ -150,15 +128,9 @@ public class GameMap {
         stones            = new ArrayList<>();
         crops             = new ArrayList<>();
         workersToAdd      = new LinkedList<>();
-        players           = new LinkedList<>();
 
         fullGrid          = buildFullGrid();
         pointToGameObject = populateMapPoints(fullGrid);
-
-        /* Add default player */
-        players.add(new Player(theLeader));
-
-        defaultPlayer = true;
     }
 
     public void stepTime() {
@@ -226,21 +198,11 @@ public class GameMap {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, p});
         
         boolean firstHouse = false;
-
-        /* Set the default player if there are no players explicitly chosen */
-        if (defaultPlayer && house.getPlayer() == null) {
-            house.setPlayer(players.get(0));
-        }
-
-        /* Verify that player is set unless the default player is used */
-        if (!defaultPlayer && house.getPlayer() == null) {
-            throw new Exception("Can't place building without a player set.");
-        }
         
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
-
+        
         /* Verify that the house's player is valid */
         if (!players.contains(house.getPlayer())) {
             throw new Exception("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
@@ -340,8 +302,10 @@ public class GameMap {
             if (b.burningDown()) {
                 continue;
             }
-            
-            if (!isWithinBorder(b.getPosition()) || !isWithinBorder(b.getFlag().getPosition())) {
+
+            Player player = b.getPlayer();
+
+            if (!player.isWithinBorder(b.getPosition()) || !player.isWithinBorder(b.getFlag().getPosition())) {
                 b.tearDown();
             }
         }
@@ -350,7 +314,9 @@ public class GameMap {
         List<Flag> flagsToRemove = new LinkedList<>();
 
         for (Flag f : flags) {
-            if (!isWithinBorder(f.getPosition())) {
+            Player player = f.getPlayer();
+            
+            if (!player.isWithinBorder(f.getPosition())) {
                 flagsToRemove.add(f);
             }
         }
@@ -361,8 +327,10 @@ public class GameMap {
         List<Road> roadsToRemove = new LinkedList<>();
         
         for (Road r : roads) {
+            Player player = r.getPlayer();
+            
             for (Point p : r.getWayPoints()) {
-                if (!isWithinBorder(p)) {
+                if (!player.isWithinBorder(p)) {
                     roadsToRemove.add(r);
                 }
             }
@@ -377,7 +345,7 @@ public class GameMap {
         wayPoints.add(building.getPosition());
         wayPoints.add(building.getFlag().getPosition());
         
-        Road road = new Road(building, wayPoints, building.getFlag());
+        Road road = new Road(building.getPlayer(), building, wayPoints, building.getFlag());
         
         road.setNeedsCourier(false);
         
@@ -388,14 +356,6 @@ public class GameMap {
         return road;
     }
 
-    public Road placeRoad(List<Point> points) throws Exception {
-        return placeRoad(getDefaultPlayer(), points);
-    }
-    
-    public Road placeRoad(Point... points) throws Exception {
-        return placeRoad(getDefaultPlayer(), points);
-    }
-    
     public Road placeRoad(Player player, Point... points) throws Exception {
         if (!players.contains(player)) {
             throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
@@ -403,7 +363,7 @@ public class GameMap {
         
         return placeRoad(player, Arrays.asList(points));
     }
-    
+
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
         
@@ -461,13 +421,8 @@ public class GameMap {
         Flag startFlag = getFlagAtPoint(start);
         Flag endFlag   = getFlagAtPoint(end);
 
-        Road road = new Road(startFlag, wayPoints, endFlag);
-
-        /* Set the default player if there is only one player */
-        if (players.size() == 1) {
-            road.setPlayer(players.get(0));
-        }
-
+        Road road = new Road(player, startFlag, wayPoints, endFlag);
+        
         roads.add(road);
 
         addRoadToMapPoints(road);
@@ -478,11 +433,6 @@ public class GameMap {
     public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws Exception {
         return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
     }
-    
-    public Road placeAutoSelectedRoad(Flag startFlag, Flag endFlag) throws Exception {
-        return placeAutoSelectedRoad(getDefaultPlayer(), startFlag.getPosition(), endFlag.getPosition());
-    }
-    
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
         
@@ -491,10 +441,6 @@ public class GameMap {
         }
 
         return placeRoad(player, wayPoints);
-    }
-    
-    public Road placeAutoSelectedRoad(Point start, Point end) throws Exception {
-        return placeAutoSelectedRoad(getDefaultPlayer(), start, end);
     }
 
     public List<Road> getRoads() {
@@ -555,10 +501,6 @@ public class GameMap {
         return placeFlag(new Flag(player, p));
     }
 
-    public Flag placeFlag(Point p) throws Exception {
-        return placeFlag(new Flag(getDefaultPlayer(), p));
-    }
-    
     private Flag placeFlag(Flag f) throws Exception {
         return doPlaceFlag(f, true);
     }
@@ -679,11 +621,6 @@ public class GameMap {
             flags.add(flag);
         }
 
-        /* Set the default player if there is only one player */
-        if (players.size() == 1) {
-            flag.setPlayer(players.get(0));
-        }
-        
         return flag;
     }
 
@@ -753,12 +690,12 @@ public class GameMap {
         return storages;
     }
 
-    public List<Point> getAvailableFlagPoints() throws Exception {
+    public List<Point> getAvailableFlagPoints(Player player) throws Exception {
         List<Point> points = new LinkedList<>();
 
-        for (Land land : getDefaultPlayer().getLands()) {
+        for (Land land : player.getLands()) {
             for (Point p : land.getPointsInLand()) {
-                if (!isAvailableFlagPoint(getDefaultPlayer(), p)) {
+                if (!isAvailableFlagPoint(player, p)) {
                     continue;
                 }
                 
@@ -887,11 +824,11 @@ public class GameMap {
         return result;
     }
 
-    public Map<Point, Size> getAvailableHousePoints() throws Exception {
+    public Map<Point, Size> getAvailableHousePoints(Player player) throws Exception {
         Map<Point, Size> housePoints = new HashMap<>();
         boolean diagonalHouse;
 
-        for (Land land : getDefaultPlayer().getLands()) {
+        for (Land land : player.getLands()) {
             for (Point point : land.getPointsInLand()) {
 
                 /* ALL CONDITIONS FOR SMALL */
@@ -922,7 +859,7 @@ public class GameMap {
                 diagonalHouse = false;
                 
                 for (Point d : point.getDiagonalPointsAndSides()) {
-                    if (!isWithinBorder(d)) {
+                    if (!player.isWithinBorder(d)) {
                         continue;
                     }
                 
@@ -935,29 +872,29 @@ public class GameMap {
                     continue;
                 }
                 
-                if (isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
+                if (player.isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
                     continue;
                 }
 
-                if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+                if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
                     if (getBuildingAtPoint(point.up().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+                if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
                     if (getBuildingAtPoint(point.down()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
+                if (player.isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
                     if (getBuildingAtPoint(point.downRight().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
+                if (player.isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
                     if (getBuildingAtPoint(point.down().right()).getSize() == LARGE) {
                         continue;
                     }
@@ -970,37 +907,37 @@ public class GameMap {
                 housePoints.put(point, MEDIUM);
                 
                 /* ADDITIONAL CONDITIONS FOR LARGE */
-                if (isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
+                if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
                     continue;
                 }
 
-                if (isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+                if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
                     continue;
                 }
 
-                if (isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
+                if (player.isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
                     continue;
                 }
                 
-                if (isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
+                if (player.isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
                     if (getBuildingAtPoint(point.upRight().right()).getSize() != SMALL) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+                if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
                     if (getBuildingAtPoint(point.up().right()).getSize() != SMALL) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
+                if (player.isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
                     if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
                         continue;
                     }
                 }
 
-                if (isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
+                if (player.isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
                     if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
                         continue;
                     }
@@ -1011,10 +948,6 @@ public class GameMap {
         }
 
         return housePoints;
-    }
-
-    public List<Point> getPossibleAdjacentRoadConnections(Point point, Point end) throws Exception {
-        return getPossibleAdjacentRoadConnections(getDefaultPlayer(), point, end);
     }
 
     public List<Point> getPossibleAdjacentRoadConnections(Player player, Point point, Point end) throws Exception {
@@ -1188,10 +1121,6 @@ public class GameMap {
 
         return true;
     }
-
-    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Point point) throws Exception {
-        return getPossibleRoadConnectionsExcludingEndpoints(getDefaultPlayer(), point);
-    }
     
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
@@ -1208,10 +1137,6 @@ public class GameMap {
         resultList.remove(point.down());
         
         return resultList;        
-    }
-    
-    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Point point) throws Exception {
-        return getPossibleAdjacentRoadConnectionsIncludingEndpoints(getDefaultPlayer(), point);
     }
     
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point point) throws Exception {
@@ -1444,14 +1369,6 @@ public class GameMap {
         stones.remove(s);
     }
 
-    public List<Collection<Point>> getBorders() {
-        return getDefaultPlayer().getBorders();
-    }
-
-    public boolean isWithinBorder(Point position) {
-        return getDefaultPlayer().isWithinBorder(position);
-    }
-
     private boolean isPossibleFlagPoint(Player player, Point flagPoint) throws Exception {
         MapPoint mp = pointToGameObject.get(flagPoint);
         
@@ -1493,14 +1410,6 @@ public class GameMap {
         mp.removeFlag();
         
         flags.remove(flag);
-    }
-
-    public List<Point> getFieldOfView() {
-        return getDefaultPlayer().getFieldOfView();
-    }
-
-    public List<Point> getDiscoveredLand() {
-        return getDefaultPlayer().getDiscoveredLand();
     }
 
     boolean isNextToWater(Point p) throws Exception {
@@ -1634,13 +1543,5 @@ public class GameMap {
 
     public List<Player> getPlayers() {
         return players;
-    }
-
-    private Player getDefaultPlayer() {
-        if (defaultPlayer) {
-            return players.get(0);
-        }
-
-        return null;
     }
 }

@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -13,6 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
@@ -35,12 +38,15 @@ public class TestQuarry {
     
     @Test
     public void testFinishedQuarryNeedsWorker() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         Utils.constructHouse(quarry, map);
 
@@ -50,18 +56,21 @@ public class TestQuarry {
     
     @Test
     public void testStonemasonIsAssignedToFinishedHouse() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(8, 6);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
         Utils.constructHouse(quarry, map);
@@ -78,13 +87,16 @@ public class TestQuarry {
 
     @Test
     public void testArrivedStonemasonRestsInHutAndThenLeaves() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
         Point point2 = new Point(12, 4);
         Stone stone = map.placeStone(point2);
 
@@ -115,13 +127,16 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonFindsSpotToGetStone() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         Point point2 = new Point(12, 4);
         Stone stone = map.placeStone(point2);
@@ -158,13 +173,16 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonReachesPointToGetStone() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2);
@@ -209,13 +227,16 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonGetsStone() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2);
@@ -276,15 +297,18 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonReturnsAndStoresStoneAsCargo() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         Point point1 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point1);
+        Building hq = map.placeBuilding(new Headquarter(player0), point1);
 
         Point point2 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point2);
+        Building quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        map.placeAutoSelectedRoad(hq.getFlag(), quarry.getFlag());
+        map.placeAutoSelectedRoad(player0, hq.getFlag(), quarry.getFlag());
         
         /* Place stone */
         Point point3 = new Point(13, 5);
@@ -365,13 +389,16 @@ public class TestQuarry {
 
     @Test
     public void testQuarryWithoutStoneProducesNothing() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry, map);
@@ -395,13 +422,16 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonStaysAtHomeWhenNoStonesAreAvailable() throws Exception {
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(10, 4);
-        Building quarry = map.placeBuilding(new Quarry(), point1);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
         constructHouse(quarry, map);
@@ -431,10 +461,13 @@ public class TestQuarry {
 
     @Test
     public void testStoneDisappearsAfterAllHasBeenRetrieved() throws Exception {
-        GameMap map = new GameMap(15, 15);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 15, 15);
 
         Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(), point0);
+        map.placeBuilding(new Headquarter(player0), point0);
         
         Point point1 = new Point(5, 5);
         
@@ -458,11 +491,14 @@ public class TestQuarry {
     public void testQuarryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place stone */
         Point point3 = new Point(12, 8);
@@ -470,7 +506,7 @@ public class TestQuarry {
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -548,11 +584,14 @@ public class TestQuarry {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place stone */
         Point point3 = new Point(12, 8);
@@ -560,7 +599,7 @@ public class TestQuarry {
         
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -607,7 +646,7 @@ public class TestQuarry {
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
     
         /* Connect the quarry with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), quarry0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -648,15 +687,18 @@ public class TestQuarry {
     public void testStonemasonGoesBackToStorageWhenQuarryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -688,18 +730,21 @@ public class TestQuarry {
     public void testStonemasonGoesBackOnToStorageOnRoadsIfPossibleWhenQuarryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Connect the quarry with the headquarter */
-        map.placeAutoSelectedRoad(quarry0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -735,18 +780,21 @@ public class TestQuarry {
     public void testDestroyedQuarryIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Connect the quarry with the headquarter */
-        map.placeAutoSelectedRoad(quarry0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -777,15 +825,18 @@ public class TestQuarry {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
         
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -802,15 +853,18 @@ public class TestQuarry {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing quarry */
         Point point26 = new Point(8, 8);
-        Building quarry0 = map.placeBuilding(new Quarry(), point26);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
         
         /* Finish construction of the quarry */
         Utils.constructHouse(quarry0, map);
@@ -827,11 +881,14 @@ public class TestQuarry {
     public void testProductionInQuarryCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place stone */
         Point point5 = new Point(10, 8);
@@ -839,13 +896,13 @@ public class TestQuarry {
         
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry0 = map.placeBuilding(new Quarry(), point1);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
         
         /* Connect the quarry and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the quarry */
         Utils.constructHouse(quarry0, map);
@@ -893,11 +950,14 @@ public class TestQuarry {
     public void testProductionInQuarryCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place stone */
         Point point5 = new Point(10, 8);
@@ -905,13 +965,13 @@ public class TestQuarry {
         
         /* Place quarry */
         Point point1 = new Point(8, 6);
-        Building quarry0 = map.placeBuilding(new Quarry(), point1);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
         
         /* Connect the quarry and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the quarry */
         Utils.constructHouse(quarry0, map);

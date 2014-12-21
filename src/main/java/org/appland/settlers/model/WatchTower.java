@@ -13,6 +13,10 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @MilitaryBuilding(maxHostedMilitary = 6, defenceRadius = 16, maxCoins = 3, attackRadius = 32)
 public class WatchTower extends Building {
 
+    public WatchTower(Player player0) {
+        super(player0);
+    }
+
     @Override
     public void stopProduction() throws Exception {
         throw new Exception("Cannot stop production in barracks.");

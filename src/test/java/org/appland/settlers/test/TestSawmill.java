@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -14,6 +16,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
@@ -34,15 +37,18 @@ public class TestSawmill {
     
     @Test
     public void testSawmillNeedsWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(sawmill.needsWorker());
@@ -55,22 +61,25 @@ public class TestSawmill {
 
     @Test
     public void testHeadquarterHasOneSawmillWorkerAtStart() {
-        Headquarter hq = new Headquarter();
+        Headquarter hq = new Headquarter(null);
         
         assertEquals(hq.getAmount(SAWMILL_WORKER), 1);
     }
     
     @Test
     public void testSawmillGetsAssignedWorker() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Point point4 = new Point(8, 8);
@@ -78,7 +87,7 @@ public class TestSawmill {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -115,15 +124,18 @@ public class TestSawmill {
     
     @Test
     public void testOccupiedSawmillWithoutWoodProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -146,15 +158,18 @@ public class TestSawmill {
     
     @Test
     public void testUnoccupiedSawmillProducesNothing() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -169,15 +184,18 @@ public class TestSawmill {
 
     @Test
     public void testOccupiedSawmillWithWoodProducesPlancks() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -210,15 +228,18 @@ public class TestSawmill {
 
     @Test
     public void testSawmillWorkerLeavesPlancksAtTheFlag() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place a road between the headquarter and the sawmill */
         Point point4 = new Point(8, 8);
@@ -226,7 +247,7 @@ public class TestSawmill {
         Point point6 = new Point(8, 6);
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(point4, point5, point6, point7, point8);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -272,15 +293,18 @@ public class TestSawmill {
 
     @Test
     public void testProductionOfOnePlanckConsumesOneWood() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -302,15 +326,18 @@ public class TestSawmill {
 
     @Test
     public void testProductionCountdownStartsWhenWoodIsAvailable() throws Exception {
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(), point0);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(), point3);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill, map);
@@ -342,15 +369,18 @@ public class TestSawmill {
     public void testSawmillWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -406,15 +436,18 @@ public class TestSawmill {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -455,7 +488,7 @@ public class TestSawmill {
         assertEquals(cargo.getPosition(), sawmill0.getFlag().getPosition());
     
         /* Connect the sawmill with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(headquarter0.getFlag(), sawmill0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
     
         /* Assign a courier to the road */
         Courier courier = new Courier(map);
@@ -497,15 +530,18 @@ public class TestSawmill {
     public void testSawmillWorkerGoesBackToStorageWhenSawmillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -537,18 +573,21 @@ public class TestSawmill {
     public void testSawmillWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenSawmillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Connect the sawmill with the headquarter */
-        map.placeAutoSelectedRoad(sawmill0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -584,18 +623,21 @@ public class TestSawmill {
     public void testDestroyedSawmillIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
 
         /* Connect the sawmill with the headquarter */
-        map.placeAutoSelectedRoad(sawmill0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -626,15 +668,18 @@ public class TestSawmill {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
         
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -651,15 +696,18 @@ public class TestSawmill {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point26);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
         
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -676,21 +724,24 @@ public class TestSawmill {
     public void testProductionInSawmillCanBeStopped() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place sawmill */
         Point point1 = new Point(8, 6);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point1);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
         
         /* Connect the sawmill and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the sawmill */
         Utils.constructHouse(sawmill0, map);
@@ -734,21 +785,24 @@ public class TestSawmill {
     public void testProductionInSawmillCanBeResumed() throws Exception {
 
         /* Create game map */
-        GameMap map = new GameMap(20, 20);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(), point0);
+        Building hq = map.placeBuilding(new Headquarter(player0), point0);
         
         /* Place sawmill */
         Point point1 = new Point(8, 6);
-        Building sawmill0 = map.placeBuilding(new Sawmill(), point1);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
         
         /* Connect the sawmill and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(point2, point3, point4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4);
         
         /* Finish the sawmill */
         Utils.constructHouse(sawmill0, map);

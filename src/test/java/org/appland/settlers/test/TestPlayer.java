@@ -13,11 +13,10 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -106,89 +105,59 @@ public class TestPlayer {
         map.placeBuilding(headquarter1, point1);
     }
 
-    @Test (expected = Exception.class)
-    public void testCannotPlaceFlagWithoutPlayerWhenPlayersAreDefined() throws Exception {
+    @Test
+    public void testPlayerIsAlsoSetInRoad() throws Exception {
 
         /* Create player 'player one' */
-        Player p = new Player("Player one");
+        Player player0 = new Player("Player one");
 
         /* Create headquarter belonging to player one */
-        Building headquarter0 = new Headquarter(p);
+        Building headquarter0 = new Headquarter(player0);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
-        players.add(p);
+        players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place first headquarter */
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
-    
-        /* Verify that a flag cannot be placed without specifying the player*/
+
+        /* Place flag */
         Point point1 = new Point(9, 5);
-        Flag flag0 = map.placeFlag(point1);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        assertEquals(road0.getPlayer(), player0);
     }
 
     @Test
-    public void testCannotCreateRoadWithoutPlayerWhenPlayersAreDefined() throws Exception {
+    public void testPlayerIsSetInDriveWay() throws Exception {
 
         /* Create player 'player one' */
-        Player player = new Player("Player one");
+        Player player0 = new Player("Player one");
 
         /* Create headquarter belonging to player one */
-        Building headquarter0 = new Headquarter(player);
+        Building headquarter0 = new Headquarter(player0);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
-        players.add(player);
+        players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
 
-        /* Place headquarter */
+        /* Place first headquarter */
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
-    
-        /* Place flag */
-        Point point1 = new Point(9, 5);
-        Flag flag0 = map.placeFlag(player, point1);
-    
-        /* Verify that roads cannot be placed without specifying the player */
-        int roads = map.getRoads().size();
 
-        try {
-            map.placeAutoSelectedRoad(headquarter0.getFlag(), flag0);
-            assertFalse(true);
-        } catch (Exception e) {}
-    
-        assertEquals(map.getRoads().size(), roads);
+        /* Place woodcutter */
+        Point point1 = new Point(11, 5);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        try {
-            map.placeAutoSelectedRoad(headquarter0.getFlag().getPosition(), point1);
-            assertFalse(true);
-        } catch (Exception e) {}
-    
-        assertEquals(map.getRoads().size(), roads);
+        /* Verify that the woodcutter's driveway has the player set correctly */
+        Road road0 = map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition());
 
-        try {
-            Point point2 = new Point(7, 5);
-            
-            map.placeRoad(headquarter0.getFlag().getPosition(), point2, flag0.getPosition());
-            assertFalse(true);
-        } catch (Exception e) {}
-
-        assertEquals(map.getRoads().size(), roads);
-
-        try {
-            Point point2 = new Point(7, 5);
-            
-            List<Point> points = new ArrayList<>();
-            
-            points.add(headquarter0.getFlag().getPosition());
-            points.add(point2);
-            points.add(flag0.getPosition());
-            map.placeRoad(points);
-            assertFalse(true);
-        } catch (Exception e) {}
-
-        assertEquals(map.getRoads().size(), roads);
+        assertEquals(road0.getPlayer(), player0);
     }
 }

@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -18,6 +20,7 @@ import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -37,15 +40,18 @@ public class TestBarracks {
     public void testBarracksOnlyNeedsTwoPlancksForConstruction() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -67,15 +73,18 @@ public class TestBarracks {
     public void testBarracksCannotBeConstructedWithOnePlanck() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -96,20 +105,23 @@ public class TestBarracks {
     public void testBarracksGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(7, 21);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
@@ -140,47 +152,53 @@ public class TestBarracks {
     public void testBorderIsNotExtendedWhenBarracksIsFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(5, 25);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(6, 24);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the barracks to finish construction */
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
         Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
 
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
     
     @Test
     public void testBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 24);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Placing road between (7, 23) and (6, 4) */
         Point point23 = new Point(7, 23);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
@@ -203,27 +221,30 @@ public class TestBarracks {
         
         /* Verify that the border is extended when the military reaches the barracks */
         assertEquals(m.getTarget(), barracks0.getPosition());        
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
         
         Utils.fastForwardUntilWorkerReachesPoint(map, m, barracks0.getPosition());
         
-        assertFalse(map.getBorders().get(0).contains(new Point(5, 25)));
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 29)));
+        assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 29)));
     }
 
     @Test
     public void testBarracksOnlyNeedsTwoMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
 
@@ -239,15 +260,18 @@ public class TestBarracks {
     public void testBarracksCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Verify that the barracks can't hold militaries before it's finished */
         assertFalse(barracks0.needsMilitaryManning());
@@ -268,15 +292,18 @@ public class TestBarracks {
     public void testBarracksCannotHoldMoreThanTwoMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
 
@@ -302,40 +329,46 @@ public class TestBarracks {
     public void testBarracksRadiusIsCorrect() throws Exception{
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 24)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
         
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 28)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 28)));
     }
     
     @Test
     public void testBarracksNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
 
@@ -346,15 +379,18 @@ public class TestBarracks {
     public void testUnfinishedBarracksNotNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         assertFalse(barracks0.needsMaterial(COIN));
     }
@@ -363,15 +399,18 @@ public class TestBarracks {
     public void testBarracksCanHoldOnlyOneCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
 
@@ -398,15 +437,18 @@ public class TestBarracks {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -431,15 +473,18 @@ public class TestBarracks {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -463,15 +508,18 @@ public class TestBarracks {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
         
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -500,15 +548,18 @@ public class TestBarracks {
     public void testPromotionConsumesCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -532,15 +583,18 @@ public class TestBarracks {
     public void testBarracksWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -565,15 +619,18 @@ public class TestBarracks {
     public void testCanDisableCoinsToBarracks() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
         
@@ -590,18 +647,21 @@ public class TestBarracks {
     public void testOccupiedBarracksCanBeEvacuated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Connect headquarter and barracks */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -623,18 +683,21 @@ public class TestBarracks {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Connect headquarter and barracks */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -665,15 +728,18 @@ public class TestBarracks {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -704,18 +770,21 @@ public class TestBarracks {
     public void testNoMilitaryIsDispatchedToEvacuatedBarracks() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Connect headquarters and barracks */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), barracks0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -734,15 +803,18 @@ public class TestBarracks {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(), point22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -780,15 +852,18 @@ public class TestBarracks {
     public void testMilitaryGoesBackToStorageWhenBarracksIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -820,18 +895,21 @@ public class TestBarracks {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenBarracksIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Connect the barracks with the headquarter */
-        map.placeAutoSelectedRoad(barracks0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
@@ -867,15 +945,18 @@ public class TestBarracks {
     public void testProductionCannotBeResumedInBarracks() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
-        Building barracks0 = map.placeBuilding(new Barracks(), point26);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);

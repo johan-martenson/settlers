@@ -19,4 +19,9 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @HouseSize(size = MEDIUM)
 @Production(requiredGoods = {WATER, FLOUR}, output = BREAD)
 @RequiresWorker(workerType = BAKER)
-public class Bakery extends Building {}
+public class Bakery extends Building {
+
+    public Bakery(Player player0) {
+        super(player0);
+    }
+}

@@ -20,5 +20,8 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @Production(output = BEER, requiredGoods = {WHEAT, WATER})
 @RequiresWorker(workerType = BREWER)
 public class Brewery extends Building {
-    
+
+    public Brewery(Player player0) {
+        super(player0);
+    }
 }

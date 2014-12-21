@@ -121,25 +121,6 @@ public class TestSeveralPlayers {
         assertEquals(headquarter1.getPlayer(), player1);
     }
 
-    @Test(expected = Exception.class)
-    public void testCannotPlaceBuildingWithoutPlayerSetWithSeveralPlayers() throws Exception {
-
-        /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
-
-        List<Player> players = new LinkedList<>();
-        players.add(player0);
-        players.add(player1);
-
-        /* Create game map choosing two players */
-        GameMap map = new GameMap(players, 50, 50);
-
-        /* Place headquarter for first player */
-        Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point0);
-    }
-
     @Test
     public void testSeveralPlayersCanPlaceAdditionalBuildingsAfterHeadquarter() throws Exception {
 

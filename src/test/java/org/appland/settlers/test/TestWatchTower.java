@@ -6,6 +6,8 @@
 
 package org.appland.settlers.test;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -19,6 +21,7 @@ import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
+import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
@@ -38,15 +41,18 @@ public class TestWatchTower {
     public void testWatchTowerNeedsThreePlancksAndFourStonesForConstruction() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Deliver two plancks and three stones*/
         Cargo cargo = new Cargo(PLANCK, map);
@@ -76,15 +82,18 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOnePlanckTooLittle() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Deliver one planck and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -116,15 +125,18 @@ public class TestWatchTower {
     public void testWatchTowerCannotBeConstructedWithOneStoneTooLittle() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Deliver one planck and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -156,20 +168,23 @@ public class TestWatchTower {
     public void testWatchTowerGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(7, 21);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the watch tower to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0, map);
@@ -200,47 +215,53 @@ public class TestWatchTower {
     public void testBorderIsNotExtendedWhenWatchTowerIsFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(5, 25);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road between (7, 21) and (6, 4) */
         Point point23 = new Point(6, 24);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the watch tower to finish construction */
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0, map);
 
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
     
     @Test
     public void testBorderIsExtendedWhenWatchTowerIsPopulated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 24);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road between (7, 23) and (6, 4) */
         Point point23 = new Point(7, 23);
         Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(point23, point36);
+        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the watch tower to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0, map);
@@ -263,27 +284,30 @@ public class TestWatchTower {
         
         /* Verify that the border is extended when the military reaches the watch tower */
         assertEquals(m.getTarget(), watchTower0.getPosition());
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
         
         Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
         
-        assertFalse(map.getBorders().get(0).contains(new Point(5, 25)));
-        assertTrue(map.getBorders().get(0).contains(new Point(5, 39)));
+        assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 39)));
     }
 
     @Test
     public void testWatchTowerOnlyNeedsSixMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
 
@@ -303,15 +327,18 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the watch tower can't hold militaries before it's finished */
         assertFalse(watchTower0.needsMilitaryManning());
@@ -332,15 +359,18 @@ public class TestWatchTower {
     public void testWatchTowerCannotHoldMoreThanSixMilitaries() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
 
@@ -370,40 +400,46 @@ public class TestWatchTower {
     public void testWatchTowerRadiusIsCorrect() throws Exception{
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 24)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
         
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), watchTower0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), watchTower0, map);
 
-        assertTrue(map.getBorders().get(0).contains(new Point(6, 38)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 38)));
     }
     
     @Test
     public void testWatchTowerNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
 
@@ -414,15 +450,18 @@ public class TestWatchTower {
     public void testUnfinishedWatchTowerNotNeedsCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         assertFalse(watchTower0.needsMaterial(COIN));
     }
@@ -431,15 +470,18 @@ public class TestWatchTower {
     public void testWatchTowerCanHoldThreeCoins() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
 
@@ -468,15 +510,18 @@ public class TestWatchTower {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -501,15 +546,18 @@ public class TestWatchTower {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -533,15 +581,18 @@ public class TestWatchTower {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
         
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -570,15 +621,18 @@ public class TestWatchTower {
     public void testPromotionConsumesCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -602,15 +656,18 @@ public class TestWatchTower {
     public void testOnePromotionOnlyConsumesOneCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -636,15 +693,18 @@ public class TestWatchTower {
     public void testWatchTowerWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -669,15 +729,18 @@ public class TestWatchTower {
     public void testCanDisableCoinsToWatchTower() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         Utils.constructHouse(watchTower0, map);
         
@@ -694,18 +757,21 @@ public class TestWatchTower {
     public void testOccupiedWatchTowerCanBeEvacuated() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Connect headquarter and watch tower */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), watchTower0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -727,18 +793,21 @@ public class TestWatchTower {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Connect headquarter and watch tower */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), watchTower0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -769,15 +838,18 @@ public class TestWatchTower {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -808,18 +880,21 @@ public class TestWatchTower {
     public void testNoMilitaryIsDispatchedToEvacuatedWatchTower() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Connect headquarters and watch tower */
-        map.placeAutoSelectedRoad(headquarter0.getFlag(), watchTower0.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -838,15 +913,18 @@ public class TestWatchTower {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         /* Starting new game */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point21);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -884,15 +962,18 @@ public class TestWatchTower {
     public void testMilitaryGoesBackToStorageWhenWatchTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point26);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -924,18 +1005,21 @@ public class TestWatchTower {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenWatchTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point26);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Connect the watch tower with the headquarter */
-        map.placeAutoSelectedRoad(watchTower0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
         
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
@@ -971,15 +1055,18 @@ public class TestWatchTower {
     public void testProductionCannotBeResumedInWatchTower() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        GameMap map = new GameMap(40, 40);
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(), point25);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing watch tower */
         Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(), point26);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
 
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);

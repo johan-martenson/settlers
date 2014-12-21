@@ -8,6 +8,10 @@ import static org.appland.settlers.model.Size.*;
 @RequiresWorker(workerType = Material.STONEMASON)
 public class Quarry extends Building {
 
+    public Quarry(Player player0) {
+        super(player0);
+    }
+
     @Override
     public String toString() {
         return "Quarry";
