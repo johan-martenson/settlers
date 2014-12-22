@@ -126,11 +126,15 @@ public class Player {
                 continue;
             }
 
-            if (b.canAttack(buildingToAttack)) {
+            if (b.canAttack(buildingToAttack) && b.getHostedMilitary() > 1) {
                 availableAttackers += b.getHostedMilitary() - 1;
             }
         }
 
         return availableAttackers;
+    }
+
+    public void attack(Building barracks1) {
+        
     }
 }

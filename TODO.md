@@ -27,6 +27,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test creating invalid point throws an exception
+
 *  Test players can not create roads on each other's land
 
 *  Player's discovered land is updated
