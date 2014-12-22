@@ -5,8 +5,6 @@ REMOVE
 RE-FACTOR
 =========
 
-*  Remove backward compatible mapping methods for pre-multiplayer tests
-
 *  Clean up getAvailableHousePoints!
 
 *  canBuild(Small|Medium|Large)House() needed?
@@ -28,10 +26,6 @@ RE-FACTOR
 
 TEST
 ====
-
-*  Test cannot create road with default player when players are set explicitly
-
-*  Test create road with default player
 
 *  Test players can not create roads on each other's land
 
@@ -583,3 +577,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove Game, Controller - DONE
 
 *  Remove GameMap::placeFlag(Flag) - DONE
+
+*  Remove backward compatible mapping methods for pre-multiplayer tests - DONE
+
