@@ -3,9 +3,12 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author johan
@@ -13,19 +16,20 @@ import java.util.List;
  */
 public class Player {
 
-    private List<Land>           ownedLands;
     private List<Point>          fieldOfView;
+    private GameMap              map;
 
+    private final List<Land>     ownedLands;
     private final String         name;
     private final List<Building> buildings;
-    private final List<Point>    discoveredLand;
+    private final Set<Point>     discoveredLand;
 
     public Player(String n) {
         name           = n;
         buildings      = new LinkedList<>();
         ownedLands     = new LinkedList<>();
         fieldOfView    = new LinkedList<>();
-        discoveredLand = new LinkedList<>();
+        discoveredLand = new HashSet<>();
     }
 
     public String getName() {
@@ -58,26 +62,13 @@ public class Player {
         List<Collection<Point>> result = new LinkedList<>();
 
         for (Land land : ownedLands) {
-            result.add(land.getBorder());
+            result.addAll(land.getBorders());
         }
 
         return result;
     }
 
-    void updateBorder() {
-        if (getBuildings().isEmpty()) {
-            return;
-        }
-        
-        ownedLands = Land.calculateLandWithinBorders(getBuildings());
-
-        /* Update field of view */
-        updateDiscoveredLand();
-        
-        fieldOfView = calculateFieldOfView(discoveredLand);
-    }
-
-    Iterable<Land> getLands() {
+    public Iterable<Land> getLands() {
         return ownedLands;
     }
 
@@ -98,7 +89,7 @@ public class Player {
     }
 
     public List<Point> getDiscoveredLand() {
-        return discoveredLand;
+        return Arrays.asList(discoveredLand.toArray(new Point[1]));
     }
 
     void discover(Point p) {
@@ -134,7 +125,55 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building barracks1) {
+    public void attack(Building buildingToAttack) {
+        Building ownBuilding = null;
         
+        /* Find closest building to attack from */
+        double distance = Double.MAX_VALUE;
+        
+        for (Building b : getBuildings()) {
+            if (!b.isMilitaryBuilding()) {
+                continue;
+            }
+
+            double tempDistance = b.getPosition().distance(buildingToAttack.getPosition());
+
+            if (tempDistance < distance) {
+                distance = tempDistance;
+
+                ownBuilding = b;
+            }
+        }
+
+        /* Retrieve a military from the building */
+        Military military = ownBuilding.retrieveMilitary();
+
+        /* Make the military move to close to the building to attack */
+        military.attack(buildingToAttack);
+    }
+
+    void sendDefense(Building buildingToAttack, Military opponent) {
+        Military military = buildingToAttack.retrieveMilitary();
+
+        military.fight(opponent);
+    }
+
+    void setMap(GameMap m) {
+        map = m;
+    }
+
+    void setLands(List<Land> value) {
+        ownedLands.clear();
+        ownedLands.addAll(value);
+
+        /* Update field of view */
+        updateDiscoveredLand();
+        
+        fieldOfView = calculateFieldOfView(discoveredLand);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

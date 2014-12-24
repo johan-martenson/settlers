@@ -501,7 +501,7 @@ public class TestGameMap {
         border = player0.getBorders().get(0);
         
         assertFalse(border.contains(new Point(50, 70)));
-        assertTrue(border.contains(new Point(50, 74)));        
+        assertTrue(border.contains(new Point(50, 74)));
         
         Point point2 = new Point(50, 72);
         Building barracks1 = map.placeBuilding(new Barracks(player0), point2);
@@ -526,10 +526,23 @@ public class TestGameMap {
         
         assertFalse(border.contains(new Point(50, 78)));
         assertTrue(border.contains(new Point(50, 82)));
-        
+
+        Point point4 = new Point(50, 80);
+        Building barracks3 = map.placeBuilding(new Barracks(player0), point4);
+
+        Utils.constructHouse(barracks3, map);
+        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks3, map);
+
+        assertEquals(player0.getBorders().size(), 1);
+        border = player0.getBorders().get(0);
+
+        assertFalse(border.contains(new Point(50, 78)));
+        assertTrue(border.contains(new Point(50, 86)));
+
         barracks0.tearDown();
         barracks1.tearDown();
-                
+        barracks2.tearDown();
+
         assertEquals(player0.getBorders().size(), 2);
     }
 
@@ -674,7 +687,7 @@ public class TestGameMap {
         
         Utils.constructHouse(building4, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building4, map);
-
+        
         assertEquals(player0.getBorders().size(), 1);
         
         Collection<Point> border = player0.getBorders().get(0);
@@ -696,11 +709,10 @@ public class TestGameMap {
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(player0), point0);
-        
-        Point point1 = new Point(1, 23);
-        
+
+        Point point1 = new Point(1, 21);
         assertTrue(player0.getBorders().get(0).contains(point1));
-        
+
         Point point2 = new Point(1, 25);
         assertTrue(player0.getFieldOfView().contains(point2));
     }

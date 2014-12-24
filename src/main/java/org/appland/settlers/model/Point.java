@@ -78,7 +78,7 @@ public class Point extends java.awt.Point {
     
         return adjacentPoints;
     }
-
+    
     Iterable<Point> getDiagonalPoints() {
         List<Point> result = new ArrayList<>();
         

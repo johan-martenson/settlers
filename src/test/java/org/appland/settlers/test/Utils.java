@@ -18,10 +18,12 @@ import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.InvalidRouteException;
+import org.appland.settlers.model.Land;
 import org.appland.settlers.model.Material;
 
 import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
 
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -438,5 +440,48 @@ public class Utils {
         }
 
         assertNotNull(worker.getCargo());
+    }
+
+    static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0) {
+        boolean populated = false;
+        for (int i = 0; i < 1000; i++) {
+            if (barracks0.getHostedMilitary() > 0) {
+                populated = true;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(populated);
+    }
+
+    static void verifyPointIsWithinBorder(GameMap map, Player player0, Point position) {
+        boolean insideLand = false;
+
+        for (Land land : player0.getLands()) {
+            if (land.isWithinBorder(position)) {
+                insideLand = true;
+
+                break;
+            }
+        }
+
+        assertTrue(insideLand);
+    }
+
+    static void verifyPointIsNotWithinBorder(GameMap map, Player player0, Point position) {
+        boolean insideLand = false;
+
+        for (Land land : player0.getLands()) {
+            if (land.isWithinBorder(position)) {
+                insideLand = true;
+
+                break;
+            }
+        }
+
+        assertFalse(insideLand);
     }
 }

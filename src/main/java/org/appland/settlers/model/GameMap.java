@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,6 +133,11 @@ public class GameMap {
 
         fullGrid          = buildFullGrid();
         pointToGameObject = populateMapPoints(fullGrid);
+
+        /* Give the players a reference to the map */
+        for (Player player : players) {
+            player.setMap(this);
+        }
     }
 
     public void stepTime() {
@@ -280,7 +287,7 @@ public class GameMap {
            or if it's a military building
         */
         if (firstHouse) {
-            house.getPlayer().updateBorder();
+            updateBorder();
         }
 
         getMapPoint(p).setBuilding(house);
@@ -291,10 +298,108 @@ public class GameMap {
     }
 
     void updateBorder() throws Exception {
+
+        /* Build dictionary Point->Building, picking buildings with the highest
+           claim */
+        Map<Point, Building> claims = new HashMap<>();
+        Map<Player, List<Land>> updatedLands = new HashMap<>();
         
-        /* Re-calculate borders */
-        for (Player player : players) {
-            player.updateBorder();
+        for (Building b : getBuildings()) {
+            if (!b.isMilitaryBuilding() || !b.ready() || !b.occupied()) {
+                continue;
+            }
+
+            for (Point p : b.getDefendedLand()) {
+                if (!claims.containsKey(p)) {
+                    claims.put(p, b);
+                } else if (calculateClaim(b, p) > calculateClaim(claims.get(p), p)) {
+                    claims.put(p, b);
+                }
+            }
+        }
+
+        /* Assign points to players - how to divide into lands? */
+        List<Point> toInvestigate = new ArrayList<>();
+        Set<Point> localCleared = new HashSet<>();
+        Set<Point> globalCleared = new HashSet<>();
+        Set<Point> pointsInLand = new HashSet<>();
+        Set<Point> borders = new LinkedHashSet<>();
+
+        for (Point root : claims.keySet()) {
+            if (!isWithinMap(root)) {
+                continue;
+            }
+            
+            if (globalCleared.contains(root)) {
+                continue;
+            }
+            
+            Player player = claims.get(root).getPlayer();
+
+            pointsInLand.clear();
+
+            toInvestigate.clear();
+            toInvestigate.add(root);
+
+            localCleared.clear();
+
+            borders.clear();
+
+            /* Investigate all adjacent points */
+            while (!toInvestigate.isEmpty()) {
+                Point point = toInvestigate.get(0);
+
+                for (Point p : point.getAdjacentPoints()) {
+                    if (!globalCleared.contains(p) &&
+                        !localCleared.contains(p)  &&
+                        !toInvestigate.contains(p) &&
+                        isWithinMap(p) && 
+                        claims.containsKey(p)) {
+                        toInvestigate.add(p);
+                    }
+
+                    if (!isWithinMap(p)) {
+                        if (!borders.contains(point)) {
+                            borders.add(point);
+                        }
+
+                        globalCleared.add(p);
+                    } else if (!claims.containsKey(p)) {
+                        if (!borders.contains(point)) {
+                            borders.add(point);
+                        }
+
+                        globalCleared.add(p);
+                    } else if (!claims.get(p).getPlayer().equals(player)) {
+                        if (!borders.contains(point)) {
+                            borders.add(point);
+                        }
+                    }
+                }
+
+                if (claims.containsKey(point)) {
+                    if (claims.get(point).getPlayer().equals(player)) {
+                        pointsInLand.add(point);
+
+                        globalCleared.add(point);
+                    }
+                }
+
+                localCleared.add(point);
+                toInvestigate.remove(point);
+            }
+
+            /* Save result as a land */
+            if (!updatedLands.containsKey(player)) {
+                updatedLands.put(player, new ArrayList<Land>());
+            }
+
+            updatedLands.get(player).add(new Land(pointsInLand, borders));
+        }
+
+        /* Update lands in each player */
+        for (Entry<Player, List<Land>> pair : updatedLands.entrySet()) {
+            pair.getKey().setLands(pair.getValue());
         }
 
         /* Destroy buildings now outside of the borders */
@@ -1543,5 +1648,12 @@ public class GameMap {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    private double calculateClaim(Building b, Point p) {
+        double radius = b.getDefenceRadius();
+        double distance = b.getPosition().distance(p);
+
+        return radius / distance;
     }
 }

@@ -699,9 +699,15 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     void setPlayer(Player p) {
+        if (player != null) {
+            player.removeBuilding(this);
+        }
+
         player = p;
 
         flag.setPlayer(p);
+
+        player.addBuilding(this);
     }
 
     boolean canAttack(Building buildingToAttack) {
@@ -720,5 +726,9 @@ public class Building implements Actor, EndPoint, Piece {
         MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
     
         return mb.attackRadius();
+    }
+
+    Military retrieveMilitary() {
+        return hostedMilitary.remove(0);
     }
 }

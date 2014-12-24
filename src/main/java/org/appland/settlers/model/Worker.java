@@ -392,7 +392,7 @@ public abstract class Worker implements Actor, Piece {
         
     }
 
-    protected Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 }

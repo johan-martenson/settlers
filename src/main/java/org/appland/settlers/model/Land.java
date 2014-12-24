@@ -7,86 +7,103 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
  * @author johan
  */
-class Land {
+public class Land {
 
     List<Point> points;
-    List<Point> border;
+    List<List<Point>> border;
 
-    Land(Collection<Point> pointsInLand) {
+    Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
         points = new ArrayList<>();
+        border = new ArrayList<>();
 
         points.addAll(pointsInLand);
 
-        border = calculateBorder(points);
-    }
+        List<Point> borderPointsToPrune = new LinkedList<>();
 
-    private List<Point> calculateBorder(Collection<Point> occupiedPoints) {
-        return GameUtils.hullWanderer(occupiedPoints);
-    }
+        /* Prune outliers */
+        for (Point borderPoint : borderPoints) {
+            boolean keepPoint = false;
 
-    List<Point> getBorder() {
-        return border;
-    }
+            for (Point p : borderPoint.getAdjacentPoints()) {
+                if (pointsInLand.contains(p) && !borderPoints.contains(p)) {
+                    keepPoint = true;
+                }
+            }
 
-    List<Point> getPointsInLand() {
-        return points;
-    }
-
-    boolean isWithinBorder(Point position) {
-        return points.contains(position);
-    }
-
-    static List<Land> calculateLandWithinBorders(Collection<Building> militaryBuildings) {
-        List<Land> result = new LinkedList<>();
-        List<Building> readyMilitaryBuildings = new LinkedList<>();
-
-        for (Building b : militaryBuildings) {
-            if (b.ready()) {
-                readyMilitaryBuildings.add(b);
+            if (!keepPoint) {
+                borderPointsToPrune.add(borderPoint);
             }
         }
 
-        while (!readyMilitaryBuildings.isEmpty()) {
-            Building root = readyMilitaryBuildings.get(0);
-            readyMilitaryBuildings.remove(0);
+        borderPoints.removeAll(borderPointsToPrune);
 
-            Set<Point> land = new HashSet<>();
+        /* Separate border points into consistent borders */
+        while (!borderPoints.isEmpty()) {
+            Point root = borderPoints.iterator().next();
+            List<Point> collectingBorder = new LinkedList<>();
 
-            land.addAll(root.getDefendedLand());
+            collectingBorder.add(root);
+            borderPoints.remove(root);
+
+            Point closePoint;
+            Point lessClosePoint;
+
+            List<Point> toRemoveFromBorder = new LinkedList<>();
 
             while (true) {
-                boolean addedToBorder = false;
-                List<Building> buildingsAlreadyAdded = new LinkedList<>();
+                closePoint = null;
+                lessClosePoint = null;
 
-                for (Building b : readyMilitaryBuildings) {
-                    if (b.occupied() && land.contains(b.getPosition())) {
-                        land.addAll(b.getDefendedLand());
+                toRemoveFromBorder.clear();
 
-                        addedToBorder = true;
-                        buildingsAlreadyAdded.add(b);
+                for (Point p : borderPoints) {
+                    if (p.distance(collectingBorder.get(0)) < 1.5) {
+                        closePoint = p;
+                        break;
+                    }
+
+                    if (p.distance(collectingBorder.get(0)) < 2.1) {
+                        lessClosePoint = p;
                     }
                 }
 
-                readyMilitaryBuildings.removeAll(buildingsAlreadyAdded);
+                if (closePoint != null) {
+                    collectingBorder.add(0, closePoint);
 
-                if (!addedToBorder) {
+                    borderPoints.remove(closePoint);
+                } else if (lessClosePoint != null) {
+                    collectingBorder.add(0, lessClosePoint);
+
+                    borderPoints.remove(lessClosePoint);
+                } else {
                     break;
                 }
             }
 
-            result.add(new Land(land));
+            if (collectingBorder.size() > 2) {
+                border.add(collectingBorder);
+            }
         }
+    
+    }
 
-        return result;
+    List<List<Point>> getBorders() {
+        return border;
+    }
+
+    public List<Point> getPointsInLand() {
+        return points;
+    }
+
+    public boolean isWithinBorder(Point position) {
+        return points.contains(position);
     }
 
     @Override

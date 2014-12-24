@@ -503,10 +503,10 @@ public class Storage extends Building implements Actor {
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        Military m = new Military(r, map);
+        Military m = new Military(getPlayer(), r, map);
 
         m.setPosition(getFlag().getPosition());
-
+        
         return m;
     }
 
@@ -525,13 +525,13 @@ public class Storage extends Building implements Actor {
 
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);
-            m = new Military(PRIVATE_RANK, map);
+            m = new Military(getPlayer(), PRIVATE_RANK, map);
         } else if (hasAtLeastOne(SERGEANT)) {
             retrieveOneFromInventory(SERGEANT);
-            m = new Military(SERGEANT_RANK, map);
+            m = new Military(getPlayer(), SERGEANT_RANK, map);
         } else if (hasAtLeastOne(GENERAL)) {
             retrieveOneFromInventory(GENERAL);
-            m = new Military(GENERAL_RANK, map);
+            m = new Military(getPlayer(), GENERAL_RANK, map);
         } else {
             throw new Exception("No militaries available");
         }

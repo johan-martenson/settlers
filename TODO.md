@@ -5,6 +5,8 @@ REMOVE
 RE-FACTOR
 =========
 
+*  Fix ugly heuristic in Land::<init>
+
 *  Clean up getAvailableHousePoints!
 
 *  canBuild(Small|Medium|Large)House() needed?
@@ -26,6 +28,18 @@ RE-FACTOR
 
 TEST
 ====
+
+*  Test who wins according to rank and experience and health
+
+*  Test for the exact time of a fight
+
+*  Test that player is set correctly in workers retrieved from storage
+
+*  Test that Player::attack(Building) throws an exception if the building cannot be attacked
+
+*  Test that the number of militaries in a building goes down when a military has been retrieved
+
+*  Test that the closest building with available militaries is used in attacking
 
 *  Test creating invalid point throws an exception
 

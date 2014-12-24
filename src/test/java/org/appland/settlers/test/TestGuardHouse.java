@@ -277,8 +277,7 @@ public class TestGuardHouse {
         Utils.fastForwardUntilWorkerReachesPoint(map, m, guardHouse0.getPosition());
         
         assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
-
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 37)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 33)));
     }
 
     @Test
@@ -404,7 +403,7 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), guardHouse0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), guardHouse0, map);
 
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 36)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 32)));
     }
     
     @Test
