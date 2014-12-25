@@ -29,6 +29,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that evacuating soldiers updates getHostedMilitaries()
+
 *  Test who wins according to rank and experience and health
 
 *  Test for the exact time of a fight
@@ -149,6 +151,14 @@ org.appland.settlers.model.DeliveryNotPossibleException: This building does not 
 
 TO IMPLEMENT
 ============
+
+*  Add shortcut to get more material for active player
+
+*  Add method to see if a military building is evacuated
+
+*  Only show attack button for enemy buildings that can be attacked (military and within range)
+
+*  Add buttons for stopping coin production and evacuation of military buildings
 
 *  Adjust attack radius in military buildings
 
