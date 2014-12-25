@@ -54,6 +54,7 @@ public class Crop implements Actor, Piece {
         }
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }

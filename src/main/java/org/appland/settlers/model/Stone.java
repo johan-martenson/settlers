@@ -32,6 +32,7 @@ public class Stone implements Piece {
         return amount;
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }

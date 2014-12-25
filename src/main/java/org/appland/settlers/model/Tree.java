@@ -50,6 +50,7 @@ public class Tree implements Actor, Piece {
         }
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }

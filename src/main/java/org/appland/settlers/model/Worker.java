@@ -64,22 +64,17 @@ public abstract class Worker implements Actor, Piece {
     }
     
     @Override
-    public void stepTime() {
+    public void stepTime() throws Exception {
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
-            Point oldPoint = position;
             position = path.get(0);
             path.remove(0);
 
             updateCargoPosition();
 
             if (position.equals(target)) {
-                try {
-                    state = IDLE_OUTSIDE;
+                state = IDLE_OUTSIDE;
 
-                    handleArrival();
-                } catch (Exception ex) {
-                    Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                handleArrival();
             } else {
                 walkCountdown.countFrom(getSpeed() - 3);
                 
@@ -93,17 +88,9 @@ public abstract class Worker implements Actor, Piece {
                 walkCountdown.step();
             }
         } else if (state == IDLE_OUTSIDE) {            
-            try {
-                onIdle();
-            } catch (Exception ex) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            onIdle();
         } else if (state == IDLE_INSIDE) {
-            try {
-                onIdle();
-            } catch (Exception ex) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            onIdle();
         }
     }
 
@@ -169,6 +156,7 @@ public abstract class Worker implements Actor, Piece {
         position = p;
     }
 
+    @Override
     public Point getPosition() {
         return position;
     }

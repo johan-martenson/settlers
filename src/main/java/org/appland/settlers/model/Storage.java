@@ -110,11 +110,7 @@ public class Storage extends Building implements Actor {
         }
         
         /* Send out new workers */
-        try {
-            assignNewWorkerToUnoccupiedPlaces(map);
-        } catch (Exception ex) {
-            Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        assignNewWorkerToUnoccupiedPlaces(map);
     }
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {

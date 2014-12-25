@@ -23,8 +23,12 @@ RE-FACTOR
 
 
 
+
+
 TEST
 ====
+
+*  Test that new roads are not populated with couriers from an opponent's storage if it happens to be the closest
 
 *  Test that headquarter is destroyed when it's taken by an opponent
 
@@ -33,8 +37,6 @@ TEST
 *  Test that storages only deliver on existing roads
 
 *  Test that storages only deliver to houses of their own type
-
-*  Test that evacuating soldiers updates getHostedMilitaries()
 
 *  Test who wins according to rank and experience and health
 
@@ -140,6 +142,8 @@ TEST
 
 TO IMPLEMENT
 ============
+
+*  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin
 
 *  Add shortcut to get more material for active player
 
@@ -604,4 +608,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that Player::attack(Building) throws an exception if the building cannot be attacked - DONE
 
 *  Test creating invalid point throws an exception - DONE
+
+*  Add @Override to all getPosition and stepTime and all overriding the on* methods in Worker - DONE
+
+*  Test that evacuating soldiers updates getHostedMilitaries() - DONE
 
