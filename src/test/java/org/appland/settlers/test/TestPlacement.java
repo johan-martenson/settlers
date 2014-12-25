@@ -98,12 +98,12 @@ public class TestPlacement {
         List<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
         /* Test that flags can't be placed on the borders */
-        for (int y = 0; y < 11; y++) {
+        for (int y = 0; y < 11; y += 2) {
             assertFalse(flagPoints.contains(new Point(0, y)));
             assertFalse(flagPoints.contains(new Point(10, y)));
         }
         
-        for (int x = 0; x < 11; x++) {
+        for (int x = 0; x < 11; x += 2) {
             assertFalse(flagPoints.contains(new Point(x, 0)));
             assertFalse(flagPoints.contains(new Point(x, 10)));
         }
@@ -1122,5 +1122,12 @@ public class TestPlacement {
 
         /* Verify that it's possible to place a house again */
         Building woodcutter1 = map.placeBuilding(new Woodcutter(player0), point1);
+    }
+
+    @Test (expected = RuntimeException.class)
+    public void testCreateInvalidPoint() {
+        
+        /* Verify that an exception is thrown when an invalid point is created */
+        new Point(5, 4);
     }
 }

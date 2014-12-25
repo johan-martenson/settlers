@@ -328,18 +328,15 @@ public class TestGameMap {
         
         assertTrue(border.contains(new Point(30, 50)));
         assertTrue(border.contains(new Point(70, 50)));
-        
-        assertFalse(border.contains(new Point(31, 50)));
-        assertFalse(border.contains(new Point(29, 50)));
+
+        assertFalse(border.contains(new Point(28, 50)));
+        assertFalse(border.contains(new Point(32, 50)));
+
+        assertFalse(border.contains(new Point(68, 50)));
+        assertFalse(border.contains(new Point(72, 50)));
     
-        assertFalse(border.contains(new Point(71, 50)));
-        assertFalse(border.contains(new Point(69, 50)));
-    
-        assertFalse(border.contains(new Point(50, 31)));
-        assertFalse(border.contains(new Point(50, 29)));
-        
-        assertFalse(border.contains(new Point(50, 31)));
-        assertFalse(border.contains(new Point(50, 29)));
+        assertFalse(border.contains(new Point(71, 51)));
+        assertFalse(border.contains(new Point(71, 49)));
     }
 
     @Test(expected = Exception.class)

@@ -356,7 +356,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     @Override
-    public void stepTime() {
+    public void stepTime() throws Exception {
         log.log(Level.FINE, "Stepping time in building");
         
         if (underConstruction()) {            
@@ -389,11 +389,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
         } else if (destroyed()) {
             if (countdown.reachedZero()) {
-                try {
-                    map.removeBuilding(this);
-                } catch (Exception ex) {
-                    Logger.getLogger(Building.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                map.removeBuilding(this);
             } else {
                 countdown.step();
             }

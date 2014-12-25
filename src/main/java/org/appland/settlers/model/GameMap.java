@@ -140,7 +140,7 @@ public class GameMap {
         }
     }
 
-    public void stepTime() {
+    public void stepTime() throws Exception {
         workersToRemove.clear();
         workersToAdd.clear();
         signsToRemove.clear();

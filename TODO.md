@@ -13,8 +13,6 @@ RE-FACTOR
 
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
-*  Add common interface for all actors to get getPosition() unified
-
 *  Fix TestCourier and TestDonkey to use occupyRoad() instead of manually placing courier or donkey
 
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
@@ -25,9 +23,16 @@ RE-FACTOR
 
 
 
-
 TEST
 ====
+
+*  Test that headquarter is destroyed when it's taken by an opponent
+
+*  Test that when a barracks is destroyed, the worker on roads that get removed return to their storage
+
+*  Test that storages only deliver on existing roads
+
+*  Test that storages only deliver to houses of their own type
 
 *  Test that evacuating soldiers updates getHostedMilitaries()
 
@@ -37,13 +42,9 @@ TEST
 
 *  Test that player is set correctly in workers retrieved from storage
 
-*  Test that Player::attack(Building) throws an exception if the building cannot be attacked
-
 *  Test that the number of militaries in a building goes down when a military has been retrieved
 
 *  Test that the closest building with available militaries is used in attacking
-
-*  Test creating invalid point throws an exception
 
 *  Test players can not create roads on each other's land
 
@@ -123,23 +124,11 @@ TEST
 
 *  Q: does tree conservation program also apply to stones?
 
-*  fix exception:    (ALLVARLIG: null
-org.appland.settlers.model.DeliveryNotPossibleException: This building does not accept deliveries.
-	at org.appland.settlers.model.Building.putCargo(Building.java:254)
-	at org.appland.settlers.model.Courier.onArrival(Courier.java:263)
-	at org.appland.settlers.model.Worker.handleArrival(Worker.java:154)
-	at org.appland.settlers.model.Worker.stepTime(Worker.java:69)
-	at org.appland.settlers.model.GameMap.stepTime(GameMap.java:119)
-	at org.appland.settlers.test.Utils.fastForward(Utils.java:71)
-	at org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:405))   
-
 *  Test the initial amount of all materials
 
 *  It should not be possible to place building that overlaps the border - verify occupied points in game
 
 *  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
-
-*  Verify that cargos are delivered to new building when it is placed so that its flag splits a road
 
 *  Geologist gets stuck when its flag is removed
 
@@ -605,4 +594,14 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Remove GameMap::placeFlag(Flag) - DONE
 
 *  Remove backward compatible mapping methods for pre-multiplayer tests - DONE
+
+*  Remove try-catch in Worker::stepTime - DONE
+
+*  Add common interface for all actors to get getPosition() unified - DONE
+
+*  Verify that cargos are delivered to new building when it is placed so that its flag splits a road - DONE
+
+*  Test that Player::attack(Building) throws an exception if the building cannot be attacked - DONE
+
+*  Test creating invalid point throws an exception - DONE
 

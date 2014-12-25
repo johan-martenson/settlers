@@ -82,7 +82,7 @@ public class Storage extends Building implements Actor {
     }
 
     @Override
-    public void stepTime() {
+    public void stepTime() throws Exception {
         super.stepTime();
         
         /* Handle promotion with delay */

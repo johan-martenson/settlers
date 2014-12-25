@@ -17,6 +17,12 @@ public class Point extends java.awt.Point {
 
     public Point(int x, int y) {
         super(x, y);
+
+        /* Throw an exception if the sum of x and y is odd which is clearly 
+           invalid */
+        if ((x + y) % 2 == 1) {
+            throw new RuntimeException("Can't create point " + x + ", " + y);
+        }
     }
 
     @Override

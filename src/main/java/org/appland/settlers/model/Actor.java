@@ -2,5 +2,5 @@ package org.appland.settlers.model;
 
 public interface Actor {
 
-    public void stepTime();
+    public void stepTime() throws Exception;
 }
