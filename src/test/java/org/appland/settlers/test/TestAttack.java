@@ -1109,7 +1109,7 @@ public class TestAttack {
         assertFalse(map.getWorkers().contains(defender));
 
         /* Verify that the field of view has not been updated yet */
-        assertTrue(player0.getFieldOfView().contains(new Point(29, 5)));
+        assertTrue(player0.getFieldOfView().contains(new Point(31, 5)));
         assertFalse(player0.getFieldOfView().contains(new Point(37, 5)));
 
         /* Wait for the attacker to go to the barracks */
@@ -1119,8 +1119,8 @@ public class TestAttack {
 
         /* Verify that the field of view is updated when the attacker has taken
            over the barracks */
-        assertFalse(player0.getFieldOfView().contains(new Point(29, 5)));
-        assertTrue(player0.getFieldOfView().contains(new Point(37, 5)));
+        assertFalse(player0.getFieldOfView().contains(new Point(31, 5)));
+        assertTrue(player0.getFieldOfView().contains(new Point(39, 5)));
     }
 
     @Test

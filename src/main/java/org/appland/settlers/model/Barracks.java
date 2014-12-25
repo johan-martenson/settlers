@@ -9,7 +9,7 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Size.SMALL;
 
 @HouseSize(size = SMALL, material = {PLANCK, PLANCK})
-@MilitaryBuilding(maxHostedMilitary = 2, defenceRadius = 6, maxCoins = 1, attackRadius = 12)
+@MilitaryBuilding(maxHostedMilitary = 2, defenceRadius = 8, maxCoins = 1, attackRadius = 12)
 public class Barracks extends Building {
 
     public Barracks(Player p) {

@@ -501,7 +501,7 @@ public class TestGameMap {
         border = player0.getBorders().get(0);
         
         assertFalse(border.contains(new Point(50, 70)));
-        assertTrue(border.contains(new Point(50, 74)));
+        assertTrue(border.contains(new Point(50, 76)));
         
         Point point2 = new Point(50, 72);
         Building barracks1 = map.placeBuilding(new Barracks(player0), point2);
@@ -513,9 +513,9 @@ public class TestGameMap {
         border = player0.getBorders().get(0);
         
         assertFalse(border.contains(new Point(50, 74)));
-        assertTrue(border.contains(new Point(50, 78)));        
+        assertTrue(border.contains(new Point(50, 80)));        
         
-        Point point3 = new Point(50, 76);
+        Point point3 = new Point(50, 78);
         Building barracks2 = map.placeBuilding(new Barracks(player0), point3);
         
         Utils.constructHouse(barracks2, map);
@@ -524,10 +524,10 @@ public class TestGameMap {
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
         
-        assertFalse(border.contains(new Point(50, 78)));
-        assertTrue(border.contains(new Point(50, 82)));
+        assertFalse(border.contains(new Point(50, 80)));
+        assertTrue(border.contains(new Point(50, 86)));
 
-        Point point4 = new Point(50, 80);
+        Point point4 = new Point(50, 84);
         Building barracks3 = map.placeBuilding(new Barracks(player0), point4);
 
         Utils.constructHouse(barracks3, map);
@@ -536,8 +536,8 @@ public class TestGameMap {
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
 
-        assertFalse(border.contains(new Point(50, 78)));
-        assertTrue(border.contains(new Point(50, 86)));
+        assertFalse(border.contains(new Point(50, 86)));
+        assertTrue(border.contains(new Point(50, 92)));
 
         barracks0.tearDown();
         barracks1.tearDown();
@@ -691,11 +691,11 @@ public class TestGameMap {
         assertEquals(player0.getBorders().size(), 1);
         
         Collection<Point> border = player0.getBorders().get(0);
+
+        assertTrue(border.contains(new Point(24, 36)));
+        assertTrue(border.contains(new Point(4, 32)));
         
-        assertTrue(border.contains(new Point(24, 34)));
-        assertTrue(border.contains(new Point(4, 30)));
-        
-        Point point46 = new Point(11, 23);
+        Point point46 = new Point(11, 25);
         assertTrue(border.contains(point46));
     }
     
@@ -794,8 +794,8 @@ public class TestGameMap {
         
         Collection<Point> newFieldOfView = player0.getFieldOfView();
 
-        Point point3 = new Point(4, 32);
-        
+        Point point3 = new Point(4, 34);
+
         assertTrue(newFieldOfView.contains(point3));
         assertFalse(newFieldOfView.contains(point1));
     }

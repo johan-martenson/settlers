@@ -226,7 +226,7 @@ public class TestBarracks {
         Utils.fastForwardUntilWorkerReachesPoint(map, m, barracks0.getPosition());
         
         assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 29)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(5, 31)));
     }
 
     @Test
@@ -350,7 +350,7 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
         
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 28)));
+        assertTrue(player0.getBorders().get(0).contains(new Point(6, 30)));
     }
     
     @Test
