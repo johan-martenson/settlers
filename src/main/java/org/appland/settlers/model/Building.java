@@ -128,8 +128,8 @@ public class Building implements Actor, EndPoint, Piece {
         if (!enablePromotions) {
             return false;
         }
-        
-        return getAmount(COIN) < getMaxCoins();
+
+        return getAmount(COIN) + promisedDeliveries.get(COIN) < getMaxCoins();
     }
 
     private int getMaxCoins() {
@@ -290,7 +290,7 @@ public class Building implements Actor, EndPoint, Piece {
             throw new InvalidStateForProduction(this);
         }
 
-        if (ready() && material == COIN && isMilitaryBuilding() && !needsCoins()) {
+        if (ready() && material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
             throw new Exception("This building doesn't need any more coins");
         }
         
@@ -574,12 +574,12 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean needsMaterialForProduction(Material material) {
         Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
         
-        if (isMilitaryBuilding() && needsCoins() && material == COIN) {
-            return true;
+        if (isMilitaryBuilding() && material == COIN) {
+            return needsCoins();
         }
 
         /* Building does not accept the material */
-        if (!requiredGoods.containsKey(material)) {            
+        if (!requiredGoods.containsKey(material)) {
             log.log(Level.FINE, "This building does not accept {0}", material);
             return false;
         }

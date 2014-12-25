@@ -472,6 +472,9 @@ public class TestGuardHouse {
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
         
+        guardHouse0.promiseDelivery(COIN);
+        guardHouse0.promiseDelivery(COIN);
+
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 

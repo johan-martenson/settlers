@@ -11,6 +11,7 @@ import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.COIN;
@@ -23,6 +24,7 @@ import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -418,21 +420,72 @@ public class TestBarracks {
         
         /* Deliver one coin to the barracks */
         Cargo cargo = new Cargo(COIN, map);
-        
+
+        barracks0.promiseDelivery(COIN);
         barracks0.putCargo(cargo);
-        
+
         /* Verify that the barracks can't hold another coin */
         assertFalse(barracks0.needsMaterial(COIN));
         assertEquals(barracks0.getAmount(COIN), 1);
-        
+
         try {
             barracks0.putCargo(cargo);
             assertFalse(true);
         } catch (Exception e) {}
-        
+
         assertEquals(barracks0.getAmount(COIN), 1);
     }
 
+    @Test
+    public void testStorageStopsDeliveringCoinsWhenBarracksIsFull() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        
+        Utils.constructHouse(barracks0, map);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Fill up headquarter with coins */
+        Utils.adjustInventoryTo((Storage) headquarter0, COIN, 10, map);
+
+        /* Wait for the barracks to get a coin */
+        for (int i = 0; i < 1000; i++) {
+            if (barracks0.getAmount(COIN) == 1) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getAmount(COIN), 1);
+
+        /* Disable promotion */
+        barracks0.disablePromotions();
+
+        /* Verify that no more coin is deliverd */
+        Courier courier = road0.getCourier();
+        for (int i = 0; i < 1000; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial().equals(COIN)) {
+                assertFalse(true);
+            }
+
+            map.stepTime();
+        }
+    }
+    
     @Test
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 

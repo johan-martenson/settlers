@@ -490,6 +490,10 @@ public class TestWatchTower {
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
         
+        watchTower0.promiseDelivery(COIN);
+        watchTower0.promiseDelivery(COIN);
+        watchTower0.promiseDelivery(COIN);
+
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);

@@ -509,6 +509,11 @@ public class TestFortress {
         /* Deliver four coins to the fortress */
         Cargo cargo = new Cargo(COIN, map);
         
+        fortress0.promiseDelivery(COIN);
+        fortress0.promiseDelivery(COIN);
+        fortress0.promiseDelivery(COIN);
+        fortress0.promiseDelivery(COIN);
+
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
