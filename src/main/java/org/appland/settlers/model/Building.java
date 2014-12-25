@@ -674,7 +674,9 @@ public class Building implements Actor, EndPoint, Piece {
         for (Military m : hostedMilitary) {
             m.returnToStorage();
         }
-        
+
+        hostedMilitary.clear();
+
         evacuated = true;
     }
 

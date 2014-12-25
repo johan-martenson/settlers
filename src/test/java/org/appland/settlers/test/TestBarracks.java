@@ -713,6 +713,7 @@ public class TestBarracks {
         map.stepTime();
         
         assertFalse(m.isInsideBuilding());
+        assertEquals(barracks0.getHostedMilitary(), 0);
         
         /* Verify that the evacuated military returns to the storage */
         assertEquals(m.getTarget(), headquarter0.getPosition());

@@ -806,7 +806,8 @@ public class TestFortress {
         
         map.stepTime();
         
-        assertFalse(m.isInsideBuilding());        
+        assertFalse(m.isInsideBuilding());
+        assertEquals(fortress0.getHostedMilitary(), 0);
     }
 
     @Test

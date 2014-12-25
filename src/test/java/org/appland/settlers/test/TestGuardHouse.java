@@ -767,7 +767,8 @@ public class TestGuardHouse {
         
         map.stepTime();
         
-        assertFalse(m.isInsideBuilding());        
+        assertFalse(m.isInsideBuilding());
+        assertEquals(guardHouse0.getHostedMilitary(), 0);
     }
 
     @Test

@@ -786,7 +786,8 @@ public class TestWatchTower {
         
         map.stepTime();
         
-        assertFalse(m.isInsideBuilding());        
+        assertFalse(m.isInsideBuilding());
+        assertEquals(watchTower0.getHostedMilitary(), 0);
     }
 
     @Test
