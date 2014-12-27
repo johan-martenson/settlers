@@ -217,8 +217,6 @@ TO IMPLEMENT
 
 *  worker setTarget and setTargetOffroad should share much more code
 
-*  house should not be possible to place if its flag will be too close to another flag
-
 *  limit number of cargos on a flag
 
 
@@ -612,4 +610,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Test that evacuating soldiers updates getHostedMilitaries() - DONE
 
 *  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin - DONE
+
+*  house should not be possible to place if its flag will be too close to another flag - DONE
 

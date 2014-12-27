@@ -7,6 +7,7 @@
 package org.appland.settlers.test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Building;
@@ -1129,5 +1130,32 @@ public class TestPlacement {
         
         /* Verify that an exception is thrown when an invalid point is created */
         new Point(5, 4);
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotPlaceHouseIfFlagIsTooCloseToOtherFlag() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point0 = new Point(10, 10);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Verify that a building cannot be place so that its flag is too 
+           close to the other flag */
+        Point point1 = new Point(7, 11);
+        Building woodcutter0 = map.placeBuilding(new Building(player0), point1);
     }
 }

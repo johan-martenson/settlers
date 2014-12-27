@@ -863,6 +863,7 @@ public class TestGameMap {
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0");
         Player player1 = new Player("Player 1");
+
         List<Player> players = new LinkedList<>();
         players.add(player0);
         players.add(player1);
