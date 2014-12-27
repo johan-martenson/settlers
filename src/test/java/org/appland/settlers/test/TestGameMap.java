@@ -9,6 +9,7 @@ package org.appland.settlers.test;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
@@ -854,5 +855,108 @@ public class TestGameMap {
 
         assertFalse(player0.isWithinBorder(point1));
         assertFalse(player0.getDiscoveredLand().contains(point1));
+    }
+
+    @Test
+    public void testCircleOfBarracksCreatesInternalBorder() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Placing barracks */
+        Point point39 = new Point(4, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point39);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
+
+        /* Placing barracks */
+        Point point50 = new Point(4, 28);
+        Building barracks1 = map.placeBuilding(new Barracks(player0), point50);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks1, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks1, map);
+
+        /* Placing barracks */
+        Point point58 = new Point(4, 34);
+        Building barracks2 = map.placeBuilding(new Barracks(player0), point58);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks2, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks2, map);
+
+        /* Placing barracks */
+        Point point65 = new Point(9, 37);
+        Building barracks3 = map.placeBuilding(new Barracks(player0), point65);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks3, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks3, map);
+
+        /* Placing barracks */
+        Point point70 = new Point(15, 37);
+        Building barracks4 = map.placeBuilding(new Barracks(player0), point70);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks4, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks4, map);
+
+        /* Placing barracks */
+        Point point74 = new Point(21, 37);
+        Building barracks5 = map.placeBuilding(new Barracks(player0), point74);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks5, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks5, map);
+
+        /* Placing barracks */
+        Point point78 = new Point(21, 31);
+        Building barracks6 = map.placeBuilding(new Barracks(player0), point78);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks6, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks6, map);
+
+        /* Placing barracks */
+        Point point85 = new Point(22, 26);
+        Building barracks7 = map.placeBuilding(new Barracks(player0), point85);
+
+        /* Finish construction of barracks */
+        Utils.constructHouse(barracks7, map);
+
+        /* Occupy barracks */
+        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks7, map);
+
+        /* Verify that there is an internal border created for the space that
+           the circle of barracks doesn't cover */
+        Point point86 = new Point(14, 22);
+        assertTrue(player0.getBorders().get(0).contains(point86) ||
+                   player0.getBorders().get(1).contains(point86));
     }
 }

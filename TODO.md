@@ -143,8 +143,6 @@ TEST
 TO IMPLEMENT
 ============
 
-*  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin
-
 *  Add shortcut to get more material for active player
 
 *  Add method to see if a military building is evacuated
@@ -612,4 +610,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add @Override to all getPosition and stepTime and all overriding the on* methods in Worker - DONE
 
 *  Test that evacuating soldiers updates getHostedMilitaries() - DONE
+
+*  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin - DONE
 
