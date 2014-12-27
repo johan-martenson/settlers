@@ -1133,7 +1133,8 @@ public class TestRoads {
         assertTrue(w2 instanceof Courier);
         
         Courier secondCourier = (Courier)w2;
-        
+
+        assertNotNull(secondCourier);
         assertNotNull(secondCourier.getAssignedRoad());
         assertFalse(secondCourier.getAssignedRoad().equals(road));
     }
