@@ -143,25 +143,15 @@ TEST
 TO IMPLEMENT
 ============
 
-*  Add shortcut to get more material for active player
-
 *  Add method to see if a military building is evacuated
-
-*  Only show attack button for enemy buildings that can be attacked (military and within range)
 
 *  Add buttons for stopping coin production and evacuation of military buildings
 
 *  Adjust attack radius in military buildings
 
-*  Change app to create player
-
-*  Update recorder to explicitly create player list
-
 *  Fix so that farmer can't walk through his own house when he goes out to plan or harvest
 
 *  Implement limit so that buildings can not accept more resources than they can hold
-
-*  Scale drawing of workers and trees in the app
 
 *  Make sure all tests for stopped production have more material than necessary
 
@@ -171,11 +161,7 @@ TO IMPLEMENT
 
 *  Improve the drawing of the selected spot
 
-*  Add button to stop production in building to the sideview in the app
-
 *  Add button to empty military buildings to the sideview in the app
-
-*  Consider changing stepTime to throw an Exception so errors will reach the top level and not get missed
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -185,11 +171,7 @@ TO IMPLEMENT
 
 *  Don't draw suggestions for next road connection over houses, verify limits next to small, medium and large houses
 
-*  Implement support for several players
-
 *  Implement option to set delivery priority for materials
-
-*  Merge construct[Small|Medium|Large]House into one method that handles all buildings dynamically
 
 *  Adjust the price for constructing foresterhut, woodcutter, quarry and sawmill
 
@@ -208,8 +190,6 @@ TO IMPLEMENT
 *  fix building to use a single state variable
 
 *  extract app's canvas to its own class
-
-*  change    Storage::retrieveWorker()    to use a Map<Material, ? extends Worker>
 
 *  add to app that 'S' dumps both state and code
 
@@ -612,4 +592,22 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin - DONE
 
 *  house should not be possible to place if its flag will be too close to another flag - DONE
+
+*  Merge construct[Small|Medium|Large]House into one method that handles all buildings dynamically - DONE
+
+*  Implement support for several players - DONE
+
+*  Consider changing stepTime to throw an Exception so errors will reach the top level and not get missed - DONE
+
+*  Add button to stop production in building to the sideview in the app - DONE
+
+*  Scale drawing of workers and trees in the app - DONE
+
+*  Change app to create player - DONE
+
+*  Add shortcut to get more material for active player - DONE
+
+*  Only show attack button for enemy buildings that can be attacked (military and within range) - DONE
+
+*  Update recorder to explicitly create player list - DONE
 
