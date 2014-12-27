@@ -1521,7 +1521,7 @@ public class TestRoads {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Occupy the road */
-        Utils.occupyRoad(new Courier(map), road0, map);
+        Utils.occupyRoad(road0, map);
         
         /* Remove the road */
         Worker ww = road0.getCourier();
@@ -1563,7 +1563,7 @@ public class TestRoads {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         /* Occupy the road */
-        Utils.occupyRoad(new Courier(map), road1, map);
+        Utils.occupyRoad(road1, map);
         
         /* Remove the road */
         Worker ww = road1.getCourier();
@@ -1632,7 +1632,7 @@ public class TestRoads {
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
     
         /* Place a worker on the road */
-        Courier courier = Utils.occupyRoad(new Courier(map), road0, map);
+        Courier courier = Utils.occupyRoad(road0, map);
     
         /* Deliver 99 cargos and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
@@ -1705,8 +1705,8 @@ public class TestRoads {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
         
         /* Place workers on the roads */
-        Courier courier0 = Utils.occupyRoad(new Courier(map), road0, map);
-        Courier courier1 = Utils.occupyRoad(new Courier(map), road1, map);
+        Courier courier0 = Utils.occupyRoad(road0, map);
+        Courier courier1 = Utils.occupyRoad(road1, map);
     
         /* Deliver 99 cargos and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {

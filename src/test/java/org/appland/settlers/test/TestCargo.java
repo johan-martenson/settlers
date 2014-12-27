@@ -118,8 +118,8 @@ public class TestCargo {
         Road road1 = map.placeRoad(player0, point2, point42, point43);
 
         /* Place couriers on the roads */
-        Utils.occupyRoad(new Courier(map), road0, map);
-        Utils.occupyRoad(new Courier(map), road1, map);
+        Utils.occupyRoad(road0, map);
+        Utils.occupyRoad(road1, map);
         
         /* Wait for a cargo with the forester hut as target to get picked up by the first courier */
         for (int i = 0; i < 2000; i++) {

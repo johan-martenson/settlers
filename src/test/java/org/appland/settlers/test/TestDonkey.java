@@ -67,8 +67,8 @@ public class TestDonkey {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
         
         /* Place workers on the roads */
-        Courier courier0 = Utils.occupyRoad(new Courier(map), road0, map);
-        Courier courier1 = Utils.occupyRoad(new Courier(map), road1, map);
+        Courier courier0 = Utils.occupyRoad(road0, map);
+        Courier courier1 = Utils.occupyRoad(road1, map);
     
         /* Deliver 99 cargos and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
