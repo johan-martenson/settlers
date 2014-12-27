@@ -667,7 +667,7 @@ public class TestBarracks {
 
         assertEquals(barracks0.getAmount(COIN), 1);
     }
-    
+
     @Test
     public void testCanDisableCoinsToBarracks() throws Exception {
 
@@ -681,19 +681,74 @@ public class TestBarracks {
         Point point21 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
+        /* Add coins to the headquarter */
+        headquarter0.putCargo(new Cargo(COIN, map));
+
         /* Placing barracks */
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
         
         Utils.constructHouse(barracks0, map);
-        
-        /* Deliver one coin to the barracks */
-        assertTrue(barracks0.needsMaterial(COIN));
-        
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Occupy the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
         /* Disable coins to the barracks and verify that it doesn't need coins*/
         barracks0.disablePromotions();
-        
+
         assertFalse(barracks0.needsMaterial(COIN));
+
+        /* Verify that no coins are delivered */
+        Utils.verifyNoDeliveryOfMaterial(map, road0, COIN);
+    }
+
+    @Test
+    public void testCanResumeDeliveryOfCoinsToBarracks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Add coins to the headquarter */
+        headquarter0.putCargo(new Cargo(COIN, map));
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        Utils.constructHouse(barracks0, map);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Occupy the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Disable coins to the barracks and verify that it doesn't need coins*/
+        barracks0.disablePromotions();
+
+        assertFalse(barracks0.needsMaterial(COIN));
+
+        /* Verify that no coins are delivered */
+        Utils.verifyNoDeliveryOfMaterial(map, road0, COIN);
+
+        /* Resume delivery of coins to the barracks */
+        barracks0.enablePromotions();
+
+        /* Verify that the barracks needs coins again */
+        assertTrue(barracks0.needsMaterial(COIN));
+
+        /* Verify that a coin is delivered to the barracks */
+        Utils.verifyDeliveryOfMaterial(map, road0, COIN);
     }
 
     @Test

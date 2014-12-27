@@ -666,6 +666,10 @@ public class Building implements Actor, EndPoint, Piece {
         enablePromotions = false;
     }
 
+    public void enablePromotions() {
+        enablePromotions = true;
+    }
+
     public void evacuate() throws Exception {
         for (Military m : hostedMilitary) {
             m.returnToStorage();

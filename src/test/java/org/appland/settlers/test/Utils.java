@@ -48,24 +48,24 @@ public class Utils {
 
     private static final Logger log = Logger.getLogger(Courier.class.getName());
 
-    public static void fastForward(int time, Actor b) {
+    public static void fastForward(int time, Actor b) throws Exception {
         int i;
         for (i = 0; i < time; i++) {
             b.stepTime();
         }
     }
 
-    public static void fastForward(int time, Actor... b) {
+    public static void fastForward(int time, Actor... b) throws Exception {
         fastForward(time, Arrays.asList(b));
     }
 
-    public static void fastForward(int time, List<Actor> actors) {
+    public static void fastForward(int time, List<Actor> actors) throws Exception {
         for (Actor a : actors) {
             fastForward(time, a);
         }
     }
 
-    public static void fastForward(int time, GameMap map) {
+    public static void fastForward(int time, GameMap map) throws Exception {
         int i;
         for (i = 0; i < time; i++) {
             map.stepTime();
@@ -97,7 +97,7 @@ public class Utils {
         return false;
     }
 
-    static void stepTime(List<Actor> actors) {
+    static void stepTime(List<Actor> actors) throws Exception {
 
         for (Actor a : actors) {
             a.stepTime();
@@ -155,7 +155,7 @@ public class Utils {
         }
     }
 
-    static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) {
+    static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) throws Exception {
         assertNotNull(map);
         assertFalse(workers.length == 0);
         
@@ -180,7 +180,7 @@ public class Utils {
         }
     }
 
-    static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) {
+    static void fastForwardUntilWorkerReachesPoint(GameMap map, Worker worker, Point target) throws Exception {
         assertNotNull(target);
         assertNotNull(worker);
         assertNotNull(map);
@@ -198,7 +198,7 @@ public class Utils {
         assertTrue(worker.isAt(target));
     }
 
-    static SawmillWorker occupySawmill(Sawmill sm, GameMap map) throws InvalidRouteException {
+    static SawmillWorker occupySawmill(Sawmill sm, GameMap map) throws Exception {
         SawmillWorker sw = new SawmillWorker(map);
         
         map.placeWorker(sw, sm.getFlag());
@@ -220,7 +220,7 @@ public class Utils {
         return worker;
     }
 
-    static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) {
+    static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) throws Exception {
         int i;
         for (i = 0; i < 500; i++) {
             map.stepTime();
@@ -233,7 +233,7 @@ public class Utils {
         assertEquals(tree.getSize(), LARGE);
     }
 
-    static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) {
+    static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws Exception {
         int i;
         for (i = 0; i < 500; i++) {
             if (crop.getGrowthState() == FULL_GROWN) {
@@ -276,7 +276,7 @@ public class Utils {
         }
     }
 
-    static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) {
+    static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) throws Exception {
         for (int i = 0; i < 10000; i++) {
             if (building.ready()) {
                 break;
@@ -288,7 +288,7 @@ public class Utils {
         assertTrue(building.ready());
     }
 
-    static void fastForwardUntilBuildingIsOccupied(Building building, GameMap map) {
+    static void fastForwardUntilBuildingIsOccupied(Building building, GameMap map) throws Exception {
         for (int i = 0; i < 1000; i++) {
             if (building.getWorker() != null) {
                 break;
@@ -358,12 +358,14 @@ public class Utils {
         }
     }
 
-    static Courier occupyRoad(Courier courier, Road road1, GameMap map) throws Exception {
+    static Courier occupyRoad(Road road1, GameMap map) throws Exception {
+        Courier courier = new Courier(map);
+
         map.placeWorker(courier, road1.getFlags()[0]);
         courier.assignToRoad(road1);
 
         assertEquals(road1.getCourier(), courier);
-        
+
         return courier;
     }
 
@@ -384,7 +386,7 @@ public class Utils {
         assertEquals(storage.getAmount(material), amount);
     }
 
-    static void constructHouse(Building b, GameMap map) {
+    static void constructHouse(Building b, GameMap map) throws Exception {
         assertTrue(b.underConstruction());
 
         for (int i = 0; i < 20; i++) {
@@ -418,7 +420,7 @@ public class Utils {
         assertTrue(b.ready());
     }
 
-    static void fastForwardUntilWorkerCarriesCargo(GameMap map, Courier courier1, Cargo cargo) {
+    static void fastForwardUntilWorkerCarriesCargo(GameMap map, Courier courier1, Cargo cargo) throws Exception {
         for (int j = 0; j < 1000; j++) {
             if (cargo.equals(courier1.getCargo())) {
                 break;
@@ -430,7 +432,7 @@ public class Utils {
         assertEquals(courier1.getCargo(), cargo);
     }
 
-    static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) {
+    static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws Exception {
         for (int i = 0; i < 300; i++) {
             if (worker.getCargo() != null) {
                 break;
@@ -442,7 +444,7 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0) {
+    static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0) throws Exception {
         boolean populated = false;
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getHostedMilitary() > 0) {
@@ -483,5 +485,33 @@ public class Utils {
         }
 
         assertFalse(insideLand);
+    }
+
+    static void verifyDeliveryOfMaterial(GameMap map, Road road, Material material) throws Exception {
+        Courier courier = road.getCourier();
+
+        boolean delivery = false;
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
+                delivery = true;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(delivery);
+    }
+
+    static void verifyNoDeliveryOfMaterial(GameMap map, Road road0, Material material) throws Exception {
+        Courier courier = road0.getCourier();
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
+                assertFalse(true);
+            }
+
+            map.stepTime();
+        }
     }
 }
