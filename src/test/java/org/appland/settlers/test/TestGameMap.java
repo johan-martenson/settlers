@@ -65,7 +65,7 @@ public class TestGameMap {
         Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter wc    = new Woodcutter(player0);
-        Point wcPoint    = new Point(1, 1);
+        Point wcPoint    = new Point(2, 2);
         Point otherPoint = new Point(2, 8);
         
         map.placeBuilding(wc, wcPoint);

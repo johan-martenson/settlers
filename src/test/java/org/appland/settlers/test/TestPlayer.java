@@ -15,6 +15,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
+import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
@@ -159,5 +160,26 @@ public class TestPlayer {
         Road road0 = map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition());
 
         assertEquals(road0.getPlayer(), player0);
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to place a building with an invalid player */
+        Player invalidPlayer = new Player("");
+        Point point1 = new Point(8, 6);
+        Building wc = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
     }
 }

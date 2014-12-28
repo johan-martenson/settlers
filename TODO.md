@@ -54,13 +54,7 @@ TEST
 
 *  Test get attack radius for each military building
 
-*  Make sure there is a test that there cannot be more than one headquarter per player
-
-*  Test that the new GameMap::place*(Player, ...) still places objects directly
-
 *  Find a way to test the size of each building
-
-*  Test border is drawn for inside donut shaped land
 
 *  Test geologist does not place signs on flags (and on roads???)
 
@@ -614,4 +608,10 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add button to empty military buildings to the sideview in the app - DONE
 
 *  Add method to see if a military building is evacuated - DONE
+
+*  Test border is drawn for inside donut shaped land - DONE
+
+*  Test that the new GameMap::place*(Player, ...) still places objects directly - DONE
+
+*  Make sure there is a test that there cannot be more than one headquarter per player - DONE
 
