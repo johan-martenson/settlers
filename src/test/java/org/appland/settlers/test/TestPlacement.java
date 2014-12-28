@@ -1200,4 +1200,28 @@ public class TestPlacement {
         Point point2 = new Point(10, 6);
         Point point3 = new Point(12, 6);
         Road road0 = map.placeRoad(player0, point1, point2, point3);
-    }}
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotPlaceFlagOnFlag() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(8, 6);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Verify that it's not possible to place a flag on the existing flag */
+        Flag flag1 = map.placeFlag(player0, point1);
+    }
+}
