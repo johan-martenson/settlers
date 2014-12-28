@@ -26,6 +26,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -959,5 +960,214 @@ public class TestGameMap {
         Point point86 = new Point(14, 22);
         assertTrue(player0.getBorders().get(0).contains(point86) ||
                    player0.getBorders().get(1).contains(point86));
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotGetNonExistingFlagAtPoint() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        
+        /* Verify that it's not possible to get a non-existing flag */
+        Point point1 = new Point(20, 20);
+        Flag flag0 = map.getFlagAtPoint(point1);
+    }
+
+    @Test
+    public void testGetRoadAtPoint() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        
+        /* Verify that it's possible to get the road */
+        Point point2 = new Point(8, 4);
+        Road road1 = map.getRoadAtPoint(point2);
+
+        assertEquals(road0, road1);
+    }
+
+    @Test
+    public void testIsRoadAtPoint() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        
+        /* Verify that it's possible to get the road */
+        Point point2 = new Point(8, 4);
+        assertTrue(map.isRoadAtPoint(point2));
+    }
+
+    @Test
+    public void testIsNotRoadAtPoint() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Verify that there is no road at the point */
+        Point point1 = new Point(10, 12);
+        assertFalse(map.isRoadAtPoint(point1));
+    }
+
+    @Test
+    public void testPlaceTree() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Verify that it's possible to place a tree */
+        Point point1 = new Point(15, 15);
+        Tree tree0 = map.placeTree(point1);
+    }
+
+    @Test
+    public void testIsTree() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place tree */
+        Point point1 = new Point(15, 15);
+        Tree tree0 = map.placeTree(point1);
+
+        /* Verify that the tree is there */
+        assertTrue(map.isTreeAtPoint(point1));
+    }
+
+    @Test
+    public void testIsNoTree() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place tree */
+        Point point1 = new Point(15, 15);
+        Tree tree0 = map.placeTree(point1);
+
+        /* Verify that there is no tree on another spot */
+        Point point2 = new Point(20, 16);
+        assertFalse(map.isTreeAtPoint(point2));
+    }
+
+    @Test
+    public void testGetTrees() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place trees */
+        Point point1 = new Point(15, 15);
+        Tree tree0 = map.placeTree(point1);
+
+        Point point2 = new Point(15, 17);
+        Tree tree1 = map.placeTree(point2);
+
+        /* Verify that there are exactly these trees on the map */
+        Collection<Tree> trees = map.getTrees();
+
+        assertEquals(trees.size(), 2);
+        assertTrue(trees.contains(tree0));
+        assertTrue(trees.contains(tree1));
     }
 }

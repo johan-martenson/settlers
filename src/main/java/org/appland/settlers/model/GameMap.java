@@ -618,10 +618,6 @@ public class GameMap {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
         
         Point flagPoint = flag.getPosition();
-        
-        if (isAlreadyPlaced(flag)) {
-            throw new Exception("Flag " + flag + " is already placed on the map");
-        }
 
         if (!isPossibleFlagPoint(flag.getPlayer(), flagPoint)) {
             throw new Exception("Can't place " + flag + " on occupied point");
@@ -1133,10 +1129,6 @@ public class GameMap {
 
     public boolean isFlagAtPoint(Point p) {
         return pointToGameObject.get(p).isFlag();
-    }
-
-    private boolean isAlreadyPlaced(Flag f) {
-        return flags.contains(f);
     }
 
     boolean isWithinMap(Point p) {
