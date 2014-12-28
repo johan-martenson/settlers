@@ -898,8 +898,14 @@ public class TestBarracks {
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
 
+        /* Verify that the barracks are evacuated */
+        assertFalse(barracks0.isEvacuated());
+
         /* Evacuate the barracks */
         barracks0.evacuate();
+
+        /* Verify that the barracks are evacuated */
+        assertTrue(barracks0.isEvacuated());
 
         /* Verify that no militaries are assigned to the barracks */
         for (int i = 0; i < 200; i++) {
@@ -951,10 +957,13 @@ public class TestBarracks {
     
         /* Cancel evacuation */
         assertFalse(barracks0.needsMilitaryManning());
-        
+
         barracks0.cancelEvacuation();
-        
+
         assertTrue(barracks0.needsMilitaryManning());
+
+        /* Verify that the barracks are not evacuated */
+        assertFalse(barracks0.isEvacuated());
     }
 
     @Test

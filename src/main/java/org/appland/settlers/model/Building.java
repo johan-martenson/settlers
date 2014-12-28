@@ -733,4 +733,8 @@ public class Building implements Actor, EndPoint, Piece {
     Military retrieveMilitary() {
         return hostedMilitary.remove(0);
     }
+
+    public boolean isEvacuated() {
+        return evacuated;
+    }
 }
