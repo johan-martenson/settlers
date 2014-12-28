@@ -1073,4 +1073,50 @@ public class TestBarracks {
         /* Verify that production cannot be resumed in barracks */
         barracks0.resumeProduction();
     }
+
+    @Test
+    public void testFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0");
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(23, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Verify that the field of view remains the same until the barracks 
+           gets occupied */
+        Point pointInOldFOV = new Point(27, 5);
+        Point pointinNewFOV = new Point(33, 5);
+
+        for (int i = 0; i < 1000; i++) {
+            if (barracks0.getHostedMilitary() == 0) {
+                assertTrue(player0.getFieldOfView().contains(pointInOldFOV));
+                assertFalse(player0.getFieldOfView().contains(pointinNewFOV));
+            } else {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        /* Verify that the field of view is updated when a military has entered
+           the barracks */
+        assertTrue(barracks0.getHostedMilitary() > 0);
+        assertTrue(player0.getFieldOfView().contains(pointinNewFOV));
+        assertFalse(player0.getFieldOfView().contains(pointInOldFOV));
+    }
 }

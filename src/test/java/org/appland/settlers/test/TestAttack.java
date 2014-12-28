@@ -1606,4 +1606,6 @@ public class TestAttack {
     //    (what happens if this is before the fight is done?)    
     //  - Test several militaries can attack and defend
     //  - Test militaries rally from several buildings
+    //  - Test one general beats six privates, not seven
+    //  - Test FOV is extended when militaries occupy a building, not before
 }
