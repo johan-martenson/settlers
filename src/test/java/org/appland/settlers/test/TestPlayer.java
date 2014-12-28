@@ -211,7 +211,7 @@ public class TestPlayer {
     }
 
     @Test (expected = Exception.class)
-    public void testPlaceRoadWithoutFlagAtTheEnd() throws Exception {
+    public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0");
@@ -225,13 +225,9 @@ public class TestPlayer {
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place flag */
+        /* Verify that it's not possible to place a flag with an invalid player */
+        Player invalidPlayer = new Player("");
         Point point1 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(player0, point1);
-
-        /* Verify that it's not possible to place a road without a flag at the end */
-        Point point2 = new Point(10, 6);
-        Point point3 = new Point(12, 6);
-        Road road0 = map.placeRoad(player0, point1, point2, point3);
+        Flag flag0 = map.placeFlag(invalidPlayer, point1);
     }
 }
