@@ -696,10 +696,16 @@ public class TestBarracks {
         /* Occupy the road */
         Courier courier = Utils.occupyRoad(road0, map);
 
+        /* Verify that promotions are enabled initially */
+        assertTrue(barracks0.isPromotionEnabled());
+
         /* Disable coins to the barracks and verify that it doesn't need coins*/
         barracks0.disablePromotions();
 
         assertFalse(barracks0.needsMaterial(COIN));
+
+        /* Verify that promotions are disabled */
+        assertFalse(barracks0.isPromotionEnabled());
 
         /* Verify that no coins are delivered */
         Utils.verifyNoDeliveryOfMaterial(map, road0, COIN);
@@ -746,6 +752,9 @@ public class TestBarracks {
 
         /* Verify that the barracks needs coins again */
         assertTrue(barracks0.needsMaterial(COIN));
+
+        /* Verify that promotions are enabled again */
+        assertTrue(barracks0.isPromotionEnabled());
 
         /* Verify that a coin is delivered to the barracks */
         Utils.verifyDeliveryOfMaterial(map, road0, COIN);

@@ -737,4 +737,8 @@ public class Building implements Actor, EndPoint, Piece {
     public boolean isEvacuated() {
         return evacuated;
     }
+
+    public boolean isPromotionEnabled() {
+        return enablePromotions;
+    }
 }
