@@ -145,7 +145,7 @@ TO IMPLEMENT
 
 *  Add method to see whether a building can produce cargos
 
-*  Add method to see if a military building is evacuated
+*  Add method to see whether a military building is accepting coins
 
 *  Adjust attack radius in military buildings
 
@@ -612,4 +612,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Add buttons for stopping coin production and evacuation of military buildings - DONE
 
 *  Add button to empty military buildings to the sideview in the app - DONE
+
+*  Add method to see if a military building is evacuated - DONE
 
