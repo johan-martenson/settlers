@@ -143,9 +143,9 @@ TEST
 TO IMPLEMENT
 ============
 
-*  Add method to see if a military building is evacuated
+*  Add method to see whether a building can produce cargos
 
-*  Add buttons for stopping coin production and evacuation of military buildings
+*  Add method to see if a military building is evacuated
 
 *  Adjust attack radius in military buildings
 
@@ -160,8 +160,6 @@ TO IMPLEMENT
 *  Use information about available flags and buildings to show the right buttons in the app
 
 *  Improve the drawing of the selected spot
-
-*  Add button to empty military buildings to the sideview in the app
 
 *  Change drawing in app to go from back to front instead of drawing all elements of each type
 
@@ -610,4 +608,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Only show attack button for enemy buildings that can be attacked (military and within range) - DONE
 
 *  Update recorder to explicitly create player list - DONE
+
+*  Add buttons for stopping coin production and evacuation of military buildings - DONE
+
+*  Add button to empty military buildings to the sideview in the app - DONE
 
