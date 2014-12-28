@@ -53,7 +53,7 @@ public class Military extends Worker {
     private static final int GENERAL_FIGHT_DURATION  = 300;
 
     private static final int PRIVATE_HEALTH  = 20;
-    private static final int SERGEANT_HEALTH = 60;
+    private static final int SERGEANT_HEALTH = 70;
     private static final int GENERAL_HEALTH  = 130;
 
     private Building  buildingToAttack;
