@@ -1158,4 +1158,22 @@ public class TestPlacement {
         Point point1 = new Point(7, 11);
         Building woodcutter0 = map.placeBuilding(new Building(player0), point1);
     }
+
+    @Test (expected = Exception.class)
+    public void testThatBuildingOtherThanHeadquarterCannotBeFirst() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point38);
+    }
 }
