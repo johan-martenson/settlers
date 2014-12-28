@@ -9,12 +9,12 @@ import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
-import static org.appland.settlers.model.Military.State.CHALLENGED;
+import static org.appland.settlers.model.Military.State.ATTACKING;
 import static org.appland.settlers.model.Military.State.DEPLOYED;
-import static org.appland.settlers.model.Military.State.FIGHTING;
+import static org.appland.settlers.model.Military.State.DEFENDING;
 import static org.appland.settlers.model.Military.State.IN_STORAGE;
 import static org.appland.settlers.model.Military.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Military.State.WAITING_FOR_OPPONENT;
+import static org.appland.settlers.model.Military.State.WAITING_FOR_DEFENDING_OPPONENT;
 import static org.appland.settlers.model.Military.State.WALKING_HOME_AFTER_FIGHT;
 import static org.appland.settlers.model.Military.State.WALKING_TO_ATTACK;
 import static org.appland.settlers.model.Military.State.WALKING_TO_FIGHT;
@@ -29,7 +29,6 @@ import static org.appland.settlers.model.Military.State.WALKING_TO_TARGET;
 public class Military extends Worker {
 
     public enum Rank {
-
         PRIVATE_RANK,
         SERGEANT_RANK,
         GENERAL_RANK;
@@ -42,28 +41,33 @@ public class Military extends Worker {
         IN_STORAGE,
         WALKING_TO_ATTACK,
         WALKING_TO_TAKE_OVER_BUILDING,
-        WAITING_FOR_OPPONENT,
+        WAITING_FOR_DEFENDING_OPPONENT,
         WALKING_TO_FIGHT,
-        FIGHTING,
-        CHALLENGED,
+        DEFENDING,
+        ATTACKING,
         WALKING_HOME_AFTER_FIGHT
     }
 
     private static final int PRIVATE_FIGHT_DURATION  = 100;
     private static final int SERGEANT_FIGHT_DURATION = 200;
     private static final int GENERAL_FIGHT_DURATION  = 300;
-        
-    private Countdown countdown;
-    private Building buildingToAttack;
-    private Military opponent;
-    private Rank rank;
-    private State state;
+
+    private static final int PRIVATE_HEALTH  = 20;
+    private static final int SERGEANT_HEALTH = 60;
+    private static final int GENERAL_HEALTH  = 130;
+
+    private Building  buildingToAttack;
+    private Military  opponent;
+    private Rank      rank;
+    private State     state;
+    private int       health;
     
     public Military(Player player, Rank r, GameMap map) {
         super(player, map);
 
         rank = r;
-        countdown = new Countdown();
+
+        health = getHealthForRank(rank);
 
         state = WALKING_TO_TARGET;
     }
@@ -95,28 +99,9 @@ public class Military extends Worker {
 
     @Override
     protected void onIdle() throws InvalidRouteException {
-        
-        /* In a fight, the defender drives the fight routine */
-        if (state == FIGHTING) {
-            if (countdown.reachedZero()) {
-                if (getRank() == PRIVATE_RANK) {
-                    opponent.won();
 
-                    map.removeWorker(this);
-                } else if (getRank() == SERGEANT_RANK && opponent.getRank() == GENERAL_RANK) {
-                    opponent.won();
-                    
-                    // should have removeWorker here, test and fix!
-                } else {
-                    opponent.lost();
-
-                    state = WALKING_HOME_AFTER_FIGHT;
-
-                    returnHome();
-                }
-            } else {
-                countdown.step();
-            }
+        if (state == DEFENDING || state == ATTACKING) {
+            opponent.hit(this);
         }
     }
 
@@ -138,7 +123,7 @@ public class Military extends Worker {
             } else {
                 buildingToAttack.getPlayer().sendDefense(buildingToAttack, this);
 
-                state = WAITING_FOR_OPPONENT;
+                state = WAITING_FOR_DEFENDING_OPPONENT;
             }
         } else if (state == WALKING_TO_TAKE_OVER_BUILDING) {
             if (buildingToAttack.ready()) {
@@ -155,13 +140,7 @@ public class Military extends Worker {
                 returnHomeOffroad();
             }
         } else if (state == WALKING_TO_FIGHT) {
-            state = FIGHTING;
-
-            int fightDuration = Math.min(opponent.getFightTime(), getFightTime());
-
-            opponent.challenge();
-
-            countdown.countFrom(fightDuration);
+            state = DEFENDING;
         } else if (state == WALKING_HOME_AFTER_FIGHT) {
             state = DEPLOYED;
 
@@ -255,15 +234,21 @@ public class Military extends Worker {
     }
 
     private void won() {
-        if (buildingToAttack.ready()) {
-            if (buildingToAttack.getHostedMilitary() == 0) {
-                state = WALKING_TO_TAKE_OVER_BUILDING;
+        if (state == ATTACKING) {
+            if (buildingToAttack.ready()) {
+                if (buildingToAttack.getHostedMilitary() == 0) {
+                    state = WALKING_TO_TAKE_OVER_BUILDING;
 
-                setOffroadTarget(buildingToAttack.getPosition());
+                    setOffroadTarget(buildingToAttack.getPosition());
+                } else {
+                    buildingToAttack.getPlayer().sendDefense(buildingToAttack, this);
+
+                    state = WAITING_FOR_DEFENDING_OPPONENT;
+                }
             } else {
-                buildingToAttack.getPlayer().sendDefense(buildingToAttack, this);
+                state = WALKING_HOME_AFTER_FIGHT;
 
-                state = WAITING_FOR_OPPONENT;
+                returnHomeOffroad();
             }
         } else {
             state = WALKING_HOME_AFTER_FIGHT;
@@ -274,13 +259,52 @@ public class Military extends Worker {
 
     private void lost() {
         map.removeWorker(this);
-    }
 
-    private void challenge() {
-        state = CHALLENGED;
+    /*            
+            if (getRank() == PRIVATE_RANK) {
+                opponent.won();
+
+                map.removeWorker(this);
+            } else if (getRank() == SERGEANT_RANK && opponent.getRank() == GENERAL_RANK) {
+                opponent.won();
+                    
+                // should have removeWorker here, test and fix!
+            } else {
+                opponent.lost();
+
+            }
+*/
     }
 
     public boolean isFighting() {
-        return state == FIGHTING || state == CHALLENGED;
+        return state == DEFENDING || state == ATTACKING;
+    }
+
+    private int getHealthForRank(Rank rank) {
+        switch (rank) {
+        case PRIVATE_RANK:
+            return PRIVATE_HEALTH;
+        case SERGEANT_RANK:
+            return SERGEANT_HEALTH;
+        case GENERAL_RANK:
+            return GENERAL_HEALTH;
+        default:
+            return 0;
+        }
+    }
+
+    private void hit(Military m) {
+        if (state == WAITING_FOR_DEFENDING_OPPONENT) {
+            state = ATTACKING;
+        }
+
+        opponent = m;
+
+        health--;
+
+        if (health == 0) {
+            opponent.won();
+            lost();
+        }
     }
 }

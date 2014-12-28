@@ -17,7 +17,6 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Land;
 import org.appland.settlers.model.Material;
 
@@ -377,7 +376,12 @@ public class Utils {
             }
 
             if (storage.getAmount(material) > amount) {
-                storage.retrieve(material);
+                
+                if (material == PRIVATE || material == SERGEANT || material == GENERAL) {
+                    storage.retrieveMilitary(material);
+                } else {
+                    storage.retrieve(material);
+                }
             } else if (storage.getAmount(material) < amount) {
                 storage.putCargo(new Cargo(material, map));
             }
@@ -513,5 +517,64 @@ public class Utils {
 
             map.stepTime();
         }
+    }
+
+    static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building, GameMap map) throws Exception {
+        for (int i = 0; i < amount; i++) {
+            occupyMilitaryBuilding(rank, building, map);
+        }
+    }
+
+    static Military occupyMilitaryBuilding(Military.Rank rank, Building building, GameMap map) throws Exception {
+        Player player = building.getPlayer();
+
+        Military military = new Military(player, rank, map);
+
+        map.placeWorker(military, building);
+        building.deployMilitary(military);
+        military.enterBuilding(building);
+
+        return military;
+    }
+
+    static Military findMilitaryOutsideBuilding(Player player, GameMap map) {
+        Military attacker = null;
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
+                attacker = (Military)w;
+            }
+        }
+
+        return attacker;
+    }
+
+    static void waitForWorkerToDisappear(Worker worker, GameMap map) throws Exception {
+        for (int i = 0; i < 500; i++) {
+            if (!map.getWorkers().contains(worker)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    static Military waitForMilitaryOutsideBuilding(Player player, GameMap map) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+            Military military = findMilitaryOutsideBuilding(player, map);
+
+            if (military != null) {
+                assertEquals(military.getPlayer(), player);
+
+                return military;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(true);
+
+        return null;
     }
 }
