@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -576,5 +577,17 @@ public class Utils {
         assertFalse(true);
 
         return null;
+    }
+
+    static List<Worker> findWorkersOfTypeOutsideForPlayer(Class aClass, Player player0, GameMap map) {
+        List<Worker> workersFound = new LinkedList<>();
+
+        for (Worker w : map.getWorkers()) {
+            if (w.getClass().equals(aClass) && !w.isInsideBuilding()) {
+                workersFound.add(w);
+            }
+        }
+
+        return workersFound;
     }
 }

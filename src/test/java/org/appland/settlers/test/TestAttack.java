@@ -176,8 +176,8 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Verify that there are available attackers for player 0 to attack
            player 1's barracks */
@@ -224,8 +224,8 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Verify that player 0 can attack player 1's barracks */
         player0.attack(barracks1);
@@ -267,8 +267,8 @@ public class TestAttack {
         map.placeBuilding(barracks1, point3);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Verify that player 0 can attack player 1's barracks */
         player0.attack(barracks0);
@@ -310,8 +310,8 @@ public class TestAttack {
         map.placeBuilding(woodcutter0, point3);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Verify that player 0 can't attack player 1's woodcutter */
         player0.attack(woodcutter0);
@@ -357,8 +357,8 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Verify that no militaries leave the barracks before the attack is 
            initiated */
@@ -379,14 +379,9 @@ public class TestAttack {
            initiated */
         map.stepTime();
 
-        int militaryOutside = 0;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                militaryOutside++;
-            }
-        }
+        List<Worker> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map);
 
-        assertEquals(militaryOutside, 1);
+        assertEquals(militaryOutside.size(), 1);
     }
 
     @Test
@@ -429,8 +424,8 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -438,12 +433,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
 
@@ -506,12 +496,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
 
@@ -561,8 +546,8 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -570,12 +555,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
 
@@ -637,11 +617,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -649,12 +629,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -670,14 +645,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Verify that the defender goes to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
 
@@ -728,11 +696,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -740,12 +708,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -761,14 +724,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -829,11 +785,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -841,12 +797,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -862,14 +813,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -937,11 +881,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -949,12 +893,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -970,14 +909,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1052,11 +984,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -1064,12 +996,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1085,14 +1012,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1167,11 +1087,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, GENERAL_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -1179,12 +1099,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1200,14 +1115,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1278,11 +1186,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -1290,12 +1198,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1311,14 +1214,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1399,11 +1295,11 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -1411,12 +1307,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1432,14 +1323,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1523,12 +1407,12 @@ public class TestAttack {
         Utils.constructHouse(barracks1, map);
         
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(player0, GENERAL_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
-        Utils.occupyMilitaryBuilding(new Military(player1, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Order an attack */
         player0.attack(barracks1);
@@ -1536,12 +1420,7 @@ public class TestAttack {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding()) {
-                attacker = (Military)w;
-            }
-        }
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -1557,14 +1436,7 @@ public class TestAttack {
         assertEquals(barracks1.getHostedMilitary(), 1);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                defender = (Military)w;
-
-                break;
-            }
-        }
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -1587,12 +1459,7 @@ public class TestAttack {
         /* Verify that a new defender goes out from the barracks */
         map.stepTime();
 
-        Military nextDefender = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player1)) {
-                nextDefender = (Military)w;
-            }
-        }
+        Military nextDefender = Utils.findMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
         assertFalse(attacker.equals(nextDefender));
@@ -1834,7 +1701,6 @@ public class TestAttack {
 
         assertTrue(map.getWorkers().contains(nextDefender));
     }
-
     // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses

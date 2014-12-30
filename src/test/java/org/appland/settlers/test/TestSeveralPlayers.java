@@ -156,4 +156,27 @@ public class TestSeveralPlayers {
         Building woodcutter1 = new Woodcutter(player1);
         map.placeBuilding(woodcutter1, point3);
     }
+
+    @Test
+    public void testRetrievePlayersFromGameMap() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0");
+        Player player1 = new Player("Player 1");
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Verify that the correct players can be retrieved from the game map */
+        List<Player> retrievedPlayers = map.getPlayers();
+
+        assertEquals(retrievedPlayers.size(), 2);
+        assertTrue(retrievedPlayers.contains(player0));
+        assertTrue(retrievedPlayers.contains(player1));
+    }
 }
