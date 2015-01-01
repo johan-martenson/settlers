@@ -28,6 +28,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Add tests for available buildings close to the border
+
 *  Test that new roads are not populated with couriers from an opponent's storage if it happens to be the closest
 
 *  Test that headquarter is destroyed when it's taken by an opponent
