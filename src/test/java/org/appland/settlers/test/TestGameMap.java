@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.GREEN;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -863,7 +864,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -967,7 +968,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -989,7 +990,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1020,7 +1021,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1049,7 +1050,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1071,7 +1072,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1093,7 +1094,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1118,7 +1119,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1144,7 +1145,7 @@ public class TestGameMap {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);

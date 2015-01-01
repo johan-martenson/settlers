@@ -234,11 +234,25 @@ public class TestPlayer {
 
     @Test
     public void testColorIsCorrectInPlayer() {
-        
+
         /* Create player */
         Player player0 = new Player("Player 0", RED);
 
         /* Verify that the color is set correctly */
         assertEquals(player0.getColor(), RED);
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotHaveTwoPlayersWithSameColor() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Verify that it's not possible to have two players with the same color */
+        GameMap map = new GameMap(players, 20, 20);
     }
 }

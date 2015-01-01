@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.GREEN;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -1137,7 +1138,7 @@ public class TestPlacement {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1164,7 +1165,7 @@ public class TestPlacement {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);

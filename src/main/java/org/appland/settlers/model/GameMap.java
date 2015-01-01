@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -137,6 +138,11 @@ public class GameMap {
         /* Give the players a reference to the map */
         for (Player player : players) {
             player.setMap(this);
+        }
+
+        /* Verify that all players have unique colors */
+        if (!allPlayersHaveUniqueColor()) {
+            throw new Exception("Each player must have a unique color");
         }
     }
 
@@ -1647,5 +1653,19 @@ public class GameMap {
         double distance = b.getPosition().distance(p);
 
         return radius / distance;
+    }
+
+    private boolean allPlayersHaveUniqueColor() {
+        List<Color> usedColors = new ArrayList<>();
+
+        for (Player p : players) {
+            if (usedColors.contains(p.getColor())) {
+                return false;
+            }
+
+            usedColors.add(p.getColor());
+        }
+
+        return true;
     }
 }

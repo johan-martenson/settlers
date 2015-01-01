@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import static java.awt.Color.GREEN;
 import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Building;
@@ -56,7 +57,7 @@ public class TestSeveralPlayers {
         /* Create player list with two players */
         List<Player> players = new LinkedList<>();
         players.add(new Player("Player 0", java.awt.Color.BLUE));
-        players.add(new Player("Player 1", java.awt.Color.BLUE));
+        players.add(new Player("Player 1", GREEN));
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 20, 20);
@@ -74,7 +75,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -99,7 +100,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -126,7 +127,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
 
@@ -162,7 +163,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", GREEN);
 
         List<Player> players = new LinkedList<>();
 
