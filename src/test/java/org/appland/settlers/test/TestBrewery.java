@@ -38,7 +38,7 @@ public class TestBrewery {
     
     @Test
     public void testBreweryNeedsWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -69,7 +69,7 @@ public class TestBrewery {
     
     @Test
     public void testBreweryGetsAssignedWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -125,7 +125,7 @@ public class TestBrewery {
     
     @Test
     public void testOccupiedBreweryWithoutWheatAndWaterProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -159,7 +159,7 @@ public class TestBrewery {
     
     @Test
     public void testUnoccupiedBreweryProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -185,7 +185,7 @@ public class TestBrewery {
 
     @Test
     public void testOccupiedBreweryWithWaterAndWheatProducesBeer() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -229,7 +229,7 @@ public class TestBrewery {
 
     @Test
     public void testBrewerLeavesBeerAtTheFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -294,7 +294,7 @@ public class TestBrewery {
 
     @Test
     public void testProductionOfOneBeerConsumesOneWheatAndOneWater() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -331,7 +331,7 @@ public class TestBrewery {
 
     @Test
     public void testProductionCountdownStartsWhenWheatAndWaterAreAvailable() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -373,7 +373,7 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWheat() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -405,7 +405,7 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWater() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -439,7 +439,7 @@ public class TestBrewery {
     public void testBreweryWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -510,7 +510,7 @@ public class TestBrewery {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -608,7 +608,7 @@ public class TestBrewery {
     public void testBrewerGoesBackToStorageWhenBreweryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -651,7 +651,7 @@ public class TestBrewery {
     public void testBrewerGoesBackOnToStorageOnRoadsIfPossibleWhenBreweryIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -701,7 +701,7 @@ public class TestBrewery {
     public void testProductionInBreweryCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -769,7 +769,7 @@ public class TestBrewery {
     public void testProductionInBreweryCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

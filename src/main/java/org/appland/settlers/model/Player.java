@@ -3,7 +3,7 @@
  */
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,9 +24,11 @@ public class Player {
     private final String         name;
     private final List<Building> buildings;
     private final Set<Point>     discoveredLand;
+    private final Color          color;
 
-    public Player(String n) {
+    public Player(String n, Color c) {
         name           = n;
+        color          = c;
         buildings      = new LinkedList<>();
         ownedLands     = new LinkedList<>();
         fieldOfView    = new LinkedList<>();
@@ -128,7 +130,7 @@ public class Player {
 
     public void attack(Building buildingToAttack, int nrAttackers) {
         List<Building> eligibleBuildings = new LinkedList<>();
-        List<Point> meetups = new ArrayList<>();
+        List<Point> meetups;
 
         /* Find all eligible buildings to attack from */
         for (Building b : getBuildings()) {
@@ -199,5 +201,9 @@ public class Player {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

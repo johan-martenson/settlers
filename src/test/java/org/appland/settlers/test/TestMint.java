@@ -38,7 +38,7 @@ public class TestMint {
     
     @Test
     public void testMintNeedsWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -77,7 +77,7 @@ public class TestMint {
     
     @Test
     public void testMintGetsAssignedWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -129,7 +129,7 @@ public class TestMint {
     
     @Test
     public void testOccupiedMintWithoutIngredientsProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -163,7 +163,7 @@ public class TestMint {
     
     @Test
     public void testUnoccupiedMintProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -189,7 +189,7 @@ public class TestMint {
 
     @Test
     public void testOccupiedMintWithGoldAndCoalProducesCoins() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -241,7 +241,7 @@ public class TestMint {
 
     @Test
     public void testMinterLeavesBreadAtTheFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -307,7 +307,7 @@ public class TestMint {
 
     @Test
     public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -342,7 +342,7 @@ public class TestMint {
 
     @Test
     public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -386,7 +386,7 @@ public class TestMint {
     public void testMintWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -457,7 +457,7 @@ public class TestMint {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -555,7 +555,7 @@ public class TestMint {
     public void testMinterGoesBackToStorageWhenMintIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -598,7 +598,7 @@ public class TestMint {
     public void testMinterGoesBackOnToStorageOnRoadsIfPossibleWhenMintIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -648,7 +648,7 @@ public class TestMint {
     public void testDestroyedMintIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -693,7 +693,7 @@ public class TestMint {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -721,7 +721,7 @@ public class TestMint {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -749,7 +749,7 @@ public class TestMint {
     public void testProductionInMintCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -817,7 +817,7 @@ public class TestMint {
     public void testProductionInMintCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

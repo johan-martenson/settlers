@@ -37,7 +37,7 @@ public class TestMill {
 
     @Test
     public void testFinishedMillNeedsWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -55,7 +55,7 @@ public class TestMill {
     
     @Test
     public void testMillerIsAssignedToFinishedHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -81,7 +81,7 @@ public class TestMill {
 
     @Test
     public void testUnoccupiedMillProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -106,7 +106,7 @@ public class TestMill {
 
     @Test
     public void testMillerEntersTheMill() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -148,7 +148,7 @@ public class TestMill {
     
     @Test
     public void testMillWorkerRests() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -185,7 +185,7 @@ public class TestMill {
 
     @Test
     public void testMillWithoutWheatProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -225,7 +225,7 @@ public class TestMill {
 
     @Test
     public void testMillProducesFlour() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -273,7 +273,7 @@ public class TestMill {
 
     @Test
     public void testMillWorkerPlacesFlourCargoAtTheFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -333,7 +333,7 @@ public class TestMill {
     public void testMillWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -400,7 +400,7 @@ public class TestMill {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -494,7 +494,7 @@ public class TestMill {
     public void testMillerGoesBackToStorageWhenMillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -537,7 +537,7 @@ public class TestMill {
     public void testMillerGoesBackOnToStorageOnRoadsIfPossibleWhenMillIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -587,7 +587,7 @@ public class TestMill {
     public void testDestroyedMillIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -632,7 +632,7 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -660,7 +660,7 @@ public class TestMill {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -688,7 +688,7 @@ public class TestMill {
     public void testProductionInMillCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -752,7 +752,7 @@ public class TestMill {
     public void testProductionInMillCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

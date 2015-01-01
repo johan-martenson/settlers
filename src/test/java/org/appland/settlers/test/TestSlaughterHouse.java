@@ -37,7 +37,7 @@ public class TestSlaughterHouse {
     
     @Test
     public void testSlaughterHouseNeedsWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -76,7 +76,7 @@ public class TestSlaughterHouse {
     
     @Test
     public void testSlaughterHouseGetsAssignedWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -128,7 +128,7 @@ public class TestSlaughterHouse {
     
     @Test
     public void testOccupiedSlaughterHouseWithoutPigsProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -162,7 +162,7 @@ public class TestSlaughterHouse {
     
     @Test
     public void testUnoccupiedSlaughterHouseProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -188,7 +188,7 @@ public class TestSlaughterHouse {
 
     @Test
     public void testOccupiedSlaughterHouseWithPigsProducesMeat() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -239,7 +239,7 @@ public class TestSlaughterHouse {
 
     @Test
     public void testButcherLeavesMeatAtTheFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -304,7 +304,7 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionOfOneBreadConsumesOnePig() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -336,7 +336,7 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionCountdownStartsWhenMaterialIsAvailable() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -379,7 +379,7 @@ public class TestSlaughterHouse {
     public void testSlaughterHouseWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -446,7 +446,7 @@ public class TestSlaughterHouse {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -539,7 +539,7 @@ public class TestSlaughterHouse {
     public void testButcherGoesBackToStorageWhenSlaughterHouseIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -582,7 +582,7 @@ public class TestSlaughterHouse {
     public void testButcherGoesBackOnToStorageOnRoadsIfPossibleWhenSlaughterHouseIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -632,7 +632,7 @@ public class TestSlaughterHouse {
     public void testDestroyedSlaughterHouseIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -677,7 +677,7 @@ public class TestSlaughterHouse {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -705,7 +705,7 @@ public class TestSlaughterHouse {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -733,7 +733,7 @@ public class TestSlaughterHouse {
     public void testProductionInSlaughterHouseCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -796,7 +796,7 @@ public class TestSlaughterHouse {
     public void testProductionInSlaughterHouseCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

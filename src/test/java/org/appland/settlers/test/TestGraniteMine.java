@@ -41,7 +41,7 @@ public class TestGraniteMine {
     
     @Test
     public void testConstructGraniteMine() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -66,7 +66,7 @@ public class TestGraniteMine {
     
     @Test
     public void testGranitemineIsNotMilitary() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -92,7 +92,7 @@ public class TestGraniteMine {
     
     @Test
     public void testGranitemineUnderConstructionNotNeedsMiner() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -114,7 +114,7 @@ public class TestGraniteMine {
     
     @Test
     public void testFinishedGranitemineNeedsMiner() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -138,7 +138,7 @@ public class TestGraniteMine {
     
     @Test
     public void testMinerIsAssignedToFinishedGranitemine() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -177,7 +177,7 @@ public class TestGraniteMine {
     
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -198,7 +198,7 @@ public class TestGraniteMine {
 
     @Test
     public void testArrivedMinerRests() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -240,7 +240,7 @@ public class TestGraniteMine {
 
     @Test
     public void testMinerMinesGranite() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -293,7 +293,7 @@ public class TestGraniteMine {
 
     @Test
     public void testGranitemineGoesToFlagWithCargoAndBack() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -353,7 +353,7 @@ public class TestGraniteMine {
     
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -372,7 +372,7 @@ public class TestGraniteMine {
 
     @Test
     public void testGranitemineRunsOutOfGranite() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -443,7 +443,7 @@ public class TestGraniteMine {
 
     @Test
     public void testGranitemineWithoutGraniteProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -492,7 +492,7 @@ public class TestGraniteMine {
     
     @Test
     public void testGranitemineWithoutFoodProducesNothing() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -534,7 +534,7 @@ public class TestGraniteMine {
 
     @Test
     public void testMiningConsumesFood() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -581,7 +581,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -652,7 +652,7 @@ public class TestGraniteMine {
     public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -750,7 +750,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackToStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -797,7 +797,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -851,7 +851,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -918,7 +918,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

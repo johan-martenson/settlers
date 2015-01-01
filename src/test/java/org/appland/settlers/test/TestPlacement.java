@@ -44,7 +44,7 @@ public class TestPlacement {
 
     @Test
     public void testDefaultMapIsEmpty() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -60,7 +60,7 @@ public class TestPlacement {
     
     @Test
     public void testEmptyMapHasNoBorders() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -70,7 +70,7 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagPointsContainsValidFlagPoint() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -87,7 +87,7 @@ public class TestPlacement {
     
     @Test
     public void testFlagsCannotBePlacedEdgeOfGameMap() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -112,7 +112,7 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToSmallHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -153,7 +153,7 @@ public class TestPlacement {
     
     @Test
     public void testNoAvailableFlagOnLake() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -175,7 +175,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnLake() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -197,7 +197,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnStone() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -218,7 +218,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnStone() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -239,7 +239,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnTree() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -260,7 +260,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnTree() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -281,7 +281,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnRoad() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -308,7 +308,7 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnRoad() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -335,7 +335,7 @@ public class TestPlacement {
 
     @Test
     public void testAvailableFlagsNextToFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -381,7 +381,7 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToSmallHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -422,7 +422,7 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToMediumHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -466,7 +466,7 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToMediumHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -516,7 +516,7 @@ public class TestPlacement {
     
     @Test
     public void testAvailableHousesNextToLargeHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -565,7 +565,7 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagsNextToLargeHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -614,7 +614,7 @@ public class TestPlacement {
     
     @Test(expected=Exception.class)
     public void testPlaceFlagTooCloseToSmallHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -634,7 +634,7 @@ public class TestPlacement {
 
     @Test(expected=Exception.class)
     public void testPlaceFlagOnHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -654,7 +654,7 @@ public class TestPlacement {
 
     @Test(expected=Exception.class) 
     public void testPlaceHouseOnFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -673,7 +673,7 @@ public class TestPlacement {
     
     @Test(expected=Exception.class)
     public void testPlaceHouseOnHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -697,7 +697,7 @@ public class TestPlacement {
 
     @Test
     public void testAutomaticWaypointSelection() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -707,7 +707,7 @@ public class TestPlacement {
 
     @Test
     public void testPossibleFlagsNextToWater() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -736,7 +736,7 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagInWater() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 6, 6);
@@ -769,7 +769,7 @@ public class TestPlacement {
 
     @Test
     public void testDifferentPointOrderGivesSameTile() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -793,7 +793,7 @@ public class TestPlacement {
 
     @Test
     public void testDifferentiateBetweenCloseTiles() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -811,7 +811,7 @@ public class TestPlacement {
 
     @Test
     public void testSetTileToMountainTerrain() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -830,7 +830,7 @@ public class TestPlacement {
     
     @Test
     public void testTreeCannotBePlacedOnStone() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -848,7 +848,7 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagOnStone() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -869,7 +869,7 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagOnTree() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -890,7 +890,7 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagOnHouse() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -911,7 +911,7 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceBuildingIfFlagCanNotBePlaced() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -935,7 +935,7 @@ public class TestPlacement {
     @Test(expected = Exception.class)
     public void testCannotPlaceRoadAcrossLake() throws Exception {
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -982,7 +982,7 @@ public class TestPlacement {
     @Test
     public void testRoadConnectionSuggestionsDoNotIncludePointsInWater() throws Exception {
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1032,7 +1032,7 @@ public class TestPlacement {
 
     @Test
     public void testFlagCanBePlacedOnSign() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -1059,7 +1059,7 @@ public class TestPlacement {
 
     @Test
     public void testMineCanBePlacedOnSign() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -1091,7 +1091,7 @@ public class TestPlacement {
     public void testPlaceHouseOnFullyDestroyedHouse() throws Exception {
         
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1136,8 +1136,8 @@ public class TestPlacement {
     public void testCannotPlaceHouseIfFlagIsTooCloseToOtherFlag() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1163,8 +1163,8 @@ public class TestPlacement {
     public void testThatBuildingOtherThanHeadquarterCannotBeFirst() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1181,7 +1181,7 @@ public class TestPlacement {
     public void testPlaceRoadWithoutFlagAtTheEnd() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1206,7 +1206,7 @@ public class TestPlacement {
     public void testCannotPlaceFlagOnFlag() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

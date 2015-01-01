@@ -42,7 +42,7 @@ import org.junit.Test;
  */
 public class TestGameMap {
     private GameMap map;
-    Player player0 = new Player("Player 0");
+    Player player0 = new Player("Player 0", java.awt.Color.BLUE);
     List<Player> players = new ArrayList<>();
     
     @Before
@@ -185,7 +185,7 @@ public class TestGameMap {
 
     @Test
     public void testCreateMinimalMap() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -194,7 +194,7 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testCreateTooSmallMap() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -203,7 +203,7 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testCreateMapWithNegativeHeight() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -212,7 +212,7 @@ public class TestGameMap {
     
     @Test(expected=Exception.class)
     public void testCreateMapWithNegativeWidth() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -315,7 +315,7 @@ public class TestGameMap {
 
     @Test
     public void testGetPerimeterWithOnlyHeadquarter() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -343,7 +343,7 @@ public class TestGameMap {
 
     @Test(expected = Exception.class)
     public void testPlaceFlagOutsideBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -356,7 +356,7 @@ public class TestGameMap {
 
     @Test(expected = Exception.class)
     public void testPlaceBuildingOutsideBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -369,7 +369,7 @@ public class TestGameMap {
     
     @Test
     public void testPlaceBuildingOutsideBorderHasNoEffect() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -389,7 +389,7 @@ public class TestGameMap {
     
     @Test
     public void testPlaceRoadThatGoesOutsideTheBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -418,7 +418,7 @@ public class TestGameMap {
 
     @Test
     public void testRemoveFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -436,7 +436,7 @@ public class TestGameMap {
     
     @Test
     public void testRemovingFlagRemovesConnectedRoad() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -457,7 +457,7 @@ public class TestGameMap {
     
     @Test
     public void testDestroyBuildingByRemovingFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -477,7 +477,7 @@ public class TestGameMap {
 
     @Test
     public void testRemovingRemoteBarracksSplitsBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -547,7 +547,7 @@ public class TestGameMap {
 
     @Test
     public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -583,7 +583,7 @@ public class TestGameMap {
 
     @Test
     public void testShrinkingBorderDestroysFlagNowOutsideOfBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -614,7 +614,7 @@ public class TestGameMap {
 
     @Test
     public void testShrinkingBorderDestroysRoadNowOutsideOfBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
@@ -650,7 +650,7 @@ public class TestGameMap {
     
     @Test
     public void testBorderCanBeConcave() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -700,7 +700,7 @@ public class TestGameMap {
     
     @Test
     public void testFieldOfViewIsOutsideBorder() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -718,7 +718,7 @@ public class TestGameMap {
     
     @Test
     public void testFieldOfViewContainsAllOwnedLand() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -744,7 +744,7 @@ public class TestGameMap {
     
     @Test
     public void testFieldOfViewCannotShrink() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -769,7 +769,7 @@ public class TestGameMap {
     
     @Test
     public void testFieldOfViewGrowsWhenBorderGrows() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -808,7 +808,7 @@ public class TestGameMap {
     public void testGetWidthAndHeight() throws Exception {
         
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 30);
@@ -822,7 +822,7 @@ public class TestGameMap {
     public void testPointWithinBorderAreDiscovered() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -842,7 +842,7 @@ public class TestGameMap {
     public void testRemotePointOutsideBorderIsNotDiscovered() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -862,8 +862,8 @@ public class TestGameMap {
     public void testCircleOfBarracksCreatesInternalBorder() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -966,8 +966,8 @@ public class TestGameMap {
     public void testCannotGetNonExistingFlagAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -988,8 +988,8 @@ public class TestGameMap {
     public void testGetRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1019,8 +1019,8 @@ public class TestGameMap {
     public void testIsRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1048,8 +1048,8 @@ public class TestGameMap {
     public void testIsNotRoadAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1070,8 +1070,8 @@ public class TestGameMap {
     public void testPlaceTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1092,8 +1092,8 @@ public class TestGameMap {
     public void testIsTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1117,8 +1117,8 @@ public class TestGameMap {
     public void testIsNoTree() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -1143,8 +1143,8 @@ public class TestGameMap {
     public void testGetTrees() throws Exception {
 
         /* Creating new game map with size 100x100 */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);

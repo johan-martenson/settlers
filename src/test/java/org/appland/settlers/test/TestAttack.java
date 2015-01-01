@@ -41,8 +41,8 @@ public class TestAttack {
     public void testNoAvailableAttackersWhenOutOfReach() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -72,8 +72,8 @@ public class TestAttack {
     public void testNoAvailableAttackersForNonMilitaryBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -107,8 +107,8 @@ public class TestAttack {
     public void testNoAvailableAttackersForOwnBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -142,8 +142,8 @@ public class TestAttack {
     public void testOneAvailableAttackerForBarracksCloseToEnemyBarracks() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -190,8 +190,8 @@ public class TestAttack {
     public void testTwoAvailableAttackersForGuardHouseCloseToEnemyBarracks() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -237,8 +237,8 @@ public class TestAttack {
     public void testPlayerCanInitiateAttack() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -284,8 +284,8 @@ public class TestAttack {
     public void testPlayerCannotAttackHimself() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -327,8 +327,8 @@ public class TestAttack {
     public void testCannotAttackNonMilitaryBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -370,8 +370,8 @@ public class TestAttack {
     public void testMilitaryLeavesBarracksWhenAttackIsInitiated() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -437,8 +437,8 @@ public class TestAttack {
     public void testAttackingMilitaryWalksToFlagOfAttackedBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -498,8 +498,8 @@ public class TestAttack {
     public void testThatPlayerIsCorrectInChosenAttacker() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -558,8 +558,8 @@ public class TestAttack {
     public void testAttackerWinsEmptyBuidingDirectly() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -628,8 +628,8 @@ public class TestAttack {
     public void testMilitaryLeavesAttackedBuildingToDefendAndMeetsAttacker() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -707,8 +707,8 @@ public class TestAttack {
     public void testGeneralAttackerBeatsPrivateDefender() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -796,8 +796,8 @@ public class TestAttack {
     public void testAttackerTakesOverBuildingAfterWinningFight() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -892,8 +892,8 @@ public class TestAttack {
     public void testAttackersBorderIsUpdatedWhenItCapturesBuilding() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -995,8 +995,8 @@ public class TestAttack {
     public void testFieldOfViewIsUpdatedWhenAttackerTakesOverBuilding() throws Exception {
         
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1098,8 +1098,8 @@ public class TestAttack {
     public void testDefenderWinsAndGoesBackToBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1197,8 +1197,8 @@ public class TestAttack {
     public void testAttackerGoesBackWhenDefenderBurnsBuildingAfterVictory() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1306,8 +1306,8 @@ public class TestAttack {
     public void testAttackerFinishesFightAndGoesBackWhenDefenderBurnsBuildingBeforeVictory() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1418,8 +1418,8 @@ public class TestAttack {
     public void testNextDefenderGoesOutWhenFirstDies() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1523,8 +1523,8 @@ public class TestAttack {
     public void testAttackingGeneralBeatsSixButNotSevenDefendingPrivates() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1638,8 +1638,8 @@ public class TestAttack {
     public void testAttackingSergeantBeatsThreeButNotFourDefendingPrivates() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1753,8 +1753,8 @@ public class TestAttack {
     public void testCanOrderAttackWithSeveralAttackersFromOneBuilding() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1830,8 +1830,8 @@ public class TestAttack {
     public void testArrivalOfAttackWithSeveralAttackersAndOneDefender() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -1922,4 +1922,7 @@ public class TestAttack {
     //  - Test militaries rally from several buildings
     //  - Test one general beats six privates, not seven when defending
     //  - Test no attack possible with only one military in the building
+    //  - Test attacking with more militaries than the attacked building can hold
+    //    and verify that it gets filled fully and that the remaining militaries 
+    //    go back to their original buildings
 }

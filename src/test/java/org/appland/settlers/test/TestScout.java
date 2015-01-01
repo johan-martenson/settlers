@@ -33,7 +33,7 @@ public class TestScout {
     public void testScoutCanBeCalledFromFlag() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -57,7 +57,7 @@ public class TestScout {
     public void testStorageDispatchesScoutWhenItHasBeenCalled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -93,7 +93,7 @@ public class TestScout {
     public void testScoutGetsToFlagThenLeavesToNearbySpot() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -141,7 +141,7 @@ public class TestScout {
     public void testScoutWalksEastTowardAndThroughTheBorder() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -187,7 +187,7 @@ public class TestScout {
     public void testScoutWalksNorthTowardAndThroughTheBorder() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -238,7 +238,7 @@ public class TestScout {
     public void testScoutWalksEightByThreeSegmentsAndThenReturnsToFlag() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -295,7 +295,7 @@ public class TestScout {
     public void testScoutDoesNotGoOutsideTheMap() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -350,7 +350,7 @@ public class TestScout {
     public void testScoutDiscoversNewGround() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -409,7 +409,7 @@ public class TestScout {
     public void testScoutDiscoversNewGroundForPlayer() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -468,7 +468,7 @@ public class TestScout {
     public void testDepositingScoutIncreasesAmountOfScouts() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -489,7 +489,7 @@ public class TestScout {
     public void testSeveralScoutsCanBeCalled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -533,7 +533,7 @@ public class TestScout {
     public void testScoutGoesOutAgainIfNeeded() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -622,7 +622,7 @@ public class TestScout {
     public void testReturningScoutIncreasesAmountInStorage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

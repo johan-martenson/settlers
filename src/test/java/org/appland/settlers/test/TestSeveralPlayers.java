@@ -38,7 +38,7 @@ public class TestSeveralPlayers {
 
         /* Create player list with one player */
         List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0"));
+        players.add(new Player("Player 0", java.awt.Color.BLUE));
 
         /* Create game map choosing one players */
         GameMap map = new GameMap(players, 20, 20);
@@ -55,8 +55,8 @@ public class TestSeveralPlayers {
 
         /* Create player list with two players */
         List<Player> players = new LinkedList<>();
-        players.add(new Player("Player 0"));
-        players.add(new Player("Player 1"));
+        players.add(new Player("Player 0", java.awt.Color.BLUE));
+        players.add(new Player("Player 1", java.awt.Color.BLUE));
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 20, 20);
@@ -73,8 +73,8 @@ public class TestSeveralPlayers {
     public void testCannotPlacePlayersHeadquartersTogether() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -98,8 +98,8 @@ public class TestSeveralPlayers {
     public void testPlacedHouseHasCorrectPlayerForSeveralPlayers() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
         players.add(player0);
@@ -125,8 +125,8 @@ public class TestSeveralPlayers {
     public void testSeveralPlayersCanPlaceAdditionalBuildingsAfterHeadquarter() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 
@@ -161,8 +161,8 @@ public class TestSeveralPlayers {
     public void testRetrievePlayersFromGameMap() throws Exception {
 
         /* Create player list with two players */
-        Player player0 = new Player("Player 0");
-        Player player1 = new Player("Player 1");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.BLUE);
 
         List<Player> players = new LinkedList<>();
 

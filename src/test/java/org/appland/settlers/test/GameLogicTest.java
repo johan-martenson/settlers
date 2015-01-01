@@ -40,7 +40,7 @@ public class GameLogicTest {
 
     @Test
     public void testInitiateNewDeliveries() throws InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,30, 30);
@@ -93,7 +93,7 @@ public class GameLogicTest {
 
     @Test
     public void testAssignWorkToIdleCouriers() throws InvalidEndPointException, InvalidRouteException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -145,7 +145,7 @@ public class GameLogicTest {
 
     @Test
     public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         
@@ -199,7 +199,7 @@ public class GameLogicTest {
 
     @Test
     public void testAssignNewWorkerToUnoccupiedPlaces() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,30, 30);

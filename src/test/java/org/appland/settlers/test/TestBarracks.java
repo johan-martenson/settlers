@@ -42,7 +42,7 @@ public class TestBarracks {
     public void testBarracksOnlyNeedsTwoPlancksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -75,7 +75,7 @@ public class TestBarracks {
     public void testBarracksCannotBeConstructedWithOnePlanck() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -107,7 +107,7 @@ public class TestBarracks {
     public void testBarracksGetPopulatedWhenFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -154,7 +154,7 @@ public class TestBarracks {
     public void testBorderIsNotExtendedWhenBarracksIsFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -184,7 +184,7 @@ public class TestBarracks {
     public void testBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -235,7 +235,7 @@ public class TestBarracks {
     public void testBarracksOnlyNeedsTwoMilitaries() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -262,7 +262,7 @@ public class TestBarracks {
     public void testBarracksCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -294,7 +294,7 @@ public class TestBarracks {
     public void testBarracksCannotHoldMoreThanTwoMilitaries() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -331,7 +331,7 @@ public class TestBarracks {
     public void testBarracksRadiusIsCorrect() throws Exception{
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -359,7 +359,7 @@ public class TestBarracks {
     public void testBarracksNeedsCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -381,7 +381,7 @@ public class TestBarracks {
     public void testUnfinishedBarracksNotNeedsCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -401,7 +401,7 @@ public class TestBarracks {
     public void testBarracksCanHoldOnlyOneCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -440,7 +440,7 @@ public class TestBarracks {
     public void testStorageStopsDeliveringCoinsWhenBarracksIsFull() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -490,7 +490,7 @@ public class TestBarracks {
     public void testPrivateIsPromotedWhenCoinIsAvailable() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -526,7 +526,7 @@ public class TestBarracks {
     public void testOnlyOnePrivateIsPromoted() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -561,7 +561,7 @@ public class TestBarracks {
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
         
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -601,7 +601,7 @@ public class TestBarracks {
     public void testPromotionConsumesCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -636,7 +636,7 @@ public class TestBarracks {
     public void testBarracksWithNoPromotionPossibleDoesNotConsumeCoin() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -672,7 +672,7 @@ public class TestBarracks {
     public void testCanDisableCoinsToBarracks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -715,7 +715,7 @@ public class TestBarracks {
     public void testCanResumeDeliveryOfCoinsToBarracks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -764,7 +764,7 @@ public class TestBarracks {
     public void testOccupiedBarracksCanBeEvacuated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -800,7 +800,7 @@ public class TestBarracks {
     public void testEvacuatedMilitaryReturnsToStorage() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -846,7 +846,7 @@ public class TestBarracks {
     public void testEvacuatedSoldierReturnsOffroadWhenNotConnected() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -888,7 +888,7 @@ public class TestBarracks {
     public void testNoMilitaryIsDispatchedToEvacuatedBarracks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -927,7 +927,7 @@ public class TestBarracks {
     public void testEvacuationCanBeCanceled() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -979,7 +979,7 @@ public class TestBarracks {
     public void testMilitaryGoesBackToStorageWhenBarracksIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1022,7 +1022,7 @@ public class TestBarracks {
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenBarracksIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1072,7 +1072,7 @@ public class TestBarracks {
     public void testProductionCannotBeResumedInBarracks() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1096,7 +1096,7 @@ public class TestBarracks {
     public void testFieldOfViewIsExtendedWhenBarracksIsOccupied() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

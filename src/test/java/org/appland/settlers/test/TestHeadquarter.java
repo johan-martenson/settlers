@@ -48,7 +48,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterIsReadyDirectly() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -62,7 +62,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterNeedsNoWorker() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -76,7 +76,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquarterGetsWorkerAutomatically() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 15, 15);
@@ -91,7 +91,7 @@ public class TestHeadquarter {
 
     @Test
     public void testHeadquartersStorageWorkerDeliversCargo() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -133,7 +133,7 @@ public class TestHeadquarter {
 
     @Test(expected = Exception.class)
     public void testHeadquarterCannotBeTornDown() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

@@ -52,7 +52,7 @@ public class TestScenarios {
         
         // TODO: RE-verify and add asserts!
         /* Create starting position */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -283,7 +283,7 @@ public class TestScenarios {
         
         
         /* Create Initial Game Setup */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -342,7 +342,7 @@ public class TestScenarios {
         
         
         /* Create Initial Game Setup */
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);

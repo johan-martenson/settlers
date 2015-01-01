@@ -53,7 +53,7 @@ public class TestTransportation {
 
     @Test
     public void testCreateRoad() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -81,7 +81,7 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutStartBuilding() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -98,7 +98,7 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -115,7 +115,7 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutAnyValidEndpoints() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -128,7 +128,7 @@ public class TestTransportation {
 
     @Test
     public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -153,7 +153,7 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -167,7 +167,7 @@ public class TestTransportation {
 
     @Test(expected = InvalidRouteException.class)
     public void testFindRouteWithSameStartAndEnd() throws InvalidRouteException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -177,7 +177,7 @@ public class TestTransportation {
 
     @Test
     public void testWorkerWalk() throws InvalidEndPointException, InvalidRouteException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -275,7 +275,7 @@ public class TestTransportation {
 
     @Test(expected = Exception.class)
     public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -302,7 +302,7 @@ public class TestTransportation {
 
     @Test
     public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -366,7 +366,7 @@ public class TestTransportation {
 
     @Test
     public void testDeliverWithHandover() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -451,7 +451,7 @@ public class TestTransportation {
 
     @Test
     public void testCourierIsAssignedToNewRoad() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -489,7 +489,7 @@ public class TestTransportation {
 
     @Test
     public void testEmptyRoadNeedsCourier() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -511,7 +511,7 @@ public class TestTransportation {
 
     @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -570,7 +570,7 @@ public class TestTransportation {
 
     @Test
     public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsNotOnFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -617,7 +617,7 @@ public class TestTransportation {
 
     @Test
     public void testCargoTargetRemainsWhenItIsPutDownAtFlag() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -693,7 +693,7 @@ public class TestTransportation {
 
     @Test
     public void testCargoDeliveryPromiseIsCleared() throws Exception {
-        Player player0 = new Player("Player 0");
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
