@@ -449,10 +449,10 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0) throws Exception {
+    static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0, int nr) throws Exception {
         boolean populated = false;
         for (int i = 0; i < 1000; i++) {
-            if (barracks0.getHostedMilitary() > 0) {
+            if (barracks0.getHostedMilitary() == nr) {
                 populated = true;
 
                 break;
@@ -462,6 +462,7 @@ public class Utils {
         }
 
         assertTrue(populated);
+        assertEquals(barracks0.getHostedMilitary(), nr);
     }
 
     static void verifyPointIsWithinBorder(GameMap map, Player player0, Point position) {
@@ -521,6 +522,7 @@ public class Utils {
     }
 
     static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building, GameMap map) throws Exception {
+        assertTrue(building.ready());
         for (int i = 0; i < amount; i++) {
             occupyMilitaryBuilding(rank, building, map);
         }
@@ -583,7 +585,7 @@ public class Utils {
         List<Worker> workersFound = new LinkedList<>();
 
         for (Worker w : map.getWorkers()) {
-            if (w.getClass().equals(aClass) && !w.isInsideBuilding()) {
+            if (w.getClass().equals(aClass) && !w.isInsideBuilding() && w.getPlayer().equals(player0)) {
                 workersFound.add(w);
             }
         }

@@ -67,7 +67,7 @@ public class Point extends java.awt.Point {
             return false;
         }
 
-        return abs(p.x - x) + abs(p.y - y) == 2;
+        return abs(p.x - x) + abs(p.y - y) <= 2;
     }
 
     public Point[] getAdjacentPoints() {

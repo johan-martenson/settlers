@@ -3,6 +3,9 @@
  */
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -204,12 +207,12 @@ public class Military extends Worker {
         return storage;
     }
 
-    void attack(Building buildingToAttack) {
+    void attack(Building buildingToAttack, Point meetingPoint) {
         this.buildingToAttack = buildingToAttack;
 
         state = WALKING_TO_ATTACK;
 
-        setOffroadTarget(buildingToAttack.getFlag().getPosition());
+        setOffroadTarget(meetingPoint);
     }
 
     void fight(Military opponent) {
@@ -306,5 +309,15 @@ public class Military extends Worker {
             opponent.won();
             lost();
         }
+    }
+
+    static List<Point> getListOfPossibleMeetingPoints(Building buildingToAttack) {
+        List<Point> meetupPoints = new ArrayList<>();
+
+        meetupPoints.add(buildingToAttack.getFlag().getPosition());
+
+        meetupPoints.addAll(Arrays.asList(buildingToAttack.getFlag().getPosition().getAdjacentPoints()));
+
+        return meetupPoints;
     }
 }

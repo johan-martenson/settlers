@@ -3,6 +3,7 @@
  */
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -125,31 +126,54 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building buildingToAttack) {
-        Building ownBuilding = null;
-        
-        /* Find closest building to attack from */
-        double distance = Double.MAX_VALUE;
-        
+    public void attack(Building buildingToAttack, int nrAttackers) {
+        List<Building> eligibleBuildings = new LinkedList<>();
+        List<Point> meetups = new ArrayList<>();
+
+        /* Find all eligible buildings to attack from */
         for (Building b : getBuildings()) {
             if (!b.isMilitaryBuilding()) {
                 continue;
             }
 
-            double tempDistance = b.getPosition().distance(buildingToAttack.getPosition());
-
-            if (tempDistance < distance) {
-                distance = tempDistance;
-
-                ownBuilding = b;
+            if (!b.canAttack(buildingToAttack)) {
+                continue;
             }
+
+            eligibleBuildings.add(b);
         }
 
-        /* Retrieve a military from the building */
-        Military military = ownBuilding.retrieveMilitary();
+        /* Construct list of targets */
+        meetups = Military.getListOfPossibleMeetingPoints(buildingToAttack);
 
-        /* Make the military move to close to the building to attack */
-        military.attack(buildingToAttack);
+        /* Retrieve militaries from the buildings */
+        int allocated = 0;
+
+        for (Building b : eligibleBuildings) {
+            if (allocated == nrAttackers) {
+                break;
+            }
+
+            if (b.getHostedMilitary() < 2) {
+                continue;
+            }
+
+            while (b.getHostedMilitary() > 1) {
+                if (allocated == nrAttackers) {
+                    break;
+                }
+
+                /* Retrieve a military from the building */
+                Military military = b.retrieveMilitary();
+
+                /* Make the military move to close to the building to attack */
+                military.attack(buildingToAttack, meetups.get(0));
+
+                meetups.remove(0);
+
+                allocated++;
+            }
+        }
     }
 
     void sendDefense(Building buildingToAttack, Military opponent) {
