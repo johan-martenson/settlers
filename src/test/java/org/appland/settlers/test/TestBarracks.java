@@ -251,8 +251,8 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks with two militaries */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Verify that the barracks does not need another military */
         assertFalse(barracks0.needsMilitaryManning());
@@ -278,10 +278,10 @@ public class TestBarracks {
         /* Verify that the barracks can't hold militaries before it's finished */
         assertFalse(barracks0.needsMilitaryManning());
         
-        Military military = new Military(PRIVATE_RANK, map);
-        
+        Military military = new Military(player0, PRIVATE_RANK, map);
+
         map.placeWorker(military, barracks0);
-        
+
         try {
             barracks0.deployMilitary(military);
             assertFalse(true);
@@ -310,11 +310,11 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks with two militaries */
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Verify that the barracks does not need another military */
-        Military military = new Military(PRIVATE_RANK, map);
+        Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, barracks0);
         
@@ -349,8 +349,8 @@ public class TestBarracks {
         /* Verify that the border is grown with the correct radius */
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
         
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 30)));
     }
@@ -511,7 +511,7 @@ public class TestBarracks {
         barracks0.putCargo(cargo);
 
         /* Occupy the barracks with one private */
-        Military military = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Verify that the private is promoted at the right time */
         for (int i = 0; i < 100; i++) {
@@ -547,8 +547,8 @@ public class TestBarracks {
         barracks0.putCargo(cargo);
 
         /* Occupy the barracks with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
@@ -585,7 +585,7 @@ public class TestBarracks {
         Utils.fastForward(200, map);
         
         /* Occupy the barracks with one private */
-        Military military = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Verify that it still takes the same time for the private to get promoted */
         Utils.fastForward(99, map);
@@ -622,7 +622,7 @@ public class TestBarracks {
         barracks0.putCargo(cargo);
 
         /* Occupy the barracks with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Verify that the promotion consumes the coin */
         assertEquals(barracks0.getAmount(COIN), 1);
@@ -657,8 +657,8 @@ public class TestBarracks {
         barracks0.putCargo(cargo);
 
         /* Occupy the barracks with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(new Military(GENERAL_RANK, map), barracks0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(new Military(GENERAL_RANK, map), barracks0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
         
         /* Verify that the promotion consumes the coin */
         assertEquals(barracks0.getAmount(COIN), 1);
@@ -784,7 +784,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Evacuate the barracks and verify that the military leaves the barracks */
         assertTrue(m.isInsideBuilding());
@@ -820,7 +820,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Evacuate the barracks */
         assertTrue(m.isInsideBuilding());
@@ -863,7 +863,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Evacuate the barracks */
         assertTrue(m.isInsideBuilding());
@@ -944,7 +944,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Military m = Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Evacuate the barracks */
         assertTrue(m.isInsideBuilding());
@@ -996,23 +996,21 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Utils.occupyBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
-        
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+
         /* Destroy the barracks */
-        Worker ww = barracks0.getWorker();
-        
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), barracks0.getPosition());
+        assertEquals(barracks0.getHostedMilitary(), 1);
 
         barracks0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+
         int amount = headquarter0.getAmount(PRIVATE);
-        
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+
+        assertEquals(military.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
 
         /* Verify that the military is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
@@ -1042,23 +1040,21 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy the barracks */
-        Utils.occupyBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         /* Destroy the barracks */
-        Worker ww = barracks0.getWorker();
-        
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), barracks0.getPosition());
+        assertEquals(barracks0.getHostedMilitary(), 1);
 
         barracks0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
-        /* Verify that the worker plans to use the roads */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+
+        assertEquals(military.getTarget(), headquarter0.getPosition());
+
+        /* Verify that the military plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point p : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;

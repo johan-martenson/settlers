@@ -21,12 +21,16 @@ RE-FACTOR
 
 *  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2
 
+*  Remove or rename state methods in Building
+
 
 
 
 
 TEST
 ====
+
+*  Test that all deployed militaries in a military building return to the storage if it's torn down
 
 *  Add tests for available buildings close to the border
 

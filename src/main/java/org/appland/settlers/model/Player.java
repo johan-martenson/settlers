@@ -178,12 +178,6 @@ public class Player {
         }
     }
 
-    void sendDefense(Building buildingToAttack, Military opponent) {
-        Military military = buildingToAttack.retrieveMilitary();
-
-        military.fight(opponent);
-    }
-
     void setMap(GameMap m) {
         map = m;
     }
@@ -205,5 +199,40 @@ public class Player {
 
     public Color getColor() {
         return color;
+    }
+
+    Building getClosestStorage(Point position, Building avoid) {
+        Storage storage = null;
+        int distance = Integer.MAX_VALUE;
+
+        for (Building b : getBuildings()) {
+            if (b.equals(avoid)) {
+                continue;
+            }
+
+            if (! (b instanceof Storage)) {
+                continue;
+            }
+
+            if (b.getFlag().getPosition().equals(position)) {
+                storage = (Storage)b;
+                break;
+            }
+
+            try {
+                List<Point> path = map.findWayWithExistingRoads(position, b.getFlag().getPosition());
+
+                if (path == null) {
+                    continue;
+                }
+
+                if (path.size() < distance) {
+                    distance = path.size();
+                    storage = (Storage) b;
+                }
+            } catch (InvalidRouteException ex) {}
+        }
+
+        return storage;
     }
 }

@@ -592,4 +592,30 @@ public class Utils {
 
         return workersFound;
     }
+
+    static <T> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player0, GameMap map) throws Exception {
+        List<T> workers = new LinkedList<>();
+
+        for (int i = 0; i < 1000; i++) {
+            int nrOutside = 0;
+
+            workers.clear();
+
+            for (Worker w : map.getWorkers()) {
+                if (w.getClass().equals(type) && !w.isInsideBuilding() && w.getPlayer().equals(player0)) {
+                    workers.add((T)w);
+                }
+            }
+
+            if (workers.size() == nr) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(workers.size(), 3);
+
+        return workers;
+    }
 }

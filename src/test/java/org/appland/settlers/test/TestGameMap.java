@@ -495,7 +495,7 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
         
         Utils.constructHouse(barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
@@ -507,7 +507,7 @@ public class TestGameMap {
         Building barracks1 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(barracks1, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
         
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
@@ -519,7 +519,7 @@ public class TestGameMap {
         Building barracks2 = map.placeBuilding(new Barracks(player0), point3);
         
         Utils.constructHouse(barracks2, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks2, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks2, map);
         
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
@@ -531,7 +531,7 @@ public class TestGameMap {
         Building barracks3 = map.placeBuilding(new Barracks(player0), point4);
 
         Utils.constructHouse(barracks3, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks3, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks3, map);
 
         assertEquals(player0.getBorders().size(), 1);
         border = player0.getBorders().get(0);
@@ -565,13 +565,13 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
         
         Utils.constructHouse(barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         Point point2 = new Point(50, 72);
         Building wc = map.placeBuilding(new Woodcutter(player0), point2);
         
         Utils.constructHouse(wc, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         assertTrue(map.getBuildings().contains(wc));
         assertTrue(wc.ready());
@@ -601,7 +601,7 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
         
         Utils.constructHouse(barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         Point point2 = new Point(50, 72);
         Flag flag0 = map.placeFlag(player0, point2);
@@ -632,7 +632,7 @@ public class TestGameMap {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
         
         Utils.constructHouse(barracks0, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
         
         Point point2 = new Point(50, 72);
         Flag flag0 = map.placeFlag(player0, point2);
@@ -665,28 +665,28 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(player0), point3);
 
         Utils.constructHouse(building1, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building1, map);
         
         /* 55 ticks from start */
         Point point4 = new Point(19, 19);
         Building building2 = map.placeBuilding(new Barracks(player0), point4);
 
         Utils.constructHouse(building2, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building2, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building2, map);
         
         /* 951 ticks from start */
         Point point39 = new Point(20, 24);
         Building building3 = map.placeBuilding(new Barracks(player0), point39);
 
         Utils.constructHouse(building3, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building3, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building3, map);
         
         /* 1957 ticks from start */
         Point point45 = new Point(24, 28);
         Building building4 = map.placeBuilding(new Barracks(player0), point45);
         
         Utils.constructHouse(building4, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building4, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building4, map);
         
         assertEquals(player0.getBorders().size(), 1);
         
@@ -759,7 +759,7 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(player0), point3);
 
         Utils.constructHouse(building1, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building1, map);
         
         Collection<Point> fieldOfViewBefore = player0.getFieldOfView();
         
@@ -790,7 +790,7 @@ public class TestGameMap {
         Building building1 = map.placeBuilding(new Barracks(player0), point2);
 
         Utils.constructHouse(building1, map);
-        Utils.occupyMilitaryBuilding(new Military(PRIVATE_RANK, map), building1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, building1, map);
         
         Collection<Point> newFieldOfView = player0.getFieldOfView();
 
@@ -884,7 +884,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks0, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         /* Placing barracks */
         Point point50 = new Point(4, 28);
@@ -894,7 +894,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks1, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
 
         /* Placing barracks */
         Point point58 = new Point(4, 34);
@@ -904,7 +904,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks2, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks2, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks2, map);
 
         /* Placing barracks */
         Point point65 = new Point(9, 37);
@@ -914,7 +914,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks3, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks3, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks3, map);
 
         /* Placing barracks */
         Point point70 = new Point(15, 37);
@@ -924,7 +924,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks4, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks4, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks4, map);
 
         /* Placing barracks */
         Point point74 = new Point(21, 37);
@@ -934,7 +934,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks5, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks5, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks5, map);
 
         /* Placing barracks */
         Point point78 = new Point(21, 31);
@@ -944,7 +944,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks6, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks6, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks6, map);
 
         /* Placing barracks */
         Point point85 = new Point(22, 26);
@@ -954,7 +954,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks7, map);
 
         /* Occupy barracks */
-        Utils.occupyMilitaryBuilding(new Military(player0, PRIVATE_RANK, map), barracks7, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks7, map);
 
         /* Verify that there is an internal border created for the space that
            the circle of barracks doesn't cover */

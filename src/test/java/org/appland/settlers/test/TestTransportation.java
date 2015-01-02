@@ -20,7 +20,7 @@ import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Military;
-import org.appland.settlers.model.Military.Rank;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -536,7 +536,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkersReachTarget(map, w);
 
         /* Add a private to the hq */
-        Military m = new Military(Rank.PRIVATE_RANK, map);
+        Military m = new Military(player0, PRIVATE_RANK, map);
         hq.depositWorker(m);
 
         /* Check that the barracks needs a military */

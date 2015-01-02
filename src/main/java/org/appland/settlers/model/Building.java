@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import static org.appland.settlers.model.Building.State.BURNING;
 import static org.appland.settlers.model.Building.State.DESTROYED;
 import static org.appland.settlers.model.Building.State.OCCUPIED;
+import static org.appland.settlers.model.Building.State.UNDER_ATTACK;
 import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import static org.appland.settlers.model.Building.State.UNOCCUPIED;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
@@ -23,10 +24,9 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements Actor, EndPoint, Piece {
-    private Player player;
 
     enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UNDER_ATTACK
     }
 
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
@@ -37,14 +37,18 @@ public class Building implements Actor, EndPoint, Piece {
     
     protected GameMap map;
     
-    private State   state;
-    private Worker  worker;
-    private Worker  promisedWorker;
-    private Point   position;
-    private Flag    flag;
-    private boolean enablePromotions;
-    private boolean evacuated;
-    private boolean productionEnabled;
+    private List<Military> attackers;
+    private List<Military> waitingAttackers;
+    private Player         player;
+    private List<Military> defenders;
+    private State          state;
+    private Worker         worker;
+    private Worker         promisedWorker;
+    private Point          position;
+    private Flag           flag;
+    private boolean        enablePromotions;
+    private boolean        evacuated;
+    private boolean        productionEnabled;
 
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
@@ -60,6 +64,9 @@ public class Building implements Actor, EndPoint, Piece {
         countdown             = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
+        waitingAttackers      = new LinkedList<>();
+        attackers             = new LinkedList<>();
+        defenders             = new LinkedList<>();
         flag                  = new Flag(null);
         worker                = null;
         promisedWorker        = null;
@@ -221,17 +228,27 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public void assignWorker(Worker w) throws Exception {
+
+        /* A building can't get an assigned worker while it's still under construction */
         if (underConstruction()) {
             throw new Exception("Can't assign " + w + " to unfinished " + this);
-        } else if (occupied()) {
+        }
+
+        /* A building can only have one worker */
+        if (occupied()) {
             throw new Exception("Building " + this + " is already occupied.");
+        }
+
+        /* Can't assign workers to military buildings */
+        if (isMilitaryBuilding() && ! (this instanceof Headquarter)) {
+            throw new Exception("Can't assign worker to military building");
         }
 
         log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[]{w, this});
 
         worker = w;
         promisedWorker = null;
-        
+
         state = OCCUPIED;
     }
 
@@ -413,6 +430,11 @@ public class Building implements Actor, EndPoint, Piece {
             worker.returnToStorage();
         }
 
+        /* Send home deployed militaries */
+        for (Military m : hostedMilitary) {
+            m.returnToStorage();
+        }
+
         /* Remove driveway */
         Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
         
@@ -543,7 +565,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean ready() {
-        return state == UNOCCUPIED || state == OCCUPIED;
+        return state == UNOCCUPIED || state == OCCUPIED || state == UNDER_ATTACK;
     }
 
     public boolean burningDown() {
@@ -740,5 +762,62 @@ public class Building implements Actor, EndPoint, Piece {
 
     public boolean isPromotionEnabled() {
         return enablePromotions;
+    }
+
+    List<Military> getDefenders() {
+        return defenders;
+    }
+
+    void registerDefender(Military defender) {
+        defenders.add(defender);
+    }
+
+    void removeDefender(Military defender) {
+        defenders.remove(defender);
+    }
+
+    void registerAttacker(Military attacker) {
+
+        /* Register the attacker */
+        if (!attackers.contains(attacker)) {
+            attackers.add(attacker);
+        }
+
+        waitingAttackers.add(attacker);
+
+        /* Retrieve defenders if needed */
+        if (getDefenders().isEmpty()) {
+            retrieveMilitary().defendBuilding(this);
+        }
+
+        /* The building is now under attack */
+        state = UNDER_ATTACK;
+    }
+
+    void removeWaitingAttacker(Military attacker) {
+        waitingAttackers.remove(attacker);
+    }
+
+    void removeAttacker(Military attacker) {
+        waitingAttackers.remove(attacker);
+        attackers.remove(attacker);
+
+        if (attackers.isEmpty()) {
+            state = OCCUPIED;
+        } else {
+            state = UNDER_ATTACK;
+        }
+    }
+
+    List<Military> getWaitingAttackers() {
+        return waitingAttackers;
+    }
+
+    Military pickWaitingAttacker() {
+        return attackers.remove(0);
+    }
+
+    List<Military> getAttackers() {
+        return attackers;
     }
 }

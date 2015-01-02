@@ -309,7 +309,7 @@ public class GameMap {
            claim */
         Map<Point, Building> claims = new HashMap<>();
         Map<Player, List<Land>> updatedLands = new HashMap<>();
-        
+
         for (Building b : getBuildings()) {
             if (!b.isMilitaryBuilding() || !b.ready() || !b.occupied()) {
                 continue;
@@ -414,6 +414,10 @@ public class GameMap {
                 continue;
             }
 
+            if (b.isMilitaryBuilding()) {
+                continue;
+            }
+
             Player player = b.getPlayer();
 
             if (!player.isWithinBorder(b.getPosition()) || !player.isWithinBorder(b.getFlag().getPosition())) {
@@ -439,11 +443,25 @@ public class GameMap {
         
         for (Road r : roads) {
             Player player = r.getPlayer();
-            
+
             for (Point p : r.getWayPoints()) {
-                if (!player.isWithinBorder(p)) {
-                    roadsToRemove.add(r);
+                if (player.isWithinBorder(p)) {
+                    continue;
                 }
+
+                /* Keep the driveways for military buildings */
+                if (r.getWayPoints().size() == 2) {
+
+                    /* Get building */
+                    if ((isBuildingAtPoint(r.getStart()) && 
+                         getBuildingAtPoint(r.getStart()).isMilitaryBuilding()) ||
+                        (isBuildingAtPoint(r.getEnd())   && 
+                         getBuildingAtPoint(r.getEnd()).isMilitaryBuilding())) {
+                        continue;
+                    }
+                }
+
+                roadsToRemove.add(r);
             }
         }
     
