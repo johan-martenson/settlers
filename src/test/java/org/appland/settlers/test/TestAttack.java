@@ -2527,10 +2527,12 @@ public class TestAttack {
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses
     //    (what happens if this is before the fight is done?)    
-    //  - Test several militaries can attack and defend
+    //  - Test several militaries can defend
     //  - Test militaries rally from several buildings
     //  - Test one general beats six privates, not seven when defending
     //  - Test no attack possible with only one military in the building
     //  - Test that the attacked building gets filled fully
     //    go back to their original buildings
+    //  - Test that promised militaries walking to the building return home when
+    //    it is captured
 }
