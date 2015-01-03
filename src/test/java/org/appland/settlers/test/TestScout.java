@@ -480,7 +480,7 @@ public class TestScout {
         /* Add a scout to the headquarter and verify that the amount goes up*/
         int amount = headquarter0.getAmount(SCOUT);
 
-        headquarter0.depositWorker(new Scout(map));
+        headquarter0.depositWorker(new Scout(player0, map));
 
         assertEquals(headquarter0.getAmount(SCOUT), amount + 1);
     }
@@ -503,7 +503,7 @@ public class TestScout {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Add more scouts to the headquarter */
-        headquarter0.depositWorker(new Scout(map));
+        headquarter0.depositWorker(new Scout(player0, map));
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -686,6 +686,47 @@ public class TestScout {
 
         /* Verify that the amount of scouts is 1 */
         assertEquals(headquarter0.getAmount(SCOUT), 1);
+    }
+
+    @Test
+    public void testAssignedScoutHasThePlayerSetCorrectly() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(22, 8);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Ensure there is exactly one scout in the headquarter */
+        Utils.adjustInventoryTo((Storage)headquarter0, SCOUT, 1, map);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to go to the flag */
+        List<Scout> scouts = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+
+        assertEquals(scouts.size(), 1);
+
+        Scout scout = scouts.get(0);
+
+        assertEquals(scout.getPlayer(), player0);
     }
 
     // TODO: test that scout goes via the flag when it returns to the storage

@@ -28,6 +28,7 @@ public abstract class Worker implements Actor, Piece {
     }
     
     private final static Logger log = Logger.getLogger(Worker.class.getName());
+    private final Countdown     walkCountdown;
 
     protected GameMap     map;
     
@@ -37,14 +38,11 @@ public abstract class Worker implements Actor, Piece {
     private Building    buildingToEnter;
     private Point       position;
     private Point       target;
-    private Countdown   walkCountdown;
     private Building    home;
 
-    public Worker() {
-        this(null);
-    }
     
-    public Worker(GameMap m) {
+    public Worker(Player p, GameMap m) {
+        player          = p;
         target          = null;
         position        = null;
         path            = null;
@@ -57,12 +55,6 @@ public abstract class Worker implements Actor, Piece {
         state = IDLE_OUTSIDE;
     }
 
-    Worker(Player player, GameMap m) {
-        this(m);
-
-        this.player = player;
-    }
-    
     @Override
     public void stepTime() throws Exception {
         if (state == WALKING_AND_EXACTLY_AT_POINT) {

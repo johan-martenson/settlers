@@ -45,8 +45,8 @@ public class Geologist extends Worker {
     private Point flagPoint;
     private boolean searchFlip;
     
-    public Geologist(GameMap m) {
-        super(m);
+    public Geologist(Player player, GameMap m) {
+        super(player, m);
     
         countdown           = new Countdown();
         nrSitesInvestigated = 0;

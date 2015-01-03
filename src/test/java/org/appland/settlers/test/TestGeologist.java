@@ -950,7 +950,7 @@ public class TestGeologist {
         /* Add a geologist to the headquarter and verify that the amount goes up*/
         int amount = headquarter0.getAmount(GEOLOGIST);
         
-        headquarter0.depositWorker(new Geologist(map));
+        headquarter0.depositWorker(new Geologist(player0, map));
         
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
     }
@@ -973,7 +973,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
         
         /* Add more geologists to the headquarter */
-        headquarter0.depositWorker(new Geologist(map));
+        headquarter0.depositWorker(new Geologist(player0, map));
         
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -1157,6 +1157,48 @@ public class TestGeologist {
         /* Verify that the amount of geologists is 1 */
         assertEquals(headquarter0.getAmount(GEOLOGIST), 1);
     }
-// TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
+
+    @Test
+    public void testAssignedGeologistHasPlayerSetCorrectly() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(22, 8);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Ensure there is exactly one geologist in the headquarter */
+        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        List<Geologist> geologists = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+
+        assertEquals(geologists.size(), 1);
+
+        Geologist geologist = geologists.get(0);
+
+        assertEquals(geologist.getPlayer(), player0);
+    }
+
+    // TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
     // TODO: test that geologist goes via the flag when it returns to the storage
 }

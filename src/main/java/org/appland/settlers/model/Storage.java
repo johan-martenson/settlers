@@ -456,7 +456,7 @@ public class Storage extends Building implements Actor {
             w = new Butcher(getPlayer(), map);
             break;
         case GEOLOGIST:
-            w = new Geologist(map);
+            w = new Geologist(getPlayer(), map);
             break;
         case DONKEY_BREEDER:
             w = new DonkeyBreeder(getPlayer(), map);

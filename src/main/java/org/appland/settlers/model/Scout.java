@@ -44,10 +44,6 @@ public class Scout extends Worker {
         segmentCount = 0;
     }
 
-    public Scout(GameMap m) {
-        this(null, m);
-    }
-
     @Override
     protected void onArrival() throws Exception {
         if (state == WALKING_TO_TARGET) {
