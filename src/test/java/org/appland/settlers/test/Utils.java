@@ -300,14 +300,6 @@ public class Utils {
         assertNotNull(building.getWorker());
     }
 
-    static Military occupyMilitaryBuilding(Military m, Building building, GameMap map) throws Exception {
-        map.placeWorker(m, building);
-        building.deployMilitary(m);
-        m.enterBuilding(building);
-
-        return m;
-    }
-
     static void putGoldAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
             t.setAmountMineral(GOLD, size);
@@ -597,8 +589,6 @@ public class Utils {
         List<T> workers = new LinkedList<>();
 
         for (int i = 0; i < 1000; i++) {
-            int nrOutside = 0;
-
             workers.clear();
 
             for (Worker w : map.getWorkers()) {
