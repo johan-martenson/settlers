@@ -447,7 +447,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -459,7 +459,7 @@ public class TestBarracks {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Fill up headquarter with coins */
-        Utils.adjustInventoryTo((Storage) headquarter0, COIN, 10, map);
+        Utils.adjustInventoryTo(headquarter0, COIN, 10, map);
 
         /* Wait for the barracks to get a coin */
         for (int i = 0; i < 1000; i++) {

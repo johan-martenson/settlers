@@ -945,7 +945,7 @@ public class TestGeologist {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(player0), point0);
+        Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add a geologist to the headquarter and verify that the amount goes up*/
         int amount = headquarter0.getAmount(GEOLOGIST);
@@ -966,7 +966,7 @@ public class TestGeologist {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = (Storage)map.placeBuilding(new Headquarter(player0), point0);
+        Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);
@@ -1010,7 +1010,7 @@ public class TestGeologist {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
@@ -1023,7 +1023,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
 
         /* Call geologist from the flag */
         flag.callGeologist();
@@ -1099,7 +1099,7 @@ public class TestGeologist {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
@@ -1112,7 +1112,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
 
         /* Call geologist from the flag */
         flag.callGeologist();
@@ -1171,7 +1171,7 @@ public class TestGeologist {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(22, 8);
@@ -1184,7 +1184,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo((Storage)headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
 
         /* Call geologist from the flag */
         flag.callGeologist();

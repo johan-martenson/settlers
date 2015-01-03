@@ -23,7 +23,6 @@ RE-FACTOR
 
 *  Remove or rename state methods in Building
 
-*  Remove constructor in worker that doesn't take a player
 
 
 
@@ -32,7 +31,7 @@ TEST
 
 *  Test that all workers return to their own storage when their house is torn down
 
-*  Test that player is set correctly in scout, geologist and militaries
+*  Test that player is set correctly in militaries
 
 *  Test that all deployed militaries in a military building return to the storage if it's torn down
 
@@ -625,3 +624,4 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Make sure there is a test that there cannot be more than one headquarter per player - DONE
 
+*  Remove constructor in worker that doesn't take a player - DONE

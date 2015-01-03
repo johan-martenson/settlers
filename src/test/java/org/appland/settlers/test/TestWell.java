@@ -49,7 +49,7 @@ public class TestWell {
         
         /* Place well */
         Point point1 = new Point(8, 6);
-        Building well = map.placeBuilding(new Well(player0), point1);
+        Well well = map.placeBuilding(new Well(player0), point1);
 
         /* Finish construction of the well */
         Utils.constructHouse(well, map);

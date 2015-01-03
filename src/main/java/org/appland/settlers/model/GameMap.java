@@ -207,7 +207,7 @@ public class GameMap {
         }
     }
 
-    public Building placeBuilding(Building house, Point p) throws Exception {
+    public <T extends Building> T placeBuilding(T house, Point p) throws Exception {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, p});
         
         boolean firstHouse = false;
