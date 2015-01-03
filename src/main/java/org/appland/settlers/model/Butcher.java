@@ -36,9 +36,9 @@ public class Butcher extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public Butcher(GameMap m) {
-        map = m;
-        
+    public Butcher(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

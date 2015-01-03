@@ -40,9 +40,9 @@ public class Armorer extends Worker {
     }
 
     
-    public Armorer(GameMap m) {
-        map = m;
-        
+    public Armorer(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

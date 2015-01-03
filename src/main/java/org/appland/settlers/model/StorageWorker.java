@@ -39,8 +39,8 @@ public class StorageWorker extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public StorageWorker(GameMap m) {
-        super(m);
+    public StorageWorker(Player player, GameMap m) {
+        super(player, m);
 
         state = WALKING_TO_TARGET;
         

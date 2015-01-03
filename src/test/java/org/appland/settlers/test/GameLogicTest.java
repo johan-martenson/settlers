@@ -101,7 +101,7 @@ public class GameLogicTest {
         Sawmill sm    = new Sawmill(player0);
         Point smPoint = new Point(5, 5);
         Point fp      = new Point(10, 10);
-        Courier courier     = new Courier(map);
+        Courier courier     = new Courier(player0, map);
         Road r;
                 
         Point hqPoint = new Point(15, 15);
@@ -153,7 +153,7 @@ public class GameLogicTest {
         Woodcutter wc = new Woodcutter(player0);
         Point srcPnt  = new Point(5, 5);
         Point wcPoint = new Point(11, 5);
-        Courier w     = new Courier(map);
+        Courier w     = new Courier(player0, map);
         Cargo c;
         Road r;
         
@@ -234,7 +234,7 @@ public class GameLogicTest {
         /* Prep the headquarter's inventory */
         assertEquals(hq.getAmount(PRIVATE), 10);
 
-        hq.depositWorker(new Forester(map));
+        hq.depositWorker(new Forester(player0, map));
 
         assertEquals(hq.getAmount(FORESTER), 3);
         assertEquals(map.getWorkers().size(), 1);

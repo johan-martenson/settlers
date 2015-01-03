@@ -12,7 +12,7 @@ package org.appland.settlers.model;
 @Walker(speed = 10)
 public class Donkey extends Courier {
 
-    public Donkey(GameMap map) {
-        super(map);
+    public Donkey(Player player, GameMap map) {
+        super(player, map);
     }
 }

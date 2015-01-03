@@ -38,9 +38,9 @@ public class Baker extends Worker {
     }
 
     
-    public Baker(GameMap m) {
-        map = m;
-        
+    public Baker(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

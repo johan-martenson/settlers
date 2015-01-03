@@ -14,8 +14,6 @@ import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
 @Walker(speed = 10)
 public class Courier extends Worker {
 
-    private final static Logger log = Logger.getLogger(Courier.class.getSimpleName());
-
     private Cargo intendedCargo;
     private Road assignedRoad;
     private States state;
@@ -61,8 +59,8 @@ public class Courier extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public Courier(GameMap map) {
-        super(map);
+    public Courier(Player player, GameMap map) {
+        super(player, map);
 
         intendedCargo = null;
         assignedRoad = null;
@@ -151,8 +149,6 @@ public class Courier extends Worker {
 
             /* Fulfill delivery if it has been started */
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            Point last = getLastPoint();
-
             List<Point> plannedPath = getPlannedPath();
 
             /* Deliver cargo to the closest flag in the road if none of the 
@@ -232,14 +228,14 @@ public class Courier extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = map.getClosestStorage(getPosition());
+        Building storage = getPlayer().getClosestStorage(getPosition(), null);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            for (Building b : map.getBuildings()) {
+            for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
                     state = RETURNING_TO_STORAGE;
 

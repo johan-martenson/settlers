@@ -158,7 +158,7 @@ public class TestDonkey {
         Road road1 = map.placeRoad(player0, point0, point4, point1);
 
         /* Assign a donkey to road1 */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road1);
@@ -196,7 +196,7 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
         /* Place a donkey and assign it to the road */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);        
@@ -239,7 +239,7 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
         /* Assign a donkey to the road */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);
@@ -283,7 +283,7 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
         /* Place a donkey and assign it to the road */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag2);
 
         donkey.assignToRoad(road0);
@@ -349,7 +349,7 @@ public class TestDonkey {
         cargo.setTarget(wc);
         
         /* Place a donkey and assign it to road0 */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag0);
 
         donkey.assignToRoad(road0);
@@ -410,7 +410,7 @@ public class TestDonkey {
         cargo.setTarget(wc);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag0);
 
         donkey.assignToRoad(road0);
@@ -485,7 +485,7 @@ public class TestDonkey {
         cargo.setTarget(wc);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag0);
 
         donkey.assignToRoad(road0);
@@ -577,7 +577,7 @@ public class TestDonkey {
         cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, leftWoodcutter.getFlag());
 
         donkey.assignToRoad(road0);
@@ -668,7 +668,7 @@ public class TestDonkey {
         cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, leftWoodcutter.getFlag());
 
         donkey.assignToRoad(road0);
@@ -746,7 +746,7 @@ public class TestDonkey {
         cargoForRightWoodcutter.setTarget(wc);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, wc.getFlag());
 
         donkey.assignToRoad(road0);
@@ -830,7 +830,7 @@ public class TestDonkey {
         cargoForRightWoodcutter.setTarget(wc);
         
         /* Place donkey at same flag as cargo */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, wc.getFlag());
 
         donkey.assignToRoad(road0);
@@ -929,7 +929,7 @@ public class TestDonkey {
         cargoForQuarry.setTarget(quarry);
         
         /* Place donkey at middle flag */
-        Donkey donkey = new Donkey(map);
+        Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, middleFlag);
 
         donkey.assignToRoad(road0);
@@ -1135,8 +1135,8 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point2, point1);
 
         /* Verify that both a courier and a donkey can be assigned to the road */
-        Courier courier0 = new Courier(map);
-        Donkey donkey0 = new Donkey(map);
+        Courier courier0 = new Courier(player0, map);
+        Donkey donkey0 = new Donkey(player0, map);
 
         map.placeWorker(courier0, flag0);
         map.placeWorker(donkey0, flag0);
@@ -1167,8 +1167,8 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point2, point1);
 
         /* Verify that two donkeys can't be assigned to the road */
-        Donkey donkey0 = new Donkey(map);
-        Donkey donkey1 = new Donkey(map);
+        Donkey donkey0 = new Donkey(player0, map);
+        Donkey donkey1 = new Donkey(player0, map);
 
         map.placeWorker(donkey0, flag0);
         map.placeWorker(donkey1, flag0);

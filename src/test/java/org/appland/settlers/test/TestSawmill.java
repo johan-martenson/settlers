@@ -141,7 +141,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
 
         /* Occupy the sawmill */
-        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -201,7 +201,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
-        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -253,7 +253,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
 
         /* Occupy the sawmill */
-        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
@@ -310,7 +310,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
-        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
         
         /* Deliver wood to the sawmill */
         sawmill.putCargo(new Cargo(WOOD, map));
@@ -343,7 +343,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
         
         /* Occupy the sawmill */
-        Worker sw = Utils.occupyBuilding(new SawmillWorker(map), sawmill, map);
+        Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
         
         /* Fast forward so that the sawmill worker would produced plancks
            if it had had any wood
@@ -386,7 +386,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
-        Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
 
         /* Deliver material to the sawmill */
         Cargo woodCargo = new Cargo(WOOD, map);
@@ -459,7 +459,7 @@ public class TestSawmill {
         sawmill0.putCargo(woodCargo);
 
         /* Occupy the sawmill */
-        Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
 
         /* Let the sawmill worker rest */
         Utils.fastForward(100, map);
@@ -491,7 +491,7 @@ public class TestSawmill {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -547,7 +547,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
-        Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
         
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();
@@ -593,7 +593,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0, map);
 
         /* Occupy the sawmill */
-        Utils.occupyBuilding(new SawmillWorker(map), sawmill0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
         
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();
@@ -747,7 +747,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0, map);
         
         /* Assign a worker to the sawmill */
-        SawmillWorker sawmillWorker = new SawmillWorker(map);
+        SawmillWorker sawmillWorker = new SawmillWorker(player0, map);
         
         Utils.occupyBuilding(sawmillWorker, sawmill0, map);
         
@@ -808,7 +808,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill0, map);
         
         /* Assign a worker to the sawmill */
-        SawmillWorker sawmillWorker = new SawmillWorker(map);
+        SawmillWorker sawmillWorker = new SawmillWorker(player0, map);
         
         Utils.occupyBuilding(sawmillWorker, sawmill0, map);
         
@@ -847,5 +847,42 @@ public class TestSawmill {
         Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
 
         assertNotNull(sawmillWorker.getCargo());
+    }
+
+    @Test
+    public void testAssignedSawmillWorkerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place sawmill*/
+        Point point1 = new Point(20, 14);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+        
+        /* Connect the sawmill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
+
+        /* Wait for sawmill worker to get assigned and leave the headquarter */
+        List<SawmillWorker> workers = Utils.waitForWorkersOutsideBuilding(SawmillWorker.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        SawmillWorker worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

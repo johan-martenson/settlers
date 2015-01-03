@@ -40,8 +40,8 @@ public class DonkeyBreeder extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public DonkeyBreeder(GameMap map) {
-        super(map);
+    public DonkeyBreeder(Player player, GameMap map) {
+        super(player, map);
 
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
@@ -101,7 +101,7 @@ public class DonkeyBreeder extends Worker {
                 }
 
                 /* Create a donkey and send it to the closest storage */
-                Donkey donkey = new Donkey(map);
+                Donkey donkey = new Donkey(getPlayer(), map);
 
                 map.placeWorkerFromStepTime(donkey, getHome());
 

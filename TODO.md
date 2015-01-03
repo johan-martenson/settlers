@@ -23,12 +23,16 @@ RE-FACTOR
 
 *  Remove or rename state methods in Building
 
-
+*  Remove constructor in worker that doesn't take a player
 
 
 
 TEST
 ====
+
+*  Test that all workers return to their own storage when their house is torn down
+
+*  Test that player is set correctly in scout, geologist and militaries
 
 *  Test that all deployed militaries in a military building return to the storage if it's torn down
 

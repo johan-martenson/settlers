@@ -37,11 +37,11 @@ public class IronFounder extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    State state;
+    private State state;
     
-    public IronFounder(GameMap m) {
-        map = m;
-        
+    public IronFounder(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

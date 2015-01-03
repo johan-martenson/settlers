@@ -246,7 +246,7 @@ public class TestTransportation {
 
         assertTrue(target.getPosition().equals(new Point(11, 15)));
 
-        Forester forester = new Forester(map);
+        Forester forester = new Forester(player0, map);
 
         assertNotNull(forester);
 
@@ -293,7 +293,7 @@ public class TestTransportation {
         Flag flag = map.placeFlag(player0, away);
 
         Road targetRoad = map.placeRoad(player0, start, middle, end.getPosition());
-        Courier worker = new Courier(map);
+        Courier worker = new Courier(player0, map);
 
         map.placeWorker(worker, flag);
 
@@ -321,8 +321,8 @@ public class TestTransportation {
 
         map.placeAutoSelectedRoad(player0, start, target);
 
-        Courier worker = new Courier(map);
-        Stonemason mason = new Stonemason(map);
+        Courier worker = new Courier(player0, map);
+        Stonemason mason = new Stonemason(player0, map);
 
         map.placeStone(qry.getFlag().getPosition().up().up());
 
@@ -375,8 +375,8 @@ public class TestTransportation {
         Point middlePoint = new Point(10, 10); // hq to middle 6 steps
         Point endPoint    = new Point(10, 14); // end to middle 4 steps
         map.placeBuilding(storage, hqPoint);
-        Courier mdlToEndCr = new Courier(map);
-        Courier hqToMdlCr  = new Courier(map);
+        Courier mdlToEndCr = new Courier(player0, map);
+        Courier hqToMdlCr  = new Courier(player0, map);
 
         Flag middleFlag = map.placeFlag(player0, middlePoint);
         Flag endFlag = map.placeFlag(player0, endPoint);
@@ -520,7 +520,7 @@ public class TestTransportation {
         Point bSpot = new Point(7, 7);
         Point hqSpot = new Point(2, 2);
         Road r;
-        Courier w = new Courier(map);
+        Courier w = new Courier(player0, map);
 
         map.placeBuilding(hq, hqSpot);
         map.placeBuilding(b, bSpot);
@@ -586,7 +586,7 @@ public class TestTransportation {
         Flag flag0 = map.placeFlag(player0, start);
         Road road0 = map.placeRoad(player0, start, middle, end);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
 
         map.placeWorker(courier, sm.getFlag());
         courier.assignToRoad(road0);
@@ -637,8 +637,8 @@ public class TestTransportation {
         Road road0 = map.placeRoad(player0, point0, point1, point2);
         Road road1 = map.placeRoad(player0, point2, point3, point4);
 
-        Courier courier = new Courier(map);
-        Courier secondCourier = new Courier(map);
+        Courier courier = new Courier(player0, map);
+        Courier secondCourier = new Courier(player0, map);
 
         map.placeWorker(courier, flag0);
         courier.assignToRoad(road0);
@@ -713,8 +713,8 @@ public class TestTransportation {
         Road road0 = map.placeRoad(player0, point0, point1, point2);
         Road road1 = map.placeRoad(player0, point2, point3, point4);
 
-        Courier courier = new Courier(map);
-        Courier secondCourier = new Courier(map);
+        Courier courier = new Courier(player0, map);
+        Courier secondCourier = new Courier(player0, map);
 
         map.placeWorker(courier, flag1);
         courier.assignToRoad(road0);

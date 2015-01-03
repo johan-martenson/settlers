@@ -130,7 +130,7 @@ public class TestDonkeyFarm {
 
         Utils.constructHouse(donkeyFarm, map);
 
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -190,7 +190,7 @@ public class TestDonkeyFarm {
         donkeyFarm.putCargo(waterCargo);
         
         /* Occupy the donkey farm with a donkey breeder */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -258,7 +258,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm, map);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -343,7 +343,7 @@ public class TestDonkeyFarm {
         donkeyFarm.putCargo(wheatCargo);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -486,7 +486,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Occupy the donkey farm */
-        Utils.occupyBuilding(new DonkeyBreeder(map), donkeyFarm0, map);
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
 
         /* Deliver material to the donkey farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -544,7 +544,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Occupy the donkey farm */
-        Utils.occupyBuilding(new DonkeyBreeder(map), donkeyFarm0, map);
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
         
         /* Destroy the donkey farm */
         Worker ww = donkeyFarm0.getWorker();
@@ -590,7 +590,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Occupy the donkey farm */
-        Utils.occupyBuilding(new DonkeyBreeder(map), donkeyFarm0, map);
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
         
         /* Destroy the donkey farm */
         Worker ww = donkeyFarm0.getWorker();
@@ -634,7 +634,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm, map);
 
         /* Occupy the donkey farm with a donkey breeder */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -671,7 +671,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm, map);
 
         /* Occupy the donkey farm with a donkey breeder */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -715,7 +715,7 @@ public class TestDonkeyFarm {
         donkeyFarm.putCargo(wheatCargo);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -883,7 +883,7 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0, map);
         
         /* Assign a worker to the donkey farm */
-        DonkeyBreeder ww = new DonkeyBreeder(map);
+        DonkeyBreeder ww = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(ww, donkeyFarm0, map);
         
@@ -985,7 +985,7 @@ public class TestDonkeyFarm {
         donkeyFarm0.putCargo(wheatCargo);
 
         /* Assign a worker to the donkey farm */
-        DonkeyBreeder ww = new DonkeyBreeder(map);
+        DonkeyBreeder ww = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(ww, donkeyFarm0, map);
         
@@ -1096,7 +1096,7 @@ public class TestDonkeyFarm {
         donkeyFarm.putCargo(wheatCargo);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
         
@@ -1142,7 +1142,7 @@ public class TestDonkeyFarm {
         donkeyFarm0.putCargo(wheatCargo);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
         
@@ -1222,7 +1222,7 @@ public class TestDonkeyFarm {
         donkeyFarm0.putCargo(wheatCargo);
 
         /* Assign a donkey breeder to the farm */
-        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
         
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
         
@@ -1257,5 +1257,42 @@ public class TestDonkeyFarm {
             map.stepTime();
         }
     
+    }
+
+    @Test
+    public void testAssignedDonkeyBreederHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place donkey farm*/
+        Point point1 = new Point(20, 14);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+        
+        /* Connect the donkey farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm0.getFlag());
+
+        /* Wait for donkey breeder to get assigned and leave the headquarter */
+        List<DonkeyBreeder> workers = Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        DonkeyBreeder worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

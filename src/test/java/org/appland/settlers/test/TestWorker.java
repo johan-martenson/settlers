@@ -39,7 +39,7 @@ public class TestWorker {
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
         
-        SawmillWorker worker = new SawmillWorker(map);
+        SawmillWorker worker = new SawmillWorker(player0, map);
         map.placeWorker(worker, sawmill.getFlag());
 
         try {

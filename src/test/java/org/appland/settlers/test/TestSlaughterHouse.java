@@ -145,7 +145,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
         
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -213,7 +213,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
-        Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
         
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -264,7 +264,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
-        Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
         
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -321,7 +321,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
-        Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
         
         /* Deliver ingredients to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
@@ -353,7 +353,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
         
         /* Populate the slaughterHouse */        
-        Worker butcher = Utils.occupyBuilding(new Butcher(map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
         
         /* Fast forward so that the slaughterHouse worker would have produced meat
            if it had had a pig
@@ -396,7 +396,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -469,7 +469,7 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(pigCargo);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
         /* Let the butcher rest */
         Utils.fastForward(100, map);
@@ -501,7 +501,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -556,7 +556,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
         
         /* Destroy the slaughter house */
         Worker ww = slaughterHouse0.getWorker();
@@ -602,7 +602,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0, map);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
         
         /* Destroy the slaughter house */
         Worker ww = slaughterHouse0.getWorker();
@@ -756,7 +756,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0, map);
         
         /* Assign a worker to the slaughter house */
-        Butcher ww = new Butcher(map);
+        Butcher ww = new Butcher(player0, map);
         
         Utils.occupyBuilding(ww, slaughterHouse0, map);
         
@@ -824,7 +824,7 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(pigCargo);
 
         /* Assign a worker to the slaughter house */
-        Butcher ww = new Butcher(map);
+        Butcher ww = new Butcher(player0, map);
         
         Utils.occupyBuilding(ww, slaughterHouse0, map);
         
@@ -863,5 +863,42 @@ public class TestSlaughterHouse {
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
+    }
+
+    @Test
+    public void testAssignedButcherHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place slaughter house*/
+        Point point1 = new Point(20, 14);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Finish construction of the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+        
+        /* Connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
+
+        /* Wait for butcher to get assigned and leave the headquarter */
+        List<Butcher> workers = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Butcher worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

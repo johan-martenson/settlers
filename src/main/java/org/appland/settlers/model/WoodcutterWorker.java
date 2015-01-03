@@ -64,8 +64,8 @@ public class WoodcutterWorker extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public WoodcutterWorker(GameMap map) {
-        super(map);
+    public WoodcutterWorker(Player player, GameMap map) {
+        super(player, map);
         
         state             = WALKING_TO_TARGET;
         countdown         = new Countdown();

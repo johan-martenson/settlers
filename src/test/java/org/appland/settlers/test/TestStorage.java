@@ -141,7 +141,7 @@ public class TestStorage {
 
         Utils.constructHouse(storage, map);
         
-        StorageWorker sw = new StorageWorker(map);
+        StorageWorker sw = new StorageWorker(player0, map);
         
         Utils.occupyBuilding(sw, storage, map);
         
@@ -177,7 +177,7 @@ public class TestStorage {
         
         Utils.constructHouse(storage, map);
         
-        StorageWorker sw = new StorageWorker(map);
+        StorageWorker sw = new StorageWorker(player0, map);
         
         Utils.occupyBuilding(sw, storage, map);
         
@@ -227,7 +227,7 @@ public class TestStorage {
         
         Utils.constructHouse(storage, map);
         
-        StorageWorker sw = new StorageWorker(map);
+        StorageWorker sw = new StorageWorker(player0, map);
         
         Utils.occupyBuilding(sw, storage, map);
         
@@ -280,7 +280,7 @@ public class TestStorage {
         
         Utils.constructHouse(storage, map);
         
-        StorageWorker sw = new StorageWorker(map);
+        StorageWorker sw = new StorageWorker(player0, map);
         
         Utils.occupyBuilding(sw, storage, map);
         
@@ -336,7 +336,7 @@ public class TestStorage {
         Utils.constructHouse(storage0, map);
 
         /* Occupy the storage */
-        Utils.occupyBuilding(new StorageWorker(map), storage0, map);
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
         
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -382,7 +382,7 @@ public class TestStorage {
         Utils.constructHouse(storage0, map);
 
         /* Occupy the storage */
-        Utils.occupyBuilding(new StorageWorker(map), storage0, map);
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
         
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -536,11 +536,48 @@ public class TestStorage {
         Utils.constructHouse(storage0, map);
         
         /* Assign a worker to the storage */
-        StorageWorker storageWorker = new StorageWorker(map);
+        StorageWorker storageWorker = new StorageWorker(player0, map);
         
         Utils.occupyBuilding(storageWorker, storage0, map);
 
         /* Verify that production can't be stopped */
         storage0.stopProduction();
+    }
+
+    @Test
+    public void testAssignedStorageWorkerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place storage*/
+        Point point1 = new Point(20, 14);
+        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+        
+        /* Connect the storage with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storage0.getFlag());
+
+        /* Wait for storage worker to get assigned and leave the headquarter */
+        List<StorageWorker> workers = Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        StorageWorker worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

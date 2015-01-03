@@ -245,7 +245,6 @@ public class Storage extends Building implements Actor {
             }
 
             Courier w = stg.retrieveCourier();
-            w.setMap(map);
             map.placeWorker(w, stg.getFlag());
             w.assignToRoad(r);
             
@@ -406,61 +405,61 @@ public class Storage extends Building implements Actor {
         
         switch (material) {
         case FORESTER:
-            w = new Forester(map);
+            w = new Forester(getPlayer(), map);
             break;
         case WOODCUTTER_WORKER:
-            w = new WoodcutterWorker(map);
+            w = new WoodcutterWorker(getPlayer(), map);
             break;
         case STONEMASON:
-            w = new Stonemason(map);
+            w = new Stonemason(getPlayer(), map);
             break;
         case FARMER:
-            w = new Farmer(map);
+            w = new Farmer(getPlayer(), map);
             break;
         case SAWMILL_WORKER:
-            w = new SawmillWorker(map);
+            w = new SawmillWorker(getPlayer(), map);
             break;
         case WELL_WORKER:
-            w = new WellWorker(map);
+            w = new WellWorker(getPlayer(), map);
             break;
         case MILLER:
-            w = new Miller(map);
+            w = new Miller(getPlayer(), map);
             break;
         case BAKER:
-            w = new Baker(map);
+            w = new Baker(getPlayer(), map);
             break;
         case STORAGE_WORKER:
-            w = new StorageWorker(map);
+            w = new StorageWorker(getPlayer(), map);
             break;
         case FISHERMAN:
-            w = new Fisherman(map);
+            w = new Fisherman(getPlayer(), map);
             break;
         case MINER:
-            w = new Miner(map);
+            w = new Miner(getPlayer(), map);
             break;
         case IRON_FOUNDER:
-            w = new IronFounder(map);
+            w = new IronFounder(getPlayer(), map);
             break;
         case BREWER:
-            w = new Brewer(map);
+            w = new Brewer(getPlayer(), map);
             break;
         case MINTER:
-            w = new Minter(map);
+            w = new Minter(getPlayer(), map);
             break;
         case ARMORER:
-            w = new Armorer(map);
+            w = new Armorer(getPlayer(), map);
             break;
         case PIG_BREEDER:
-            w = new PigBreeder(map);
+            w = new PigBreeder(getPlayer(), map);
             break;
         case BUTCHER:
-            w = new Butcher(map);
+            w = new Butcher(getPlayer(), map);
             break;
         case GEOLOGIST:
             w = new Geologist(map);
             break;
         case DONKEY_BREEDER:
-            w = new DonkeyBreeder(map);
+            w = new DonkeyBreeder(getPlayer(), map);
             break;
         case SCOUT:
             w = new Scout(getPlayer(), map);
@@ -509,7 +508,7 @@ public class Storage extends Building implements Actor {
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
 
-        Courier c = new Courier(map);
+        Courier c = new Courier(getPlayer(), map);
 
         c.setPosition(getFlag().getPosition());
 
@@ -639,7 +638,7 @@ public class Storage extends Building implements Actor {
         if (hasAtLeastOne(DONKEY)) {
             retrieveOneFromInventory(DONKEY);
             
-            return new Donkey(map);
+            return new Donkey(getPlayer(), map);
         }
     
         return null;

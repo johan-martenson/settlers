@@ -62,8 +62,8 @@ public class Forester extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public Forester(GameMap map) {
-        super(map);
+    public Forester(Player player, GameMap map) {
+        super(player, map);
         
         state = WALKING_TO_TARGET;
         

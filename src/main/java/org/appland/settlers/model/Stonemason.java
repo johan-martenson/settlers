@@ -44,8 +44,8 @@ public class Stonemason extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public Stonemason(GameMap map) {
-        super(map);
+    public Stonemason(Player player, GameMap map) {
+        super(player, map);
         
         state = WALKING_TO_TARGET;
         

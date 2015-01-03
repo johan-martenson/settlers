@@ -37,9 +37,9 @@ public class Brewer extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public Brewer(GameMap m) {
-        map = m;
-        
+    public Brewer(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

@@ -199,7 +199,7 @@ public class Utils {
     }
 
     static SawmillWorker occupySawmill(Sawmill sm, GameMap map) throws Exception {
-        SawmillWorker sw = new SawmillWorker(map);
+        SawmillWorker sw = new SawmillWorker(sm.getPlayer(), map);
         
         map.placeWorker(sw, sm.getFlag());
         
@@ -351,7 +351,7 @@ public class Utils {
     }
 
     static Courier occupyRoad(Road road1, GameMap map) throws Exception {
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(road1.getPlayer(), map);
 
         map.placeWorker(courier, road1.getFlags()[0]);
         courier.assignToRoad(road1);
@@ -592,7 +592,7 @@ public class Utils {
             workers.clear();
 
             for (Worker w : map.getWorkers()) {
-                if (w.getClass().equals(type) && !w.isInsideBuilding() && w.getPlayer().equals(player0)) {
+                if (w.getClass().equals(type) && !w.isInsideBuilding() && player0.equals(w.getPlayer())) {
                     workers.add((T)w);
                 }
             }

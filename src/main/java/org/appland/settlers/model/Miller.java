@@ -28,8 +28,8 @@ public class Miller extends Worker {
 
     private States state;
 
-    public Miller(GameMap m) {
-        super(m);
+    public Miller(Player player, GameMap m) {
+        super(player, m);
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

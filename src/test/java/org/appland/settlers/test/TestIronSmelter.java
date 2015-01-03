@@ -142,7 +142,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
@@ -202,7 +202,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
@@ -254,7 +254,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
@@ -311,7 +311,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
@@ -348,7 +348,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         /* Fast forward so that the iron smelter worker would produced iron bars
            if it had had iron and coal
@@ -390,7 +390,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         /* Deliver iron but not coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
@@ -422,7 +422,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
         
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
                 
         /* Deliver iron but not coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(COAL, map));
@@ -456,7 +456,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter0, map);
 
         /* Occupy the iron smelter */
-        Utils.occupyBuilding(new IronFounder(map), ironSmelter0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
 
         /* Deliver material to the iron smelter */
         Cargo ironCargo = new Cargo(COAL, map);
@@ -537,7 +537,7 @@ public class TestIronSmelter {
         ironSmelter0.putCargo(coalCargo);
 
         /* Occupy the iron smelter */
-        Utils.occupyBuilding(new IronFounder(map), ironSmelter0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
 
         /* Let the iron founder rest */
         Utils.fastForward(100, map);
@@ -569,7 +569,7 @@ public class TestIronSmelter {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironSmelter0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -625,7 +625,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         /* Destroy the iron smelter */
         Worker ironFounder = ironSmelter.getWorker();
@@ -671,7 +671,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Utils.occupyBuilding(new IronFounder(map), ironSmelter, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
         
         /* Destroy the iron smelter */
         Worker ironFounder = ironSmelter.getWorker();
@@ -829,7 +829,7 @@ public class TestIronSmelter {
         ironSmelter0.putCargo(new Cargo(IRON, map));
         
         /* Assign a worker to the iron smelter */
-        IronFounder ironFounder = new IronFounder(map);
+        IronFounder ironFounder = new IronFounder(player0, map);
         
         Utils.occupyBuilding(ironFounder, ironSmelter0, map);
         
@@ -887,7 +887,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter0, map);
         
         /* Assign a worker to the iron smelter */
-        IronFounder ironFounder = new IronFounder(map);
+        IronFounder ironFounder = new IronFounder(player0, map);
         
         Utils.occupyBuilding(ironFounder, ironSmelter0, map);
         
@@ -930,5 +930,42 @@ public class TestIronSmelter {
         Utils.fastForwardUntilWorkerProducesCargo(map, ironFounder);
 
         assertNotNull(ironFounder.getCargo());
+    }
+
+    @Test
+    public void testAssignedIronFounderHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place iron smelter*/
+        Point point1 = new Point(20, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+        
+        /* Connect the iron smelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironSmelter0.getFlag());
+
+        /* Wait for iron founder to get assigned and leave the headquarter */
+        List<IronFounder> workers = Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        IronFounder worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

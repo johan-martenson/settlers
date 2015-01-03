@@ -211,4 +211,17 @@ public class Road {
     void setPlayer(Player p) {
         player = p;
     }
+
+    void remove() throws Exception {
+
+        /* Return the courier to storage when the road is removed */
+        if (courier != null) {
+            courier.returnToStorage();
+        }
+
+        /* Return the donkey to storage when the road is removed */
+        if (donkey != null) {
+            donkey.returnToStorage();
+        }
+    }
 }

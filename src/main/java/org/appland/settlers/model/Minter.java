@@ -37,9 +37,9 @@ public class Minter extends Worker {
 
     private State state;
     
-    public Minter(GameMap m) {
-        map = m;
-        
+    public Minter(Player player, GameMap m) {
+        super(player, m);
+
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }

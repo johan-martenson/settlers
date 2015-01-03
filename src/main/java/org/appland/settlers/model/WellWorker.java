@@ -27,8 +27,8 @@ public class WellWorker extends Worker {
 
     private States  state;
 
-    public WellWorker(GameMap m) {
-        super(m);
+    public WellWorker(Player player, GameMap m) {
+        super(player, m);
         countdown = new Countdown();
         state     = WALKING_TO_TARGET;
     }

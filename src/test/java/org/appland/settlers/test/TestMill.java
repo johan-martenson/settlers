@@ -119,7 +119,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -161,7 +161,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -169,7 +169,7 @@ public class TestMill {
         Utils.constructHouse(mill, map);
         
         /* Put the miller in the mill */
-        Miller miller = new Miller(map);
+        Miller miller = new Miller(player0, map);
         
         Utils.occupyBuilding(miller, mill, map);
         
@@ -198,7 +198,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -206,7 +206,7 @@ public class TestMill {
         Utils.constructHouse(mill, map);
         
         /* Put the miller in the mill */
-        Miller miller = new Miller(map);
+        Miller miller = new Miller(player0, map);
         
         Utils.occupyBuilding(miller, mill, map);
         
@@ -238,7 +238,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -251,7 +251,7 @@ public class TestMill {
         mill.putCargo(cargo);
         
         /* Put the worker in the mill */
-        Miller miller = new Miller(map);
+        Miller miller = new Miller(player0, map);
         
         Utils.occupyBuilding(miller, mill, map);
         
@@ -286,7 +286,7 @@ public class TestMill {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -299,7 +299,7 @@ public class TestMill {
         mill.putCargo(cargo);
         
         /* Put the worker in the mill */
-        Miller miller = new Miller(map);
+        Miller miller = new Miller(player0, map);
         
         Utils.occupyBuilding(miller, mill, map);
         
@@ -350,7 +350,7 @@ public class TestMill {
         Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
-        Utils.occupyBuilding(new Miller(map), mill0, map);
+        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
 
         /* Deliver material to the mill */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -423,7 +423,7 @@ public class TestMill {
         mill0.putCargo(wheatCargo);
 
         /* Occupy the mill */
-        Utils.occupyBuilding(new Miller(map), mill0, map);
+        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
 
         /* Let the miller rest */
         Utils.fastForward(100, map);
@@ -455,7 +455,7 @@ public class TestMill {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -511,7 +511,7 @@ public class TestMill {
         Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
-        Utils.occupyBuilding(new Miller(map), mill0, map);
+        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
         
         /* Destroy the mill */
         Worker ww = mill0.getWorker();
@@ -557,7 +557,7 @@ public class TestMill {
         Utils.constructHouse(mill0, map);
 
         /* Occupy the mill */
-        Utils.occupyBuilding(new Miller(map), mill0, map);
+        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
         
         /* Destroy the mill */
         Worker ww = mill0.getWorker();
@@ -717,7 +717,7 @@ public class TestMill {
         mill0.putCargo(wheatCargo);
 
         /* Assign a worker to the mill */
-        Miller ww = new Miller(map);
+        Miller ww = new Miller(player0, map);
         
         Utils.occupyBuilding(ww, mill0, map);
         
@@ -775,7 +775,7 @@ public class TestMill {
         Utils.constructHouse(mill0, map);
         
         /* Assign a worker to the mill */
-        Miller ww = new Miller(map);
+        Miller ww = new Miller(player0, map);
         
         Utils.occupyBuilding(ww, mill0, map);
         
@@ -817,5 +817,42 @@ public class TestMill {
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
+    }
+
+    @Test
+    public void testAssignedMillerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place mill*/
+        Point point1 = new Point(20, 14);
+        Building mill0 = map.placeBuilding(new Mill(player0), point1);
+
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+        
+        /* Connect the mill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
+
+        /* Wait for miller to get assigned and leave the headquarter */
+        List<Miller> workers = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Miller worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

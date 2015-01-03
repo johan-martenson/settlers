@@ -31,7 +31,7 @@ public class Headquarter extends Storage {
         super.setMap(m);
             
         try {
-            Worker w = new StorageWorker(m);
+            Worker w = new StorageWorker(getPlayer(), m);
             map.placeWorker(w, this);
             
             w.enterBuilding(this);

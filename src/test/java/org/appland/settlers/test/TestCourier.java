@@ -6,13 +6,17 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
@@ -20,6 +24,7 @@ import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -85,7 +90,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, point2, point3, point0);
         Road road1 = map.placeRoad(player0, point0, point4, point1);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road1);        
@@ -115,7 +120,7 @@ public class TestCourier {
         
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road0);        
@@ -150,7 +155,7 @@ public class TestCourier {
         
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road0);
@@ -184,7 +189,7 @@ public class TestCourier {
         
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road0);
@@ -239,7 +244,7 @@ public class TestCourier {
         flag0.putCargo(cargo);
         cargo.setTarget(wc);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag0);
 
         courier.assignToRoad(road0);
@@ -290,7 +295,7 @@ public class TestCourier {
         cargo.setTarget(wc);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag0);
 
         courier.assignToRoad(road0);
@@ -357,7 +362,7 @@ public class TestCourier {
         cargo.setTarget(wc);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag0);
 
         courier.assignToRoad(road0);
@@ -441,7 +446,7 @@ public class TestCourier {
         cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, leftWoodcutter.getFlag());
 
         courier.assignToRoad(road0);
@@ -524,7 +529,7 @@ public class TestCourier {
         cargoForRightWoodcutter.setTarget(rightWoodcutter);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, leftWoodcutter.getFlag());
 
         courier.assignToRoad(road0);
@@ -597,7 +602,7 @@ public class TestCourier {
         cargoForRightWoodcutter.setTarget(wc);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, wc.getFlag());
 
         courier.assignToRoad(road0);
@@ -676,7 +681,7 @@ public class TestCourier {
         cargoForRightWoodcutter.setTarget(wc);
         
         /* Place courier at same flag as cargo */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, wc.getFlag());
 
         courier.assignToRoad(road0);
@@ -768,7 +773,7 @@ public class TestCourier {
         cargoForForesterHut.setTarget(foresterHut0);
 
         /* Place courier at the woodcutter's flag */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, wc.getFlag());
 
         courier.assignToRoad(road0);
@@ -855,7 +860,7 @@ public class TestCourier {
         cargoForQuarry.setTarget(quarry);
         
         /* Place courier at middle flag */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, middleFlag);
 
         courier.assignToRoad(road0);
@@ -1061,13 +1066,108 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point2, point1);
 
         /* Verify that two couriers can't be assigned to the road */
-        Courier courier0 = new Courier(map);
-        Courier courier1 = new Courier(map);
+        Courier courier0 = new Courier(player0, map);
+        Courier courier1 = new Courier(player0, map);
 
         map.placeWorker(courier0, flag0);
         map.placeWorker(courier1, flag0);
 
         courier0.assignToRoad(road0);
         courier1.assignToRoad(road0);
+    }
+
+    @Test
+    public void testCourierGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Building headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Place flags */
+        Point point3 = new Point(29, 19);
+        Flag flag0 = map.placeFlag(player0, point3);
+        Point point5 = new Point(29, 17);
+        Flag flag1 = map.placeFlag(player0, point5);
+        
+        /* Place road close to the new border */
+        Point point4 = new Point(28, 18);
+        Road road0 = map.placeRoad(player0, point3, point4, point5);
+
+        /* Place a courier on the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Verify that the road is closer to the enemy's storage */
+        assertTrue(point3.distance(headquarter0.getPosition()) > point3.distance(headquarter1.getPosition()));
+        assertTrue(point4.distance(headquarter0.getPosition()) > point4.distance(headquarter1.getPosition()));
+        assertTrue(point5.distance(headquarter0.getPosition()) > point5.distance(headquarter1.getPosition()));
+
+        /* Verify that the courier goes back to its own storage when the fortress
+           is torn down*/
+        fortress0.tearDown();
+
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testAssignedCourierHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place flag */
+        Point point1 = new Point(20, 14);
+        Flag flag1 = map.placeFlag(player0, point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
+
+        /* Wait for courier to get assigned and leave the headquarter */
+        List<Courier> couriers = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0, map);
+
+        assertNotNull(couriers);
+        assertEquals(couriers.size(), 1);
+
+        /* Verify that the player is set correctly in the courier */
+        Courier courier = couriers.get(0);
+
+        assertEquals(courier.getPlayer(), player0);
     }
 }

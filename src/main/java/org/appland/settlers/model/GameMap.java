@@ -461,6 +461,8 @@ public class GameMap {
                     }
                 }
 
+                r.remove();
+
                 roadsToRemove.add(r);
             }
         }
@@ -643,10 +645,10 @@ public class GameMap {
         
         Point flagPoint = flag.getPosition();
 
-        if (!isPossibleFlagPoint(flag.getPlayer(), flagPoint)) {
+        if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint)) {
             throw new Exception("Can't place " + flag + " on occupied point");
         }
-        
+
         if (checkBorder && !flag.getPlayer().isWithinBorder(flag.getPosition())) {
             throw new Exception("Can't place flag at " + flag.getPosition() + " outside of the border");
         }
@@ -839,15 +841,15 @@ public class GameMap {
         if (isStoneAtPoint(p)) {
             return false;
         }
-        
+
         if (isTreeAtPoint(p)) {
             return false;
         }
-        
+
         if (terrain.isInWater(p)) {
             return false;
         }
-        
+
         boolean diagonalFlagExists = false;
 
         for (Point d : p.getDiagonalPoints()) {
@@ -1488,20 +1490,6 @@ public class GameMap {
         mp.setStone(null);
         
         stones.remove(s);
-    }
-
-    private boolean isPossibleFlagPoint(Player player, Point flagPoint) throws Exception {
-        MapPoint mp = pointToGameObject.get(flagPoint);
-        
-        if (mp.isStone() || mp.isTree() || mp.isBuilding()) {
-            return false;
-        }
-
-        if (!isAvailableFlagPoint(player, flagPoint)) {
-            return false;
-        }
-
-        return true;
     }
 
     public void removeFlag(Flag flag) throws Exception {

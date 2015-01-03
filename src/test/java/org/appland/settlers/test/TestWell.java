@@ -143,7 +143,7 @@ public class TestWell {
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
         
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
         
@@ -197,7 +197,7 @@ public class TestWell {
         Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
-        WellWorker ww = new WellWorker(map);
+        WellWorker ww = new WellWorker(player0, map);
         
         Utils.occupyBuilding(ww, well, map);
         
@@ -238,7 +238,7 @@ public class TestWell {
         Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
-        WellWorker ww = new WellWorker(map);
+        WellWorker ww = new WellWorker(player0, map);
         
         Utils.occupyBuilding(ww, well, map);
         
@@ -285,7 +285,7 @@ public class TestWell {
         Utils.constructHouse(well, map);
         
         /* Assign a worker to the well */
-        WellWorker ww = new WellWorker(map);
+        WellWorker ww = new WellWorker(player0, map);
         
         Utils.occupyBuilding(ww, well, map);
         
@@ -339,7 +339,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
 
         /* Occupy the well */
-        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
 
         /* Let the well worker rest */
         Utils.fastForward(100, map);
@@ -400,7 +400,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
 
         /* Occupy the well */
-        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
 
         /* Let the well worker rest */
         Utils.fastForward(100, map);
@@ -432,7 +432,7 @@ public class TestWell {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -488,7 +488,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
 
         /* Occupy the well */
-        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
         
         /* Destroy the well */
         Worker ww = well0.getWorker();
@@ -534,7 +534,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
 
         /* Occupy the well */
-        Utils.occupyBuilding(new WellWorker(map), well0, map);
+        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
         
         /* Destroy the well */
         Worker ww = well0.getWorker();
@@ -688,7 +688,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
         
         /* Assign a worker to the well */
-        WellWorker ww = new WellWorker(map);
+        WellWorker ww = new WellWorker(player0, map);
         
         Utils.occupyBuilding(ww, well0, map);
         
@@ -746,7 +746,7 @@ public class TestWell {
         Utils.constructHouse(well0, map);
         
         /* Assign a worker to the well */
-        WellWorker ww = new WellWorker(map);
+        WellWorker ww = new WellWorker(player0, map);
         
         Utils.occupyBuilding(ww, well0, map);
         
@@ -782,5 +782,42 @@ public class TestWell {
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
+    }
+
+    @Test
+    public void testAssignedWellWorkerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place well*/
+        Point point1 = new Point(20, 14);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Finish construction of the well */
+        Utils.constructHouse(well0, map);
+        
+        /* Connect the well with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
+
+        /* Wait for well worker to get assigned and leave the headquarter */
+        List<WellWorker> workers = Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        WellWorker worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

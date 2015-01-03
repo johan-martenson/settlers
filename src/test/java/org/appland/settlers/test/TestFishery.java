@@ -62,7 +62,7 @@ public class TestFishery {
         /* Verify that the Fishery requires a worker */
         assertTrue(f.needsWorker());
 
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         /* Assign worker */
         f.assignWorker(fisherman);
@@ -82,7 +82,7 @@ public class TestFishery {
 
         assertTrue(f.underConstruction());
 
-        f.promiseWorker(new Fisherman(map));
+        f.promiseWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -96,7 +96,7 @@ public class TestFishery {
 
         assertTrue(f.underConstruction());
 
-        f.assignWorker(new Fisherman(map));
+        f.assignWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -110,9 +110,9 @@ public class TestFishery {
 
         Utils.constructHouse(f, map);
 
-        f.assignWorker(new Fisherman(map));
+        f.assignWorker(new Fisherman(player0, map));
 
-        f.assignWorker(new Fisherman(map));
+        f.assignWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -126,9 +126,9 @@ public class TestFishery {
 
         Utils.constructHouse(f, map);
 
-        f.promiseWorker(new Fisherman(map));
+        f.promiseWorker(new Fisherman(player0, map));
 
-        f.promiseWorker(new Fisherman(map));
+        f.promiseWorker(new Fisherman(player0, map));
     }
 
     @Test
@@ -236,7 +236,7 @@ public class TestFishery {
         constructHouse(fishery, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishery, map);
         
@@ -281,7 +281,7 @@ public class TestFishery {
         constructHouse(fishery, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishery, map);
         
@@ -328,7 +328,7 @@ public class TestFishery {
         constructHouse(fishermanHut, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishermanHut, map);
         
@@ -380,7 +380,7 @@ public class TestFishery {
         constructHouse(fishermanHut, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishermanHut, map);
         
@@ -452,7 +452,7 @@ public class TestFishery {
         constructHouse(fishermanHut, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishermanHut, map);
         
@@ -523,7 +523,7 @@ public class TestFishery {
         constructHouse(fishery, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishery, map);
         
@@ -616,7 +616,7 @@ public class TestFishery {
         }
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishermanHut, map);
         
@@ -798,7 +798,7 @@ public class TestFishery {
         constructHouse(fishery, map);
         
         /* Manually place fisherman */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
 
         Utils.occupyBuilding(fisherman, fishery, map);
         
@@ -886,7 +886,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
 
         /* Occupy the fishery */
-        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery0, map);
 
         /* Let the fisherman rest */
         Utils.fastForward(100, map);
@@ -970,7 +970,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
 
         /* Occupy the fishery */
-        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery0, map);
 
         /* Let the fisherman rest */
         Utils.fastForward(100, map);
@@ -1010,7 +1010,7 @@ public class TestFishery {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -1066,7 +1066,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
 
         /* Occupy the fishery */
-        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery0, map);
         
         /* Destroy the fishery */
         Worker fisherman = fishery0.getWorker();
@@ -1112,7 +1112,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
 
         /* Occupy the fishery */
-        Utils.occupyBuilding(new Fisherman(map), fishery0, map);
+        Utils.occupyBuilding(new Fisherman(player0, map), fishery0, map);
         
         /* Destroy the fishery */
         Worker fisherman = fishery0.getWorker();
@@ -1172,7 +1172,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
         
         /* Assign a worker to the fishery */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
         
         Utils.occupyBuilding(fisherman, fishery0, map);
         
@@ -1244,7 +1244,7 @@ public class TestFishery {
         Utils.constructHouse(fishery0, map);
         
         /* Assign a worker to the fishery */
-        Fisherman fisherman = new Fisherman(map);
+        Fisherman fisherman = new Fisherman(player0, map);
         
         Utils.occupyBuilding(fisherman, fishery0, map);
         
@@ -1287,5 +1287,42 @@ public class TestFishery {
         Utils.fastForwardUntilWorkerProducesCargo(map, fisherman);
 
         assertNotNull(fisherman.getCargo());
+    }
+
+    @Test
+    public void testAssignedFishermanHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place fishery*/
+        Point point1 = new Point(20, 14);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery0, map);
+        
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
+
+        /* Wait for fisherman to get assigned and leave the headquarter */
+        List<Fisherman> workers = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Fisherman worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

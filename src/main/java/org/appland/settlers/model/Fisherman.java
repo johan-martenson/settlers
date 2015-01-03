@@ -72,8 +72,8 @@ public class Fisherman extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public Fisherman(GameMap map) {
-        super(map);
+    public Fisherman(Player player, GameMap map) {
+        super(player, map);
         
         state = WALKING_TO_TARGET;
         

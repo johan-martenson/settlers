@@ -144,7 +144,7 @@ public class TestInventory {
 
     @Test
     public void testDepositRetrieveWorkers() throws Exception {
-        storage.depositWorker(new Forester(null));
+        storage.depositWorker(new Forester(null, null));
         assertEquals(storage.getAmount(FORESTER), 1);
         assertTrue(storage.isInStock(FORESTER));
         storage.retrieveWorker(FORESTER);
@@ -240,13 +240,13 @@ public class TestInventory {
     
     @Test(expected=Exception.class)
     public void testRetrieveCourierLikeMaterial() throws Exception {
-        storage.depositWorker(new Courier(null));
+        storage.depositWorker(new Courier(null, null));
         storage.retrieve(COURIER);
     }
     
     @Test(expected=Exception.class)
     public void testRetrieveCourierLikeWorker() throws Exception {
-        storage.depositWorker(new Courier(null));
+        storage.depositWorker(new Courier(null, null));
         storage.retrieveWorker(COURIER);
     }
     

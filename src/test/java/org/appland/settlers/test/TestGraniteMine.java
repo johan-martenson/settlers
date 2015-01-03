@@ -218,7 +218,7 @@ public class TestGraniteMine {
         constructHouse(mine, map);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -265,7 +265,7 @@ public class TestGraniteMine {
         mine.putCargo(food);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -321,7 +321,7 @@ public class TestGraniteMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -407,7 +407,7 @@ public class TestGraniteMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -470,7 +470,7 @@ public class TestGraniteMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -513,7 +513,7 @@ public class TestGraniteMine {
         constructHouse(mine, map);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -559,7 +559,7 @@ public class TestGraniteMine {
         mine.putCargo(food);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -602,7 +602,7 @@ public class TestGraniteMine {
         Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
 
         /* Deliver material to the granite mine */
         Cargo fishCargo = new Cargo(FISH, map);
@@ -679,7 +679,7 @@ public class TestGraniteMine {
         graniteMine0.putCargo(fishCargo);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
 
         /* Let the miner rest */
         Utils.fastForward(100, map);
@@ -711,7 +711,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -771,7 +771,7 @@ public class TestGraniteMine {
         Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
         
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -821,7 +821,7 @@ public class TestGraniteMine {
         Utils.constructHouse(graniteMine0, map);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
         
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -883,7 +883,7 @@ public class TestGraniteMine {
         graniteMine0.putCargo(food);
 
         /* Assign a worker to the granite mine */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
         
         Utils.occupyBuilding(miner, graniteMine0, map);
         
@@ -952,7 +952,7 @@ public class TestGraniteMine {
         graniteMine0.putCargo(food);
 
         /* Assign a worker to the granite mine */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
         
         Utils.occupyBuilding(miner, graniteMine0, map);
         
@@ -988,5 +988,46 @@ public class TestGraniteMine {
         Utils.fastForwardUntilWorkerProducesCargo(map, miner);
 
         assertNotNull(miner.getCargo());
+    }
+
+    @Test
+    public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+        
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place granite mine*/
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Finish construction of the granite mine */
+        Utils.constructHouse(graniteMine0, map);
+        
+        /* Connect the granite mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
+
+        /* Wait for miner to get assigned and leave the headquarter */
+        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Miner worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

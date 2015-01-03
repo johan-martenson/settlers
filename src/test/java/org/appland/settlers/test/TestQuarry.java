@@ -104,7 +104,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -145,7 +145,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
         
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -191,7 +191,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry*/
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -245,7 +245,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -318,7 +318,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
 
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -404,7 +404,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -437,7 +437,7 @@ public class TestQuarry {
         constructHouse(quarry, map);
         
         /* Assign a stonemason to the quarry */
-        Stonemason mason = new Stonemason(map);
+        Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
         
@@ -512,7 +512,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
 
         /* Let the stone mason rest */
         Utils.fastForward(100, map);
@@ -605,7 +605,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
 
         /* Let the stone mason rest */
         Utils.fastForward(100, map);
@@ -649,7 +649,7 @@ public class TestQuarry {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -704,7 +704,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
         
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -750,7 +750,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
         
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -908,7 +908,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
         
         /* Assign a worker to the quarry */
-        Stonemason stonemason = new Stonemason(map);
+        Stonemason stonemason = new Stonemason(player0, map);
         
         Utils.occupyBuilding(stonemason, quarry0, map);
         
@@ -977,7 +977,7 @@ public class TestQuarry {
         Utils.constructHouse(quarry0, map);
         
         /* Assign a worker to the quarry */
-        Stonemason stonemason = new Stonemason(map);
+        Stonemason stonemason = new Stonemason(player0, map);
         
         Utils.occupyBuilding(stonemason, quarry0, map);
         
@@ -1020,5 +1020,42 @@ public class TestQuarry {
         Utils.fastForwardUntilWorkerProducesCargo(map, stonemason);
 
         assertNotNull(stonemason.getCargo());
+    }
+
+    @Test
+    public void testAssignedStonemasonHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place quarry*/
+        Point point1 = new Point(20, 14);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+        
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+
+        /* Wait for stonemason to get assigned and leave the headquarter */
+        List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Stonemason worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

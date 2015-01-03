@@ -81,10 +81,10 @@ public class TestScenarios {
         Road qryToHqRoad = map.placeAutoSelectedRoad(player0, hq.getFlag(), qry.getFlag());
 
         /* Assign workers to the roads */
-        Courier wr1 = new Courier(map);
-        Courier wr2 = new Courier(map);
-        Courier wr3 = new Courier(map);
-        WoodcutterWorker wcr = new WoodcutterWorker(map);
+        Courier wr1 = new Courier(player0, map);
+        Courier wr2 = new Courier(player0, map);
+        Courier wr3 = new Courier(player0, map);
+        WoodcutterWorker wcr = new WoodcutterWorker(player0, map);
 
         map.placeWorker(wr1, wc.getFlag());
         map.placeWorker(wr2, sm.getFlag());
@@ -109,7 +109,7 @@ public class TestScenarios {
         assertEquals(hq.getAmount(STONE), 10);
 
         Utils.occupyBuilding(wcr, wc, map);
-        Utils.occupyBuilding(new SawmillWorker(map), sm, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sm, map);
 
         /* Let the couriers reach their targeted roads */
         Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);        

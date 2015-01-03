@@ -43,8 +43,8 @@ public class Miner extends Worker {
     }
     
     
-    public Miner(GameMap map) {
-        super(map);
+    public Miner(Player player, GameMap map) {
+        super(player, map);
         
         mineral = null;
         

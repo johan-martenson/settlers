@@ -173,7 +173,7 @@ public class TestFarm {
 
         Utils.constructHouse(farm, map);
 
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -216,7 +216,7 @@ public class TestFarm {
 
         Utils.constructHouse(farm, map);
 
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -262,7 +262,7 @@ public class TestFarm {
 
         Utils.constructHouse(farm, map);
 
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -330,7 +330,7 @@ public class TestFarm {
         Utils.constructHouse(farm, map);
 
         /* Assign a farmer to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -398,7 +398,7 @@ public class TestFarm {
         Utils.fastForwardUntilCropIsGrown(crop, map);
         
         /* Assign a farmer to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -467,7 +467,7 @@ public class TestFarm {
         Utils.fastForwardUntilCropIsGrown(crop, map);
 
         /* Assign a farmer to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -560,7 +560,7 @@ public class TestFarm {
         Utils.constructHouse(farm, map);
         
         /* Assign a farmer to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -694,7 +694,7 @@ public class TestFarm {
         }
         
         /* Assign a farmer to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm, map);
         
@@ -790,7 +790,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
-        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
         
         /* Let the farmer rest */
         Utils.fastForward(100, map);
@@ -870,7 +870,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
-        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
 
         /* Let the farmer rest */
         Utils.fastForward(100, map);
@@ -910,7 +910,7 @@ public class TestFarm {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -966,7 +966,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
-        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
         
         /* Destroy the farm */
         Worker farmer = farm0.getWorker();
@@ -1012,7 +1012,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
 
         /* Occupy the farm */
-        Utils.occupyBuilding(new Farmer(map), farm0, map);
+        Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
         
         /* Destroy the farm */
         Worker farmer = farm0.getWorker();
@@ -1065,7 +1065,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
         
         /* Assign a worker to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm0, map);
         
@@ -1135,7 +1135,7 @@ public class TestFarm {
         Utils.constructHouse(farm0, map);
         
         /* Assign a worker to the farm */
-        Farmer farmer = new Farmer(map);
+        Farmer farmer = new Farmer(player0, map);
         
         Utils.occupyBuilding(farmer, farm0, map);
         
@@ -1189,5 +1189,42 @@ public class TestFarm {
         }
     
         assertFalse(farmer.isInsideBuilding());
+    }
+
+    @Test
+    public void testAssignedFarmerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place farm*/
+        Point point1 = new Point(20, 14);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Finish construction of the farm */
+        Utils.constructHouse(farm0, map);
+        
+        /* Connect the farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), farm0.getFlag());
+
+        /* Wait for farmer to get assigned and leave the headquarter */
+        List<Farmer> workers = Utils.waitForWorkersOutsideBuilding(Farmer.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Farmer worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

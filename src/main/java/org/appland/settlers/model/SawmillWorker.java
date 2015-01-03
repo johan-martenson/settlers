@@ -36,8 +36,8 @@ public class SawmillWorker extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public SawmillWorker(GameMap m) {
-        map = m;
+    public SawmillWorker(Player player, GameMap m) {
+        super(player, m);
         
         countdown = new Countdown();
         state = WALKING_TO_TARGET;

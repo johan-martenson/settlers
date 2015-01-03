@@ -45,8 +45,8 @@ public class PigBreeder extends Worker {
         RETURNING_TO_STORAGE
     }
     
-    public PigBreeder(GameMap map) {
-        super(map);
+    public PigBreeder(Player player, GameMap map) {
+        super(player, map);
 
         state = WALKING_TO_TARGET;
         countdown = new Countdown();

@@ -218,7 +218,7 @@ public class TestIronMine {
         constructHouse(mine, map);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -265,7 +265,7 @@ public class TestIronMine {
         mine.putCargo(food);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -321,7 +321,7 @@ public class TestIronMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -407,7 +407,7 @@ public class TestIronMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -470,7 +470,7 @@ public class TestIronMine {
         mine.putCargo(food);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -513,7 +513,7 @@ public class TestIronMine {
         constructHouse(mine, map);
 
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -559,7 +559,7 @@ public class TestIronMine {
         mine.putCargo(food);
         
         /* Manually place miner */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
 
         Utils.occupyBuilding(miner, mine, map);
         
@@ -602,7 +602,7 @@ public class TestIronMine {
         Utils.constructHouse(ironMine0, map);
 
         /* Occupy the iron mine */
-        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
 
         /* Deliver material to the iron mine */
         Cargo fishCargo = new Cargo(FISH, map);
@@ -679,7 +679,7 @@ public class TestIronMine {
         ironMine0.putCargo(fishCargo);
 
         /* Occupy the iron mine */
-        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
 
         /* Let the miner rest */
         Utils.fastForward(100, map);
@@ -711,7 +711,7 @@ public class TestIronMine {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -770,7 +770,7 @@ public class TestIronMine {
         Utils.constructHouse(ironMine0, map);
 
         /* Occupy the iron mine */
-        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
         
         /* Destroy the iron mine */
         Worker miner = ironMine0.getWorker();
@@ -820,7 +820,7 @@ public class TestIronMine {
         Utils.constructHouse(ironMine0, map);
 
         /* Occupy the iron mine */
-        Utils.occupyBuilding(new Miner(map), ironMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
         
         /* Destroy the iron mine */
         Worker miner = ironMine0.getWorker();
@@ -884,7 +884,7 @@ public class TestIronMine {
         ironMine0.putCargo(fishCargo);
 
         /* Assign a worker to the iron mine */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
         
         Utils.occupyBuilding(miner, ironMine0, map);
         
@@ -923,7 +923,7 @@ public class TestIronMine {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 6);
         Utils.surroundPointWithMountain(point1, map);
@@ -947,7 +947,7 @@ public class TestIronMine {
         Utils.constructHouse(ironMine0, map);
         
         /* Assign a worker to the iron mine */
-        Miner miner = new Miner(map);
+        Miner miner = new Miner(player0, map);
         
         Utils.occupyBuilding(miner, ironMine0, map);
         
@@ -989,5 +989,46 @@ public class TestIronMine {
         Utils.fastForwardUntilWorkerProducesCargo(map, miner);
 
         assertNotNull(miner.getCargo());
+    }
+
+    @Test
+    public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place iron mine*/
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Finish construction of the iron mine */
+        Utils.constructHouse(ironMine0, map);
+        
+        /* Connect the iron mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine0.getFlag());
+
+        /* Wait for miner to get assigned and leave the headquarter */
+        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        Miner worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }

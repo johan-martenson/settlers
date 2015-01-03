@@ -134,7 +134,7 @@ public class TestPigFarm {
 
         Utils.constructHouse(pigFarm, map);
 
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -194,7 +194,7 @@ public class TestPigFarm {
         pigFarm.putCargo(waterCargo);
         
         /* Occupy the pig farm with a pig breeder */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -262,7 +262,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm, map);
 
         /* Assign a pigBreeder to the farm */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -347,7 +347,7 @@ public class TestPigFarm {
         pigFarm.putCargo(wheatCargo);
 
         /* Assign a pigBreeder to the farm */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -477,7 +477,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
-        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0, map);
 
         /* Deliver material to the pig farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -570,7 +570,7 @@ public class TestPigFarm {
         pigFarm0.putCargo(waterCargo);
         
         /* Occupy the pig farm */
-        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0, map);
 
         /* Let the pig breeder rest */
         Utils.fastForward(100, map);
@@ -608,7 +608,7 @@ public class TestPigFarm {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
     
         /* Assign a courier to the road */
-        Courier courier = new Courier(map);
+        Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
     
@@ -664,7 +664,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
-        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0, map);
         
         /* Destroy the pig farm */
         Worker ww = pigFarm0.getWorker();
@@ -710,7 +710,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0, map);
 
         /* Occupy the pig farm */
-        Utils.occupyBuilding(new PigBreeder(map), pigFarm0, map);
+        Utils.occupyBuilding(new PigBreeder(player0, map), pigFarm0, map);
         
         /* Destroy the pig farm */
         Worker ww = pigFarm0.getWorker();
@@ -754,7 +754,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm, map);
 
         /* Occupy the pig farm with a pig breeder */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -791,7 +791,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm, map);
 
         /* Occupy the pig farm with a pig breeder */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -835,7 +835,7 @@ public class TestPigFarm {
         pigFarm.putCargo(wheatCargo);
 
         /* Assign a pigBreeder to the farm */
-        PigBreeder pigBreeder = new PigBreeder(map);
+        PigBreeder pigBreeder = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(pigBreeder, pigFarm, map);
         
@@ -1003,7 +1003,7 @@ public class TestPigFarm {
         Utils.constructHouse(pigFarm0, map);
         
         /* Assign a worker to the pig farm */
-        PigBreeder ww = new PigBreeder(map);
+        PigBreeder ww = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(ww, pigFarm0, map);
         
@@ -1078,7 +1078,7 @@ public class TestPigFarm {
         pigFarm0.putCargo(wheatCargo);
 
         /* Assign a worker to the pig farm */
-        PigBreeder ww = new PigBreeder(map);
+        PigBreeder ww = new PigBreeder(player0, map);
         
         Utils.occupyBuilding(ww, pigFarm0, map);
         
@@ -1114,5 +1114,42 @@ public class TestPigFarm {
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
         assertNotNull(ww.getCargo());
+    }
+
+    @Test
+    public void testAssignedPigBreederHasCorrectlySetPlayer() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place pig farm*/
+        Point point1 = new Point(20, 14);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Finish construction of the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+        
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
+
+        /* Wait for pig breeder to get assigned and leave the headquarter */
+        List<PigBreeder> workers = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0, map);
+
+        assertNotNull(workers);
+        assertEquals(workers.size(), 1);
+
+        /* Verify that the player is set correctly in the worker */
+        PigBreeder worker = workers.get(0);
+
+        assertEquals(worker.getPlayer(), player0);
     }
 }
