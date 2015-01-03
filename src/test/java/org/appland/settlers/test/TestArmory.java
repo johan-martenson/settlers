@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -896,14 +897,21 @@ public class TestArmory {
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", GREEN);
+        Player player2 = new Player("Player 2", RED);
 
         List<Player> players = new LinkedList<>();
 
         players.add(player0);
         players.add(player1);
+        players.add(player2);
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 2's headquarter */
+        Building headquarter2 = new Headquarter(player2);
+        Point point10 = new Point(70, 70);
+        map.placeBuilding(headquarter2, point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(5, 5);
@@ -934,9 +942,6 @@ public class TestArmory {
 
         /* Occupy the armory */
         Armorer worker = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
-
-        /* Connect the armory to the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Verify that the enemy's headquarter is closer */
         assertTrue(armory0.getPosition().distance(headquarter0.getPosition()) > 

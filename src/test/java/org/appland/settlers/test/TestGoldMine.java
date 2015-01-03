@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -1044,11 +1045,13 @@ public class TestGoldMine {
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", GREEN);
+        Player player2 = new Player("Player 2", RED);
 
         List<Player> players = new LinkedList<>();
 
         players.add(player0);
         players.add(player1);
+        players.add(player2);
 
         /* Create game map choosing two players */
         GameMap map = new GameMap(players, 100, 100);
@@ -1057,6 +1060,11 @@ public class TestGoldMine {
         Point point4 = new Point(28, 18);
         Utils.surroundPointWithMountain(point4, map);
         Utils.putGoldAtSurroundingTiles(point4, LARGE, map);
+
+        /* Place player 2's headquarter */
+        Building headquarter2 = new Headquarter(player2);
+        Point point10 = new Point(70, 70);
+        map.placeBuilding(headquarter2, point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(5, 5);
@@ -1086,9 +1094,6 @@ public class TestGoldMine {
 
         /* Occupy the gold mine */
         Miner worker = Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-
-        /* Connect the gold mine to the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down*/

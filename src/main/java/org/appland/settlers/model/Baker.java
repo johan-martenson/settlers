@@ -123,7 +123,7 @@ public class Baker extends Worker {
             
             setTarget(storage.getPosition());
         } else {
-            for (Building b : map.getBuildings()) {
+            for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
                     state = RETURNING_TO_STORAGE;
 

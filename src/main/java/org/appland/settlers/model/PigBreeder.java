@@ -156,7 +156,7 @@ public class PigBreeder extends Worker {
             
             setTarget(storage.getPosition());
         } else {
-            for (Building b : map.getBuildings()) {
+            for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage && !b.equals(getHome())) {
                     state = RETURNING_TO_STORAGE;
 
