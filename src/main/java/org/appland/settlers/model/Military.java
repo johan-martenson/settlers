@@ -39,7 +39,7 @@ public class Military extends Worker {
         GENERAL_RANK;
     }
     
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         DEPLOYED,
         RETURNING_TO_STORAGE,
@@ -51,7 +51,6 @@ public class Military extends Worker {
         DEFENDING,
         ATTACKING,
         WALKING_HOME_AFTER_FIGHT,
-        WALKING_TO_BE_ON_STANDBY_TO_DEFEND,
         STANDBY_WAITING_DEFEND
     }
 
