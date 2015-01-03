@@ -31,7 +31,7 @@ public class StorageWorker extends Worker {
     private Storage ownStorage;
 
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DELIVERING_CARGO_TO_FLAG,

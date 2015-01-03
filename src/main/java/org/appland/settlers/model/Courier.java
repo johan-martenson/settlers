@@ -53,7 +53,7 @@ public class Courier extends Worker {
         throw new Exception("No endpoint at " + currentPosition);
     }
 
-    enum States {
+    protected enum States {
 
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO,
         GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,

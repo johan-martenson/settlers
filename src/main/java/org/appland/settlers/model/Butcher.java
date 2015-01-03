@@ -27,7 +27,7 @@ public class Butcher extends Worker {
 
     private State state;
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         SLAUGHTERING_PIG,

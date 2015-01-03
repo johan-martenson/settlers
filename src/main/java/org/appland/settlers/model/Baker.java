@@ -28,7 +28,7 @@ public class Baker extends Worker {
     
     private State state;
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         BAKING_BREAD,

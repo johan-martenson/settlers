@@ -26,7 +26,7 @@ import static org.appland.settlers.model.Size.SMALL;
 @Walker(speed = 10)
 public class Geologist extends Worker {
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_SITE,
         INVESTIGATING,

@@ -34,7 +34,7 @@ public class Miller extends Worker {
         state = WALKING_TO_TARGET;
     }
     
-    enum States {
+    protected enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         GRINDING_WHEAT,

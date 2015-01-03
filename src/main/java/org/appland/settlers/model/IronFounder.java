@@ -28,7 +28,7 @@ public class IronFounder extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         MELTING_IRON,

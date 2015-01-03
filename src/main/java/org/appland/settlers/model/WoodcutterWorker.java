@@ -52,7 +52,7 @@ public class WoodcutterWorker extends Worker {
         return null;
     }
 
-    enum States {
+    protected enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_CUT_TREE,

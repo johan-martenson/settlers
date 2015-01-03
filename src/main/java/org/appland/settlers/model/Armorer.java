@@ -30,7 +30,7 @@ public class Armorer extends Worker {
     private Material nextWeapon = SWORD;
     private State state;
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         PRODUCING_WEAPON,

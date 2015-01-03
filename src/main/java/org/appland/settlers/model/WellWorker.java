@@ -33,7 +33,7 @@ public class WellWorker extends Worker {
         state     = WALKING_TO_TARGET;
     }
     
-    enum States {
+    protected enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DRAWING_WATER,

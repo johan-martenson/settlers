@@ -27,7 +27,7 @@ public class SawmillWorker extends Worker {
 
     private State state;
 
-    enum State {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         CUTTING_WOOD,

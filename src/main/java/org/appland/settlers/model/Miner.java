@@ -33,7 +33,7 @@ public class Miner extends Worker {
     private Material mineral;
     private States state;
 
-    enum States {
+    protected enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         MINING,
