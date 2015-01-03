@@ -210,7 +210,7 @@ public class Utils {
         return sw;
     }
 
-    static Worker occupyBuilding(Worker worker, Building building, GameMap map) throws Exception {
+    static <T extends Worker> T occupyBuilding(T worker, Building building, GameMap map) throws Exception {
         map.placeWorker(worker, building);
         building.assignWorker(worker);
         worker.enterBuilding(building);

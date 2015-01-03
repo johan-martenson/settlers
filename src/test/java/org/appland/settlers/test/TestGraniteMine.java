@@ -6,11 +6,15 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
@@ -18,6 +22,7 @@ import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -1029,5 +1034,64 @@ public class TestGraniteMine {
         Miner worker = workers.get(0);
 
         assertEquals(worker.getPlayer(), player0);
+    }
+
+    @Test
+    public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Put a small mountain on the map */
+        Point point4 = new Point(28, 18);
+        Utils.surroundPointWithMountain(point4, map);
+        Utils.putGraniteAtSurroundingTiles(point4, LARGE, map);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point3 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point3);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Place granite mine close to the new border */
+        GraniteMine graniteMine0 = map.placeBuilding(new GraniteMine(player0), point4);
+
+        /* Finish construction of the granite mine */
+        Utils.constructHouse(graniteMine0, map);
+
+        /* Occupy the granite mine */
+        Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+
+        /* Connect the granite mine to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the worker goes back to its own storage when the fortress
+           is torn down*/
+        fortress0.tearDown();
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
 }

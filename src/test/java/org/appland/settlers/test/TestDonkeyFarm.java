@@ -5,18 +5,23 @@
  */
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
 import org.appland.settlers.model.DonkeyBreeder;
 import org.appland.settlers.model.DonkeyFarm;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1294,5 +1299,60 @@ public class TestDonkeyFarm {
         DonkeyBreeder worker = workers.get(0);
 
         assertEquals(worker.getPlayer(), player0);
+    }
+
+    @Test
+    public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Place donkey farm close to the new border */
+        Point point4 = new Point(28, 18);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point4);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Occupy the donkey farm */
+        DonkeyBreeder worker = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
+
+        /* Connect the donkey farm to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the worker goes back to its own storage when the fortress
+           is torn down*/
+        fortress0.tearDown();
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
 }
