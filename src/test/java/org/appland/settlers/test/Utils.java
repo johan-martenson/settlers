@@ -604,7 +604,7 @@ public class Utils {
             map.stepTime();
         }
 
-        assertEquals(workers.size(), 3);
+        assertEquals(workers.size(), nr);
 
         return workers;
     }
