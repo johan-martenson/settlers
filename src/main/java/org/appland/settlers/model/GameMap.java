@@ -1574,6 +1574,10 @@ public class GameMap {
         Size result = null;
 
         /* ALL CONDITIONS FOR SMALL */
+        if (!isWithinMap(point.downRight())) {
+            return result;
+        }
+        
         if (isBuildingAtPoint(point)) {
             return result;
         }

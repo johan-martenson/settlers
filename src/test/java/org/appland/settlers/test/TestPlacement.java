@@ -33,6 +33,7 @@ import org.appland.settlers.model.Woodcutter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -423,46 +424,50 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToMediumHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 17);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Sawmill sawmill = new Sawmill(player0);
-        Point point0 = new Point(7,3);
-        
-        map.placeBuilding(sawmill, point0);
+
+        /* Place sawmill */
+        Point point0 = new Point(7,5);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point0);
         
         Map<Point, Size> possibleHouseSizes = map.getAvailableHousePoints(player0);
         
         /* The house's own point */
-        assertFalse(possibleHouseSizes.containsKey(new Point(7, 3)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(7, 5)));
         
         /* The house's flag */
-        assertFalse(possibleHouseSizes.containsKey(new Point(8, 2)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(8, 4)));
         
         /* Points in front, sampled */
-        assertEquals(possibleHouseSizes.get(new Point(9, 1)), MEDIUM);
-        assertEquals(possibleHouseSizes.get(new Point(10, 2)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(9, 3)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(10, 4)), MEDIUM);
 
         /* Points on left, sampled */
 //        assertEquals(possibleHouseSizes.get(new Point(7, 1)), MEDIUM); // WEIRD!!
-        assertFalse(possibleHouseSizes.containsKey(new Point(6, 2)));
-        assertFalse(possibleHouseSizes.containsKey(new Point(5, 3)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(6, 4)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(5, 5)));
         
-        assertEquals(possibleHouseSizes.get(new Point(4, 2)), MEDIUM);
-        assertEquals(possibleHouseSizes.get(new Point(5, 1)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(4, 4)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(new Point(5, 3)), MEDIUM);
 
         /* Points on top, sampled */
-        assertFalse(possibleHouseSizes.containsKey(new Point(6, 4)));
-        assertEquals (possibleHouseSizes.get(new Point(7, 5)), MEDIUM);
+        assertFalse(possibleHouseSizes.containsKey(new Point(6, 6)));
+        assertEquals (possibleHouseSizes.get(new Point(7, 7)), MEDIUM);
         
         /* Points on right, sampled */
-        assertFalse(possibleHouseSizes.containsKey(new Point(8, 4)));
-        assertFalse(possibleHouseSizes.containsKey(new Point(9, 3)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(8, 6)));
+        assertFalse(possibleHouseSizes.containsKey(new Point(9, 5)));
     }
     
     @Test
@@ -1246,5 +1251,47 @@ public class TestPlacement {
 
         assertFalse(map.isAvailableFlagPoint(player0, point1));
         assertFalse(map.getAvailableFlagPoints(player0).contains(point1));
+    }
+
+    @Test
+    public void testNoAvailablePointForHouseTooCloseToBottomEdgeOfMap() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there is no available space for a house too close to the bottom edge */
+        Point point1 = new Point(5, 1);
+
+        assertNull(map.isAvailableHousePoint(player0, point1));
+        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotBuildHouseTooCloseToBottomEdgeOfMap() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to build a house too close to the bottom edge */
+        Point point1 = new Point(5, 1);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
     }
 }
