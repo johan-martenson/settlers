@@ -25,10 +25,16 @@ RE-FACTOR
 
 *  Remove Utils.occupySawmill
 
+*  Figure out how to make Size::contains(Size, Size) non-static
+
 
 
 TEST
 ====
+
+*  Test GameMap::isAvailableFlagSpot(...)
+
+*  Test GameMap::isAvailableHouseSpot(...)
 
 *  Test that all workers return to their own storage when their house is torn down
 
