@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class Land {
 
-    List<Point> points;
-    List<List<Point>> border;
+    private List<Point>       points;
+    private List<List<Point>> border;
 
     Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
         points = new ArrayList<>();

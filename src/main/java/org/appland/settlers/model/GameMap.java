@@ -642,17 +642,13 @@ public class GameMap {
     
     private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
-        
+
         Point flagPoint = flag.getPosition();
 
-        if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint)) {
+        if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint, checkBorder)) {
             throw new Exception("Can't place " + flag + " on occupied point");
         }
 
-        if (checkBorder && !flag.getPlayer().isWithinBorder(flag.getPosition())) {
-            throw new Exception("Can't place flag at " + flag.getPosition() + " outside of the border");
-        }
-        
         /* Handle the case where the flag is placed on a sign */
         if (isSignAtPoint(flagPoint)) {
             removeSign(getSignAtPoint(flagPoint));
@@ -832,9 +828,17 @@ public class GameMap {
     
         return points;
     }
-    
+
     public boolean isAvailableFlagPoint(Player player, Point p) throws Exception {
+        return isAvailableFlagPoint(player, p, true);
+    }
+
+    private boolean isAvailableFlagPoint(Player player, Point p, boolean checkBorder) throws Exception {
         if (!isWithinMap(p)) {
+            return false;
+        }
+
+        if (checkBorder && !player.isWithinBorder(p)) {
             return false;
         }
 
@@ -1230,6 +1234,10 @@ public class GameMap {
         if (mp.isFlag() || mp.isRoad() || mp.isBuilding() || mp.isStone()) {
             throw new Exception("Can't place tree on " + position);
         }
+
+        if (getTerrain().isOnMountain(position)) {
+            throw new Exception("Can't place tree on a mountain");
+        }
         
         Tree tree = new Tree(position);
         
@@ -1391,7 +1399,7 @@ public class GameMap {
         MapPoint mp = pointToGameObject.get(flag.getPosition());
         
         /* Destroy the house if the flag is connected to a house */
-        if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
+        if (mpUpLeft != null && mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
             Building attachedBuilding = mpUpLeft.getBuilding();
             
             attachedBuilding.tearDown();
@@ -1571,7 +1579,8 @@ public class GameMap {
 
     public Size isAvailableHousePoint(Player player, Point point) throws Exception {
 
-        Size result = null;
+        Size result     = null;
+        Point flagPoint = point.downRight();
 
         /* ALL CONDITIONS FOR SMALL */
         if (!isWithinMap(point.downRight())) {
@@ -1599,6 +1608,10 @@ public class GameMap {
         }
 
         if (isRoadAtPoint(point)) {
+            return result;
+        }
+
+        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint)) {
             return result;
         }
 

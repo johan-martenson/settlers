@@ -23,6 +23,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
+import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tile.Vegetation;
@@ -833,7 +834,7 @@ public class TestPlacement {
         
         assertEquals(t1.getVegetationType(), MOUNTAIN);
     }
-    
+
     @Test
     public void testTreeCannotBePlacedOnStone() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -844,6 +845,31 @@ public class TestPlacement {
     
         map.placeStone(point0);
         
+        try {
+            map.placeTree(point0);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getTrees().isEmpty());
+    }
+
+    @Test
+    public void testTreeCannotBePlacedOnMountain() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Put a small mountain on the map */
+        Point point0 = new Point(5, 5);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
+
+        /* Verify that it's not possible to place a tree on the mountain */
         try {
             map.placeTree(point0);
             assertFalse(true);
@@ -1293,5 +1319,94 @@ public class TestPlacement {
         /* Verify that it's not possible to build a house too close to the bottom edge */
         Point point1 = new Point(5, 1);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+    }
+
+    @Test
+    public void testThereIsAvailableFlagSpotForEachAvailableHouseSpot() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there are available flag spots for all available house spots */
+        for (Point point : map.getAvailableHousePoints(player0).keySet()) {
+            Point flagPoint = point.downRight();
+
+            /* Skip the test for the headquarter's flag */
+            if (flagPoint.equals(point0.downRight())) {
+                continue;
+            }
+
+            assertTrue(map.isAvailableFlagPoint(player0, flagPoint));
+            assertTrue(map.getAvailableFlagPoints(player0).contains(flagPoint));
+        }
+    }
+
+    @Test
+    public void testPlaceFlagOnEachAvailableFlagSpot() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's possible to place a flag at each available flag spot */
+        for (Point point : map.getAvailableFlagPoints(player0)) {
+            Flag flag0 = map.placeFlag(player0, point);
+
+            assertTrue(map.isFlagAtPoint(point));
+
+            map.removeFlag(flag0);
+        }
+    }
+
+    @Test
+    public void testPlaceHouseOnEachAvailableHouseSpot() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's possible to place a house at each available house spot */
+        for (Point point : map.getAvailableHousePoints(player0).keySet()) {
+
+            /* Place building */
+            Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point);
+            Flag flag0 = woodcutter0.getFlag();
+
+            assertTrue(map.isBuildingAtPoint(point));
+
+            /* Destroy the building */
+            woodcutter0.tearDown();
+
+            /* Wait for the building to stop burning and disappear */
+            Utils.waitForBuildingToDisappear(map, woodcutter0);
+
+            /* Remove the flag */
+            map.removeFlag(flag0);
+        }
     }
 }

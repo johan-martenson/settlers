@@ -37,6 +37,7 @@ import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -607,5 +608,19 @@ public class Utils {
         assertEquals(workers.size(), nr);
 
         return workers;
+    }
+
+    static <T extends Building> void waitForBuildingToDisappear(GameMap map, T building) throws Exception {
+        assertTrue(building.burningDown() || building.destroyed());
+
+        for (int i = 0; i < 1000; i++) {
+            if (!map.getBuildings().contains(building)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getBuildings().contains(building));
     }
 }
