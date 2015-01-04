@@ -1225,4 +1225,26 @@ public class TestPlacement {
         /* Verify that it's not possible to place a flag on the existing flag */
         Flag flag1 = map.placeFlag(player0, point1);
     }
+
+    @Test
+    public void testNoAvailablePointForFlagTooCloseToBottomEdgeOfMap() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there is no available space for a flag too close to the bottom edge */
+        Point point1 = new Point(4, 0);
+
+        assertFalse(map.isAvailableFlagPoint(player0, point1));
+        assertFalse(map.getAvailableFlagPoints(player0).contains(point1));
+    }
 }

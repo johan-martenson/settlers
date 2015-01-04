@@ -833,7 +833,11 @@ public class GameMap {
         return points;
     }
     
-    private boolean isAvailableFlagPoint(Player player, Point p) throws Exception {
+    public boolean isAvailableFlagPoint(Player player, Point p) throws Exception {
+        if (!isWithinMap(p)) {
+            return false;
+        }
+
         if (isFlagAtPoint(p)) {
             return false;
         }
@@ -953,124 +957,14 @@ public class GameMap {
 
     public Map<Point, Size> getAvailableHousePoints(Player player) throws Exception {
         Map<Point, Size> housePoints = new HashMap<>();
-        boolean diagonalHouse;
 
         for (Land land : player.getLands()) {
             for (Point point : land.getPointsInLand()) {
+                Size result = isAvailableHousePoint(player, point);
 
-                /* ALL CONDITIONS FOR SMALL */
-                if (isBuildingAtPoint(point)) {
-                    continue;
+                if (result != null) {
+                    housePoints.put(point, result);
                 }
-
-                if (isFlagAtPoint(point)) {
-                    continue;
-                }
-                
-                if (isStoneAtPoint(point)) {
-                    continue;
-                }
-                
-                if (isTreeAtPoint(point)) {
-                    continue;
-                }
-                
-                if (terrain.isInWater(point)) {
-                    continue;
-                }
-                
-                if (isRoadAtPoint(point)) {
-                    continue;
-                }
-                
-                diagonalHouse = false;
-                
-                for (Point d : point.getDiagonalPointsAndSides()) {
-                    if (!player.isWithinBorder(d)) {
-                        continue;
-                    }
-                
-                    if (isBuildingAtPoint(d)) {
-                        diagonalHouse = true;
-                    }
-                }
-                
-                if (diagonalHouse) {
-                    continue;
-                }
-                
-                if (player.isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
-                    continue;
-                }
-
-                if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-                    if (getBuildingAtPoint(point.up().right()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
-                    if (getBuildingAtPoint(point.down()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
-                    if (getBuildingAtPoint(point.downRight().right()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
-                    if (getBuildingAtPoint(point.down().right()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-                
-                housePoints.put(point, SMALL);
-                
-                /* ADDITIONAL CONDITIONS FOR MEDIUM */
-                
-                housePoints.put(point, MEDIUM);
-                
-                /* ADDITIONAL CONDITIONS FOR LARGE */
-                if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
-                    continue;
-                }
-
-                if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
-                    continue;
-                }
-
-                if (player.isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
-                    continue;
-                }
-                
-                if (player.isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
-                    if (getBuildingAtPoint(point.upRight().right()).getSize() != SMALL) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-                    if (getBuildingAtPoint(point.up().right()).getSize() != SMALL) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
-                    if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-
-                if (player.isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
-                    if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
-                        continue;
-                    }
-                }
-
-                housePoints.put(point, LARGE);
             }
         }
 
@@ -1673,5 +1567,126 @@ public class GameMap {
         }
 
         return true;
+    }
+
+    public Size isAvailableHousePoint(Player player, Point point) throws Exception {
+
+        Size result = null;
+
+        /* ALL CONDITIONS FOR SMALL */
+        if (isBuildingAtPoint(point)) {
+            return result;
+        }
+
+        if (isFlagAtPoint(point)) {
+            return result;
+        }
+
+        if (isStoneAtPoint(point)) {
+            return result;
+        }
+
+        if (isTreeAtPoint(point)) {
+            return result;
+        }
+
+        if (terrain.isInWater(point)) {
+            return result;
+        }
+
+        if (isRoadAtPoint(point)) {
+            return result;
+        }
+
+        boolean diagonalHouse = false;
+
+        for (Point d : point.getDiagonalPointsAndSides()) {
+            if (!player.isWithinBorder(d)) {
+                continue;
+            }
+
+            if (isBuildingAtPoint(d)) {
+                diagonalHouse = true;
+            }
+        }
+
+        if (diagonalHouse) {
+            return result;
+        }
+
+        if (player.isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
+            return result;
+        }
+
+        if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+            if (getBuildingAtPoint(point.up().right()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+            if (getBuildingAtPoint(point.down()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
+            if (getBuildingAtPoint(point.downRight().right()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
+            if (getBuildingAtPoint(point.down().right()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        result = SMALL;
+
+        /* ADDITIONAL CONDITIONS FOR MEDIUM */
+
+        result = MEDIUM;
+
+        /* ADDITIONAL CONDITIONS FOR LARGE */
+        if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
+            return result;
+        }
+
+        if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
+            return result;
+        }
+
+        if (player.isWithinBorder(point.left()) && isFlagAtPoint(point.left())) {
+            return result;
+        }
+
+        if (player.isWithinBorder(point.upRight().right()) && isBuildingAtPoint(point.upRight().right())) {
+            if (getBuildingAtPoint(point.upRight().right()).getSize() != SMALL) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
+            if (getBuildingAtPoint(point.up().right()).getSize() != SMALL) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
+            if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        if (player.isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
+            if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
+                return result;
+            }
+        }
+
+        result = LARGE;
+
+        return result;
     }
 }

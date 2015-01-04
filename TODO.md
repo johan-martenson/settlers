@@ -32,6 +32,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test Size::contains(Size, Size)
+
 *  Test GameMap::isAvailableFlagSpot(...)
 
 *  Test GameMap::isAvailableHouseSpot(...)
