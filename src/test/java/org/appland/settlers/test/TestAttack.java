@@ -2438,7 +2438,6 @@ public class TestAttack {
     //    (what happens if this is before the fight is done?)    
     //  - Test several militaries can defend
     //  - Test militaries rally from several buildings
-    //  - Test one general beats six privates, not seven when defending
     //  - Test no attack possible with only one military in the building
     //  - Test that the attacked building gets filled fully
     //    go back to their original buildings
