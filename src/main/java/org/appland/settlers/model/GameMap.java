@@ -25,17 +25,18 @@ import org.appland.settlers.model.Tile.Vegetation;
 
 public class GameMap {
 
+    private final List<Worker>      workers;
+    private final int               height;
+    private final int               width;
+
     private List<Building>          buildings;
     private List<Building>          buildingsToRemove;
     private List<Road>              roads;
     private List<Flag>              flags;
     private List<Sign>              signs;
     private List<Sign>              signsToRemove;
-    private List<Worker>            workers;
     private List<Worker>            workersToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
-    private final int               height;
-    private final int               width;
     private Terrain                 terrain;
     private List<Point>             fullGrid;
     private Map<Point, MapPoint>    pointToGameObject;
@@ -191,10 +192,14 @@ public class GameMap {
         }
 
         /* Remove workers that are invalid after the round */
-        workers.removeAll(workersToRemove);
+        synchronized (workers) {
+            workers.removeAll(workersToRemove);
+        }
 
         /* Add workers that were placed during the round */
-        workers.addAll(workersToAdd);
+        synchronized (workers) {
+            workers.addAll(workersToAdd);
+        }
         
         /* Remove signs that have expired during this round */
         signs.removeAll(signsToRemove);
@@ -1055,7 +1060,7 @@ public class GameMap {
         return pointToGameObject.get(p).isFlag();
     }
 
-    boolean isWithinMap(Point p) {
+    public boolean isWithinMap(Point p) {
         return p.x > 0 && p.x < width && p.y > 0 && p.y < height;
     }
 
@@ -1705,5 +1710,13 @@ public class GameMap {
         result = LARGE;
 
         return result;
+    }
+
+    public Stone getStoneAtPoint(Point point) {
+        return getMapPoint(point).getStone();
+    }
+
+    public List<Road> getRoadsFromFlag(Flag flag) {
+        return getMapPoint(flag.getPosition()).getConnectedRoads();
     }
 }

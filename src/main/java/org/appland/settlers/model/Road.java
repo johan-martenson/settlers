@@ -160,7 +160,7 @@ public class Road {
         return end.getPosition();
     }
 
-    EndPoint getOtherFlag(EndPoint flag) throws Exception {
+    public EndPoint getOtherFlag(EndPoint flag) throws Exception {
         if (flag.equals(start)) {
             return end;
         } else if (flag.equals(end)) {

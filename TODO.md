@@ -32,6 +32,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test GameMap::getRoadsFromFlag(Flag)
+
 *  Test Size::contains(Size, Size)
 
 *  Test GameMap::isAvailableFlagSpot(...)

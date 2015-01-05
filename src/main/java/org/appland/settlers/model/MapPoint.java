@@ -6,7 +6,9 @@
 
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -114,8 +116,8 @@ public class MapPoint {
         return !connectedNeighbors.isEmpty();
     }
 
-    public Iterable<Road> getConnectedRoads() {
-        return connectedRoads;
+    List<Road> getConnectedRoads() {
+        return new ArrayList<Road>(connectedRoads);
     }
 
     Set<Point> getConnectedNeighbors() {
