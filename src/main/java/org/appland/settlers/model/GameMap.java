@@ -1591,7 +1591,11 @@ public class GameMap {
         if (!isWithinMap(point.downRight())) {
             return result;
         }
-        
+
+        if (!player.isWithinBorder(point)) {
+            return result;
+        }
+
         if (isBuildingAtPoint(point)) {
             return result;
         }

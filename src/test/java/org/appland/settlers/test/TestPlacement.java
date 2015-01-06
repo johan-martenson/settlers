@@ -1409,4 +1409,26 @@ public class TestPlacement {
             map.removeFlag(flag0);
         }
     }
+
+    @Test
+    public void testAllAvailableHouseSpotsAreWithinBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that available house spots are within the border */
+        for (Point point : map.getAvailableHousePoints(player0).keySet()) {
+
+            assertTrue(player0.isWithinBorder(point));
+        }
+    }
 }
