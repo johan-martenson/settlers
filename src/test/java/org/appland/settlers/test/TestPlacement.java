@@ -1431,4 +1431,26 @@ public class TestPlacement {
             assertTrue(player0.isWithinBorder(point));
         }
     }
+
+    @Test
+    public void testAllAvailableFlagSpotsAreWithinBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that available flag spots are within the border */
+        for (Point point : map.getAvailableFlagPoints(player0)) {
+
+            assertTrue(player0.isWithinBorder(point));
+        }
+    }
 }
