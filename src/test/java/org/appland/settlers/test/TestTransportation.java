@@ -98,19 +98,24 @@ public class TestTransportation {
 
     @Test(expected = InvalidEndPointException.class)
     public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException, Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Woodcutter wc = new Woodcutter(player0);
 
-        map.placeBuilding(wc, new Point(3, 3));
+        /* Place woodcutter */
+        Woodcutter wc = map.placeBuilding(new Woodcutter(player0), new Point(4, 4));
 
-        map.placeAutoSelectedRoad(player0, new Flag(new Point(8, 6)), new Flag(new Point(3, 3)));
+        /* Verify that it' not possible to place a road without flags at both sides */
+        map.placeAutoSelectedRoad(player0, new Flag(new Point(8, 6)), wc.getFlag());
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -128,26 +133,35 @@ public class TestTransportation {
 
     @Test
     public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Point middleFlag = new Point(7, 7);
-        Point endFlag = new Point(10, 10);
-        Woodcutter wc = new Woodcutter(player0);
-        Point wcPoint = new Point(3, 3);
 
-        map.placeBuilding(wc, wcPoint);
+        /* Place woodcutter */
+        Point wcPoint = new Point(4, 4);
+        Woodcutter wc = map.placeBuilding(new Woodcutter(player0), wcPoint);
+
+        /* Place middle flag */
+        Point middleFlag = new Point(7, 7);
         map.placeFlag(player0, middleFlag);
 
+        /* Place road from woodcutter to the middle flag */
         map.placeAutoSelectedRoad(player0, wc.getFlag().getPosition(), middleFlag);
 
+        /* Place end flag */
+        Point endFlag = new Point(10, 10);
         map.placeFlag(player0, endFlag);
 
+        /* Place road from middle flag to end flag */
         map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
     }
 
@@ -180,7 +194,7 @@ public class TestTransportation {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 30, 30);
+        GameMap map = new GameMap(players, 40, 40);
         
         /*
          * F--F1--F2--F3--F4
@@ -192,21 +206,21 @@ public class TestTransportation {
          *    |
          *    |---F7---F8
          */
-        Point wcPoint = new Point(10, 16);
+        Point wcPoint = new Point(12, 16);
         ForesterHut hut = new ForesterHut(player0);
-        Point start = new Point(2, 18);
-        Point f1 = new Point(6, 18);
-        Point f2 = new Point(10, 18);
-        Point f3 = new Point(14, 18);
-        Point f4 = new Point(18, 18);
-        Point f5 = new Point(8, 12);
-        Point f6 = new Point(12, 12);
-        Point f7 = new Point(8, 10);
-        Point f8 = new Point(12, 10);
-        Point f9 = new Point(14, 14);
+        Point start = new Point(4, 18);
+        Point f1 = new Point(8, 18);
+        Point f2 = new Point(12, 18);
+        Point f3 = new Point(16, 18);
+        Point f4 = new Point(20, 18);
+        Point f5 = new Point(10, 12);
+        Point f6 = new Point(14, 12);
+        Point f7 = new Point(10, 10);
+        Point f8 = new Point(14, 10);
+        Point f9 = new Point(16, 14);
 
 
-        map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        map.placeBuilding(new Headquarter(player0), new Point(7, 5));
 
         Flag startFlag = map.placeFlag(player0, start);
 
@@ -244,7 +258,7 @@ public class TestTransportation {
 
         Flag target = hut.getFlag();
 
-        assertTrue(target.getPosition().equals(new Point(11, 15)));
+        assertTrue(target.getPosition().equals(new Point(13, 15)));
 
         Forester forester = new Forester(player0, map);
 
@@ -302,23 +316,29 @@ public class TestTransportation {
 
     @Test
     public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Quarry qry = new Quarry(player0);
-        Storage stge = new Storage(player0);
 
-        map.placeBuilding(qry, new Point(2, 2));
-        map.placeBuilding(stge, new Point(6, 2));
+        /* Place quarry */
+        Quarry qry = map.placeBuilding(new Quarry(player0), new Point(4, 4));
+
+        /* Place storage */
+        Storage stge = map.placeBuilding(new Storage(player0), new Point(8, 4));
 
         Flag target = stge.getFlag();
         Flag start = qry.getFlag();
 
+        /* Connect the storage and the quarry */
         map.placeAutoSelectedRoad(player0, start, target);
 
         Courier worker = new Courier(player0, map);
@@ -489,20 +509,28 @@ public class TestTransportation {
 
     @Test
     public void testEmptyRoadNeedsCourier() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
-        Point point1 = new Point(1, 1);
-        Point point2 = new Point(5, 1);
-        Point middle = new Point(3, 1);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
+        /* Place flags */
+        Point point1 = new Point(3, 3);
         map.placeFlag(player0, point1);
+
+        Point point2 = new Point(7, 3);
         map.placeFlag(player0, point2);
 
+        /* Place road */
+        Point middle = new Point(5, 3);
         Road r = map.placeRoad(player0, point1, middle, point2);
 
         assertTrue(r.needsCourier());
@@ -511,29 +539,31 @@ public class TestTransportation {
 
     @Test
     public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
-        Headquarter hq = new Headquarter(player0);
-        Barracks b = new Barracks(player0);
-        Point bSpot = new Point(7, 7);
-        Point hqSpot = new Point(2, 2);
-        Road r;
-        Courier w = new Courier(player0, map);
 
-        map.placeBuilding(hq, hqSpot);
-        map.placeBuilding(b, bSpot);
+        /* Place headquarter */
+        Point hqSpot = new Point(7, 7);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqSpot);
 
-        r = map.placeAutoSelectedRoad(player0, hq.getFlag(), b.getFlag());
-        map.placeWorker(w, hq.getFlag());
-        w.assignToRoad(r);
-        
+        /* Place barracks */
+        Point bSpot = new Point(12, 12);
+        Barracks b = map.placeBuilding(new Barracks(player0), bSpot);
+
+        /* Place road */
+        Road r = map.placeAutoSelectedRoad(player0, hq.getFlag(), b.getFlag());
+
+        /* Occupy the road */
+        Courier w = Utils.occupyRoad(r, map);
+
         /* Construct barracks */
         Utils.constructHouse(b, map);
-
-        /* Let the courier get to its target road */
-        Utils.fastForwardUntilWorkersReachTarget(map, w);
 
         /* Add a private to the hq */
         Military m = new Military(player0, PRIVATE_RANK, map);
@@ -541,8 +571,10 @@ public class TestTransportation {
 
         /* Check that the barracks needs a military */
         assertTrue(b.isMilitaryBuilding());
+
         int hostedMilitary = b.getHostedMilitary();
         int maxHostedMilitary = b.getMaxHostedMilitary();
+
         assertEquals(hostedMilitary, 0);
         assertEquals(maxHostedMilitary, 2);
 

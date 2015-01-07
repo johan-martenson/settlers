@@ -50,10 +50,10 @@ public class TestIronMine {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        GameMap map = new GameMap(players, 20, 20);
         
         /* Put a small mountain on the map */
-        Point point0 = new Point(8, 2);
+        Point point0 = new Point(8, 14);
         Utils.surroundPointWithMountain(point0, map);
         
         /* Place a headquarter */
@@ -75,10 +75,10 @@ public class TestIronMine {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(8, 2);
+        Point point0 = new Point(8, 14);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
@@ -101,10 +101,10 @@ public class TestIronMine {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(8, 2);
+        Point point0 = new Point(8, 14);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
@@ -123,10 +123,10 @@ public class TestIronMine {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+        GameMap map = new GameMap(players, 20, 20);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(8, 2);
+        Point point0 = new Point(8, 14);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */

@@ -157,27 +157,29 @@ public class TestFishery {
 
     @Test
     public void testFishermanIsAssignedToFishery() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place fishery */
         Point point1 = new Point(10, 4);
         Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(7, 3);
-        Point point4 = new Point(8, 2);
-        Point point5 = new Point(10, 2);
-        Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Finish the fisherman hut */
         Utils.constructHouse(fishery, map);
-        
+
         /* Run game logic twice, once to place courier and once to place fisherman */
         Utils.fastForward(2, map);
 
@@ -186,23 +188,25 @@ public class TestFishery {
 
     @Test
     public void testOnlyOneFishermanIsAssignedToFishery() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place fishery */
         Point point1 = new Point(10, 4);
         Building fishery = map.placeBuilding(new Fishery(player0), point1);
 
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(7, 3);
-        Point point4 = new Point(8, 2);
-        Point point5 = new Point(10, 2);
-        Point point6 = new Point(11, 3);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         /* Construct the fisherman hut */
         constructHouse(fishery, map);

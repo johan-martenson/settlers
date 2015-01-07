@@ -430,7 +430,7 @@ public class TestAttack {
            initiated */
         map.stepTime();
 
-        List<Worker> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map);
+        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map);
 
         assertEquals(militaryOutside.size(), 1);
     }
@@ -1489,9 +1489,8 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
-        map.placeBuilding(headquarter0, point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
@@ -1504,7 +1503,7 @@ public class TestAttack {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(31, 5);
         Building barracks1 = new Fortress(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1619,7 +1618,7 @@ public class TestAttack {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(31, 5);
         Building barracks1 = new Fortress(player1);
         map.placeBuilding(barracks1, point3);
 

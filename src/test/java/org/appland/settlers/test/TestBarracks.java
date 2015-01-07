@@ -24,7 +24,6 @@ import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -157,20 +156,22 @@ public class TestBarracks {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
+        System.out.println("B " + player0.getBorders());
+
         /* Placing barracks */
-        Point point22 = new Point(5, 25);
+        Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road between (7, 21) and (6, 4) */
-        Point point23 = new Point(6, 24);
-        Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
@@ -187,6 +188,8 @@ public class TestBarracks {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -194,13 +197,11 @@ public class TestBarracks {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
-        Point point22 = new Point(6, 24);
+        Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Placing road between (7, 23) and (6, 4) */
-        Point point23 = new Point(7, 23);
-        Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
@@ -224,9 +225,9 @@ public class TestBarracks {
         /* Verify that the border is extended when the military reaches the barracks */
         assertEquals(m.getTarget(), barracks0.getPosition());        
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, barracks0.getPosition());
-        
+
         assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 31)));
     }
@@ -1095,6 +1096,8 @@ public class TestBarracks {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1102,7 +1105,7 @@ public class TestBarracks {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
-        Point point26 = new Point(23, 5);
+        Point point26 = new Point(21, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Connect the barracks with the headquarter */
@@ -1114,7 +1117,7 @@ public class TestBarracks {
         /* Verify that the field of view remains the same until the barracks 
            gets occupied */
         Point pointInOldFOV = new Point(27, 5);
-        Point pointinNewFOV = new Point(33, 5);
+        Point pointinNewFOV = new Point(31, 5);
 
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getHostedMilitary() == 0) {

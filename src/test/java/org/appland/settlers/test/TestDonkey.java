@@ -1003,14 +1003,14 @@ public class TestDonkey {
         Utils.fastForward(133, map);
 
         /* Placing forester */
-        Point point22 = new Point(22, 4);
+        Point point22 = new Point(22, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
         /* 147 ticks from start */
         Utils.fastForward(14, map);
 
         /* Placing woodcutter */
-        Point point23 = new Point(19, 5);
+        Point point23 = new Point(19, 7);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point23);
 
         /* 185 ticks from start */
@@ -1024,15 +1024,16 @@ public class TestDonkey {
         Utils.fastForward(21, map);
 
         /* Placing road between (23, 3) and (20, 4) */
-        Point point25 = new Point(23, 3);
-        Point point26 = new Point(21, 3);
-        Point point27 = new Point(20, 4);
+        Point point25 = new Point(23, 5);
+        Point point26 = new Point(21, 5);
+        Point point27 = new Point(20, 6);
         Road road0 = map.placeRoad(player0, point25, point26, point27);
 
         /* 227 ticks from start */
         Utils.fastForward(21, map);
 
         /* Placing road between (20, 4) and (11, 11) */
+        Point point50 = new Point(19, 5);
         Point point28 = new Point(18, 4);
         Point point29 = new Point(17, 5);
         Point point30 = new Point(16, 6);
@@ -1041,7 +1042,7 @@ public class TestDonkey {
         Point point33 = new Point(13, 9);
         Point point34 = new Point(12, 10);
         Point point35 = new Point(11, 11);
-        Road road1 = map.placeRoad(player0, point27, point28, point29, point30, point31, point32, point33, point34, point35);
+        Road road1 = map.placeRoad(player0, point27, point50, point28, point29, point30, point31, point32, point33, point34, point35);
 
         /* 254 ticks from start */
         Utils.fastForward(27, map);

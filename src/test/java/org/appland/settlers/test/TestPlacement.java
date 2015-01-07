@@ -8,9 +8,11 @@ package org.appland.settlers.test;
 
 import static java.awt.Color.GREEN;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
@@ -73,15 +75,19 @@ public class TestPlacement {
     
     @Test
     public void testAvailableFlagPointsContainsValidFlagPoint() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
     
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Verify that there is a valid flag point in the available flag points */
         List<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
@@ -115,43 +121,48 @@ public class TestPlacement {
 
     @Test
     public void testAvailableHousesNextToSmallHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Woodcutter wc = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        
-        map.placeBuilding(wc, wcPoint);
-        
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 6);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Verify that the available houses next to the woodcutter are correct */
         Map<Point, Size> possibleHouses = map.getAvailableHousePoints(player0);
-        
+
         /* The house's own point */
-        assertFalse(possibleHouses.containsKey(new Point(6, 4)));
-        
+        assertFalse(possibleHouses.containsKey(point1));
+
         /* The house's flag */
-        assertFalse(possibleHouses.containsKey(new Point(7, 3)));
-        
+        assertFalse(possibleHouses.containsKey(point1.downRight()));
+
         /* Points in front, sampled */
-        assertEquals(possibleHouses.get(new Point(8, 2)), MEDIUM);
-        assertEquals(possibleHouses.get(new Point(9, 3)), MEDIUM);
-        
+        assertEquals(possibleHouses.get(point1.right().down()), MEDIUM);
+        assertEquals(possibleHouses.get(point1.right().downRight()), MEDIUM);
+
         /* Points on left, sampled */
-        assertFalse(possibleHouses.containsKey(new Point(6, 2)));
-        assertFalse(possibleHouses.containsKey(new Point(5, 3)));
-        
+        assertFalse(possibleHouses.containsKey(point1.down()));
+        assertFalse(possibleHouses.containsKey(point1.downLeft()));
+
         /* Points on top, sampled */
-        assertFalse(possibleHouses.containsKey(new Point(4, 4)));
-        assertFalse(possibleHouses.containsKey(new Point(5, 5)));
-        assertEquals(possibleHouses.get(new Point(6, 6)), MEDIUM);
-        
+        assertFalse(possibleHouses.containsKey(point1.left()));
+        assertFalse(possibleHouses.containsKey(point1.upLeft()));
+        assertEquals(possibleHouses.get(point1.up()), MEDIUM);
+
         /* Points on right, sampled*/
-        assertFalse(possibleHouses.containsKey(new Point(7, 5)));
-        assertFalse(possibleHouses.containsKey(new Point(8, 4)));
+        assertFalse(possibleHouses.containsKey(point1.upRight()));
+        assertFalse(possibleHouses.containsKey(point1.left()));
     }
     
     @Test
@@ -338,19 +349,24 @@ public class TestPlacement {
 
     @Test
     public void testAvailableFlagsNextToFlag() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(7, 7);
         Flag flag0 = map.placeFlag(player0, point0);
-        
+
+        /* Verify that the available flag points next to the flag are correct */
         List<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
         
         /* The flag's own point */
@@ -381,7 +397,7 @@ public class TestPlacement {
         assertTrue (possibleFlagPoints.contains(point0.upLeft().left()));
         assertTrue (possibleFlagPoints.contains(point0.upLeft().upLeft()));
     }
-    
+
     @Test
     public void testAvailableFlagsNextToSmallHouse() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -439,186 +455,202 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sawmill */
-        Point point0 = new Point(7,5);
+        Point point0 = new Point(7, 7);
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point0);
-        
+
+        /* Verify that the available houses next to the sawmill are correct */
         Map<Point, Size> possibleHouseSizes = map.getAvailableHousePoints(player0);
-        
+
         /* The house's own point */
-        assertFalse(possibleHouseSizes.containsKey(new Point(7, 5)));
-        
+        assertFalse(possibleHouseSizes.containsKey(point0));
+
         /* The house's flag */
-        assertFalse(possibleHouseSizes.containsKey(new Point(8, 4)));
-        
+        assertFalse(possibleHouseSizes.containsKey(point0.downRight()));
+
         /* Points in front, sampled */
-        assertEquals(possibleHouseSizes.get(new Point(9, 3)), MEDIUM);
-        assertEquals(possibleHouseSizes.get(new Point(10, 4)), MEDIUM);
+        assertEquals(possibleHouseSizes.get(point0.right().down()), MEDIUM);
+        assertEquals(possibleHouseSizes.get(point0.right().downRight()), MEDIUM);
 
         /* Points on left, sampled */
 //        assertEquals(possibleHouseSizes.get(new Point(7, 1)), MEDIUM); // WEIRD!!
-        assertFalse(possibleHouseSizes.containsKey(new Point(6, 4)));
-        assertFalse(possibleHouseSizes.containsKey(new Point(5, 5)));
-        
-        assertEquals(possibleHouseSizes.get(new Point(4, 4)), MEDIUM);
-        assertEquals(possibleHouseSizes.get(new Point(5, 3)), MEDIUM);
+        assertFalse(possibleHouseSizes.containsKey(point0.downLeft()));
+        assertFalse(possibleHouseSizes.containsKey(point0.left()));
+
+        assertEquals(possibleHouseSizes.get(point0.left().downLeft()), MEDIUM);
+        assertEquals(possibleHouseSizes.get(point0.left().down()), MEDIUM);
 
         /* Points on top, sampled */
-        assertFalse(possibleHouseSizes.containsKey(new Point(6, 6)));
-        assertEquals (possibleHouseSizes.get(new Point(7, 7)), MEDIUM);
-        
+        assertFalse(possibleHouseSizes.containsKey(point0.upLeft()));
+        assertEquals (possibleHouseSizes.get(point0.up()), MEDIUM);
+
         /* Points on right, sampled */
-        assertFalse(possibleHouseSizes.containsKey(new Point(8, 6)));
-        assertFalse(possibleHouseSizes.containsKey(new Point(9, 5)));
+        assertFalse(possibleHouseSizes.containsKey(point0.upRight()));
+        assertFalse(possibleHouseSizes.containsKey(point0.right()));
     }
     
     @Test
     public void testAvailableFlagsNextToMediumHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Sawmill sawmill = new Sawmill(player0);
-        Point farmPoint = new Point(7,3);
-        
-        map.placeBuilding(sawmill, farmPoint);
-        
+
+        /* Place sawmill */
+        Point point0 = new Point(7, 7);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point0);
+
+        /* Verify that the available flag points next to the sawmill are correct */
         List<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
-        
+
         /* The house's own point */
-        assertFalse(possibleFlagPoints.contains(new Point(7, 3)));
-        
+        assertFalse(possibleFlagPoints.contains(point0));
+
         /* The house's flag */
-        assertFalse(possibleFlagPoints.contains(new Point(8, 2)));
-        
+        assertFalse(possibleFlagPoints.contains(point0.downRight()));
+
         /* Points in front, sampled */
-        assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
-        assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
+        assertFalse(possibleFlagPoints.contains(point0.right().down()));
+        assertFalse(possibleFlagPoints.contains(point0.right().downRight()));
 
         /* Points on left, sampled */
-        assertFalse(possibleFlagPoints.contains(new Point(7, 1)));
-        assertFalse(possibleFlagPoints.contains(new Point(6, 2)));
-        assertTrue (possibleFlagPoints.contains(new Point(5, 3)));
-        
-        assertTrue (possibleFlagPoints.contains(new Point(4, 2)));
-        assertTrue (possibleFlagPoints.contains(new Point(5, 1)));
+        assertFalse(possibleFlagPoints.contains(point0.down()));
+        assertFalse(possibleFlagPoints.contains(point0.downLeft()));
+        assertTrue (possibleFlagPoints.contains(point0.left()));
+
+        assertTrue (possibleFlagPoints.contains(point0.left().downLeft()));
+        assertTrue (possibleFlagPoints.contains(point0.left().down()));
 
         /* Points on top, sampled */
-        assertTrue (possibleFlagPoints.contains(new Point(6, 4)));
-        assertTrue (possibleFlagPoints.contains(new Point(7, 5)));
-        assertTrue (possibleFlagPoints.contains(new Point(8, 6)));
-        
-        /* Points on right, sampled */
-        assertTrue (possibleFlagPoints.contains(new Point(8, 4)));
-        assertFalse(possibleFlagPoints.contains(new Point(9, 3)));
+        assertTrue (possibleFlagPoints.contains(point0.upLeft()));
+        assertTrue (possibleFlagPoints.contains(point0.up()));
+        assertTrue (possibleFlagPoints.contains(point0.up().upRight()));
 
-        assertTrue (possibleFlagPoints.contains(new Point(9, 5)));
-        assertTrue (possibleFlagPoints.contains(new Point(10, 4)));
-        assertTrue (possibleFlagPoints.contains(new Point(11, 3)));
-        assertTrue (possibleFlagPoints.contains(new Point(12, 2)));
+        /* Points on right, sampled */
+        assertTrue (possibleFlagPoints.contains(point0.upRight()));
+        assertFalse(possibleFlagPoints.contains(point0.right()));
+
+        assertTrue (possibleFlagPoints.contains(point0.right().up()));
+        assertTrue (possibleFlagPoints.contains(point0.right().upRight()));
+        assertTrue (possibleFlagPoints.contains(point0.right().right()));
+        assertTrue (possibleFlagPoints.contains(point0.right().right().downRight()));
     }
     
     @Test
     public void testAvailableHousesNextToLargeHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Farm farm       = new Farm(player0);
-        Point farmPoint = new Point(7, 3);
-        
-        map.placeBuilding(farm, farmPoint);
-        
+
+        /* Place farm */
+        Point point0 = new Point(8, 8);
+        Farm farm = map.placeBuilding(new Farm(player0), point0);
+
+        /* Verify that the available house points next to the farm are correct */
         Map<Point, Size> possibleHouses = map.getAvailableHousePoints(player0);
-        
+
         /* The house's own point */
-        assertFalse(possibleHouses.containsKey(new Point(7, 3)));
-        
+        assertFalse(possibleHouses.containsKey(point0));
+
         /* More space under the house */
-        assertFalse(possibleHouses.containsKey(new Point(6, 4)));
-        assertFalse(possibleHouses.containsKey(new Point(6, 2)));
-        assertFalse(possibleHouses.containsKey(new Point(5, 3)));
-        
+        assertFalse(possibleHouses.containsKey(point0.upLeft()));
+        assertFalse(possibleHouses.containsKey(point0.downLeft()));
+        assertFalse(possibleHouses.containsKey(point0.left()));
+
         /* The house's flag */
-        assertFalse(possibleHouses.containsKey(new Point(8, 2)));
-        
+        assertFalse(possibleHouses.containsKey(point0.downRight()));
+
         /* Points in front, TBD sampled */ 
         // assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
         // assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
-        assertFalse(possibleHouses.containsKey(new Point(7, 1)));
-        assertFalse(possibleHouses.containsKey(new Point(9, 3)));
+        assertFalse(possibleHouses.containsKey(point0.down()));
+        assertFalse(possibleHouses.containsKey(point0.right()));
 
         /* Points on left, sampled */
-        assertFalse(possibleHouses.containsKey(new Point(5, 1)));
-        assertEquals(possibleHouses.get(new Point(4, 2)), MEDIUM);
-        assertEquals(possibleHouses.get(new Point(3, 3)), MEDIUM);
+        assertFalse(possibleHouses.containsKey(point0.left().down()));
+        assertEquals(possibleHouses.get(point0.left().downLeft()), MEDIUM);
+        assertEquals(possibleHouses.get(point0.left().left()), MEDIUM);
 
         /* Points on top, sampled */
-        assertFalse(possibleHouses.containsKey(new Point(4, 4)));
-        assertFalse(possibleHouses.containsKey(new Point(5, 5)));
-        assertEquals(possibleHouses.get(new Point(6, 6)), MEDIUM);
-        
+        assertFalse(possibleHouses.containsKey(point0.left().upLeft()));
+        assertFalse(possibleHouses.containsKey(point0.left().up()));
+        assertEquals(possibleHouses.get(point0.up().upLeft()), MEDIUM);
+
         /* Points on right, sampled */
-        assertFalse(possibleHouses.containsKey(new Point(7, 5)));
-        assertFalse(possibleHouses.containsKey(new Point(8, 4)));
+        assertFalse(possibleHouses.containsKey(point0.up()));
+        assertFalse(possibleHouses.containsKey(point0.upRight()));
     }
-    
+
     @Test
     public void testAvailableFlagsNextToLargeHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Farm farm       = new Farm(player0);
-        Point farmPoint = new Point(7, 3);
-        
-        map.placeBuilding(farm, farmPoint);
-        
+
+        /* Place farm */
+        Point point0 = new Point(8, 8);
+        Farm farm = map.placeBuilding(new Farm(player0), point0);
+
+        /* Verify that the available points for flags next to the farm are correct */
         List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
-        
+
         /* The house's own point */
-        assertFalse(possibleFlags.contains(new Point(7, 3)));
-        
+        assertFalse(possibleFlags.contains(point0));
+
         /* More space under the house */
-        assertFalse(possibleFlags.contains(new Point(6, 4)));
-        assertFalse(possibleFlags.contains(new Point(6, 2)));
-        assertFalse(possibleFlags.contains(new Point(5, 3)));
-        
+        assertFalse(possibleFlags.contains(point0.upLeft()));
+        assertFalse(possibleFlags.contains(point0.downLeft()));
+        assertFalse(possibleFlags.contains(point0.left()));
+
         /* The house's flag */
-        assertFalse(possibleFlags.contains(new Point(8, 2)));
-        
+        assertFalse(possibleFlags.contains(point0.downRight()));
+
         /* Points in front, TBD sampled */ 
         // assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
         // assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
-        assertFalse(possibleFlags.contains(new Point(7, 1)));
-        assertFalse(possibleFlags.contains(new Point(9, 3)));
+        assertFalse(possibleFlags.contains(point0.down()));
+        assertFalse(possibleFlags.contains(point0.right()));
 
         /* Points on left, sampled */
-        assertTrue(possibleFlags.contains(new Point(5, 1)));
-        assertTrue(possibleFlags.contains(new Point(4, 2)));
-        assertTrue(possibleFlags.contains(new Point(3, 3)));
+        assertTrue(possibleFlags.contains(point0.left().down()));
+        assertTrue(possibleFlags.contains(point0.left().downLeft()));
+        assertTrue(possibleFlags.contains(point0.left().left()));
 
         /* Points on top, sampled */
-        assertTrue(possibleFlags.contains(new Point(4, 4)));
-        assertTrue(possibleFlags.contains(new Point(5, 5)));
-        assertTrue(possibleFlags.contains(new Point(6, 6)));
-        
+        assertTrue(possibleFlags.contains(point0.left().upLeft()));
+        assertTrue(possibleFlags.contains(point0.left().up()));
+        assertTrue(possibleFlags.contains(point0.up().upLeft()));
+
         /* Points on right, sampled */
-        assertTrue(possibleFlags.contains(new Point(7, 5)));
-        assertFalse(possibleFlags.contains(new Point(8, 4)));        
+        assertTrue(possibleFlags.contains(point0.up()));
+        assertFalse(possibleFlags.contains(point0.upRight()));        
     }
-    
+
     @Test(expected=Exception.class)
     public void testPlaceFlagTooCloseToSmallHouse() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -641,22 +673,25 @@ public class TestPlacement {
 
     @Test(expected=Exception.class)
     public void testPlaceFlagOnHouse() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-        
-        Woodcutter wc = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        
-        map.placeBuilding(wc, wcPoint);
 
-        Point point0 = new Point(6, 4);
-        
-        map.placeFlag(player0, point0);
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place woodcutter */
+        Point wcPoint = new Point(8, 8);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), wcPoint);
+
+        /* Verify that it's not possible to place a flag on the woodcutter */
+        map.placeFlag(player0, wcPoint);
     }
 
     @Test(expected=Exception.class) 
@@ -698,35 +733,33 @@ public class TestPlacement {
     }
 
     @Test
-    public void testWaypointsNextToFlag() {
-        
-    }
-
-    @Test
     public void testAutomaticWaypointSelection() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
-        //List<Point> = map.proposeNewRoad(new Point(1, 1), new Point(3, 7));
-        
+        //TODO: Add this test!
     }
 
     @Test
     public void testPossibleFlagsNextToWater() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        Point sharedPoint1 = new Point(3, 1);
-        Point sharedPoint2 = new Point(4, 2);
-        Point grassPoint   = new Point(5, 1);
-        Point waterPoint   = new Point(2, 2);
-        
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+        Point sharedPoint1 = new Point(7, 5);
+        Point sharedPoint2 = new Point(8, 6);
+        Point grassPoint   = new Point(9, 5);
+        Point waterPoint   = new Point(6, 6);
+
         /* Place headquarter */
-        Point point0 = new Point(10, 10);
+        Point point0 = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Create water and grass tiles */
         Tile waterTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, waterPoint);
         Tile grassTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, grassPoint);
@@ -921,27 +954,6 @@ public class TestPlacement {
     }
 
     @Test
-    public void testCanNotPlaceFlagOnHouse() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
-    
-        Point hqPoint = new Point(6, 6);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-            
-        map.placeBuilding(new Woodcutter(player0), point0);
-        
-        try {
-            map.placeFlag(player0, point0);
-            assertFalse(true);
-        } catch (Exception e) {}
-
-        assertEquals(map.getFlags().size(), 2);
-    }
-
-    @Test
     public void testCanNotPlaceBuildingIfFlagCanNotBePlaced() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -1091,28 +1103,32 @@ public class TestPlacement {
 
     @Test
     public void testMineCanBePlacedOnSign() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
-    
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
         /* Place headquarter */
-        Point hqPoint = new Point(6, 6);
+        Point hqPoint = new Point(18, 18);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
-        
+
         /* Place sign */
         map.placeEmptySign(point0);
-        
+
         assertFalse(map.getSigns().isEmpty());
         assertTrue(map.isSignAtPoint(point0));
-        
+
         /* Build a mine on the sign */
         map.placeBuilding(new GoldMine(player0), point0);
-        
+
         /* Verify that the sign is gone and the mine exists */
         assertTrue(map.isBuildingAtPoint(point0));
         assertFalse(map.isSignAtPoint(point0));
@@ -1451,6 +1467,122 @@ public class TestPlacement {
         for (Point point : map.getAvailableFlagPoints(player0)) {
 
             assertTrue(player0.isWithinBorder(point));
+        }
+    }
+
+    @Test
+    public void testNoAvailableFlagSpotsOnTheBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there are no available flag spots on the border */
+        List<Point> availableFlagPoints = map.getAvailableFlagPoints(player0);
+
+        for (Collection<Point> border : player0.getBorders()) {
+            for (Point borderPoint : border) {
+                assertFalse(availableFlagPoints.contains(borderPoint));
+            }
+        }
+    }
+
+    @Test
+    public void testNoAvailableHouseSpotsOnTheBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there are no available flag spots on the border */
+        Set<Point> availableHousePoints = map.getAvailableHousePoints(player0).keySet();
+
+        for (Collection<Point> border : player0.getBorders()) {
+            for (Point borderPoint : border) {
+                assertFalse(availableHousePoints.contains(borderPoint));
+            }
+        }
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to place a flag on any point of the border */
+        for (Collection<Point> border : player0.getBorders()) {
+            for (Point borderPoint : border) {
+
+                try {
+                    Flag flag0 = map.placeFlag(player0, borderPoint);
+
+                    assertFalse(true);
+                } catch (Exception e) {}
+
+                assertFalse(map.isFlagAtPoint(borderPoint));
+
+                try {
+                    map.getFlagAtPoint(borderPoint);
+                    assertFalse(true);
+                } catch (Exception e) {}
+            }
+        }
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to place a house on any point of the border */
+        for (Collection<Point> border : player0.getBorders()) {
+            for (Point borderPoint : border) {
+
+                try {
+                    Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), borderPoint);
+
+                    assertFalse(true);
+                } catch (Exception e) {}
+
+                assertFalse(map.isBuildingAtPoint(borderPoint));
+                assertNull(map.getBuildingAtPoint(borderPoint));
+            }
         }
     }
 }

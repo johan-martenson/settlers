@@ -933,7 +933,7 @@ public class TestCourier {
         Utils.fastForward(133, map);
 
         /* Placing forester */
-        Point point22 = new Point(22, 4);
+        Point point22 = new Point(22, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
         /* 147 ticks from start */
@@ -954,8 +954,8 @@ public class TestCourier {
         Utils.fastForward(21, map);
 
         /* Placing road between (23, 3) and (20, 4) */
-        Point point25 = new Point(23, 3);
-        Point point26 = new Point(21, 3);
+        Point point25 = new Point(23, 5);
+        Point point26 = new Point(21, 5);
         Point point27 = new Point(20, 4);
         Road road0 = map.placeRoad(player0, point25, point26, point27);
 

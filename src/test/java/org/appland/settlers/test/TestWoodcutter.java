@@ -468,12 +468,19 @@ public class TestWoodcutter {
     
         @Test
     public void testWoodCargoIsCorrect() throws Exception {
+
+        /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
         Point point3 = new Point(6, 4);
         Building hq = map.placeBuilding(new Headquarter(player0), point3);
+
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
@@ -486,10 +493,12 @@ public class TestWoodcutter {
         /* Place woodcutter */
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
-        
-        Point point4 = new Point(2, 4);
+
+        /* Place forester */
+        Point point4 = new Point(16, 16);
         Building hut2 = map.placeBuilding(new ForesterHut(player0), point4);
-        
+
+        /* Place roads */
         Point point5 = new Point(9, 3);
         
         Road road0 = map.placeRoad(player0, hq.getFlag().getPosition(), point5, wc.getFlag().getPosition());

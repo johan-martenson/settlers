@@ -206,6 +206,8 @@ public class TestGuardHouse {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -213,13 +215,11 @@ public class TestGuardHouse {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
-        Point point22 = new Point(5, 25);
+        Point point22 = new Point(5, 23);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        /* Placing road between (7, 21) and (6, 4) */
-        Point point23 = new Point(6, 24);
-        Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
@@ -236,6 +236,8 @@ public class TestGuardHouse {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -243,13 +245,11 @@ public class TestGuardHouse {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
-        Point point22 = new Point(6, 24);
+        Point point22 = new Point(5, 23);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        /* Placing road between (7, 23) and (6, 4) */
-        Point point23 = new Point(7, 23);
-        Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(guardHouse0, map);

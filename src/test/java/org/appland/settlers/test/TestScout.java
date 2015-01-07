@@ -298,6 +298,8 @@ public class TestScout {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create game map */
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -335,8 +337,8 @@ public class TestScout {
 
         /* Verify that the scout does not go outside the map */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(player0.isWithinBorder(scout.getTarget()));
-            assertTrue(player0.isWithinBorder(scout.getPosition()));
+            assertTrue(map.isWithinMap(scout.getTarget()));
+            assertTrue(map.isWithinMap(scout.getPosition()));
 
             if (scout.getTarget().equals(headquarter0.getPosition())) {
                 break;

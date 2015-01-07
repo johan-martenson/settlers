@@ -329,7 +329,7 @@ public class GameMap {
             }
         }
 
-        /* Assign points to players - how to divide into lands? */
+        /* Assign points to players */
         List<Point> toInvestigate = new ArrayList<>();
         Set<Point> localCleared = new HashSet<>();
         Set<Point> globalCleared = new HashSet<>();
@@ -340,11 +340,11 @@ public class GameMap {
             if (!isWithinMap(root)) {
                 continue;
             }
-            
+
             if (globalCleared.contains(root)) {
                 continue;
             }
-            
+
             Player player = claims.get(root).getPlayer();
 
             pointsInLand.clear();
@@ -369,18 +369,23 @@ public class GameMap {
                         toInvestigate.add(p);
                     }
 
+                    /* Filter points outside the map */
                     if (!isWithinMap(p)) {
                         if (!borders.contains(point)) {
                             borders.add(point);
                         }
 
                         globalCleared.add(p);
+
+                    /* Add points outside the claimed areas to the border */
                     } else if (!claims.containsKey(p)) {
                         if (!borders.contains(point)) {
                             borders.add(point);
                         }
 
                         globalCleared.add(p);
+
+                    /* Add the point to the border if it belongs to another player */
                     } else if (!claims.get(p).getPlayer().equals(player)) {
                         if (!borders.contains(point)) {
                             borders.add(point);
@@ -388,6 +393,7 @@ public class GameMap {
                     }
                 }
 
+                /* Add claimed points to the points of the current land */
                 if (claims.containsKey(point)) {
                     if (claims.get(point).getPlayer().equals(player)) {
                         pointsInLand.add(point);
@@ -396,9 +402,13 @@ public class GameMap {
                     }
                 }
 
+                /* Clear the local variables */
                 localCleared.add(point);
                 toInvestigate.remove(point);
             }
+
+            /* Filter out the border points from the land */
+            pointsInLand.removeAll(borders);
 
             /* Save result as a land */
             if (!updatedLands.containsKey(player)) {
@@ -804,18 +814,6 @@ public class GameMap {
 
     public List<Worker> getWorkers() {
         return workers;
-    }
-
-    public List<Storage> getStorages() {
-        List<Storage> storages = new ArrayList<>();
-
-        for (Building b : buildings) {
-            if (b instanceof Storage) {
-                storages.add((Storage) b);
-            }
-        }
-
-        return storages;
     }
 
     public List<Point> getAvailableFlagPoints(Player player) throws Exception {
