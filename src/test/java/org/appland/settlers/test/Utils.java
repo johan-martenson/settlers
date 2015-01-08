@@ -27,8 +27,6 @@ import org.appland.settlers.model.Player;
 
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
@@ -196,18 +194,6 @@ public class Utils {
         }
 
         assertTrue(worker.isAt(target));
-    }
-
-    public static SawmillWorker occupySawmill(Sawmill sm, GameMap map) throws Exception {
-        SawmillWorker sw = new SawmillWorker(sm.getPlayer(), map);
-        
-        map.placeWorker(sw, sm.getFlag());
-        
-        sw.setTargetBuilding(sm);
-        
-        fastForwardUntilWorkersReachTarget(map, sw);
-        
-        return sw;
     }
 
     public static <T extends Worker> T occupyBuilding(T worker, Building building, GameMap map) throws Exception {
