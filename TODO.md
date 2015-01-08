@@ -157,6 +157,8 @@ TEST
 TO IMPLEMENT
 ============
 
+*  Fix discovery so that military buildings only help if they are ready and occupied (this is not the case with fortress today)
+
 *  Add method to see whether a building can produce cargos
 
 *  Add method to see whether a military building is accepting coins

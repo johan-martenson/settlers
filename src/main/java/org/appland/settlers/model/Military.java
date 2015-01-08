@@ -148,6 +148,10 @@ public class Military extends Worker {
             building.deployMilitary(this);
             enterBuilding(building);
 
+            /* Join the defense if the building is under attack */
+            if (!building.getWaitingAttackers().isEmpty()) {
+                defendBuilding(building);
+            }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
             
