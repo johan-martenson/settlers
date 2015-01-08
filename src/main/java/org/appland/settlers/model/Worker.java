@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  * @author johan
  */
 public abstract class Worker implements Actor, Piece {
-    private Player player;
+    private final Player player;
 
     enum States {
         WALKING_AND_EXACTLY_AT_POINT, 
@@ -40,7 +40,6 @@ public abstract class Worker implements Actor, Piece {
     private Point       target;
     private Building    home;
 
-    
     public Worker(Player p, GameMap m) {
         player          = p;
         target          = null;
@@ -76,6 +75,9 @@ public abstract class Worker implements Actor, Piece {
             if (walkCountdown.reachedZero()) {
                 
                 state = WALKING_AND_EXACTLY_AT_POINT;
+
+                /* Call the sub class to let it react */
+                onWalkingAndAtFixedPoint();
             } else {
                 walkCountdown.step();
             }
@@ -129,10 +131,7 @@ public abstract class Worker implements Actor, Piece {
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
-            if (this instanceof Military) {
-                building.deployMilitary((Military) this);
-                enterBuilding(building);
-            } else {
+            if ( !(this instanceof Military)) {
                 building.assignWorker(this);
                 enterBuilding(building);
             }
@@ -375,4 +374,6 @@ public abstract class Worker implements Actor, Piece {
     public Player getPlayer() {
         return player;
     }
+
+    protected void onWalkingAndAtFixedPoint() throws Exception {}
 }

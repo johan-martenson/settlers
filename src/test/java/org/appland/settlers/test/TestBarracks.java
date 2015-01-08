@@ -164,8 +164,6 @@ public class TestBarracks {
         Point point21 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        System.out.println("B " + player0.getBorders());
-
         /* Placing barracks */
         Point point22 = new Point(5, 23);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);

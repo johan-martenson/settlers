@@ -138,7 +138,17 @@ public class Military extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
-        if (state == RETURNING_TO_STORAGE) {
+
+        if (state == WALKING_TO_TARGET) {
+
+            /* Get the building at the position */
+            Building building = map.getBuildingAtPoint(getPosition());
+
+            /* Deploy military in building */
+            building.deployMilitary(this);
+            enterBuilding(building);
+
+        } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
             
             enterBuilding(storage);
@@ -401,6 +411,35 @@ public class Military extends Worker {
             state = WALKING_TO_FIGHT_TO_DEFEND;
 
             setOffroadTarget(opponent.getPosition());
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        if (state == WALKING_TO_TARGET) {
+
+            /* Return to the storage if the target building changed owner */
+            if (!getTargetBuilding().getPlayer().equals(getPlayer())) {
+
+                /* Set state to returning to storage */
+                state = RETURNING_TO_STORAGE;
+
+                returnToStorage();
+
+                return;
+            }
+
+            /* Return to the storage if the target building is destroyed */
+            if (!getTargetBuilding().ready()) {
+
+                /* Set state to returning to storage */
+                state = RETURNING_TO_STORAGE;
+
+                returnToStorage();
+
+                return;
+            }
         }
     }
 }
