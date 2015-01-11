@@ -224,7 +224,19 @@ public class TestScenarios {
         int amountInQueue = sm.getAmount(WOOD);
         
         /* Produce plancks in sawmill. 
-        
+
+        /* Make sure the sawmill worker is done with the previous planck */
+        for (i = 0; i < 500; i++) {
+            if (sm.getWorker().getCargo() == null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNull(sm.getWorker().getCargo());
+
+        /*
         Note! The sawmill worker is after the courier 
               in the worker list so it will get called to step time once before 
               this section is reached
@@ -233,7 +245,7 @@ public class TestScenarios {
             if (sm.getWorker().getCargo() != null) {
                 break;
             }
-            
+
             assertNull(sm.getWorker().getCargo());
             map.stepTime();
         }

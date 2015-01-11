@@ -229,26 +229,29 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean assignCouriers() throws Exception {
-        for (Road r : map.getRoads()) {
-            if (!r.needsCourier()) {
-                continue;
-            }
 
-            Storage stg = map.getClosestStorage(r.getStart());
+        synchronized (map.getRoads()) {
+            for (Road r : map.getRoads()) {
+                if (!r.needsCourier()) {
+                    continue;
+                }
 
-            if (!equals(stg)) {
-                continue;
-            }
+                Storage stg = map.getClosestStorage(r.getStart());
 
-            if (!hasAtLeastOne(COURIER)) {
+                if (!equals(stg)) {
+                    continue;
+                }
+
+                if (!hasAtLeastOne(COURIER)) {
+                    return true;
+                }
+
+                Courier w = stg.retrieveCourier();
+                map.placeWorker(w, stg.getFlag());
+                w.assignToRoad(r);
+
                 return true;
             }
-
-            Courier w = stg.retrieveCourier();
-            map.placeWorker(w, stg.getFlag());
-            w.assignToRoad(r);
-            
-            return true;
         }
 
         return false;

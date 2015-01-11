@@ -140,6 +140,7 @@ public class Farmer extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
+
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 Crop cropToHarvest = findCropToHarvest();
@@ -212,6 +213,7 @@ public class Farmer extends Worker {
 
     @Override
     public void onArrival() throws Exception {
+
         if (state == GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 

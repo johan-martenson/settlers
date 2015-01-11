@@ -154,13 +154,18 @@ public class Utils {
     }
 
     public static void fastForwardUntilWorkersReachTarget(GameMap map, Worker... workers) throws Exception {
+        fastForwardUntilWorkersReachTarget(map, Arrays.asList(workers));
+    }
+
+    public static void fastForwardUntilWorkersReachTarget(GameMap map, List<Worker> workers) throws Exception {
+
         assertNotNull(map);
-        assertFalse(workers.length == 0);
-        
+        assertFalse(workers.isEmpty());
+
         for (Worker c : workers) {
             assertTrue(c.isTraveling());
         }
-            
+
         for (int i = 0; i < 1000; i++) {
             boolean allDone = true;
 
@@ -173,7 +178,7 @@ public class Utils {
             if (allDone) {
                 break;
             }
-            
+
             map.stepTime();
         }
     }
@@ -186,6 +191,7 @@ public class Utils {
         assertTrue(worker.getPlannedPath().contains(target));
 
         for (int i = 0; i < 1000; i++) {
+            
             if (worker.isAt(target)) {
                 break;
             }
@@ -193,6 +199,7 @@ public class Utils {
             map.stepTime();
         }
 
+        assertEquals(worker.getPosition(), target);
         assertTrue(worker.isAt(target));
     }
 
@@ -607,5 +614,19 @@ public class Utils {
         }
 
         assertFalse(map.getBuildings().contains(building));
+    }
+
+    static void waitForFightToStart(GameMap map, Military attacker, Military defender) throws Exception {
+
+        for (int i = 0; i < 1000; i++) {
+            if (attacker.isFighting() && defender.isFighting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(defender.isFighting());
+        assertTrue(attacker.isFighting());
     }
 }

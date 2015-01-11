@@ -24,9 +24,13 @@ public abstract class Worker implements Actor, Piece {
         WALKING_AND_EXACTLY_AT_POINT, 
         WALKING_BETWEEN_POINTS, 
         IDLE_OUTSIDE, 
-        IDLE_INSIDE
+        IDLE_INSIDE,
+        WALKING_HALF_WAY,
+        WALKING_HALFWAY_AND_EXACTLY_AT_POINT, 
+        IDLE_HALF_WAY
     }
     
+    private final static int SPEED_ADJUST = 1;
     private final static Logger log = Logger.getLogger(Worker.class.getName());
     private final Countdown     walkCountdown;
 
@@ -56,34 +60,65 @@ public abstract class Worker implements Actor, Piece {
 
     @Override
     public void stepTime() throws Exception {
+
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
-            position = path.get(0);
-            path.remove(0);
 
-            updateCargoPosition();
-
-            if (position.equals(target)) {
-                state = IDLE_OUTSIDE;
-
-                handleArrival();
-            } else {
-                walkCountdown.countFrom(getSpeed() - 3);
+            /* Start the next part of the road if the worker is not at the target */
+            if (!position.equals(target)) {
+                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
                 
                 state = WALKING_BETWEEN_POINTS;
             }
         } else if (state == WALKING_BETWEEN_POINTS) {
+            walkCountdown.step();
+
             if (walkCountdown.reachedZero()) {
-                
+
                 state = WALKING_AND_EXACTLY_AT_POINT;
+
+                /* Update the worker's position */
+                position = path.get(0);
+                path.remove(0);
+                
+                /* Update the cargo's position */
+                updateCargoPosition();
 
                 /* Call the sub class to let it react */
                 onWalkingAndAtFixedPoint();
-            } else {
-                walkCountdown.step();
+
+                /* Handle the arrival if the worker is at the target */
+                if (position.equals(target)) {
+
+                    /* Set the state to idle and outside */
+                    state = IDLE_OUTSIDE;
+
+                    /* Enter buildings if required and give the sub classes a change to act */
+                    handleArrival();
+                }
+            }
+        } else if (state == States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT) {
+
+            /* Start the next part of the road if the worker is not at the target */
+            if (!position.equals(target)) {
+                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+                
+                state = States.WALKING_HALF_WAY;
+            }
+        } else if (state == States.WALKING_HALF_WAY) {
+
+            walkCountdown.step();
+
+            /* The worker has walked half way */
+            if (getPercentageOfDistanceTraveled() >= 50) {
+                onWalkedHalfWay();
+
+                state = States.IDLE_HALF_WAY;
             }
         } else if (state == IDLE_OUTSIDE) {            
             onIdle();
         } else if (state == IDLE_INSIDE) {
+            onIdle();
+        } else if (state == States.IDLE_HALF_WAY) {
             onIdle();
         }
     }
@@ -189,7 +224,7 @@ public abstract class Worker implements Actor, Piece {
     }
 
     public boolean isExactlyAtPoint() {
-        return state != WALKING_BETWEEN_POINTS;
+        return state != WALKING_BETWEEN_POINTS && state != States.WALKING_HALF_WAY && state != States.IDLE_HALF_WAY;
     }
 
     public Point getLastPoint() {
@@ -205,11 +240,14 @@ public abstract class Worker implements Actor, Piece {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (state != WALKING_BETWEEN_POINTS) {
+        if (state != WALKING_BETWEEN_POINTS  && 
+            state != States.WALKING_HALF_WAY &&
+            state != States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
+            state != States.IDLE_HALF_WAY) {
             return 100;
         }
-    
-        return (int)(((double)(getSpeed() - walkCountdown.getCount() - 2) / (double)getSpeed()) * 100);
+
+        return (int)(((double)(getSpeed() - walkCountdown.getCount()) / (double)getSpeed()) * 100);
     }
 
     public void enterBuilding(Building b) throws Exception {
@@ -243,7 +281,7 @@ public abstract class Worker implements Actor, Piece {
     
     protected void setOffroadTarget(Point p, Point via) {
         boolean wasInside = false;
-        
+
         log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {p, via});
         
         target = p;
@@ -276,7 +314,9 @@ public abstract class Worker implements Actor, Piece {
                     path = map.findWayOffroad(getPosition(), p, null);
                 }
             }
-                
+
+            path.remove(0);
+
             log.log(Level.FINER, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
@@ -296,7 +336,7 @@ public abstract class Worker implements Actor, Piece {
     
     protected void setTarget(Point p, Point via) throws InvalidRouteException {
         log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
-        
+
         target = p;
 
         if (position.equals(p)) {
@@ -319,7 +359,10 @@ public abstract class Worker implements Actor, Piece {
             if (path == null) {
                 throw new InvalidRouteException("No way on existing roads from " + start + " to " + target);
             }
-                
+
+            /* Remove the current point from the path */
+            path.remove(0);
+
             log.log(Level.FINE, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
@@ -376,4 +419,33 @@ public abstract class Worker implements Actor, Piece {
     }
 
     protected void onWalkingAndAtFixedPoint() throws Exception {}
+
+    protected void walkHalfWayOffroadTo(Point point) {
+
+        /* Walk half way to the given target */
+        setOffroadTarget(point);
+
+        state = States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
+    }
+
+    protected void onWalkedHalfWay() {}
+
+    protected void returnToFixedPoint() {
+
+        Point previousTarget = target;
+        Point previousLastPoint = getLastPoint();
+
+        /* Change the previous position to make the worker leave the previous target */
+        position = previousTarget;
+
+        /* Change the target to make the worker walk back */
+        target = previousLastPoint;
+
+        /* Change the planned path */
+        path.clear();
+        path.add(previousLastPoint);
+
+        /* Set the state to be walking between two fixed points */
+        state = States.WALKING_BETWEEN_POINTS;
+    }
 }

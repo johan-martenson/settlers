@@ -24,6 +24,18 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements Actor, EndPoint, Piece {
+    private Military ownDefender;
+    private Military primaryAttacker;
+
+    boolean isDefenseLess() {
+        if (getHostedMilitary() == 0       && 
+            getRemoteDefenders().isEmpty() &&
+            ownDefender == null) {
+            return true;
+        }
+
+        return false;
+    }
 
     enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UNDER_ATTACK
@@ -376,7 +388,23 @@ public class Building implements Actor, EndPoint, Piece {
     public void stepTime() throws Exception {
         log.log(Level.FINE, "Stepping time in building");
         
-        if (underConstruction()) {            
+        if (state == UNDER_ATTACK) {
+
+            /* There is nothing to do if the building has no hosted militaries */
+            if (getHostedMilitary() == 0) {
+                return;
+            }
+
+            /* Send out a defender to the flag if needed */
+            if (isAttackerAtFlag() && ownDefender == null) {
+
+                /* Retrieve a defender locally */
+                ownDefender = retrieveMilitary();
+
+                /* Tell the defender to handle the attacker at the flag */
+                ownDefender.defendBuilding(this);
+            }
+        } else if (underConstruction()) {
             if (countdown.reachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
@@ -764,7 +792,7 @@ public class Building implements Actor, EndPoint, Piece {
         return enablePromotions;
     }
 
-    List<Military> getDefenders() {
+    List<Military> getRemoteDefenders() {
         return defenders;
     }
 
@@ -773,6 +801,11 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     void removeDefender(Military defender) {
+
+        if (defender.equals(ownDefender)) {
+            ownDefender = null;
+        }
+
         defenders.remove(defender);
     }
 
@@ -785,11 +818,6 @@ public class Building implements Actor, EndPoint, Piece {
 
         waitingAttackers.add(attacker);
 
-        /* Retrieve defenders if needed */
-        if (getDefenders().isEmpty()) {
-            retrieveMilitary().defendBuilding(this);
-        }
-
         /* The building is now under attack */
         state = UNDER_ATTACK;
     }
@@ -801,6 +829,10 @@ public class Building implements Actor, EndPoint, Piece {
     void removeAttacker(Military attacker) {
         waitingAttackers.remove(attacker);
         attackers.remove(attacker);
+
+        if (attacker.equals(primaryAttacker)) {
+            primaryAttacker = null;
+        }
 
         if (attackers.isEmpty()) {
             state = OCCUPIED;
@@ -819,5 +851,32 @@ public class Building implements Actor, EndPoint, Piece {
 
     List<Military> getAttackers() {
         return attackers;
+    }
+
+    public boolean isUnderAttack() {
+        return state == UNDER_ATTACK;
+    }
+
+    private boolean isAttackerAtFlag() {
+
+        /* Return false if there is no primary attacker */
+        if (primaryAttacker == null) {
+            return false;
+        }
+
+        /* Return false if the primary attacker is not at the flag yet */
+        if (!primaryAttacker.getPosition().equals(getFlag().getPosition())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    Military getPrimaryAttacker() {
+        return primaryAttacker;
+    }
+
+    void setPrimaryAttacker(Military attacker) {
+        primaryAttacker = attacker;
     }
 }
