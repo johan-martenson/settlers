@@ -27,16 +27,6 @@ public class Building implements Actor, EndPoint, Piece {
     private Military ownDefender;
     private Military primaryAttacker;
 
-    boolean isDefenseLess() {
-        if (getHostedMilitary() == 0       && 
-            getRemoteDefenders().isEmpty() &&
-            ownDefender == null) {
-            return true;
-        }
-
-        return false;
-    }
-
     enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UNDER_ATTACK
     }
@@ -878,5 +868,24 @@ public class Building implements Actor, EndPoint, Piece {
 
     void setPrimaryAttacker(Military attacker) {
         primaryAttacker = attacker;
+    }
+
+    boolean isDefenseLess() {
+        if (getHostedMilitary() == 0       && 
+            getRemoteDefenders().isEmpty() &&
+            ownDefender == null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    void capture(Player p) {
+
+        /* Change the ownership of the building */
+        setPlayer(p);
+
+        /* Reset the number of promised militaries */
+        promisedMilitary.clear();
     }
 }

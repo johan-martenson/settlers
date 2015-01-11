@@ -3,6 +3,7 @@ package org.appland.settlers.test;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -628,5 +629,23 @@ public class Utils {
 
         assertTrue(defender.isFighting());
         assertTrue(attacker.isFighting());
+    }
+
+    static Military getMainAttacker(GameMap map, Player player0, Building building, Collection<Military> attackers) throws Exception {
+        Military firstAttacker = null;
+
+        for (Military m : attackers) {
+            if (m.getTarget().equals(building.getFlag().getPosition())) {
+                firstAttacker = m;
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(firstAttacker);
+
+        return firstAttacker;
     }
 }

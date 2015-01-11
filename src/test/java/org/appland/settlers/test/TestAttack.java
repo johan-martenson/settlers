@@ -3102,6 +3102,263 @@ public class TestAttack {
         }
     }
 
+    @Test
+    public void testMilitaryEnteringBuildingLeavesIfItIsCaptured() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(49, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place guard house for player 0 */
+        Point point2 = new Point(21, 5);
+        Building guardHouse = new GuardHouse(player0);
+        map.placeBuilding(guardHouse, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(31, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Place flag */
+        Point point4 = new Point(61, 5);
+        Flag flag0 = map.placeFlag(player1, point4);
+
+        /* Connect the flag with the barracks */
+        Road road0 = map.placeAutoSelectedRoad(player1, flag0, barracks1.getFlag());
+
+        /* Finish construction */
+        Utils.constructHouse(guardHouse, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 0's guard house */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse, map);
+
+        /* Populate player 1's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1, map);
+
+        /* Empty both headquarters for militaries */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0, map);
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Order an attack */
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.waitForMilitaryOutsideBuilding(player0, map);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attackers to walk to the attacked building */
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+
+        /* Wait for defender to leave the attacked building */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
+
+        assertNotNull(defender);
+
+        /* Wait for the fight to be over */
+        Utils.waitForWorkerToDisappear(defender, map);
+
+        /* Wait for the attacker to go back to the flag */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        /* Let the attacker get started walking to the barracks*/
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+
+        map.stepTime();
+        map.stepTime();
+        map.stepTime();
+
+        /* Send a reinforcement to the attacked building */
+        Military reinforcement = new Military(player1, PRIVATE_RANK, map);
+
+        map.placeWorker(reinforcement, barracks1.getFlag());
+
+        reinforcement.setTargetBuilding(barracks1);
+
+        /* Wait for the attacker to reach the building */
+        assertFalse(attacker.getPosition().equals(barracks1.getPosition()));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertEquals(barracks1.getPlayer(), player0);
+        assertEquals(barracks1.getHostedMilitary(), 1);
+        assertTrue(attacker.isInsideBuilding());
+
+        /* Verify that reinforcement reaches the barracks and leaves */
+        assertFalse(reinforcement.getPosition().equals(barracks1.getPosition()));
+        assertEquals(reinforcement.getTarget(), barracks1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, reinforcement, barracks1.getPosition());
+
+        assertEquals(reinforcement.getTarget(), headquarter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, reinforcement, headquarter1.getPosition());
+
+        assertEquals(reinforcement.getPosition(), headquarter1.getPosition());
+        assertTrue(reinforcement.isInsideBuilding());
+    }
+
+    @Test
+    public void testAttackersEnterDespitePromisedReinforcement() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(49, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place guard house for player 0 */
+        Point point2 = new Point(21, 5);
+        Building guardHouse0 = new GuardHouse(player0);
+        map.placeBuilding(guardHouse0, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(31, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+
+        /* Finish construction */
+        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 0's guard house */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse0, map);
+
+        /* Populate player 1's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1, map);
+
+        /* Empty both headquarters for militaries */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0, map);
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Order an attack */
+        player0.attack(barracks1, 2);
+
+        /* Wait for two militaries to leave the guard house */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 2, player0, map);
+
+        assertNotNull(attackers);
+        assertEquals(attackers.size(), 2);
+
+        /* Get the first attacker */
+        Military firstAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
+        
+        /* Wait for the first attacker to reach the attacked building */
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getFlag().getPosition());
+
+        /* Verify that one attacker waits until the other attacker wins 
+         the fight before entering the building */
+        Military defender = Utils.waitForMilitaryOutsideBuilding(player1, map);
+
+        /* Get the waiting attacker */
+        Military waitingAttacker = null;
+        if (attackers.get(0).equals(firstAttacker)) {
+            waitingAttacker = attackers.get(1);
+        } else {
+            waitingAttacker = attackers.get(0);
+        }
+
+        /* Wait for the fight to start */
+        Utils.waitForFightToStart(map, firstAttacker, defender);
+
+        /* Send two reinforcements from far away */
+        Military reinforcement1 = new Military(player1, GENERAL_RANK, map);
+        Military reinforcement2 = new Military(player1, GENERAL_RANK, map);
+
+        map.placeWorker(reinforcement1, headquarter1);
+        map.placeWorker(reinforcement2, headquarter1);
+
+        reinforcement1.setTargetBuilding(barracks1);
+        reinforcement2.setTargetBuilding(barracks1);
+
+        barracks1.promiseMilitary(reinforcement1);
+        barracks1.promiseMilitary(reinforcement2);
+
+        /* Make sure there are two attackers */
+        assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map).size(), 2);
+
+        /* Wait for the fight to end */
+        Utils.waitForWorkerToDisappear(defender, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+
+        /* Wait for the fighting attacker to go back to the flag */
+        assertEquals(firstAttacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, firstAttacker.getTarget());
+
+        /* Wait for the active attacker enters the building */
+        assertEquals(firstAttacker.getTarget(), barracks1.getPosition());
+        assertEquals(firstAttacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getHostedMilitary(), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getPosition());
+
+        assertTrue(firstAttacker.getPosition().equals(barracks1.getPosition()));
+        assertTrue(firstAttacker.isInsideBuilding());
+        assertEquals(barracks1.getHostedMilitary(), 1);
+
+        /* Verify that the waiting attacker enters the building */
+        map.stepTime();
+
+        assertEquals(waitingAttacker.getTarget(), barracks1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, waitingAttacker, barracks1.getPosition());
+
+        assertEquals(waitingAttacker.getPosition(), barracks1.getPosition());
+    }
     // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses
@@ -3113,4 +3370,5 @@ public class TestAttack {
     //    go back to their original buildings
     //  - Test that promised militaries walking to the building return home when
     //    it is captured
+
 }

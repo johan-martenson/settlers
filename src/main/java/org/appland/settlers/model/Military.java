@@ -250,8 +250,8 @@ public class Military extends Worker {
         } else if (state == WALKING_TO_TAKE_OVER_BUILDING) {
             if (buildingToAttack.ready()) {
                 
-                /* Change ownership of the building */
-                buildingToAttack.setPlayer(getPlayer());
+                /* Capture the building */
+                buildingToAttack.capture(getPlayer());
 
                 /* Enter the building */
                 enterBuilding(buildingToAttack);
