@@ -447,21 +447,30 @@ public class GameMap {
 
         for (Flag f : flags) {
             Player player = f.getPlayer();
-            
+
             if (!player.isWithinBorder(f.getPosition())) {
                 flagsToRemove.add(f);
             }
         }
 
+        /* Remove the flags */
         flags.removeAll(flagsToRemove);
-        
+
         /* Remove any roads now outside of the borders */
-        List<Road> roadsToRemove = new LinkedList<>();
-        
+        Set<Road> roadsToRemove = new HashSet<>();
+
         for (Road r : roads) {
+
+            /* Only remove each road once */
+            if (roadsToRemove.contains(r)) {
+                continue;
+            }
+
             Player player = r.getPlayer();
 
             for (Point p : r.getWayPoints()) {
+
+                /* Filter points within the border */
                 if (player.isWithinBorder(p)) {
                     continue;
                 }
@@ -469,7 +478,7 @@ public class GameMap {
                 /* Keep the driveways for military buildings */
                 if (r.getWayPoints().size() == 2) {
 
-                    /* Get building */
+                    /* Check if the connected building is military */
                     if ((isBuildingAtPoint(r.getStart()) && 
                          getBuildingAtPoint(r.getStart()).isMilitaryBuilding()) ||
                         (isBuildingAtPoint(r.getEnd())   && 
@@ -478,13 +487,15 @@ public class GameMap {
                     }
                 }
 
-                r.remove();
-
+                /* Remember to remove the road */
                 roadsToRemove.add(r);
             }
         }
 
-        roads.removeAll(roadsToRemove);
+        /* Remove the roads */
+        for (Road road : roadsToRemove) {
+            removeRoad(road);
+        }
     }
     
     private Road placeDriveWay(Building building) throws Exception {

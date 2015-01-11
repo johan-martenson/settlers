@@ -7,6 +7,7 @@ package org.appland.settlers.test;
 
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -34,6 +36,7 @@ import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -3268,11 +3271,12 @@ public class TestAttack {
         Utils.constructHouse(guardHouse0, map);
         Utils.constructHouse(barracks1, map);
 
-        /* Populate player 0's guard house */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse0, map);
-
         /* Populate player 1's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1, map);
+
+        
+        /* Populate player 0's guard house */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse0, map);
 
         /* Empty both headquarters for militaries */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0, map);
@@ -3302,6 +3306,9 @@ public class TestAttack {
          the fight before entering the building */
         Military defender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
+        assertNotNull(defender);
+        assertTrue(map.getWorkers().contains(defender));
+
         /* Get the waiting attacker */
         Military waitingAttacker = null;
         if (attackers.get(0).equals(firstAttacker)) {
@@ -3317,12 +3324,12 @@ public class TestAttack {
         Military reinforcement1 = new Military(player1, GENERAL_RANK, map);
         Military reinforcement2 = new Military(player1, GENERAL_RANK, map);
 
-        map.placeWorker(reinforcement1, headquarter1);
-        map.placeWorker(reinforcement2, headquarter1);
+        map.placeWorker(reinforcement1, headquarter1.getFlag());
+        map.placeWorker(reinforcement2, headquarter1.getFlag());
 
         reinforcement1.setTargetBuilding(barracks1);
         reinforcement2.setTargetBuilding(barracks1);
-
+        
         barracks1.promiseMilitary(reinforcement1);
         barracks1.promiseMilitary(reinforcement2);
 
@@ -3359,7 +3366,90 @@ public class TestAttack {
 
         assertEquals(waitingAttacker.getPosition(), barracks1.getPosition());
     }
-    // Test:
+
+
+    @Test
+    public void testRoadRemovedInAttackCannotBeUsedToFindWay() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+        Player player2 = new Player("Player 2", RED);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+        players.add(player2);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place player 2's headquarter */
+        Building headquarter2 = new Headquarter(player2);
+        Point point10 = new Point(70, 70);
+        map.placeBuilding(headquarter2, point10);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0, map);
+
+        /* Connect the fortress with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Occupy the road */
+        Utils.occupyRoad(road0, map);
+
+        /* Place barracks close to the new border */
+        Point point4 = new Point(34, 18);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point4);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+
+        /* Connect the barracks with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
+
+        /* Occupy the road */
+        Utils.occupyRoad(road1, map);
+
+        /* Capture the barracks for player 0 */
+        player0.attack(barracks0, 2);
+
+        /* Wait for player 0 to take over the barracks */
+        for (int i = 0; i < 2000; i++) {
+
+            if (barracks0.getPlayer().equals(player0) && barracks0.getHostedMilitary() > 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        List<Point> path = map.findWayWithExistingRoads(headquarter1.getPosition(), barracks0.getFlag().getPosition());
+
+        assertNull(path);
+    }
+// Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses
     //    (what happens if this is before the fight is done?)    

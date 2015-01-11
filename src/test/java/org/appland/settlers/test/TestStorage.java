@@ -12,13 +12,17 @@ import static java.awt.Color.RED;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -644,5 +648,124 @@ public class TestStorage {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testRoadCloseToOpponentGetsPopulatedFromCorrectPlayer() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+        Player player2 = new Player("Player 2", RED);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+        players.add(player2);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place player 2's headquarter */
+        Building headquarter2 = new Headquarter(player2);
+        Point point10 = new Point(70, 70);
+        map.placeBuilding(headquarter2, point10);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0, map);
+
+        /* Connect the fortress with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Occupy the road */
+        Utils.occupyRoad(road0, map);
+
+        /* Place barracks close to the new border */
+        Point point4 = new Point(34, 18);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point4);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+
+        /* Connect the barracks with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player1, headquarter1.getFlag(), barracks0.getFlag());
+
+        /* Occupy the road */
+        Utils.occupyRoad(road1, map);
+
+        /* Capture the barracks for player 0 */
+        player0.attack(barracks0, 2);
+
+        /* Wait for player 0 to take over the barracks */
+        for (int i = 0; i < 2000; i++) {
+
+            if (barracks0.getPlayer().equals(player0) && barracks0.getHostedMilitary() > 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getPlayer(), player0);
+        assertTrue(barracks0.getHostedMilitary() > 0);
+
+        /* Connect the captured barracks with the headquarter */
+        Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());
+
+        /* Occupy the road */
+        Utils.occupyRoad(road4, map);
+
+        /* Place flag */
+        Point point5 = new Point(32, 18);
+        Flag flag0 = map.placeFlag(player0, point5);
+
+        /* Place road */
+        Road road3 = map.placeAutoSelectedRoad(player0, flag0, barracks0.getFlag());
+
+        /* Verify that player 1's headquarter is closer to the road */
+        for (Point point : road3.getWayPoints()) {
+
+            assertTrue(point.distance(headquarter1.getPosition()) < point.distance(headquarter0.getPosition()));
+        }
+
+        /* Verify that the barracks gets populated from the right headquarter only */
+        int player0Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0, map).size();
+        int player1Couriers = Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player1, map).size();
+
+        for (int i = 0; i < 1000; i++) {
+            Courier courier = road3.getCourier();
+
+            if (courier != null && road3.getWayPoints().contains(courier.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(road3.getCourier());
+        assertTrue(road3.getWayPoints().contains(road3.getCourier().getPosition()));
+        assertEquals(road3.getCourier().getPlayer(), player0);
+        assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0, map).size(), player0Couriers + 1);
     }
 }
