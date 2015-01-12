@@ -103,6 +103,18 @@ public class Terrain {
     protected boolean isOnGrass(Point p) throws Exception {
         return isSurroundedBy(p, GRASS);
     }
+
+    private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) throws Exception {
+        List<Tile> tiles = getSurroundingTiles(point);
+
+        for (Tile t : tiles) {
+            if (t.getVegetationType() == vegetation) {
+                return true;
+            }
+        }
+    
+        return false;        
+    }
     
     private boolean isSurroundedBy(Point p, Vegetation vegetation) throws Exception {
         boolean    isSurrounded = true;
@@ -163,6 +175,10 @@ public class Terrain {
 
     private boolean isValidPoint(Point p1) {
         return (p1.x + p1.y) % 2 == 0;
+    }
+
+    boolean isNextToWater(Point point) throws Exception {
+        return isAnyAdjacentTile(point, WATER);
     }
 
     public static class TileKey {

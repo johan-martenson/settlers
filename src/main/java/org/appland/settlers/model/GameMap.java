@@ -1626,7 +1626,7 @@ public class GameMap {
             return result;
         }
 
-        if (terrain.isInWater(point)) {
+        if (terrain.isNextToWater(point)) {
             return result;
         }
 
@@ -1723,6 +1723,21 @@ public class GameMap {
             if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
                 return result;
             }
+        }
+
+        /* A large building needs a larger free area on grass */
+        boolean wideAreaClear = true;
+
+        for (Point p : point.getAdjacentPoints()) {
+            if (!terrain.isOnGrass(p)) {
+                wideAreaClear = false;
+
+                break;
+            }
+        }
+
+        if (!terrain.isOnGrass(point) || !wideAreaClear) {
+            return result;
         }
 
         result = LARGE;

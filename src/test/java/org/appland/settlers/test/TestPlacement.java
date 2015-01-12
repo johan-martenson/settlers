@@ -6,12 +6,15 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
@@ -27,6 +30,7 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
@@ -36,6 +40,7 @@ import org.appland.settlers.model.Woodcutter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -1583,6 +1588,83 @@ public class TestPlacement {
                 assertFalse(map.isBuildingAtPoint(borderPoint));
                 assertNull(map.getBuildingAtPoint(borderPoint));
             }
+        }
+    }
+
+    @Test
+    public void testPlaceHouseOnEachAvailableSpotWithLakeInMap() throws Exception {
+
+        /* Starting new game */
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place a water tile */
+        Point point0 = new Point(10, 4);
+        Point point1 = new Point(8, 4);
+        Point point2 = new Point(9, 5);
+        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+
+        /* Place a water tile */
+        Point point3 = new Point(11, 5);
+        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
+
+        /* Place a water tile */
+        Point point4 = new Point(12, 4);
+        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
+
+        /* Place a water tile */
+        Point point5 = new Point(11, 3);
+        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
+
+        /* Place a water tile */
+        Point point6 = new Point(9, 3);
+        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
+
+        /* Place a water tile */
+        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+
+        /* Placing headquarter for player0 */
+        Point point46 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
+
+        /* Verify that it's possible to build on all available house sites */
+        for (Entry<Point, Size> pair : map.getAvailableHousePoints(player0).entrySet()) {
+            Building building = null;
+
+            System.out.println("POINT " + pair.getKey() + " size " + pair.getValue());
+            
+            /* Filter points that are not available */
+            if (pair.getValue() == null) {
+                continue;
+            }
+
+            /* Build a house with the right size */
+            if (pair.getValue() == SMALL) {
+                building = map.placeBuilding(new Woodcutter(player0), pair.getKey());
+            } else if (pair.getValue() == MEDIUM) {
+                building = map.placeBuilding(new Sawmill(player0), pair.getKey());
+            } else if (pair.getValue() == LARGE) {
+                building = map.placeBuilding(new Farm(player0), pair.getKey());
+            }
+
+            assertNotNull(building);
+            assertTrue(map.isBuildingAtPoint(pair.getKey()));
+            assertEquals(map.getBuildingAtPoint(pair.getKey()), building);
+
+            /* Tear down the house */
+            map.removeFlag(building.getFlag());
+
+            Utils.waitForBuildingToDisappear(map, building);
+
+            assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }
     }
 }
