@@ -27,10 +27,14 @@ RE-FACTOR
 
 *  Figure out how to make Size::contains(Size, Size) non-static
 
+*  Fix placeBuilding(...) to use isAvailableHousePoint(...) 
+
 
 
 TEST
 ====
+
+*  Test that woodcutter worker (and others) can't go through buildings
 
 *  Test GameMap::getRoadsFromFlag(Flag)
 
