@@ -1199,6 +1199,37 @@ public class TestGeologist {
         assertEquals(geologist.getPlayer(), player0);
     }
 
+    @Test
+    public void testCannotCallGeologistFlagNotConnectedToStorage() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+        
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Verify that no geologist is sent from the headquarter */
+        for (int i = 0; i < 200; i++) {
+
+            assertTrue(Utils.findWorkersOfTypeOutsideForPlayer(Geologist.class, player0, map).isEmpty());
+
+            map.stepTime();
+        }
+    }
+    
     // TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
     // TODO: test that geologist goes via the flag when it returns to the storage
 }

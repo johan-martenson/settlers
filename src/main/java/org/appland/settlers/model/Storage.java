@@ -137,26 +137,39 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean assignGeologists() throws Exception {
+
+        /* Leave if there are no scouts in this storage */
+        if (!hasAtLeastOne(GEOLOGIST)) {
+            return false;
+        }
+
+        /* Go through the flags and look for flags waiting for geologists */
         for (Flag f : map.getFlags()) {
             if (f.needsGeologist()) {
+
+                /* Don't send out scout if there is no way to the flag */
+                List<Point> path = map.findWayWithExistingRoads(getPosition(), f.getPosition());
+
+                if (path == null) {
+                    continue;
+                }
+
+                /* Don't send a geologist if there is a closer storage */
                 if (!isClosestStorage(this)) {
                     continue;
                 }
 
-                if (!hasAtLeastOne(GEOLOGIST)) {
-                    continue;
-                }
-                
+                /* Send a geologist to the flag */
                 Geologist geologist = (Geologist)retrieveWorker(GEOLOGIST);
 
                 map.placeWorker(geologist, this);
                 geologist.setTarget(f.getPosition());
                 f.geologistSent(geologist);
-                
+
                 return true;
             }
         }
-    
+
         return false;
     }
 
@@ -177,7 +190,7 @@ public class Storage extends Building implements Actor {
                 if (path == null) {
                     continue;
                 }
-
+ 
                 /* Don't send out a scout if there is a closer storage */
                 if (!isClosestStorage(this)) {
                     continue;
