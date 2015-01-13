@@ -2146,27 +2146,13 @@ public class TestAttack {
         Point waitingPosition = waitingAttacker.getPosition();
 
         /* Wait for the fight to start */
-        for (int i = 0; i < 1000; i++) {
-            if (firstAttacker.isFighting() && defender.isFighting()) {
-                break;
-            }
-
-            map.stepTime();
-        }
+        Utils.waitForFightToStart(map, firstAttacker, defender);
 
         /* Make sure there are only two attackers */
         assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map).size(), 2);
 
         /* Wait for the fight to end and verify that the waiting attacker doesn't move */
-        for (int i = 0; i < 1000; i++) {
-            if (!map.getWorkers().contains(defender)) {
-                break;
-            }
-
-            assertEquals(waitingAttacker.getPosition(), waitingPosition);
-
-            map.stepTime();
-        }
+        Utils.waitForWorkerToDisappear(defender, map);
 
         assertFalse(map.getWorkers().contains(defender));
 
@@ -2373,13 +2359,7 @@ public class TestAttack {
         assertEquals(attackers.size(), 3);
 
         /* Get the first attacker */
-        Military firstAttacker = null;
-
-        for (Military m : attackers) {
-            if (m.getTarget().equals(barracks1.getFlag().getPosition())) {
-                firstAttacker = m;
-            }
-        }
+        Military firstAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
 
         assertNotNull(firstAttacker);
 
@@ -2520,15 +2500,7 @@ public class TestAttack {
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0, map);
 
         /* Wait for the first attacker to reach its position */
-        Military firstAttacker = null;
-
-        for (Military m : attackers) {
-            if (m.getTarget().equals(barracks1.getFlag().getPosition())) {
-                firstAttacker = m;
-
-                break;
-            }
-        }
+        Military firstAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
 
         assertNotNull(firstAttacker);
 
@@ -2670,13 +2642,7 @@ public class TestAttack {
         List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0, map);
 
         /* Get the first attacker */
-        Military firstAttacker = null;
-
-        for (Military m : attackers) {
-            if (m.getTarget().equals(barracks1.getFlag().getPosition())) {
-                firstAttacker = m;
-            }
-        }
+        Military firstAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
 
         assertNotNull(firstAttacker);
 
@@ -3135,17 +3101,7 @@ public class TestAttack {
         assertEquals(attackers.size(), 8);
 
         /* Get the first attacker to fight */
-        Military fightingAttacker = null;
-
-        for (Military m : attackers) {
-            if (m.getTarget().equals(barracks1.getFlag().getPosition())) {
-                fightingAttacker = m;
-
-                break;
-            }
-
-            map.stepTime();
-        }
+        Military fightingAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
 
         assertNotNull(fightingAttacker);
 
