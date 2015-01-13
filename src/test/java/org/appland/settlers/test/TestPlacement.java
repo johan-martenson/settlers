@@ -1639,8 +1639,6 @@ public class TestPlacement {
         for (Entry<Point, Size> pair : map.getAvailableHousePoints(player0).entrySet()) {
             Building building = null;
 
-            System.out.println("POINT " + pair.getKey() + " size " + pair.getValue());
-            
             /* Filter points that are not available */
             if (pair.getValue() == null) {
                 continue;

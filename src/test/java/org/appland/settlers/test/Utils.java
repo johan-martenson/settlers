@@ -520,6 +520,9 @@ public class Utils {
         Military military = new Military(player, rank, map);
 
         map.placeWorker(military, building);
+
+        building.promiseMilitary(military);
+
         building.deployMilitary(military);
         military.enterBuilding(building);
 

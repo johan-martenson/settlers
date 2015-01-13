@@ -89,4 +89,11 @@ public class Headquarter extends Storage {
     public void tearDown() throws Exception {
         throw new Exception("Can not tear down headquarter");
     }
+
+    @Override
+    void capture(Player player) throws Exception {
+
+        /* Destroy the headquarter if it's captured */
+        super.tearDown();
+    }
 }

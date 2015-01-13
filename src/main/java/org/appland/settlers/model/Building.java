@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 import static org.appland.settlers.model.Building.State.BURNING;
 import static org.appland.settlers.model.Building.State.DESTROYED;
 import static org.appland.settlers.model.Building.State.OCCUPIED;
-import static org.appland.settlers.model.Building.State.UNDER_ATTACK;
 import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
 import static org.appland.settlers.model.Building.State.UNOCCUPIED;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
@@ -28,7 +27,7 @@ public class Building implements Actor, EndPoint, Piece {
     private Military primaryAttacker;
 
     enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UNDER_ATTACK
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
     }
 
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
@@ -378,7 +377,7 @@ public class Building implements Actor, EndPoint, Piece {
     public void stepTime() throws Exception {
         log.log(Level.FINE, "Stepping time in building");
         
-        if (state == UNDER_ATTACK) {
+        if (isUnderAttack()) {
 
             /* There is nothing to do if the building has no hosted militaries */
             if (getHostedMilitary() == 0) {
@@ -436,13 +435,18 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public void tearDown() throws Exception {
+
+        /* Change building state to burning */
         state = BURNING;
+
+        /* Start countdown for burning */
         countdown.countFrom(TIME_TO_BURN_DOWN);
-        
+
+        /* Update the border if this was a military building */
         if (isMilitaryBuilding()) {
             map.updateBorder();
         }
-    
+
         /* Send home the worker */
         if (worker != null) {
             worker.returnToStorage();
@@ -583,7 +587,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean ready() {
-        return state == UNOCCUPIED || state == OCCUPIED || state == UNDER_ATTACK;
+        return state == UNOCCUPIED || state == OCCUPIED;
     }
 
     public boolean burningDown() {
@@ -807,9 +811,6 @@ public class Building implements Actor, EndPoint, Piece {
         }
 
         waitingAttackers.add(attacker);
-
-        /* The building is now under attack */
-        state = UNDER_ATTACK;
     }
 
     void removeWaitingAttacker(Military attacker) {
@@ -822,12 +823,6 @@ public class Building implements Actor, EndPoint, Piece {
 
         if (attacker.equals(primaryAttacker)) {
             primaryAttacker = null;
-        }
-
-        if (attackers.isEmpty()) {
-            state = OCCUPIED;
-        } else {
-            state = UNDER_ATTACK;
         }
     }
 
@@ -844,7 +839,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean isUnderAttack() {
-        return state == UNDER_ATTACK;
+        return !attackers.isEmpty();
     }
 
     private boolean isAttackerAtFlag() {
@@ -880,7 +875,7 @@ public class Building implements Actor, EndPoint, Piece {
         return false;
     }
 
-    void capture(Player p) {
+    void capture(Player p) throws Exception {
 
         /* Change the ownership of the building */
         setPlayer(p);

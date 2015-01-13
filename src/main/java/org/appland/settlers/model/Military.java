@@ -108,6 +108,7 @@ public class Military extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
+
         if (state == DEFENDING || state == ATTACKING) {
 
             /* Hit the opponent if the military is involved in a fight */
@@ -115,6 +116,7 @@ public class Military extends Worker {
         } else if (state == WAITING_FOR_DEFENDING_OPPONENT) {
 
             if (buildingToAttack.getPlayer().equals(getPlayer())) {
+
                 if (buildingToAttack.needsMilitaryManning()) {
 
                     /* Enter the building if it has already been taken over and 
@@ -124,21 +126,17 @@ public class Military extends Worker {
                     state = WALKING_TO_TAKE_OVER_BUILDING;
 
                     setOffroadTarget(buildingToAttack.getPosition(), buildingToAttack.getFlag().getPosition());
-                } else if (getHome().needsMilitaryManning()) {
-
-                    /* Return home if the building is captured and doesn't need
-                       an additional military */
-                    getHome().promiseMilitary(this);
-
-                    state = WALKING_HOME_AFTER_FIGHT;
-
-                    returnHomeOffroad();
                 } else {
 
-                    /* Return to storage if this military is not needed in the 
-                       captured building nor in the building it came from */
-                    returnToStorage();
+                    /* Return home or to storage */
+                    returnAfterAttackIsOver();
                 }
+
+            /* Leave if the building is destroyed */
+            } else if (!buildingToAttack.ready()) {
+
+                /* Return home or to storage */
+                returnAfterAttackIsOver();
 
             /* Try to take the place as primary attacker */
             } else if (buildingToAttack.getPrimaryAttacker() == null) {
@@ -151,15 +149,14 @@ public class Military extends Worker {
 
                 setOffroadTarget(buildingToAttack.getFlag().getPosition());
             }
+
         } else if (state == STANDBY_WAITING_DEFEND) {
 
             /* Go home if there are no more attackers */
             if (defendedBuilding.getAttackers().isEmpty()) {
 
-                /* Return home */
-                state = WALKING_HOME_AFTER_FIGHT;
-
-                returnHomeOffroad();
+                /* Return home or to storage*/
+                returnAfterAttackIsOver();
 
             /* Look for an attacker at the flag if this is the militaries own building */
             } else if (getHome().equals(defendedBuilding)) {
@@ -229,15 +226,27 @@ public class Military extends Worker {
             state = IN_STORAGE;
         } else if (state == WALKING_TO_ATTACK) {
 
-            /* Take over the building directly if it can not protect itself */
-            if (buildingToAttack.isDefenseLess()) {
+            /* Main attacker */
+            if (getPosition().equals(buildingToAttack.getFlag().getPosition())) {
 
-                /* Walk to capture the building */
-                state = WALKING_TO_TAKE_OVER_BUILDING;
-                
-                setOffroadTarget(buildingToAttack.getPosition(), buildingToAttack.getFlag().getPosition());
+                /* Take over the building directly if it can not protect itself */
+                if (buildingToAttack.isDefenseLess()) {
 
-            /* Notify the building about the attacker and start waiting for an opponent */
+                    /* Walk to capture the building */
+                    state = WALKING_TO_TAKE_OVER_BUILDING;
+
+                    setOffroadTarget(buildingToAttack.getPosition(), buildingToAttack.getFlag().getPosition());
+
+                /* Notify the building about the attacker and start waiting for an opponent */
+                } else {
+
+                    /* Register as an attacker and start waiting for an opponent */
+                    buildingToAttack.registerAttacker(this);
+
+                    state = WAITING_FOR_DEFENDING_OPPONENT;
+                }
+
+            /* Not main attacker */
             } else {
 
                 /* Register as an attacker and start waiting for an opponent */
@@ -248,26 +257,36 @@ public class Military extends Worker {
 
         /* Capture the building */
         } else if (state == WALKING_TO_TAKE_OVER_BUILDING) {
+
             if (buildingToAttack.ready()) {
-                
+
                 /* Capture the building */
                 buildingToAttack.capture(getPlayer());
 
-                /* Enter the building */
-                enterBuilding(buildingToAttack);
+                /* Return home if it's a headquarter */
+                if (buildingToAttack instanceof Headquarter) {
 
-                buildingToAttack.deployMilitary(this);
+                    /* Can't occupy headquarter so return home or to storage */
+                    returnAfterAttackIsOver();
 
-                /* Extend the border */
-                map.updateBorder();
+                } else {
 
-                state = DEPLOYED;
+                    /* Enter the building */
+                    enterBuilding(buildingToAttack);
+
+                    buildingToAttack.deployMilitary(this);
+
+                    /* Extend the border */
+                    map.updateBorder();
+
+                    state = DEPLOYED;
+                }
 
             /* Return home if the building has been destroyed */
             } else {
-                state = WALKING_HOME_AFTER_FIGHT;
 
-                returnHomeOffroad();
+                /* Return home or to storage */
+                returnAfterAttackIsOver();
             }
         } else if (state == WALKING_TO_FIGHT_TO_DEFEND) {
 
@@ -305,18 +324,14 @@ public class Military extends Worker {
             } else {
 
                 /* Return home if the other player destroyed the building */
-                state = WALKING_HOME_AFTER_FIGHT;
-
-                returnHomeOffroad();
+                returnAfterAttackIsOver();
             }
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE) {
 
             if (defendedBuilding.getAttackers().isEmpty()) {
                 
-                /* Go home if there are no more attackers */
-                state = WALKING_HOME_AFTER_FIGHT;
-
-                returnHomeOffroad();
+                /* Go home or to storage if there are no more attackers */
+                returnAfterAttackIsOver();
             } else if (getHome().equals(defendedBuilding)) {
 
                 /* Stay by the flag if the military is defending its own 
@@ -590,5 +605,27 @@ public class Military extends Worker {
         /* A defender has decided to fight this attacker so wait for it instead
            of looking for a new fight */
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
+    }
+
+    private void returnAfterAttackIsOver() throws Exception {
+
+        /* Return home if there is a need for a military at home */
+        if (getHome().needsMilitaryManning()) {
+
+            /* Promise to return home */
+            getHome().promiseMilitary(this);
+
+            /* Change state to walking home */
+            state = WALKING_HOME_AFTER_FIGHT;
+
+            /* Walk home */
+            returnHomeOffroad();
+        } else {
+
+            /* Go to the storage if there is no space in the home */
+            state = RETURNING_TO_STORAGE;
+
+            returnToStorage();
+        }
     }
 }

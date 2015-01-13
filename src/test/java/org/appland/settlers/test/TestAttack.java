@@ -19,7 +19,6 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -1657,7 +1656,7 @@ public class TestAttack {
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         /* Wait for the attacker to win the fight and verify that no additional 
-           defender goes out from the barracks*/
+         defender goes out from the barracks*/
         for (int i = 0; i < 1000; i++) {
 
             if (!map.getWorkers().contains(defender)) {
@@ -2207,6 +2206,107 @@ public class TestAttack {
 
     @Test
     public void testAttackersGoHomeAfterVictoryIfTheyDontFitInAttackedBuilding() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(49, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place guard house for player 0 */
+        Point point2 = new Point(21, 5);
+        Building watchTower0 = new WatchTower(player0);
+        map.placeBuilding(watchTower0, point2);
+
+        /* Finish construction */
+        Utils.constructHouse(watchTower0, map);
+
+        /* Populate player 0's watch tower */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 4, watchTower0, map);
+
+        /* Empty both headquarters for militaries */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0, map);
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Verify that the attackers-to-be are in the watchtower */
+        assertEquals(watchTower0.getHostedMilitary(), 4);
+        assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map).size(), 0);
+
+        /* Order an attack */
+        player0.attack(headquarter1, 3);
+
+        /* Wait for three militaries to leave the watch tower */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 3, player0, map);
+
+        assertNotNull(attackers);
+        assertEquals(attackers.size(), 3);
+
+        /* Add reinforcements to the watch tower */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 4, watchTower0, map);
+
+        /* Verify that there are five militaries in the watch tower */
+        assertEquals(watchTower0.getHostedMilitary(), 5);
+
+        /* Get the first attacker */
+        Military firstAttacker = Utils.getMainAttacker(map, player0, headquarter1, attackers);
+
+        /* Wait for the first attacker to reach its position */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, headquarter1.getFlag().getPosition());
+
+        /* Wait for the attacker to go to the headquarter */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, headquarter1.getPosition());
+
+        /* Give the attackers time to detect that the headquarter is detroyed */
+        map.stepTime();
+        map.stepTime();
+        map.stepTime();
+        map.stepTime();
+        map.stepTime();
+
+        /* Verify that one attacker goes back to the watch tower and the others go to the headquarter */
+        int attackersToWatchTower = 0;
+        int attackersToHeadquarter = 0;
+
+        for (Military attacker : attackers) {
+
+            if (attacker.getTarget().equals(watchTower0.getPosition())) {
+                attackersToWatchTower++;
+            } else if (attacker.getTarget().equals(headquarter0.getPosition())) {
+                attackersToHeadquarter++;
+            }
+        }
+
+        assertEquals(attackersToWatchTower, 1);
+        assertEquals(attackersToHeadquarter, 2);
+    }
+
+    @Test
+    public void testAttackersGoHomeOrToStorageAfterCapturingHeadquarter() throws Exception {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -3274,7 +3374,6 @@ public class TestAttack {
         /* Populate player 1's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1, map);
 
-        
         /* Populate player 0's guard house */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 3, guardHouse0, map);
 
@@ -3298,7 +3397,7 @@ public class TestAttack {
 
         /* Get the first attacker */
         Military firstAttacker = Utils.getMainAttacker(map, player0, barracks1, attackers);
-        
+
         /* Wait for the first attacker to reach the attacked building */
         Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getFlag().getPosition());
 
@@ -3329,7 +3428,7 @@ public class TestAttack {
 
         reinforcement1.setTargetBuilding(barracks1);
         reinforcement2.setTargetBuilding(barracks1);
-        
+
         barracks1.promiseMilitary(reinforcement1);
         barracks1.promiseMilitary(reinforcement2);
 
@@ -3366,7 +3465,6 @@ public class TestAttack {
 
         assertEquals(waitingAttacker.getPosition(), barracks1.getPosition());
     }
-
 
     @Test
     public void testRoadRemovedInAttackCannotBeUsedToFindWay() throws Exception {
@@ -3448,6 +3546,174 @@ public class TestAttack {
         List<Point> path = map.findWayWithExistingRoads(headquarter1.getPosition(), barracks0.getFlag().getPosition());
 
         assertNull(path);
+    }
+
+    @Test
+    public void testHeadquarterIsDestroyedWhenItGetsCaptured() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Empty the militaries in player 1's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Verify that there are no hosted soliders in the headquarter */
+        assertEquals(headquarter1.getHostedMilitary(), 0);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0, map);
+
+        /* Verify that it's possible to attack the headquarter */
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+
+        /* Capture the player 1's headquarter */
+        player0.attack(headquarter1, 8);
+
+        /* Get attackers */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0, map);
+
+        /* Get the main attacker */
+        Military firstAttacker = Utils.getMainAttacker(map, player0, headquarter1, attackers);
+
+        /* Wait for the main attacker to get to the flag */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, firstAttacker.getTarget());
+
+        /* Verify that the headquarter remains intact until the main attacker enters */
+        for (int i = 0; i < 100; i++) {
+
+            if (firstAttacker.getPosition().equals(headquarter1.getPosition())) {
+                break;
+            }
+
+            assertTrue(headquarter0.ready());
+
+            map.stepTime();
+        }
+
+        assertEquals(firstAttacker.getPosition(), headquarter1.getPosition());
+        assertTrue(headquarter1.burningDown());
+        assertFalse(headquarter1.ready());
+    }
+
+    @Test
+    public void testMilitaryReturnsToStorageAfterCapturingHeadquarter() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Empty the militaries in player 1's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Verify that there are no hosted soliders in the headquarter */
+        assertEquals(headquarter1.getHostedMilitary(), 0);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0, map);
+
+        /* Verify that it's possible to attack the headquarter */
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+
+        /* Capture the player 1's headquarter */
+        player0.attack(headquarter1, 8);
+
+        /* Get attackers */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0, map);
+
+        /* Get the main attacker */
+        Military firstAttacker = Utils.getMainAttacker(map, player0, headquarter1, attackers);
+
+        /* Wait for the main attacker to get to the flag */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, firstAttacker.getTarget());
+
+        /* Wait for the main attacker to capture the headquarter */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, headquarter1.getPosition());
+
+        /* Wait for the attackers to get to the headquarter and start to walk home */
+        for (int i = 0; i < 200; i++) {
+
+            boolean allWalkingBack = true;
+
+            for (Military attacker : attackers) {
+                if (!attacker.getTarget().equals(headquarter0.getPosition()) && 
+                    !attacker.getTarget().equals(fortress0.getPosition())) {
+                    allWalkingBack = false;
+
+                    break;
+                }
+            }
+
+            if (allWalkingBack) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        /* Verify that the attackers return to storage or the fortress */
+        for (Military attacker : attackers) {
+            assertTrue(attacker.getTarget().equals(headquarter0.getPosition()) ||
+                       attacker.getTarget().equals(fortress0.getPosition()));
+        }
     }
 // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
