@@ -731,5 +731,38 @@ public class TestScout {
         assertEquals(scout.getPlayer(), player0);
     }
 
+    @Test
+    public void testNothingHappensWithScoutCalledFromFlagWithoutConnectionToStorage() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Verify that no scout leaves the headquarter */
+        for (int i = 0; i < 100; i++) {
+
+            List<Scout> scouts = Utils.findWorkersOfTypeOutsideForPlayer(Scout.class, player0, map);
+
+            assertEquals(scouts.size(), 0);
+
+            map.stepTime();
+        }
+    }
+
     // TODO: test that scout goes via the flag when it returns to the storage
 }

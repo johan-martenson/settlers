@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -160,26 +161,39 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean assignScouts() throws Exception {
+
+        /* Leave if there are no scouts in this storage */
+        if (!hasAtLeastOne(SCOUT)) {
+            return false;
+        }
+
+        /* Go through flags and look for flags that are waiting for scouts */
         for (Flag f : map.getFlags()) {
             if (f.needsScout()) {
+
+                List<Point> path = map.findWayWithExistingRoads(getPosition(), f.getPosition());
+
+                /* Don't send out a scout if there is no way to the flag */
+                if (path == null) {
+                    continue;
+                }
+
+                /* Don't send out a scout if there is a closer storage */
                 if (!isClosestStorage(this)) {
                     continue;
                 }
-            
-                if (!hasAtLeastOne(SCOUT)) {
-                    continue;
-                }
-            
+
+                /* Send a scout to the flag */
                 Scout scout = (Scout)retrieveWorker(SCOUT);
-            
+
                 map.placeWorker(scout, this);
                 scout.setTarget(f.getPosition());
                 f.scoutSent();
-            
+
                 return true;
             }
         }
-    
+
         return false;
     }
     
