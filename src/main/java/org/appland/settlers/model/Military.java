@@ -610,7 +610,7 @@ public class Military extends Worker {
     private void returnAfterAttackIsOver() throws Exception {
 
         /* Return home if there is a need for a military at home */
-        if (getHome().needsMilitaryManning()) {
+        if (getHome().needsMilitaryManning()  && getHome().getPlayer().equals(getPlayer())) {
 
             /* Promise to return home */
             getHome().promiseMilitary(this);

@@ -376,24 +376,25 @@ public class Building implements Actor, EndPoint, Piece {
     @Override
     public void stepTime() throws Exception {
         log.log(Level.FINE, "Stepping time in building");
-        
+
         if (isUnderAttack()) {
 
             /* There is nothing to do if the building has no hosted militaries */
-            if (getHostedMilitary() == 0) {
-                return;
+            if (getHostedMilitary() > 0) {
+
+                /* Send out a defender to the flag if needed */
+                if (isAttackerAtFlag() && ownDefender == null) {
+
+                    /* Retrieve a defender locally */
+                    ownDefender = retrieveMilitary();
+
+                    /* Tell the defender to handle the attacker at the flag */
+                    ownDefender.defendBuilding(this);
+                }
             }
+        }
 
-            /* Send out a defender to the flag if needed */
-            if (isAttackerAtFlag() && ownDefender == null) {
-
-                /* Retrieve a defender locally */
-                ownDefender = retrieveMilitary();
-
-                /* Tell the defender to handle the attacker at the flag */
-                ownDefender.defendBuilding(this);
-            }
-        } else if (underConstruction()) {
+        if (underConstruction()) {
             if (countdown.reachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
@@ -435,6 +436,11 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public void tearDown() throws Exception {
+
+        /* Clear up after the attack */
+        attackers.clear();
+        defenders.clear();
+        ownDefender = null;
 
         /* Change building state to burning */
         state = BURNING;
@@ -882,5 +888,10 @@ public class Building implements Actor, EndPoint, Piece {
 
         /* Reset the number of promised militaries */
         promisedMilitary.clear();
+
+        /* Remove traces of the attack */
+        attackers.clear();
+        defenders.clear();
+        ownDefender = null;
     }
 }

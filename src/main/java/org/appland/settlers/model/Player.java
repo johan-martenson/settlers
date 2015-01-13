@@ -71,7 +71,7 @@ public class Player {
         return result;
     }
 
-    public Iterable<Land> getLands() {
+    public Collection<Land> getLands() {
         return ownedLands;
     }
 
@@ -186,9 +186,14 @@ public class Player {
         ownedLands.clear();
         ownedLands.addAll(value);
 
+        /* Stop here if there is no owned land */
+        if (ownedLands.isEmpty()) {
+            return;
+        }
+
         /* Update field of view */
         updateDiscoveredLand();
-        
+
         fieldOfView = calculateFieldOfView(discoveredLand);
     }
 

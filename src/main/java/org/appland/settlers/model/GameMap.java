@@ -312,8 +312,7 @@ public class GameMap {
 
     void updateBorder() throws Exception {
 
-        /* Build dictionary Point->Building, picking buildings with the highest
-           claim */
+        /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building> claims = new HashMap<>();
         Map<Player, List<Land>> updatedLands = new HashMap<>();
 
@@ -421,8 +420,17 @@ public class GameMap {
         }
 
         /* Update lands in each player */
+        List<Player> playersToUpdate = new ArrayList<>(players);
+
         for (Entry<Player, List<Land>> pair : updatedLands.entrySet()) {
             pair.getKey().setLands(pair.getValue());
+
+            playersToUpdate.remove(pair.getKey());
+        }
+
+        /* Clear the players that no longer have any land */
+        for (Player player : playersToUpdate) {
+            player.setLands(new ArrayList<Land>());
         }
 
         /* Destroy buildings now outside of the borders */

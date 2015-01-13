@@ -3578,6 +3578,99 @@ public class TestAttack {
         assertEquals(firstAttacker.getPosition(), headquarter1.getPosition());
         assertTrue(headquarter1.burningDown());
         assertFalse(headquarter1.ready());
+
+        /* Verify that the headquarter eventually burns down */
+        Utils.fastForward(50, map);
+
+        assertTrue(headquarter1.destroyed());
+
+        /* Verify that the headquarter disappears from the map */
+        Utils.fastForward(100, map);
+
+        assertFalse(map.getBuildings().contains(headquarter1));
+    }
+
+    @Test
+    public void testBorderIsRemovedWhenHeadquarterIsDestroyed() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Empty the militaries in player 1's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Verify that there are no hosted soliders in the headquarter */
+        assertEquals(headquarter1.getHostedMilitary(), 0);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(21, 5);
+        Building fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 9, fortress0, map);
+
+        /* Verify that it's possible to attack the headquarter */
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 8);
+
+        /* Capture the player 1's headquarter */
+        player0.attack(headquarter1, 8);
+
+        /* Get attackers */
+        List<Military> attackers = Utils.waitForWorkersOutsideBuilding(Military.class, 8, player0, map);
+
+        /* Get the main attacker */
+        Military firstAttacker = Utils.getMainAttacker(map, player0, headquarter1, attackers);
+
+        /* Wait for the main attacker to get to the flag */
+        assertEquals(firstAttacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, firstAttacker.getTarget());
+
+        /* Verify that the headquarter remains intact until the main attacker enters */
+        assertTrue(headquarter1.isMilitaryBuilding());
+        for (int i = 0; i < 100; i++) {
+
+            if (firstAttacker.getPosition().equals(headquarter1.getPosition())) {
+                break;
+            }
+
+            assertTrue(headquarter0.ready());
+
+            map.stepTime();
+        }
+
+        assertEquals(firstAttacker.getPosition(), headquarter1.getPosition());
+        assertTrue(headquarter1.burningDown());
+        assertFalse(headquarter1.ready());
+
+        /* Verify that the border is gone */
+        assertTrue(player1.getBorders().isEmpty());
+
+        /* Verify that player 1 has no land */
+        assertTrue(player1.getLands().isEmpty());
     }
 
     @Test
