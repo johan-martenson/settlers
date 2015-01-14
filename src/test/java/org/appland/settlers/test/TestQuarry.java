@@ -163,7 +163,7 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
         assertTrue(map.isStoneAtPoint(point2));
         
-        /* Step once and make sure the forester goes out of the hut */
+        /* Step once and make sure the stone mason goes out of the hut */
         map.stepTime();
         
         assertFalse(mason.isInsideBuilding());    
