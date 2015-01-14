@@ -1477,4 +1477,66 @@ public class TestWoodcutter {
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
+
+    @Test
+    public void testWoodcutterDoesNotWalkStraightThroughHouse() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place and grow the tree directly behind the woodcutter*/
+        Point point2 = new Point(9, 5);
+        Tree tree = map.placeTree(point2);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Construct the woodcutter */
+        constructHouse(wc, map);
+
+        /* Manually place woodcutter worker */
+        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        Utils.occupyBuilding(wcWorker, wc, map);
+
+        /* Wait for the woodcutter to rest */        
+        Utils.fastForward(100, map);
+
+        assertFalse(wcWorker.isInsideBuilding());
+        assertTrue(wcWorker.isTraveling());
+
+        /* Verify that the woodcutter chooses a path that goes via the flag 
+           and doesn't go through the house */
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
+        assertTrue(wcWorker.getPlannedPath().lastIndexOf(wc.getPosition()) < 1);
+
+        /* Let the woodcutter reach the tree and start cutting */
+        assertEquals(wcWorker.getTarget(), point2);
+
+        Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
+
+        assertTrue(wcWorker.isArrived());
+        assertTrue(wcWorker.isAt(point2));
+        assertTrue(wcWorker.isCuttingTree());
+
+        /* Wait for the woodcutter to cut down the tree */
+        Utils.fastForward(50, map);
+
+        /* Verify that the woodcutter chooses a path back that goes via the flag */
+        assertEquals(wcWorker.getTarget(), wc.getPosition());
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getFlag().getPosition()));
+        assertTrue(wcWorker.getPlannedPath().contains(wc.getPosition()));
+        assertTrue(wcWorker.getPlannedPath().indexOf(wc.getFlag().getPosition()) < 
+                   wcWorker.getPlannedPath().indexOf(wc.getPosition()));
+    }
 }

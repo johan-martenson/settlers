@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-public enum Size implements Comparable<Size> {
+public enum Size {
 
     SMALL, MEDIUM, LARGE;
 

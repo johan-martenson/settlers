@@ -1024,22 +1024,33 @@ public class GameMap {
     private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
-        
+
+        /* Houses can only be left via the driveway so handle this case separately*/
+        if (isBuildingAtPoint(point) && getBuildingAtPoint(point).getPosition().equals(point)) {
+            resultList.add(point.downRight());
+
+            return resultList;
+        }
+
+        /* Find out which adjacent points are possible offroad connections */
         for (Point p : adjacentPoints) {
+
+            /* Filter points outside the map */
             if (!isWithinMap(p)) {
                 continue;
             }
-            
-            if (isBuildingAtPoint(p)) {
-                if (!getBuildingAtPoint(p).getPosition().equals(p)) {
-                    continue;
-                }
+
+            /* Buildings can only be reached from their flags */
+            if (isBuildingAtPoint(p) && !getBuildingAtPoint(p).getFlag().getPosition().equals(point)) {
+                continue;
             }
-            
+
+            /* Filter points in water */
             if (terrain.isInWater(p)) {
                 continue;
             }
-            
+
+            /* Add the point to the list if it passed the filters */
             resultList.add(p);
         }
     
@@ -1229,13 +1240,28 @@ public class GameMap {
     }
 
     public List<Point> findWayOffroad(Point start, Point goal, Point via, Collection<Point> avoid) {
+
+        /* Handle the case where the "via" point is equal to the start or the goal */
+        if (start.equals(via)) {
+            return findWayOffroad(start, goal, avoid);
+        } else if (via.equals(goal)) {
+            return findWayOffroad(start, goal, avoid);
+        }
+
+        /* Calculate and join each step */
         List<Point> path1 = findWayOffroad(start, via, avoid);
         List<Point> path2 = findWayOffroad(via, goal, avoid);
-        
+
+        /* Return null if one of there is no way for one of the steps */
+        if (path1 == null || path2 == null) {
+            return null;
+        }
+
+        /* Join the steps */
         path2.remove(0);
-        
+
         path1.addAll(path2);
-        
+
         return path1;
     }
     
