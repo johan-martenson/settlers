@@ -932,29 +932,36 @@ public class GameMap {
 
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
         List<Point> toEvaluate = new LinkedList<>();
-        List<Point> visited = new LinkedList<>();
+        Set<Point> visited = new HashSet<>();
         Set<Building> reachable = new HashSet<>();
-        
+
         toEvaluate.add(startFlag.getPosition());
-        
+
         while (!toEvaluate.isEmpty()) {
             Point point = toEvaluate.get(0);
             toEvaluate.remove(point);
-            
+
+            /* Test if this point is connected to a building */
             if (isBuildingAtPoint(point)) {
                 reachable.add(getBuildingAtPoint(point));
             }
-            
+
+            /* Remember that this point has been tested */
             visited.add(point);
-            
-            MapPoint mp = pointToGameObject.get(point);
-            Set<Point> neighbors = new HashSet<>();
-            neighbors.addAll(mp.getConnectedNeighbors());
-            
-            neighbors.removeAll(visited);
-            toEvaluate.addAll(neighbors);
+
+            /* Go through the neighbors and add the new points to the list to be evaluated */
+            for (Point neighborPoint : getMapPoint(point).getConnectedNeighbors()) {
+
+                /* Filter already visited */
+                if (visited.contains(neighborPoint)) {
+                    continue;
+                }
+
+                /* Add the point to the list */
+                toEvaluate.add(neighborPoint);
+            }
         }
-        
+
         return reachable;
     }
 
