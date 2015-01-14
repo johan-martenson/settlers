@@ -34,15 +34,11 @@ RE-FACTOR
 TEST
 ====
 
-*  Test that woodcutter worker (and others) can't go through buildings
+*  Test expanding computer player that it recovers when a barracks under construction is destroyed
 
 *  Test GameMap::getRoadsFromFlag(Flag)
 
 *  Test Size::contains(Size, Size)
-
-*  Test GameMap::isAvailableFlagSpot(...)
-
-*  Test GameMap::isAvailableHouseSpot(...)
 
 *  Test that all workers return to their own storage when their house is torn down
 
@@ -52,15 +48,9 @@ TEST
 
 *  Add tests for available buildings close to the border
 
-*  Test that new roads are not populated with couriers from an opponent's storage if it happens to be the closest
-
-*  Test that headquarter is destroyed when it's taken by an opponent
-
 *  Test that when a barracks is destroyed, the worker on roads that get removed return to their storage
 
 *  Test that storages only deliver on existing roads
-
-*  Test that storages only deliver to houses of their own type
 
 *  Test who wins according to rank and experience and health
 
@@ -642,3 +632,16 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Make sure there is a test that there cannot be more than one headquarter per player - DONE
 
 *  Remove constructor in worker that doesn't take a player - DONE
+
+*  Test that woodcutter worker (and others) can't go through buildings - DONE
+
+*  Test GameMap::isAvailableFlagSpot(...) - DONE
+
+*  Test GameMap::isAvailableHouseSpot(...) - DONE
+
+*  Test that new roads are not populated with couriers from an opponent's storage if it happens to be the closest - DONE
+
+*  Test that headquarter is destroyed when it's taken by an opponent - DONE
+
+*  Test that storages only deliver to houses of their own type - DONE
+
