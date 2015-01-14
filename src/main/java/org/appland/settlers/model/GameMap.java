@@ -1050,6 +1050,11 @@ public class GameMap {
                 continue;
             }
 
+            /* Filter points with stones */
+            if (isStoneAtPoint(p)) {
+                continue;
+            }
+
             /* Add the point to the list if it passed the filters */
             resultList.add(p);
         }

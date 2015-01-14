@@ -26,12 +26,13 @@ import static org.appland.settlers.model.WoodcutterWorker.States.WALKING_TO_TARG
 public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_CUT_TREE = 49;
-    
+    private final static int RANGE = 7;
+
     private States  state;
     private final Countdown countdown;
 
     private Point getTreeToCutDown() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 
         for (Point p : adjacentPoints) {
             if (!map.isTreeAtPoint(p)) {

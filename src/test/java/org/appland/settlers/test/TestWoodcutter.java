@@ -27,6 +27,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
+import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
@@ -1538,5 +1539,50 @@ public class TestWoodcutter {
         assertTrue(wcWorker.getPlannedPath().contains(wc.getPosition()));
         assertTrue(wcWorker.getPlannedPath().indexOf(wc.getFlag().getPosition()) < 
                    wcWorker.getPlannedPath().indexOf(wc.getPosition()));
+    }
+
+    @Test
+    public void testWoodcutterDoesNotWalkStraightThroughStone() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place the woodcutter */
+        Point point1 = new Point(10, 4);
+        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place and grow the tree directly behind the woodcutter*/
+        Point point2 = new Point(15, 3);
+        Tree tree = map.placeTree(point2);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place stone */
+        Point point3 = new Point(13, 3);
+        Stone stone0 = map.placeStone(point3);
+
+        /* Construct the woodcutter */
+        constructHouse(wc, map);
+
+        /* Manually place woodcutter worker */
+        WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
+        Utils.occupyBuilding(wcWorker, wc, map);
+
+        /* Wait for the woodcutter to rest */        
+        Utils.fastForward(100, map);
+
+        assertFalse(wcWorker.isInsideBuilding());
+        assertTrue(wcWorker.isTraveling());
+
+        /* Verify that the woodcutter chooses to walk around the stone */
+        assertFalse(wcWorker.getPlannedPath().contains(point3));
     }
 }
