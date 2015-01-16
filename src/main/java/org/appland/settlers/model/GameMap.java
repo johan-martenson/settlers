@@ -1672,6 +1672,10 @@ public class GameMap {
             return result;
         }
 
+        if (terrain.isOnMountain(point)) {
+            return result;
+        }
+
         if (terrain.isNextToWater(point)) {
             return result;
         }
@@ -1797,5 +1801,48 @@ public class GameMap {
 
     public List<Road> getRoadsFromFlag(Flag flag) {
         return getMapPoint(flag.getPosition()).getConnectedRoads();
+    }
+
+    public boolean isAvailableMinePoint(Player p, Point point0) throws Exception {
+
+        /* Return false if the point is outside the border */
+        if (!p.isWithinBorder(point0)) {
+            return false;
+        }
+
+        /* Return false if the point is not on a mountain */
+        if (!getTerrain().isOnMountain(point0)) {
+            return false;
+        }
+
+        /* Return false if the point is on a flag */
+        if (isFlagAtPoint(point0)) {
+            return false;
+        }
+
+        /* Return false if the point is on a road */
+        if (isRoadAtPoint(point0)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public List<Point> getAvailableMinePoints(Player p) throws Exception {
+
+        List<Point> availableMinePoints = new LinkedList<>();
+
+        /* Find available points for mine in the owned land */
+        for (Land land : p.getLands()) {
+            for (Point point : land.getPointsInLand()) {
+
+                /* Add the point if it's possible to build a mine there */
+                if (isAvailableMinePoint(p, point)) {
+                    availableMinePoints.add(point);
+                }
+            }
+        }
+
+        return availableMinePoints;
     }
 }

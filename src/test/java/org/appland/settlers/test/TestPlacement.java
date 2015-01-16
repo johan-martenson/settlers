@@ -1665,4 +1665,208 @@ public class TestPlacement {
             assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }
     }
+
+    @Test
+    public void testAvailableMineOnMountain() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Verify that there is an available point for a mine on the mountain */
+        assertTrue(map.isAvailableMinePoint(player0, point0));
+        assertTrue(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableHouseOnMountain() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Verify that there is no available point for a house on the mountain */
+        assertNull(map.isAvailableHousePoint(player0, point0));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOnGrass() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Verify that there is no available mine on the grass */
+        Point point0  = new Point(8, 8);
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOutsideBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(47, 47);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Verify that there is no available mine on the grass */
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOnExistingMine() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Place a mine on the mountain */
+        GoldMine goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+
+        /* Verify that there is no available point for a house on the mountain */
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOnFlag() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Place a flag on the mountain */
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Verify that there is no available point for a house on the mountain */
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOnRoad() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Place flags */
+        Point point1 = new Point(6, 8);
+        Flag flag0 = map.placeFlag(player0, point1);
+        Point point2 = new Point(10, 8);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place a road on the mountain */
+        Road road0 = map.placeRoad(player0, point1, point0, point2);
+
+        /* Verify that there is no available point for a house on the mountain */
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
+
+    @Test
+    public void testNoAvailableMineOnWater() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Put a lake on the map */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithWater(point0, map);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Verify that there is no available mine on the grass */
+        assertFalse(map.isAvailableMinePoint(player0, point0));
+        assertFalse(map.getAvailableMinePoints(player0).contains(point0));
+    }
 }
