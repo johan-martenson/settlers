@@ -181,6 +181,25 @@ public class Terrain {
         return isAnyAdjacentTile(point, WATER);
     }
 
+    boolean isOnEdgeOf(Point point, Vegetation vegetation) throws Exception {
+
+        boolean matchFound = false;
+        boolean nonMatchFound = false;
+        
+        /* Go through the surrounding tiles and verify that they contain at least 
+           on matching and one non-matching*/
+        for (Tile t : getSurroundingTiles(point)) {
+
+            if (t.getVegetationType().equals(vegetation)) {
+                matchFound = true;
+            } else if (!t.getVegetationType().equals(vegetation)) {
+                nonMatchFound = true;
+            }
+        }
+
+        return matchFound && nonMatchFound;
+    }
+
     public static class TileKey {
         private final int rightMost;
         private final int leftMost;

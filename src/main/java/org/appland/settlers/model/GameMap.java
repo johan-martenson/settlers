@@ -22,6 +22,7 @@ import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Tile.Vegetation;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 
 public class GameMap {
 
@@ -1680,6 +1681,10 @@ public class GameMap {
             return result;
         }
 
+        if (terrain.isOnEdgeOf(point, MOUNTAIN)) {
+            return result;
+        }
+        
         if (isRoadAtPoint(point)) {
             return result;
         }

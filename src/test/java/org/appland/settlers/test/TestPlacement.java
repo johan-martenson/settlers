@@ -1869,4 +1869,50 @@ public class TestPlacement {
         assertFalse(map.isAvailableMinePoint(player0, point0));
         assertFalse(map.getAvailableMinePoints(player0).contains(point0));
     }
+
+    @Test
+    public void testOnlyAvailableFlagPointsOnBorderBetweenMountainAndGrass() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(18, 18);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on point0 */
+        Point point0  = new Point(8, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Verify that there are available flag points next to the mountain */
+        List<Point> edgePoints = new LinkedList<>();
+        edgePoints.add(point0.upRight());
+        edgePoints.add(point0.right());
+        edgePoints.add(point0.downRight());
+        edgePoints.add(point0.downLeft());
+        edgePoints.add(point0.left());
+        edgePoints.add(point0.upLeft());
+
+        for (Point p : edgePoints) {
+            assertTrue(map.isAvailableFlagPoint(player0, p));
+            assertTrue(map.getAvailableFlagPoints(player0).contains(p));
+        }
+
+        /* Verify that there are no available mine points on the edge */
+        for (Point p : edgePoints) {
+            assertFalse(map.isAvailableMinePoint(player0, p));
+            assertFalse(map.getAvailableMinePoints(player0).contains(p));
+        }
+
+        /* Verify that there are no available house points on the edge */
+        for (Point p : edgePoints) {
+            assertNull(map.isAvailableHousePoint(player0, p));
+            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(p));
+        }
+    }
 }
