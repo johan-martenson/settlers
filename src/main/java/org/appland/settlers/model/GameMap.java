@@ -1703,6 +1703,11 @@ public class GameMap {
             if (isBuildingAtPoint(d)) {
                 diagonalHouse = true;
             }
+
+            /* It's not possible to build a house next to a stone */
+            if (isStoneAtPoint(d)) {
+                return result;
+            }
         }
 
         if (diagonalHouse) {
