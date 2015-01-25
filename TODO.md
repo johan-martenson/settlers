@@ -34,6 +34,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that cargo on the way to be delivered is re-routed if the planned way breaks
+
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed
 
 *  Test GameMap::getRoadsFromFlag(Flag)
