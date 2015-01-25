@@ -894,4 +894,10 @@ public class Building implements Actor, EndPoint, Piece {
         defenders.clear();
         ownDefender = null;
     }
+
+    void cancelPromisedDelivery(Cargo aThis) {
+        int amount = promisedDeliveries.get(aThis.getMaterial());
+
+        promisedDeliveries.put(aThis.getMaterial(), amount - 1);
+    }
 }

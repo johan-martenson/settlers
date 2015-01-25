@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
 import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;

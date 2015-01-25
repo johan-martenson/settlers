@@ -412,7 +412,7 @@ public class Utils {
     }
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Courier courier1, Cargo cargo) throws Exception {
-        for (int j = 0; j < 1000; j++) {
+        for (int j = 0; j < 2000; j++) {
             if (cargo.equals(courier1.getCargo())) {
                 break;
             }

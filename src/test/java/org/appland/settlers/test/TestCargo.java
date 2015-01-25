@@ -135,7 +135,7 @@ public class TestCargo {
     
         /* Remove the forester hut */
         foresterHut0.tearDown();
-        
+
         /* Verify that the courier delivers the cargo to the next flag */
         Courier courier = road1.getCourier();
         Cargo cargo = courier.getCargo();
@@ -145,8 +145,6 @@ public class TestCargo {
         
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
 
-        assertFalse(flag0.getStackedCargo().isEmpty());
-        
         /* Verify that the courier picks up the cargo again and returns it to the storage */
         for (int i = 0; i < 200; i++) {
             

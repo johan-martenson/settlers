@@ -133,7 +133,9 @@ public class Cargo implements Piece {
         }
     }
 
-    void rerouteIfNeeded() {
+    void rerouteIfNeeded() throws InvalidRouteException {
+
+        /* Handle the case where the targeted building cannot receive the cargo */
         if (getTarget() == null) {
             resumeTransport();
         } else if (!map.getBuildings().contains(getTarget())) {
@@ -142,6 +144,26 @@ public class Cargo implements Piece {
             returnToStorage();
         } else if (getTarget().destroyed()) {
             returnToStorage();
+        } else {
+
+            /* Find the best way from this flag */
+            List<Point> closestPath = map.findWayWithExistingRoads(getPosition(), getTarget().getPosition());
+
+            /* Return the cargo to storage if there is no available route to the target */
+            if (closestPath == null) {
+
+                /* Break the promise to deliver to the target */
+                getTarget().cancelPromisedDelivery(this);
+
+                /* Return the cargo to the storage */
+                returnToStorage();
+            } else {
+
+                /* Update the planned route to use the closest way */
+                closestPath.remove(0);
+
+                path = closestPath;
+            }
         }
     }
 }
