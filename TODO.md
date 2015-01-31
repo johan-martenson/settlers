@@ -153,6 +153,8 @@ TEST
 TO IMPLEMENT
 ============
 
+*  Fix in app so that it's not possible to choose non-available road points when building road
+
 *  Fix discovery so that military buildings only help if they are ready and occupied (this is not the case with fortress today)
 
 *  Add method to see whether a building can produce cargos
