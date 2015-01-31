@@ -984,6 +984,7 @@ public class TestPlacement {
 
     @Test(expected = Exception.class)
     public void testCannotPlaceRoadAcrossLake() throws Exception {
+
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
