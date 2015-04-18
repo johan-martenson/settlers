@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -612,7 +613,7 @@ public class GameMap {
     }
 
     public List<Road> getRoads() {
-        return roads;
+        return Collections.unmodifiableList(roads);
     }
 
     public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
@@ -825,11 +826,11 @@ public class GameMap {
     }
 
     public List<Building> getBuildings() {
-        return buildings;
+        return Collections.unmodifiableList(buildings);
     }
 
     public List<Flag> getFlags() {
-        return flags;
+        return Collections.unmodifiableList(flags);
     }
     
     public void placeWorker(Worker w, EndPoint e) {
@@ -838,7 +839,7 @@ public class GameMap {
     }
 
     public List<Worker> getWorkers() {
-        return workers;
+        return Collections.unmodifiableList(workers);
     }
 
     public List<Point> getAvailableFlagPoints(Player player) throws Exception {
@@ -1315,7 +1316,7 @@ public class GameMap {
     }
 
     public Collection<Tree> getTrees() {
-        return trees;
+        return Collections.unmodifiableCollection(trees);
     }
 
     void removeTree(Point position) {
@@ -1441,7 +1442,7 @@ public class GameMap {
     }
 
     public List<Stone> getStones() {
-        return stones;
+        return Collections.unmodifiableList(stones);
     }
 
     public Crop getCropAtPoint(Point point) {
@@ -1449,7 +1450,7 @@ public class GameMap {
     }
 
     public Iterable<Crop> getCrops() {
-        return crops;
+        return Collections.unmodifiableList(crops);
     }
 
     private void removeStone(Stone s) {
@@ -1564,7 +1565,7 @@ public class GameMap {
     }
 
     public Collection<Sign> getSigns() {
-        return signs;
+        return Collections.unmodifiableCollection(signs);
     }
 
     public void placeEmptySign(Point point) {
@@ -1619,7 +1620,7 @@ public class GameMap {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return Collections.unmodifiableList(players);
     }
 
     private double calculateClaim(Building b, Point p) {
