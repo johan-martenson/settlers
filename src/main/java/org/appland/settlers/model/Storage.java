@@ -113,7 +113,7 @@ public class Storage extends Building implements Actor {
         }
         
         /* Send out new workers */
-        assignNewWorkerToUnoccupiedPlaces(map);
+        assignNewWorkerToUnoccupiedPlaces(getMap());
     }
 
     public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
@@ -146,11 +146,11 @@ public class Storage extends Building implements Actor {
         }
 
         /* Go through the flags and look for flags waiting for geologists */
-        for (Flag f : map.getFlags()) {
+        for (Flag f : getMap().getFlags()) {
             if (f.needsGeologist()) {
 
                 /* Don't send out scout if there is no way to the flag */
-                List<Point> path = map.findWayWithExistingRoads(getPosition(), f.getPosition());
+                List<Point> path = getMap().findWayWithExistingRoads(getPosition(), f.getPosition());
 
                 if (path == null) {
                     continue;
@@ -164,7 +164,7 @@ public class Storage extends Building implements Actor {
                 /* Send a geologist to the flag */
                 Geologist geologist = (Geologist)retrieveWorker(GEOLOGIST);
 
-                map.placeWorker(geologist, this);
+                getMap().placeWorker(geologist, this);
                 geologist.setTarget(f.getPosition());
                 f.geologistSent(geologist);
 
@@ -183,10 +183,10 @@ public class Storage extends Building implements Actor {
         }
 
         /* Go through flags and look for flags that are waiting for scouts */
-        for (Flag f : map.getFlags()) {
+        for (Flag f : getMap().getFlags()) {
             if (f.needsScout()) {
 
-                List<Point> path = map.findWayWithExistingRoads(getPosition(), f.getPosition());
+                List<Point> path = getMap().findWayWithExistingRoads(getPosition(), f.getPosition());
 
                 /* Don't send out a scout if there is no way to the flag */
                 if (path == null) {
@@ -201,7 +201,7 @@ public class Storage extends Building implements Actor {
                 /* Send a scout to the flag */
                 Scout scout = (Scout)retrieveWorker(SCOUT);
 
-                map.placeWorker(scout, this);
+                getMap().placeWorker(scout, this);
                 scout.setTarget(f.getPosition());
                 f.scoutSent();
 
@@ -213,7 +213,7 @@ public class Storage extends Building implements Actor {
     }
     
     private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
-        for (Building b : map.getBuildings()) {
+        for (Building b : getMap().getBuildings()) {
             if (b.isMilitaryBuilding()) {
                 if (b.needsMilitaryManning()) {
                     if (!isClosestStorage(b)) {
@@ -225,7 +225,7 @@ public class Storage extends Building implements Actor {
                     }
                     
                     Military m = retrieveAnyMilitary();
-                    map.placeWorker(m, this);
+                    getMap().placeWorker(m, this);
                     m.setTargetBuilding(b);
                     b.promiseMilitary(m);
                     
@@ -234,7 +234,7 @@ public class Storage extends Building implements Actor {
             } else {
                 if (b.needsWorker()) {
                     Material m = b.getWorkerType();
-                    Storage stg = map.getClosestStorage(b.getPosition(), b);
+                    Storage stg = getMap().getClosestStorage(b.getPosition(), b);
                     
                     if (!equals(stg)) {
                         continue;
@@ -245,7 +245,7 @@ public class Storage extends Building implements Actor {
                     }
                     
                     Worker w = stg.retrieveWorker(m);
-                    map.placeWorker(w, stg.getFlag());
+                    getMap().placeWorker(w, stg.getFlag());
                     w.setTargetBuilding(b);
                     b.promiseWorker(w);
                     
@@ -259,13 +259,13 @@ public class Storage extends Building implements Actor {
 
     private boolean assignCouriers() throws Exception {
 
-        synchronized (map.getRoads()) {
-            for (Road r : map.getRoads()) {
+        synchronized (getMap().getRoads()) {
+            for (Road r : getMap().getRoads()) {
                 if (!r.needsCourier()) {
                     continue;
                 }
 
-                Storage stg = map.getClosestStorage(r.getStart());
+                Storage stg = getMap().getClosestStorage(r.getStart());
 
                 if (!equals(stg)) {
                     continue;
@@ -276,7 +276,7 @@ public class Storage extends Building implements Actor {
                 }
 
                 Courier w = stg.retrieveCourier();
-                map.placeWorker(w, stg.getFlag());
+                getMap().placeWorker(w, stg.getFlag());
                 w.assignToRoad(r);
 
                 return true;
@@ -348,7 +348,7 @@ public class Storage extends Building implements Actor {
         
         retrieveOneFromInventory(material);
 
-        Cargo c = new Cargo(material, map);
+        Cargo c = new Cargo(material, getMap());
 
         c.setPosition(getFlag().getPosition());
 
@@ -425,7 +425,7 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(SCOUT);
         }
     
-        map.removeWorker(w);
+        getMap().removeWorker(w);
     }
 
     public Worker retrieveWorker(Material material) throws Exception {
@@ -437,64 +437,64 @@ public class Storage extends Building implements Actor {
         
         switch (material) {
         case FORESTER:
-            w = new Forester(getPlayer(), map);
+            w = new Forester(getPlayer(), getMap());
             break;
         case WOODCUTTER_WORKER:
-            w = new WoodcutterWorker(getPlayer(), map);
+            w = new WoodcutterWorker(getPlayer(), getMap());
             break;
         case STONEMASON:
-            w = new Stonemason(getPlayer(), map);
+            w = new Stonemason(getPlayer(), getMap());
             break;
         case FARMER:
-            w = new Farmer(getPlayer(), map);
+            w = new Farmer(getPlayer(), getMap());
             break;
         case SAWMILL_WORKER:
-            w = new SawmillWorker(getPlayer(), map);
+            w = new SawmillWorker(getPlayer(), getMap());
             break;
         case WELL_WORKER:
-            w = new WellWorker(getPlayer(), map);
+            w = new WellWorker(getPlayer(), getMap());
             break;
         case MILLER:
-            w = new Miller(getPlayer(), map);
+            w = new Miller(getPlayer(), getMap());
             break;
         case BAKER:
-            w = new Baker(getPlayer(), map);
+            w = new Baker(getPlayer(), getMap());
             break;
         case STORAGE_WORKER:
-            w = new StorageWorker(getPlayer(), map);
+            w = new StorageWorker(getPlayer(), getMap());
             break;
         case FISHERMAN:
-            w = new Fisherman(getPlayer(), map);
+            w = new Fisherman(getPlayer(), getMap());
             break;
         case MINER:
-            w = new Miner(getPlayer(), map);
+            w = new Miner(getPlayer(), getMap());
             break;
         case IRON_FOUNDER:
-            w = new IronFounder(getPlayer(), map);
+            w = new IronFounder(getPlayer(), getMap());
             break;
         case BREWER:
-            w = new Brewer(getPlayer(), map);
+            w = new Brewer(getPlayer(), getMap());
             break;
         case MINTER:
-            w = new Minter(getPlayer(), map);
+            w = new Minter(getPlayer(), getMap());
             break;
         case ARMORER:
-            w = new Armorer(getPlayer(), map);
+            w = new Armorer(getPlayer(), getMap());
             break;
         case PIG_BREEDER:
-            w = new PigBreeder(getPlayer(), map);
+            w = new PigBreeder(getPlayer(), getMap());
             break;
         case BUTCHER:
-            w = new Butcher(getPlayer(), map);
+            w = new Butcher(getPlayer(), getMap());
             break;
         case GEOLOGIST:
-            w = new Geologist(getPlayer(), map);
+            w = new Geologist(getPlayer(), getMap());
             break;
         case DONKEY_BREEDER:
-            w = new DonkeyBreeder(getPlayer(), map);
+            w = new DonkeyBreeder(getPlayer(), getMap());
             break;
         case SCOUT:
-            w = new Scout(getPlayer(), map);
+            w = new Scout(getPlayer(), getMap());
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
@@ -530,7 +530,7 @@ public class Storage extends Building implements Actor {
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        Military m = new Military(getPlayer(), r, map);
+        Military m = new Military(getPlayer(), r, getMap());
 
         m.setPosition(getFlag().getPosition());
         
@@ -540,7 +540,7 @@ public class Storage extends Building implements Actor {
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
 
-        Courier c = new Courier(getPlayer(), map);
+        Courier c = new Courier(getPlayer(), getMap());
 
         c.setPosition(getFlag().getPosition());
 
@@ -552,13 +552,13 @@ public class Storage extends Building implements Actor {
 
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);
-            m = new Military(getPlayer(), PRIVATE_RANK, map);
+            m = new Military(getPlayer(), PRIVATE_RANK, getMap());
         } else if (hasAtLeastOne(SERGEANT)) {
             retrieveOneFromInventory(SERGEANT);
-            m = new Military(getPlayer(), SERGEANT_RANK, map);
+            m = new Military(getPlayer(), SERGEANT_RANK, getMap());
         } else if (hasAtLeastOne(GENERAL)) {
             retrieveOneFromInventory(GENERAL);
-            m = new Military(getPlayer(), GENERAL_RANK, map);
+            m = new Military(getPlayer(), GENERAL_RANK, getMap());
         } else {
             throw new Exception("No militaries available");
         }
@@ -631,13 +631,13 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isClosestStorage(Building b) {
-        Storage stg = map.getClosestStorage(b.getPosition());
+        Storage stg = getMap().getClosestStorage(b.getPosition());
                     
         return equals(stg);
     }
 
     private boolean assignDonkeys() throws Exception {
-        for (Road r : map.getRoads()) {
+        for (Road r : getMap().getRoads()) {
             if (!r.isMainRoad()) {
                 continue;
             }
@@ -650,14 +650,14 @@ public class Storage extends Building implements Actor {
                 continue;
             }
         
-            Storage stg = map.getClosestStorage(r.getStart());
+            Storage stg = getMap().getClosestStorage(r.getStart());
             
             if (stg != null && !this.equals(stg)) {
                 continue;
             }
             
             Donkey d = retrieveDonkey();
-            map.placeWorker(d, getFlag());
+            getMap().placeWorker(d, getFlag());
             d.assignToRoad(r);
 
             return true;
@@ -670,7 +670,7 @@ public class Storage extends Building implements Actor {
         if (hasAtLeastOne(DONKEY)) {
             retrieveOneFromInventory(DONKEY);
             
-            return new Donkey(getPlayer(), map);
+            return new Donkey(getPlayer(), getMap());
         }
     
         return null;

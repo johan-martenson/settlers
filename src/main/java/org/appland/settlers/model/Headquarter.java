@@ -32,7 +32,7 @@ public class Headquarter extends Storage {
             
         try {
             Worker w = new StorageWorker(getPlayer(), m);
-            map.placeWorker(w, this);
+            getMap().placeWorker(w, this);
             
             w.enterBuilding(this);
 

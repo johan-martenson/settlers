@@ -2,6 +2,7 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,11 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.Building.State.BURNING;
-import static org.appland.settlers.model.Building.State.DESTROYED;
-import static org.appland.settlers.model.Building.State.OCCUPIED;
-import static org.appland.settlers.model.Building.State.UNDER_CONSTRUCTION;
-import static org.appland.settlers.model.Building.State.UNOCCUPIED;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -26,7 +22,7 @@ public class Building implements Actor, EndPoint, Piece {
     private Military ownDefender;
     private Military primaryAttacker;
 
-    enum State {
+    private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
     }
 
@@ -35,13 +31,9 @@ public class Building implements Actor, EndPoint, Piece {
     private static final int TIME_TO_BUILD_LARGE_HOUSE             = 199;
     private static final int TIME_TO_BURN_DOWN                     = 49;
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
-    
-    protected GameMap map;
-    
-    private List<Military> attackers;
-    private List<Military> waitingAttackers;
+
+    private GameMap        map;
     private Player         player;
-    private List<Military> defenders;
     private State          state;
     private Worker         worker;
     private Worker         promisedWorker;
@@ -51,6 +43,9 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean        evacuated;
     private boolean        productionEnabled;
 
+    private final List<Military>         attackers;
+    private final List<Military>         waitingAttackers;
+    private final List<Military>         defenders;
     private final Countdown              countdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final List<Military>         hostedMilitary;
@@ -79,7 +74,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         countdown.countFrom(getConstructionCountdown());
 
-        state = UNDER_CONSTRUCTION;
+        state = State.UNDER_CONSTRUCTION;
         player = p;
         
         flag.setPlayer(p);
@@ -250,7 +245,7 @@ public class Building implements Actor, EndPoint, Piece {
         worker = w;
         promisedWorker = null;
 
-        state = OCCUPIED;
+        state = State.OCCUPIED;
     }
 
     public void deployMilitary(Military military) throws Exception {
@@ -271,10 +266,10 @@ public class Building implements Actor, EndPoint, Piece {
         hostedMilitary.add(military);
         promisedMilitary.remove(military);
         
-        state = OCCUPIED;
+        state = State.OCCUPIED;
 
         
-        if (previousState == UNOCCUPIED) {
+        if (previousState == State.UNOCCUPIED) {
             map.updateBorder();
         }
     }
@@ -402,14 +397,14 @@ public class Building implements Actor, EndPoint, Piece {
 
                     consumeConstructionMaterial();
                     
-                    state = UNOCCUPIED;
+                    state = State.UNOCCUPIED;
                 }
             } else {
                 countdown.step();
             }
         } else if (burningDown()) {
             if (countdown.reachedZero()) {
-                state = DESTROYED;
+                state = State.DESTROYED;
                 
                 countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
             } else {
@@ -444,7 +439,7 @@ public class Building implements Actor, EndPoint, Piece {
         ownDefender = null;
 
         /* Change building state to burning */
-        state = BURNING;
+        state = State.BURNING;
 
         /* Start countdown for burning */
         countdown.countFrom(TIME_TO_BURN_DOWN);
@@ -575,23 +570,23 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean underConstruction() {
-        return state == UNDER_CONSTRUCTION;
+        return state == State.UNDER_CONSTRUCTION;
     }
 
     public boolean ready() {
-        return state == UNOCCUPIED || state == OCCUPIED;
+        return state == State.UNOCCUPIED || state == State.OCCUPIED;
     }
 
     public boolean burningDown() {
-        return state == BURNING;
+        return state == State.BURNING;
     }
 
     public boolean destroyed() {
-        return state == DESTROYED;
+        return state == State.DESTROYED;
     }
 
     protected void setConstructionReady() {
-        state = UNOCCUPIED;
+        state = State.UNOCCUPIED;
     }
 
     private boolean moreMaterialNeededForConstruction(Material material) {
@@ -653,11 +648,11 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private boolean unoccupied() {
-        return state == UNOCCUPIED;
+        return state == State.UNOCCUPIED;
     }
 
     public boolean occupied() {
-        return state == OCCUPIED;
+        return state == State.OCCUPIED;
     }
 
     private void doPromotion() {
@@ -779,7 +774,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getRemoteDefenders() {
-        return defenders;
+        return Collections.unmodifiableList(defenders);
     }
 
     void registerDefender(Military defender) {
@@ -819,7 +814,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getWaitingAttackers() {
-        return waitingAttackers;
+        return Collections.unmodifiableList(waitingAttackers);
     }
 
     Military pickWaitingAttacker() {
@@ -827,7 +822,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getAttackers() {
-        return attackers;
+        return Collections.unmodifiableList(attackers);
     }
 
     public boolean isUnderAttack() {
