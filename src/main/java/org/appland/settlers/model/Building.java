@@ -528,21 +528,6 @@ public class Building implements Actor, EndPoint, Piece {
                 int amount = materials.get(m);
                 materials.put(m, amount + 1);
             }
-        } else {
-            switch (getSize()) {
-            case SMALL:
-                materials.put(PLANCK, 2);
-                materials.put(STONE, 2);
-                break;
-            case MEDIUM:
-                materials.put(PLANCK, 4);
-                materials.put(STONE, 3);
-                break;
-            case LARGE:
-                materials.put(PLANCK, 4);
-                materials.put(STONE, 4);
-                break;
-            }
         }
 
         return materials;
