@@ -22,6 +22,8 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PIG;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -41,6 +43,118 @@ import org.junit.Test;
  * @author johan
  */
 public class TestPigFarm {
+
+    @Test
+    public void testPigFarmOnlyNeedsThreePlancksAndThreeStonesForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing pig farm */
+        Point point22 = new Point(6, 22);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
+        
+        /* Deliver three planck and three stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(stoneCargo);
+        pigFarm0.putCargo(stoneCargo);
+        pigFarm0.putCargo(stoneCargo);
+    
+        /* Verify that this is enough to construct the pig farm */
+        for (int i = 0; i < 200; i++) {
+            assertTrue(pigFarm0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(pigFarm0.ready());
+    }
+
+    @Test
+    public void testPigFarmCannotBeConstructedWithTooFewPlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing pig farm */
+        Point point22 = new Point(6, 22);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
+
+        /* Deliver two planck and three stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(stoneCargo);
+        pigFarm0.putCargo(stoneCargo);
+        pigFarm0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the pig farm */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(pigFarm0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(pigFarm0.ready());
+    }
+
+    @Test
+    public void testPigFarmCannotBeConstructedWithTooFewStones() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing pig farm */
+        Point point22 = new Point(6, 22);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
+
+        /* Deliver three plancks and two stones */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(planckCargo);
+        pigFarm0.putCargo(stoneCargo);
+        pigFarm0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the pig farm */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(pigFarm0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(pigFarm0.ready());
+    }
 
     @Test
     public void testUnfinishedPigFarmNeedsNoPigBreeder() throws Exception {

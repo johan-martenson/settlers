@@ -24,6 +24,8 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -41,7 +43,113 @@ import org.junit.Test;
  * @author johan
  */
 public class TestIronSmelter {
+
+    @Test
+    public void testIronSmelterOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing iron smelter */
+        Point point22 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point22);
+        
+        /* Deliver two planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        ironSmelter0.putCargo(planckCargo);
+        ironSmelter0.putCargo(planckCargo);
+        ironSmelter0.putCargo(stoneCargo);
+        ironSmelter0.putCargo(stoneCargo);
     
+        /* Verify that this is enough to construct the iron smelter */
+        for (int i = 0; i < 150; i++) {
+            assertTrue(ironSmelter0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(ironSmelter0.ready());
+    }
+
+    @Test
+    public void testIronSmelterCannotBeConstructedWithTooFewPlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing iron smelter */
+        Point point22 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point22);
+        
+        /* Deliver one planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        ironSmelter0.putCargo(planckCargo);
+        ironSmelter0.putCargo(stoneCargo);
+        ironSmelter0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the iron smelter */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(ironSmelter0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(ironSmelter0.ready());
+    }
+
+    @Test
+    public void testIronSmelterCannotBeConstructedWithTooFewStones() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing iron smelter */
+        Point point22 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point22);
+        
+        /* Deliver two plancks and one stones */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        ironSmelter0.putCargo(planckCargo);
+        ironSmelter0.putCargo(planckCargo);
+        ironSmelter0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the iron smelter */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(ironSmelter0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(ironSmelter0.ready());
+    }
+
     @Test
     public void testIronSmelterNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

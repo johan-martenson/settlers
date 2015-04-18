@@ -9,7 +9,9 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Size.MEDIUM;
 
@@ -17,7 +19,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  *
  * @author johan
  */
-@HouseSize(size = MEDIUM)
+@HouseSize(size = MEDIUM, material = {PLANCK, PLANCK, STONE, STONE})
 @Production(requiredGoods = {IRON, COAL}, output = {SWORD, SHIELD})
 @RequiresWorker(workerType = ARMORER)
 public class Armory extends Building {

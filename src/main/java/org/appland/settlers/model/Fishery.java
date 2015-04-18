@@ -7,12 +7,13 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.PLANCK;
 
 /**
  *
  * @author johan
  */
-@HouseSize(size = Size.SMALL)
+@HouseSize(size = Size.SMALL, material = {PLANCK, PLANCK})
 @RequiresWorker(workerType = FISHERMAN)
 public class Fishery extends Building {
 

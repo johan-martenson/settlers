@@ -25,6 +25,8 @@ import org.appland.settlers.model.Fortress;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Worker;
@@ -40,7 +42,113 @@ import org.junit.Test;
  * @author johan
  */
 public class TestSlaughterHouse {
+
+    @Test
+    public void testSlaughterHouseOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing slaughter house */
+        Point point22 = new Point(6, 22);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
+        
+        /* Deliver two planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(stoneCargo);
+        slaughterHouse0.putCargo(stoneCargo);
     
+        /* Verify that this is enough to construct the slaughter house */
+        for (int i = 0; i < 150; i++) {
+            assertTrue(slaughterHouse0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(slaughterHouse0.ready());
+    }
+
+    @Test
+    public void testSlaughterHouseCannotBeConstructedWithTooFewPlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing slaughter house */
+        Point point22 = new Point(6, 22);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
+        
+        /* Deliver one planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(stoneCargo);
+        slaughterHouse0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the slaughter house */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(slaughterHouse0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(slaughterHouse0.ready());
+    }
+
+    @Test
+    public void testSlaughterHouseCannotBeConstructedWithTooFewStones() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing slaughter house */
+        Point point22 = new Point(6, 22);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
+        
+        /* Deliver two plancks and one stones */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the slaughter house */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(slaughterHouse0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(slaughterHouse0.ready());
+    }
+
     @Test
     public void testSlaughterHouseNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

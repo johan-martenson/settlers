@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author johan
  */
 public class TestBarracks {
-    
+
     @Test
     public void testBarracksOnlyNeedsTwoPlancksForConstruction() throws Exception {
 
@@ -69,7 +69,7 @@ public class TestBarracks {
 
         assertTrue(barracks0.ready());
     }
-    
+
     @Test
     public void testBarracksCannotBeConstructedWithOnePlanck() throws Exception {
 

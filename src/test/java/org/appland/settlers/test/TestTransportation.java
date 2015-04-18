@@ -852,8 +852,6 @@ public class TestTransportation {
 
         /* Promise plancks to the sawmill until it doesn't need any new deliveries of plancks */
         sm.promiseDelivery(PLANCK);
-        sm.promiseDelivery(PLANCK);
-        sm.promiseDelivery(PLANCK);
 
         assertFalse(sm.needsMaterial(PLANCK));
 

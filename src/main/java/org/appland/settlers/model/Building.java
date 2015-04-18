@@ -396,6 +396,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         if (underConstruction()) {
             if (countdown.reachedZero()) {
+
                 if (isMaterialForConstructionAvailable()) {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
@@ -564,7 +565,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
-        
+
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
             Material m = entry.getKey();
 

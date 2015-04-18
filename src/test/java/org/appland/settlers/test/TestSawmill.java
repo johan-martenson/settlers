@@ -20,6 +20,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
@@ -40,7 +41,113 @@ import org.junit.Test;
  * @author johan
  */
 public class TestSawmill {
+
+    @Test
+    public void testSawmillOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing sawmill */
+        Point point22 = new Point(6, 22);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        
+        /* Deliver two planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(stoneCargo);
+        sawmill0.putCargo(stoneCargo);
     
+        /* Verify that this is enough to construct the sawmill */
+        for (int i = 0; i < 150; i++) {
+            assertTrue(sawmill0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(sawmill0.ready());
+    }
+
+    @Test
+    public void testSawmillCannotBeConstructedWithTooFewPlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing sawmill */
+        Point point22 = new Point(6, 22);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        
+        /* Deliver one planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(stoneCargo);
+        sawmill0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the sawmill */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(sawmill0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(sawmill0.ready());
+    }
+
+    @Test
+    public void testSawmillCannotBeConstructedWithTooFewStones() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing sawmill */
+        Point point22 = new Point(6, 22);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
+        
+        /* Deliver two plancks and one stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the sawmill */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(sawmill0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(sawmill0.ready());
+    }
+
     @Test
     public void testSawmillNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

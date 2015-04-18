@@ -9,6 +9,7 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.SMALL;
 
@@ -16,7 +17,7 @@ import static org.appland.settlers.model.Size.SMALL;
  *
  * @author johan
  */
-@HouseSize(size = SMALL)
+@HouseSize(size = SMALL, material = {PLANCK, PLANCK, PLANCK, PLANCK})
 @RequiresWorker(workerType = MINER)
 @Production(output = STONE, requiredGoods = {BREAD, FISH})
 public class GraniteMine extends Building {

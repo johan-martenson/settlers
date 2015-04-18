@@ -53,28 +53,16 @@ public class ConstructionTest {
         assertTrue(wc.underConstruction());
 
         assertTrue(wc.needsMaterial(PLANCK));
-        assertTrue(wc.needsMaterial(STONE));
 
         assertFalse(wc.needsMaterial(SERGEANT));
 
         assertTrue(wc.needsMaterial(PLANCK));
-        assertTrue(wc.needsMaterial(STONE));
 
         wc.promiseDelivery(PLANCK);
         assertTrue(wc.needsMaterial(PLANCK));
-        assertTrue(wc.needsMaterial(STONE));
 
         wc.promiseDelivery(PLANCK);
         assertFalse(wc.needsMaterial(PLANCK));
-        assertTrue(wc.needsMaterial(STONE));
-
-        wc.promiseDelivery(STONE);
-        assertFalse(wc.needsMaterial(PLANCK));
-        assertTrue(wc.needsMaterial(STONE));
-
-        wc.promiseDelivery(STONE);
-        assertFalse(wc.needsMaterial(PLANCK));
-        assertFalse(wc.needsMaterial(STONE));
 
         /* Verify that construction doesn't finish before material is delivered */
         int i;
@@ -84,10 +72,8 @@ public class ConstructionTest {
         }
 
         Cargo planckCargo = new Cargo(PLANCK, null);
-        Cargo stoneCargo = new Cargo(STONE, null);
+
         wc.putCargo(planckCargo);
-        wc.putCargo(planckCargo);
-        wc.putCargo(stoneCargo);
 
         for (i = 0; i < 1000; i++) {
             assertTrue(wc.underConstruction());
@@ -95,7 +81,7 @@ public class ConstructionTest {
         }
 
         /* Verify that construction can finish when all material is delivered */
-        wc.putCargo(stoneCargo);
+        wc.putCargo(planckCargo);
         wc.stepTime();
 
         assertTrue(wc.ready());
@@ -186,11 +172,9 @@ public class ConstructionTest {
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
+
         sm.putCargo(planckCargo);
         sm.putCargo(planckCargo);
-        sm.putCargo(planckCargo);
-        sm.putCargo(planckCargo);
-        sm.putCargo(stoneCargo);
         sm.putCargo(stoneCargo);
 
         for (int i = 0; i < 1000; i++) {
@@ -254,8 +238,6 @@ public class ConstructionTest {
         farm.putCargo(planckCargo);
         farm.putCargo(planckCargo);
         farm.putCargo(planckCargo);
-        farm.putCargo(planckCargo);
-        farm.putCargo(stoneCargo);
         farm.putCargo(stoneCargo);
         farm.putCargo(stoneCargo);
 

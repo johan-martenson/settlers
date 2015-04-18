@@ -130,7 +130,7 @@ public class GameUtils {
         }
     }
     
-    static Map createEmptyMaterialIntMap() {
+    static Map<Material, Integer> createEmptyMaterialIntMap() {
         Map<Material, Integer> result = new HashMap<>();
         for (Material m : Material.values()) {
             result.put(m, 0);

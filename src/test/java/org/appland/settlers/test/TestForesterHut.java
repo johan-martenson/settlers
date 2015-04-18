@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
@@ -21,6 +22,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -35,6 +37,72 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class TestForesterHut {
+
+
+    @Test
+    public void testForesterHutOnlyNeedsTwoPlancksForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing forester hut */
+        Point point22 = new Point(6, 22);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
+        
+        /* Deliver two plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        foresterHut0.putCargo(cargo);
+        foresterHut0.putCargo(cargo);
+    
+        /* Verify that this is enough to construct the forester hut */
+        for (int i = 0; i < 100; i++) {
+            assertTrue(foresterHut0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(foresterHut0.ready());
+    }
+
+    @Test
+    public void testForesterHutCannotBeConstructedWithOnePlanck() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing forester hut */
+        Point point22 = new Point(6, 22);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
+        
+        /* Deliver two plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        foresterHut0.putCargo(cargo);
+    
+        /* Verify that this is enough to construct the forester hut */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(foresterHut0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(foresterHut0.ready());
+    }
 
     @Test
     public void testConstructForester() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {

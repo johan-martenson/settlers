@@ -22,6 +22,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Miner;
@@ -44,14 +45,89 @@ import org.junit.Test;
  * @author johan
  */
 public class TestGraniteMine {
+
+    @Test
+    public void testGraniteMineOnlyNeedsFourPlancksForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Put a small mountain on the map */
+        Point point22 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point22, map);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing granite mine */
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
+        
+        /* Deliver four plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        graniteMine0.putCargo(cargo);
+        graniteMine0.putCargo(cargo);
+        graniteMine0.putCargo(cargo);
+        graniteMine0.putCargo(cargo);
     
+        /* Verify that this is enough to construct the granite mine */
+        for (int i = 0; i < 100; i++) {
+            assertTrue(graniteMine0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(graniteMine0.ready());
+    }
+
+    @Test
+    public void testGraniteMineCannotBeConstructedWithThreePlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Put a small mountain on the map */
+        Point point22 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point22, map);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing granite mine */
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
+        
+        /* Deliver three plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        graniteMine0.putCargo(cargo);
+        graniteMine0.putCargo(cargo);
+        graniteMine0.putCargo(cargo);
+
+        /* Verify that this is not enough to construct the granite mine */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(graniteMine0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(graniteMine0.ready());
+    }
+
     @Test
     public void testConstructGraniteMine() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Put a small mountain on the map */
         Point point0 = new Point(12, 8);
         Utils.surroundPointWithMountain(point0, map);

@@ -5,7 +5,9 @@
  */
 package org.appland.settlers.model;
 
-@HouseSize(size = Size.SMALL)
+import static org.appland.settlers.model.Material.PLANCK;
+
+@HouseSize(size = Size.SMALL, material = {PLANCK, PLANCK})
 @RequiresWorker(workerType = Material.FORESTER)
 public class ForesterHut extends Building {
 

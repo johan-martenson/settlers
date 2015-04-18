@@ -25,6 +25,7 @@ import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -46,6 +47,71 @@ import org.junit.Test;
  * @author johan
  */
 public class TestFishery {
+
+    @Test
+    public void testFisheryOnlyNeedsTwoPlancksForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing fishery */
+        Point point22 = new Point(6, 22);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
+        
+        /* Deliver two planck and two stone */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+
+        fishery0.putCargo(planckCargo);
+        fishery0.putCargo(planckCargo);
+    
+        /* Verify that this is enough to construct the fishery */
+        for (int i = 0; i < 100; i++) {
+            assertTrue(fishery0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(fishery0.ready());
+    }
+
+    @Test
+    public void testFisheryCannotBeConstructedWithTooFewPlancks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing fishery */
+        Point point22 = new Point(6, 22);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
+        
+        /* Deliver one planck */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+
+        fishery0.putCargo(planckCargo);
+
+        /* Verify that this is not enough to construct the fishery */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(fishery0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(fishery0.ready());
+    }
 
     @Test
     public void testConstructFisherman() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {

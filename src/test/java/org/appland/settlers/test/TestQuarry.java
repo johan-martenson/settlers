@@ -18,6 +18,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -41,7 +42,73 @@ import org.junit.Test;
  * @author johan
  */
 public class TestQuarry {
+
+
+    @Test
+    public void testQuarryOnlyNeedsTwoPlancksForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing quarry */
+        Point point22 = new Point(6, 22);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        
+        /* Deliver two plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        quarry0.putCargo(cargo);
+        quarry0.putCargo(cargo);
     
+        /* Verify that this is enough to construct the quarry */
+        for (int i = 0; i < 100; i++) {
+            assertTrue(quarry0.underConstruction());
+            
+            map.stepTime();
+        }
+
+        assertTrue(quarry0.ready());
+    }
+
+    @Test
+    public void testQuarryCannotBeConstructedWithOnePlanck() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing quarry */
+        Point point22 = new Point(6, 22);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
+        
+        /* Deliver two plancks */
+        Cargo cargo = new Cargo(PLANCK, map);
+
+        quarry0.putCargo(cargo);
+    
+        /* Verify that this is enough to construct the quarry */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(quarry0.underConstruction());
+
+            map.stepTime();
+        }
+
+        assertFalse(quarry0.ready());
+    }
+
     @Test
     public void testFinishedQuarryNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
