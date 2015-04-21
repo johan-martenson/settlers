@@ -5,15 +5,19 @@
  */
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.WHITE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -23,8 +27,10 @@ import static org.appland.settlers.model.Material.COIN;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tile.Vegetation;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -1860,5 +1866,35 @@ public class TestRoads {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
 
         assertTrue(road1.isMainRoad());
+    }
+    @Test
+    public void testDifferentRoadsWithSameEndpointsAreNotEqual() throws Exception {
+
+        /* Create player */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter for player0 */
+        Point point17 = new Point(8, 10);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point17);
+
+        /* Place flags */
+        Point point0 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        Point point1 = new Point(15, 11);
+        Flag flag1 = map.placeFlag(player0, point1);
+
+        /* Verify that roads with same endpoints but different waypoints are not equal */
+        Point point2 = new Point(14, 10);
+        Point point3 = new Point(13, 11);
+        Road road1 = map.placeRoad(player0, point0, point2, point1);
+        Road road2 = map.placeRoad(player0, point0, point3, point1);
+
+        assertFalse(road1.equals(road2));
     }
 }
