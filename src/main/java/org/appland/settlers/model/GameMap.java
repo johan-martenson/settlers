@@ -36,6 +36,7 @@ public class GameMap {
     private List<Building>          buildingsToRemove;
     private List<Flag>              flags;
     private List<Sign>              signs;
+    private List<Projectile>        projectiles;
     private List<Sign>              signsToRemove;
     private List<Worker>            workersToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
@@ -128,6 +129,7 @@ public class GameMap {
         roads             = new ArrayList<>();
         flags             = new ArrayList<>();
         signs             = new ArrayList<>();
+        projectiles       = new ArrayList<>();
         signsToRemove     = new LinkedList<>();
         workers           = new ArrayList<>();
         workersToRemove   = new LinkedList<>();
@@ -1855,5 +1857,13 @@ public class GameMap {
         }
 
         return availableMinePoints;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return Collections.unmodifiableList(projectiles);
+    }
+
+    void placeProjectile(Projectile projectile, Point position) {
+        projectiles.add(projectile);
     }
 }

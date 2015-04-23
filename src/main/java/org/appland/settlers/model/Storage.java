@@ -10,6 +10,7 @@ import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.BUTCHER;
+import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
@@ -243,12 +244,12 @@ public class Storage extends Building implements Actor {
                     if (!hasAtLeastOne(m)) {
                         continue;
                     }
-                    
+
                     Worker w = stg.retrieveWorker(m);
                     getMap().placeWorker(w, stg.getFlag());
                     w.setTargetBuilding(b);
                     b.promiseWorker(w);
-                    
+
                     return true;
                 }
             }
@@ -496,6 +497,9 @@ public class Storage extends Building implements Actor {
         case SCOUT:
             w = new Scout(getPlayer(), getMap());
             break;
+        case CATAPULT_WORKER:
+            w = new CatapultWorker(getPlayer(), getMap());
+            break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
@@ -571,6 +575,8 @@ public class Storage extends Building implements Actor {
     private boolean hasAtLeastOne(Material m) {
         if (m == COURIER) {
             return true;
+        } else if (m == CATAPULT_WORKER) {
+            return true;
         }
 
         return inventory.get(m) > 0;
@@ -578,6 +584,8 @@ public class Storage extends Building implements Actor {
 
     private void retrieveOneFromInventory(Material m) {
         if (m == COURIER) {
+            return;
+        } else if (m == CATAPULT_WORKER) {
             return;
         }
         
@@ -588,6 +596,8 @@ public class Storage extends Building implements Actor {
 
     private void storeOneInInventory(Material m) {
         if (m == COURIER) {
+            return;
+        } else if (m == CATAPULT_WORKER) {
             return;
         }
         

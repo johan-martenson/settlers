@@ -12,8 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
@@ -125,14 +123,6 @@ public class Building implements Actor, EndPoint, Piece {
                 this instanceof IronMine ||
                 this instanceof CoalMine ||
                 this instanceof GraniteMine);
-    }
-
-    private boolean needsCoins() {
-        if (!enablePromotions) {
-            return false;
-        }
-
-        return getAmount(COIN) + promisedDeliveries.get(COIN) < getMaxCoins();
     }
 
     private int getMaxCoins() {
@@ -293,9 +283,20 @@ public class Building implements Actor, EndPoint, Piece {
 
         Material material = c.getMaterial();
 
-        /* Wood and stone can be delivered during construction */
-        if (underConstruction() && (material != PLANCK && material != STONE)) {
-            throw new InvalidMaterialException(material);
+        /* Plancks and stone can be delivered during construction */
+        if (underConstruction()) {
+
+            Map<Material, Integer> materialsNeeded = getMaterialsToBuildHouse();
+
+            /* Throw an exception if another material is being delivered */
+            if (!materialsNeeded.containsKey(c.getMaterial())) {
+                throw new InvalidMaterialException(material);
+            }
+
+            /* Throw an exception if too much is being delivered */
+            if (getAmount(material) >= getTotalAmountNeeded(material)) {
+                throw new Exception("Can't accept delivery of " + material);
+            }
         }
 
         /* Can't accept delivery when building is burning or destroyed */
@@ -303,16 +304,19 @@ public class Building implements Actor, EndPoint, Piece {
             throw new InvalidStateForProduction(this);
         }
 
-        if (ready() && material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
-            throw new Exception("This building doesn't need any more coins");
-        }
-        
-        if (ready() && !canAcceptGoods()) {
-            throw new DeliveryNotPossibleException();
-        }
-        
-        if (ready() && !isAccepted(material)) {
-            throw new InvalidMaterialException(material);
+        if (ready()) {
+
+            if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
+                throw new Exception("This building doesn't need any more coins");
+            }
+
+            if (!canAcceptGoods()) {
+                throw new DeliveryNotPossibleException();
+            }
+
+            if (!isAccepted(material)) {
+                throw new InvalidMaterialException(material);
+            }
         }
 
         int existingQuantity = receivedMaterial.get(material);
@@ -330,13 +334,7 @@ public class Building implements Actor, EndPoint, Piece {
     public boolean needsMaterial(Material material) {
         log.log(Level.FINE, "Does {0} require {1}", new Object[]{this, material});
 
-        if (underConstruction()) {
-            return moreMaterialNeededForConstruction(material);
-        } else if (ready()) {
-            return needsMaterialForProduction(material);
-        }
-    
-        return false;
+        return getLackingAmountWithProjected(material) > 0;
     }
 
     @Override
@@ -473,7 +471,7 @@ public class Building implements Actor, EndPoint, Piece {
         return hs.size();
     }
 
-    public Map<Material, Integer> getRequiredGoodsForProduction() {
+    public Map<Material, Integer> getTotalAmountNeededForProduction() {
         log.log(Level.FINE, "Getting the required goods for this building");
 
         Production p = getClass().getAnnotation(Production.class);
@@ -516,10 +514,15 @@ public class Building implements Actor, EndPoint, Piece {
     private Map<Material, Integer> getMaterialsToBuildHouse() {
         HouseSize hs                     = getClass().getAnnotation(HouseSize.class);
         Material[] materialsArray        = hs.material();
-        Map<Material, Integer> materials = createEmptyMaterialIntMap();
+        Map<Material, Integer> materials = new HashMap<>();
 
         if (materialsArray.length != 0) {
             for (Material m : materialsArray) {
+
+                if (!materials.containsKey(m)) {
+                    materials.put(m, 0);
+                }
+
                 int amount = materials.get(m);
                 materials.put(m, amount + 1);
             }
@@ -558,13 +561,13 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private boolean isAccepted(Material material) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
+        Map<Material, Integer> requiredGoods = getTotalAmountNeededForProduction();
 
         return requiredGoods.containsKey(material);
     }
 
     private boolean canAcceptGoods() {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
+        Map<Material, Integer> requiredGoods = getTotalAmountNeededForProduction();
 
         return !requiredGoods.keySet().isEmpty();
     }
@@ -587,44 +590,6 @@ public class Building implements Actor, EndPoint, Piece {
 
     protected void setConstructionReady() {
         state = State.UNOCCUPIED;
-    }
-
-    private boolean moreMaterialNeededForConstruction(Material material) {
-        Map<Material, Integer> allMaterialNeededForConstruction = getMaterialsToBuildHouse();
-
-        int promised = promisedDeliveries.get(material);
-        int delivered = receivedMaterial.get(material);
-        int required = allMaterialNeededForConstruction.get(material);
-
-        log.log(Level.FINE, "Is more {0} needed for construction: {1} > {2} + {3}",
-                new Object[]{material, required, promised, delivered});
-
-        return (required > promised + delivered);
-    }
-
-    private boolean needsMaterialForProduction(Material material) {
-        Map<Material, Integer> requiredGoods = getRequiredGoodsForProduction();
-        
-        if (isMilitaryBuilding() && material == COIN) {
-            return needsCoins();
-        }
-
-        /* Building does not accept the material */
-        if (!requiredGoods.containsKey(material)) {
-            log.log(Level.FINE, "This building does not accept {0}", material);
-            return false;
-        }
-
-        int neededAmount = requiredGoods.get(material);
-
-        /* Building has all the cargos it needs of the material */
-        if (receivedMaterial.get(material) >= neededAmount) {
-            log.log(Level.FINE, "This building has all the {0} it needs", material);
-            return false;
-        }
-
-        log.log(Level.FINE, "This building requires {0}", material);
-        return true;
     }
 
     @Override
@@ -880,5 +845,67 @@ public class Building implements Actor, EndPoint, Piece {
         int amount = promisedDeliveries.get(aThis.getMaterial());
 
         promisedDeliveries.put(aThis.getMaterial(), amount - 1);
+    }
+
+    private Integer getProjectedAmount(Material material) {
+        return promisedDeliveries.get(material) + getAmount(material);
+    }
+
+    private int getTotalAmountNeeded(Material material) {
+
+        if (state == State.UNDER_CONSTRUCTION) {
+
+            if (!getMaterialsToBuildHouse().containsKey(material)) {
+                return 0;
+            }
+
+            return getMaterialsToBuildHouse().get(material);
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+            return getTotalAmountNeededForProduction().get(material);
+        }
+
+        return 0;
+    }
+
+    private int getLackingAmountWithProjected(Material material) {
+
+        if (state == State.UNDER_CONSTRUCTION) {
+
+            if (!getMaterialsToBuildHouse().containsKey(material)) {
+                return 0;
+            }
+
+            return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+            
+            if (!isAccepted(material)) {
+                return 0;
+            } else {
+                return getTotalAmountNeeded(material) - getProjectedAmount(material);
+            }
+        }
+
+        return 0;
+    }
+
+    private int getLackingAmountWithoutProjected(Material material) {
+
+        if (state == State.UNDER_CONSTRUCTION) {
+
+            if (!getMaterialsToBuildHouse().containsKey(material)) {
+                return 0;
+            }
+
+            return getMaterialsToBuildHouse().get(material) - getAmount(material);
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+
+            if (!isAccepted(material)) {
+                return 0;
+            } else {
+                return getTotalAmountNeeded(material) - getAmount(material);
+            }
+        }
+
+        return 0;
     }
 }

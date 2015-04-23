@@ -567,8 +567,11 @@ public class TestSawmill {
 
         /* Deliver material to the sawmill */
         Cargo woodCargo = new Cargo(WOOD, map);
-        
+
+        sawmill0.promiseDelivery(WOOD);
         sawmill0.putCargo(woodCargo);
+
+        sawmill0.promiseDelivery(WOOD);
         sawmill0.putCargo(woodCargo);
 
         /* Occupy the sawmill */
@@ -602,38 +605,37 @@ public class TestSawmill {
     
         /* Connect the sawmill with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
-    
+
         /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
-    
+
         /* Wait for the courier to reach the idle point of the road */
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(sawmill0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-    
-    
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-    
+
         /* Verify that the courier walks to pick up the cargo */
         map.stepTime();
-        
+
         assertEquals(courier.getTarget(), sawmill0.getFlag().getPosition());
-    
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-        
+
         /* Verify that the courier has picked up the cargo */
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
-        
+
         /* Verify that the courier delivers the cargo to the headquarter */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
-        
+
         int amount = headquarter0.getAmount(PLANCK);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
-        
+
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(PLANCK), amount + 1);

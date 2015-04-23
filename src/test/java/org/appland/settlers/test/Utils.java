@@ -108,7 +108,7 @@ public class Utils {
         Map<Building, Material> result = new HashMap<>();
 
         for (Building b : buildings) {
-            Map<Material, Integer> neededMaterial = b.getRequiredGoodsForProduction();
+            Map<Material, Integer> neededMaterial = b.getTotalAmountNeededForProduction();
 
             for (Material m : neededMaterial.keySet()) {
                 result.put(b, m);
@@ -384,6 +384,8 @@ public class Utils {
             if (b.needsMaterial(PLANCK)) {
                 try {
                     Cargo cargo = new Cargo(PLANCK, map);
+
+                    b.promiseDelivery(PLANCK);
                     b.putCargo(cargo);
                 } catch (Exception ex) {
                     Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
@@ -393,6 +395,8 @@ public class Utils {
             if (b.needsMaterial(STONE)) {                
                 try {
                     Cargo cargo = new Cargo(STONE, map);
+
+                    b.promiseDelivery(STONE);
                     b.putCargo(cargo);
                 } catch (Exception ex) {
                     Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
