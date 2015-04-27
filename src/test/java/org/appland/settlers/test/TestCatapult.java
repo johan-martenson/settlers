@@ -27,6 +27,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.Projectile;
+import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -475,6 +476,64 @@ public class TestCatapult {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testCatapultDoesNotFireOnNonMilitaryEnemyBuildings() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(29, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Place catapult */
+        Point point3 = new Point(21, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult, map);
+
+        /* Occupy the catapult */
+        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+
+        assertTrue(sw.isInsideBuilding());
+        assertEquals(sw.getHome(), catapult);
+        assertEquals(catapult.getWorker(), sw);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Deliver stones to the catapult */
+        catapult.putCargo(new Cargo(STONE, map));
+        catapult.putCargo(new Cargo(STONE, map));
+
+        /* Verify that the catapult doesn't throw a projectile */
+        for (int i = 0; i < 500; i++) {
+
+            assertTrue(map.getProjectiles().isEmpty());
+            assertEquals(catapult.getAmount(STONE), 2);
+
+            map.stepTime();
+        }
+    }
+
     @Test
     public void testBarracksLosesOneSoldierWhenProjectileHits() throws Exception {
 
