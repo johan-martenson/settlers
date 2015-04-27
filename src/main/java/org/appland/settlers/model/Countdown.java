@@ -12,13 +12,15 @@ package org.appland.settlers.model;
  */
 class Countdown {
 
-    int count = -1;
+    private int count = -1;
+    private int startedAt;
     
     public Countdown() {
     }
 
     void countFrom(int i) {
         count = i;
+        startedAt = i;
     }
 
     void step() {
@@ -47,5 +49,9 @@ class Countdown {
 
     int getCount() {
         return count;
+    }
+
+    int getStartedAt() {
+        return startedAt;
     }
 }

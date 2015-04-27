@@ -16,6 +16,7 @@ import static org.appland.settlers.model.Material.STONE;
 public class CatapultWorker extends Worker {
     private final Countdown countdown;
     private final static int RESTING_TIME = 49;
+    private final static int MAX_RANGE = 15;
 
     private State state;
 
@@ -50,15 +51,20 @@ public class CatapultWorker extends Worker {
                 /* Fire the catapult if there are stones available */
                 if (getHome().getAmount(STONE) > 0) {
 
-                    Projectile projectile = new Projectile();
+                    Building target = findReachableTarget();
 
-                    map.placeProjectile(projectile, getPosition());
+                    /* Fire a projectile if there was a suitable target */
+                    if (target != null) {
+                        Projectile projectile = new Projectile(getPosition(), target);
 
-                    /* Consume the stone */
-                    getHome().consumeOne(STONE);
+                        map.placeProjectile(projectile, getPosition());
 
-                    /* Rest again */
-                    countdown.countFrom(RESTING_TIME);
+                        /* Consume the stone */
+                        getHome().consumeOne(STONE);
+
+                        /* Rest again */
+                        countdown.countFrom(RESTING_TIME);
+                    }
                 }
 
             } else {
@@ -100,5 +106,37 @@ public class CatapultWorker extends Worker {
                 }
             }
         }
+    }
+
+    private Building findReachableTarget() {
+
+        for (Point p : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
+
+            /* Filter points without a building */
+            if (!map.isBuildingAtPoint(p)) {
+                continue;
+            }
+
+            Building building = map.getBuildingAtPoint(p);
+
+            /* Filter buildings belonging to the same player */
+            if (building.getPlayer().equals(getPlayer())) {
+                continue;
+            }
+
+            /* Filter non-military buildings */
+            if (!building.isMilitaryBuilding()) {
+                continue;
+            }
+
+            /* Filer buildings that are not ready */
+            if (!building.ready()) {
+                continue;
+            }
+
+            return building;
+        }
+
+        return null;
     }
 }

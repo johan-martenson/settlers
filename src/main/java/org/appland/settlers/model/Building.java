@@ -908,4 +908,13 @@ public class Building implements Actor, EndPoint, Piece {
 
         return 0;
     }
+
+    void hitByCatapult() throws Exception {
+
+        if (getHostedMilitary() > 0) {
+            hostedMilitary.remove(0);
+        } else {
+            tearDown();
+        }
+    }
 }

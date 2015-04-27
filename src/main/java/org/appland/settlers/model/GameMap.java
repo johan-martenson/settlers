@@ -158,6 +158,10 @@ public class GameMap {
         workersToAdd.clear();
         signsToRemove.clear();
         buildingsToRemove.clear();
+
+        for (Projectile p : projectiles) {
+            p.stepTime();
+        }
         
         for (Worker w : workers) {
             w.stepTime();
@@ -178,7 +182,7 @@ public class GameMap {
         for (Sign s : signs) {
             s.stepTime();
         }
-        
+
         List<Stone> stonesToRemove = new ArrayList<>();
         for (Stone s : stones) {
             if (s.noMoreStone()) {
