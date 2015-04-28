@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
@@ -27,6 +28,7 @@ import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.LARGE;
@@ -240,7 +242,7 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class aClass) {
+    public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<? extends Worker> aClass) {
         boolean found = false;
         
         for (Worker w : allWorkers) {
@@ -654,5 +656,41 @@ public class Utils {
         assertNotNull(firstAttacker);
 
         return firstAttacker;
+    }
+
+    static Projectile waitForCatapultToThrowProjectile(Catapult catapult, GameMap map) throws Exception {
+        Projectile projectile = null;
+
+        assertTrue(map.getProjectiles().isEmpty());
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (!map.getProjectiles().isEmpty()) {
+
+                projectile = map.getProjectiles().get(0);
+
+                break;
+            }
+        }
+
+        assertNotNull(projectile);
+
+        return projectile;
+    }
+
+    static void waitForProjectileToReachTarget(Projectile projectile, GameMap map) throws Exception {
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (projectile.arrived()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(projectile.arrived());
     }
 }

@@ -34,6 +34,7 @@ public class GameMap {
 
     private List<Building>          buildings;
     private List<Building>          buildingsToRemove;
+    private List<Projectile>        projectilesToRemove;
     private List<Flag>              flags;
     private List<Sign>              signs;
     private List<Projectile>        projectiles;
@@ -124,23 +125,24 @@ public class GameMap {
             throw new Exception("Can't create too small map (" + width + "x" + height + ")");
         }
         
-        buildings         = new ArrayList<>();
-        buildingsToRemove = new LinkedList<>();
-        roads             = new ArrayList<>();
-        flags             = new ArrayList<>();
-        signs             = new ArrayList<>();
-        projectiles       = new ArrayList<>();
-        signsToRemove     = new LinkedList<>();
-        workers           = new ArrayList<>();
-        workersToRemove   = new LinkedList<>();
-        terrain           = new Terrain(width, height);
-        trees             = new ArrayList<>();
-        stones            = new ArrayList<>();
-        crops             = new ArrayList<>();
-        workersToAdd      = new LinkedList<>();
+        buildings           = new ArrayList<>();
+        buildingsToRemove   = new LinkedList<>();
+        projectilesToRemove = new LinkedList<>();
+        roads               = new ArrayList<>();
+        flags               = new ArrayList<>();
+        signs               = new ArrayList<>();
+        projectiles         = new ArrayList<>();
+        signsToRemove       = new LinkedList<>();
+        workers             = new ArrayList<>();
+        workersToRemove     = new LinkedList<>();
+        terrain             = new Terrain(width, height);
+        trees               = new ArrayList<>();
+        stones              = new ArrayList<>();
+        crops               = new ArrayList<>();
+        workersToAdd        = new LinkedList<>();
 
-        fullGrid          = buildFullGrid();
-        pointToGameObject = populateMapPoints(fullGrid);
+        fullGrid            = buildFullGrid();
+        pointToGameObject   = populateMapPoints(fullGrid);
 
         /* Give the players a reference to the map */
         for (Player player : players) {
@@ -154,6 +156,7 @@ public class GameMap {
     }
 
     public void stepTime() throws Exception {
+        projectilesToRemove.clear();
         workersToRemove.clear();
         workersToAdd.clear();
         signsToRemove.clear();
@@ -162,7 +165,7 @@ public class GameMap {
         for (Projectile p : projectiles) {
             p.stepTime();
         }
-        
+
         for (Worker w : workers) {
             w.stepTime();
         }
@@ -193,7 +196,7 @@ public class GameMap {
         for (Stone s : stonesToRemove) {
             removeStone(s);
         }
-    
+
         /* Resume transport of stuck cargos */
         for (Flag f : flags) {
             for (Cargo cargo : f.getStackedCargo()) {
@@ -210,27 +213,30 @@ public class GameMap {
         synchronized (workers) {
             workers.addAll(workersToAdd);
         }
-        
+
         /* Remove signs that have expired during this round */
         signs.removeAll(signsToRemove);
-        
+
         /* Remove buildings that have been destroyed some time ago */
         buildings.removeAll(buildingsToRemove);
-        
+
         for (Building b : buildingsToRemove) {
             b.getPlayer().removeBuilding(b);
         }
+
+        /* Remove projectiles that have hit the ground */
+        projectiles.removeAll(projectilesToRemove);
     }
 
     public <T extends Building> T placeBuilding(T house, Point p) throws Exception {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, p});
-        
+
         boolean firstHouse = false;
-        
+
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
-        
+
         /* Verify that the house's player is valid */
         if (!players.contains(house.getPlayer())) {
             throw new Exception("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
@@ -1869,5 +1875,9 @@ public class GameMap {
 
     void placeProjectile(Projectile projectile, Point position) {
         projectiles.add(projectile);
+    }
+
+    void removeProjectileFromWithinStepTime(Projectile aThis) {
+        projectilesToRemove.add(aThis);
     }
 }

@@ -15,7 +15,7 @@ import static org.appland.settlers.model.Material.STONE;
 @Walker(speed = 10)
 public class CatapultWorker extends Worker {
     private final Countdown countdown;
-    private final static int RESTING_TIME = 49;
+    private final static int RESTING_TIME = 99;
     private final static int MAX_RANGE = 15;
 
     private State state;
@@ -55,7 +55,7 @@ public class CatapultWorker extends Worker {
 
                     /* Fire a projectile if there was a suitable target */
                     if (target != null) {
-                        Projectile projectile = new Projectile(getPosition(), target);
+                        Projectile projectile = new Projectile(getPosition(), target, map);
 
                         map.placeProjectile(projectile, getPosition());
 

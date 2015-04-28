@@ -10,14 +10,18 @@ package org.appland.settlers.model;
  * @author johan
  */
 public class Projectile implements Actor {
-    private final int SPEED = 5;
+    private final double FAIL_RATE = 0.25;
+    private final int    SPEED     = 5;
+
     private final Building  target;
     private final Point     source;
     private final Countdown countdown;
+    private final GameMap   map;
 
-    Projectile(Point src, Building tgt) {
+    Projectile(Point src, Building tgt, GameMap m) {
         target = tgt;
         source = src;
+        map    = m;
 
         countdown = new Countdown();
         countdown.countFrom((int)(src.distance(tgt.getPosition()) * SPEED));
@@ -46,7 +50,13 @@ public class Projectile implements Actor {
         }
 
         if (countdown.reachedZero()) {
-            target.hitByCatapult();
+
+            /* Determine if the projectile hit the target - the hitrate is 75% */
+            if (Math.random() > FAIL_RATE) {
+                target.hitByCatapult();
+            }
+
+            map.removeProjectileFromWithinStepTime(this);
         }
     }
 

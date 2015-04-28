@@ -449,7 +449,7 @@ public class TestCatapult {
         /* Wait for the catapult to throw a projectile */
         assertTrue(map.getProjectiles().isEmpty());
 
-        Utils.fastForward(50, map);
+        Utils.fastForward(100, map);
 
         /* Get the projectile */
         assertEquals(map.getProjectiles().size(), 1);
@@ -535,6 +535,80 @@ public class TestCatapult {
     }
 
     @Test
+    public void testCatapultHitrateBetweenSeventyAndEightyPercent() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks */
+        Point point2 = new Point(33, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(barracks0, map);
+
+        /* Place catapult */
+        Point point3 = new Point(21, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult, map);
+
+        /* Occupy the catapult */
+        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+
+        assertTrue(sw.isInsideBuilding());
+        assertEquals(sw.getHome(), catapult);
+        assertEquals(catapult.getWorker(), sw);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Verify that the catapult has a hit rate higher than seventy percent */
+        int hits = 0;
+
+        for (int i = 0; i < 100; i++) {
+
+            /* Occupy the barracks if needed */
+            if (barracks0.getHostedMilitary() == 0) {
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+            }
+
+            /* Deliver stone to the catapult */
+            catapult.putCargo(new Cargo(STONE, map));
+
+            /* Wait for the catapult to throw a projectile */
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult, map);
+
+            int hostedBefore = barracks0.getHostedMilitary();
+
+            /* Wait for the projectile to reach its target */
+            Utils.waitForProjectileToReachTarget(projectile, map);
+
+            /* Check if the projectile hit */
+            if (barracks0.getHostedMilitary() < hostedBefore) {
+                hits++;
+            }
+        }
+
+        assertTrue(hits > 70);
+        assertTrue(hits < 80);
+    }
+
+    @Test
     public void testBarracksLosesOneSoldierWhenProjectileHits() throws Exception {
 
         /* Create new game map */
@@ -589,7 +663,7 @@ public class TestCatapult {
         /* Wait for the catapult to throw a projectile */
         assertTrue(map.getProjectiles().isEmpty());
 
-        Utils.fastForward(50, map);
+        Utils.fastForward(100, map);
 
         /* Get the projectile */
         assertEquals(map.getProjectiles().size(), 1);
@@ -612,6 +686,7 @@ public class TestCatapult {
         }
 
         assertTrue(projectile.arrived());
+        assertTrue(map.getProjectiles().isEmpty());
 
         /* Verify that the barracks lost one military */
         assertEquals(barracks0.getHostedMilitary(), 0);
@@ -665,7 +740,7 @@ public class TestCatapult {
         catapult.putCargo(new Cargo(STONE, map));
 
         /* Verify that the catapult throws a projectile at the right time */
-        for (int i = 0; i < 49; i++) {
+        for (int i = 0; i < 99; i++) {
 
             map.stepTime();
 
@@ -789,7 +864,7 @@ public class TestCatapult {
 
         /* Connect the catapult with the headquarter */
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0, map);
 
@@ -799,14 +874,14 @@ public class TestCatapult {
         assertTrue(catapult0.burningDown());
 
         /* Wait for the catapult to stop burning */
-        Utils.fastForward(50, map);
-        
+        Utils.fastForward(100, map);
+
         assertTrue(catapult0.destroyed());
-        
+
         /* Wait for the catapult to disappear */
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             assertEquals(map.getBuildingAtPoint(point26), catapult0);
-            
+
             map.stepTime();
         }
         
