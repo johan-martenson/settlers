@@ -7,12 +7,6 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.WATER;
-import static org.appland.settlers.model.WellWorker.States.DRAWING_WATER;
-import static org.appland.settlers.model.WellWorker.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.WellWorker.States.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.WellWorker.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.WellWorker.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.WellWorker.States.WALKING_TO_TARGET;
 
 /**
  *
@@ -29,11 +23,12 @@ public class WellWorker extends Worker {
 
     public WellWorker(Player player, GameMap m) {
         super(player, m);
+
         countdown = new Countdown();
-        state     = WALKING_TO_TARGET;
+        state     = States.WALKING_TO_TARGET;
     }
     
-    protected enum States {
+    private enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DRAWING_WATER,
@@ -48,22 +43,22 @@ public class WellWorker extends Worker {
             setHome(b);
         }
 
-        state = RESTING_IN_HOUSE;
+        state = States.RESTING_IN_HOUSE;
         
         countdown.countFrom(RESTING_TIME);
     }
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {
+        if (state == States.RESTING_IN_HOUSE) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
-                state = DRAWING_WATER;
+                state = States.DRAWING_WATER;
                 
                 countdown.countFrom(PRODUCTION_TIME);
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
-        } else if (state == DRAWING_WATER) {
+        } else if (state == States.DRAWING_WATER) {
             if (countdown.reachedZero()) {
                 Cargo cargo = new Cargo(WATER, map);
                     
@@ -71,7 +66,7 @@ public class WellWorker extends Worker {
                     
                 setTarget(getHome().getFlag().getPosition());
                     
-                state = GOING_TO_FLAG_WITH_CARGO;
+                state = States.GOING_TO_FLAG_WITH_CARGO;
             } else {
                 countdown.step();
             }
@@ -80,7 +75,7 @@ public class WellWorker extends Worker {
     
     @Override
     protected void onArrival() throws Exception {
-        if (state == GOING_TO_FLAG_WITH_CARGO) {
+        if (state == States.GOING_TO_FLAG_WITH_CARGO) {
             Flag f = getHome().getFlag();
             Cargo cargo = getCargo();
 
@@ -93,13 +88,13 @@ public class WellWorker extends Worker {
 
             returnHome();
 
-            state = GOING_BACK_TO_HOUSE;
-        } else if (state == GOING_BACK_TO_HOUSE) {
+            state = States.GOING_BACK_TO_HOUSE;
+        } else if (state == States.GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
 
-            state = RESTING_IN_HOUSE;
+            state = States.RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
-        } else if (state == RETURNING_TO_STORAGE) {
+        } else if (state == States.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
         
             storage.depositWorker(this);
@@ -111,13 +106,13 @@ public class WellWorker extends Worker {
         Building storage = map.getClosestStorage(getPosition());
     
         if (storage != null) {
-            state = RETURNING_TO_STORAGE;
+            state = States.RETURNING_TO_STORAGE;
             
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = RETURNING_TO_STORAGE;
+                    state = States.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 

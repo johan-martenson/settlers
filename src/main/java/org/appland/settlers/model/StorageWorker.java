@@ -9,11 +9,6 @@ package org.appland.settlers.model;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.StorageWorker.State.DELIVERING_CARGO_TO_FLAG;
-import static org.appland.settlers.model.StorageWorker.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.StorageWorker.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.StorageWorker.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.StorageWorker.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -31,7 +26,7 @@ public class StorageWorker extends Worker {
     private Storage ownStorage;
 
 
-    protected enum State {
+    private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DELIVERING_CARGO_TO_FLAG,
@@ -42,7 +37,7 @@ public class StorageWorker extends Worker {
     public StorageWorker(Player player, GameMap m) {
         super(player, m);
 
-        state = WALKING_TO_TARGET;
+        state = State.WALKING_TO_TARGET;
         
         countdown = new Countdown();
         
@@ -87,12 +82,12 @@ public class StorageWorker extends Worker {
             ownStorage = (Storage)b;
         }
     
-        state = RESTING_IN_HOUSE;
+        state = State.RESTING_IN_HOUSE;
     }
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {
+        if (state == State.RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Cargo cargo = tryToStartDelivery();
                     
@@ -102,7 +97,7 @@ public class StorageWorker extends Worker {
 
                         setTarget(getHome().getFlag().getPosition());
 
-                        state = DELIVERING_CARGO_TO_FLAG;
+                        state = State.DELIVERING_CARGO_TO_FLAG;
                         } catch (InvalidRouteException ex) {
                             Logger.getLogger(StorageWorker.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -115,7 +110,7 @@ public class StorageWorker extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
-        if (state == DELIVERING_CARGO_TO_FLAG) {
+        if (state == State.DELIVERING_CARGO_TO_FLAG) {
             Flag f = getHome().getFlag();
                 
             f.putCargo(getCargo());
@@ -124,14 +119,14 @@ public class StorageWorker extends Worker {
                 
             returnHome();
                 
-            state = GOING_BACK_TO_HOUSE;
-        } else if (state == GOING_BACK_TO_HOUSE) {
+            state = State.GOING_BACK_TO_HOUSE;
+        } else if (state == State.GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             
-            state = RESTING_IN_HOUSE;
+            state = State.RESTING_IN_HOUSE;
             
             countdown.countFrom(RESTING_TIME);
-        } else if (state == RETURNING_TO_STORAGE) {
+        } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
         
             storage.depositWorker(this);
@@ -143,13 +138,13 @@ public class StorageWorker extends Worker {
         Building storage = map.getClosestStorage(getPosition(), getHome());
     
         if (storage != null) {
-            state = RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
             
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage && !b.equals(getHome())) {
-                    state = RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 

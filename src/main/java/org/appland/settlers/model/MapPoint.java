@@ -117,7 +117,7 @@ public class MapPoint {
     }
 
     List<Road> getConnectedRoads() {
-        return new ArrayList<Road>(connectedRoads);
+        return new ArrayList<>(connectedRoads);
     }
 
     Set<Point> getConnectedNeighbors() {

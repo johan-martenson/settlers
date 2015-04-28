@@ -62,6 +62,7 @@ public class Tile {
             break;
         case COAL:
             amountCoal--;
+            break;
         case STONE:
             amountGranite--;
         }
@@ -99,8 +100,10 @@ public class Tile {
             break;
         case COAL:
             amountCoal = nrAmount;
+            break;
         case STONE:
             amountGranite = nrAmount;
+            break;
         default:
             
         }

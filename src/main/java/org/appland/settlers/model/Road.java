@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,7 +104,7 @@ public class Road {
     }
 
     public List<Point> getWayPoints() {
-        return steps;
+        return Collections.unmodifiableList(steps);
     }
 
     private boolean roadStepsTooLong(List<Point> wayPoints) {

@@ -14,6 +14,7 @@ import java.util.List;
  * @author johan
  */
 public class Point extends java.awt.Point {
+    private static final long serialVersionUID = 1L;
 
     public Point(int x, int y) {
         super(x, y);

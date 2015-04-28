@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,14 +56,16 @@ public enum Material {
     
     static Iterable<Material> getMinerals() {
         if (minerals == null) {
-            minerals = new LinkedList<>();
-            
-            minerals.add(GOLD);
-            minerals.add(IRON);
-            minerals.add(COAL);
-            minerals.add(STONE);
+            List<Material> tempList = new LinkedList<>();
+
+            tempList.add(GOLD);
+            tempList.add(IRON);
+            tempList.add(COAL);
+            tempList.add(STONE);
+
+            minerals = Collections.unmodifiableList(tempList);
         }
-        
+
         return minerals;
     }
 }

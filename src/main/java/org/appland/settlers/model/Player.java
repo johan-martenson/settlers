@@ -6,6 +6,7 @@ package org.appland.settlers.model;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class Player {
     }
 
     public List<Building> getBuildings() {
-        return buildings;
+        return Collections.unmodifiableList(buildings);
     }
 
     public boolean isWithinBorder(Point position) {
@@ -72,11 +73,11 @@ public class Player {
     }
 
     public Collection<Land> getLands() {
-        return ownedLands;
+        return Collections.unmodifiableCollection(ownedLands);
     }
 
     public List<Point> getFieldOfView() {
-        return fieldOfView;
+        return Collections.unmodifiableList(fieldOfView);
     }
 
     private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {

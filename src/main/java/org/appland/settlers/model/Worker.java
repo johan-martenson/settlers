@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -387,7 +388,7 @@ public abstract class Worker implements Actor, Piece {
     }
 
     public List<Point> getPlannedPath() {
-        return path;
+        return Collections.unmodifiableList(path);
     }
 
     protected void returnHomeOffroad() {
