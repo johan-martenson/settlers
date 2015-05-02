@@ -7,6 +7,7 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -95,11 +96,11 @@ public class Land {
     }
 
     List<List<Point>> getBorders() {
-        return border;
+        return Collections.unmodifiableList(border);
     }
 
     public List<Point> getPointsInLand() {
-        return points;
+        return Collections.unmodifiableList(points);
     }
 
     public boolean isWithinBorder(Point position) {

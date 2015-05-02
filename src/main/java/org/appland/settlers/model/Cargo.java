@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +58,7 @@ public class Cargo implements Piece {
     }
 
     public List<Point> getPlannedSteps() {
-        return path;
+        return Collections.unmodifiableList(path);
     }
 
     public Point getNextStep() {

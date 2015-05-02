@@ -47,7 +47,7 @@ public class GameUtils {
         return true;
     }
 
-    public interface ConnectionsProvider {
+    protected interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
     }
 

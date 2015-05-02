@@ -25,7 +25,7 @@ public class Courier extends Worker {
             return wayPoints.get(0);
         }
 
-        return wayPoints.get((int) (wayPoints.size() / 2));
+        return wayPoints.get(wayPoints.size() / 2);
     }
 
     public boolean isWalkingToIdlePoint() {

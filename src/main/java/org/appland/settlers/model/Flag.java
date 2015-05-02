@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ public class Flag implements EndPoint, Piece {
 
     @Override
     public List<Cargo> getStackedCargo() {
-        return stackedCargo;
+        return Collections.unmodifiableList(stackedCargo);
     }
 
     @Override
