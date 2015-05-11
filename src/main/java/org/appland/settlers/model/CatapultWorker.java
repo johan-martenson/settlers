@@ -46,11 +46,11 @@ public class CatapultWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {            
-            if (countdown.reachedZero()) {
 
-                /* Fire the catapult if there are stones available */
-                if (getHome().getAmount(STONE) > 0) {
+            /* Countdown if there are stones available */
+            if (getHome().getAmount(STONE) > 0) {
 
+                if (countdown.reachedZero()) {
                     Building target = findReachableTarget();
 
                     /* Fire a projectile if there was a suitable target */
@@ -65,10 +65,9 @@ public class CatapultWorker extends Worker {
                         /* Rest again */
                         countdown.countFrom(RESTING_TIME);
                     }
+                } else {
+                    countdown.step();
                 }
-
-            } else {
-                countdown.step();
             }
         }
     }

@@ -278,7 +278,7 @@ public class TestCatapult {
     }
 
     @Test
-    public void testOccupiedCatapultNothing() throws Exception {
+    public void testOccupiedCatapultProducesNothing() throws Exception {
 
         /* Create new game map */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -610,6 +610,131 @@ public class TestCatapult {
 
         assertTrue(hits > 60);
         assertTrue(hits < 90);
+    }
+
+    @Test
+    public void testCatapultDestroysEmptyBarracks() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks */
+        Point point2 = new Point(33, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(barracks0, map);
+
+        /* Place catapult */
+        Point point3 = new Point(21, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult, map);
+
+        /* Occupy the catapult */
+        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+
+        assertTrue(sw.isInsideBuilding());
+        assertEquals(sw.getHome(), catapult);
+        assertEquals(catapult.getWorker(), sw);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Verify that the catapult destroys the barracks */
+        for (int i = 0; i < 100; i++) {
+
+            /* Deliver stone to the catapult */
+            catapult.putCargo(new Cargo(STONE, map));
+
+            /* Wait for the catapult to throw a projectile */
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult, map);
+
+            /* Wait for the projectile to reach its target */
+            Utils.waitForProjectileToReachTarget(projectile, map);
+
+            /* Check if the projectile hit and destroyed the barracks */
+            if (barracks0.burningDown()) {
+                break;
+            }
+        }
+
+        assertTrue(barracks0.burningDown());
+    }
+
+    @Test
+    public void testCatapultWaitsBeforeThrowingAfterReceivingStone() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks */
+        Point point2 = new Point(33, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(barracks0, map);
+
+        /* Place catapult */
+        Point point3 = new Point(21, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult, map);
+
+        /* Occupy the catapult */
+        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+
+        assertTrue(sw.isInsideBuilding());
+        assertEquals(sw.getHome(), catapult);
+        assertEquals(catapult.getWorker(), sw);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Make the catapult worker wait */
+        Utils.fastForward(300, map);
+
+        /* Deliver stone to the catapult */
+        catapult.putCargo(new Cargo(STONE, map));
+
+        /* Verify that the catapult worker waits before throwing a projectile */
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the catapult hasn't thrown yet */
+            assertTrue(map.getProjectiles().isEmpty());
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getProjectiles().isEmpty());
     }
 
     @Test
