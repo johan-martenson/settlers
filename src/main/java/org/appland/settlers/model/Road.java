@@ -18,7 +18,7 @@ public class Road {
     private boolean     needsCourier;
     private Player      player;
 
-    Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
+    protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
         if (roadStepsTooLong(wayPoints)) {
             throw new Exception("The steps are too long in " + wayPoints);
         }
@@ -37,7 +37,7 @@ public class Road {
         usage = 0;
     }
 
-    Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
+    protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
         this(startFlag, wayPoints, endFlag);
         
         this.player = player;
