@@ -38,6 +38,7 @@ import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -692,5 +693,21 @@ public class Utils {
         }
 
         assertTrue(projectile.arrived());
+    }
+
+    static WildAnimal waitForAnimalToAppear(GameMap map) throws Exception {
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (!map.getWildAnimals().isEmpty()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWildAnimals().isEmpty());
+
+        return map.getWildAnimals().get(0);
     }
 }

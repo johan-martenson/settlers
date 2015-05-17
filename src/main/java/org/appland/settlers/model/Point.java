@@ -97,7 +97,7 @@ public class Point extends java.awt.Point {
         return result;
     }
 
-    Iterable<Point> getDiagonalPointsAndSides() {
+    List<Point> getDiagonalPointsAndSides() {
         List<Point> result = new ArrayList<>();
         
         result.add(upRight());

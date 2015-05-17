@@ -24,6 +24,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import org.appland.settlers.policy.Constants;
 
 public class GameMap {
 
@@ -31,6 +32,7 @@ public class GameMap {
     private final int               height;
     private final int               width;
     private final List<Road>        roads;
+    private final Countdown         animalCountdown;
 
     private List<Building>          buildings;
     private List<Building>          buildingsToRemove;
@@ -38,6 +40,7 @@ public class GameMap {
     private List<Flag>              flags;
     private List<Sign>              signs;
     private List<Projectile>        projectiles;
+    private List<WildAnimal>        wildAnimals;
     private List<Sign>              signsToRemove;
     private List<Worker>            workersToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
@@ -132,6 +135,7 @@ public class GameMap {
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
         projectiles         = new ArrayList<>();
+        wildAnimals         = new ArrayList<>();
         signsToRemove       = new LinkedList<>();
         workers             = new ArrayList<>();
         workersToRemove     = new LinkedList<>();
@@ -140,6 +144,7 @@ public class GameMap {
         stones              = new ArrayList<>();
         crops               = new ArrayList<>();
         workersToAdd        = new LinkedList<>();
+        animalCountdown     = new Countdown();
 
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -186,6 +191,14 @@ public class GameMap {
             s.stepTime();
         }
 
+        for (WildAnimal w : wildAnimals) {
+            w.stepTime();
+        }
+
+        /* Possibly add wild animals */
+        handleWildAnimalPopulation();
+
+        /* Remove completely mined stones */
         List<Stone> stonesToRemove = new ArrayList<>();
         for (Stone s : stones) {
             if (s.noMoreStone()) {
@@ -1245,7 +1258,7 @@ public class GameMap {
 
     public Building getBuildingAtPoint(Point p) {
         MapPoint mp = pointToGameObject.get(p);
-        
+
         return mp.getBuilding();
     }
 
@@ -1879,5 +1892,62 @@ public class GameMap {
 
     void removeProjectileFromWithinStepTime(Projectile aThis) {
         projectilesToRemove.add(aThis);
+    }
+
+    public List<WildAnimal> getWildAnimals() {
+        return Collections.unmodifiableList(wildAnimals);
+    }
+
+    private void handleWildAnimalPopulation() throws Exception {
+
+        double density = wildAnimals.size() / (width * height);
+
+        if (density < Constants.WILD_ANIMAL_NATURAL_DENSITY) {
+            if (animalCountdown.reachedZero()) {
+
+                /* Find point to place new wild animal on */
+                Point point = findPossiblePointToPlaceFreeMovingActor();
+
+                if (point == null) {
+                    return;
+                }
+
+                /* Place the new wild animal */
+                WildAnimal animal = new WildAnimal(this);
+
+                animal.setPosition(point);
+                wildAnimals.add(animal);
+            } else if (!animalCountdown.isActive()) {
+                animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
+            } else {
+                animalCountdown.step();
+            }
+        }
+    }
+
+    Point findPossiblePointToPlaceFreeMovingActor() throws Exception {
+
+        /* Go through the full map and look for a suitable point */
+        for (Point p : fullGrid) {
+
+            /* Filter buildings */
+            if (isBuildingAtPoint(p)) {
+                continue;
+            }
+
+            /* Filter stones */
+            if (isStoneAtPoint(p)) {
+                continue;
+            }
+
+            /* Filter lakes */
+            if (getTerrain().isInWater(p)) {
+                continue;
+            }
+
+            return p;
+        }
+
+        return null;
     }
 }
