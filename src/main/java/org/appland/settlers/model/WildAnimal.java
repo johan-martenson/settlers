@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,9 +86,15 @@ public class WildAnimal extends Worker {
         List<Point> adjacentPoints = getPosition().getDiagonalPointsAndSides();
 
         /* Choose the next point to go to */
-        for (int i = nextPick; i < PSEUDO_RANDOM.length; i++) {
+        for (int i = nextPick; i < PSEUDO_RANDOM.length + nextPick; i++) {
 
-            if (PSEUDO_RANDOM[i] == -1) {
+            int index = i;
+
+            if (index >= PSEUDO_RANDOM.length) {
+                index = index - nextPick;
+            }
+
+            if (PSEUDO_RANDOM[index] == -1) {
 
                 nextPick++;
 
@@ -100,7 +105,7 @@ public class WildAnimal extends Worker {
                 return null;
             }
 
-            Point p = adjacentPoints.get(PSEUDO_RANDOM[i]);
+            Point p = adjacentPoints.get(PSEUDO_RANDOM[index]);
 
             if (canGoTo(p)) {
 

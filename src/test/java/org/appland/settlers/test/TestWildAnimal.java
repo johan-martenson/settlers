@@ -72,4 +72,36 @@ public class TestWildAnimal {
 
         assertFalse(animal.getPosition().equals(origin));
     }
+
+    @Test
+    public void testWildAnimalDoesNotGetStuck() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Wait for an animal to appear */
+        WildAnimal animal = Utils.waitForAnimalToAppear(map);
+        
+        /* Verify that the animal moves sometimes */
+        Point oldPlace = animal.getPosition();
+        int timeInSamePlace = 0;
+
+        for (int i = 0; i < 1000; i++) {
+
+            /* Check if the animal has moved */
+            if (!oldPlace.equals(animal.getPosition())) {
+                timeInSamePlace = 0;
+                oldPlace = animal.getPosition();
+            } else {
+                timeInSamePlace++;
+            }
+
+            assertTrue(timeInSamePlace < 60);
+
+            map.stepTime();
+        }
+    }
 }
