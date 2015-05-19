@@ -1917,6 +1917,8 @@ public class GameMap {
 
                 animal.setPosition(point);
                 wildAnimals.add(animal);
+
+                animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
             } else if (!animalCountdown.isActive()) {
                 animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
             } else {

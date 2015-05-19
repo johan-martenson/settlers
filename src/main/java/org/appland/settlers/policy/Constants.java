@@ -10,7 +10,7 @@ package org.appland.settlers.policy;
  * @author johan
  */
 public class Constants {
-    public final static double WILD_ANIMAL_NATURAL_DENSITY = 0.01;
-    public final static int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 300;
+    public final static double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
+    public final static int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
     
 }

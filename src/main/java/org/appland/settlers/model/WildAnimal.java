@@ -6,6 +6,7 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -14,12 +15,13 @@ import java.util.List;
 @Walker(speed = 10)
 public class WildAnimal extends Worker {
 
-    private final static int TIME_TO_STAND = 19;
-    private final static int[] PSEUDO_RANDOM = {-1, 0, 3, 5, 4, 2, 5, 2, -1, 0, 4, 3, 1, 1};
+    private final static int TIME_TO_STAND = 9;
+    private final static int MAX_TRIES = 5;
+    private final static int RANGE = 10;
+    private final Random random;
 
     private final Countdown countdown;
     private State state;
-    private int nextPick;
 
     private enum State {
 
@@ -36,7 +38,9 @@ public class WildAnimal extends Worker {
 
         countdown.countFrom(TIME_TO_STAND);
 
-        nextPick = 0;
+        random = new Random();
+
+        random.setSeed(1);
     }
 
     @Override
@@ -46,13 +50,17 @@ public class WildAnimal extends Worker {
             if (countdown.reachedZero()) {
 
                 /* Should the animal stand still or move? */
-                Point nextPoint = findNextPoint();
+                if (random.nextBoolean()) {
 
-                /* Walk if there is an available spot */
-                if (nextPoint == null) {
+                    /* Stand still for a while */
                     countdown.countFrom(TIME_TO_STAND);
                 } else {
-                    setOffroadTarget(nextPoint);
+
+                    Point nextPoint = findNextPoint();
+                    /* Walk if there is an available spot */
+                    if (nextPoint != null) {
+                        setOffroadTarget(nextPoint);
+                    }
                 }
             } else {
                 countdown.step();
@@ -82,43 +90,35 @@ public class WildAnimal extends Worker {
     }
 
     private Point findNextPoint() throws Exception {
+
         /* Get surrounding points */
-        List<Point> adjacentPoints = getPosition().getDiagonalPointsAndSides();
+        List<Point> adjacentPoints = map.getPointsWithinRadius(getPosition(), RANGE);
 
-        /* Choose the next point to go to */
-        for (int i = nextPick; i < PSEUDO_RANDOM.length + nextPick; i++) {
+        /* Try choosing the next point randomly */
+        for (int tries = 0; tries < MAX_TRIES; tries++) {
 
-            int index = i;
+            int index = random.nextInt(adjacentPoints.size());
 
-            if (index >= PSEUDO_RANDOM.length) {
-                index = index - nextPick;
-            }
-
-            if (PSEUDO_RANDOM[index] == -1) {
-
-                nextPick++;
-
-                if (nextPick >= PSEUDO_RANDOM.length) {
-                    nextPick = 0;
-                }
-
-                return null;
-            }
-
-            Point p = adjacentPoints.get(PSEUDO_RANDOM[index]);
+            Point p = adjacentPoints.get(index);
 
             if (canGoTo(p)) {
-
-                nextPick++;
-
-                if (nextPick >= PSEUDO_RANDOM.length) {
-                    nextPick = 0;
-                }
-
                 return p;
             }
         }
 
+        /* Give up and search through all available points sequentially */
+        for (Point p : adjacentPoints) {
+
+            /* Filter points where the animal cannot stand */
+            if (!canGoTo(p)) {
+                continue;
+            }
+
+            /* Return the found point */
+            return p;
+        }
+
+        /* Return null if there is no available point */
         return null;
     }
 }
