@@ -1900,7 +1900,7 @@ public class GameMap {
 
     private void handleWildAnimalPopulation() throws Exception {
 
-        double density = wildAnimals.size() / (width * height);
+        double density = (double)wildAnimals.size() / (double)(width * height);
 
         if (density < Constants.WILD_ANIMAL_NATURAL_DENSITY) {
             if (animalCountdown.reachedZero()) {
