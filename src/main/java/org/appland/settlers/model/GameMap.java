@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,11 +53,13 @@ public class GameMap {
     private List<Crop>              crops;
     private List<Worker>            workersToAdd;
     private List<Player>            players;
+    private Random                  random;
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
+    private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
 
     public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
@@ -145,6 +148,7 @@ public class GameMap {
         crops               = new ArrayList<>();
         workersToAdd        = new LinkedList<>();
         animalCountdown     = new Countdown();
+        random              = new Random();
 
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -158,6 +162,10 @@ public class GameMap {
         if (!allPlayersHaveUniqueColor()) {
             throw new Exception("Each player must have a unique color");
         }
+
+        /* Set a constant initial seed for the random generator to get a 
+           deterministic behavior */
+        random.setSeed(1);
     }
 
     public void stepTime() throws Exception {
@@ -1906,7 +1914,7 @@ public class GameMap {
             if (animalCountdown.reachedZero()) {
 
                 /* Find point to place new wild animal on */
-                Point point = findPossiblePointToPlaceFreeMovingActor();
+                Point point = findRandomPossiblePointToPlaceFreeMovingActor();
 
                 if (point == null) {
                     return;
@@ -1927,10 +1935,16 @@ public class GameMap {
         }
     }
 
-    Point findPossiblePointToPlaceFreeMovingActor() throws Exception {
+    Point findRandomPossiblePointToPlaceFreeMovingActor() throws Exception {
+
+        /* Pick centered point randomly */
+        double x = random.nextDouble() * getWidth();
+        double y = random.nextDouble() * getHeight();
+
+        Point point = GameUtils.getClosestPoint(x, y);
 
         /* Go through the full map and look for a suitable point */
-        for (Point p : fullGrid) {
+        for (Point p : getPointsWithinRadius(point, LOOKUP_RANGE_FOR_FREE_ACTOR)) {
 
             /* Filter buildings */
             if (isBuildingAtPoint(p)) {

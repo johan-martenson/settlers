@@ -57,6 +57,7 @@ public class WildAnimal extends Worker {
                 } else {
 
                     Point nextPoint = findNextPoint();
+
                     /* Walk if there is an available spot */
                     if (nextPoint != null) {
                         setOffroadTarget(nextPoint);

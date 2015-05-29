@@ -6,7 +6,9 @@
 package org.appland.settlers.test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -103,5 +105,64 @@ public class TestWildAnimal {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWildAnimalsAreCreatedAcrossTheMap() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Verify that animals are created across the map */
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+
+        Set<WildAnimal> currentAnimals = new HashSet<>();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Find min and max of newly created animals */
+            for (WildAnimal w : map.getWildAnimals()) {
+
+                /* Filter already handled animals */
+                if (currentAnimals.contains(w)) {
+                    continue;
+                }
+
+                Point p = w.getPosition();
+
+                /* Update min and max */
+                if (p.x < minX) {
+                    minX = p.x;
+                }
+
+                if (p.x > maxX) {
+                    maxX = p.x;
+                }
+
+                if (p.y < minY) {
+                    minY = p.y;
+                }
+
+                if (p.y > maxY) {
+                    maxY = p.y;
+                }
+
+                /* Remember that this animal has been handled */
+                currentAnimals.add(w);
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(maxX - minX > 20);
+        assertTrue(maxY - minY > 20);
+
+        assertFalse(map.getWildAnimals().isEmpty());
     }
 }

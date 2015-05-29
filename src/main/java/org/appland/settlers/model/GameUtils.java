@@ -5,6 +5,10 @@
  */
 package org.appland.settlers.model;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
+import static java.lang.Math.round;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -272,5 +276,37 @@ public class GameUtils {
         result.addAll(surrounding.subList(0, armIndex + 1));
         
         return result;
+    }
+
+    public static Point getClosestPoint(double px, double py) {
+
+        /* Round to integers */
+        int roundedX = (int) round(px);
+        int roundedY = (int) round(py);
+
+        /* Calculate the error */
+        double errorX = abs(px - roundedX);
+        double errorY = abs(py - roundedY);
+
+        /* Adjust the values if needed to avoid invalid points */
+        if ((roundedX + roundedY) % 2 != 0) {
+            if (errorX < errorY) {
+                if (roundedY > py) {
+                    roundedY = (int) floor(py);
+                } else {
+                    roundedY = (int) ceil(py);
+                }
+            } else if (errorX > errorY) {
+                if (roundedX > px) {
+                    roundedX = (int) floor(px);
+                } else {
+                    roundedX = (int) ceil(px);
+                }
+            } else {
+                roundedX++;
+            }
+        }
+
+        return new Point(roundedX, roundedY);
     }
 }
