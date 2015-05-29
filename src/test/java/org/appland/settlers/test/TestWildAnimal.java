@@ -165,4 +165,26 @@ public class TestWildAnimal {
 
         assertFalse(map.getWildAnimals().isEmpty());
     }
+
+    @Test
+    public void testWildAnimalsStayAliveUnlessKilled() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Wait for a wild animal to appear */
+        WildAnimal animal = Utils.waitForAnimalToAppear(map);
+
+        /* Verify that the animal stays alive */
+        for (int i = 0; i < 20000; i++) {
+
+            /* Find min and max of newly created animals */
+            assertTrue(map.getWildAnimals().contains(animal));
+
+            map.stepTime();
+        }
+    }
 }
