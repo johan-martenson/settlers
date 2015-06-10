@@ -6,18 +6,15 @@
 package org.appland.settlers.test;
 
 import static java.awt.Color.BLUE;
-import static java.awt.Color.WHITE;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
-import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
@@ -27,10 +24,8 @@ import static org.appland.settlers.model.Material.COIN;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Tile.Vegetation;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -1556,7 +1551,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testSplitHorisontalRoadInBeginningWithTooShortRemainingRoads() throws Exception {
+    public void testSplitHorisontalRoadWithTooShortRemainingRoads() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1573,17 +1568,21 @@ public class TestRoads {
         Point m1 = new Point(11, 5);
         Point m2 = new Point(13, 5);
         Point m3 = new Point(15, 5);
-        map.placeRoad(player0, start, m1, m2, m3, end);
+        Road road0 = map.placeRoad(player0, start, m1, m2, m3, end);
 
         assertEquals(map.getRoads().size(), 2);
+
+        List<Point> wayPointsBefore = new ArrayList<>(road0.getWayPoints());
 
         try {
             map.placeFlag(player0, m1);
             assertFalse(true);
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
 
+        assertTrue(map.getRoads().contains(road0));
+        assertEquals(road0.getWayPoints().size(), 5);
         assertEquals(map.getRoads().size(), 2);
+        assertEquals(wayPointsBefore, road0.getWayPoints());
         assertNotNull(map.getRoad(start, end));
     }
 
