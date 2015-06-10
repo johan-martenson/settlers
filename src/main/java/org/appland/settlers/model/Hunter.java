@@ -89,6 +89,12 @@ public class Hunter extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == State.TRACKING) {
+            if (prey.isExactlyAtPoint()) {
+                state = State.SHOOTING;
+
+                countdown.countFrom(TIME_TO_SHOOT);
+            }
         }
     }
 
