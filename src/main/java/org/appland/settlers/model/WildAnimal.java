@@ -7,6 +7,7 @@ package org.appland.settlers.model;
 
 import java.util.List;
 import java.util.Random;
+import static org.appland.settlers.model.Material.MEAT;
 
 /**
  *
@@ -121,5 +122,21 @@ public class WildAnimal extends Worker {
 
         /* Return null if there is no available point */
         return null;
+    }
+
+    public boolean isAlive() {
+        return state != State.DEAD;
+    }
+
+    Cargo pickUpCargo() {
+        map.removeWildAnimalWithinStepTime(this);
+
+        return new Cargo(MEAT, map);
+    }
+
+    void shoot() {
+        state = State.DEAD;
+
+        cancelWalkingToTarget();
     }
 }

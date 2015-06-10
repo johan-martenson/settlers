@@ -20,6 +20,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.Land;
 import org.appland.settlers.model.Material;
 
@@ -709,5 +710,45 @@ public class Utils {
         assertFalse(map.getWildAnimals().isEmpty());
 
         return map.getWildAnimals().get(0);
+    }
+
+    static WildAnimal waitForWildAnimalCloseToPoint(Point point, GameMap map) throws Exception {
+        WildAnimal animal = null;
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Check if there is a wild animal close to the hut */
+            for (WildAnimal wa : map.getWildAnimals()) {
+                if (wa.getPosition().distance(point) < 20) {
+                    animal = wa;
+
+                    break;
+                }
+            }
+
+            /* Exit the loop if an animal was found */
+            if (animal != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(animal);
+        assertTrue(animal.getPosition().distance(point) < 20);
+
+        return animal;
+    }
+
+    static void waitForActorsToGetClose(Hunter hunter, WildAnimal animal, int d, GameMap map) throws Exception {
+        for (int i = 0; i < 5000; i++) {
+            if (hunter.getPosition().distance(animal.getPosition()) <= d) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(hunter.getPosition().distance(animal.getPosition()) <= d);
     }
 }

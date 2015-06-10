@@ -20,6 +20,7 @@ import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
@@ -424,6 +425,8 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(DONKEY_BREEDER);
         } else if (w instanceof Scout) {
             storeOneInInventory(SCOUT);
+        } else if (w instanceof Hunter) {
+            storeOneInInventory(HUNTER);
         }
     
         getMap().removeWorker(w);
@@ -499,6 +502,9 @@ public class Storage extends Building implements Actor {
             break;
         case CATAPULT_WORKER:
             w = new CatapultWorker(getPlayer(), getMap());
+            break;
+        case HUNTER:
+            w = new Hunter(getPlayer(), getMap());
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);

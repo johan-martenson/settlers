@@ -44,7 +44,7 @@ public class Headquarter extends Storage {
     
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
         inventory.put(SHIELD, InitialState.STORAGE_INITIAL_SHIELDS);
-        inventory.put(SWORD, InitialState.STORAGE_INIITAL_SWORDS);
+        inventory.put(SWORD, InitialState.STORAGE_INITIAL_SWORDS);
         inventory.put(BEER, InitialState.STORAGE_INITIAL_BEER);
         inventory.put(GOLD, InitialState.STORAGE_INITIAL_GOLD);
 
@@ -78,6 +78,7 @@ public class Headquarter extends Storage {
         inventory.put(GEOLOGIST, InitialState.STORAGE_INITIAL_GEOLOGIST);
         inventory.put(DONKEY_BREEDER, InitialState.STORAGE_INITIAL_DONKEY_BREEDER);
         inventory.put(SCOUT, InitialState.STORAGE_INITIAL_SCOUT);
+        inventory.put(HUNTER, InitialState.STORAGE_INITIAL_HUNTER);
     }
 
     @Override

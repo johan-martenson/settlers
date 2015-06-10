@@ -38,6 +38,7 @@ public class GameMap {
     private List<Building>          buildings;
     private List<Building>          buildingsToRemove;
     private List<Projectile>        projectilesToRemove;
+    private List<WildAnimal>        animalsToRemove;
     private List<Flag>              flags;
     private List<Sign>              signs;
     private List<Projectile>        projectiles;
@@ -134,6 +135,7 @@ public class GameMap {
         buildings           = new ArrayList<>();
         buildingsToRemove   = new LinkedList<>();
         projectilesToRemove = new LinkedList<>();
+        animalsToRemove     = new LinkedList<>();
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
@@ -174,6 +176,7 @@ public class GameMap {
         workersToAdd.clear();
         signsToRemove.clear();
         buildingsToRemove.clear();
+        animalsToRemove.clear();
 
         for (Projectile p : projectiles) {
             p.stepTime();
@@ -237,6 +240,9 @@ public class GameMap {
 
         /* Remove signs that have expired during this round */
         signs.removeAll(signsToRemove);
+
+        /* Remove wild animals that have been killed and turned to cargo */
+        wildAnimals.removeAll(animalsToRemove);
 
         /* Remove buildings that have been destroyed some time ago */
         buildings.removeAll(buildingsToRemove);
@@ -1965,5 +1971,9 @@ public class GameMap {
         }
 
         return null;
+    }
+
+    void removeWildAnimalWithinStepTime(WildAnimal animal) {
+        animalsToRemove.add(animal);
     }
 }

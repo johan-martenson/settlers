@@ -5,7 +5,7 @@ public class InitialState {
 	public final static int MAX_PLAYERS = 4;
         
 	public static final int STORAGE_INITIAL_SHIELDS = 0;
-	public static final int STORAGE_INIITAL_SWORDS = 0;
+	public static final int STORAGE_INITIAL_SWORDS = 0;
 	public static final int STORAGE_INITIAL_BEER = 0;
 	public static final int STORAGE_INITIAL_GOLD = 0;
 	public static final int STORAGE_INITIAL_PRIVATE = 10;
@@ -38,4 +38,5 @@ public class InitialState {
         public static final int STORAGE_INITIAL_GEOLOGIST = 1;
         public static final int STORAGE_INITIAL_DONKEY_BREEDER = 1;
         public static final int STORAGE_INITIAL_SCOUT = 1;
+        public static final int STORAGE_INITIAL_HUNTER = 1;
 }

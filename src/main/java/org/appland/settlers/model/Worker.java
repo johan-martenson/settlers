@@ -449,4 +449,12 @@ public abstract class Worker implements Actor, Piece {
         /* Set the state to be walking between two fixed points */
         state = States.WALKING_BETWEEN_POINTS;
     }
+
+    protected GameMap getMap() {
+        return map;
+    }
+
+    protected void cancelWalkingToTarget() {
+        state = States.IDLE_OUTSIDE;
+    }
 }
