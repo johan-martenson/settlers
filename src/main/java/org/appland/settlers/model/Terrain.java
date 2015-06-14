@@ -92,7 +92,7 @@ public class Terrain {
         return isSurroundedBy(p, MOUNTAIN);
     }
     
-    boolean isInWater(Point p) throws Exception {
+    public boolean isInWater(Point p) throws Exception {
         return isSurroundedBy(p, WATER);
     }
 

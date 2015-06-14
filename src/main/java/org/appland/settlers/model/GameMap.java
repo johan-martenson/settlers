@@ -581,7 +581,7 @@ public class GameMap {
 
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
-        
+
         Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
