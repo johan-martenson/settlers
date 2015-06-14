@@ -88,7 +88,7 @@ public class Terrain {
         }
     }
 
-    protected boolean isOnMountain(Point p) throws Exception {
+    public boolean isOnMountain(Point p) throws Exception {
         return isSurroundedBy(p, MOUNTAIN);
     }
     
@@ -251,5 +251,11 @@ public class Terrain {
             }
             return true;
         }
+    }
+
+    protected void placeMountainOnTile(Point p1, Point p2, Point p3, GameMap map) throws Exception {
+        Tile tile = map.getTerrain().getTile(p1, p2, p3);
+
+        tile.setVegetationType(MOUNTAIN);
     }
 }

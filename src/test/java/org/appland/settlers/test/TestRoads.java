@@ -559,7 +559,7 @@ public class TestRoads {
         Point down = new Point(5, 3);
 
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, right);
-        
+
         assertEquals(points.size(), 3);
 
         assertFalse(points.contains(right.up()));
@@ -1577,7 +1577,8 @@ public class TestRoads {
         try {
             map.placeFlag(player0, m1);
             assertFalse(true);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         assertTrue(map.getRoads().contains(road0));
         assertEquals(road0.getWayPoints().size(), 5);
@@ -1866,6 +1867,7 @@ public class TestRoads {
 
         assertTrue(road1.isMainRoad());
     }
+
     @Test
     public void testDifferentRoadsWithSameEndpointsAreNotEqual() throws Exception {
 

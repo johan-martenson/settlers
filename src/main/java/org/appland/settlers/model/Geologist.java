@@ -6,8 +6,8 @@
 
 package org.appland.settlers.model;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import static org.appland.settlers.model.Geologist.State.GOING_TO_NEXT_SITE;
 import static org.appland.settlers.model.Geologist.State.INVESTIGATING;
 import static org.appland.settlers.model.Geologist.State.RETURNING_TO_FLAG;
@@ -36,15 +36,15 @@ public class Geologist extends Worker {
     }
     
     private final static int TIME_TO_INVESTIGATE   = 19;
-    private final static int RADIUS_TO_INVESTIGATE = 3;
+    private final static int RADIUS_TO_INVESTIGATE = 5;
     
     private final Countdown countdown;
-    
+    private static final Random random = new Random(1);
+
     private State state;
     private int   nrSitesInvestigated;
     private Point flagPoint;
-    private boolean searchFlip;
-    
+
     public Geologist(Player player, GameMap m) {
         super(player, m);
     
@@ -52,8 +52,6 @@ public class Geologist extends Worker {
         nrSitesInvestigated = 0;
 
         state = WALKING_TO_TARGET;
-        
-        searchFlip = true;
     }
 
     public boolean isInvestigating() {
@@ -76,13 +74,13 @@ public class Geologist extends Worker {
                     
                     return;
                 }
-                
+
                 Point nextSite = findSiteToExamine();
-                
+
                 if (nextSite == null) {
-                    state = RETURNING_TO_STORAGE;
+                    state = RETURNING_TO_FLAG;
                 
-                    setTarget(map.getClosestStorage(getPosition()).getPosition(), flagPoint);
+                    setOffroadTarget(flagPoint);
                 } else {
                     state = GOING_TO_NEXT_SITE;
                     
@@ -160,15 +158,13 @@ public class Geologist extends Worker {
     }
 
     private Point findSiteToExamine() {
-        List<Point> points = map.getPointsWithinRadius(getPosition(), RADIUS_TO_INVESTIGATE);
-        
-        if (searchFlip) {
-            Collections.reverse(points);
-        }
-        
-        searchFlip = !searchFlip;
-        
-        for (Point p : points) {
+        List<Point> points = map.getPointsWithinRadius(flagPoint, RADIUS_TO_INVESTIGATE);
+
+        points.addAll(points);
+
+        int startIndex = random.nextInt(points.size() / 2);
+
+        for (Point p : points.subList(startIndex, points.size() - 1)) {
             if (p.equals(getPosition())) {
                 continue;
             }
@@ -184,11 +180,15 @@ public class Geologist extends Worker {
             if (map.isStoneAtPoint(p)) {
                 continue;
             }
-            
+
             if (map.isFlagAtPoint(p)) {
                 continue;
             }
-            
+
+            if (map.isBuildingAtPoint(p)) {
+                continue;
+            }
+
             if (map.findWayOffroad(getPosition(), p, null) == null) {
                 continue;
             }

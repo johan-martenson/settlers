@@ -308,6 +308,13 @@ public class GameMap {
             throw new Exception("Can't place building on " + p + ".");
         }
 
+        /* Verify that the flag can be placed */
+        if (!isFlagAtPoint(p.downRight()) && 
+            !firstHouse && 
+            !isAvailableFlagPoint(house.getPlayer(), p.downRight())) {
+            throw new Exception("Can't place flag for building at " + p);
+        }
+
         /* Handle the case where there is a sign at the site */
         if (isSignAtPoint(p)) {
             removeSign(getSignAtPoint(p));
@@ -1418,23 +1425,6 @@ public class GameMap {
         return mp.getStone() != null;
     }
 
-    int getDistanceForPath(List<Point> path) {
-        int distance = 0;
-        Point previous = null;
-        
-        for (Point current : path) {
-            if (previous == null) {
-                previous = current;
-
-                continue;
-            }
-
-            distance += previous.distance(current);
-        }
-        
-        return distance;
-    }
-
     Cargo removePartOfStone(Point position) {
         MapPoint mp = pointToGameObject.get(position);
         
@@ -1875,6 +1865,13 @@ public class GameMap {
             return false;
         }
 
+        /* Return false if it's not possible to place a flag */
+        Point flagPoint = point0.downRight();
+
+        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(p, flagPoint)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -1975,5 +1972,21 @@ public class GameMap {
 
     void removeWildAnimalWithinStepTime(WildAnimal animal) {
         animalsToRemove.add(animal);
+    }
+
+    public void placeMountainHexagonOnMap(Point p, GameMap map) throws Exception {
+
+        terrain.placeMountainOnTile(p, p.left(), p.upLeft(), map);
+        terrain.placeMountainOnTile(p, p.upLeft(), p.upRight(), map);
+        terrain.placeMountainOnTile(p, p.upRight(), p.right(), map);
+        terrain.placeMountainOnTile(p, p.right(), p.downRight(), map);
+        terrain.placeMountainOnTile(p, p.downRight(), p.downLeft(), map);
+        terrain.placeMountainOnTile(p, p.downLeft(), p.left(), map);
+    }
+
+    public void surroundPointWithMineral(Point p, Material material, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(p)) {
+            t.setAmountMineral(material, LARGE);
+        }
     }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
@@ -140,8 +141,8 @@ public class TestGeologist {
         
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
         
-        /* Verify that the geologist keeps going to a point within a radius of 3 */
-        assertTrue(geologist.getPosition().distance(geologist.getTarget()) < 3);
+        /* Verify that the geologist keeps going to a point within a radius of 7 */
+        assertTrue(geologist.getPosition().distance(geologist.getTarget()) < 7);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
     }
@@ -205,11 +206,6 @@ public class TestGeologist {
     }
 
     @Test
-    public void testGeologistGoesBackIfItCannotFindSiteToInvestigate() {
-        // TODO: Implement test
-    }
-
-    @Test
     public void testGeologistWillNotInvestigateTrees() throws Exception {
 
         /* Starting new game */
@@ -236,7 +232,7 @@ public class TestGeologist {
         flag.callGeologist();
 
         /* Fill surrounding area with trees */
-        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 6)) {
+        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
                 map.placeTree(p);
             } catch (Exception e) {}
@@ -289,7 +285,7 @@ public class TestGeologist {
         flag.callGeologist();
 
         /* Fill surrounding area with stones */
-        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 6)) {
+        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
                 map.placeStone(p);
             } catch (Exception e) {}
@@ -487,12 +483,12 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 4, map);
-        Utils.putMineralWithinRadius(GOLD, point1, 4, map);
+        Utils.createMountainWithinRadius(point1, 7, map);
+        Utils.putMineralWithinRadius(GOLD, point1, 7, map);
         
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -550,12 +546,12 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 4, map);
-        Utils.putMineralWithinRadius(COAL, point1, 4, map);
+        Utils.createMountainWithinRadius(point1, 7, map);
+        Utils.putMineralWithinRadius(COAL, point1, 7, map);
         
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -613,12 +609,12 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 4, map);
-        Utils.putMineralWithinRadius(IRON, point1, 4, map);
+        Utils.createMountainWithinRadius(point1, 7, map);
+        Utils.putMineralWithinRadius(IRON, point1, 7, map);
         
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -676,12 +672,12 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(15, 15);
         Flag flag = map.placeFlag(player0, point1);
         
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 4, map);
-        Utils.putMineralWithinRadius(STONE, point1, 4, map);
+        Utils.createMountainWithinRadius(point1, 7, map);
+        Utils.putMineralWithinRadius(STONE, point1, 7, map);
         
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -803,10 +799,10 @@ public class TestGeologist {
         
         assertEquals(headquarter0.getAmount(GEOLOGIST), amount + 1);
         
-    }        
+    }
 
     @Test
-    public void testGeologistAvoisSitesWithSigns() throws Exception {
+    public void testGeologistAvoidsSitesWithSigns() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -823,7 +819,7 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
         
         /* Surround the flag with signs */
-        for (Point p : map.getPointsWithinRadius(point1, 5)) {
+        for (Point p : map.getPointsWithinRadius(point1, 10)) {
             try {
                 map.placeSign(WATER, LARGE, p);
             } catch (Exception e) {}
@@ -857,7 +853,138 @@ public class TestGeologist {
         /* Verify that cannot find a place to investigate and goes back */
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
     }        
-    
+
+    @Test
+    public void testGeologistReturnsAfterNoMoreSignsCanBePlaced() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+        
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+        
+        /* Surround the flag with trees except for one point*/
+        Point point2 = new Point(11, 11);
+
+        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+
+            /* Leave one point free */
+            if (p.equals(point2)) {
+                continue;
+            }
+
+            try {
+                map.placeTree(p);
+            } catch (Exception e) {}
+        }
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        map.stepTime();
+
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Verify that the geologist only investigates free points */
+        while (!geologist.getTarget().equals(flag.getPosition())) {
+
+            assertFalse(map.isTreeAtPoint(geologist.getTarget()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the geologist goes back */
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testGeologistDoesNotPlaceSignOnBuilding() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+        
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Build a forester hut */
+        Point point2 = new Point(9, 11);
+        ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
+
+        /* Surround the flag with trees except for the forester hut */
+        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+
+            /* Leave one point free */
+            if (p.equals(point2)) {
+                continue;
+            }
+
+            try {
+                map.placeTree(p);
+            } catch (Exception e) {}
+        }
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        map.stepTime();
+
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Verify that the geologist only investigates free points */
+        while (!geologist.getTarget().equals(flag.getPosition())) {
+
+            assertFalse(map.isBuildingAtPoint(geologist.getTarget()));
+            assertFalse(map.isTreeAtPoint(geologist.getTarget()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the geologist goes back */
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
+
     @Test
     public void testGeologistPlacesEmptySignWhenItFindsNothing() throws Exception {
 

@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import java.awt.Color;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
@@ -16,12 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.GOLD;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -37,6 +41,7 @@ import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 
 import static org.junit.Assert.assertEquals;
@@ -1962,5 +1967,83 @@ public class TestPlacement {
             assertNull(map.isAvailableHousePoint(player0, p));
             assertFalse(map.getAvailableHousePoints(player0).keySet().contains(p));
         }
+    }
+
+    @Test
+    public void testAvailableMineSite() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player2 = new Player("Player 0", Color.RED);
+        Player player3 = new Player("Player 1", Color.BLUE);
+        List<Player> players = new LinkedList<>();
+        players.add(player2);
+        players.add(player3);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+        /* Create a small mountain */
+        Point p = new Point(5, 13);
+        Point p2 = new Point(8, 14);
+        Point p3 = new Point(5, 15);
+        map.placeMountainHexagonOnMap(p, map);
+        map.placeMountainHexagonOnMap(p2, map);
+        map.placeMountainHexagonOnMap(p3, map);
+
+        /* Put gold at mountain */
+        map.surroundPointWithMineral(p, GOLD, map);
+        map.surroundPointWithMineral(p2, GOLD, map);
+        map.surroundPointWithMineral(p3, GOLD, map);
+
+        /* Create a small mountain */
+        Point p4 = new Point(8, 16);
+        Point p5 = new Point(11, 17);
+        Point p6 = new Point(8, 18);
+        map.placeMountainHexagonOnMap(p4, map);
+        map.placeMountainHexagonOnMap(p5, map);
+        map.placeMountainHexagonOnMap(p6, map);
+
+        /* Put coal at mountain */
+        map.surroundPointWithMineral(p4, COAL, map);
+        map.surroundPointWithMineral(p5, COAL, map);
+        map.surroundPointWithMineral(p6, COAL, map);
+
+        /* Placing headquarter for player2 */
+        Point point17 = new Point(8, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player2), point17);
+
+        /* Placing headquarter for player3 */
+        Point point18 = new Point(45, 21);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player3), point18);
+
+        /* Placing barracks for player3 */
+        Point point19 = new Point(29, 21);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player3), point19);
+
+        /* Placing road between (30, 20) and (46, 20) */
+        Point point20 = new Point(30, 20);
+        Point point21 = new Point(32, 20);
+        Point point22 = new Point(34, 20);
+        Point point23 = new Point(36, 20);
+        Point point24 = new Point(38, 20);
+        Point point25 = new Point(40, 20);
+        Point point26 = new Point(42, 20);
+        Point point27 = new Point(44, 20);
+        Point point28 = new Point(46, 20);
+        Road road0 = map.placeRoad(player3, point20, point21, point22, point23, point24, point25, point26, point27, point28);
+
+        /* Placing flag */
+        Point point29 = new Point(5, 11);
+        Flag flag0 = map.placeFlag(player2, point29);
+
+        /* Placing road between (5, 11) and (9, 9) */
+        Point point30 = new Point(6, 10);
+        Point point31 = new Point(7, 9);
+        Point point32 = new Point(9, 9);
+        Road road1 = map.placeRoad(player2, point29, point30, point31, point32);
+
+        /* Place mine */
+        Point point33 = new Point(5, 13);
+
+        assertFalse(map.isAvailableMinePoint(player2, point33));
     }
 }
