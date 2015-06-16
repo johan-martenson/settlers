@@ -13,7 +13,12 @@ public enum Size {
      * @return true if s2 fits in s1
      */
     static public boolean contains(Size s1, Size s2) {
-        if (s1 == s2) {
+
+        if (s1 == null) {
+            return false;
+        }
+
+    	if (s1 == s2) {
             return true;
         }
 
