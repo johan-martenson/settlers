@@ -23,8 +23,6 @@ RE-FACTOR
 
 *  Remove or rename state methods in Building
 
-*  Remove Utils.occupySawmill
-
 *  Figure out how to make Size::contains(Size, Size) non-static
 
 *  Fix placeBuilding(...) to use isAvailableHousePoint(...) 
@@ -36,15 +34,11 @@ TEST
 
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers
 
-*  Test that cargo on the way to be delivered is re-routed if the planned way breaks
-
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed
 
 *  Test GameMap::getRoadsFromFlag(Flag)
 
 *  Test Size::contains(Size, Size)
-
-*  Test that all workers return to their own storage when their house is torn down
 
 *  Test that player is set correctly in militaries
 
@@ -60,8 +54,6 @@ TEST
 
 *  Test for the exact time of a fight
 
-*  Test that player is set correctly in workers retrieved from storage
-
 *  Test that the number of militaries in a building goes down when a military has been retrieved
 
 *  Test that the closest building with available militaries is used in attacking
@@ -73,8 +65,6 @@ TEST
 *  Test get attack radius for each military building
 
 *  Find a way to test the size of each building
-
-*  Test geologist does not place signs on flags (and on roads???)
 
 *  Test that a donkey can't be assigned to a non-main road
 
@@ -108,7 +98,7 @@ TEST
 
 *  Test geologist has an ok movement pattern
 
-*  Test geologist goes directly back to storage if flag is removed - is this true??
+*  Test geologist does not go directly back to storage if flag is removed
 
 *  Test geologist doesn't investigate points with house, tree, stone, flag, water
 
@@ -116,19 +106,11 @@ TEST
 
 *  Exception caused by    org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:422)    
 
-*  test re-routing of cargos when a road is removed 
-
-*  test re-routing of cargos when a road is added
-
 *  getClosestStorage
 
 *  farm puts crops on road
  
 *  farm seems to always place crop on its flag
-
-*  worker takes exactly 10 ticks to reach next step
-
-*  worker    isExactlyAtPoint()    seems wrong
 
 *  test that barracks can only be built close to border
 
@@ -155,8 +137,6 @@ TEST
 TO IMPLEMENT
 ============
 
-*  Fix in app so that it's not possible to choose non-available road points when building road
-
 *  Fix discovery so that military buildings only help if they are ready and occupied (this is not the case with fortress today)
 
 *  Add method to see whether a building can produce cargos
@@ -164,8 +144,6 @@ TO IMPLEMENT
 *  Add method to see whether a military building is accepting coins
 
 *  Adjust attack radius in military buildings
-
-*  Fix so that farmer can't walk through his own house when he goes out to plan or harvest
 
 *  Implement limit so that buildings can not accept more resources than they can hold
 
@@ -175,19 +153,13 @@ TO IMPLEMENT
 
 *  Use information about available flags and buildings to show the right buttons in the app
 
-*  Improve the drawing of the selected spot
-
-*  Change drawing in app to go from back to front instead of drawing all elements of each type
-
 *  Add list of all possible building types to the model
 
 *  Draw cargo in front of the flagpole
 
-*  Don't draw suggestions for next road connection over houses, verify limits next to small, medium and large houses
+*  Verify limits next to small, medium and large houses
 
 *  Implement option to set delivery priority for materials
-
-*  Adjust the price for constructing foresterhut, woodcutter, quarry and sawmill
 
 *  Make measurement used for tree conservation program consider all storages
 
@@ -195,11 +167,9 @@ TO IMPLEMENT
 
 *  Fix so workers go back to _closest_ storage when their building is destroyed
 
-*  Implement Hunter, MetalWorks, Shipyard, Harbour, Ship
+*  Implement MetalWorks, Shipyard, Harbour, Ship
 
 *  Add messages
-
-*  Add wild animals
 
 *  fix building to use a single state variable
 
@@ -651,3 +621,36 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Test that storages only deliver to houses of their own type - DONE
 
+*  Remove Utils.occupySawmill - DONE
+
+*  Test that cargo on the way to be delivered is re-routed if the planned way breaks - DONE
+
+*  Test that all workers return to their own storage when their house is torn down - DONE
+
+*  Test geologist does not place signs on flags (and on roads???) - DONE
+
+*  test re-routing of cargos when a road is removed - DONE 
+
+*  worker takes exactly 10 ticks to reach next step - DONE
+
+*  worker    isExactlyAtPoint()    seems wrong - DONE
+
+*  Fix in app so that it's not possible to choose non-available road points when building road - DONE
+
+*  Fix so that farmer can't walk through his own house when he goes out to plan or harvest - DONE
+
+*  Implement HunterHut - DONE
+
+*  Add wild animals - DONE
+
+*  Adjust the price for constructing foresterhut, woodcutter, quarry and sawmill - DONE
+
+*  Change drawing in app to go from back to front instead of drawing all elements of each type - DONE
+
+*  Improve the drawing of the selected spot - DONE
+
+*  Don't draw suggestions for next road connection over houses - DONE
+
+*  test re-routing of cargos when a road is added - DONE
+
+*  Test that player is set correctly in workers retrieved from storage - DONE
