@@ -986,6 +986,73 @@ public class TestGeologist {
     }
 
     @Test
+    public void testGeologistDoesNotPlaceSignOnFlag() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+        
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Place flag */
+        Point point2 = new Point(14, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        /* Surround the flag with trees except for the forester hut */
+        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+
+            /* Leave one point free */
+            if (p.equals(point2)) {
+                continue;
+            }
+
+            try {
+                map.placeTree(p);
+            } catch (Exception e) {}
+        }
+
+        /* Call geologist from the flag */
+        flag.callGeologist();
+
+        /* Wait for the geologist to go to the flag */
+        map.stepTime();
+
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Verify that the geologist only investigates free points */
+        while (!geologist.getTarget().equals(flag.getPosition())) {
+
+            assertFalse(map.isBuildingAtPoint(geologist.getTarget()));
+            assertFalse(map.isTreeAtPoint(geologist.getTarget()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the geologist goes back */
+        assertEquals(geologist.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
+
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
     public void testGeologistPlacesEmptySignWhenItFindsNothing() throws Exception {
 
         /* Starting new game */
