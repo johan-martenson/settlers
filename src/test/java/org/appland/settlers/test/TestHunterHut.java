@@ -526,9 +526,11 @@ public class TestHunterHut {
         Point lastAnimalPoint = animal.getPosition();
 
         /* Wait for the hunter to reach the dead animal */
-        assertEquals(hunter.getTarget(), lastAnimalPoint);
+        assertTrue(hunter.getTarget().equals(lastAnimalPoint) || hunter.getPosition().equals(lastAnimalPoint));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, lastAnimalPoint);
+        if (hunter.getTarget().equals(lastAnimalPoint)) {
+            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, lastAnimalPoint);
+        }
 
         assertEquals(animal.getPosition(), lastAnimalPoint);
         assertNotNull(hunter.getCargo());
@@ -580,9 +582,11 @@ public class TestHunterHut {
         assertFalse(animal.isAlive());
 
         /* Wait for the hunter to reach the dead animal */
-        assertEquals(hunter.getTarget(), animal.getPosition());
+        assertTrue(hunter.getTarget().equals(animal.getPosition()) || hunter.getPosition().equals(animal.getPosition()));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, animal.getPosition());
+        if (hunter.getTarget().equals(animal.getPosition())) {
+            Utils.fastForwardUntilWorkerReachesPoint(map, hunter, animal.getPosition());
+        }
 
         assertNotNull(hunter.getCargo());
 
