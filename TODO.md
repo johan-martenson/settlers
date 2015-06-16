@@ -34,6 +34,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers
+
 *  Test that cargo on the way to be delivered is re-routed if the planned way breaks
 
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed

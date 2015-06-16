@@ -1985,27 +1985,27 @@ public class TestPlacement {
         Point p = new Point(5, 13);
         Point p2 = new Point(8, 14);
         Point p3 = new Point(5, 15);
-        map.placeMountainHexagonOnMap(p, map);
-        map.placeMountainHexagonOnMap(p2, map);
-        map.placeMountainHexagonOnMap(p3, map);
+        map.placeMountainHexagonOnMap(p);
+        map.placeMountainHexagonOnMap(p2);
+        map.placeMountainHexagonOnMap(p3);
 
         /* Put gold at mountain */
-        map.surroundPointWithMineral(p, GOLD, map);
-        map.surroundPointWithMineral(p2, GOLD, map);
-        map.surroundPointWithMineral(p3, GOLD, map);
+        map.surroundPointWithMineral(p, GOLD);
+        map.surroundPointWithMineral(p2, GOLD);
+        map.surroundPointWithMineral(p3, GOLD);
 
         /* Create a small mountain */
         Point p4 = new Point(8, 16);
         Point p5 = new Point(11, 17);
         Point p6 = new Point(8, 18);
-        map.placeMountainHexagonOnMap(p4, map);
-        map.placeMountainHexagonOnMap(p5, map);
-        map.placeMountainHexagonOnMap(p6, map);
+        map.placeMountainHexagonOnMap(p4);
+        map.placeMountainHexagonOnMap(p5);
+        map.placeMountainHexagonOnMap(p6);
 
         /* Put coal at mountain */
-        map.surroundPointWithMineral(p4, COAL, map);
-        map.surroundPointWithMineral(p5, COAL, map);
-        map.surroundPointWithMineral(p6, COAL, map);
+        map.surroundPointWithMineral(p4, COAL);
+        map.surroundPointWithMineral(p5, COAL);
+        map.surroundPointWithMineral(p6, COAL);
 
         /* Placing headquarter for player2 */
         Point point17 = new Point(8, 10);

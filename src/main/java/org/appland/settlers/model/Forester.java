@@ -7,6 +7,7 @@ package org.appland.settlers.model;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Forester.States.GOING_OUT_TO_PLANT;
 import static org.appland.settlers.model.Forester.States.PLANTING;
 import static org.appland.settlers.model.Forester.States.RESTING_IN_HOUSE;
@@ -23,14 +24,14 @@ public class Forester extends Worker {
     private final Countdown countdown;
     private States state;
 
-    private Point getTreeSpot() {
+    private Point getTreeSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
         
         for (Point p : adjacentPoints) {
             if (map.isBuildingAtPoint(p)) {
                 continue;
             }
-            
+
             if (map.isFlagAtPoint(p)) {
                 continue;
             }
@@ -44,6 +45,10 @@ public class Forester extends Worker {
             }
             
             if (map.isStoneAtPoint(p)) {
+                continue;
+            }
+
+            if (map.getTerrain().isOnMountain(p)) {
                 continue;
             }
 
@@ -94,7 +99,7 @@ public class Forester extends Worker {
                 if (p == null) {
                     return;
                 }
-                
+
                 setOffroadTarget(p);
 
                 state = GOING_OUT_TO_PLANT;

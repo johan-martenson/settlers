@@ -622,6 +622,69 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterDoesNotPlantTreeOnMountain() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Create a small mountain */
+        Point p4 = new Point(8, 16);
+        Point p5 = new Point(11, 17);
+        Point p6 = new Point(14, 16);
+        map.placeMountainHexagonOnMap(p4);
+        map.placeMountainHexagonOnMap(p5);
+        map.placeMountainHexagonOnMap(p6);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 14);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut, map);
+
+        /* Put stones around the forester hut but not on the mountain */
+        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 10)) {
+            if (p.equals(point1)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(p) || 
+                map.isFlagAtPoint(p)     || 
+                map.isRoadAtPoint(p)     || 
+                map.isStoneAtPoint(p)    ||
+                map.getTerrain().isOnMountain(p)) {
+                continue;
+            }
+
+            map.placeTree(p);
+        }
+
+        /* Manually place forester */
+        Forester forester = new Forester(player0, map);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Wait for the forester to rest */        
+        Utils.fastForward(99, map);
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Step once and make sure the forester stays in the hut */
+        map.stepTime();
+
+        assertTrue(forester.isInsideBuilding());
+    }
+
+    @Test
     public void testForesterGoesBackToStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */

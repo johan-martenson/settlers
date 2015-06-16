@@ -253,8 +253,8 @@ public class Terrain {
         }
     }
 
-    protected void placeMountainOnTile(Point p1, Point p2, Point p3, GameMap map) throws Exception {
-        Tile tile = map.getTerrain().getTile(p1, p2, p3);
+    protected void placeMountainOnTile(Point p1, Point p2, Point p3) throws Exception {
+        Tile tile = getTile(p1, p2, p3);
 
         tile.setVegetationType(MOUNTAIN);
     }

@@ -1974,18 +1974,18 @@ public class GameMap {
         animalsToRemove.add(animal);
     }
 
-    public void placeMountainHexagonOnMap(Point p, GameMap map) throws Exception {
+    public void placeMountainHexagonOnMap(Point p) throws Exception {
 
-        terrain.placeMountainOnTile(p, p.left(), p.upLeft(), map);
-        terrain.placeMountainOnTile(p, p.upLeft(), p.upRight(), map);
-        terrain.placeMountainOnTile(p, p.upRight(), p.right(), map);
-        terrain.placeMountainOnTile(p, p.right(), p.downRight(), map);
-        terrain.placeMountainOnTile(p, p.downRight(), p.downLeft(), map);
-        terrain.placeMountainOnTile(p, p.downLeft(), p.left(), map);
+        terrain.placeMountainOnTile(p, p.left(), p.upLeft());
+        terrain.placeMountainOnTile(p, p.upLeft(), p.upRight());
+        terrain.placeMountainOnTile(p, p.upRight(), p.right());
+        terrain.placeMountainOnTile(p, p.right(), p.downRight());
+        terrain.placeMountainOnTile(p, p.downRight(), p.downLeft());
+        terrain.placeMountainOnTile(p, p.downLeft(), p.left());
     }
 
-    public void surroundPointWithMineral(Point p, Material material, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(p)) {
+    public void surroundPointWithMineral(Point p, Material material) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(p)) {
             t.setAmountMineral(material, LARGE);
         }
     }
