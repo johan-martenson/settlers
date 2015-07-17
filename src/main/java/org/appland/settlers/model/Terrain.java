@@ -131,7 +131,6 @@ public class Terrain {
     }
 
     public List<Tile> getSurroundingTiles(Point center) throws Exception {
-        List<Tile> allTiles = new LinkedList<>();
         List<Tile> result   = new LinkedList<>();
         
         Point rightPoint = new Point(center.x + 2, center.y);
@@ -141,20 +140,42 @@ public class Terrain {
         Point p1 = new Point(center.x - 1, center.y + 1);
         Point p2 = new Point(center.x + 1, center.y + 1);
 
-        allTiles.add(getTile(p4, center, rightPoint));
-        allTiles.add(getTile(p5, center, p4));
-        allTiles.add(getTile(leftPoint, center, p5));
-    
-
-        allTiles.add(getTile(p1, center, leftPoint));
-        allTiles.add(getTile(p2, center, p1));
-        allTiles.add(getTile(rightPoint, center, p2));
-
-        for (Tile t : allTiles) {
-            if (t == null) {
-                continue;
-            }
         
+        Tile t = getTile(p4, center, rightPoint);
+
+        /* This method is called frequently. Treat the tiles one-by-one
+           to avoid creating a temporary list */
+        if (t != null) {
+            result.add(t);
+        }
+
+        t = getTile(p5, center, p4);
+
+        if (t != null) {
+            result.add(t);
+        }
+
+        t = getTile(leftPoint, center, p5);
+
+        if (t != null) {
+            result.add(t);
+        }
+
+        t = getTile(p1, center, leftPoint);
+
+        if (t != null) {
+            result.add(t);
+        }
+
+        t = getTile(p2, center, p1);
+
+        if (t != null) {
+            result.add(t);
+        }
+
+        t = getTile(rightPoint, center, p2);
+
+        if (t != null) {
             result.add(t);
         }
         
