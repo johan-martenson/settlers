@@ -27,7 +27,8 @@ public class Fisherman extends Worker {
     
     private final Countdown countdown;
 
-    private States state;
+    private States  state;
+    private boolean noMoreFish;
 
     private Point getFishingSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
@@ -78,6 +79,8 @@ public class Fisherman extends Worker {
         state = WALKING_TO_TARGET;
         
         countdown = new Countdown();
+
+        noMoreFish = false;
     }
 
     public boolean isFishing() {
@@ -97,11 +100,15 @@ public class Fisherman extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
+        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled() && !noMoreFish) {
             if (countdown.reachedZero()) {
                 Point p = getFishingSpot();
 
                 if (p == null) {
+
+                    /* Remember that there's no more fish */
+                    noMoreFish = true;
+
                     return;
                 }
                 
