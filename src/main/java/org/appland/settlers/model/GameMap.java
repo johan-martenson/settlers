@@ -62,7 +62,8 @@ public class GameMap {
     private final int MINIMUM_HEIGHT = 5;
     private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
 
-    public List<Point> findAutoSelectedRoad(final Player player, Point start, Point goal, Collection<Point> avoid) {
+    public List<Point> findAutoSelectedRoad(final Player player, Point start, 
+            Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
             @Override
@@ -74,6 +75,11 @@ public class GameMap {
                 }
                 
                 return new LinkedList<>();
+            }
+
+            @Override
+            public Double distance(Point currentPoint, Point neighbor) {
+                return (double)1;
             }
         });
     }
@@ -689,8 +695,13 @@ public class GameMap {
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
                 MapPoint mp = pointToGameObject.get(start);
-                    
+
                 return mp.getConnectedNeighbors();
+            }
+
+            @Override
+            public Double distance(Point currentPoint, Point neighbor) {
+                return (double)1;
             }
         });
     }
@@ -979,14 +990,18 @@ public class GameMap {
     }
 
     public Set<Building> getBuildingsWithinReach(Flag startFlag) {
-        List<Point> toEvaluate = new LinkedList<>();
-        Set<Point> visited = new HashSet<>();
+        List<Point> toEvaluate  = new LinkedList<>();
+        Set<Point> visited      = new HashSet<>();
         Set<Building> reachable = new HashSet<>();
 
         toEvaluate.add(startFlag.getPosition());
 
+        /* Declare variables outside of the loop to keep memory churn down */
+        Point point;
+
         while (!toEvaluate.isEmpty()) {
-            Point point = toEvaluate.get(0);
+
+            point = toEvaluate.get(0);
             toEvaluate.remove(point);
 
             /* Test if this point is connected to a building */
@@ -998,15 +1013,17 @@ public class GameMap {
             visited.add(point);
 
             /* Go through the neighbors and add the new points to the list to be evaluated */
-            for (Point neighborPoint : getMapPoint(point).getConnectedNeighbors()) {
+            for (Road road : getMapPoint(point).getConnectedRoads()) {
 
+                Point oppositePoint = road.getOtherPoint(point);
+                
                 /* Filter already visited */
-                if (visited.contains(neighborPoint)) {
+                if (visited.contains(oppositePoint)) {
                     continue;
                 }
 
                 /* Add the point to the list */
-                toEvaluate.add(neighborPoint);
+                toEvaluate.add(oppositePoint);
             }
         }
 
@@ -1160,7 +1177,7 @@ public class GameMap {
     private void addRoadToMapPoints(Road road) throws Exception {    
         for (Point p : road.getWayPoints()) {
             MapPoint mapPoint = pointToGameObject.get(p);
-            
+
             mapPoint.addConnectingRoad(road);
         }
     }
@@ -1289,7 +1306,7 @@ public class GameMap {
 
     public boolean isRoadAtPoint(Point p) {
         MapPoint mp = pointToGameObject.get(p);
-        
+
         return !mp.getConnectedNeighbors().isEmpty();
     }
 
@@ -1299,7 +1316,8 @@ public class GameMap {
         return mp.getTree() != null;
     }
 
-    public List<Point> findWayOffroad(Point start, Point goal, Point via, Collection<Point> avoid) {
+    public List<Point> findWayOffroad(Point start, Point goal, Point via, 
+            Collection<Point> avoid) {
 
         /* Handle the case where the "via" point is equal to the start or the goal */
         if (start.equals(via)) {
@@ -1325,7 +1343,8 @@ public class GameMap {
         return path1;
     }
     
-    public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
+    public List<Point> findWayOffroad(Point start, Point goal, 
+            Collection<Point> avoid) {
         return GameUtils.findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
             @Override
@@ -1337,6 +1356,11 @@ public class GameMap {
                 }
                 
                 return new LinkedList<>();
+            }
+
+            @Override
+            public Double distance(Point currentPoint, Point neighbor) {
+                return (double)1;
             }
         });
     }
