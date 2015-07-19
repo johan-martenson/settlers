@@ -42,6 +42,10 @@ public class Fisherman extends Worker {
                 continue;
             }
 
+            if (map.getAmountFishAtPoint(p) == 0) {
+                continue;
+            }
+
             if (!map.isNextToWater(p)) {
                 continue;
             }
@@ -50,11 +54,7 @@ public class Fisherman extends Worker {
             if (map.findWayOffroad(getHome().getFlag().getPosition(), p, null) == null) {
                 continue;
             }
-            
-            if (map.getAmountFishAtPoint(p) == 0) {
-                continue;
-            }
-            
+
             return p;
         }
 
