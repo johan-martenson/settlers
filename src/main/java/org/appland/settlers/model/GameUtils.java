@@ -156,37 +156,6 @@ public class GameUtils {
         return isEmpty;
     }
 
-    private class PointCostPair {
-        Point point;
-        double cost;
-
-        public PointCostPair(Point point, double cost) {
-            this.point = point;
-            this.cost  = cost;
-        }
-    }
-
-    private class CostComparator implements Comparator<PointCostPair> {
-
-        @Override
-        public int compare(PointCostPair pcp1, PointCostPair pcp2) {
-
-            if (pcp1 == null && pcp2 == null) {
-                return 0;
-            } else if (pcp1 == null) {
-                return -1;
-            } else if (pcp2 == null) {
-                return 1;
-            } else if (pcp1.cost < pcp2.cost) {
-                return 1;
-            } else if (pcp1.cost > pcp2.cost){
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-    }
-
     public static List<Point> findShortestPath(Point start, Point goal, 
             Collection<Point> avoid, ConnectionsProvider pf) {
         Set<Point>          evaluated       = new HashSet<>();
