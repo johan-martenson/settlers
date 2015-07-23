@@ -44,6 +44,7 @@ import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import static org.junit.Assert.assertTrue;
 
@@ -419,16 +420,29 @@ public class Utils {
         assertTrue(b.ready());
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Courier courier1, Cargo cargo) throws Exception {
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material m) throws Exception {
+
         for (int j = 0; j < 2000; j++) {
-            if (cargo.equals(courier1.getCargo())) {
+            if (worker.getCargo() != null && worker.getCargo().getMaterial().equals(m)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(courier1.getCargo(), cargo);
+        assertEquals(worker.getCargo().getMaterial(), m);
+    }
+
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws Exception {
+        for (int j = 0; j < 2000; j++) {
+            if (cargo.equals(worker.getCargo())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(worker.getCargo(), cargo);
     }
 
     public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws Exception {
@@ -750,5 +764,46 @@ public class Utils {
         }
 
         assertTrue(hunter.getPosition().distance(animal.getPosition()) <= d);
+    }
+
+    static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws Exception {
+
+        for (int j = 0; j < 2000; j++) {
+            if (worker.getCargo() == null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNull(worker.getCargo());
+    }
+
+    static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws Exception {
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (cargo.getPosition().equals(cargo.getTarget().getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(cargo.getPosition(), cargo.getTarget().getPosition());
+    }
+
+    static void waitUntilAmountIs(GameMap map, Building target, Material m, int amount) throws Exception {
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (target.getAmount(m) == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(target.getAmount(m), amount);
     }
 }

@@ -28,6 +28,7 @@ public class Player {
     private final List<Building> buildings;
     private final Set<Point>     discoveredLand;
     private final Color          color;
+    private final Map<Class<? extends Building>, Integer> foodQuota;
 
     public Player(String n, Color c) {
         name           = n;
@@ -36,6 +37,14 @@ public class Player {
         ownedLands     = new LinkedList<>();
         fieldOfView    = new LinkedList<>();
         discoveredLand = new HashSet<>();
+
+        /* Create the food quota and set it to equal distribution */
+        foodQuota = new HashMap<>();
+
+        foodQuota.put(GoldMine.class, 1);
+        foodQuota.put(IronMine.class, 1);
+        foodQuota.put(CoalMine.class, 1);
+        foodQuota.put(GraniteMine.class, 1);
     }
 
     public String getName() {
@@ -269,5 +278,13 @@ public class Player {
         }
 
         return result;
+    }
+
+    int getFoodQuota(Class<? extends Building> aClass) {
+        return foodQuota.get(aClass);
+    }
+
+    public void setFoodQuota(Class<? extends Building> aClass, int i) {
+        foodQuota.put(aClass, i);
     }
 }

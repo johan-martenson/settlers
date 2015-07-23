@@ -394,7 +394,7 @@ public class Building implements Actor, EndPoint, Piece {
                     log.log(Level.INFO, "Construction of {0} done", this);
 
                     consumeConstructionMaterial();
-                    
+
                     state = State.UNOCCUPIED;
                 }
             } else {

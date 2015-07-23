@@ -6,8 +6,13 @@
 
 package org.appland.settlers.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static org.appland.settlers.model.Material.BREAD;
+import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANCK;
 
 /**
@@ -21,10 +26,10 @@ public class StorageWorker extends Worker {
     private final static int TREE_CONSERVATION_LIMIT = 10;
     
     private final Countdown countdown;
-    
+    private final Map<Class<? extends Building>, Integer> assignedFood;
+
     private State state;
     private Storage ownStorage;
-
 
     private enum State {
         WALKING_TO_TARGET,
@@ -33,7 +38,7 @@ public class StorageWorker extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
+
     public StorageWorker(Player player, GameMap m) {
         super(player, m);
 
@@ -42,6 +47,14 @@ public class StorageWorker extends Worker {
         countdown = new Countdown();
         
         countdown.countFrom(RESTING_TIME);
+
+        /* Set the initial assignments of food to zero */
+        assignedFood = new HashMap<>();
+
+        assignedFood.put(GoldMine.class, 0);
+        assignedFood.put(IronMine.class, 0);
+        assignedFood.put(CoalMine.class, 0);
+        assignedFood.put(GraniteMine.class, 0);
     }
     
     private Cargo tryToStartDelivery() throws Exception {
@@ -53,20 +66,30 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                if (ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
+                /* Make sure plancks are only used for planck production if
+                   the limit is critically low */
+                if (m == PLANCK && 
+                    ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
                     !(b instanceof Sawmill)     &&
                     !(b instanceof ForesterHut) &&
                     !(b instanceof Woodcutter)) {
                     continue;
                 }
-                
+
                 if (b.needsMaterial(m) && ownStorage.isInStock(m)) {
-                    b.promiseDelivery(m);
 
-                    Cargo cargo = ownStorage.retrieve(m);
-                    cargo.setTarget(b);
+                    /* Check that the building type is within its assigned quota */
+                    if (isWithinQuota(b, m)) {
+                        b.promiseDelivery(m);
 
-                    return cargo;
+                        Cargo cargo = ownStorage.retrieve(m);
+                        cargo.setTarget(b);
+
+                        /* Track allocation */
+                        trackAllocation(b, m);
+
+                        return cargo;
+                    }
                 }
             }
         }
@@ -152,5 +175,57 @@ public class StorageWorker extends Worker {
                 }
             }
         }
+    }
+
+    private void trackAllocation(Building b, Material m) {
+
+        if (isFood(m)) {
+
+            int amount = assignedFood.get(b.getClass());
+            assignedFood.put(b.getClass(), amount + 1);
+
+            /* Reset count if all building types have reached their quota */
+            if (!isWithinQuota(b, m) && 
+                 overQuota(GoldMine.class) &&
+                 overQuota(IronMine.class) &&
+                 overQuota(CoalMine.class) &&
+                 overQuota(GraniteMine.class)) {
+                assignedFood.put(GoldMine.class, 0);
+                assignedFood.put(IronMine.class, 0);
+                assignedFood.put(CoalMine.class, 0);
+                assignedFood.put(GraniteMine.class, 0);
+            }
+        }
+    }
+
+    private boolean isFood(Material m) {
+        return m == FISH || m == BREAD || m == MEAT;
+    }
+
+    private boolean isWithinQuota(Building b, Material m) {
+
+        /* Handle quota for food */
+        if (isFood(m)) {
+            int quota = getPlayer().getFoodQuota(b.getClass());
+
+            return assignedFood.get(b.getClass()) < quota;
+        }
+
+        /* All other materials are without quota */
+        return true;
+    }
+
+    private boolean overQuota(Class<? extends Building> aClass) {
+
+        /* Only handle food quota for mines */
+        if (aClass.equals(GoldMine.class) ||
+            aClass.equals(IronMine.class) ||
+            aClass.equals(CoalMine.class) ||
+            aClass.equals(GraniteMine.class)) {
+            return assignedFood.get(aClass) >= getPlayer().getFoodQuota(aClass);
+        }
+
+        /* All other buildlings have no quota */
+        return false;
     }
 }
