@@ -6,8 +6,10 @@
 
 package org.appland.settlers.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.BREAD;
@@ -185,15 +187,23 @@ public class StorageWorker extends Worker {
             assignedFood.put(b.getClass(), amount + 1);
 
             /* Reset count if all building types have reached their quota */
-            if (!isWithinQuota(b, m) && 
-                 overQuota(GoldMine.class) &&
-                 overQuota(IronMine.class) &&
-                 overQuota(CoalMine.class) &&
-                 overQuota(GraniteMine.class)) {
-                assignedFood.put(GoldMine.class, 0);
-                assignedFood.put(IronMine.class, 0);
-                assignedFood.put(CoalMine.class, 0);
-                assignedFood.put(GraniteMine.class, 0);
+            if (!isWithinQuota(b, m)) {
+
+                Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
+
+                if ((!buildingTypeInSet(reachableBuildings, GoldMine.class)    || 
+                      overQuota(GoldMine.class))                                  &&
+                    (!buildingTypeInSet(reachableBuildings, IronMine.class)    || 
+                      overQuota(IronMine.class))                                  &&
+                    (!buildingTypeInSet(reachableBuildings, CoalMine.class)    || 
+                      overQuota(CoalMine.class))                                  &&
+                    (!buildingTypeInSet(reachableBuildings, GraniteMine.class) || 
+                      overQuota(GraniteMine.class))) {
+                    assignedFood.put(GoldMine.class, 0);
+                    assignedFood.put(IronMine.class, 0);
+                    assignedFood.put(CoalMine.class, 0);
+                    assignedFood.put(GraniteMine.class, 0);
+                }
             }
         }
     }
@@ -226,6 +236,17 @@ public class StorageWorker extends Worker {
         }
 
         /* All other buildlings have no quota */
+        return false;
+    }
+
+    private boolean buildingTypeInSet(Collection<Building> buildings, Class<? extends Building> aClass) {
+
+        for (Building b : buildings) {
+            if (b.getClass().equals(aClass)) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
