@@ -12,7 +12,7 @@ package org.appland.settlers.model;
  */
 public class Sign implements Actor, Piece {
 
-    private final static int SIGN_EXPIRATION_TIME = 999;
+    private final static int SIGN_EXPIRATION_TIME = 1999;
     
     private final Material type;
     private final Size     size;

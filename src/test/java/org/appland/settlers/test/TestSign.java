@@ -41,7 +41,7 @@ public class TestSign {
         map.placeSign(IRON, SMALL, point0);
 
         /* Verify that the sign remains for the right time */
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2000; i++) {
             assertTrue(map.isSignAtPoint(point0));
             
             map.stepTime();
