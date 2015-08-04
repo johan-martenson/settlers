@@ -391,7 +391,11 @@ public class GameMap {
         Set<Point> pointsInLand = new HashSet<>();
         Set<Point> borders = new LinkedHashSet<>();
 
-        for (Point root : claims.keySet()) {
+        for (Entry<Point, Building> pair : claims.entrySet()) {
+
+            Point    root     = pair.getKey();
+            Building building = pair.getValue();
+
             if (!isWithinMap(root)) {
                 continue;
             }
@@ -400,7 +404,7 @@ public class GameMap {
                 continue;
             }
 
-            Player player = claims.get(root).getPlayer();
+            Player player = building.getPlayer();
 
             pointsInLand.clear();
 

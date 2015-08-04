@@ -54,17 +54,21 @@ public enum Material {
     HUNTER;
 
     private static List<Material> minerals = null;
-    
+
+    private final static Object initLock = new Object();
+
     static Iterable<Material> getMinerals() {
-        if (minerals == null) {
-            List<Material> tempList = new LinkedList<>();
+        synchronized (initLock) {
+            if (minerals == null) {
+                List<Material> tempList = new LinkedList<>();
 
-            tempList.add(GOLD);
-            tempList.add(IRON);
-            tempList.add(COAL);
-            tempList.add(STONE);
+                tempList.add(GOLD);
+                tempList.add(IRON);
+                tempList.add(COAL);
+                tempList.add(STONE);
 
-            minerals = Collections.unmodifiableList(tempList);
+                minerals = Collections.unmodifiableList(tempList);
+            }
         }
 
         return minerals;
