@@ -191,13 +191,13 @@ public class StorageWorker extends Worker {
 
                 Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
 
-                if ((!buildingTypeInSet(reachableBuildings, GoldMine.class)    || 
+                if ((!readyConsumerExists(reachableBuildings, GoldMine.class)    || 
                       overQuota(GoldMine.class))                                  &&
-                    (!buildingTypeInSet(reachableBuildings, IronMine.class)    || 
+                    (!readyConsumerExists(reachableBuildings, IronMine.class)    || 
                       overQuota(IronMine.class))                                  &&
-                    (!buildingTypeInSet(reachableBuildings, CoalMine.class)    || 
+                    (!readyConsumerExists(reachableBuildings, CoalMine.class)    || 
                       overQuota(CoalMine.class))                                  &&
-                    (!buildingTypeInSet(reachableBuildings, GraniteMine.class) || 
+                    (!readyConsumerExists(reachableBuildings, GraniteMine.class) || 
                       overQuota(GraniteMine.class))) {
                     assignedFood.put(GoldMine.class, 0);
                     assignedFood.put(IronMine.class, 0);
@@ -239,10 +239,10 @@ public class StorageWorker extends Worker {
         return false;
     }
 
-    private boolean buildingTypeInSet(Collection<Building> buildings, Class<? extends Building> aClass) {
+    private boolean readyConsumerExists(Collection<Building> buildings, Class<? extends Building> aClass) {
 
         for (Building b : buildings) {
-            if (b.getClass().equals(aClass)) {
+            if (b.getClass().equals(aClass) && b.ready()) {
                 return true;
             }
         }
