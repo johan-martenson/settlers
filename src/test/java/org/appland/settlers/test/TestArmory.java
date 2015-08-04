@@ -26,7 +26,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
@@ -305,6 +305,8 @@ public class TestArmory {
 
     @Test
     public void testOccupiedArmoryWithCoalAndIronProducesWeapon() throws Exception {
+
+        /* Start new game with one player only */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -312,11 +314,11 @@ public class TestArmory {
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        Armory armory = map.placeBuilding(new Armory(player0), point3);
 
         /* 64 ticks from start */
         Point point4 = new Point(8, 8);
@@ -337,7 +339,7 @@ public class TestArmory {
         assertEquals(armory.getWorker(), armorer);        
 
         /* Deliver material to the armory */
-        armory.putCargo(new Cargo(IRON, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
         armory.putCargo(new Cargo(COAL, map));
         
         /* Verify that the armory produces weapons */
@@ -389,7 +391,7 @@ public class TestArmory {
         assertEquals(armory.getWorker(), armorer);        
 
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
         armory.putCargo(new Cargo(COAL, map));
         
         /* Verify that the armory produces weapons */
@@ -443,17 +445,17 @@ public class TestArmory {
         Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
         
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
         armory.putCargo(new Cargo(COAL, map));
         
         /* Wait until the armory worker produces a weapons */
-        assertEquals(armory.getAmount(IRON), 1);
+        assertEquals(armory.getAmount(IRON_BAR), 1);
         assertEquals(armory.getAmount(COAL), 1);
         
         Utils.fastForward(150, map);
         
         assertEquals(armory.getAmount(COAL), 0);
-        assertEquals(armory.getAmount(IRON), 0);
+        assertEquals(armory.getAmount(IRON_BAR), 0);
     }
 
     @Test
@@ -485,7 +487,7 @@ public class TestArmory {
         assertNull(armorer.getCargo());
         
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
         armory.putCargo(new Cargo(COAL, map));
         
         /* Verify that it takes 50 steps for the armory worker to produce the planck */
@@ -532,8 +534,8 @@ public class TestArmory {
         assertEquals(armory.getWorker(), armorer);        
 
         /* Deliver material to the armory */
-        armory.putCargo(new Cargo(IRON, map));
-        armory.putCargo(new Cargo(IRON, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
+        armory.putCargo(new Cargo(IRON_BAR, map));
         armory.putCargo(new Cargo(COAL, map));
         armory.putCargo(new Cargo(COAL, map));
         
@@ -583,7 +585,7 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo ironCargo = new Cargo(IRON_BAR, map);
         Cargo coalCargo = new Cargo(COAL, map);
         
         armory0.putCargo(ironCargo);
@@ -651,7 +653,7 @@ public class TestArmory {
         Utils.constructHouse(armory0, map);
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo ironCargo = new Cargo(IRON_BAR, map);
         Cargo coalCargo = new Cargo(COAL, map);
         
         armory0.putCargo(ironCargo);
@@ -850,7 +852,7 @@ public class TestArmory {
         Utils.constructHouse(armory0, map);
         
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo ironCargo = new Cargo(IRON_BAR, map);
         Cargo coalCargo = new Cargo(COAL, map);
         
         armory0.putCargo(ironCargo);
@@ -923,7 +925,7 @@ public class TestArmory {
         assertTrue(armorer.isInsideBuilding());
 
         /* Deliver material to the armory */
-        Cargo ironCargo = new Cargo(IRON, map);
+        Cargo ironCargo = new Cargo(IRON_BAR, map);
         Cargo coalCargo = new Cargo(COAL, map);
         
         armory0.putCargo(ironCargo);

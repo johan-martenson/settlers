@@ -32,6 +32,8 @@ RE-FACTOR
 TEST
 ====
 
+*  Test that all mines wants all types of food!!
+
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers
 
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed

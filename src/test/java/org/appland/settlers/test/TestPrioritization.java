@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.appland.settlers.model.Armorer;
+import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.CoalMine;
@@ -16,18 +18,29 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronMine;
+import org.appland.settlers.model.IronSmelter;
 import static org.appland.settlers.model.Material.BREAD;
+import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.IRON_BAR;
+import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MEAT;
+import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Mint;
+import org.appland.settlers.model.Minter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
@@ -836,12 +849,19 @@ public class TestPrioritization {
         /* Finish construction of the mines */
         Utils.constructHouse(goldMine0, map);
         Utils.constructHouse(ironMine0, map);
+        Utils.constructHouse(coalMine0, map);
         Utils.constructHouse(graniteMine0, map);
 
-        /* Occupy the mines */
+        /* Occupy the mines except for the coal mine */
         Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
         Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+
+        /* Set the quota to even distribution */
+        player0.setFoodQuota(GoldMine.class, 1);
+        player0.setFoodQuota(IronMine.class, 1);
+        player0.setFoodQuota(CoalMine.class, 1);
+        player0.setFoodQuota(GraniteMine.class, 1);
 
         /* Make sure the headquarter has no food */
         Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
@@ -867,7 +887,7 @@ public class TestPrioritization {
         Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
-
+            
             /* Add one bread to the headquarter */
             Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
 
@@ -892,8 +912,149 @@ public class TestPrioritization {
 
             assertEquals(target.getAmount(BREAD), 1);
 
-            /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            /* Exit after four delivered breads */
+            int sum = 0;
+
+            for (Integer amountInBuilding : breadAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 8) {
+                break;
+            }
+        }
+
+        assertEquals(breadAllocation.keySet().size(), 4);
+
+        assertEquals((int)breadAllocation.get(goldMine0), 2);
+        assertEquals((int)breadAllocation.get(ironMine0), 2);
+        assertEquals((int)breadAllocation.get(coalMine0), 2);
+        assertEquals((int)breadAllocation.get(graniteMine0), 2);
+    }
+
+    @Test
+    public void testOtherMinesGetFoodWithFullyStockedCoalMine() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Put small mountains with ore on the map */
+        Point point0 = new Point(6, 10);
+        Utils.surroundPointWithMountain(point0, map);
+
+        Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
+
+        Point point1 = new Point(6, 14);
+        Utils.surroundPointWithMountain(point1, map);
+
+        Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
+
+        Point point2 = new Point(6, 18);
+        Utils.surroundPointWithMountain(point2, map);
+
+        Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
+
+        Point point3 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point3, map);
+
+        Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place gold mine */
+        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+
+        /* Place iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Place coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+
+        /* Place granite mine */
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
+
+        /* Finish construction of the mines */
+        Utils.constructHouse(goldMine0, map);
+        Utils.constructHouse(ironMine0, map);
+        Utils.constructHouse(coalMine0, map);
+        Utils.constructHouse(graniteMine0, map);
+
+        /* Occupy the mines except for the coal mine */
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+
+        /* Set the quota to even distribution */
+        player0.setFoodQuota(GoldMine.class, 1);
+        player0.setFoodQuota(IronMine.class, 1);
+        player0.setFoodQuota(CoalMine.class, 1);
+        player0.setFoodQuota(GraniteMine.class, 1);
+
+        /* Make sure the headquarter has no food */
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+
+        /* Make sure the headquarter has no miners so the coal mine will not be 
+           constructed */
+        Utils.adjustInventoryTo(headquarter0, MINER, 0, map);
+
+        /* Fill the stock in the coal mine so it doesn't need anything */
+        Utils.deliverCargo(coalMine0, FISH, map);
+        Utils.deliverCargo(coalMine0, BREAD, map);
+        Utils.deliverCargo(coalMine0, MEAT, map);
+
+        assertEquals(coalMine0.getAmount(FISH), 1);
+        assertEquals(coalMine0.getAmount(BREAD), 1);
+        assertEquals(coalMine0.getAmount(MEAT), 1);
+
+        assertFalse(coalMine0.needsMaterial(FISH));
+        assertFalse(coalMine0.needsMaterial(BREAD));
+        assertFalse(coalMine0.needsMaterial(MEAT));
+
+        /* Attach the mines to the headquarter */
+        map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /*Verify that the mines get one bread each with the four first deliveries*/
+        Map<Building, Integer> breadAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+            
+            /* Add one bread to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+
+            /* Wait for the storage worker to pick up a bread cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+
+            /* Keep track of where the breads end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!breadAllocation.containsKey(targetBuilding)) {
+                breadAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = breadAllocation.get(targetBuilding);
+            breadAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the bread to reach the mine */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(BREAD), 1);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -912,5 +1073,825 @@ public class TestPrioritization {
         assertEquals((int)breadAllocation.get(goldMine0), 2);
         assertEquals((int)breadAllocation.get(ironMine0), 2);
         assertEquals((int)breadAllocation.get(graniteMine0), 2);
+    }
+
+    @Test
+    public void testCoalConsumersGetEqualAmountsOfCoal() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+        
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /* Verify that the coal consumers get one coal each with the three first deliveries */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coalss end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Wait for the consumer to consume the coal */
+            Utils.waitUntilAmountIs(map, target, COAL, 0);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 6) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 3);
+
+        assertEquals((int)coalAllocation.get(mint0), 2);
+        assertEquals((int)coalAllocation.get(ironSmelter0), 2);
+        assertEquals((int)coalAllocation.get(armory0), 2);
+    }
+
+    @Test
+    public void testOnlyIronSmelterGetsCoal() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Set the quota for coal consumers to only give coal to the 
+           iron smelter */
+        player0.setCoalQuota(IronSmelter.class, 1);
+        player0.setCoalQuota(Mint.class, 0);
+        player0.setCoalQuota(Armory.class, 0);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Make sure the iron smelter has iron to smelt */
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /*Verify that only the iron smelter gets any coal */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Wait for the consumer to consume the coal */
+            Utils.waitUntilAmountIs(map, target, COAL, 0);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 8) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 1);
+
+        assertEquals((int)coalAllocation.get(ironSmelter0), 8);
+    }
+
+    @Test
+    public void testOnlyMintGetsCoal() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Set the quota for coal consumers to only give coal to the 
+           iron smelter */
+        player0.setCoalQuota(IronSmelter.class, 0);
+        player0.setCoalQuota(Mint.class, 1);
+        player0.setCoalQuota(Armory.class, 0);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Make sure the iron smelter has iron to smelt */
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /*Verify that only the iron smelter gets any coal */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Wait for the consumer to consume the coal */
+            Utils.waitUntilAmountIs(map, target, COAL, 0);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 8) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 1);
+
+        assertEquals((int)coalAllocation.get(mint0), 8);
+    }
+
+    @Test
+    public void testOnlyArmoryGetsCoal() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Set the quota for coal consumers to only give coal to the 
+           iron smelter */
+        player0.setCoalQuota(IronSmelter.class, 0);
+        player0.setCoalQuota(Mint.class, 0);
+        player0.setCoalQuota(Armory.class, 1);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Make sure the iron smelter has iron to smelt */
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+        ironSmelter0.putCargo(new Cargo(IRON, map));
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /*Verify that only the iron smelter gets any coal */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Wait for the consumer to consume the coal */
+            Utils.waitUntilAmountIs(map, target, COAL, 0);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 8) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 1);
+
+        assertEquals((int)coalAllocation.get(armory0), 8);
+    }
+
+    @Test
+    public void testOtherConsumersGetCoalWithIronSmelterMissing() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Set the quota for coal consumers to only give coal to the 
+           iron smelter */
+        player0.setCoalQuota(IronSmelter.class, 1);
+        player0.setCoalQuota(Mint.class, 1);
+        player0.setCoalQuota(Armory.class, 1);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /*Verify that only the iron smelter gets any coal */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Wait for the consumer to consume the coal */
+            Utils.waitUntilAmountIs(map, target, COAL, 0);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 8) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 2);
+
+        assertEquals((int)coalAllocation.get(armory0), 4);
+        assertEquals((int)coalAllocation.get(mint0), 4);
+    }
+
+    @Test
+    public void testOtherConsumersGetCoalWithIronSmelterNotReady() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings except for the iron smelter */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Make sure there is no construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Set the quota for coal consumers to only give coal to the 
+           iron smelter */
+        player0.setCoalQuota(IronSmelter.class, 1);
+        player0.setCoalQuota(Mint.class, 1);
+        player0.setCoalQuota(Armory.class, 1);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /* Verify that the other consumers get coal when the iron smelter is
+           not yet constructed */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the consumer */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Exit after six delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 6) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 3);
+
+        assertEquals((int)coalAllocation.get(armory0), 2);
+        assertEquals((int)coalAllocation.get(mint0), 2);
+        assertEquals((int)coalAllocation.get(ironSmelter0), 2);
+    }
+
+    @Test
+    public void testOtherConsumersGetCoalWithFullyStockedIronSmelter() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place mint */
+        Point point0 = new Point(6, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 14);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place armory */
+        Point point2 = new Point(6, 18);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Finish construction of the coal consumers */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(ironSmelter0, map);
+        Utils.constructHouse(armory0, map);
+
+        /* Occupy the buildings except for the iron smelter */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+
+        /* Set the quota to even distribution */
+        player0.setFoodQuota(IronSmelter.class, 1);
+        player0.setFoodQuota(Mint.class, 1);
+        player0.setFoodQuota(Armory.class, 1);
+
+        /* Make sure the headquarter has no coal */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
+        /* Make sure the headquarter has no iron founder so the coal mine will 
+           not be constructed */
+        Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0, map);
+
+        /* Fill the stock in the iron smelter so it doesn't need anything */
+        Utils.deliverCargo(ironSmelter0, IRON, map);
+        Utils.deliverCargo(ironSmelter0, COAL, map);
+
+        assertEquals(ironSmelter0.getAmount(IRON), 1);
+        assertEquals(ironSmelter0.getAmount(COAL), 1);
+
+        assertFalse(ironSmelter0.needsMaterial(IRON));
+        assertFalse(ironSmelter0.needsMaterial(COAL));
+
+        /* Attach the coal consumers to the headquarter */
+        map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+        map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /* Verify that the other consumers get coal when the iron smelter is
+           already fully stocked and does not consume its resources */
+        Map<Building, Integer> coalAllocation = new HashMap<>();
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5000; i++) {
+
+            /* Give all consumers the other materials they need for production */
+            if (ironSmelter0.getAmount(IRON) == 0) {
+                ironSmelter0.putCargo(new Cargo(IRON, map));
+            }
+
+            if (mint0.getAmount(GOLD) == 0) {
+                mint0.putCargo(new Cargo(GOLD, map));
+            }
+
+            if (armory0.getAmount(IRON_BAR) == 0) {
+                armory0.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            /* Add one coal to the headquarter */
+            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+
+            /* Wait for the storage worker to pick up a coal cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
+
+            /* Keep track of where the coals end up */
+            Building targetBuilding = carrier.getCargo().getTarget();
+
+            if (!coalAllocation.containsKey(targetBuilding)) {
+                coalAllocation.put(targetBuilding, 0);
+            }
+
+            int amount = coalAllocation.get(targetBuilding);
+            coalAllocation.put(targetBuilding, amount + 1);
+
+            /* Wait for the coal to reach the mine */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(COAL), 1);
+
+            /* Exit after four delivered coals */
+            int sum = 0;
+
+            for (Integer amountInBuilding : coalAllocation.values()) {
+                sum += amountInBuilding;
+            }
+
+            if (sum == 4) {
+                break;
+            }
+        }
+
+        assertEquals(coalAllocation.keySet().size(), 2);
+
+        assertEquals((int)coalAllocation.get(mint0), 2);
+        assertEquals((int)coalAllocation.get(armory0), 2);
     }
 }

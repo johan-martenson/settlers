@@ -29,6 +29,7 @@ public class Player {
     private final Set<Point>     discoveredLand;
     private final Color          color;
     private final Map<Class<? extends Building>, Integer> foodQuota;
+    private final Map<Class<? extends Building>, Integer> coalQuota;
 
     public Player(String n, Color c) {
         name           = n;
@@ -45,6 +46,13 @@ public class Player {
         foodQuota.put(IronMine.class, 1);
         foodQuota.put(CoalMine.class, 1);
         foodQuota.put(GraniteMine.class, 1);
+
+        /* Create the coal quota and set it to equal distribution */
+        coalQuota = new HashMap<>();
+
+        coalQuota.put(IronSmelter.class, 1);
+        coalQuota.put(Mint.class, 1);
+        coalQuota.put(Armory.class, 1);
     }
 
     public String getName() {
@@ -286,5 +294,13 @@ public class Player {
 
     public void setFoodQuota(Class<? extends Building> aClass, int i) {
         foodQuota.put(aClass, i);
+    }
+
+    public void setCoalQuota(Class<? extends Building> aClass, int i) {
+        coalQuota.put(aClass, i);
+    }
+
+    int getCoalQuota(Class<? extends Building> aClass) {
+        return coalQuota.get(aClass);
     }
 }

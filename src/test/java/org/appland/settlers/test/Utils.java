@@ -806,4 +806,12 @@ public class Utils {
 
         assertEquals(target.getAmount(m), amount);
     }
+
+    static void deliverCargo(Building coalMine0, Material material, GameMap map) throws Exception {
+        Cargo cargo = new Cargo(material, map);
+
+        coalMine0.promiseDelivery(material);
+
+        coalMine0.putCargo(cargo);
+    }
 }
