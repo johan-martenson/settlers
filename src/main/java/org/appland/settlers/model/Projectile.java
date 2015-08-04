@@ -10,8 +10,8 @@ package org.appland.settlers.model;
  * @author johan
  */
 public class Projectile implements Actor {
-    private final double FAIL_RATE = 0.25;
-    private final int    SPEED     = 5;
+    private final static double FAIL_RATE = 0.25;
+    private final static int    SPEED     = 5;
 
     private final Building  target;
     private final Point     source;
