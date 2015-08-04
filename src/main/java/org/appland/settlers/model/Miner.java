@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Miner.States.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.States.GOING_OUT_TO_FLAG;
@@ -64,6 +65,8 @@ public class Miner extends Worker {
             home.consumeOne(BREAD);
         } else if (home.getAmount(FISH) > 0) {
             home.consumeOne(FISH);
+        } else if (home.getAmount(MEAT) > 0) {
+            home.consumeOne(MEAT);
         }
     }
 
@@ -148,7 +151,9 @@ public class Miner extends Worker {
     private boolean hasFood() {
         Building home = getHome();
         
-        return home.getAmount(BREAD) > 0 || home.getAmount(FISH) > 0;
+        return home.getAmount(BREAD) > 0 || 
+               home.getAmount(FISH)  > 0 ||
+               home.getAmount(MEAT)  > 0;
     }
 
     @Override

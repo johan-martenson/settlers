@@ -22,6 +22,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -616,6 +617,8 @@ public class TestGoldMine {
 
     @Test
     public void testMiningConsumesFood() throws Exception {
+
+        /* Start new game with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -657,6 +660,65 @@ public class TestGoldMine {
         
         /* Verify that the miner consumed the bread */
         assertEquals(mine.getAmount(BREAD), 0);
+    }
+
+    @Test
+    public void testGoldmineCanConsumeAllTypesOfFood() throws Exception {
+
+        /* Start new game with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+        
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new GoldMine(player0), point0);
+
+        /* Construct the gold mine */
+        constructHouse(mine, map);
+        
+        /* Deliver food of all types to the miner */
+        assertTrue(mine.needsMaterial(FISH));
+        assertTrue(mine.needsMaterial(MEAT));
+        assertTrue(mine.needsMaterial(BREAD));
+
+        mine.putCargo(new Cargo(FISH, map));
+        mine.putCargo(new Cargo(MEAT, map));
+        mine.putCargo(new Cargo(BREAD, map));
+        
+        /* Manually place miner */
+        Miner miner = new Miner(player0, map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Mine three times and verify that the miner consumed all food */
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the miner to produce ore */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, miner, GOLD);
+
+            /* Wait for the miner to leave the ore at the flag */
+            assertEquals(miner.getTarget(), mine.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+
+            assertNull(miner.getCargo());
+        }
+
+        assertEquals(mine.getAmount(BREAD), 0);
+        assertEquals(mine.getAmount(FISH), 0);
+        assertEquals(mine.getAmount(MEAT), 0);
     }
 
     @Test

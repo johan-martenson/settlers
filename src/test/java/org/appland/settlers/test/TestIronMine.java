@@ -22,6 +22,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -136,7 +137,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a goldmine*/
+        /* Place a ironmine*/
         Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         assertTrue(mine.underConstruction());
@@ -161,7 +162,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         /* Verify that the mine is not a military building */
@@ -187,7 +188,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine*/
+        /* Place a iron mine*/
         Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         /* Verify that the unfinished mine does not need a worker */
@@ -209,7 +210,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine*/
+        /* Place a iron mine*/
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         Utils.constructHouse(mine, map);
@@ -233,10 +234,10 @@ public class TestIronMine {
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
 
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
         
-        /* Place a road between the headquarter and the goldmine */
+        /* Place a road between the headquarter and the ironmine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
@@ -272,7 +273,7 @@ public class TestIronMine {
         Point point0 = new Point(10, 8);
         Utils.surroundPointWithMountain(point0, map);
 
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
         
         assertEquals(map.getBuildings().size(), 2);
@@ -293,10 +294,10 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
         
         /* Manually place miner */
@@ -336,10 +337,10 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
         
         /* Deliver food to the miner */
@@ -356,7 +357,7 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Verify that the miner mines for gold */
+        /* Verify that the miner mines for iron */
         int amountIron = map.getAmountOfMineralAtPoint(IRON, point0);
         
         int i;
@@ -365,7 +366,7 @@ public class TestIronMine {
             map.stepTime();
         }
         
-        /* Verify that the miner finishes mining on time and has gold */
+        /* Verify that the miner finishes mining on time and has iron */
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
@@ -389,13 +390,13 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
@@ -412,10 +413,10 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Wait for the miner to mine gold */
+        /* Wait for the miner to mine iron */
         Utils.fastForward(50, map);
         
-        /* Verify that the miner leaves the gold at the flag */
+        /* Verify that the miner leaves the iron at the flag */
         assertFalse(miner.isMining());
         assertFalse(miner.isInsideBuilding());
         assertNotNull(miner.getCargo());
@@ -464,7 +465,7 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, SMALL, map);
 
-        /* Remove all gold but one */
+        /* Remove all iron but one */
         for (int i = 0; i < 1000; i++) {
             if (map.getAmountOfMineralAtPoint(IRON, point0) > 1) {
                 map.mineMineralAtPoint(IRON, point0);
@@ -475,13 +476,13 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
@@ -498,10 +499,10 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Wait for the miner to mine gold */
+        /* Wait for the miner to mine iron */
         Utils.fastForward(50, map);
         
-        /* Wait for the miner to leave the gold at the flag */
+        /* Wait for the miner to leave the iron at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
         
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
@@ -512,7 +513,7 @@ public class TestIronMine {
         
         assertTrue(miner.isInsideBuilding());
 
-        /* Verify that the gold is gone and that the miner gets no gold */
+        /* Verify that the iron is gone and that the miner gets no iron */
         assertEquals(map.getAmountOfMineralAtPoint(IRON, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -538,13 +539,13 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
         
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
@@ -561,7 +562,7 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Verify that there is no gold and that the miner gets no gold */
+        /* Verify that there is no iron and that the miner gets no iron */
         assertEquals(map.getAmountOfMineralAtPoint(IRON, point0), 0);
 
         for (int i = 0; i < 200; i++) {
@@ -588,10 +589,10 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
 
         /* Manually place miner */
@@ -604,7 +605,7 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Verify that the miner gets no gold */
+        /* Verify that the miner gets no iron */
 
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
@@ -630,10 +631,10 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
         
-        /* Place a gold mine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        /* Construct the gold mine */
+        /* Construct the iron mine */
         constructHouse(mine, map);
         
         /* Deliver food to the miner */
@@ -650,7 +651,7 @@ public class TestIronMine {
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
         
-        /* Verify that the miner mines for gold */
+        /* Verify that the miner mines for iron */
         assertEquals(mine.getAmount(BREAD), 1);
         
         Utils.fastForward(50, map);
@@ -659,6 +660,64 @@ public class TestIronMine {
         assertEquals(mine.getAmount(BREAD), 0);
     }
 
+    @Test
+    public void testIronmineCanConsumeAllTypesOfFood() throws Exception {
+
+        /* Start new game with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+        
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
+        
+        /* Place a headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+        
+        /* Place a iron mine */
+        Building mine = map.placeBuilding(new IronMine(player0), point0);
+
+        /* Construct the iron mine */
+        constructHouse(mine, map);
+        
+        /* Deliver food of all types to the miner */
+        assertTrue(mine.needsMaterial(FISH));
+        assertTrue(mine.needsMaterial(MEAT));
+        assertTrue(mine.needsMaterial(BREAD));
+
+        mine.putCargo(new Cargo(FISH, map));
+        mine.putCargo(new Cargo(MEAT, map));
+        mine.putCargo(new Cargo(BREAD, map));
+        
+        /* Manually place miner */
+        Miner miner = new Miner(player0, map);
+
+        Utils.occupyBuilding(miner, mine, map);
+        
+        assertTrue(miner.isInsideBuilding());
+
+        /* Mine three times and verify that the miner consumed all food */
+        for (int i = 0; i < 3; i++) {
+
+            /* Wait for the miner to produce ore */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, miner, IRON);
+
+            /* Wait for the miner to leave the ore at the flag */
+            assertEquals(miner.getTarget(), mine.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
+
+            assertNull(miner.getCargo());
+        }
+
+        assertEquals(mine.getAmount(BREAD), 0);
+        assertEquals(mine.getAmount(FISH), 0);
+        assertEquals(mine.getAmount(MEAT), 0);
+    }
     @Test
     public void testIronMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
