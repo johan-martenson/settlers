@@ -13,7 +13,7 @@ import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Armorer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Armorer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.SWORD;
 
@@ -75,13 +75,13 @@ public class Armorer extends Worker {
                 countdown.step();
             }
         } else if (state == PRODUCING_WEAPON) {
-            if (getHome().getAmount(IRON) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
+            if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(nextWeapon, map);
 
                     setCargo(cargo);
 
-                    getHome().consumeOne(IRON);
+                    getHome().consumeOne(IRON_BAR);
                     getHome().consumeOne(COAL);
 
                     nextWeapon = getNextWeapon(nextWeapon);
