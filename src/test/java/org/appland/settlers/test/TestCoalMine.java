@@ -460,6 +460,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineRunsOutOfCoal() throws Exception {
 
+        /* Create game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -476,11 +477,11 @@ public class TestCoalMine {
                 map.mineMineralAtPoint(COAL, point0);
             }
         }
-        
+
         /* Place a headquarter */
         Point hqPoint = new Point(15, 15);
         Building building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
@@ -491,8 +492,9 @@ public class TestCoalMine {
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
-        Cargo food = new Cargo(BREAD, map);
-        mine.putCargo(food);
+        Utils.deliverCargo(mine, BREAD, map);
+        Utils.deliverCargo(mine, FISH, map);
+        Utils.deliverCargo(mine, MEAT, map);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
@@ -503,13 +505,15 @@ public class TestCoalMine {
         
         /* Wait for the miner to rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the miner to mine gold */
         Utils.fastForward(50, map);
-        
+
+        assertFalse(mine.outOfNaturalResources());
+
         /* Wait for the miner to leave the gold at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, miner, mine.getFlag().getPosition());
         
         assertNull(miner.getCargo());
@@ -524,9 +528,12 @@ public class TestCoalMine {
         for (int i = 0; i < 200; i++) {
             assertTrue(miner.isInsideBuilding());
             assertNull(miner.getCargo());
-            
+        
             map.stepTime();
         }
+
+        /* Verify that the mine is out of resources */
+        assertTrue(mine.outOfNaturalResources());
     }
 
     @Test

@@ -123,7 +123,10 @@ public class Stonemason extends Worker {
                     }
                 }
 
+                /* Report that there are no resources if no point is found */
                 if (accessPoint == null) {
+                    getHome().reportNoMoreNaturalResources();
+
                     return;
                 }
 

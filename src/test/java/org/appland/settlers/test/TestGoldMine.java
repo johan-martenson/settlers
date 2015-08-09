@@ -455,6 +455,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineRunsOutOfGold() throws Exception {
+
+        /* Create a new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -486,8 +488,9 @@ public class TestGoldMine {
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
-        Cargo food = new Cargo(BREAD, map);
-        mine.putCargo(food);
+        Utils.deliverCargo(mine, BREAD, map);
+        Utils.deliverCargo(mine, FISH, map);
+        Utils.deliverCargo(mine, MEAT, map);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
@@ -500,8 +503,10 @@ public class TestGoldMine {
         Utils.fastForward(100, map);
         
         /* Wait for the miner to mine gold */
+        assertFalse(mine.outOfNaturalResources());
+
         Utils.fastForward(50, map);
-        
+
         /* Wait for the miner to leave the gold at the flag */
         assertEquals(miner.getTarget(), mine.getFlag().getPosition());
         
@@ -522,6 +527,9 @@ public class TestGoldMine {
             
             map.stepTime();
         }
+
+        /* Verify that the mine is out of natural resources */
+        assertTrue(mine.outOfNaturalResources());
     }
 
     @Test

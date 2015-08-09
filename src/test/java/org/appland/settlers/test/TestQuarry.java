@@ -495,14 +495,18 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonStaysAtHomeWhenNoStonesAreAvailable() throws Exception {
+
+        /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
-        
+
+        /* Place quarry */
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
@@ -520,11 +524,18 @@ public class TestQuarry {
         Utils.fastForward(99, map);
         
         assertTrue(mason.isInsideBuilding());
-        
+
+        /* Verify that the stone mason hasn't understood that there are no  
+           resources available */
+        assertFalse(quarry.outOfNaturalResources());
+
         /* Step once to verify that the stonemason stays inside */
         map.stepTime();
         
         assertTrue(mason.isInsideBuilding());
+
+        /* Verify that the quarry is out of natural resources */
+        assertTrue(quarry.outOfNaturalResources());
     }
 
     @Test

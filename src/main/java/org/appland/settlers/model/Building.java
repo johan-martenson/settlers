@@ -19,6 +19,7 @@ import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 public class Building implements Actor, EndPoint, Piece {
     private Military ownDefender;
     private Military primaryAttacker;
+    private boolean  outOfResources;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -69,6 +70,7 @@ public class Building implements Actor, EndPoint, Piece {
         enablePromotions      = true;
         evacuated             = false;
         productionEnabled     = true;
+        outOfResources        = false;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -916,5 +918,13 @@ public class Building implements Actor, EndPoint, Piece {
         } else {
             tearDown();
         }
+    }
+
+    void reportNoMoreNaturalResources() {
+        outOfResources = true;
+    }
+
+    public boolean outOfNaturalResources() {
+        return outOfResources;
     }
 }

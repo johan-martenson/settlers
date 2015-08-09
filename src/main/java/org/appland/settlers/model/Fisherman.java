@@ -100,14 +100,16 @@ public class Fisherman extends Worker {
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled() && !noMoreFish) {
+        if (state == RESTING_IN_HOUSE       && 
+            getHome().isProductionEnabled() &&
+            !getHome().outOfNaturalResources()) {
             if (countdown.reachedZero()) {
                 Point p = getFishingSpot();
 
                 if (p == null) {
 
-                    /* Remember that there's no more fish */
-                    noMoreFish = true;
+                    /* Report that there's no more fish */
+                    getHome().reportNoMoreNaturalResources();
 
                     return;
                 }

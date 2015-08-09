@@ -114,6 +114,10 @@ public class Miner extends Worker {
                     setTarget(getHome().getFlag().getPosition());
 
                     state = GOING_OUT_TO_FLAG;
+                } else {
+
+                    /* Report that there is no more ore available in the mine */
+                    getHome().reportNoMoreNaturalResources();
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();

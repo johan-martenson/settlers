@@ -455,6 +455,8 @@ public class TestIronMine {
 
     @Test
     public void testIronmineRunsOutOfIron() throws Exception {
+
+        /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -486,8 +488,9 @@ public class TestIronMine {
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
-        Cargo food = new Cargo(BREAD, map);
-        mine.putCargo(food);
+        Utils.deliverCargo(mine, BREAD, map);
+        Utils.deliverCargo(mine, FISH, map);
+        Utils.deliverCargo(mine, MEAT, map);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
@@ -500,6 +503,8 @@ public class TestIronMine {
         Utils.fastForward(100, map);
         
         /* Wait for the miner to mine iron */
+        assertFalse(mine.outOfNaturalResources());
+
         Utils.fastForward(50, map);
         
         /* Wait for the miner to leave the iron at the flag */
@@ -522,6 +527,9 @@ public class TestIronMine {
             
             map.stepTime();
         }
+
+        /* Verify that the mine can run out of resources */
+        assertTrue(mine.outOfNaturalResources());
     }
 
     @Test

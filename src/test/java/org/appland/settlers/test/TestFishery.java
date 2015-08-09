@@ -838,6 +838,8 @@ public class TestFishery {
 
     @Test
     public void testFishermanCanRunOutOfFish() throws Exception {
+
+        /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -902,6 +904,8 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
         
         /* Wait for the fisherman to finish fishing */
+        assertFalse(fishery.outOfNaturalResources());
+
         Utils.fastForward(20, map);
         
         /* Let the fisherman go back to the fishery */
@@ -921,7 +925,7 @@ public class TestFishery {
         
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
         
-        /* Verify that there is no more fish and that the fisherman statys at home */
+        /* Verify that there is no more fish and that the fisherman stays at home */
         assertEquals(map.getAmountFishAtPoint(point0), 0);
         assertEquals(map.getAmountFishAtPoint(point1), 0);
         assertEquals(map.getAmountFishAtPoint(point2), 0);
@@ -932,6 +936,9 @@ public class TestFishery {
             
             map.stepTime();
         }
+
+        /* Verify that the fishery can run out of fish */
+        assertTrue(fishery.outOfNaturalResources());
     }
 
     @Test
