@@ -196,6 +196,7 @@ public class Courier extends Worker {
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             pickUpCargo();
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
+            System.out.println("DELIVERING CARGO TO BUILDING");
             deliverCargo();
 
             state = GOING_BACK_TO_ROAD;
@@ -222,6 +223,13 @@ public class Courier extends Worker {
             Storage storage = (Storage) map.getBuildingAtPoint(getPosition());
 
             storage.depositWorker(this);
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() {
+        if (getCargo() != null) {
+            getCargo().setPosition(getPosition());
         }
     }
 
@@ -262,9 +270,6 @@ public class Courier extends Worker {
         cargo.setPosition(currentPosition);
 
         setCargo(null);
-
-        /* Register the usage of the road */
-        assignedRoad.registerUsage();
     }
     
     private void planAfterDelivery() throws Exception {

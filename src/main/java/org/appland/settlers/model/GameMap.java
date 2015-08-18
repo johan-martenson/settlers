@@ -2017,4 +2017,10 @@ public class GameMap {
             t.setAmountMineral(material, LARGE);
         }
     }
+
+    public void surroundPointWithWater(Point right) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(right)) {
+            t.setVegetationType(Vegetation.WATER);
+        }
+    }
 }

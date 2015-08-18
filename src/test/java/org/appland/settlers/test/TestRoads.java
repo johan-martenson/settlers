@@ -21,12 +21,15 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.WATER;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.Well;
+import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 
@@ -1866,6 +1869,126 @@ public class TestRoads {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
 
         assertTrue(road1.isMainRoad());
+    }
+
+    @Test
+    public void testDrivewayBecomesAgedWithDeliveriesToStorage() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place well */
+        Point point2 = new Point(5, 9);
+        Well well0 = map.placeBuilding(new Well(player0), point2);
+
+        /* Construct the well */
+        Utils.constructHouse(well0, map);
+
+        /* Occupy the well */
+        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
+
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        /* Place a worker on the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Wait for the courier to deliver 99 water cargos without turning the
+           driveways into main roads */
+        Road driveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
+
+        for (int i = 0; i < 99; i++) {
+
+            /* Wait for the courier to pick up a water cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, WATER);
+
+            /* Wait for the courier to deliver the water */
+            assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+            assertNull(courier.getCargo());
+            assertFalse(driveway.isMainRoad());
+        }
+
+        /* Verify that the driveways become main roads after one more delivery */
+        assertNull(courier.getCargo());
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, WATER);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        assertTrue(driveway.isMainRoad());
+    }
+
+    @Test
+    public void testDrivewayBecomesAgedWithWellWorkersDeliveries() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place well */
+        Point point2 = new Point(5, 15);
+        Well well0 = map.placeBuilding(new Well(player0), point2);
+
+        /* Construct the well */
+        Utils.constructHouse(well0, map);
+
+        /* Occupy the well */
+        WellWorker wellWorker = Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
+
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
+
+        /* Place a worker on the road */
+        Utils.occupyRoad(road0, map);
+
+        /* Wait for the well worker to deliver 99 water cargos without turning the
+           driveways into main roads */
+        Road driveway = map.getRoad(well0.getPosition(), well0.getFlag().getPosition());
+
+        for (int i = 0; i < 99; i++) {
+
+            /* Wait for the well worker to pick up a water cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+
+            /* Wait for the well worker to deliver the water */
+            assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+
+            assertNull(wellWorker.getCargo());
+            assertFalse(driveway.isMainRoad());
+        }
+
+        /* Verify that the driveways become main roads after one more delivery */
+        assertNull(wellWorker.getCargo());
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, wellWorker, WATER);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(wellWorker.getTarget(), well0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+
+        assertTrue(driveway.isMainRoad());
     }
 
     @Test

@@ -379,6 +379,10 @@ public abstract class Worker implements Actor, Piece {
 
     protected void setCargo(Cargo cargo) {
         carriedCargo = cargo;
+
+        if (carriedCargo != null) {
+            carriedCargo.setPosition(getPosition());
+        }
     }
 
     private void updateCargoPosition() {

@@ -69,8 +69,29 @@ public class Cargo implements Piece {
         return path.get(0);
     }
     
-    public void setPosition(Point p) {
+    public void setPosition(Point p) throws Exception {
         log.log(Level.FINE, "Setting position to {0}", p);
+
+        if (map.isFlagAtPoint(p) || map.isBuildingAtPoint(p)) {
+            if (position != null && position != p) {
+
+                if (map.isFlagAtPoint(position) || map.isBuildingAtPoint(position)) {
+                    Road road = map.getRoad(p, position);
+
+                    if (road != null) {
+                        road.registerUsage();
+                    }
+                } else {
+
+                    Road road = map.getRoadAtPoint(position);
+
+                    if (road != null) {
+                        road.registerUsage();
+                    }
+                }
+            }
+        }
+
         position = p;
         
         if (path != null && path.size() > 0 && path.get(0).equals(p)) {
