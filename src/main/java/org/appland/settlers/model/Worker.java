@@ -377,7 +377,7 @@ public abstract class Worker implements Actor, Piece {
         return home;
     }
 
-    protected void setCargo(Cargo cargo) {
+    protected void setCargo(Cargo cargo) throws Exception {
         carriedCargo = cargo;
 
         if (carriedCargo != null) {
@@ -385,7 +385,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    private void updateCargoPosition() {
+    private void updateCargoPosition() throws Exception {
         if (carriedCargo != null) {
             carriedCargo.setPosition(getPosition());
         }

@@ -36,7 +36,7 @@ public class Flag implements EndPoint, Piece {
     }
 
     @Override
-    public void putCargo(Cargo c) throws InvalidRouteException {
+    public void putCargo(Cargo c) throws InvalidRouteException, Exception {
         log.log(Level.FINE, "Putting {0} at {1}", new Object[]{c, this});
 
         c.setPosition(getPosition());

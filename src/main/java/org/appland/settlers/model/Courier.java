@@ -196,7 +196,6 @@ public class Courier extends Worker {
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             pickUpCargo();
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            System.out.println("DELIVERING CARGO TO BUILDING");
             deliverCargo();
 
             state = GOING_BACK_TO_ROAD;
@@ -227,7 +226,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() {
+    protected void onWalkingAndAtFixedPoint() throws Exception {
         if (getCargo() != null) {
             getCargo().setPosition(getPosition());
         }
