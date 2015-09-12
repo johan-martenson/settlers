@@ -7,15 +7,6 @@ package org.appland.settlers.model;
 
 import java.util.List;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Stonemason.States.GETTING_STONE;
-import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Stonemason.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_GET_STONE;
-import static org.appland.settlers.model.Stonemason.States.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.Stonemason.States.IN_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Stonemason.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Stonemason.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Stonemason.States.WALKING_TO_TARGET;
 
 /**
  *
@@ -27,10 +18,10 @@ public class Stonemason extends Worker {
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_GET_STONE = 49;
     private final Countdown countdown;
-    private States state;
+    private State state;
     private Point stoneTarget;
 
-    protected enum States {
+    private enum State {
 
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -46,14 +37,14 @@ public class Stonemason extends Worker {
     public Stonemason(Player player, GameMap map) {
         super(player, map);
 
-        state = WALKING_TO_TARGET;
+        state = State.WALKING_TO_TARGET;
 
         countdown = new Countdown();
         stoneTarget = null;
     }
 
     public boolean isGettingStone() {
-        return state == GETTING_STONE;
+        return state == State.GETTING_STONE;
     }
 
     @Override
@@ -62,14 +53,14 @@ public class Stonemason extends Worker {
             setHome(b);
         }
 
-        state = RESTING_IN_HOUSE;
+        state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
     }
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
+        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point accessPoint = null;
                 double distance = Integer.MAX_VALUE;
@@ -132,17 +123,17 @@ public class Stonemason extends Worker {
 
                 setOffroadTarget(accessPoint);
 
-                state = GOING_OUT_TO_GET_STONE;
+                state = State.GOING_OUT_TO_GET_STONE;
             } else {
                 countdown.step();
             }
-        } else if (state == GETTING_STONE) {
+        } else if (state == State.GETTING_STONE) {
             if (countdown.reachedZero()) {
                 map.removePartOfStone(stoneTarget);
 
                 setCargo(new Cargo(STONE, map));
 
-                state = GOING_BACK_TO_HOUSE_WITH_CARGO;
+                state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 
                 stoneTarget = null;
 
@@ -150,16 +141,16 @@ public class Stonemason extends Worker {
             } else {
                 countdown.step();
             }
-        } else if (state == IN_HOUSE_WITH_CARGO) {
+        } else if (state == State.IN_HOUSE_WITH_CARGO) {
             setTarget(getHome().getFlag().getPosition());
 
-            state = GOING_OUT_TO_PUT_CARGO;
+            state = State.GOING_OUT_TO_PUT_CARGO;
         }
     }
 
     @Override
     public void onArrival() throws Exception {
-        if (state == GOING_OUT_TO_PUT_CARGO) {
+        if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
@@ -170,22 +161,22 @@ public class Stonemason extends Worker {
 
             setTarget(getHome().getPosition());
 
-            state = GOING_BACK_TO_HOUSE;
-        } else if (state == GOING_BACK_TO_HOUSE) {
-            state = RESTING_IN_HOUSE;
+            state = State.GOING_BACK_TO_HOUSE;
+        } else if (state == State.GOING_BACK_TO_HOUSE) {
+            state = State.RESTING_IN_HOUSE;
 
             enterBuilding(getHome());
 
             countdown.countFrom(TIME_TO_REST);
-        } else if (state == GOING_OUT_TO_GET_STONE) {
-            state = GETTING_STONE;
+        } else if (state == State.GOING_OUT_TO_GET_STONE) {
+            state = State.GETTING_STONE;
 
             countdown.countFrom(TIME_TO_GET_STONE);
-        } else if (state == GOING_BACK_TO_HOUSE_WITH_CARGO) {
+        } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
 
-            state = IN_HOUSE_WITH_CARGO;
-        } else if (state == RETURNING_TO_STORAGE) {
+            state = State.IN_HOUSE_WITH_CARGO;
+        } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage) map.getBuildingAtPoint(getPosition());
 
             storage.depositWorker(this);
@@ -198,13 +189,13 @@ public class Stonemason extends Worker {
         Building storage = map.getClosestStorage(getPosition());
 
         if (storage != null) {
-            state = RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 
