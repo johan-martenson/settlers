@@ -2018,9 +2018,15 @@ public class GameMap {
         }
     }
 
-    public void surroundPointWithWater(Point right) throws Exception {
-        for (Tile t : terrain.getSurroundingTiles(right)) {
+    public void surroundPointWithWater(Point point) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(point)) {
             t.setVegetationType(Vegetation.WATER);
+        }
+    }
+
+    public void surroundPointWithLand(Point point) throws Exception {
+        for (Tile t : terrain.getSurroundingTiles(point)) {
+            t.setVegetationType(Vegetation.GRASS);
         }
     }
 }

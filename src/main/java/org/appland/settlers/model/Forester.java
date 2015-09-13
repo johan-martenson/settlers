@@ -20,12 +20,13 @@ import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
 public class Forester extends Worker {
     private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_REST = 99;
+    private static final int RANGE = 8;
     
     private final Countdown countdown;
     private States state;
 
     private Point getTreeSpot() throws Exception {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
         
         for (Point p : adjacentPoints) {
             if (map.isBuildingAtPoint(p)) {
@@ -52,6 +53,17 @@ public class Forester extends Worker {
                 continue;
             }
 
+            if (map.getTerrain().isInWater(p)) {
+                continue;
+            }
+
+            if (map.findWayOffroad(
+                    getHome().getFlag().getPosition(), 
+                    p,
+                    null) == null) {
+                continue;
+            }
+          
             return p;
         }
 

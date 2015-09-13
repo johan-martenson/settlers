@@ -532,16 +532,136 @@ public class TestForesterHut {
 
     @Test
     public void testForesterStaysInsideWhenThereAreNoSpotsAvailable() throws Exception {
+
+        /* Create a new game map with a single player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
+        /* Place forester hut */
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut, map);
+
+        /* Put trees around the forester hut */
+        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 20)) {
+            if (p.equals(point1)) {
+                continue;
+            }
+            
+            if (map.isBuildingAtPoint(p) || 
+                map.isFlagAtPoint(p)     || 
+                map.isRoadAtPoint(p)     || 
+                map.isStoneAtPoint(p)    ||
+                !map.isWithinMap(p)) {
+                continue;
+            }
+            
+            map.placeTree(p);
+        }
+        
+        /* Manually place forester */
+        Forester forester = new Forester(player0, map);
+
+        Utils.occupyBuilding(forester, foresterHut, map);
+        
+        assertTrue(forester.isInsideBuilding());
+        
+        /* Verify that the forester stays in the hut */
+        int i;
+        for (i = 0; i < 200; i++) {
+            assertTrue(forester.isInsideBuilding());
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testForesterAvoidsUnreachableSpots() throws Exception {
+
+        /* Create a new game map with a single player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Create a lake with an island inside */
+        for (Point p : map.getPointsWithinRadius(point1, 4)) {
+            map.surroundPointWithWater(p);
+        }
+
+        map.surroundPointWithLand(point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut, map);
+
+        /* Put trees around the forester hut */
+        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+            if (p.equals(point1)) {
+                continue;
+            }
+
+            if (map.isBuildingAtPoint(p)  || 
+                    map.isFlagAtPoint(p)  || 
+                    map.isRoadAtPoint(p)  || 
+                    map.isStoneAtPoint(p) ||
+                    map.getTerrain().isInWater(p)) {
+                continue;
+            }
+
+            map.placeTree(p);
+        }
+
+        /* Manually place forester */
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+
+        assertTrue(forester.isInsideBuilding());
+
+        /* Verify that the forester stays in the hut */
+        int i;
+        for (i = 0; i < 200; i++) {
+            assertTrue(forester.isInsideBuilding());
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testForesterDoesNotPlantTreesInWater() throws Exception {
+
+        /* Create a new game map with a single player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 17);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Create a lake with an island inside */
+        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+            map.surroundPointWithWater(p);
+        }
+
+        map.surroundPointWithLand(point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -552,13 +672,17 @@ public class TestForesterHut {
                 continue;
             }
             
-            if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
+            if (map.isBuildingAtPoint(p)  || 
+                    map.isFlagAtPoint(p)  || 
+                    map.isRoadAtPoint(p)  || 
+                    map.isStoneAtPoint(p) ||
+                    map.getTerrain().isInWater(p)) {
                 continue;
             }
-            
+
             map.placeTree(p);
         }
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
