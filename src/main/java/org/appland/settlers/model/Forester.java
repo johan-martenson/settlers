@@ -8,12 +8,6 @@ package org.appland.settlers.model;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.appland.settlers.model.Forester.States.GOING_OUT_TO_PLANT;
-import static org.appland.settlers.model.Forester.States.PLANTING;
-import static org.appland.settlers.model.Forester.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Forester.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Forester.States.WALKING_TO_TARGET;
-
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
 @Walker(speed = 10)
@@ -23,7 +17,7 @@ public class Forester extends Worker {
     private static final int RANGE = 8;
     
     private final Countdown countdown;
-    private States state;
+    private State state;
 
     private Point getTreeSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
@@ -63,14 +57,14 @@ public class Forester extends Worker {
                     null) == null) {
                 continue;
             }
-          
+
             return p;
         }
 
         return null;
     }
-    
-    protected enum States {
+
+    private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         GOING_OUT_TO_PLANT,
@@ -82,13 +76,13 @@ public class Forester extends Worker {
     public Forester(Player player, GameMap map) {
         super(player, map);
         
-        state = WALKING_TO_TARGET;
+        state = State.WALKING_TO_TARGET;
         
         countdown = new Countdown();
     }
 
     public boolean isPlanting() {
-        return state == PLANTING;
+        return state == State.PLANTING;
     }
 
     @Override
@@ -97,14 +91,14 @@ public class Forester extends Worker {
             setHome(b);
         }
         
-        state = RESTING_IN_HOUSE;
+        state = State.RESTING_IN_HOUSE;
         
         countdown.countFrom(TIME_TO_REST);
     }
     
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
+        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point p = getTreeSpot();
 
@@ -114,18 +108,18 @@ public class Forester extends Worker {
 
                 setOffroadTarget(p);
 
-                state = GOING_OUT_TO_PLANT;
+                state = State.GOING_OUT_TO_PLANT;
             } else {
                 countdown.step();
             }
-        } else if (state == PLANTING) {
+        } else if (state == State.PLANTING) {
             if (countdown.reachedZero()) {
                 try {
                     map.placeTree(getPosition());
                 } catch (Exception ex) {
                     Logger.getLogger(Forester.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                state = States.GOING_BACK_TO_HOUSE;
+                state = State.GOING_BACK_TO_HOUSE;
                 
                 returnHomeOffroad();
             } else {
@@ -136,17 +130,17 @@ public class Forester extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
-        if (state == GOING_OUT_TO_PLANT) {
-            state = PLANTING;
+        if (state == State.GOING_OUT_TO_PLANT) {
+            state = State.PLANTING;
             
             countdown.countFrom(TIME_TO_PLANT);
-        } else if (state == States.GOING_BACK_TO_HOUSE) {
-            state = RESTING_IN_HOUSE;
+        } else if (state == State.GOING_BACK_TO_HOUSE) {
+            state = State.RESTING_IN_HOUSE;
             
             enterBuilding(getHome());
             
             countdown.countFrom(TIME_TO_REST);
-        } else if (state == RETURNING_TO_STORAGE) {
+        } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
         
             storage.depositWorker(this);
@@ -159,13 +153,13 @@ public class Forester extends Worker {
         Building storage = map.getClosestStorage(getPosition());
     
         if (storage != null) {
-            state = RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
             
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 
