@@ -303,4 +303,8 @@ public class Player {
     int getCoalQuota(Class<? extends Building> aClass) {
         return coalQuota.get(aClass);
     }
+
+    public GameMap getMap() {
+        return map;
+    }
 }
