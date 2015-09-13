@@ -32,6 +32,10 @@ RE-FACTOR
 TEST
 ====
 
+*  Test one gold mine, one iron mine, one coal mine, and one un-occupied coal mine. All mines should get food
+
+*  Test farmed crop fields eventually disappear
+
 *  Test that all mines wants all types of food!!
 
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers
@@ -49,8 +53,6 @@ TEST
 *  Add tests for available buildings close to the border
 
 *  Test that when a barracks is destroyed, the worker on roads that get removed return to their storage
-
-*  Test that storages only deliver on existing roads
 
 *  Test who wins according to rank and experience and health
 
@@ -92,7 +94,7 @@ TEST
 
 *  Test that production can't be resumed unless it's stopped
 
-*  Test that splitting a main road results in two main roads (verify?)
+*  Test that splitting a main road results in two main roads
 
 *  Test that it's not possible to assign a donkey to a small road
 
@@ -130,8 +132,6 @@ TEST
 
 *  Geologist gets stuck when its flag is removed
 
-*  There is too little stone on the map
-
 *  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely
 
 
@@ -143,8 +143,6 @@ TO IMPLEMENT
 
 *  Add method to see whether a building can produce cargos
 
-*  Add method to see whether a military building is accepting coins
-
 *  Adjust attack radius in military buildings
 
 *  Implement limit so that buildings can not accept more resources than they can hold
@@ -152,8 +150,6 @@ TO IMPLEMENT
 *  Make sure all tests for stopped production have more material than necessary
 
 *  Make it possible to stop storage of material in storage
-
-*  Use information about available flags and buildings to show the right buttons in the app
 
 *  Add list of all possible building types to the model
 
@@ -656,3 +652,12 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  test re-routing of cargos when a road is added - DONE
 
 *  Test that player is set correctly in workers retrieved from storage - DONE
+
+*  Test that storages only deliver on existing roads - DONE
+
+*  There is too little stone on the map - DONE
+
+*  Use information about available flags and buildings to show the right buttons in the app - DONE
+
+*  Add method to see whether a military building is accepting coins - DONE
+
