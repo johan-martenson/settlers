@@ -789,16 +789,53 @@ public class TestFarm {
 
     @Test
     public void testCropCanBePlacedOnHarvestedCrop() throws Exception {
+
+        /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
 
+        /* Place a crop */
         Crop crop = map.placeCrop(point0);
+
+        /* Harvest the crop */
         crop.harvest();
-        
+
+        /* Verify that it's possible to place a new crop on the harvested crop */
         map.placeCrop(point0);
+    }
+
+    @Test
+    public void testHarvestedCropDisappearsEventually() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Place a crop */
+        Crop crop = map.placeCrop(point0);
+
+        /* Harvest the crop */
+        crop.harvest();
+
+        /* Verify that the harvested crop disappears after a specific time */
+        for (int i = 0; i < 200; i++) {
+
+            /* Verify that the crop is still there */
+            assertTrue(map.isCropAtPoint(point0));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.isCropAtPoint(point0));
+        assertFalse(map.getCrops().iterator().hasNext());
     }
 
     @Test(expected = Exception.class)

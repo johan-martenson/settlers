@@ -45,6 +45,7 @@ public class GameMap {
     private List<WildAnimal>        wildAnimals;
     private List<Sign>              signsToRemove;
     private List<Worker>            workersToRemove;
+    private List<Crop>              cropsToRemove;
     private String                  theLeader = "Mai Thi Van Anh";
     private Terrain                 terrain;
     private List<Point>             fullGrid;
@@ -142,6 +143,7 @@ public class GameMap {
         buildingsToRemove   = new LinkedList<>();
         projectilesToRemove = new LinkedList<>();
         animalsToRemove     = new LinkedList<>();
+        cropsToRemove       = new LinkedList<>();
         roads               = new ArrayList<>();
         flags               = new ArrayList<>();
         signs               = new ArrayList<>();
@@ -183,6 +185,7 @@ public class GameMap {
         signsToRemove.clear();
         buildingsToRemove.clear();
         animalsToRemove.clear();
+        cropsToRemove.clear();
 
         for (Projectile p : projectiles) {
             p.stepTime();
@@ -242,6 +245,11 @@ public class GameMap {
         /* Add workers that were placed during the round */
         synchronized (workers) {
             workers.addAll(workersToAdd);
+        }
+
+        /* Remove crops that were removed during this round */
+        synchronized (crops) {
+            crops.removeAll(cropsToRemove);
         }
 
         /* Remove signs that have expired during this round */
@@ -1432,7 +1440,7 @@ public class GameMap {
             }
         }
         
-        Crop crop = new Crop(point);
+        Crop crop = new Crop(point, this);
 
         mp.setCrop(crop);
 
@@ -2028,5 +2036,11 @@ public class GameMap {
         for (Tile t : terrain.getSurroundingTiles(point)) {
             t.setVegetationType(Vegetation.GRASS);
         }
+    }
+
+    void removeCropWithinStepTime(Crop crop) {
+        cropsToRemove.add(crop);
+
+        getMapPoint(crop.getPosition()).setCrop(null);
     }
 }
