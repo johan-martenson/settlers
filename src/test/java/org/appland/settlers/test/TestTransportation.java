@@ -603,29 +603,39 @@ public class TestTransportation {
 
     @Test
     public void testCourierPicksUpCargoWhenItAppearsAndWorkerIsNotOnFlag() throws Exception {
+
+        /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Point start = new Point(5, 5);
-        Point middle = new Point(6, 6);
-        Point end = new Point(7, 7);
-        
+
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
+        /* Place sawmill at the other end of the road */
+        Point end = new Point(7, 7);
         Building sm = map.placeBuilding(new Sawmill(player0), end.upLeft());
 
+        /* Place start flag */
+        Point start = new Point(5, 5);
         Flag flag0 = map.placeFlag(player0, start);
+
+        /* Place middle flag */
+        Point middle = new Point(6, 6);
         Road road0 = map.placeRoad(player0, start, middle, end);
 
+        /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
 
         map.placeWorker(courier, sm.getFlag());
         courier.assignToRoad(road0);
 
+        /* Wait for the courier to rest at the middle of the road */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
-        
+
+        /* Place cargo to be delivered to the sawmill at the start flag */
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(start);
         cargo.setTarget(sm);
@@ -637,11 +647,13 @@ public class TestTransportation {
         assertNull(courier.getCargo());
         assertFalse(cargo.isDeliveryPromised());
 
+        /* Step time to get the courier to notice the cargo */
         map.stepTime();
 
         assertTrue(cargo.isDeliveryPromised());
         assertEquals(courier.getTarget(), flag0.getPosition());
 
+        /* Fast forward until the courier picks up the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, start);
 
         assertTrue(courier.isAt(start));

@@ -13,10 +13,10 @@ import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
 @Walker(speed = 10)
 public class Courier extends Worker {
 
-    private Cargo intendedCargo;
-    private Road assignedRoad;
+    private Cargo  intendedCargo;
+    private Road   assignedRoad;
     private States state;
-    private Point idlePoint;
+    private Point  idlePoint;
 
     private Point findIdlePointAtRoad(Road road) {
         List<Point> wayPoints = road.getWayPoints();

@@ -14,6 +14,8 @@ import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.CoalMine;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.GraniteMine;
@@ -32,16 +34,20 @@ import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.Minter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -1893,5 +1899,113 @@ public class TestPrioritization {
 
         assertEquals((int)coalAllocation.get(mint0), 2);
         assertEquals((int)coalAllocation.get(armory0), 2);
+    }
+
+    @Test
+    public void testCourierPicksUpCargoOfHighestPriority() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place flag */
+        Point point0 = new Point(20, 14);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Assign a courier to the road */
+        Courier courier = new Courier(player0, map);
+
+        map.placeWorker(courier, flag0);
+        courier.assignToRoad(road0);
+
+        /* Wait for the courier to rest at the middle of the road */
+        assertEquals(courier.getTarget(), flag0.getPosition().left());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+
+        /* Place wood cargo to be delivered to the headquarter */
+        Cargo woodCargo = new Cargo(WOOD, map);
+        woodCargo.setPosition(point0);
+        woodCargo.setTarget(headquarter0);
+
+        flag0.putCargo(woodCargo);
+
+        /* Place stone cargo to be delivered to the headquarter */
+        Cargo stoneCargo = new Cargo(STONE, map);
+        stoneCargo.setPosition(point0);
+        stoneCargo.setTarget(headquarter0);
+
+        flag0.putCargo(stoneCargo);
+
+        /* Place planck cargo to be delivered to the headquarter */
+        Cargo planckCargo = new Cargo(PLANCK, map);
+        planckCargo.setPosition(point0);
+        planckCargo.setTarget(headquarter0);
+
+        flag0.putCargo(planckCargo);
+
+        /* Set stone deliveries to highest priority */
+        player0.setTransportPriority(0, STONE);
+        player0.setTransportPriority(1, WOOD);
+        player0.setTransportPriority(2, PLANCK);
+
+        assertFalse(courier.isTraveling());
+        assertTrue(courier.isAt(flag0.getPosition().left()));
+        assertNull(courier.getCargo());
+        assertFalse(planckCargo.isDeliveryPromised());
+
+        /* Verify that the courier picks up the stone cargo first */
+        assertNull(courier.getCargo());
+
+        map.stepTime();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+
+        assertTrue(courier.isAt(point0));
+        assertEquals(courier.getCargo(), stoneCargo);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        map.stepTime();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        /* Verify that the courier picks up the wood cargo next */
+        assertNull(courier.getCargo());
+
+        map.stepTime();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+
+        assertTrue(courier.isAt(point0));
+        assertEquals(courier.getCargo(), woodCargo);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        /* Verify that the courier picks up the planck cargo next */
+        assertNull(courier.getCargo());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+
+        assertTrue(courier.isAt(point0));
+        assertEquals(courier.getCargo(), planckCargo);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
     }
 }

@@ -194,10 +194,8 @@ public class Utils {
         assertNotNull(worker);
         assertNotNull(map);
 
-        assertTrue(worker.getPlannedPath().contains(target));
-
         for (int i = 0; i < 1000; i++) {
-            
+
             if (worker.isAt(target)) {
                 break;
             }

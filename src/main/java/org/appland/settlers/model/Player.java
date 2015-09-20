@@ -28,16 +28,18 @@ public class Player {
     private final List<Building> buildings;
     private final Set<Point>     discoveredLand;
     private final Color          color;
+    private final List<Material> transportPriorities;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
 
     public Player(String n, Color c) {
-        name           = n;
-        color          = c;
-        buildings      = new LinkedList<>();
-        ownedLands     = new LinkedList<>();
-        fieldOfView    = new LinkedList<>();
-        discoveredLand = new HashSet<>();
+        name                = n;
+        color               = c;
+        buildings           = new LinkedList<>();
+        ownedLands          = new LinkedList<>();
+        fieldOfView         = new LinkedList<>();
+        discoveredLand      = new HashSet<>();
+        transportPriorities = new LinkedList<>();
 
         /* Create the food quota and set it to equal distribution */
         foodQuota = new HashMap<>();
@@ -53,6 +55,9 @@ public class Player {
         coalQuota.put(IronSmelter.class, 1);
         coalQuota.put(Mint.class, 1);
         coalQuota.put(Armory.class, 1);
+
+        /* Set the initial transport priority */
+        transportPriorities.addAll(Arrays.asList(Material.values()));
     }
 
     public String getName() {
@@ -306,5 +311,27 @@ public class Player {
 
     public GameMap getMap() {
         return map;
+    }
+
+    public void setTransportPriority(int priority, Material material) {
+        synchronized (transportPriorities) {
+            transportPriorities.remove(material);
+
+            transportPriorities.add(priority, material);
+        }
+    }
+
+    int getTransportPriority(Cargo c) {
+        int i = 0;
+
+        for (Material m : transportPriorities) {
+            if (c.getMaterial() == m) {
+                return i;
+            }
+
+            i++;
+        }
+
+        return Integer.MAX_VALUE;
     }
 }

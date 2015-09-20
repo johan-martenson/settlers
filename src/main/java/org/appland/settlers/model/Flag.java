@@ -91,17 +91,32 @@ public class Flag implements EndPoint, Piece {
 
     @Override
     public Cargo getCargoWaitingForRoad(Road r) {
+
+        Cargo waitingCargo = null;
+        int priority = Integer.MAX_VALUE;
+        
         for (Cargo c : stackedCargo) {
             if (c.isDeliveryPromised()) {
                 continue;
             }
-            
-            if (r.getWayPoints().contains(c.getNextStep())) {
-                return c;
+
+            if (!r.getWayPoints().contains(c.getNextStep())) {
+                continue;
+            }
+
+            int tmpPriority = player.getTransportPriority(c);
+
+            if (tmpPriority < priority) {
+                priority = tmpPriority;
+                waitingCargo = c;
+            }
+
+            if (priority == 0) {
+                break;
             }
         }
 
-        return null;
+        return waitingCargo;
     }
     
     public void callGeologist() {
