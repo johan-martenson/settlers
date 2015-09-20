@@ -812,4 +812,20 @@ public class Utils {
 
         coalMine0.putCargo(cargo);
     }
+
+    static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws Exception {
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (worker.getCargo() != null) {
+                return worker.getCargo();
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(false);
+
+        return null;
+    }
 }

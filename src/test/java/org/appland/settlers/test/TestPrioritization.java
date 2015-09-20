@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.Baker;
+import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.CoalMine;
@@ -26,6 +28,7 @@ import org.appland.settlers.model.IronSmelter;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
@@ -34,7 +37,11 @@ import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
+import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Mint;
 import org.appland.settlers.model.Minter;
@@ -42,7 +49,9 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
+import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -2007,5 +2016,155 @@ public class TestPrioritization {
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerHandsOutCargoOfHighestPriority() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place mint */
+        Point point0 = new Point(20, 14);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(24, 14);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Place sawmill */
+        Point point2 = new Point(28, 14);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
+
+        /* Place mill */
+        Point point3 = new Point(24, 10);
+        Mill mill0 = map.placeBuilding(new Mill(player0), point3);
+
+        /* Plac well */
+        Point point4 = new Point(20, 10);
+        Well well0 = map.placeBuilding(new Well(player0), point4);
+
+        /* Construct all the buildings except the well */
+        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(bakery0, map);
+        Utils.constructHouse(sawmill0, map);
+        Utils.constructHouse(mill0, map);
+
+        /* Utils occupy the constructed buildings */
+        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
+
+        /* Connect the buildings with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
+        Road road1 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), bakery0.getFlag());
+        Road road2 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), sawmill0.getFlag());
+        Road road3 = map.placeAutoSelectedRoad(player0, sawmill0.getFlag(), mill0.getFlag());
+        Road road4 = map.placeAutoSelectedRoad(player0, mill0.getFlag(), well0.getFlag());
+
+        /* Assign couriers to the roads */
+        Utils.occupyRoad(road0, map);
+        Utils.occupyRoad(road1, map);
+        Utils.occupyRoad(road2, map);
+        Utils.occupyRoad(road3, map);
+        Utils.occupyRoad(road4, map);
+
+        /* Verify that the storage worker in the headquarter delivers cargos
+           in the right order 
+        */
+        assertTrue(mint0.needsMaterial(COAL));
+        assertTrue(mint0.needsMaterial(GOLD));
+        assertTrue(bakery0.needsMaterial(WATER));
+        assertTrue(bakery0.needsMaterial(FLOUR));
+        assertTrue(sawmill0.needsMaterial(WOOD));
+        assertTrue(mill0.needsMaterial(WHEAT));
+        assertTrue(well0.needsMaterial(PLANCK));
+
+        Worker storageWorker = headquarter0.getWorker();
+
+        assertNull(storageWorker.getCargo());
+
+        /* Set the transport priority for the materials */
+        player0.setTransportPriority(0, WHEAT);
+        player0.setTransportPriority(1, PLANCK);
+        player0.setTransportPriority(2, COAL);
+        player0.setTransportPriority(3, GOLD);
+        player0.setTransportPriority(4, WATER);
+        player0.setTransportPriority(5, FLOUR);
+
+        /* Ensure the headquarter has all the materials and enough to avoid the
+           tree conservation program 
+        */
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 20, map);
+        Utils.adjustInventoryTo(headquarter0, PLANCK, 20, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 20, map);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 20, map);
+        Utils.adjustInventoryTo(headquarter0, WATER, 20, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20, map);
+
+        /* Verify that the storage worker first delivers wheat */
+        Cargo currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+
+        assertEquals(currentCargo.getMaterial(), WHEAT);
+
+        /* Wait for the worker to deliver the cargo */
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+
+        assertFalse(mill0.needsMaterial(WHEAT));
+
+        /* Verify that the storage worker then delivers plancks */
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+
+        assertEquals(currentCargo.getMaterial(), PLANCK);
+
+        /* Wait for the worker to deliver the cargo */
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+
+        assertFalse(mill0.needsMaterial(WHEAT));
+        assertTrue(well0.needsMaterial(PLANCK));
+
+        /* Verify that the storage worker then plancks until the well doesn't 
+           need them anymore */
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+
+        assertEquals(currentCargo.getMaterial(), PLANCK);
+
+        /* Wait for the worker to deliver the cargo */
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+
+        assertFalse(mill0.needsMaterial(WHEAT));
+        assertFalse(well0.needsMaterial(PLANCK));
+
+        /* Verify that the storage worker then delivers coal */
+        assertTrue(mint0.needsMaterial(COAL));
+
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+
+        assertEquals(currentCargo.getMaterial(), COAL);
+
+        /* Wait for the worker to deliver the cargo */
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+
+        assertFalse(mill0.needsMaterial(WHEAT));
+        assertFalse(well0.needsMaterial(PLANCK));
+        assertFalse(mint0.needsMaterial(COAL));
+
+        /* Verify that the storage worker then delivers gold */
+        assertTrue(mint0.needsMaterial(GOLD));
+
+        currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
+
+        assertEquals(currentCargo.getMaterial(), GOLD);
+
+        /* Wait for the worker to deliver the cargo */
+        Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
     }
 }

@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -69,7 +70,9 @@ public class StorageWorker extends Worker {
     }
 
     private Cargo tryToStartDelivery() throws Exception {
-        for (Material m : Material.values()) {
+        List<Material> materialsInPriorityOrder = getPlayer().getTransportPriorityList();
+
+        for (Material m : materialsInPriorityOrder) {
             for (Building b : map.getBuildingsWithinReach(ownStorage.getFlag())) {
 
                 /* Don't deliver to itself */
