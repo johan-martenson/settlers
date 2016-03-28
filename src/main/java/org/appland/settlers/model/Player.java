@@ -338,4 +338,24 @@ public class Player {
     List<Material> getTransportPriorityList() {
         return transportPriorities;
     }
+
+    public Player getPlayerAtPoint(Point p) {
+
+        /* Don't allow lookup of points the player hasn't discovered yet */
+        if (!getDiscoveredLand().contains(p)) {
+            return null;
+        }
+
+        /* Check each player if they own the point and return the player that 
+           does
+        */
+        for (Player player : map.getPlayers()) {
+            if (player.isWithinBorder(p)) {
+                return player;
+            }
+        }
+
+        /* Return null if no player owns the point */
+        return null;
+    }
 }
