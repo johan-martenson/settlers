@@ -1115,12 +1115,14 @@ public class TestBarracks {
         /* Verify that the field of view remains the same until the barracks 
            gets occupied */
         Point pointInOldFOV = new Point(27, 5);
-        Point pointinNewFOV = new Point(31, 5);
+        Point pointInNewFOV = new Point(31, 5);
 
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getHostedMilitary() == 0) {
                 assertTrue(player0.getFieldOfView().contains(pointInOldFOV));
-                assertFalse(player0.getFieldOfView().contains(pointinNewFOV));
+                assertTrue(player0.getDiscoveredLand().contains(pointInOldFOV));
+                assertFalse(player0.getFieldOfView().contains(pointInNewFOV));
+                assertFalse(player0.getDiscoveredLand().contains(pointInNewFOV));
             } else {
                 break;
             }
@@ -1131,7 +1133,9 @@ public class TestBarracks {
         /* Verify that the field of view is updated when a military has entered
            the barracks */
         assertTrue(barracks0.getHostedMilitary() > 0);
-        assertTrue(player0.getFieldOfView().contains(pointinNewFOV));
+        assertTrue(player0.getFieldOfView().contains(pointInNewFOV));
+        assertTrue(player0.getDiscoveredLand().contains(pointInNewFOV));
         assertFalse(player0.getFieldOfView().contains(pointInOldFOV));
+        assertTrue(player0.getDiscoveredLand().contains(pointInOldFOV));
     }
 }
