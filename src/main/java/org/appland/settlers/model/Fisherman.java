@@ -28,7 +28,6 @@ public class Fisherman extends Worker {
     private final Countdown countdown;
 
     private States  state;
-    private boolean noMoreFish;
 
     private Point getFishingSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
@@ -79,8 +78,6 @@ public class Fisherman extends Worker {
         state = WALKING_TO_TARGET;
         
         countdown = new Countdown();
-
-        noMoreFish = false;
     }
 
     public boolean isFishing() {

@@ -9,7 +9,7 @@ public class Road {
 
     private static final int MAIN_ROAD_THRESHOLD = 99;
     
-    public int         usage;
+    public int          usage;
     private EndPoint    start;
     private EndPoint    end;
     private Courier     courier;

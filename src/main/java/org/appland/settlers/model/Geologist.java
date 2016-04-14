@@ -37,9 +37,9 @@ public class Geologist extends Worker {
     
     private final static int TIME_TO_INVESTIGATE   = 19;
     private final static int RADIUS_TO_INVESTIGATE = 5;
+    private final static Random RANDOM = new Random(1);
     
     private final Countdown countdown;
-    private static final Random random = new Random(1);
 
     private State state;
     private int   nrSitesInvestigated;
@@ -162,7 +162,7 @@ public class Geologist extends Worker {
 
         points.addAll(points);
 
-        int startIndex = random.nextInt(points.size() / 2);
+        int startIndex = RANDOM.nextInt(points.size() / 2);
 
         for (Point p : points.subList(startIndex, points.size() - 1)) {
             if (p.equals(getPosition())) {

@@ -48,7 +48,7 @@ import org.appland.settlers.policy.ProductionDelays;
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Storage extends Building implements Actor {
 
-    protected Map<Material, Integer> inventory;
+    protected final Map<Material, Integer> inventory;
     
     private final Countdown promotionalCountdown;
     private final Countdown draftCountdown;

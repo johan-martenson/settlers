@@ -29,34 +29,34 @@ import org.appland.settlers.policy.Constants;
 
 public class GameMap {
 
-    private final List<Worker>      workers;
-    private final int               height;
-    private final int               width;
-    private final List<Road>        roads;
-    private final Countdown         animalCountdown;
+    private final List<Worker>         workers;
+    private final int                  height;
+    private final int                  width;
+    private final List<Road>           roads;
+    private final Countdown            animalCountdown;
+    private final List<Crop>           crops;
+    private final List<Building>       buildings;
+    private final List<Building>       buildingsToRemove;
+    private final List<Building>       buildingsToAdd;
+    private final List<Projectile>     projectilesToRemove;
+    private final List<WildAnimal>     animalsToRemove;
+    private final List<Flag>           flags;
+    private final List<Sign>           signs;
+    private final List<Projectile>     projectiles;
+    private final List<WildAnimal>     wildAnimals;
+    private final List<Sign>           signsToRemove;
+    private final List<Worker>         workersToRemove;
+    private final List<Crop>           cropsToRemove;
+    private final Terrain              terrain;
+    private final List<Point>          fullGrid;
+    private final Map<Point, MapPoint> pointToGameObject;
+    private final List<Tree>           trees;
+    private final List<Stone>          stones;
+    private final List<Worker>         workersToAdd;
+    private final List<Player>         players;
+    private final Random               random;
 
-    private List<Building>          buildings;
-    private List<Building>          buildingsToRemove;
-    private List<Building>          buildingsToAdd;
-    private List<Projectile>        projectilesToRemove;
-    private List<WildAnimal>        animalsToRemove;
-    private List<Flag>              flags;
-    private List<Sign>              signs;
-    private List<Projectile>        projectiles;
-    private List<WildAnimal>        wildAnimals;
-    private List<Sign>              signsToRemove;
-    private List<Worker>            workersToRemove;
-    private List<Crop>              cropsToRemove;
-    private String                  theLeader = "Mai Thi Van Anh";
-    private Terrain                 terrain;
-    private List<Point>             fullGrid;
-    private Map<Point, MapPoint>    pointToGameObject;
-    private List<Tree>              trees;
-    private List<Stone>             stones;
-    private List<Crop>              crops;
-    private List<Worker>            workersToAdd;
-    private List<Player>            players;
-    private Random                  random;
+    private String theLeader = "Mai Thi Van Anh";
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
