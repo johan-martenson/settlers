@@ -37,6 +37,7 @@ public class GameMap {
 
     private List<Building>          buildings;
     private List<Building>          buildingsToRemove;
+    private List<Building>          buildingsToAdd;
     private List<Projectile>        projectilesToRemove;
     private List<WildAnimal>        animalsToRemove;
     private List<Flag>              flags;
@@ -141,6 +142,7 @@ public class GameMap {
         
         buildings           = new ArrayList<>();
         buildingsToRemove   = new LinkedList<>();
+        buildingsToAdd      = new LinkedList<>();
         projectilesToRemove = new LinkedList<>();
         animalsToRemove     = new LinkedList<>();
         cropsToRemove       = new LinkedList<>();
@@ -186,6 +188,8 @@ public class GameMap {
         buildingsToRemove.clear();
         animalsToRemove.clear();
         cropsToRemove.clear();
+        buildingsToRemove.clear();
+        buildingsToAdd.clear();
 
         for (Projectile p : projectiles) {
             p.stepTime();
@@ -257,6 +261,16 @@ public class GameMap {
 
         /* Remove wild animals that have been killed and turned to cargo */
         wildAnimals.removeAll(animalsToRemove);
+
+        /* Update buildings list to handle upgraded buildings where the old
+           building gets removed and a new building is added */
+        for (Building removedBuilding: buildingsToRemove) {
+            buildings.remove(removedBuilding);
+        }
+
+        for (Building addedBuilding: buildingsToAdd) {
+            buildings.add(addedBuilding);
+        }
 
         /* Remove buildings that have been destroyed some time ago */
         buildings.removeAll(buildingsToRemove);
@@ -375,10 +389,15 @@ public class GameMap {
     void updateBorder() throws Exception {
 
         /* Build map Point->Building, picking buildings with the highest claim */
-        Map<Point, Building> claims = new HashMap<>();
+        Map<Point, Building>    claims       = new HashMap<>();
         Map<Player, List<Land>> updatedLands = new HashMap<>();
+        List<Building>          allBuildings = new LinkedList<>();
 
-        for (Building b : getBuildings()) {
+        allBuildings.addAll(getBuildings());
+        allBuildings.addAll(buildingsToAdd);
+        allBuildings.removeAll(buildingsToRemove);
+
+        for (Building b : allBuildings) {
             if (!b.isMilitaryBuilding() || !b.ready() || !b.occupied()) {
                 continue;
             }
@@ -2042,5 +2061,16 @@ public class GameMap {
         cropsToRemove.add(crop);
 
         getMapPoint(crop.getPosition()).setCrop(null);
+    }
+
+    void replaceBuilding(Building upgradedBuilding, Point position) throws Exception {
+        buildingsToRemove.add(getBuildingAtPoint(position));
+
+        upgradedBuilding.setPosition(position);
+
+        getMapPoint(position).removeBuilding();
+        getMapPoint(position).setBuilding(upgradedBuilding);
+
+        buildingsToAdd.add(upgradedBuilding);
     }
 }

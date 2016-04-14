@@ -23,6 +23,7 @@ import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.COAL;
@@ -1062,5 +1063,31 @@ public class TestArmory {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test (expected = InvalidUserActionException.class)
+    public void testNonMilitaryBuildingCannotBeUpgraded() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place armory*/
+        Point point1 = new Point(20, 14);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory0, map);
+
+        /* Verify that non-military building cannot be upgraded */
+        armory0.upgrade();
     }
 }

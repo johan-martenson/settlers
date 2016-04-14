@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
@@ -22,7 +24,7 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean  outOfResources;
 
     private enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UPGRADING
     }
 
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
@@ -30,6 +32,7 @@ public class Building implements Actor, EndPoint, Piece {
     private static final int TIME_TO_BUILD_LARGE_HOUSE             = 199;
     private static final int TIME_TO_BURN_DOWN                     = 49;
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
+    private static final int TIME_TO_UPGRADE                       = 99;
 
     private GameMap        map;
     private Player         player;
@@ -424,6 +427,20 @@ public class Building implements Actor, EndPoint, Piece {
             } else {
                 countdown.step();
             }
+        } else if (beingUpgraded()) {
+            if (countdown.reachedZero()) {
+
+                if (isMaterialForUpgradeAvailable()) {
+
+                    /* Replace the current building from the map */
+                    map.replaceBuilding(getUpgradedBuilding(), getPosition());
+
+                    /* Re-calculate the border after the upgrade */
+                    map.updateBorder();
+                }
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -563,9 +580,20 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private boolean isAccepted(Material material) {
-        Map<Material, Integer> requiredGoods = getTotalAmountNeededForProduction();
 
-        return requiredGoods.containsKey(material);
+        /* Return true if the production in the building requires the material */
+        if (getTotalAmountNeededForProduction().containsKey(material)) {
+            return true;
+        }
+
+        /* Return true if the building is being upgraded and requires the
+           material for the upgrade
+        */
+        if (getTotalAmountNeededForUpgrade(material) > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     private boolean canAcceptGoods() {
@@ -863,14 +891,21 @@ public class Building implements Actor, EndPoint, Piece {
 
             return getMaterialsToBuildHouse().get(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            return getTotalAmountNeededForProduction().get(material);
+            Integer amount = getTotalAmountNeededForProduction().get(material);
+
+            if (amount == null) {
+                return 0;
+            } else {
+                return amount;
+            }
+        } else if (upgrading()) {
+            return getTotalAmountNeededForUpgrade(material);
         }
 
         return 0;
     }
 
     private int getLackingAmountWithProjected(Material material) {
-
         if (state == State.UNDER_CONSTRUCTION) {
 
             if (!getMaterialsToBuildHouse().containsKey(material)) {
@@ -878,7 +913,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
 
             return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED || state == State.UPGRADING) {
             
             if (!isAccepted(material)) {
                 return 0;
@@ -926,5 +961,98 @@ public class Building implements Actor, EndPoint, Piece {
 
     public boolean outOfNaturalResources() {
         return outOfResources;
+    }
+
+    public void upgrade() throws InvalidUserActionException {
+
+        /* Refuse to upgrade non-upgradable buildings */
+        if (!isUpgradable()) {
+            throw new InvalidUserActionException("Cannot upgrade " + getClass().getSimpleName());
+        }
+
+        /* Refuse to upgrade while under construction */
+        if (underConstruction()) {
+            throw new InvalidUserActionException("Cannot upgrade while under construction.");
+        }
+
+        /* Refuse to upgrade while being torn down */
+        if (burningDown()) {
+            throw new InvalidUserActionException("Cannot upgrade while burning down.");
+        }
+
+        /* Refuse to upgrade while already being upgraded */
+        if (upgrading()) {
+            throw new InvalidUserActionException("Cannot upgrade while being upgraded.");
+        }
+
+        /* Start the upgrade */
+        state = State.UPGRADING;
+
+        countdown.countFrom(TIME_TO_UPGRADE);
+    }
+
+    private boolean beingUpgraded() {
+        return state == State.UPGRADING;
+    }
+
+    protected Building getUpgradedBuilding() throws Exception {
+        return null;
+    }
+
+    private boolean isMaterialForUpgradeAvailable() {
+
+        /* Get the cost for upgrade */
+        UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
+
+        int plancksNeeded = upgradeCost.plancks();
+        int stoneNeeded   = upgradeCost.stones();
+
+        /* Get available resources */
+
+        int planckAvailable = receivedMaterial.get(PLANCK);
+        int stoneAvailable = receivedMaterial.get(STONE);
+        
+        /* Determine if an upgrade is possible */
+        if (plancksNeeded <= planckAvailable && stoneNeeded <= stoneAvailable) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean upgrading() {
+        return state == State.UPGRADING;
+    }
+
+    private int getTotalAmountNeededForUpgrade(Material material) {
+        UpgradeCost upgrade = getClass().getAnnotation(UpgradeCost.class);
+
+        /* Only need material for upgrades if the building is actually being
+           upgraded
+        */
+        if (!upgrading()) {
+            return 0;
+        }
+
+        /* Only require material for upgrades if the building is capable of
+           upgrades
+        */
+        if (upgrade == null) {
+            return 0;
+        }
+
+        /* Only plancks and stones are used for upgrades */
+        switch (material) {
+            case PLANCK:
+                return upgrade.plancks();
+            case STONE:
+                return upgrade.stones();
+            default:
+                return 0;
+        }
+    }
+
+    private boolean isUpgradable() {
+        return getClass().getAnnotation(UpgradeCost.class) != null;
     }
 }
