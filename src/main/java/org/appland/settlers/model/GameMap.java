@@ -2064,9 +2064,11 @@ public class GameMap {
     }
 
     void replaceBuilding(Building upgradedBuilding, Point position) throws Exception {
-        buildingsToRemove.add(getBuildingAtPoint(position));
+        Building oldBuilding = getBuildingAtPoint(position);
+        buildingsToRemove.add(oldBuilding);
 
         upgradedBuilding.setPosition(position);
+        upgradedBuilding.setFlag(oldBuilding.getFlag());
 
         getMapPoint(position).removeBuilding();
         getMapPoint(position).setBuilding(upgradedBuilding);

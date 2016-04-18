@@ -1172,6 +1172,8 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
 
         /* Upgrade the barracks */
+        assertFalse(barracks0.isUpgrading());
+
         barracks0.upgrade();
 
         /* Add materials for the upgrade */
@@ -1188,14 +1190,17 @@ public class TestBarracks {
         /* Verify that the upgrade isn't too quick */
         for (int i = 0; i < 100; i++) {
 
+            assertTrue(barracks0.isUpgrading());
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
         }
 
-        assertNotNull(map.getBuildingAtPoint(barracks0.getPosition()));
-        assertFalse(barracks0.equals(map.getBuildingAtPoint(barracks0.getPosition())));
-        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
+        Building upgradedBuilding = map.getBuildingAtPoint(barracks0.getPosition());
+
+        assertNotNull(upgradedBuilding);
+        assertFalse(upgradedBuilding.isUpgrading());
+        assertEquals(upgradedBuilding.getClass(), GuardHouse.class);
     }
 
     @Test (expected = Exception.class)
@@ -1515,11 +1520,6 @@ public class TestBarracks {
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
 
-        /* Occupy the barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
-
-        assertTrue(barracks0.occupied());
-
         /* Upgrade the barracks */
         barracks0.upgrade();
 
@@ -1668,7 +1668,6 @@ public class TestBarracks {
 
         /* Wait for the upgrade */
         for (int i = 0; i < 100; i++) {
-
             assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
 
             map.stepTime();
@@ -1793,7 +1792,123 @@ public class TestBarracks {
         assertTrue(player0.getBorders().get(0).contains(new Point(31, 5)));
     }
 
+    @Test
+    public void testFlagIsCorrectAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+
+        assertTrue(barracks0.occupied());
+
+        /* Upgrade the barracks */
+        barracks0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+
+        /* Verify the border before the upgrade */
+        assertTrue(player0.getBorders().get(0).contains(new Point(29, 5)));
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the flag is correct after the upgrade */
+        Building buildingAfterUpgrade = map.getBuildingAtPoint(point26);
+
+        assertNotNull(buildingAfterUpgrade);
+        assertNotNull(buildingAfterUpgrade.getFlag());
+        assertEquals(buildingAfterUpgrade.getFlag().getPosition(), point26.downRight());
+    }
+
+    @Test
+    public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+
+        assertTrue(barracks0.occupied());
+
+        /* Upgrade the barracks */
+        barracks0.upgrade();
+
+        /* Verify that the barracks is still occupied */
+        assertTrue(barracks0.occupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+
+        /* Verify that the barracks is occupied during the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the barracks is still occupied */
+            assertTrue(barracks0.occupied());
+
+            map.stepTime();
+        }
+    }
+
     /*
+
+    player's list of buildings is correct
 
     percentage of upgrade progress is getting updated
     is possible to see if upgrades are possible
@@ -1804,5 +1919,6 @@ public class TestBarracks {
     
     lack of space can hinder upgrades
     upgrade of regular building
+    isUpgrading() in regular buildings
     */
 }

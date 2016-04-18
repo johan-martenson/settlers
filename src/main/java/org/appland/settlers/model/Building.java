@@ -24,7 +24,7 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean  outOfResources;
 
     private enum State {
-        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED, UPGRADING
+        UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
     }
 
     private static final int TIME_TO_BUILD_SMALL_HOUSE             = 99;
@@ -44,11 +44,13 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean        enablePromotions;
     private boolean        evacuated;
     private boolean        productionEnabled;
+    private boolean        upgrading;
 
     private final List<Military>         attackers;
     private final List<Military>         waitingAttackers;
     private final List<Military>         defenders;
     private final Countdown              countdown;
+    private final Countdown              upgradeCountdown;
     private final Map<Material, Integer> promisedDeliveries;
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
@@ -60,6 +62,7 @@ public class Building implements Actor, EndPoint, Piece {
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
         countdown             = new Countdown();
+        upgradeCountdown      = new Countdown();
         hostedMilitary        = new ArrayList<>();
         promisedMilitary      = new ArrayList<>();
         waitingAttackers      = new LinkedList<>();
@@ -74,6 +77,7 @@ public class Building implements Actor, EndPoint, Piece {
         evacuated             = false;
         productionEnabled     = true;
         outOfResources        = false;
+        upgrading             = false;
 
         countdown.countFrom(getConstructionCountdown());
 
@@ -427,8 +431,10 @@ public class Building implements Actor, EndPoint, Piece {
             } else {
                 countdown.step();
             }
-        } else if (beingUpgraded()) {
-            if (countdown.reachedZero()) {
+        }
+
+        if (isUpgrading()) {
+            if (upgradeCountdown.reachedZero()) {
 
                 if (isMaterialForUpgradeAvailable()) {
 
@@ -439,7 +445,7 @@ public class Building implements Actor, EndPoint, Piece {
                     map.updateBorder();
                 }
             } else {
-                countdown.step();
+                upgradeCountdown.step();
             }
         }
     }
@@ -892,14 +898,19 @@ public class Building implements Actor, EndPoint, Piece {
             return getMaterialsToBuildHouse().get(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
             Integer amount = getTotalAmountNeededForProduction().get(material);
+            int amountToUpgrade = getTotalAmountNeededForUpgrade(material);
 
             if (amount == null) {
-                return 0;
-            } else {
-                return amount;
+                amount = 0;
             }
-        } else if (upgrading()) {
-            return getTotalAmountNeededForUpgrade(material);
+            
+            if (amount == 0 && amountToUpgrade == 0) {
+                return 0;
+            } else if (amount > amountToUpgrade) {
+                return amount;
+            } else {
+                return amountToUpgrade;
+            }
         }
 
         return 0;
@@ -913,7 +924,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
 
             return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
-        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED || state == State.UPGRADING) {
+        } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
             
             if (!isAccepted(material)) {
                 return 0;
@@ -981,18 +992,14 @@ public class Building implements Actor, EndPoint, Piece {
         }
 
         /* Refuse to upgrade while already being upgraded */
-        if (upgrading()) {
+        if (isUpgrading()) {
             throw new InvalidUserActionException("Cannot upgrade while being upgraded.");
         }
 
         /* Start the upgrade */
-        state = State.UPGRADING;
+        upgrading = true;
 
-        countdown.countFrom(TIME_TO_UPGRADE);
-    }
-
-    private boolean beingUpgraded() {
-        return state == State.UPGRADING;
+        upgradeCountdown.countFrom(TIME_TO_UPGRADE);
     }
 
     protected Building getUpgradedBuilding() throws Exception {
@@ -1020,17 +1027,13 @@ public class Building implements Actor, EndPoint, Piece {
         }
     }
 
-    private boolean upgrading() {
-        return state == State.UPGRADING;
-    }
-
     private int getTotalAmountNeededForUpgrade(Material material) {
         UpgradeCost upgrade = getClass().getAnnotation(UpgradeCost.class);
 
         /* Only need material for upgrades if the building is actually being
            upgraded
         */
-        if (!upgrading()) {
+        if (!isUpgrading()) {
             return 0;
         }
 
@@ -1054,5 +1057,9 @@ public class Building implements Actor, EndPoint, Piece {
 
     private boolean isUpgradable() {
         return getClass().getAnnotation(UpgradeCost.class) != null;
+    }
+
+    public boolean isUpgrading() {
+        return upgrading;
     }
 }
