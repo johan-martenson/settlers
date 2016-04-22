@@ -116,8 +116,8 @@ public class Player {
         }
     }
 
-    public List<Point> getDiscoveredLand() {
-        return Arrays.asList(discoveredLand.toArray(new Point[1]));
+    public Set<Point> getDiscoveredLand() {
+        return discoveredLand;
     }
 
     void discover(Point p) {
