@@ -320,7 +320,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
 
             if (!canAcceptGoods()) {
-                throw new DeliveryNotPossibleException();
+                throw new DeliveryNotPossibleException(this, c);
             }
 
             if (!isAccepted(material)) {
