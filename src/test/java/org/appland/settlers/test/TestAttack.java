@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -22,6 +23,7 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -3765,7 +3767,6 @@ public class TestAttack {
         }
     }
 
-
     @Test
     public void testBarracksGetReinforcedWhenHostedMilitaryTakesOverOtherBuilding() throws Exception {
 
@@ -3880,6 +3881,144 @@ public class TestAttack {
 
         assertEquals(barracks0.getHostedMilitary(), 2);
         assertEquals(barracks1.getHostedMilitary(), 1);
+    }
+
+    @Test
+    public void testConqueredBarracksCanBeUpgradedAndGetMaterial() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Fill up extra militaries in player 0's headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 10, map);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = new Barracks(player0);
+        map.placeBuilding(barracks0, point2);
+
+        /* Connect the barracks to the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(29, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+
+        /* Populate player 1's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
+
+        /* Order an attack */
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        /* Verify that a military leaves the attacked building to defend when 
+         the attacker reaches the flag */
+        assertEquals(barracks1.getHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Wait for the general to beat the private */
+        Utils.waitForWorkerToDisappear(defender, map);
+
+        assertFalse(map.getWorkers().contains(defender));
+
+        /* Wait for the attacker to go back to the fixed point */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
+
+        /* Wait for the attacker to take over the building */
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertEquals(barracks1.getPlayer(), player0);
+
+        /* Verify that the barracks can be upgraded */
+        barracks1.upgrade();
+
+        assertTrue(barracks1.isUpgrading());
+
+        /* Connect the barracks to the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks1.getFlag());
+
+        /* Verify that stone is delivered to the barracks */
+        assertTrue(barracks1.needsMaterial(STONE));
+        assertEquals(barracks1.getAmount(STONE), 0);
+
+        Worker worker = headquarter0.getWorker();
+        Utils.fastForwardUntilWorkerCarriesCargo(map, worker, STONE);
+
+        Cargo cargo = worker.getCargo();
+
+        assertEquals(cargo.getTarget(), barracks1);
+
+        Utils.waitForCargoToReachTarget(map, cargo);
+
+        assertEquals(barracks1.getAmount(STONE), 1);
+
+        /* Wait for the upgrade to happen */
+        for (int i = 0; i < 1000; i++) {
+
+            assertTrue(barracks1.isUpgrading());
+
+            if (map.getBuildingAtPoint(point3) instanceof GuardHouse) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.getBuildingAtPoint(point3) instanceof GuardHouse);
     }
 
 // Test:
