@@ -1003,6 +1003,11 @@ public class GameMap {
             return false;
         }
 
+        if (isCropAtPoint(p) &&
+            getCropAtPoint(p).getGrowthState() != Crop.GrowthState.HARVESTED) {
+            return false;
+        }
+
         boolean diagonalFlagExists = false;
 
         for (Point d : p.getDiagonalPoints()) {

@@ -19,6 +19,7 @@ import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
+import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.Land;
@@ -827,5 +828,76 @@ public class Utils {
         assertTrue(false);
 
         return null;
+    }
+
+    static void waitForCropToGetReady(GameMap map, Crop crop) throws Exception {
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (crop.getGrowthState() == Crop.GrowthState.FULL_GROWN) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.FULL_GROWN);
+    }
+
+    static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws Exception {
+
+        waitForFarmerToStartPlanting(map, farmer0);
+
+        Point position = farmer0.getPosition();
+
+        assertFalse(map.isCropAtPoint(position));
+
+        waitForFarmerToStopPlanting(map, farmer0);
+
+        assertTrue(map.isCropAtPoint(position));
+
+        return map.getCropAtPoint(position);
+    }
+
+    private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer0) throws Exception {
+
+        for (int i = 0; i < 10000; i++) {
+
+            if (!farmer0.isPlanting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(farmer0.isPlanting());
+    }
+
+    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer0) throws Exception {
+
+        for (int i = 0; i < 10000; i++) {
+
+            if (farmer0.isPlanting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(farmer0.isPlanting());
+    }
+
+    static void waitForCropToGetHarvested(GameMap map, Crop crop) throws Exception {
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (crop.getGrowthState() == Crop.GrowthState.HARVESTED) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(crop.getGrowthState(), Crop.GrowthState.HARVESTED);
     }
 }

@@ -24,6 +24,7 @@ import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Farmer;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -39,6 +40,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1386,11 +1388,11 @@ public class TestFarm {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a crop */
-        Crop crop = map.placeCrop(point0);
+        Point point1 = new Point(10, 10);
+        Crop crop = map.placeCrop(point1);
 
         /* Verify that it's not possible to place a building on the growing crop */
-        Point point1 = new Point(12, 12);
-        Building armory0 = map.placeBuilding(new Armory(player0), point0);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
     }
 
     @Test
@@ -1408,10 +1410,297 @@ public class TestFarm {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a crop */
-        Crop crop = map.placeCrop(point0);
+        Point point1 = new Point(10, 10);
+        Crop crop = map.placeCrop(point1);
 
         /* Verify that there is no available building space on the growing crop */
         assertEquals(map.isAvailableHousePoint(player0, point0), null);
+    }
+
+    @Test (expected = InvalidUserActionException.class)
+    public void testCannotPlaceBuildingOnNewlyHarvestedCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+        /* Let the crop grow fully */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the crop to get harvested */
+        Utils.waitForCropToGetHarvested(map, crop);
+
+        /* Verify that it's possible to place a building on the growing crop */
+        Building armory0 = map.placeBuilding(new Armory(player0), crop.getPosition());
+    }
+
+    @Test
+    public void testNotAvailableBuildingSpaceOnNewlyHarvestedCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+        /* Let the crop grow fully */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the crop to get harvested */
+        Utils.waitForCropToGetHarvested(map, crop);
+
+        /* Verify that there is available building space on the growing crop */
+        assertEquals(map.isAvailableHousePoint(player0, crop.getPosition()), null);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnNewlyHarvestedCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = null;
+
+        for (int i = 0; i < 1000; i++) {
+            crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+            /* Look for a point where there is no flag too close */
+            boolean noCloseFlag = true;
+            for (Point p : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(p)) {
+                    noCloseFlag = false;
+                }
+            }
+
+            if (noCloseFlag) {
+                break;
+            }
+        }
+
+        assertNotNull(crop);
+
+        /* Let the crop grow fully */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the crop to get harvested */
+        Utils.waitForCropToGetHarvested(map, crop);
+
+        /* Verify that it's possible to place a flag on the growing crop */
+        Flag flag0 = map.placeFlag(player0, crop.getPosition());
+    }
+
+    @Test (expected = Exception.class)
+    public void testCannotPlaceFlagOnGrowingCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = null;
+
+        for (int i = 0; i < 1000; i++) {
+            crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+            /* Look for a point where there is no flag too close */
+            boolean noCloseFlag = true;
+            for (Point p : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(p)) {
+                    noCloseFlag = false;
+                }
+            }
+
+            if (noCloseFlag) {
+                break;
+            }
+        }
+
+        assertNotNull(crop);
+        assertTrue(map.isCropAtPoint(crop.getPosition()));
+        assertNotEquals(crop.getGrowthState(), Crop.GrowthState.HARVESTED);
+
+        /* Verify that it's possible to place a flag on the growing crop */
+        Flag flag0 = map.placeFlag(player0, crop.getPosition());
+    }
+
+    @Test
+    public void testNoAvailableFlagOnGrowingCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = null;
+
+        for (int i = 0; i < 1000; i++) {
+            crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+            /* Look for a point where there is no flag too close */
+            boolean noCloseFlag = true;
+            for (Point p : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(p)) {
+                    noCloseFlag = false;
+                }
+            }
+
+            if (noCloseFlag) {
+                break;
+            }
+        }
+
+        assertNotNull(crop);
+        assertTrue(map.isCropAtPoint(crop.getPosition()));
+        assertNotEquals(crop.getGrowthState(), Crop.GrowthState.HARVESTED);
+
+        /* Verify that it's possible to place a flag on the growing crop */
+        assertFalse(map.isAvailableFlagPoint(player0, crop.getPosition()));
+    }
+
+    @Test
+    public void testAvailableFlagSpaceOnNewlyHarvestedCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a farm */
+        Point point1 = new Point(5, 15);
+        Building farm0 = map.placeBuilding(new Farm(player0), point1);
+
+        /* Construct the farm */
+        Utils.constructHouse(farm0, map);
+
+        /* Occupy the farm */
+        Farmer farmer0 = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
+
+        /* Wait for the farmer to plant a crop */
+        Crop crop = null;
+
+        for (int i = 0; i < 1000; i++) {
+            crop = Utils.waitForFarmerToPlantCrop(map, farmer0);
+
+            /* Look for a point where there is no flag too close */
+            boolean noCloseFlag = true;
+            for (Point p : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(p)) {
+                    noCloseFlag = false;
+                }
+            }
+
+            if (noCloseFlag) {
+                break;
+            }
+        }
+
+        assertNotNull(crop);
+
+        /* Let the crop grow fully */
+        Utils.waitForCropToGetReady(map, crop);
+
+        /* Wait for the crop to get harvested */
+        Utils.waitForCropToGetHarvested(map, crop);
+
+        /* Verify that there is available building space on the growing crop */
+        assertTrue(map.isAvailableFlagPoint(player0, crop.getPosition()));
     }
 /*
     Test building point available on crop
