@@ -203,7 +203,7 @@ public class Courier extends Worker {
             setTarget(getPosition().downRight());
         } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
             deliverCargo();
-            
+
             if (map.getFlagAtPoint(getPosition()).hasCargoWaitingForRoad(assignedRoad)) {
                 pickUpCargo();
             } else {            

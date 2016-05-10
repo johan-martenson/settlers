@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -26,6 +27,7 @@ import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
@@ -1368,4 +1370,56 @@ public class TestFarm {
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
+
+    @Test (expected = InvalidUserActionException.class)
+    public void testCannotPlaceBuildingOnGrowingCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a crop */
+        Crop crop = map.placeCrop(point0);
+
+        /* Verify that it's not possible to place a building on the growing crop */
+        Point point1 = new Point(12, 12);
+        Building armory0 = map.placeBuilding(new Armory(player0), point0);
+    }
+
+    @Test
+    public void testNoAvailableBuildingSpaceOnGrowingCrop() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+        Point point0 = new Point(5, 5);
+
+        /* Placing headquarter */
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a crop */
+        Crop crop = map.placeCrop(point0);
+
+        /* Verify that there is no available building space on the growing crop */
+        assertEquals(map.isAvailableHousePoint(player0, point0), null);
+    }
+/*
+    Test building point available on crop
+    crop blocking flag
+    building point available with crop blocking flag
+    
+    place crop on building
+    place crop on flag
+    
+    */
 }

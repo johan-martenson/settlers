@@ -1198,6 +1198,10 @@ public class TestBarracks {
 
         Building upgradedBuilding = map.getBuildingAtPoint(barracks0.getPosition());
 
+        assertFalse(map.getBuildings().contains(barracks0));
+        assertTrue(map.getBuildings().contains(upgradedBuilding));
+        assertFalse(player0.getBuildings().contains(barracks0));
+        assertTrue(player0.getBuildings().contains(upgradedBuilding));
         assertNotNull(upgradedBuilding);
         assertFalse(upgradedBuilding.isUpgrading());
         assertEquals(upgradedBuilding.getClass(), GuardHouse.class);
@@ -1909,7 +1913,8 @@ public class TestBarracks {
     /*
 
     player's list of buildings is correct
-
+    gamemap mappoint, gamemap buildings
+    
     percentage of upgrade progress is getting updated
     is possible to see if upgrades are possible
     promotion timers are running through upgrades    

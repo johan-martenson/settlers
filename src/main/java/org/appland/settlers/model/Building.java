@@ -267,7 +267,6 @@ public class Building implements Actor, EndPoint, Piece {
         
         state = State.OCCUPIED;
 
-        
         if (previousState == State.UNOCCUPIED) {
             map.updateBorder();
         }
@@ -434,8 +433,9 @@ public class Building implements Actor, EndPoint, Piece {
         }
 
         if (isUpgrading()) {
-            if (upgradeCountdown.reachedZero()) {
 
+            if (upgradeCountdown.reachedZero()) {
+        
                 if (isMaterialForUpgradeAvailable()) {
 
                     /* Replace the current building from the map */

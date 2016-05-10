@@ -34,9 +34,9 @@ public class Terrain {
         constructDefaultTiles();
     }
     
-    public Tile getTile(Point p1, Point p3, Point p2) throws Exception {
+    public Tile getTile(Point p1, Point p3, Point p2) {
         if (!isValidPoint(p1) || !isValidPoint(p2) || !isValidPoint(p3)) {
-            throw new Exception("Can't return tile by invalid points " + p1 + ", " + p2 + ", " + p3);
+            throw new RuntimeException("Can't return tile by invalid points " + p1 + ", " + p2 + ", " + p3);
         }
         
         int leftMost  = Math.min(p1.x, p2.x);
@@ -88,7 +88,7 @@ public class Terrain {
         }
     }
 
-    public boolean isOnMountain(Point p) throws Exception {
+    public boolean isOnMountain(Point p) {
         return isSurroundedBy(p, MOUNTAIN);
     }
     
@@ -116,7 +116,7 @@ public class Terrain {
         return false;        
     }
     
-    private boolean isSurroundedBy(Point p, Vegetation vegetation) throws Exception {
+    private boolean isSurroundedBy(Point p, Vegetation vegetation) {
         boolean    isSurrounded = true;
         List<Tile> tiles        = getSurroundingTiles(p);
         
@@ -130,7 +130,7 @@ public class Terrain {
         return isSurrounded;
     }
 
-    public List<Tile> getSurroundingTiles(Point center) throws Exception {
+    public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> result   = new LinkedList<>();
         
         Point rightPoint = new Point(center.x + 2, center.y);

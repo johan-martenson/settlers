@@ -55,6 +55,7 @@ public class GameMap {
     private final List<Worker>         workersToAdd;
     private final List<Player>         players;
     private final Random               random;
+    private final List<Point>          startingPoints;
 
     private String theLeader = "Mai Thi Van Anh";
 
@@ -161,6 +162,7 @@ public class GameMap {
         workersToAdd        = new LinkedList<>();
         animalCountdown     = new Countdown();
         random              = new Random();
+        startingPoints      = new ArrayList<>();
 
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
@@ -180,6 +182,24 @@ public class GameMap {
         random.setSeed(1);
     }
 
+    public void setStartingPoints(List<Point> points) {
+        startingPoints.addAll(points);
+    }
+
+    public List<Point> getStartingPoints() {
+        return startingPoints;
+    }
+
+    public void setPlayers(List<Player> newPlayers) {
+        players.clear();
+
+        players.addAll(newPlayers);
+
+        for (Player player : players) {
+            player.setMap(this);
+        }
+    }
+
     public void stepTime() throws Exception {
         projectilesToRemove.clear();
         workersToRemove.clear();
@@ -191,99 +211,102 @@ public class GameMap {
         buildingsToRemove.clear();
         buildingsToAdd.clear();
 
-        for (Projectile p : projectiles) {
-            p.stepTime();
-        }
+        synchronized (this) {
 
-        for (Worker w : workers) {
-            w.stepTime();
-        }
-
-        for (Building b : buildings) {
-            b.stepTime();
-        }
-
-        for (Tree t : trees) {
-            t.stepTime();
-        }
-
-        for (Crop c : crops) {
-            c.stepTime();
-        }
-
-        for (Sign s : signs) {
-            s.stepTime();
-        }
-
-        for (WildAnimal w : wildAnimals) {
-            w.stepTime();
-        }
-
-        /* Possibly add wild animals */
-        handleWildAnimalPopulation();
-
-        /* Remove completely mined stones */
-        List<Stone> stonesToRemove = new ArrayList<>();
-        for (Stone s : stones) {
-            if (s.noMoreStone()) {
-                stonesToRemove.add(s);
+            for (Projectile p : projectiles) {
+                p.stepTime();
             }
-        }
 
-        for (Stone s : stonesToRemove) {
-            removeStone(s);
-        }
-
-        /* Resume transport of stuck cargos */
-        for (Flag f : flags) {
-            for (Cargo cargo : f.getStackedCargo()) {
-                cargo.rerouteIfNeeded();
+            for (Worker w : workers) {
+                w.stepTime();
             }
+
+            for (Building b : buildings) {
+                b.stepTime();
+            }
+
+            for (Tree t : trees) {
+                t.stepTime();
+            }
+
+            for (Crop c : crops) {
+                c.stepTime();
+            }
+
+            for (Sign s : signs) {
+                s.stepTime();
+            }
+
+            for (WildAnimal w : wildAnimals) {
+                w.stepTime();
+            }
+
+            /* Possibly add wild animals */
+            handleWildAnimalPopulation();
+
+            /* Remove completely mined stones */
+            List<Stone> stonesToRemove = new ArrayList<>();
+            for (Stone s : stones) {
+                if (s.noMoreStone()) {
+                    stonesToRemove.add(s);
+                }
+            }
+
+            for (Stone s : stonesToRemove) {
+                removeStone(s);
+            }
+
+            /* Resume transport of stuck cargos */
+            for (Flag f : flags) {
+                for (Cargo cargo : f.getStackedCargo()) {
+                    cargo.rerouteIfNeeded();
+                }
+            }
+
+            /* Remove workers that are invalid after the round */
+            synchronized (workers) {
+                workers.removeAll(workersToRemove);
+            }
+
+            /* Add workers that were placed during the round */
+            synchronized (workers) {
+                workers.addAll(workersToAdd);
+            }
+
+            /* Remove crops that were removed during this round */
+            synchronized (crops) {
+                crops.removeAll(cropsToRemove);
+            }
+
+            /* Remove signs that have expired during this round */
+            signs.removeAll(signsToRemove);
+
+            /* Remove wild animals that have been killed and turned to cargo */
+            wildAnimals.removeAll(animalsToRemove);
+
+            /* Update buildings list to handle upgraded buildings where the old
+               building gets removed and a new building is added */
+            for (Building removedBuilding: buildingsToRemove) {
+                buildings.remove(removedBuilding);
+            }
+
+            for (Building addedBuilding: buildingsToAdd) {
+                buildings.add(addedBuilding);
+            }
+
+            /* Remove buildings that have been destroyed some time ago */
+            buildings.removeAll(buildingsToRemove);
+
+            for (Building b : buildingsToRemove) {
+                b.getPlayer().removeBuilding(b);
+            }
+
+            /* Remove projectiles that have hit the ground */
+            projectiles.removeAll(projectilesToRemove);
         }
-
-        /* Remove workers that are invalid after the round */
-        synchronized (workers) {
-            workers.removeAll(workersToRemove);
-        }
-
-        /* Add workers that were placed during the round */
-        synchronized (workers) {
-            workers.addAll(workersToAdd);
-        }
-
-        /* Remove crops that were removed during this round */
-        synchronized (crops) {
-            crops.removeAll(cropsToRemove);
-        }
-
-        /* Remove signs that have expired during this round */
-        signs.removeAll(signsToRemove);
-
-        /* Remove wild animals that have been killed and turned to cargo */
-        wildAnimals.removeAll(animalsToRemove);
-
-        /* Update buildings list to handle upgraded buildings where the old
-           building gets removed and a new building is added */
-        for (Building removedBuilding: buildingsToRemove) {
-            buildings.remove(removedBuilding);
-        }
-
-        for (Building addedBuilding: buildingsToAdd) {
-            buildings.add(addedBuilding);
-        }
-
-        /* Remove buildings that have been destroyed some time ago */
-        buildings.removeAll(buildingsToRemove);
-
-        for (Building b : buildingsToRemove) {
-            b.getPlayer().removeBuilding(b);
-        }
-
-        /* Remove projectiles that have hit the ground */
-        projectiles.removeAll(projectilesToRemove);
     }
 
-    public <T extends Building> T placeBuilding(T house, Point p) throws Exception {
+    public synchronized <T extends Building> T placeBuilding(T house, Point p) throws Exception {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, p});
 
         boolean firstHouse = false;
@@ -346,6 +369,11 @@ public class GameMap {
         /* Handle the case where there is a sign at the site */
         if (isSignAtPoint(p)) {
             removeSign(getSignAtPoint(p));
+        }
+
+        /* Verify that there is no crop blocking the construction */
+        if (isCropAtPoint(p)) {
+            throw new InvalidUserActionException("Cannot place building on crop");
         }
 
         /* Use the existing flag if it exists, otherwise place a new flag */
@@ -616,7 +644,7 @@ public class GameMap {
         return placeRoad(player, Arrays.asList(points));
     }
 
-    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
+    public synchronized Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
 
         Point start = wayPoints.get(0);
@@ -748,7 +776,7 @@ public class GameMap {
         return null;
     }
 
-    public Flag placeFlag(Player player, Point p) throws Exception {
+    public synchronized Flag placeFlag(Player player, Point p) throws Exception {
 
         /* Verify that the player is valid */
         if (!players.contains(player)) {
@@ -1778,6 +1806,10 @@ public class GameMap {
             return result;
         }
 
+        if (isCropAtPoint(point)) {
+            return result;
+        }
+
         boolean diagonalHouse = false;
 
         for (Point d : point.getDiagonalPointsAndSides()) {
@@ -2064,6 +2096,7 @@ public class GameMap {
     }
 
     void replaceBuilding(Building upgradedBuilding, Point position) throws Exception {
+
         Building oldBuilding = getBuildingAtPoint(position);
         buildingsToRemove.add(oldBuilding);
 
@@ -2072,6 +2105,9 @@ public class GameMap {
 
         getMapPoint(position).removeBuilding();
         getMapPoint(position).setBuilding(upgradedBuilding);
+
+        upgradedBuilding.getPlayer().removeBuilding(oldBuilding);
+        upgradedBuilding.getPlayer().addBuilding(upgradedBuilding);
 
         buildingsToAdd.add(upgradedBuilding);
     }
