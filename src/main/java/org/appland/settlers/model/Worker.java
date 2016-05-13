@@ -156,7 +156,7 @@ public abstract class Worker implements Actor, Piece {
         log.log(Level.FINE, "On idle hook with nothing to do");
     }
     
-    protected void onEnterBuilding(Building b) {
+    protected void onEnterBuilding(Building b) throws Exception {
         log.log(Level.FINE, "On enter building hook with nothing to do");
     }
             

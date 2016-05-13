@@ -79,6 +79,7 @@ public class Flag implements EndPoint, Piece {
 
     @Override
     public Cargo retrieveCargo(Cargo c) {
+
         if (stackedCargo.contains(c)) {
 
             stackedCargo.remove(c);

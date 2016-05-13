@@ -1160,6 +1160,7 @@ public class TestAttack {
          and that it's not in player 1's border anymore */
         Utils.verifyPointIsWithinBorder(map, player0, barracks1.getPosition());
         Utils.verifyPointIsNotWithinBorder(map, player1, barracks1.getPosition());
+        assertEquals(player0.getPlayerAtPoint(barracks1.getPosition()), player0);
     }
 
     @Test
@@ -1354,6 +1355,7 @@ public class TestAttack {
         /* Verify that the defender goes back to its building and that the 
          building still belongs to player 1 */
         assertEquals(defender.getTarget(), barracks1.getPosition());
+        assertEquals(barracks1.getHostedMilitary(), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
 
@@ -1571,6 +1573,7 @@ public class TestAttack {
 
         /* Verify that the attacker goes back to its building after the fight */
         assertEquals(attacker.getTarget(), barracks0.getPosition());
+        assertEquals(barracks0.getHostedMilitary(), 1);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks0.getPosition());
 

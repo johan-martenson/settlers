@@ -262,13 +262,17 @@ public class Building implements Actor, EndPoint, Piece {
 
         State previousState = state;
 
-        hostedMilitary.add(military);
-        promisedMilitary.remove(military);
-        
         state = State.OCCUPIED;
 
         if (previousState == State.UNOCCUPIED) {
             map.updateBorder();
+        }
+
+        if (!isEvacuated()) {
+            hostedMilitary.add(military);
+            promisedMilitary.remove(military);
+        } else {
+            military.returnToStorage();
         }
     }
 
@@ -502,8 +506,24 @@ public class Building implements Actor, EndPoint, Piece {
         Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
-        if (isMilitaryBuilding() && getMaxCoins() > 0 && enablePromotions) {
-            requiredGoods.put(COIN, getMaxCoins());
+        if (isMilitaryBuilding()) {
+
+            if (getMaxCoins() > 0 && enablePromotions) {
+                requiredGoods.put(COIN, getMaxCoins());
+            }
+
+            if (isUpgrading()) {
+                int plancks = getTotalAmountNeededForUpgrade(PLANCK);
+                int stones = getTotalAmountNeededForUpgrade(STONE);
+
+                if (plancks > 0) {
+                    requiredGoods.put(PLANCK, plancks);
+                }
+
+                if (stones > 0) {
+                    requiredGoods.put(STONE, stones);
+                }
+            }
         }
         
         log.log(Level.FINER, "Found annotations for {0} in class", requiredGoods);

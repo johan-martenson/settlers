@@ -937,9 +937,13 @@ public class TestTransportation {
         map.placeWorker(courier4, flag1);
         courier4.assignToRoad(road3);
 
-        /* Remove all plancks and stones in the headquarter */
+        /* Remove all plancks, wood and stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+
+        /* Give the couriers time to get to the middle of their roads */
+        Utils.fastForward(100, map);
 
         /* Place a cargo on the headquarter's flag */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -974,6 +978,8 @@ public class TestTransportation {
         assertNull(courier.getCargo());
 
         /* Verify that the third courier picks up the cargo */
+        assertEquals(courier3.getTarget(), headquarter0.getFlag().getPosition());
+
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier3, cargo);
 
         /* Verify that the third courier delivers the cargo to the flag */

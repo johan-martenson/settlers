@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.test;
 
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import org.appland.settlers.model.Building;
@@ -1176,5 +1177,70 @@ public class TestDonkey {
 
         donkey0.assignToRoad(road0);
         donkey1.assignToRoad(road0);
+    }
+
+    @Test
+    public void testDonkeyIsNotDispatchedToDriveway() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place courier on the road */
+        Courier courier0 = Utils.occupyRoad(road0, map);
+
+        /* Make sure there are donkeys in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 10, map);
+
+        /* Turn the roads into main roads */
+        Road headquarterDriveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
+
+        for (int i = 0; i < 500; i++) {
+            Cargo cargo = new Cargo(COIN, map);
+ 
+            flag0.putCargo(cargo);
+
+            cargo.setTarget(headquarter0);
+
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier0.getCargo());
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier0, cargo);
+
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier0.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier0, headquarter0.getPosition());
+
+            assertNull(courier0.getCargo());
+
+            if (road0.isMainRoad() && headquarterDriveway.isMainRoad()) {
+                break;
+            }
+        }
+
+        assertTrue(road0.isMainRoad());
+        assertTrue(headquarterDriveway.isMainRoad());
+
+        /* Verify that the driveway does not get assigned a donkey */
+        assertFalse(headquarterDriveway.needsDonkey());
+        assertNull(headquarterDriveway.getDonkey());
+
+        Utils.fastForward(500, map);
+
+        assertNull(headquarterDriveway.getDonkey());
     }
 }

@@ -175,7 +175,7 @@ public class Road {
     }
 
     public boolean needsDonkey() {
-        if (isMainRoad() && donkey == null) {
+        if (isMainRoad() && donkey == null && needsCourier) {
             return true;
         }
 

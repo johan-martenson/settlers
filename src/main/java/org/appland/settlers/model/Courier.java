@@ -109,13 +109,15 @@ public class Courier extends Worker {
             throw new Exception("Not at " + flag);
         }
 
-        for (Cargo c : flag.getStackedCargo()) {
-            if (r.getWayPoints().contains(c.getNextStep())) {
-                cargoToPickUp = c;
-            }
-        }
+        cargoToPickUp = flag.getCargoWaitingForRoad(r);
 
-        setCargo(flag.retrieveCargo(cargoToPickUp));
+        cargoToPickUp.promiseDelivery();
+
+        flag.retrieveCargo(cargoToPickUp);
+
+        setCargo(cargoToPickUp);
+
+        getCargo().clearPromisedDelivery();
     }
 
     public Road getAssignedRoad() {

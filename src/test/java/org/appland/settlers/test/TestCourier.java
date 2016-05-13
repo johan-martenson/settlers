@@ -262,7 +262,7 @@ public class TestCourier {
         
         assertFalse(courier.isWalkingToIdlePoint());
     }
-    
+
     @Test
     public void testCourierPicksUpCargoFromFlag() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

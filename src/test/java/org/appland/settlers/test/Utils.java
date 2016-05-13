@@ -544,7 +544,6 @@ public class Utils {
 
         building.promiseMilitary(military);
 
-        building.deployMilitary(military);
         military.enterBuilding(building);
 
         return military;

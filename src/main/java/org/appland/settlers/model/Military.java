@@ -213,9 +213,9 @@ public class Military extends Worker {
             Building building = map.getBuildingAtPoint(getPosition());
 
             /* Deploy military in building */
-            building.deployMilitary(this);
             enterBuilding(building);
 
+            state = State.DEPLOYED;
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
             
@@ -274,8 +274,6 @@ public class Military extends Worker {
                     /* Enter the building */
                     enterBuilding(buildingToAttack);
 
-                    buildingToAttack.deployMilitary(this);
-
                     /* Extend the border */
                     map.updateBorder();
 
@@ -300,11 +298,9 @@ public class Military extends Worker {
             walkHalfWayOffroadTo(getPosition().right());
 
         } else if (state == WALKING_HOME_AFTER_FIGHT) {
-            state = DEPLOYED;
-
             enterBuilding(getHome());
 
-            getHome().deployMilitary(this);
+            state = DEPLOYED;
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_ATTACK) {
 
             if (buildingToAttack.ready()) {
@@ -358,12 +354,18 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
+    protected void onEnterBuilding(Building b) throws Exception {
         if (b.isMilitaryBuilding()) {
             setHome(b);
         }
+
+	if (state == State.WALKING_TO_TARGET             ||
+	    state == State.WALKING_TO_TAKE_OVER_BUILDING ||
+	    state == State.WALKING_HOME_AFTER_FIGHT) {
+            b.deployMilitary(this);
+        }
     }
-    
+
     @Override
     protected void onReturnToStorage() throws Exception {
         Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
