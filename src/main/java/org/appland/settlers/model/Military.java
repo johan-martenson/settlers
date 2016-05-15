@@ -215,12 +215,17 @@ public class Military extends Worker {
             /* Deploy military in building */
             enterBuilding(building);
 
-            state = State.DEPLOYED;
+            /* The building may have sent us back immediately, otherwise become
+               deployed 
+            */
+            if (state == WALKING_TO_TARGET) {
+                state = State.DEPLOYED;
+            }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
-            
+
             enterBuilding(storage);
-            
+
             storage.putCargo(new Cargo(rankToMaterial(rank), map));
 
             state = IN_STORAGE;

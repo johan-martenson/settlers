@@ -16,9 +16,12 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -2012,6 +2015,87 @@ public class TestBarracks {
 
         assertNotNull(buildingAfterUpgrade);
         assertEquals(buildingAfterUpgrade.getClass(), GuardHouse.class);
+    }
+
+    @Test
+    public void testEvacuatedMilitaryGetsAddedCorrectlyInStorage() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Keep track of the original amount of militaries */
+        int originalAmount = Utils.getAmountMilitary(headquarter0);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Wait for a military to start walking to the barracks */
+        Military military = null;
+        for (int i = 0; i < 1000; i++) {
+            for (Worker w : map.getWorkers()) {
+                if (w instanceof Military && w.getTarget().equals(barracks0.getPosition())) {
+                    military = (Military)w;
+                    break;
+                }
+            }
+
+            if (military != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(military);
+        assertTrue(Utils.getAmountMilitary(headquarter0) < originalAmount);
+
+        /* Evacuate the barracks */
+        barracks0.evacuate();
+
+        /* Wait for the military to reach the barracks */
+        assertEquals(military.getTarget(), barracks0.getPosition());
+        assertEquals(barracks0.getHostedMilitary(), 0);
+        assertFalse(barracks0.occupied());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+
+        assertTrue(barracks0.occupied());
+
+        /* Verify that the military walks back and the barracks remains occupied */
+        for (int i = 0; i < 1000; i++) {
+            if (barracks0.getHostedMilitary() == 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (int i = 0; i < 100; i++) {
+
+            assertTrue(barracks0.occupied());
+            assertEquals(barracks0.getHostedMilitary(), 0);
+
+            map.stepTime();
+        }
+
+        /* Verify that the evacuated militaries are added correctly */
+        assertEquals(Utils.getAmountMilitary(headquarter0), originalAmount);
     }
 
     /*

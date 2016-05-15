@@ -21,6 +21,7 @@ import org.appland.settlers.model.Crop;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.Land;
 import org.appland.settlers.model.Material;
@@ -898,5 +899,11 @@ public class Utils {
         }
 
         assertEquals(crop.getGrowthState(), Crop.GrowthState.HARVESTED);
+    }
+
+    static int getAmountMilitary(Headquarter headquarter0) {
+        return headquarter0.getAmount(PRIVATE) + 
+                headquarter0.getAmount(SERGEANT) + 
+                headquarter0.getAmount(GENERAL);
     }
 }

@@ -603,7 +603,7 @@ public class Storage extends Building implements Actor {
         } else if (m == CATAPULT_WORKER) {
             return;
         }
-        
+
         int amount = inventory.get(m);
 
         inventory.put(m, amount + 1);
