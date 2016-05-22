@@ -52,28 +52,6 @@ public class Road {
         }
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.steps);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Road other = (Road) obj;
-        if (!Objects.equals(this.steps, other.steps)) {
-            return false;
-        }
-        return true;
-    }
-
     public EndPoint[] getFlags() {
         return new EndPoint[]{start, end};
     }

@@ -55,6 +55,7 @@ import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -2166,5 +2167,36 @@ public class TestPrioritization {
 
         /* Wait for the worker to deliver the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
+    }
+
+    @Test
+    public void testReprioritizedMaterialsDoNotGetDuplicated() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Count initial number of times plancks appear */
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
+
+        /* Put plancks on top priority and verify that it appears only once */
+        player0.setTransportPriority(0, PLANCK);
+
+        assertEquals(player0.getTransportPriorityList().get(0), PLANCK);
+        assertNotEquals(player0.getTransportPriorityList().get(10), PLANCK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
+
+        /* Put plancks on medium priority and verify that it appears only once */
+        player0.setTransportPriority(10, PLANCK);
+
+        assertNotEquals(player0.getTransportPriorityList().get(0), PLANCK);
+        assertEquals(player0.getTransportPriorityList().get(10), PLANCK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
     }
 }

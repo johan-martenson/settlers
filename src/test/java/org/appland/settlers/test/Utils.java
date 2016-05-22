@@ -906,4 +906,22 @@ public class Utils {
                 headquarter0.getAmount(SERGEANT) + 
                 headquarter0.getAmount(GENERAL);
     }
+
+    static <T> int countNumberElementAppearsInList(List<T> transportPriorityList, T element) {
+        int sum = 0;
+
+        for (T t : transportPriorityList) {
+            if (element == null) {
+                if (t == null) {
+                    sum++;
+                }
+            } else {
+                if (element.equals(t)) {
+                    sum++;
+                }
+            }
+        }
+
+        return sum;
+    }
 }

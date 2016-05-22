@@ -308,7 +308,7 @@ public class TestGuardHouse {
         assertFalse(guardHouse0.needsMilitaryManning());
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testGuardHouseCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -331,16 +331,11 @@ public class TestGuardHouse {
         Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, guardHouse0);
-        
-        try {
-            guardHouse0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
+
+        military.enterBuilding(guardHouse0);
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testGuardHouseCannotHoldMoreThanThreeMilitaries() throws Exception {
 
         /* Starting new game */
@@ -368,14 +363,8 @@ public class TestGuardHouse {
         Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, guardHouse0);
-        
-        try {
-            guardHouse0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
-        assertEquals(guardHouse0.getHostedMilitary(), 3);
+
+        military.enterBuilding(guardHouse0);
     }
 
     @Test

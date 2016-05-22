@@ -116,7 +116,7 @@ public class GameMap {
         removeRoadButNotWorker(r);
     }
 
-    private void removeRoadButNotWorker(Road r) throws Exception {
+    private synchronized void removeRoadButNotWorker(Road r) throws Exception {
 
         roads.remove(r);
 
@@ -201,17 +201,16 @@ public class GameMap {
     }
 
     public void stepTime() throws Exception {
-        projectilesToRemove.clear();
-        workersToRemove.clear();
-        workersToAdd.clear();
-        signsToRemove.clear();
-        buildingsToRemove.clear();
-        animalsToRemove.clear();
-        cropsToRemove.clear();
-        buildingsToRemove.clear();
-        buildingsToAdd.clear();
 
         synchronized (this) {
+            projectilesToRemove.clear();
+            workersToRemove.clear();
+            workersToAdd.clear();
+            signsToRemove.clear();
+            buildingsToRemove.clear();
+            animalsToRemove.clear();
+            cropsToRemove.clear();
+            buildingsToAdd.clear();
 
             for (Projectile p : projectiles) {
                 p.stepTime();
@@ -794,7 +793,7 @@ public class GameMap {
         return doPlaceFlag(flag, false);
     }    
     
-    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
+    private synchronized Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
 
         Point flagPoint = flag.getPosition();
@@ -949,7 +948,7 @@ public class GameMap {
         return Collections.unmodifiableList(flags);
     }
     
-    public void placeWorker(Worker w, EndPoint e) {
+    public synchronized void placeWorker(Worker w, EndPoint e) {
         w.setPosition(e.getPosition());
         workers.add(w);
     }

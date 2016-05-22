@@ -339,7 +339,7 @@ public class TestFortress {
         assertFalse(fortress0.needsMilitaryManning());
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testFortressCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -362,16 +362,11 @@ public class TestFortress {
         Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, fortress0);
-        
-        try {
-            fortress0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
+
+        military.enterBuilding(fortress0);
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testFortressCannotHoldMoreThanNineMilitaries() throws Exception {
 
         /* Starting new game */
@@ -405,14 +400,8 @@ public class TestFortress {
         Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, fortress0);
-        
-        try {
-            fortress0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
-        assertEquals(fortress0.getHostedMilitary(), 9);
+
+        military.enterBuilding(fortress0);
     }
 
     @Test

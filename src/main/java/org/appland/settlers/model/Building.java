@@ -247,7 +247,7 @@ public class Building implements Actor, EndPoint, Piece {
         state = State.OCCUPIED;
     }
 
-    public void deployMilitary(Military military) throws Exception {
+    protected void deployMilitary(Military military) throws Exception {
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
         }
@@ -272,6 +272,7 @@ public class Building implements Actor, EndPoint, Piece {
             hostedMilitary.add(military);
             promisedMilitary.remove(military);
         } else {
+            promisedMilitary.remove(military);
             military.returnToStorage();
         }
     }

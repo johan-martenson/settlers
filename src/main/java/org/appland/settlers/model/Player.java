@@ -335,7 +335,7 @@ public class Player {
         return Integer.MAX_VALUE;
     }
 
-    List<Material> getTransportPriorityList() {
+    public List<Material> getTransportPriorityList() {
         return transportPriorities;
     }
 

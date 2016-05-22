@@ -16,12 +16,9 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -264,7 +261,7 @@ public class TestBarracks {
         assertFalse(barracks0.needsMilitaryManning());
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testBarracksCannotHoldMilitariesBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -288,15 +285,10 @@ public class TestBarracks {
 
         map.placeWorker(military, barracks0);
 
-        try {
-            barracks0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
+        military.enterBuilding(barracks0);
     }
 
-    @Test
+    @Test (expected = Exception.class)
     public void testBarracksCannotHoldMoreThanTwoMilitaries() throws Exception {
 
         /* Starting new game */
@@ -323,14 +315,8 @@ public class TestBarracks {
         Military military = new Military(player0, PRIVATE_RANK, map);
         
         map.placeWorker(military, barracks0);
-        
-        try {
-            barracks0.deployMilitary(military);
-            assertFalse(true);
-        } catch (Exception e) {}
-        
-        assertFalse(military.isInsideBuilding());
-        assertEquals(barracks0.getHostedMilitary(), 2);
+
+        military.enterBuilding(barracks0);
     }
 
     @Test
@@ -1787,7 +1773,11 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Verify the border before the upgrade */
-        assertTrue(player0.getBorders().get(0).contains(new Point(29, 5)));
+        Point point27 = new Point(29, 5);
+        Point point28 = new Point(31, 5);
+        assertTrue(player0.getBorders().get(0).contains(point27));
+        assertFalse(player0.getBorders().get(0).contains(point28));
+        assertFalse(player0.isWithinBorder(point27));
 
         /* Wait for the upgrade */
         for (int i = 0; i < 100; i++) {
@@ -1798,8 +1788,9 @@ public class TestBarracks {
         }
 
         /* Verify that the border is expanded after the upgrade */
-        assertFalse(player0.getBorders().get(0).contains(new Point(29, 5)));
-        assertTrue(player0.getBorders().get(0).contains(new Point(31, 5)));
+        assertFalse(player0.getBorders().get(0).contains(point27));
+        assertTrue(player0.getBorders().get(0).contains(point28));
+        assertTrue(player0.isWithinBorder(point27));
     }
 
     @Test
@@ -2096,6 +2087,97 @@ public class TestBarracks {
 
         /* Verify that the evacuated militaries are added correctly */
         assertEquals(Utils.getAmountMilitary(headquarter0), originalAmount);
+    }
+
+    @Test
+    public void testCanCancelEvacuationAndRefillBarracks() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Add extra militaries to inventory */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10, map);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Wait for a military to start walking to the barracks */
+        Military military = null;
+        for (int i = 0; i < 1000; i++) {
+            for (Worker w : map.getWorkers()) {
+                if (w instanceof Military && w.getTarget().equals(barracks0.getPosition())) {
+                    military = (Military)w;
+                    break;
+                }
+            }
+
+            if (military != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(military);
+
+        /* Evacuate the barracks */
+        barracks0.evacuate();
+
+        /* Wait for the military to reach the barracks */
+        assertEquals(military.getTarget(), barracks0.getPosition());
+        assertEquals(barracks0.getHostedMilitary(), 0);
+        assertFalse(barracks0.occupied());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+
+        assertTrue(barracks0.occupied());
+
+        /* Wait for the military to walk out */
+        for (int i = 0; i < 1000; i++) {
+            if (barracks0.getHostedMilitary() == 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(military.isInsideBuilding());
+        assertEquals(barracks0.getHostedMilitary(), 0);
+        assertEquals(military.getTarget(), headquarter0.getPosition());
+
+        /* Verify that it's possible to cancel evacuation and fill up with militaries
+           again
+        */
+        barracks0.cancelEvacuation();
+
+        assertFalse(barracks0.isEvacuated());
+
+        for (int i = 0; i < 500; i++) {
+
+            if (barracks0.getHostedMilitary() == 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getHostedMilitary(), 2);
     }
 
     /*
