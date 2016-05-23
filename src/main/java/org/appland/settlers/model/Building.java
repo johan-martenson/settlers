@@ -248,6 +248,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     protected void deployMilitary(Military military) throws Exception {
+
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
         }
@@ -444,7 +445,7 @@ public class Building implements Actor, EndPoint, Piece {
                 if (isMaterialForUpgradeAvailable()) {
 
                     /* Replace the current building from the map */
-                    map.replaceBuilding(getUpgradedBuilding(), getPosition());
+                    doUpgradeBuilding();
 
                     /* Re-calculate the border after the upgrade */
                     map.updateBorder();
@@ -1023,8 +1024,7 @@ public class Building implements Actor, EndPoint, Piece {
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
     }
 
-    protected Building getUpgradedBuilding() throws Exception {
-        return null;
+    protected void doUpgradeBuilding() throws Exception {
     }
 
     private boolean isMaterialForUpgradeAvailable() {
@@ -1082,5 +1082,9 @@ public class Building implements Actor, EndPoint, Piece {
 
     public boolean isUpgrading() {
         return upgrading;
+    }
+
+    void setOccupied() {
+        state = State.OCCUPIED;
     }
 }

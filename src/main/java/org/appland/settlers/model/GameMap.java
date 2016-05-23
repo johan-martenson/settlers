@@ -424,11 +424,15 @@ public class GameMap {
         allBuildings.addAll(buildingsToAdd);
         allBuildings.removeAll(buildingsToRemove);
 
+        /* Calculate claims for all military buildings */
         for (Building b : allBuildings) {
+
+            /* Filter non-military buildings and un-occupied military buildings */
             if (!b.isMilitaryBuilding() || !b.ready() || !b.occupied()) {
                 continue;
             }
 
+            /* Store the claim for each military building */
             for (Point p : b.getDefendedLand()) {
                 if (!claims.containsKey(p)) {
                     claims.put(p, b);
@@ -469,10 +473,11 @@ public class GameMap {
 
             borders.clear();
 
-            /* Investigate all adjacent points */
+            /* Investigate each un-broken landmass */
             while (!toInvestigate.isEmpty()) {
                 Point point = toInvestigate.get(0);
 
+                /* Go through the adjacent points */
                 for (Point p : point.getAdjacentPoints()) {
                     if (!globalCleared.contains(p) &&
                         !localCleared.contains(p)  &&
@@ -810,90 +815,87 @@ public class GameMap {
         /* Handle the case where the flag is on an existing road that will be split */
         if (pointIsOnRoad(flagPoint)) {
 
-            synchronized (roads) {
+            Road existingRoad = getRoadAtPoint(flagPoint);
+            Courier courier   = existingRoad.getCourier();
 
-                Road existingRoad = getRoadAtPoint(flagPoint);
-                Courier courier   = existingRoad.getCourier();
+            List<Point> points = existingRoad.getWayPoints();
 
-                List<Point> points = existingRoad.getWayPoints();
+            int index = points.indexOf(flagPoint);
 
-                int index = points.indexOf(flagPoint);
+            if (index < 2 || points.size() - index < 3) {
+                throw new Exception("Splitting road creates too short roads");
+            }
 
-                if (index < 2 || points.size() - index < 3) {
-                    throw new Exception("Splitting road creates too short roads");
-                }
+            removeRoadButNotWorker(existingRoad);
 
-                removeRoadButNotWorker(existingRoad);
+            pointToGameObject.get(flag.getPosition()).setFlag(flag);
+            flags.add(flag);
 
-                pointToGameObject.get(flag.getPosition()).setFlag(flag);
-                flags.add(flag);
+            Road newRoad1 = placeRoad(flag.getPlayer(), points.subList(0, index + 1));
+            Road newRoad2 = placeRoad(flag.getPlayer(), points.subList(index, points.size()));
 
-                Road newRoad1 = placeRoad(flag.getPlayer(), points.subList(0, index + 1));
-                Road newRoad2 = placeRoad(flag.getPlayer(), points.subList(index, points.size()));
+            /* Re-assign the courier to one of the new roads */
+            if (courier != null) {
+                Road roadToAssign = null;
 
-                /* Re-assign the courier to one of the new roads */
-                if (courier != null) {
-                    Road roadToAssign = null;
+                /* Of the courier is idle, place it on the road it is on */
+                if (courier.isIdle()) {
+                    Point currentPosition = courier.getPosition();
 
-                    /* Of the courier is idle, place it on the road it is on */
-                    if (courier.isIdle()) {
-                        Point currentPosition = courier.getPosition();
+                    if (newRoad1.getWayPoints().contains(currentPosition)) {
+                        roadToAssign = newRoad1;
+                    } else {
+                        roadToAssign = newRoad2;
+                    }
 
-                        if (newRoad1.getWayPoints().contains(currentPosition)) {
+                /* If the courier is working... */
+                } else {
+                    Point lastPoint = courier.getLastPoint();
+                    Point nextPoint = courier.getNextPoint();
+
+                    /* If the courier is on the road between one of the flags and 
+                    a building, pick the road with the flag */
+
+                    /*    - Courier walking from flag to building */
+                    if (isFlagAtPoint(lastPoint) && isBuildingAtPoint(nextPoint) && nextPoint.equals(lastPoint.upLeft())) {
+                        if (lastPoint.equals(newRoad1.getStart()) || lastPoint.equals(newRoad1.getEnd())) {
                             roadToAssign = newRoad1;
                         } else {
                             roadToAssign = newRoad2;
                         }
 
-                    /* If the courier is working... */
-                    } else {
-                        Point lastPoint = courier.getLastPoint();
-                        Point nextPoint = courier.getNextPoint();
-
-                        /* If the courier is on the road between one of the flags and 
-                        a building, pick the road with the flag */
-
-                        /*    - Courier walking from flag to building */
-                        if (isFlagAtPoint(lastPoint) && isBuildingAtPoint(nextPoint) && nextPoint.equals(lastPoint.upLeft())) {
-                            if (lastPoint.equals(newRoad1.getStart()) || lastPoint.equals(newRoad1.getEnd())) {
-                                roadToAssign = newRoad1;
-                            } else {
-                                roadToAssign = newRoad2;
-                            }
-
-                        /*    - Courier walking from building to flag */
-                        } else if (isBuildingAtPoint(lastPoint) && isFlagAtPoint(nextPoint)) {
-                            if (nextPoint.equals(newRoad1.getStart()) || nextPoint.equals(newRoad1.getEnd())) {
-                                roadToAssign = newRoad1;
-                            } else {
-                                roadToAssign = newRoad2;
-                            }
+                    /*    - Courier walking from building to flag */
+                    } else if (isBuildingAtPoint(lastPoint) && isFlagAtPoint(nextPoint)) {
+                        if (nextPoint.equals(newRoad1.getStart()) || nextPoint.equals(newRoad1.getEnd())) {
+                            roadToAssign = newRoad1;
                         } else {
+                            roadToAssign = newRoad2;
+                        }
+                    } else {
 
-                            /* Pick the road the worker's last point was on if the next 
-                               point is the new flag point */
-                            if (nextPoint.equals(flagPoint)) {
-                                if (newRoad1.getWayPoints().contains(lastPoint)) {
-                                    roadToAssign = newRoad1;
-                                } else {
-                                    roadToAssign = newRoad2;
-                                }
-
-                            /* Pick the road the worker's next point is on if the next
-                               point is not the new flag point */
+                        /* Pick the road the worker's last point was on if the next 
+                           point is the new flag point */
+                        if (nextPoint.equals(flagPoint)) {
+                            if (newRoad1.getWayPoints().contains(lastPoint)) {
+                                roadToAssign = newRoad1;
                             } else {
-                                if (newRoad1.getWayPoints().contains(nextPoint)) {
-                                    roadToAssign = newRoad1;
-                                } else {
-                                    roadToAssign = newRoad2;
-                                }
+                                roadToAssign = newRoad2;
                             }
 
+                        /* Pick the road the worker's next point is on if the next
+                           point is not the new flag point */
+                        } else {
+                            if (newRoad1.getWayPoints().contains(nextPoint)) {
+                                roadToAssign = newRoad1;
+                            } else {
+                                roadToAssign = newRoad2;
+                            }
                         }
-                    }
 
-                    courier.assignToRoad(roadToAssign);
+                    }
                 }
+
+                courier.assignToRoad(roadToAssign);
             }
         } else {
             pointToGameObject.get(flag.getPosition()).setFlag(flag);

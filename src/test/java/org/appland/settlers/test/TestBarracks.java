@@ -7,15 +7,18 @@
 package org.appland.settlers.test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Land;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
@@ -2180,8 +2183,94 @@ public class TestBarracks {
         assertEquals(barracks0.getHostedMilitary(), 2);
     }
 
+    @Test
+    public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+
+        /* Place a second barracks */
+        Point point1 = new Point(26, 6);
+        Building barracks1 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct the barracks */
+        Utils.constructHouse(barracks1, map);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1, map);
+
+        /* Place regular building */
+        Point point2 = new Point(30, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
+
+        /* Connect the buildings with a road */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks1.getFlag(), foresterHut0.getFlag());
+
+        /* Evacuate the barracks and wait for the barracks to become empty */
+        barracks1.evacuate();
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (barracks1.getHostedMilitary() == 0) {
+                break;
+            }
+
+            map.stepTime();
+        }
+        
+        assertEquals(barracks1.getHostedMilitary(), 0);
+
+        /* Upgrade the barracks */
+        barracks1.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks1.promiseDelivery(STONE);
+        barracks1.promiseDelivery(STONE);
+        barracks1.promiseDelivery(STONE);
+
+        barracks1.putCargo(stoneCargo);
+        barracks1.putCargo(stoneCargo);
+        barracks1.putCargo(stoneCargo);
+
+        /* Wait for the upgrade */
+        for (int i = 0; i < 100; i++) {
+
+            assertEquals(barracks1, map.getBuildingAtPoint(barracks1.getPosition()));
+
+            map.stepTime();
+        }
+
+        /* Verify that the forester hut and the road remains */
+        assertEquals(map.getBuildingAtPoint(barracks1.getPosition()).getClass(), GuardHouse.class);
+        assertTrue(map.isBuildingAtPoint(foresterHut0.getPosition()));
+        assertEquals(map.getBuildingAtPoint(foresterHut0.getPosition()), foresterHut0);
+        assertTrue(map.getRoads().contains(road0));
+    }
     /*
 
+    add test for upgrade of non-occupied barracks!!
+    
     player's list of buildings is correct
     gamemap mappoint, gamemap buildings
     

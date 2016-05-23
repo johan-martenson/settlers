@@ -29,7 +29,7 @@ public class Barracks extends Building {
     }
 
     @Override
-    protected Building getUpgradedBuilding() throws Exception {
+    protected void doUpgradeBuilding() throws Exception {
         Building upgraded = new GuardHouse(getPlayer());
 
         /* Set the map in the upgraded building */
@@ -38,12 +38,26 @@ public class Barracks extends Building {
         /* Pre-construct the upgraded building */
         upgraded.setConstructionReady();
 
+        /* Set the position of the upgraded building so the militaries can enter */
+        upgraded.setPosition(getPosition());
+
+        /* Replace the buildings on the map */
+        getMap().replaceBuilding(upgraded, getPosition());
+
+        /* Ensure that the new building is occupied */
+        upgraded.setOccupied();
+
         /* Move the soldiers to the new building */
         for (int i = 0; i < getHostedMilitary(); i++) {
 
             /* Move one military from the old to the new building */
             Military military = this.retrieveMilitary();
-            upgraded.deployMilitary(military);
+            military.enterBuilding(upgraded);
+        }
+
+        /* Make sure the border is updated only once */
+        if (upgraded.getHostedMilitary() == 0) {
+            getMap().updateBorder();
         }
 
         /* Move the coins to the new building */
@@ -56,7 +70,5 @@ public class Barracks extends Building {
 
             upgraded.putCargo(coinCargo);
         }
-
-        return upgraded;
     }
 }
