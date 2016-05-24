@@ -1620,11 +1620,11 @@ public class GameMap {
 
     public int getAmountOfMineralAtPoint(Material mineral, Point point) throws Exception {
         int amount = 0;
-        
+
         for (Tile t : terrain.getSurroundingTiles(point)) {
             amount += t.getAmountOfMineral(mineral);
         }
-        
+
         return amount;
     }
 
