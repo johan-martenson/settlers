@@ -8,26 +8,30 @@ public enum Size {
      * Compares two Size instances and returns true if the second instance
      * fits within the first instance.
      * 
-     * @param s1 Instance of Size
-     * @param s2 Instance of Size
+     * @param available Instance of Size
+     * @param needed Instance of Size
      * @return true if s2 fits in s1
      */
-    static public boolean contains(Size s1, Size s2) {
+    static public boolean contains(Size available, Size needed) {
 
-        if (s1 == null) {
+        if (available == null) {
             return false;
         }
 
-    	if (s1 == s2) {
+        if (available == LARGE) {
             return true;
         }
 
-        if (s1 == MEDIUM) {
-            if (s2 == LARGE) {
+        if (available == MEDIUM) {
+            if (needed == LARGE) {
                 return false;
             }
 
             return true;
+        }
+
+        if (available == SMALL && needed != SMALL) {
+            return false;
         }
 
         return true;

@@ -2046,4 +2046,23 @@ public class TestPlacement {
 
         assertFalse(map.isAvailableMinePoint(player2, point33));
     }
+
+    @Test
+    public void testSizeComparisons() {
+        assertTrue(Size.contains(LARGE, LARGE));
+        assertTrue(Size.contains(LARGE, MEDIUM));
+        assertTrue(Size.contains(LARGE, SMALL));
+
+        assertFalse(Size.contains(MEDIUM, LARGE));
+        assertTrue(Size.contains(MEDIUM, MEDIUM));
+        assertTrue(Size.contains(MEDIUM, SMALL));
+
+        assertFalse(Size.contains(SMALL, LARGE));
+        assertFalse(Size.contains(SMALL, MEDIUM));
+        assertTrue(Size.contains(SMALL, SMALL));
+
+        assertFalse(Size.contains(null, LARGE));
+        assertFalse(Size.contains(null, MEDIUM));
+        assertFalse(Size.contains(null, SMALL));
+    }
 }
