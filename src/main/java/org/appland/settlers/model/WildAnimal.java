@@ -88,6 +88,10 @@ public class WildAnimal extends Worker {
             return false;
         }
 
+        if (map.findWayOffroad(getPosition(), p, null) == null) {
+            return false;
+        }
+
         return true;
     }
 

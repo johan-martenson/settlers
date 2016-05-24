@@ -13,7 +13,9 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WildAnimal;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -183,6 +185,64 @@ public class TestWildAnimal {
 
             /* Find min and max of newly created animals */
             assertTrue(map.getWildAnimals().contains(animal));
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testWildAnimalWithNowhereToGoStandsStill() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Fill the map with stones except for one single point */
+        Point point0 = new Point(20, 20);
+        Point point1 = new Point(23, 23);
+
+        for (int i = 1; i < 40; i++) {
+            for (int j = 1; j < 40; j++) {
+
+                if ((i + j) % 2 != 0) {
+                    continue;
+                }
+                Point pointCurrent = new Point(i, j);
+
+                if (point0.equals(pointCurrent) || point1.equals(pointCurrent)) {
+                    continue;
+                }
+
+                map.placeStone(pointCurrent);
+            }
+        }
+
+        /* Wait for a wild animal to appear in the single available spot */
+        for (int i = 0; i < 1000; i++) {
+
+            if (!map.getWildAnimals().isEmpty() &&
+                 map.getWildAnimals().get(0).getPosition().equals(point0)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.getWildAnimals().size() > 0);
+
+        /* Verify that the wild animal stays in the spot because it has nowhere 
+          to go
+        */
+        WildAnimal wildAnimal0 = map.getWildAnimals().get(0);
+
+        assertNotNull(wildAnimal0);
+        assertEquals(wildAnimal0.getPosition(), point0);
+
+        for (int i = 0; i < 500; i++) {
+
+            assertEquals(wildAnimal0.getPosition(), point0);
 
             map.stepTime();
         }
