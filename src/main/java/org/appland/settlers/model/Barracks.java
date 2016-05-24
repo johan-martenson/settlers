@@ -45,7 +45,9 @@ public class Barracks extends Building {
         getMap().replaceBuilding(upgraded, getPosition());
 
         /* Ensure that the new building is occupied */
-        upgraded.setOccupied();
+        if (occupied()) {
+            upgraded.setOccupied();
+        }
 
         /* Move the soldiers to the new building */
         for (int i = 0; i < getHostedMilitary(); i++) {

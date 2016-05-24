@@ -7,7 +7,6 @@
 package org.appland.settlers.test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
@@ -18,7 +17,6 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
-import org.appland.settlers.model.Land;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
@@ -2267,6 +2265,67 @@ public class TestBarracks {
         assertEquals(map.getBuildingAtPoint(foresterHut0.getPosition()), foresterHut0);
         assertTrue(map.getRoads().contains(road0));
     }
+
+    @Test
+    public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Upgrade the barracks */
+        assertFalse(barracks0.occupied());
+
+        barracks0.upgrade();
+
+        /* Verify that the barracks is still unoccupied */
+        assertFalse(barracks0.occupied());
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+
+        /* Verify that the barracks is unoccupied during and after the upgrade */
+        Point point1 = new Point(25, 5);
+        Point point2 = new Point(27, 5);
+        for (int i = 0; i < 100; i++) {
+
+            /* Verify that the barracks is still occupied */
+            assertFalse(barracks0.occupied());
+            assertTrue(player0.getBorders().get(0).contains(point1));
+            assertFalse(player0.isWithinBorder(point2));
+
+            map.stepTime();
+        }
+
+        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
+        assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).occupied());
+        assertTrue(player0.getBorders().get(0).contains(point1));
+        assertFalse(player0.isWithinBorder(point2));
+    }
+
     /*
 
     add test for upgrade of non-occupied barracks!!
