@@ -651,16 +651,20 @@ public class Storage extends Building implements Actor {
 
     private boolean assignDonkeys() throws Exception {
         if (hasAtLeastOne(DONKEY)) {
-            for (Road r : getMap().getRoads()) {
-                if (!r.isMainRoad()) {
+            for (Road road : getMap().getRoads()) {
+                if (!road.getPlayer().equals(getPlayer())) {
                     continue;
                 }
 
-                if (!r.needsDonkey()) {
+                if (!road.isMainRoad()) {
                     continue;
                 }
 
-                Storage stg = getMap().getClosestStorage(r.getStart());
+                if (!road.needsDonkey()) {
+                    continue;
+                }
+
+                Storage stg = getMap().getClosestStorage(road.getStart());
 
                 if (stg != null && !this.equals(stg)) {
                     continue;
@@ -668,7 +672,7 @@ public class Storage extends Building implements Actor {
 
                 Donkey d = retrieveDonkey();
                 getMap().placeWorker(d, getFlag());
-                d.assignToRoad(r);
+                d.assignToRoad(road);
 
                 return true;
             }

@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import org.appland.settlers.model.Building;
@@ -14,13 +13,16 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Donkey;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -125,7 +127,7 @@ public class TestDonkey {
         assertNotNull(road1.getDonkey());
         assertFalse(road1.needsDonkey());
     }
-    
+
     @Test
     public void testDonkeyWalksToIntendedRoad() throws Exception {
 
@@ -1242,5 +1244,108 @@ public class TestDonkey {
         Utils.fastForward(500, map);
 
         assertNull(headquarterDriveway.getDonkey());
+    }
+
+    @Test
+    public void testDonkeyIsNotDispatchedToOpponentsRoadWithoutConnectedStorage() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 45);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Remove all donkeys from the inventory */
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 0, map);
+
+        /* Extend the border */
+        Point point0 = new Point(7, 29);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Place a guardhouse */
+        Point point1 = new Point(7, 15);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct the guardhouse */
+        Utils.constructHouse(guardHouse0, map);
+
+        /* Occupy the guardhouse */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(player0, point2);
+        
+        /* Place flag */
+        Point point3 = new Point(5, 13);
+        Flag flag1 = map.placeFlag(player0, point3);
+        
+        /* Place road between the headquarter and the first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+    
+        /* Place road between the headquarter and the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        
+        /* Place workers on the roads */
+        Courier courier0 = Utils.occupyRoad(road0, map);
+        Courier courier1 = Utils.occupyRoad(road1, map);
+    
+        /* Deliver 100 cargos to make the road a main road */
+        for (int i = 0; i < 100; i++) {
+            Cargo cargo = new Cargo(COIN, map);
+ 
+            flag1.putCargo(cargo);
+
+            cargo.setTarget(headquarter0);
+            
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier1.getCargo());
+            
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
+            
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier1.getTarget(), flag0.getPosition());
+            
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier1, flag0.getPosition());
+            
+            assertNull(courier1.getCargo());
+        }
+
+        assertTrue(road1.isMainRoad());
+
+        /* Destroy the fortress so the main road is not connected to the headquarter */
+        fortress0.tearDown();
+
+        assertNull(map.findWayWithExistingRoads(road1.getStart(), headquarter0.getPosition()));
+
+        /* Place an opponent */
+        Point point4 = new Point(40, 40);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
+
+        /* Put donkeys in the opponent's inventory */
+        Utils.adjustInventoryTo(headquarter1, DONKEY, 10, map);
+
+        /* Verify that the opponent's headquarter doesn't try to deliver 
+           donkeys
+        */
+        for (int i = 0; i < 500; i++) {
+
+            assertEquals(headquarter1.getAmount(DONKEY), 10);
+
+            map.stepTime();
+        }
     }
 }
