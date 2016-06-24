@@ -8,8 +8,10 @@ package org.appland.settlers.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -17,11 +19,11 @@ import java.util.List;
  */
 public class Land {
 
-    private List<Point>       points;
+    private Set<Point>        points;
     private List<List<Point>> border;
 
     Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
-        points = new ArrayList<>();
+        points = new HashSet<>();
         border = new ArrayList<>();
 
         points.addAll(pointsInLand);
@@ -99,8 +101,8 @@ public class Land {
         return Collections.unmodifiableList(border);
     }
 
-    public List<Point> getPointsInLand() {
-        return Collections.unmodifiableList(points);
+    public Set<Point> getPointsInLand() {
+        return Collections.unmodifiableSet(points);
     }
 
     public boolean isWithinBorder(Point position) {

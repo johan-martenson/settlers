@@ -18,9 +18,12 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -1169,5 +1172,76 @@ public class TestCourier {
         Courier courier = couriers.get(0);
 
         assertEquals(courier.getPlayer(), player0);
+    }
+
+    @Test
+    public void testCourierIsNotDispatchedToOpponentsRoadWithoutConnectedStorage() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 45);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Remove all donkeys from the inventory */
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 0, map);
+
+        /* Extend the border */
+        Point point0 = new Point(7, 29);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Place a guardhouse */
+        Point point1 = new Point(7, 15);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct the guardhouse */
+        Utils.constructHouse(guardHouse0, map);
+
+        /* Occupy the guardhouse */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(player0, point2);
+        
+        /* Place flag */
+        Point point3 = new Point(5, 13);
+        Flag flag1 = map.placeFlag(player0, point3);
+        
+        /* Place road between the flags */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Destroy the fortress so the  road is not connected to the headquarter */
+        fortress0.tearDown();
+
+        assertNull(map.findWayWithExistingRoads(road0.getStart(), headquarter0.getPosition()));
+
+        /* Place an opponent */
+        Point point4 = new Point(40, 40);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
+
+        /* Verify that the opponent's headquarter doesn't try to deliver 
+           a courier to the road
+        */
+        for (int i = 0; i < 500; i++) {
+
+            assertTrue(road0.needsCourier());
+            assertNull(road0.getCourier());
+
+            map.stepTime();
+        }
     }
 }

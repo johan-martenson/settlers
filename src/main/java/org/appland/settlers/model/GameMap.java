@@ -1063,6 +1063,7 @@ public class GameMap {
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point point;
+        Point oppositePoint;
 
         while (!toEvaluate.isEmpty()) {
 
@@ -1080,8 +1081,8 @@ public class GameMap {
             /* Go through the neighbors and add the new points to the list to be evaluated */
             for (Road road : getMapPoint(point).getConnectedRoads()) {
 
-                Point oppositePoint = road.getOtherPoint(point);
-                
+                oppositePoint = road.getOtherPoint(point);
+
                 /* Filter already visited */
                 if (visited.contains(oppositePoint)) {
                     continue;

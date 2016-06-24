@@ -263,12 +263,16 @@ public class Storage extends Building implements Actor {
     private boolean assignCouriers() throws Exception {
 
         if (hasAtLeastOne(COURIER)) {
-            for (Road r : getMap().getRoads()) {
-                if (!r.needsCourier()) {
+            for (Road road : getMap().getRoads()) {
+                if (!road.getPlayer().equals(getPlayer())) {
                     continue;
                 }
 
-                Storage stg = getMap().getClosestStorage(r.getStart());
+                if (!road.needsCourier()) {
+                    continue;
+                }
+
+                Storage stg = getMap().getClosestStorage(road.getStart());
 
                 if (!equals(stg)) {
                     continue;
@@ -276,7 +280,7 @@ public class Storage extends Building implements Actor {
 
                 Courier w = stg.retrieveCourier();
                 getMap().placeWorker(w, stg.getFlag());
-                w.assignToRoad(r);
+                w.assignToRoad(road);
 
                 return true;
             }
