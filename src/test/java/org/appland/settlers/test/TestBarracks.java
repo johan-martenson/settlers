@@ -2326,6 +2326,106 @@ public class TestBarracks {
         assertFalse(player0.isWithinBorder(point2));
     }
 
+    @Test
+    public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
+
+        /* Creating new player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing barracks */
+        Point point26 = new Point(21, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
+
+        /* Connect the barracks with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Fill the barracks with militaries */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0, map);
+
+        assertEquals(barracks0.getHostedMilitary(), 2);
+        /* Make sure there are enough militaries in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 200, map);
+
+        /* Upgrade the barracks */
+        barracks0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade to happen */
+        assertEquals(barracks0.getHostedMilitary(), 2);
+
+        barracks0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+
+        assertEquals(barracks0.getHostedMilitary(), 2);
+        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), barracks0);
+        assertEquals(barracks0.getMaxHostedMilitary(), 3);
+        /* Verify that only one military is sent out to occupy the building */
+
+        /* Wait for the military */
+        assertTrue(barracks0.needsMilitaryManning());
+        assertEquals(barracks0.getHostedMilitary(), 2);
+
+        Military military0 = null;
+        for (int i = 0; i < 2000; i++) {
+
+            military0 = Utils.findMilitaryOutsideBuilding(player0, map);
+
+            if (military0 != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(military0);
+        assertFalse(barracks0.needsMilitaryManning());
+
+        /* Wait for the military to get to the barracks and verify no other
+           military is sent out
+        */
+        for (int i = 0; i < 2000; i++) {
+
+            if (military0.getPosition().equals(barracks0.getPosition())) {
+                break;
+            }
+
+            assertEquals(Utils.findMilitariesOutsideBuilding(player0, map).size(), 1);
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getHostedMilitary(), 3);
+
+        /* Verify that no more militaries are sent */
+        for (int i = 0; i < 2000; i++) {
+
+            assertNull(Utils.findMilitaryOutsideBuilding(player0, map));
+
+            map.stepTime();
+        }
+    }
+
     /*
 
     add test for upgrade of non-occupied barracks!!

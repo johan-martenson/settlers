@@ -561,6 +561,18 @@ public class Utils {
         return attacker;
     }
 
+    public static List<Military> findMilitariesOutsideBuilding(Player player, GameMap map) {
+        List<Military> result = new LinkedList<>();
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
+                result.add((Military)w);
+            }
+        }
+
+        return result;
+    }
+
     public static void waitForWorkerToDisappear(Worker worker, GameMap map) throws Exception {
         for (int i = 0; i < 500; i++) {
             if (!map.getWorkers().contains(worker)) {
@@ -923,5 +935,21 @@ public class Utils {
         }
 
         return sum;
+    }
+
+    static Building waitForBuildingToGetUpgraded(Building barracks0) throws Exception {
+        GameMap map = barracks0.getMap();
+
+        for (int i = 0; i < 10000; i++) {
+            if (!map.getBuildingAtPoint(barracks0.getPosition()).equals(barracks0)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).equals(barracks0));
+
+        return map.getBuildingAtPoint(barracks0.getPosition());
     }
 }

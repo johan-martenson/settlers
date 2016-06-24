@@ -50,10 +50,14 @@ public class Barracks extends Building {
         }
 
         /* Move the soldiers to the new building */
-        for (int i = 0; i < getHostedMilitary(); i++) {
+        int currentMilitary = getHostedMilitary();
+
+        for (int i = 0; i < currentMilitary; i++) {
 
             /* Move one military from the old to the new building */
             Military military = this.retrieveMilitary();
+
+            upgraded.promiseMilitary(military);
             military.enterBuilding(upgraded);
         }
 
