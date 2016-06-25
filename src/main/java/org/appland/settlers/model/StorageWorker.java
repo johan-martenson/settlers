@@ -70,9 +70,8 @@ public class StorageWorker extends Worker {
     }
 
     private Cargo tryToStartDelivery() throws Exception {
-        List<Material> materialsInPriorityOrder = getPlayer().getTransportPriorityList();
 
-        for (Material m : materialsInPriorityOrder) {
+        for (Material material : getPlayer().getTransportPriorityList()) {
             for (Building b : map.getBuildingsWithinReach(ownStorage.getFlag())) {
 
                 /* Don't deliver to itself */
@@ -82,7 +81,7 @@ public class StorageWorker extends Worker {
 
                 /* Make sure plancks are only used for planck production if
                    the limit is critically low */
-                if (m == PLANCK && 
+                if (material == PLANCK && 
                     ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
                     !(b instanceof Sawmill)     &&
                     !(b instanceof ForesterHut) &&
@@ -90,17 +89,18 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                if (b.needsMaterial(m) && ownStorage.isInStock(m)) {
+                if (b.needsMaterial(material) && ownStorage.isInStock(material)) {
 
                     /* Check that the building type is within its assigned quota */
-                    if (isWithinQuota(b, m)) {
-                        b.promiseDelivery(m);
+                    if (isWithinQuota(b, material) ||
+                        (resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
+                        b.promiseDelivery(material);
 
-                        Cargo cargo = ownStorage.retrieve(m);
+                        Cargo cargo = ownStorage.retrieve(material);
                         cargo.setTarget(b);
 
                         /* Track allocation */
-                        trackAllocation(b, m);
+                        trackAllocation(b, material);
 
                         return cargo;
                     }
@@ -191,6 +191,50 @@ public class StorageWorker extends Worker {
         }
     }
 
+    private boolean resetAllocationIfNeeded(Material m) {
+        
+        if (isFood(m)) {
+
+        /* Reset count if all building types have reached their quota */
+            Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
+
+            if ((!needyConsumerExists(reachableBuildings, GoldMine.class, m)    || 
+                  overQuota(GoldMine.class))                                  &&
+                (!needyConsumerExists(reachableBuildings, IronMine.class, m)    || 
+                  overQuota(IronMine.class))                                  &&
+                (!needyConsumerExists(reachableBuildings, CoalMine.class, m)    || 
+                  overQuota(CoalMine.class))                                  &&
+                (!needyConsumerExists(reachableBuildings, GraniteMine.class, m) || 
+                  overQuota(GraniteMine.class))) {
+                assignedFood.put(GoldMine.class, 0);
+                assignedFood.put(IronMine.class, 0);
+                assignedFood.put(CoalMine.class, 0);
+                assignedFood.put(GraniteMine.class, 0);
+
+                return true;
+            }
+        } else if (m == COAL) {
+
+            /* Reset count if all building types have reached their quota */
+            Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
+
+            if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, m)  ||
+                  overQuota(IronSmelter.class))                                    &&
+                (!needyConsumerExists(reachableBuildings, Mint.class, m)         ||
+                  overQuota(Mint.class))                                           &&
+                (!needyConsumerExists(reachableBuildings, Armory.class, m)       ||
+                  overQuota(Armory.class))) {
+                assignedCoal.put(IronSmelter.class, 0);
+                assignedCoal.put(Mint.class, 0);
+                assignedCoal.put(Armory.class, 0);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void trackAllocation(Building b, Material m) {
 
         if (isFood(m)) {
@@ -198,50 +242,14 @@ public class StorageWorker extends Worker {
             int amount = assignedFood.get(b.getClass());
             assignedFood.put(b.getClass(), amount + 1);
 
-            /* Reset count if all building types have reached their quota */
-            if (!isWithinQuota(b, m)) {
-
-                Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
-
-                if ((!needyConsumerExists(reachableBuildings, GoldMine.class, m)    || 
-                      overQuota(GoldMine.class))                                  &&
-                    (!needyConsumerExists(reachableBuildings, IronMine.class, m)    || 
-                      overQuota(IronMine.class))                                  &&
-                    (!needyConsumerExists(reachableBuildings, CoalMine.class, m)    || 
-                      overQuota(CoalMine.class))                                  &&
-                    (!needyConsumerExists(reachableBuildings, GraniteMine.class, m) || 
-                      overQuota(GraniteMine.class))) {
-                    assignedFood.put(GoldMine.class, 0);
-                    assignedFood.put(IronMine.class, 0);
-                    assignedFood.put(CoalMine.class, 0);
-                    assignedFood.put(GraniteMine.class, 0);
-                }
-            }
         } else if (m == COAL) {
             int amount = assignedCoal.get(b.getClass());
             assignedCoal.put(b.getClass(), amount + 1);
-
-            /* Reset count if all building types have reached their quota */
-            if (!isWithinQuota(b, m)) {
-
-                Set<Building> reachableBuildings = map.getBuildingsWithinReach(getHome().getFlag());
-
-                if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, m)  ||
-                      overQuota(IronSmelter.class))                                    &&
-                    (!needyConsumerExists(reachableBuildings, Mint.class, m)         ||
-                      overQuota(Mint.class))                                           &&
-                    (!needyConsumerExists(reachableBuildings, Armory.class, m)       ||
-                      overQuota(Armory.class))) {
-                    assignedCoal.put(IronSmelter.class, 0);
-                    assignedCoal.put(Mint.class, 0);
-                    assignedCoal.put(Armory.class, 0);
-                }
-            }
         }
     }
 
-    private boolean isFood(Material m) {
-        return m == FISH || m == BREAD || m == MEAT;
+    private boolean isFood(Material material) {
+        return material == FISH || material == BREAD || material == MEAT;
     }
 
     private boolean isWithinQuota(Building b, Material m) {

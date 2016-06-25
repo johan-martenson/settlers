@@ -1092,6 +1092,96 @@ public class TestPrioritization {
     }
 
     @Test
+    public void testFoodContinuesToBeAllocatedWhenQuotaIsReduced() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Put small mountains with ore on the map */
+        Point point0 = new Point(6, 10);
+        Utils.surroundPointWithMountain(point0, map);
+
+        Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Place gold mines */
+        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
+
+        /* Finish construction of the mines */
+        Utils.constructHouse(goldMine0, map);
+
+        /* Occupy the mines */
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
+
+        /* Set the quota for mine to give maximum food to the gold mine */
+        player0.setFoodQuota(GoldMine.class, 10);
+
+        /* Make sure the headquarter has no food */
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+
+        /* Attach the mines to the headquarter */
+        map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
+        
+        /* Verify that the storage worker isn't carrying something when the game starts */
+        assertNull(headquarter0.getWorker().getCargo());
+
+        /* Wait for the headquarter to deliver five breads to the mine */
+        Worker carrier = headquarter0.getWorker();
+
+        for (int i = 0; i < 5; i++) {
+
+            /* Place one bread in the headquarter */
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+
+            /* Wait for the storage worker to pick up a bread cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+
+            assertEquals(carrier.getCargo().getTarget(), goldMine0);
+
+            /* Wait for the bread to reach the mine */
+            Cargo cargo = carrier.getCargo();
+            Building target = cargo.getTarget();
+
+            Utils.waitForCargoToReachTarget(map, cargo);
+
+            assertEquals(target.getAmount(BREAD), 1);
+
+            /* Wait for the mine to consume the bread */
+            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+        }
+
+        /**
+         *  Reduce the food quota to below five and verify that food continues 
+         *  to be delivered
+         */
+        player0.setFoodQuota(GoldMine.class, 1);
+
+        /* Place one bread in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+
+        /* Wait for the storage worker to pick up a bread cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
+
+        assertEquals(carrier.getCargo().getTarget(), goldMine0);
+
+        /* Wait for the bread to reach the mine */
+        Cargo cargo = carrier.getCargo();
+        Building target = cargo.getTarget();
+
+        Utils.waitForCargoToReachTarget(map, cargo);
+
+        assertEquals(target.getAmount(BREAD), 1);
+    }
+
+    @Test
     public void testCoalConsumersGetEqualAmountsOfCoal() throws Exception {
 
         /* Starting new game */

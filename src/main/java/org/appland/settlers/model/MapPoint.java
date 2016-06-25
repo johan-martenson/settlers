@@ -40,8 +40,12 @@ public class MapPoint {
     }
 
     void setBuilding(Building b) throws Exception {
-        if (isOccupied()) {
-            throw new Exception(this + " is already occupied");
+        if (flag != null) {
+            throw new Exception(this + " is already occupied by flag " + flag);
+        }
+
+        if (building != null) {
+            throw new Exception(this + " is already occupied by building " + building);
         }
 
         building = b;

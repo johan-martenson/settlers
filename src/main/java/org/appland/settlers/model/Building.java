@@ -1076,7 +1076,7 @@ public class Building implements Actor, EndPoint, Piece {
         }
     }
 
-    private boolean isUpgradable() {
+    public boolean isUpgradable() {
         return getClass().getAnnotation(UpgradeCost.class) != null;
     }
 

@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-class Countdown {
+public class Countdown {
 
     private int count = -1;
     private int startedAt;
@@ -18,28 +18,28 @@ class Countdown {
     public Countdown() {
     }
 
-    void countFrom(int i) {
+    public void countFrom(int i) {
         count = i;
         startedAt = i;
     }
 
-    void step() {
+    public void step() {
         count--;
     }
 
-    boolean reachedZero() {
+    public boolean reachedZero() {
         return count == 0;
     }
 
-    boolean isActive() {
+    public boolean isActive() {
         return count != -1;
     }
 
-    boolean isInactive() {
+    public boolean isInactive() {
         return !isActive();
     }
 
-    void reset() {
+    public void reset() {
         count = -1;
     }
 
@@ -47,7 +47,7 @@ class Countdown {
         return count > 0;
     }
 
-    int getCount() {
+    public int getCount() {
         return count;
     }
 

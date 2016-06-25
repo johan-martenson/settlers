@@ -669,7 +669,7 @@ public class GameMap {
         /* Verify that all points of the road are within the border */
         for (Point p : wayPoints) {
             if (!player.isWithinBorder(p)) {
-                throw new Exception("Can't place road with " + p + " outside the border");
+                throw new Exception("Can't place road " + wayPoints + "with " + p + " outside the border");
             }
         }
         
@@ -1279,7 +1279,7 @@ public class GameMap {
         
         MapPoint mp = pointToGameObject.get(p);
         
-        if (mp.isFlag()) {
+        if (mp.isFlag() && player.isWithinBorder(p)) {
             return true;
         }
         
