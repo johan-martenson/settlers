@@ -836,7 +836,7 @@ public class TestStorage {
         /* Wait for player 0 to take over the barracks */
         for (int i = 0; i < 2000; i++) {
 
-            if (barracks0.getPlayer().equals(player0) && barracks0.getHostedMilitary() > 0) {
+            if (barracks0.getPlayer().equals(player0) && barracks0.getNumberOfHostedMilitary() > 0) {
                 break;
             }
 
@@ -844,7 +844,7 @@ public class TestStorage {
         }
 
         assertEquals(barracks0.getPlayer(), player0);
-        assertTrue(barracks0.getHostedMilitary() > 0);
+        assertTrue(barracks0.getNumberOfHostedMilitary() > 0);
 
         /* Connect the captured barracks with the headquarter */
         Road road4 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), fortress0.getFlag());

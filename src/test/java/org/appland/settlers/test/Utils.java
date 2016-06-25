@@ -49,6 +49,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import static org.junit.Assert.assertTrue;
+import static java.lang.Math.abs;
 
 public class Utils {
 
@@ -460,7 +461,7 @@ public class Utils {
     public static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0, int nr) throws Exception {
         boolean populated = false;
         for (int i = 0; i < 1000; i++) {
-            if (barracks0.getHostedMilitary() == nr) {
+            if (barracks0.getNumberOfHostedMilitary() == nr) {
                 populated = true;
 
                 break;
@@ -470,7 +471,7 @@ public class Utils {
         }
 
         assertTrue(populated);
-        assertEquals(barracks0.getHostedMilitary(), nr);
+        assertEquals(barracks0.getNumberOfHostedMilitary(), nr);
     }
 
     public static void verifyPointIsWithinBorder(GameMap map, Player player0, Point position) {

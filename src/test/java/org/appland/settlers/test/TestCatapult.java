@@ -587,7 +587,7 @@ public class TestCatapult {
         for (int i = 0; i < 100; i++) {
 
             /* Occupy the barracks if needed */
-            if (barracks0.getHostedMilitary() == 0) {
+            if (barracks0.getNumberOfHostedMilitary() == 0) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
             }
 
@@ -597,13 +597,13 @@ public class TestCatapult {
             /* Wait for the catapult to throw a projectile */
             Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult, map);
 
-            int hostedBefore = barracks0.getHostedMilitary();
+            int hostedBefore = barracks0.getNumberOfHostedMilitary();
 
             /* Wait for the projectile to reach its target */
             Utils.waitForProjectileToReachTarget(projectile, map);
 
             /* Check if the projectile hit */
-            if (barracks0.getHostedMilitary() < hostedBefore) {
+            if (barracks0.getNumberOfHostedMilitary() < hostedBefore) {
                 hits++;
             }
         }

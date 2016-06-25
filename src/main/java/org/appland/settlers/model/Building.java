@@ -164,8 +164,12 @@ public class Building implements Actor, EndPoint, Piece {
         }
     }
 
-    public int getHostedMilitary() {
+    public int getNumberOfHostedMilitary() {
         return hostedMilitary.size();
+    }
+
+    public List<Military> getHostedMilitary() {
+        return Collections.unmodifiableList(hostedMilitary);
     }
 
     public boolean needsWorker() {
@@ -387,7 +391,7 @@ public class Building implements Actor, EndPoint, Piece {
         if (isUnderAttack()) {
 
             /* There is nothing to do if the building has no hosted militaries */
-            if (getHostedMilitary() > 0) {
+            if (getNumberOfHostedMilitary() > 0) {
 
                 /* Send out a defender to the flag if needed */
                 if (isAttackerAtFlag() && ownDefender == null) {
@@ -876,7 +880,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     boolean isDefenseLess() {
-        if (getHostedMilitary() == 0       && 
+        if (getNumberOfHostedMilitary() == 0       && 
             getRemoteDefenders().isEmpty() &&
             ownDefender == null) {
             return true;
@@ -981,7 +985,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     void hitByCatapult() throws Exception {
 
-        if (getHostedMilitary() > 0) {
+        if (getNumberOfHostedMilitary() > 0) {
             hostedMilitary.remove(0);
         } else {
             tearDown();

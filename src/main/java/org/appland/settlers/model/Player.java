@@ -145,8 +145,8 @@ public class Player {
                 continue;
             }
 
-            if (b.canAttack(buildingToAttack) && b.getHostedMilitary() > 1) {
-                availableAttackers += b.getHostedMilitary() - 1;
+            if (b.canAttack(buildingToAttack) && b.getNumberOfHostedMilitary() > 1) {
+                availableAttackers += b.getNumberOfHostedMilitary() - 1;
             }
         }
 
@@ -181,11 +181,11 @@ public class Player {
                 break;
             }
 
-            if (b.getHostedMilitary() < 2) {
+            if (b.getNumberOfHostedMilitary() < 2) {
                 continue;
             }
 
-            while (b.getHostedMilitary() > 1) {
+            while (b.getNumberOfHostedMilitary() > 1) {
                 if (allocated == nrAttackers) {
                     break;
                 }

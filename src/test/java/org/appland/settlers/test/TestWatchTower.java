@@ -778,7 +778,7 @@ public class TestWatchTower {
         map.stepTime();
         
         assertFalse(m.isInsideBuilding());
-        assertEquals(watchTower0.getHostedMilitary(), 0);
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
     }
 
     @Test
@@ -896,7 +896,7 @@ public class TestWatchTower {
 
         /* Verify that no militaries are assigned to the watch tower */
         for (int i = 0; i < 200; i++) {
-            assertEquals(watchTower0.getHostedMilitary(), 0);
+            assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
         }
     }
@@ -974,7 +974,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
         
         /* Destroy the watch tower */
-        assertEquals(watchTower0.getHostedMilitary(), 1);
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
 
         watchTower0.tearDown();
 
@@ -1018,7 +1018,7 @@ public class TestWatchTower {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
         
         /* Destroy the watch tower */
-        assertEquals(watchTower0.getHostedMilitary(), 1);
+        assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
 
         watchTower0.tearDown();
 

@@ -801,7 +801,7 @@ public class TestFortress {
         map.stepTime();
         
         assertFalse(m.isInsideBuilding());
-        assertEquals(fortress0.getHostedMilitary(), 0);
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 0);
     }
 
     @Test
@@ -919,7 +919,7 @@ public class TestFortress {
 
         /* Verify that no militaries are assigned to the fortress */
         for (int i = 0; i < 200; i++) {
-            assertEquals(fortress0.getHostedMilitary(), 0);
+            assertEquals(fortress0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
         }
     }
@@ -997,7 +997,7 @@ public class TestFortress {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
         
         /* Destroy the fortress */
-        assertEquals(fortress0.getHostedMilitary(), 1);
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
 
         fortress0.tearDown();
 
@@ -1041,7 +1041,7 @@ public class TestFortress {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
         
         /* Destroy the fortress */
-        assertEquals(fortress0.getHostedMilitary(), 1);
+        assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
 
         fortress0.tearDown();
 

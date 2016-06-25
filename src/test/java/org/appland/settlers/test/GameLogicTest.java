@@ -279,7 +279,7 @@ public class GameLogicTest {
         Utils.constructHouse(bk, map);
 
         assertTrue(bk.needsMilitaryManning());
-        assertEquals(bk.getHostedMilitary(), 0);
+        assertEquals(bk.getNumberOfHostedMilitary(), 0);
 
         /* Step time to make the headquarter assign new workers */
         map.stepTime();
@@ -303,7 +303,7 @@ public class GameLogicTest {
         Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(4));
         
         assertFalse(bk.needsMilitaryManning());
-        assertEquals(bk.getHostedMilitary(), 2);
+        assertEquals(bk.getNumberOfHostedMilitary(), 2);
 
         /* Assign new workers to unoccupied buildings again. There is building
          * or road that requires a worker so this should have no effect

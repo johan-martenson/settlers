@@ -121,7 +121,7 @@ public class ConstructionTest {
 
         assertTrue(brks.isMilitaryBuilding());
         assertEquals(brks.getMaxHostedMilitary(), 2);
-        assertEquals(brks.getHostedMilitary(), 0);
+        assertEquals(brks.getNumberOfHostedMilitary(), 0);
         assertEquals(brks.getPromisedMilitary(), 0);
 
         assertFalse(brks.needsMilitaryManning());
@@ -138,7 +138,7 @@ public class ConstructionTest {
 
         assertTrue(brks.isMilitaryBuilding());
         assertTrue(brks.ready());
-        assertEquals(brks.getHostedMilitary(), 0);
+        assertEquals(brks.getNumberOfHostedMilitary(), 0);
         assertEquals(brks.getMaxHostedMilitary(), 2);
         assertTrue(brks.needsMilitaryManning());
 

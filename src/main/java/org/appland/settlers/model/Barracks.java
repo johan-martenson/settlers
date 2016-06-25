@@ -50,7 +50,7 @@ public class Barracks extends Building {
         }
 
         /* Move the soldiers to the new building */
-        int currentMilitary = getHostedMilitary();
+        int currentMilitary = getNumberOfHostedMilitary();
 
         for (int i = 0; i < currentMilitary; i++) {
 
@@ -62,7 +62,7 @@ public class Barracks extends Building {
         }
 
         /* Make sure the border is updated only once */
-        if (upgraded.getHostedMilitary() == 0) {
+        if (upgraded.getNumberOfHostedMilitary() == 0) {
             getMap().updateBorder();
         }
 

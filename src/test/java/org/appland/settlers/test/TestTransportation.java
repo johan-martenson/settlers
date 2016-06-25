@@ -573,7 +573,7 @@ public class TestTransportation {
         /* Check that the barracks needs a military */
         assertTrue(b.isMilitaryBuilding());
 
-        int hostedMilitary = b.getHostedMilitary();
+        int hostedMilitary = b.getNumberOfHostedMilitary();
         int maxHostedMilitary = b.getMaxHostedMilitary();
 
         assertEquals(hostedMilitary, 0);
@@ -598,7 +598,7 @@ public class TestTransportation {
         assertTrue(m.isArrived());
 
         /* Verify that the military entered the barracks */
-        assertEquals(b.getHostedMilitary(), 1);
+        assertEquals(b.getNumberOfHostedMilitary(), 1);
     }
 
     @Test

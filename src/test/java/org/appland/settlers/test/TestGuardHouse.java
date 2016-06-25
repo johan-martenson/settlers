@@ -760,7 +760,7 @@ public class TestGuardHouse {
         map.stepTime();
         
         assertFalse(m.isInsideBuilding());
-        assertEquals(guardHouse0.getHostedMilitary(), 0);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 0);
     }
 
     @Test
@@ -878,7 +878,7 @@ public class TestGuardHouse {
 
         /* Verify that no militaries are assigned to the guard house */
         for (int i = 0; i < 200; i++) {
-            assertEquals(guardHouse0.getHostedMilitary(), 0);
+            assertEquals(guardHouse0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
         }
     }
@@ -956,7 +956,7 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
         
         /* Destroy the guard house */
-        assertEquals(guardHouse0.getHostedMilitary(), 1);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 1);
 
         guardHouse0.tearDown();
 
@@ -1000,7 +1000,7 @@ public class TestGuardHouse {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
         
         /* Destroy the guard house */
-        assertEquals(guardHouse0.getHostedMilitary(), 1);
+        assertEquals(guardHouse0.getNumberOfHostedMilitary(), 1);
 
         guardHouse0.tearDown();
 

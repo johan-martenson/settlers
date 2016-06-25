@@ -269,14 +269,14 @@ public class TestWorker {
         assertFalse(attacker.isFighting());
 
         /* Wait for the military to reach the attacked building */
-        assertEquals(barracks1.getHostedMilitary(), 1);
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
         assertTrue(attacker.isExactlyAtPoint());
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
-        assertEquals(barracks1.getHostedMilitary(), 0);
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
         Military defender = Utils.findMilitaryOutsideBuilding(player1, map);

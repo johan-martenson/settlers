@@ -176,7 +176,7 @@ public class TestForesterHut {
         Utils.constructHouse(f, null);
 
         assertFalse(f.isMilitaryBuilding());
-        assertEquals(f.getHostedMilitary(), 0);
+        assertEquals(f.getNumberOfHostedMilitary(), 0);
         assertEquals(f.getMaxHostedMilitary(), 0);
     }
 
