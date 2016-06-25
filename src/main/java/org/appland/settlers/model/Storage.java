@@ -19,7 +19,6 @@ import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
-import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MILLER;
@@ -50,7 +49,6 @@ public class Storage extends Building implements Actor {
 
     protected final Map<Material, Integer> inventory;
     
-    private final Countdown promotionalCountdown;
     private final Countdown draftCountdown;
 
     private static final Logger log = Logger.getLogger(Storage.class.getName());
@@ -59,8 +57,7 @@ public class Storage extends Building implements Actor {
         super(p);
         
         inventory = createEmptyMaterialIntMap();
-        
-        promotionalCountdown = new Countdown();
+
         draftCountdown = new Countdown();
     }
 
@@ -90,18 +87,6 @@ public class Storage extends Building implements Actor {
     public void stepTime() throws Exception {
         super.stepTime();
         
-        /* Handle promotion with delay */
-        if (isPromotionPossible(inventory)) {
-            if (promotionalCountdown.reachedZero()) {
-                doPromoteMilitary();
-                promotionalCountdown.countFrom(ProductionDelays.PROMOTION_DELAY);
-            } else if (promotionalCountdown.isCounting()) {
-                promotionalCountdown.step();
-            } else {
-                promotionalCountdown.countFrom(ProductionDelays.PROMOTION_DELAY);
-            }
-        }
-
         /* Handle draft with delay */
         if (isDraftPossible(inventory)) {
             if (draftCountdown.reachedZero()) {
@@ -215,7 +200,7 @@ public class Storage extends Building implements Actor {
     }
     
     private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
-        for (Building b : getMap().getBuildings()) {
+        for (Building b : getPlayer().getBuildings()) {
             if (b.isMilitaryBuilding()) {
                 if (!hasMilitary()) {
                     continue;
@@ -293,36 +278,6 @@ public class Storage extends Building implements Actor {
         return inventory.get(BEER) > 0
                 && inventory.get(SWORD) > 0
                 && inventory.get(SHIELD) > 0;
-    }
-
-    public boolean isPromotionPossible(Map<Material, Integer> inventory) {
-        return inventory.get(GOLD) > 0
-                && (inventory.get(PRIVATE) > 0
-                || inventory.get(SERGEANT) > 0);
-    }
-
-    private void doPromoteMilitary() {
-        int gold = inventory.get(GOLD);
-        int privates = inventory.get(PRIVATE);
-        int sergeants = inventory.get(SERGEANT);
-        int generals = inventory.get(GENERAL);
-
-        if (gold > 0 && privates > 0) {
-            sergeants++;
-            privates--;
-            gold--;
-        }
-
-        if (gold > 0 && sergeants > 1) {
-            generals++;
-            sergeants--;
-            gold--;
-        }
-
-        inventory.put(PRIVATE, privates);
-        inventory.put(SERGEANT, sergeants);
-        inventory.put(GENERAL, generals);
-        inventory.put(GOLD, gold);
     }
 
     @Override

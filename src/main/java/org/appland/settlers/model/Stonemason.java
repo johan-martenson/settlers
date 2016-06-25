@@ -67,7 +67,7 @@ public class Stonemason extends Worker {
                 Point homePoint = getHome().getPosition();
 
                 /* Look for stones within range */
-                for (Point p : map.getPointsWithinRadius(homePoint, 4)) {
+                for (Point p : map.getPointsWithinRadius(homePoint, 8)) {
 
                     /* Filter points without stones */
                     if (!map.isStoneAtPoint(p)) {

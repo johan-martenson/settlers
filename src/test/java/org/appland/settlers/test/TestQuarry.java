@@ -1201,4 +1201,6 @@ public class TestQuarry {
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
+
+    // Add test for stones in/out of range
 }

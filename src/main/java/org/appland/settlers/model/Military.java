@@ -366,7 +366,8 @@ public class Military extends Worker {
 
 	if (state == State.WALKING_TO_TARGET             ||
 	    state == State.WALKING_TO_TAKE_OVER_BUILDING ||
-	    state == State.WALKING_HOME_AFTER_FIGHT) {
+	    state == State.WALKING_HOME_AFTER_FIGHT      ||
+            state == State.DEPLOYED) {
             b.deployMilitary(this);
         }
     }
@@ -466,7 +467,7 @@ public class Military extends Worker {
 
     private void lost() {
 
-        /* Remove the military from the map (i.e. "die" */
+        /* Remove the military from the map (i.e. "die") */
         map.removeWorker(this);
 
         /* Remove this military from the list of the building's defenders */

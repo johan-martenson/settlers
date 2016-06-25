@@ -3,10 +3,16 @@ package org.appland.settlers.test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.PRIVATE;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
@@ -63,160 +69,127 @@ public class MilitaryCreationAndPromotionTest {
     }
 
     @Test
-    public void promoteSinglePrivate() throws Exception {
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
+    public void storageDoesNotPromote() throws Exception {
 
-        assertEquals(1, storage.getAmount(Material.GOLD));
-        assertEquals(1, storage.getAmount(Material.PRIVATE));
-        assertEquals(0, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        Utils.fastForward(110, storage);
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        assertEquals(0, storage.getAmount(Material.GOLD));
-        assertEquals(0, storage.getAmount(Material.PRIVATE));
-        assertEquals(1, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
-    }
+        Utils.adjustInventoryTo(headquarter0, COIN, 10, map);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10, map);
 
-    @Test
-    public void promoteGroupOfPrivates() throws Exception {
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
+        assertEquals(10, headquarter0.getAmount(Material.COIN));
+        assertEquals(10, headquarter0.getAmount(Material.GOLD));
+        assertEquals(10, headquarter0.getAmount(Material.PRIVATE));
+        assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
+        assertEquals(0, headquarter0.getAmount(Material.GENERAL));
 
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
+        Utils.fastForward(500, map);
 
-        assertEquals(10, storage.getAmount(Material.GOLD));
-        assertEquals(5, storage.getAmount(Material.PRIVATE));
-        assertEquals(0, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
-
-        Utils.fastForward(110, storage);
-
-        assertEquals(9, storage.getAmount(Material.GOLD));
-        assertEquals(4, storage.getAmount(Material.PRIVATE));
-        assertEquals(1, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
-    }
-
-    @Test
-    public void promotePrivateAndSergeant() throws Exception {
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-
-        storage.putCargo(new Cargo(Material.SERGEANT, null));
-        storage.putCargo(new Cargo(Material.SERGEANT, null));
-        storage.putCargo(new Cargo(Material.SERGEANT, null));
-
-        assertEquals(10, storage.getAmount(Material.GOLD));
-        assertEquals(5, storage.getAmount(Material.PRIVATE));
-        assertEquals(3, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
-
-        Utils.fastForward(110, storage);
-
-        assertEquals(8, storage.getAmount(Material.GOLD));
-        assertEquals(4, storage.getAmount(Material.PRIVATE));
-        assertEquals(3, storage.getAmount(Material.SERGEANT));
-        assertEquals(1, storage.getAmount(Material.GENERAL));
-
+        assertEquals(10, headquarter0.getAmount(Material.COIN));
+        assertEquals(10, headquarter0.getAmount(Material.GOLD));
+        assertEquals(10, headquarter0.getAmount(Material.PRIVATE));
+        assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
+        assertEquals(0, headquarter0.getAmount(Material.GENERAL));
     }
 
     @Test
     public void promoteWithoutMilitary() throws Exception {
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
 
-        Utils.fastForward(100, storage);
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        assertEquals(10, storage.getAmount(Material.GOLD));
-        assertEquals(0, storage.getAmount(Material.PRIVATE));
-        assertEquals(0, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing fortress */
+        Point point22 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Put gold in the fortress */
+        Utils.deliverCargo(fortress0, COIN, map);
+
+        /* Verify that no promotion happens when no military is present */
+        Utils.fastForward(200, map);
+
+        assertEquals(fortress0.getAmount(COIN), 1);
     }
 
     @Test
     public void promoteWithOnlyGenerals() throws Exception {
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
-        storage.putCargo(new Cargo(Material.GOLD, null));
 
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
-        storage.putCargo(new Cargo(Material.GENERAL, null));
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        Utils.fastForward(100, storage);
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        assertEquals(10, storage.getAmount(Material.GOLD));
-        assertEquals(0, storage.getAmount(Material.PRIVATE));
-        assertEquals(0, storage.getAmount(Material.SERGEANT));
-        assertEquals(10, storage.getAmount(Material.GENERAL));
+        /* Placing fortress */
+        Point point22 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Put gold in the fortress */
+        Utils.deliverCargo(fortress0, COIN, map);
+
+        /* Verify that no promotion happens when all occupants are generals */
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, fortress0, map);
+
+        Utils.fastForward(200, map);
+
+        assertEquals(military0.getRank(), Military.Rank.GENERAL_RANK);
+        assertEquals(military1.getRank(), Military.Rank.GENERAL_RANK);
+        assertEquals(fortress0.getAmount(COIN), 1);
     }
 
     @Test
     public void promoteWithoutGold() throws Exception {
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
-        storage.putCargo(new Cargo(Material.PRIVATE, null));
 
-        Utils.fastForward(100, storage);
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        assertEquals(0, storage.getAmount(Material.GOLD));
-        assertEquals(5, storage.getAmount(Material.PRIVATE));
-        assertEquals(0, storage.getAmount(Material.SERGEANT));
-        assertEquals(0, storage.getAmount(Material.GENERAL));
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
+        /* Placing fortress */
+        Point point22 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Verify that no promotion happens without gold */
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0, map);
+
+        Utils.fastForward(100, map);
+
+        assertEquals(military0.getRank(), Military.Rank.PRIVATE_RANK);
+        assertEquals(military1.getRank(), Military.Rank.PRIVATE_RANK);
     }
 }

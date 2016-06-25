@@ -4024,6 +4024,110 @@ public class TestAttack {
         assertTrue(map.getBuildingAtPoint(point3) instanceof GuardHouse);
     }
 
+    @Test
+    public void testBuildingIsNoLongerUnderAttackWhenDefenderWins() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Building headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = new Barracks(player0);
+        map.placeBuilding(barracks0, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(29, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+
+        /* Populate player 1's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1, map);
+
+        /* Order an attack */
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+
+        assertNotNull(attacker);
+        assertEquals(attacker.getPlayer(), player0);
+
+        /* Wait for a military to leave the attacked building to defend when 
+           the attacker reaches the flag
+        */
+        assertEquals(barracks1.getHostedMilitary(), 1);
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+        assertEquals(barracks1.getHostedMilitary(), 0);
+
+        /* Wait for the defender to go to the attacker */
+        assertTrue(barracks1.isUnderAttack());
+
+        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
+
+        assertNotNull(defender);
+        assertEquals(defender.getTarget(), attacker.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, attacker.getPosition());
+
+        assertEquals(defender.getPosition(), attacker.getPosition());
+
+        /* Wait for the defender's general to beat the attacker's private */
+        Utils.waitForWorkerToDisappear(attacker, map);
+
+        assertFalse(map.getWorkers().contains(attacker));
+
+        /* Wait for the defender to return to the fixed point */
+        assertEquals(defender.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, defender.getTarget());
+
+        /* Wait for the defender to go back to its building */
+        assertEquals(defender.getTarget(), barracks1.getPosition());
+        assertEquals(barracks1.getHostedMilitary(), 0);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, defender, barracks1.getPosition());
+
+        assertTrue(defender.isInsideBuilding());
+        assertEquals(barracks1.getHostedMilitary(), 1);
+        assertEquals(player1, barracks1.getPlayer());
+
+        /* Verify that the barracks is not under attack anymore */
+        assertFalse(barracks1.isUnderAttack());
+    }
+
 // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses

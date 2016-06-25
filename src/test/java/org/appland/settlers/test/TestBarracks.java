@@ -2426,6 +2426,111 @@ public class TestBarracks {
         }
     }
 
+    @Test
+    public void testMilitariesOfDifferentTypesArePromotedInParallel() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+        
+        Utils.constructHouse(barracks0, map);
+        
+        /* Deliver one coin to the barracks */
+        Cargo cargo = new Cargo(COIN, map);
+        
+        barracks0.putCargo(cargo);
+
+        /* Occupy the barracks with one private */
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0, map);
+
+        /* Wait for the promotion to happen */
+        Utils.fastForward(100, map);
+
+        assertTrue((military1.getRank() == GENERAL_RANK && military2.getRank() == SERGEANT_RANK) ||
+                   (military1.getRank() == SERGEANT_RANK  && military2.getRank() == GENERAL_RANK));
+    }
+
+    @Test
+    public void testUpgradedBarracksGetsPopulatedFully() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Add privates to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 20, map);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        Utils.constructHouse(barracks0, map);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the barracks to get occupied */
+        for (int i = 0; i < 1000; i++) {
+
+            if (barracks0.getHostedMilitary() == 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getHostedMilitary(), 2);
+
+        /* Upgrade the barracks */
+        barracks0.upgrade();
+
+        /* Add materials for the upgrade */
+        Cargo stoneCargo = new Cargo(STONE, map);
+
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+        barracks0.promiseDelivery(STONE);
+
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+        barracks0.putCargo(stoneCargo);
+
+        /* Wait for the upgrade to happen */
+        barracks0 = Utils.waitForBuildingToGetUpgraded(barracks0);
+
+        assertEquals(map.getBuildingAtPoint(barracks0.getPosition()), barracks0);
+        assertEquals(barracks0.getMaxHostedMilitary(), 3);
+
+        /* Verify that the building gets fully occupied */
+        for (int i = 0; i < 500; i++) {
+
+            if (barracks0.getHostedMilitary() == 3) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(barracks0.getHostedMilitary(), 3);
+    }
+
     /*
 
     add test for upgrade of non-occupied barracks!!
