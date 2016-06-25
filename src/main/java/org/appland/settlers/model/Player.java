@@ -155,7 +155,6 @@ public class Player {
 
     public void attack(Building buildingToAttack, int nrAttackers) {
         List<Building> eligibleBuildings = new LinkedList<>();
-        List<Point> meetups;
 
         /* Find all eligible buildings to attack from */
         for (Building b : getBuildings()) {
@@ -170,13 +169,14 @@ public class Player {
             eligibleBuildings.add(b);
         }
 
-        /* Construct list of targets */
-        meetups = Military.getListOfPossibleMeetingPoints(buildingToAttack);
-
         /* Retrieve militaries from the buildings */
         int allocated = 0;
 
+        Set<Point> reservedSpots = new HashSet<>();
+        Point center             = buildingToAttack.getFlag().getPosition();
+
         for (Building b : eligibleBuildings) {
+
             if (allocated == nrAttackers) {
                 break;
             }
@@ -185,6 +185,8 @@ public class Player {
                 continue;
             }
 
+            boolean foundSpot;
+            
             while (b.getNumberOfHostedMilitary() > 1) {
                 if (allocated == nrAttackers) {
                     break;
@@ -194,9 +196,38 @@ public class Player {
                 Military military = b.retrieveMilitary();
 
                 /* Make the military move to close to the building to attack */
-                military.attack(buildingToAttack, meetups.get(0));
+                foundSpot = false;
 
-                meetups.remove(0);
+                if (!reservedSpots.contains(center)) {
+                    military.attack(buildingToAttack, center);
+
+                    reservedSpots.add(center);
+                } else {
+                    for (int radius = 0; radius < 20; radius++) {
+                        for (Point point : map.getPointsWithinRadius(center, radius)) {
+
+                            if (reservedSpots.contains(point)) {
+                                continue;
+                            }
+
+                            if (map.findWayOffroad(b.getPosition(), point, null) == null) {
+                                continue;
+                            }
+
+                            military.attack(buildingToAttack, point);
+
+                            reservedSpots.add(point);
+
+                            foundSpot = true;
+
+                            break;
+                        }
+
+                        if (foundSpot) {
+                            break;
+                        }
+                    }
+                }
 
                 allocated++;
             }

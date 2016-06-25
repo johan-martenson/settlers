@@ -9,9 +9,11 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -2148,7 +2150,13 @@ public class TestAttack {
             waitingAttacker = attackers.get(0);
         }
 
+        if (waitingAttacker.isTraveling()) {
+            Utils.fastForwardUntilWorkerReachesPoint(map, waitingAttacker, waitingAttacker.getTarget());
+        }
+
         Point waitingPosition = waitingAttacker.getPosition();
+
+        assertFalse(waitingAttacker.isTraveling());
 
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, firstAttacker, defender);
@@ -4128,6 +4136,135 @@ public class TestAttack {
         assertFalse(barracks1.isUnderAttack());
     }
 
+    @Test
+    public void testCanAttackWithManyAttackers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(41, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place fortress for player 0 */
+        Point point2 = new Point(17, 5);
+        Fortress fortress0 = new Fortress(player0);
+        map.placeBuilding(fortress0, point2);
+
+        /* Remove all militaries in the headquarters */
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, GENERAL, 0, map);
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+
+        /* Place fortress for player 0 */
+        Point point3 = new Point(17, 13);
+        Fortress fortress1 = new Fortress(player0);
+        map.placeBuilding(fortress1, point3);
+
+        /* Place barracks for player 1 */
+        Point point4 = new Point(27, 9);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point4);
+
+        /* Finish construction */
+        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress1, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 1's barracks */
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks1, map);
+
+        /* Populate player 0's fortresses */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress1, map);
+
+        assertEquals(player0.getAvailableAttackersForBuilding(barracks1), 16);
+
+        /* Order an attack */
+        player0.attack(barracks1, 16);
+
+        /* Verify that 16 attackers leave */
+        Set<Worker> militariesOutside = new HashSet<>();
+        for (int i = 0; i < 1000; i++) {
+
+            for (Worker w : map.getWorkers()) {
+                if (!w.getPlayer().equals(player0)) {
+                    continue;
+                }
+
+                if (! (w instanceof Military)) {
+                    continue;
+                }
+
+                if (w.isInsideBuilding()) {
+                    continue;
+                }
+
+                militariesOutside.add(w);
+            }
+
+            if (militariesOutside.size() == 16) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(militariesOutside.size(), 16);
+
+        for (Worker w : map.getWorkers()) {
+            if (!w.getPlayer().equals(player0)) {
+                continue;
+            }
+
+            if (! (w instanceof Military)) {
+                continue;
+            }
+
+            if (w.isInsideBuilding()) {
+                continue;
+            }
+
+            assertTrue(w.getTarget().distance(barracks1.getPosition()) < 10 );
+        }
+    }
 // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses

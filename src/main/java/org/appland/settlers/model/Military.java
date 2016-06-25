@@ -511,18 +511,6 @@ public class Military extends Worker {
         }
     }
 
-    static List<Point> getListOfPossibleMeetingPoints(Building buildingToAttack) {
-        List<Point> meetupPoints = new ArrayList<>();
-
-        meetupPoints.add(buildingToAttack.getFlag().getPosition());
-
-        meetupPoints.addAll(Arrays.asList(buildingToAttack.getFlag().getPosition().getAdjacentPoints()));
-
-        meetupPoints.remove(buildingToAttack.getPosition());
-
-        return meetupPoints;
-    }
-
     void defendBuilding(Building building) {
 
         defendedBuilding = building;
