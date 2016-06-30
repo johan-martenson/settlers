@@ -389,4 +389,26 @@ public class Player {
         /* Return null if no player owns the point */
         return null;
     }
+
+    Storage getClosestStorageOffroad(Point position) {
+        Building storage = null;
+        Double distance = Double.MAX_VALUE;
+
+        for (Building building : buildings) {
+
+            /* Filter non-storage buildings */
+            if (! (building instanceof Storage)) {
+                continue;
+            }
+
+            double tmpDistance = position.distance(building.getPosition());
+
+            if (tmpDistance < distance) {
+                distance = tmpDistance;
+                storage = building;
+            }
+        }
+
+        return (Storage)storage;
+    }
 }

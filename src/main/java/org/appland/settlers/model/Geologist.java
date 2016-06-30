@@ -114,8 +114,15 @@ public class Geologist extends Worker {
             countdown.countFrom(TIME_TO_INVESTIGATE);
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
-            
-            setTarget(map.getClosestStorage(flagPoint).getPosition());
+   
+            /* Go back via the flag if it still exists */
+            if (map.isFlagAtPoint(flagPoint)) {
+                setTarget(map.getClosestStorage(flagPoint).getPosition());
+
+            /* Go back offroad if the flag has been removed */
+            } else {
+                setOffroadTarget(getPlayer().getClosestStorageOffroad(getPosition()).getPosition());
+            }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
             
