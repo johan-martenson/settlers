@@ -3,9 +3,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
@@ -419,7 +416,7 @@ public class Military extends Worker {
         return storage;
     }
 
-    void attack(Building building, Point meetingPoint) {
+    void attack(Building building, Point meetingPoint) throws Exception {
 
         /* Save the building to attack */
         buildingToAttack = building;
@@ -511,7 +508,7 @@ public class Military extends Worker {
         }
     }
 
-    void defendBuilding(Building building) {
+    void defendBuilding(Building building) throws Exception {
 
         defendedBuilding = building;
 
@@ -585,7 +582,7 @@ public class Military extends Worker {
         }
     }
 
-    private void prepareForFight(Military m) {
+    private void prepareForFight(Military m) throws Exception {
 
         /* Remember the opponent */
         opponent = m;

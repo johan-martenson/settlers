@@ -602,7 +602,7 @@ public class Storage extends Building implements Actor {
         return ready();
     }
 
-    private boolean isClosestStorage(Building b) {
+    private boolean isClosestStorage(Building b) throws InvalidRouteException {
         Storage stg = getMap().getClosestStorage(b.getPosition());
                     
         return equals(stg);

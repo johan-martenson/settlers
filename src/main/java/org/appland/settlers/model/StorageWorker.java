@@ -129,15 +129,11 @@ public class StorageWorker extends Worker {
                 Cargo cargo = tryToStartDelivery();
                     
                 if (cargo != null) {
-                    try {
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        setTarget(getHome().getFlag().getPosition());
+                    setTarget(getHome().getFlag().getPosition());
 
-                        state = State.DELIVERING_CARGO_TO_FLAG;
-                        } catch (InvalidRouteException ex) {
-                            Logger.getLogger(StorageWorker.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    state = State.DELIVERING_CARGO_TO_FLAG;
                 }
             } else {
                 countdown.step();

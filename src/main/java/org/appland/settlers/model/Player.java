@@ -153,7 +153,7 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building buildingToAttack, int nrAttackers) {
+    public void attack(Building buildingToAttack, int nrAttackers) throws Exception {
         List<Building> eligibleBuildings = new LinkedList<>();
 
         /* Find all eligible buildings to attack from */
@@ -262,7 +262,7 @@ public class Player {
         return color;
     }
 
-    Building getClosestStorage(Point position, Building avoid) {
+    Building getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
         Storage storage = null;
         int distance = Integer.MAX_VALUE;
 
@@ -280,18 +280,20 @@ public class Player {
                 break;
             }
 
-            try {
-                List<Point> path = map.findWayWithExistingRoads(position, b.getFlag().getPosition());
+            if (position.equals(b.getFlag().getPosition())) {
+                return b;
+            }
 
-                if (path == null) {
-                    continue;
-                }
+            List<Point> path = map.findWayWithExistingRoads(position, b.getFlag().getPosition());
 
-                if (path.size() < distance) {
-                    distance = path.size();
-                    storage = (Storage) b;
-                }
-            } catch (InvalidRouteException ex) {}
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() < distance) {
+                distance = path.size();
+                storage = (Storage) b;
+            }
         }
 
         return storage;

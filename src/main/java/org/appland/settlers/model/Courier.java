@@ -90,7 +90,7 @@ public class Courier extends Worker {
         }
     }
 
-    private void planToPickUpCargo(Cargo cargo, EndPoint flag) throws InvalidRouteException {
+    private void planToPickUpCargo(Cargo cargo, EndPoint flag) throws Exception {
         cargo.promiseDelivery();
 
         intendedCargo = cargo;

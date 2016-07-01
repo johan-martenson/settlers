@@ -215,7 +215,7 @@ public abstract class Worker implements Actor, Piece {
         return w.speed();
     }
 
-    public void setTargetBuilding(Building b) throws InvalidRouteException {
+    public void setTargetBuilding(Building b) throws Exception {
         buildingToEnter = b;
         setTarget(b.getPosition());
     }
@@ -276,11 +276,11 @@ public abstract class Worker implements Actor, Piece {
         return carriedCargo;
     }
 
-    protected void setOffroadTarget(Point p) {
+    protected void setOffroadTarget(Point p) throws Exception {
         setOffroadTarget(p, null);
     }
     
-    protected void setOffroadTarget(Point p, Point via) {
+    protected void setOffroadTarget(Point p, Point via) throws Exception {
         boolean wasInside = false;
 
         log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {p, via});
@@ -292,13 +292,9 @@ public abstract class Worker implements Actor, Piece {
         }
 
         if (position.equals(p)) {
-            try {
-                state = IDLE_OUTSIDE;
+            state = IDLE_OUTSIDE;
                 
-                handleArrival();
-            } catch (Exception ex) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            handleArrival();
         } else {
             if (wasInside && !target.equals(home.getFlag().getPosition())) {                
                 if (via != null) {
@@ -323,7 +319,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
     
-    protected void setTarget(Point p) throws InvalidRouteException {
+    protected void setTarget(Point p) throws Exception {
         if (state == IDLE_INSIDE) {
             if (!p.equals(home.getFlag().getPosition())) {        
                 setTarget(p, home.getFlag().getPosition());
@@ -335,19 +331,15 @@ public abstract class Worker implements Actor, Piece {
         }
     }
     
-    protected void setTarget(Point p, Point via) throws InvalidRouteException {
+    protected void setTarget(Point p, Point via) throws InvalidRouteException, Exception {
         log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
 
         target = p;
 
         if (position.equals(p)) {
-            try {
-                state = IDLE_OUTSIDE;
+            state = IDLE_OUTSIDE;
                 
-                handleArrival();
-            } catch (Exception ex) {
-                Logger.getLogger(Worker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            handleArrival();
         } else {
             Point start = getPosition();
             
@@ -395,11 +387,11 @@ public abstract class Worker implements Actor, Piece {
         return Collections.unmodifiableList(path);
     }
 
-    protected void returnHomeOffroad() {
+    protected void returnHomeOffroad() throws Exception {
         setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
     }
 
-    protected void returnHome() throws InvalidRouteException {
+    protected void returnHome() throws Exception {
         if (getPosition().equals(home.getFlag().getPosition())) {
             setTarget(home.getPosition());
         } else {
@@ -425,7 +417,7 @@ public abstract class Worker implements Actor, Piece {
 
     protected void onWalkingAndAtFixedPoint() throws Exception {}
 
-    protected void walkHalfWayOffroadTo(Point point) {
+    protected void walkHalfWayOffroadTo(Point point) throws Exception {
 
         /* Walk half way to the given target */
         setOffroadTarget(point);

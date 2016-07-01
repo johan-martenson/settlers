@@ -905,11 +905,11 @@ public class GameMap {
         return flag;
     }
 
-    public Storage getClosestStorage(Point p) {
+    public Storage getClosestStorage(Point p) throws InvalidRouteException {
         return getClosestStorage(p, null);
     }
     
-    public Storage getClosestStorage(Point p, Building avoid) {
+    public Storage getClosestStorage(Point p, Building avoid) throws InvalidRouteException {
         Storage stg = null;
         int distance = Integer.MAX_VALUE;
         
@@ -919,23 +919,21 @@ public class GameMap {
             }
             
             if (b instanceof Storage) {
-                try {
-                    if (b.getFlag().getPosition().equals(p)) {
-                        stg = (Storage)b;
-                        break;
-                    }
-                    
-                    List<Point> path = findWayWithExistingRoads(p, b.getFlag().getPosition());
-                    
-                    if (path == null) {
-                        continue;
-                    }
-                    
-                    if (path.size() < distance) {
-                        distance = path.size();
-                        stg = (Storage) b;
-                    }
-                } catch (InvalidRouteException ex) {}
+                if (b.getFlag().getPosition().equals(p)) {
+                    stg = (Storage)b;
+                    break;
+                }
+
+                List<Point> path = findWayWithExistingRoads(p, b.getFlag().getPosition());
+
+                if (path == null) {
+                    continue;
+                }
+
+                if (path.size() < distance) {
+                    distance = path.size();
+                    stg = (Storage) b;
+                }
             }
         }
 

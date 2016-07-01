@@ -131,31 +131,23 @@ public class Cargo implements Piece {
         }
     }
 
-    void resumeTransport() {
+    void resumeTransport() throws Exception {
         Storage stg = map.getClosestStorage(getPosition());
         
         if (stg != null) {
-            try {
-                setTarget(stg);
-            } catch (Exception ex) {
-                Logger.getLogger(Cargo.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            setTarget(stg);
         }
     }
 
-    void returnToStorage() {
+    void returnToStorage() throws Exception {
         Storage stg = map.getClosestStorage(getPosition());
 
         if (stg != null) {
-            try {
-                setTarget(stg);
-            } catch (Exception ex) {
-                Logger.getLogger(Cargo.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            setTarget(stg);
         }
     }
 
-    void rerouteIfNeeded() throws InvalidRouteException {
+    void rerouteIfNeeded() throws Exception {
 
         /* Handle the case where the targeted building cannot receive the cargo */
         if (getTarget() == null) {

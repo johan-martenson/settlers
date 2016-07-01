@@ -140,7 +140,7 @@ public class Building implements Actor, EndPoint, Piece {
         return mb.maxCoins();
     }
 
-    protected void setMap(GameMap m) {
+    protected void setMap(GameMap m) throws Exception {
         map = m;
     }
     

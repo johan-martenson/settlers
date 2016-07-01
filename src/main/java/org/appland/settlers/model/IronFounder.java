@@ -68,20 +68,16 @@ public class IronFounder extends Worker {
         } else if (state == MELTING_IRON) {
             if (getHome().getAmount(COAL) > 0 && getHome().getAmount(IRON) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    try {
-                        Cargo cargo = new Cargo(IRON_BAR, map);
+                    Cargo cargo = new Cargo(IRON_BAR, map);
 
-                        setCargo(cargo);
+                    setCargo(cargo);
 
-                        getHome().consumeOne(COAL);
-                        getHome().consumeOne(IRON);
+                    getHome().consumeOne(COAL);
+                    getHome().consumeOne(IRON);
 
-                        state = GOING_TO_FLAG_WITH_CARGO;
+                    state = GOING_TO_FLAG_WITH_CARGO;
 
-                        setTarget(getHome().getFlag().getPosition());
-                    } catch (InvalidRouteException ex) {
-                        Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    setTarget(getHome().getFlag().getPosition());
                 } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
@@ -92,24 +88,21 @@ public class IronFounder extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            try {
-                Flag f = map.getFlagAtPoint(getPosition());
-                
-                Cargo cargo = getCargo();
-                
-                cargo.setPosition(getPosition());
-                cargo.transportToStorage();
-                
-                f.putCargo(getCargo());
-                
-                setCargo(null);
-                
-                state = GOING_BACK_TO_HOUSE;
-                
-                returnHome();
-            } catch (Exception ex) {
-                Logger.getLogger(SawmillWorker.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+            Flag f = map.getFlagAtPoint(getPosition());
+
+            Cargo cargo = getCargo();
+
+            cargo.setPosition(getPosition());
+            cargo.transportToStorage();
+
+            f.putCargo(getCargo());
+
+            setCargo(null);
+
+            state = GOING_BACK_TO_HOUSE;
+
+            returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
             
