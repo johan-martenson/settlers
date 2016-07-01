@@ -5,9 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
 @Walker(speed = 10)
@@ -19,45 +16,55 @@ public class Forester extends Worker {
     private final Countdown countdown;
     private State state;
 
+    private boolean spotIsClearForTree(Point point) {
+        if (map.isBuildingAtPoint(point)) {
+            return false;
+        }
+
+        if (map.isFlagAtPoint(point)) {
+            return false;
+        }
+
+        if (map.isRoadAtPoint(point)) {
+            return false;
+        }
+
+        if (map.isTreeAtPoint(point)) {
+            return false;
+        }
+
+        if (map.isStoneAtPoint(point)) {
+            return false;
+        }
+
+        if (map.getTerrain().isOnMountain(point)) {
+            return false;
+        }
+
+        if (map.getTerrain().isInWater(point)) {
+            return false;
+        }
+
+        if (map.findWayOffroad(
+                getHome().getFlag().getPosition(), 
+                point,
+                null) == null) {
+            return false;
+        }
+
+        return true;
+    }
     private Point getTreeSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
         
         for (Point p : adjacentPoints) {
-            if (map.isBuildingAtPoint(p)) {
+
+            /* Filter points where trees cannot be placed */
+            if (!spotIsClearForTree(p)) {
                 continue;
             }
 
-            if (map.isFlagAtPoint(p)) {
-                continue;
-            }
-            
-            if (map.isRoadAtPoint(p)) {
-                continue;
-            }
-
-            if (map.isTreeAtPoint(p)) {
-                continue;
-            }
-            
-            if (map.isStoneAtPoint(p)) {
-                continue;
-            }
-
-            if (map.getTerrain().isOnMountain(p)) {
-                continue;
-            }
-
-            if (map.getTerrain().isInWater(p)) {
-                continue;
-            }
-
-            if (map.findWayOffroad(
-                    getHome().getFlag().getPosition(), 
-                    p,
-                    null) == null) {
-                continue;
-            }
-
+            /* Return the first point that passed the filter */
             return p;
         }
 
@@ -114,7 +121,11 @@ public class Forester extends Worker {
             }
         } else if (state == State.PLANTING) {
             if (countdown.reachedZero()) {
-                map.placeTree(getPosition());
+
+                /* Place a tree if the point is still open */
+                if (spotIsClearForTree(getPosition())) {
+                    map.placeTree(getPosition());
+                }
 
                 state = State.GOING_BACK_TO_HOUSE;
 

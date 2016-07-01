@@ -92,19 +92,19 @@ public class Terrain {
         return isSurroundedBy(p, MOUNTAIN);
     }
     
-    public boolean isInWater(Point p) throws Exception {
+    public boolean isInWater(Point p) {
         return isSurroundedBy(p, WATER);
     }
 
-    boolean isInSwamp(Point p) throws Exception {
+    boolean isInSwamp(Point p) {
         return isSurroundedBy(p, SWAMP);
     }
 
-    protected boolean isOnGrass(Point p) throws Exception {
+    protected boolean isOnGrass(Point p) {
         return isSurroundedBy(p, GRASS);
     }
 
-    private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) throws Exception {
+    private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) {
         List<Tile> tiles = getSurroundingTiles(point);
 
         for (Tile t : tiles) {

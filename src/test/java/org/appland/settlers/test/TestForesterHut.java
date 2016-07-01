@@ -1149,4 +1149,83 @@ public class TestForesterHut {
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
+
+    @Test
+    public void testForesterReturnsHomeWithoutPlantingTreeIfAFlagIsPlacedThereWhilePlanting() throws Exception {
+
+        /* Create a game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place the forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Construct the forester hut */
+        constructHouse(foresterHut, map);
+
+        /* Manually place forester */
+        Forester forester = new Forester(player0, map);
+        Utils.occupyBuilding(forester, foresterHut, map);
+
+        /* Wait for the forester to pick a spot to plant a tree where a flag 
+           can be placed
+        */
+        for (int i = 0; i < 10000; i++) {
+
+            Point spot = forester.getTarget();
+
+            if (spot != null && map.isAvailableFlagPoint(player0, spot)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        Point point = forester.getTarget();
+
+        assertTrue(map.isAvailableFlagPoint(player0, forester.getTarget()));
+        assertTrue(forester.isTraveling());
+
+        /* Wait for the forester to reach the spot for the tree */
+        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+
+        assertTrue(forester.isArrived());
+        assertTrue(forester.isAt(point));
+        assertTrue(forester.isPlanting());
+        assertEquals(forester.getPosition(), point);
+
+        /* Put a flag on the spot where the forester is planting the tree */
+        map.placeFlag(player0, forester.getPosition());
+
+        /* Wait until the forester stops planting and verify that it goes back
+           to the forester hut without planting a tree
+        */
+        for (int i = 0; i < 200; i++) {
+            if (!forester.isPlanting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(forester.isPlanting());
+        assertFalse(map.isTreeAtPoint(point));
+
+        /* Verify that the forester goes back home */
+        assertEquals(forester.getTarget(), foresterHut.getPosition());
+        assertTrue(forester.isTraveling());
+        
+        Utils.fastForwardUntilWorkersReachTarget(map, forester);
+
+        assertTrue(forester.isArrived());        
+        assertTrue(forester.isInsideBuilding());
+        assertFalse(map.isTreeAtPoint(point));
+    }
 }
