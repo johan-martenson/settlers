@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

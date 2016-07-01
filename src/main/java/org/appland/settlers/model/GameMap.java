@@ -580,7 +580,7 @@ public class GameMap {
 
         /* Remove the flags */
         for (Flag f : flagsToRemove) {
-            removeFlag(f);
+            removeFlagWithoutSideEffects(f);
         }
 
         /* Remove any roads now outside of the borders */
@@ -1591,9 +1591,9 @@ public class GameMap {
         MapPoint mp = pointToGameObject.get(flag.getPosition());
         
         /* Destroy the house if the flag is connected to a house */
-        if (mpUpLeft != null && mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
+        if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
             Building attachedBuilding = mpUpLeft.getBuilding();
-            
+
             attachedBuilding.tearDown();
         }
         
@@ -1604,14 +1604,20 @@ public class GameMap {
                 roadsToRemove.add(r);
             }
         }
-        
+
         for (Road r : roadsToRemove) {
             removeRoad(r);
         }
-        
+
+        removeFlagWithoutSideEffects(flag);
+    }
+
+    private void removeFlagWithoutSideEffects(Flag flag) {
+        MapPoint mp = pointToGameObject.get(flag.getPosition());
+
         /* Remove the flag */
         mp.removeFlag();
-        
+
         flags.remove(flag);
     }
 
