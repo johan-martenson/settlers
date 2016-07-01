@@ -132,18 +132,7 @@ public class Fisherman extends Worker {
         } else if (state == IN_HOUSE_WITH_FISH) {
             state = GOING_TO_FLAG;
 
-            try {
-                setTarget(getHome().getFlag().getPosition());
-            } catch (Exception e) {
-                System.out.println("Home on map: " + map.getBuildings().contains(getHome()));
-                System.out.println("Home at " + getHome());
-                System.out.println("Home on fire? " + getHome().burningDown());
-                System.out.println("Home ready? " + getHome().ready());
-                System.out.println("Flag exists? " + map.getFlags().contains(getHome().getFlag()));
-                System.out.println("Can go between flags? " + map.findWayWithExistingRoads(getHome().getPosition(), getHome().getFlag().getPosition()));
-                System.out.println(" error " + e);
-                System.exit(1);
-            }
+            setTarget(getHome().getFlag().getPosition());
         }
     }
 
