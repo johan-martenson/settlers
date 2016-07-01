@@ -114,19 +114,18 @@ public class Geologist extends Worker {
             countdown.countFrom(TIME_TO_INVESTIGATE);
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
-   
-            /* Go back via the flag if it still exists */
-            if (map.isFlagAtPoint(flagPoint)) {
-                if (map.getClosestStorage(flagPoint) == null) {
-                    System.out.println("My player: " + getPlayer());
-                    System.out.println("Flag player: " + map.getFlagAtPoint(flagPoint).getPlayer());
-                    System.out.println("Way home: " + map.findWayWithExistingRoads(flagPoint, map.getClosestStorage(flagPoint).getPosition()));
-                }
-                setTarget(map.getClosestStorage(flagPoint).getPosition());
+
+            /* Try to go to the storage on roads */
+            Building storage = map.getClosestStorage(flagPoint);
+
+            if (storage != null) {
+                setTarget(storage.getPosition());
 
             /* Go back offroad if the flag has been removed */
             } else {
-                setOffroadTarget(getPlayer().getClosestStorageOffroad(getPosition()).getPosition());
+                storage = getPlayer().getClosestStorageOffroad(flagPoint);
+
+                setOffroadTarget(storage.getPosition());
             }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
