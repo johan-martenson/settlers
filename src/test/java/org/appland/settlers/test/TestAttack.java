@@ -4265,6 +4265,91 @@ public class TestAttack {
             assertTrue(w.getTarget().distance(barracks1.getPosition()) < 10 );
         }
     }
+
+    @Test
+    public void testFlagsAreRemovedCompletelyWhenTerritoryIsLost() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Building headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = new Barracks(player0);
+        map.placeBuilding(barracks0, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(29, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Place additional flag close to player 1's barracks */
+        Point point4 = new Point(29, 9);
+        Flag flag0 = map.placeFlag(player1, point4);
+
+        assertTrue(map.isFlagAtPoint(point4));
+        assertEquals(map.getFlagAtPoint(point4), flag0);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks1, map);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0, map);
+
+        /* Order an attack */
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+
+        /* Wait for the attacker to take over the building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertTrue(attacker.isInsideBuilding());
+        assertEquals(barracks1.getPlayer(), player0);
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
+
+        /* Verify that the flag is now outside of player 1's border and
+           completely gone
+        */
+        assertFalse(player1.isWithinBorder(point4));
+        assertFalse(map.getFlags().contains(flag0));
+        assertFalse(map.isFlagAtPoint(point4));
+    }
 // Test:
     //  - Test all points that can be attacked are within the FOV (not the case today?)
     //  - Winning private meets new private and loses

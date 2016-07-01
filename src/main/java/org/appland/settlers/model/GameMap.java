@@ -579,7 +579,9 @@ public class GameMap {
         }
 
         /* Remove the flags */
-        flags.removeAll(flagsToRemove);
+        for (Flag f : flagsToRemove) {
+            removeFlag(f);
+        }
 
         /* Remove any roads now outside of the borders */
         Set<Road> roadsToRemove = new HashSet<>();
