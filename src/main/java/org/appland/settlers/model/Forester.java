@@ -114,13 +114,10 @@ public class Forester extends Worker {
             }
         } else if (state == State.PLANTING) {
             if (countdown.reachedZero()) {
-                try {
-                    map.placeTree(getPosition());
-                } catch (Exception ex) {
-                    Logger.getLogger(Forester.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                map.placeTree(getPosition());
+
                 state = State.GOING_BACK_TO_HOUSE;
-                
+
                 returnHomeOffroad();
             } else {
                 countdown.step();

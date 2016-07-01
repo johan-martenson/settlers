@@ -5,6 +5,8 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Random;
+
 /**
  *
  * @author johan
@@ -12,6 +14,7 @@ package org.appland.settlers.model;
 public class Projectile implements Actor {
     private final static double FAIL_RATE = 0.25;
     private final static int    SPEED     = 5;
+    private final static Random RANDOM    = new Random(1);
 
     private final Building  target;
     private final Point     source;
@@ -52,7 +55,7 @@ public class Projectile implements Actor {
         if (countdown.reachedZero()) {
 
             /* Determine if the projectile hit the target - the hitrate is 75% */
-            if (Math.random() > FAIL_RATE) {
+            if (RANDOM.nextDouble() > FAIL_RATE) {
                 target.hitByCatapult();
             }
 

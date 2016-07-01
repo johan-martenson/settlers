@@ -1434,8 +1434,14 @@ public class GameMap {
     public Tree placeTree(Point position) throws Exception {
         MapPoint mp = pointToGameObject.get(position);
     
-        if (mp.isFlag() || mp.isRoad() || mp.isBuilding() || mp.isStone()) {
-            throw new Exception("Can't place tree on " + position);
+        if (mp.isFlag()) {
+            throw new Exception("Can't place tree on " + position + " on existing flag");
+        } else if (mp.isRoad()) {
+            throw new Exception("Can't place tree on " + position + " on existing road");
+        } else if (mp.isBuilding()) {
+            throw new Exception("Can't place tree on " + position + " on existing building");
+        } else if (mp.isStone()) {
+            throw new Exception("Can't place tree on " + position + " on existing stone");
         }
 
         if (getTerrain().isOnMountain(position)) {

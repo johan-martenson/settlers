@@ -117,6 +117,11 @@ public class Geologist extends Worker {
    
             /* Go back via the flag if it still exists */
             if (map.isFlagAtPoint(flagPoint)) {
+                if (map.getClosestStorage(flagPoint) == null) {
+                    System.out.println("My player: " + getPlayer());
+                    System.out.println("Flag player: " + map.getFlagAtPoint(flagPoint).getPlayer());
+                    System.out.println("Way home: " + map.findWayWithExistingRoads(flagPoint, map.getClosestStorage(flagPoint).getPosition()));
+                }
                 setTarget(map.getClosestStorage(flagPoint).getPosition());
 
             /* Go back offroad if the flag has been removed */
