@@ -49,6 +49,7 @@ import static org.junit.Assert.assertNull;
 
 import static org.junit.Assert.assertTrue;
 import static java.lang.Math.abs;
+import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 
 public class Utils {
 
@@ -272,6 +273,12 @@ public class Utils {
     public static void surroundPointWithMountain(Point point0, GameMap map) throws Exception {
         for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
             t.setVegetationType(MOUNTAIN);
+        }
+    }
+
+    public static void surroundPointWithSwamp(Point point0, GameMap map) throws Exception {
+        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
+            t.setVegetationType(SWAMP);
         }
     }
 

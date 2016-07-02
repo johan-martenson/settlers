@@ -1674,6 +1674,79 @@ public class TestPlacement {
     }
 
     @Test
+    public void testPlaceHouseOnEachAvailableSpotWithMountainInMap() throws Exception {
+
+        /* Starting new game */
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Put a two parallel mountains with grass between on the map */
+        Point point23 = new Point(8, 6);
+        Utils.surroundPointWithSwamp(point23, map);
+
+        Point point24 = new Point(14, 6);
+        Utils.surroundPointWithSwamp(point24, map);
+
+        Point point25 = new Point(9, 7);
+        Utils.surroundPointWithSwamp(point25, map);
+
+        Point point26 = new Point(15, 7);
+        Utils.surroundPointWithSwamp(point26, map);
+
+        Point point27 = new Point(10, 8);
+        Utils.surroundPointWithSwamp(point27, map);
+
+        Point point28 = new Point(16, 8);
+        Utils.surroundPointWithSwamp(point28, map);
+
+        /* Place the last mountain as a hat */
+        Point point29 = new Point(15, 9);
+        Utils.surroundPointWithSwamp(point29, map);
+
+        /* Placing headquarter for player0 */
+        Point point46 = new Point(26, 6);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
+
+        /* Verify that it's possible to build on all available house sites */
+        for (Entry<Point, Size> pair : map.getAvailableHousePoints(player0).entrySet()) {
+            Building building = null;
+
+            /* Filter points that are not available */
+            if (pair.getValue() == null) {
+                continue;
+            }
+
+            /* Build a house with the right size */
+            if (pair.getValue() == SMALL) {
+                building = map.placeBuilding(new Woodcutter(player0), pair.getKey());
+            } else if (pair.getValue() == MEDIUM) {
+                building = map.placeBuilding(new Sawmill(player0), pair.getKey());
+            } else if (pair.getValue() == LARGE) {
+                building = map.placeBuilding(new Farm(player0), pair.getKey());
+            }
+
+            assertNotNull(building);
+            assertTrue(map.isBuildingAtPoint(pair.getKey()));
+            assertEquals(map.getBuildingAtPoint(pair.getKey()), building);
+
+            /* Tear down the house */
+            map.removeFlag(building.getFlag());
+
+            Utils.waitForBuildingToDisappear(map, building);
+
+            assertFalse(map.isBuildingAtPoint(pair.getKey()));
+        }
+    }
+
+    @Test
     public void testAvailableMineOnMountain() throws Exception {
 
         /* Create players */

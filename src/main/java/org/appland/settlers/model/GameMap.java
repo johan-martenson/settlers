@@ -90,7 +90,7 @@ public class GameMap {
     private boolean pointIsOnRoad(Point point) {
         return getRoadAtPoint(point) != null;
     }
-    
+
     public Road getRoadAtPoint(Point point) {
         MapPoint p = pointToGameObject.get(point);
         
@@ -99,7 +99,7 @@ public class GameMap {
         for (Road r : roadsFromPoint) {
             if (!r.getFlags()[0].getPosition().equals(point) &&
                 !r.getFlags()[1].getPosition().equals(point)) {
-                
+
                 return r;
             }
         }
@@ -335,6 +335,8 @@ public class GameMap {
             for (Building b : house.getPlayer().getBuildings()) {
                 if (b instanceof Headquarter) {
                     headquarterPlaced = true;
+
+                    break;
                 }
             }
 
@@ -353,7 +355,7 @@ public class GameMap {
                 throw new Exception("Can't place building on " + p + " within another player's border");
             }
         }
-        
+
         if (!isVegetationCorrect(house, p)) {
             throw new Exception("Can't place building on " + p + ".");
         }
@@ -432,7 +434,10 @@ public class GameMap {
                 continue;
             }
 
-            /* Store the claim for each military building */
+            /* Store the claim for each military building
+               This iterates over a collection and the order may be
+               non-deterministic
+            */
             for (Point p : b.getDefendedLand()) {
                 if (!claims.containsKey(p)) {
                     claims.put(p, b);
@@ -449,6 +454,7 @@ public class GameMap {
         Set<Point> pointsInLand = new HashSet<>();
         Set<Point> borders = new LinkedHashSet<>();
 
+        /* This iterates over a set and the order may be non-deterministic */
         for (Entry<Point, Building> pair : claims.entrySet()) {
 
             Point    root     = pair.getKey();
@@ -539,6 +545,7 @@ public class GameMap {
         /* Update lands in each player */
         List<Player> playersToUpdate = new ArrayList<>(players);
 
+        /* This iterates over a set and the order may be non-deterministic */
         for (Entry<Player, List<Land>> pair : updatedLands.entrySet()) {
             pair.getKey().setLands(pair.getValue());
 
@@ -963,6 +970,8 @@ public class GameMap {
         List<Point> points = new LinkedList<>();
 
         for (Land land : player.getLands()) {
+
+            /* This iterates over a set and the order may be non-deterministic */
             for (Point p : land.getPointsInLand()) {
                 if (!isAvailableFlagPoint(player, p)) {
                     continue;
@@ -1014,6 +1023,8 @@ public class GameMap {
         for (Point d : p.getDiagonalPoints()) {
             if (player.isWithinBorder(d) && isFlagAtPoint(d)) {
                 diagonalFlagExists = true;
+
+                break;
             }
         }
 
@@ -1213,7 +1224,19 @@ public class GameMap {
             switch (size) {
             case SMALL:
             case MEDIUM:
-                return terrain.isOnGrass(site);
+                if (terrain.isOnMountain(site)) {
+                    return false;
+                }
+
+                if (terrain.isNextToWater(site)) {
+                    return false;
+                }
+
+                if (terrain.isOnEdgeOf(site, MOUNTAIN)) {
+                    return false;
+                }
+
+                return true;
             case LARGE:
                 boolean wideAreaClear = true;
 
@@ -1829,25 +1852,19 @@ public class GameMap {
             return result;
         }
 
-        boolean diagonalHouse = false;
-
         for (Point d : point.getDiagonalPointsAndSides()) {
             if (!player.isWithinBorder(d)) {
                 continue;
             }
 
             if (isBuildingAtPoint(d)) {
-                diagonalHouse = true;
+                return result;
             }
 
             /* It's not possible to build a house next to a stone */
             if (isStoneAtPoint(d)) {
                 return result;
             }
-        }
-
-        if (diagonalHouse) {
-            return result;
         }
 
         if (player.isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
@@ -1985,7 +2002,10 @@ public class GameMap {
 
         List<Point> availableMinePoints = new LinkedList<>();
 
-        /* Find available points for mine in the owned land */
+        /* Find available points for mine in the owned land
+           This iterates over a collection and the order may be
+           non-deterministic
+        */
         for (Land land : p.getLands()) {
             for (Point point : land.getPointsInLand()) {
 
