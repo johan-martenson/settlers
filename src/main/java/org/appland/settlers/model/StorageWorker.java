@@ -8,11 +8,8 @@ package org.appland.settlers.model;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
@@ -72,7 +69,12 @@ public class StorageWorker extends Worker {
     private Cargo tryToStartDelivery() throws Exception {
 
         for (Material material : getPlayer().getTransportPriorityList()) {
-            for (Building b : map.getBuildingsWithinReach(ownStorage.getFlag())) {
+
+            /* Iterate over all buildings, instead of just the ones that can be
+               reached from the headquarter. This will perform the quick tests
+               first and only perform the expensive test if the quick ones pass
+            */
+            for (Building b : getPlayer().getBuildings()) {
 
                 /* Don't deliver to itself */
                 if (ownStorage.equals(b)) {
@@ -90,6 +92,11 @@ public class StorageWorker extends Worker {
                 }
 
                 if (b.needsMaterial(material) && ownStorage.isInStock(material)) {
+
+                    /* Filter out buildings that cannot be reached from the storage */
+                    if (map.findWayWithExistingRoads(getHome().getPosition(), b.getPosition()) == null) {
+                        continue;
+                    }
 
                     /* Check that the building type is within its assigned quota */
                     if (isWithinQuota(b, material) ||

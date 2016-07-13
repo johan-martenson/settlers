@@ -45,6 +45,7 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean        evacuated;
     private boolean        productionEnabled;
     private boolean        upgrading;
+    private Material[]     requiredGoodsForProduction;
 
     private final List<Military>         attackers;
     private final List<Military>         waitingAttackers;
@@ -85,6 +86,17 @@ public class Building implements Actor, EndPoint, Piece {
         player = p;
         
         flag.setPlayer(p);
+
+        /* Initialize goods required for production if the building does any
+           any production
+        */
+        Production production = getClass().getAnnotation(Production.class);
+
+        if (production != null) {
+            requiredGoodsForProduction = production.requiredGoods();
+        } else {
+            requiredGoodsForProduction = new Material[0];
+        }
     }
     
     void setFlag(Flag flagAtPoint) {
@@ -509,7 +521,6 @@ public class Building implements Actor, EndPoint, Piece {
     public Map<Material, Integer> getTotalAmountNeededForProduction() {
         log.log(Level.FINE, "Getting the required goods for this building");
 
-        Production p = getClass().getAnnotation(Production.class);
         Map<Material, Integer> requiredGoods = new HashMap<>();
 
         if (isMilitaryBuilding()) {
@@ -534,13 +545,11 @@ public class Building implements Actor, EndPoint, Piece {
         
         log.log(Level.FINER, "Found annotations for {0} in class", requiredGoods);
 
-        if (p == null) {
+        if (requiredGoodsForProduction.length == 0) {
             return requiredGoods;
         }
 
-        Material[] goods = p.requiredGoods();
-
-        for (Material m : goods) {
+        for (Material m : requiredGoodsForProduction) {
             if (!requiredGoods.containsKey(m)) {
                 requiredGoods.put(m, 0);
             }
