@@ -111,21 +111,6 @@ public class Utils {
         }
     }
 
-    public static Map<Building, Material> getNeedForDelivery(List<Building> buildings) {
-
-        Map<Building, Material> result = new HashMap<>();
-
-        for (Building b : buildings) {
-            Map<Material, Integer> neededMaterial = b.getTotalAmountNeededForProduction();
-
-            for (Material m : neededMaterial.keySet()) {
-                result.put(b, m);
-            }
-        }
-
-        return result;
-    }
-
     public static void fillUpInventory(Storage hq, Material material, int amount) throws Exception {
         Cargo c = new Cargo(material, null);
 

@@ -45,8 +45,8 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean        evacuated;
     private boolean        productionEnabled;
     private boolean        upgrading;
-    private Material[]     requiredGoodsForProduction;
 
+    private final Material[]             requiredGoodsForProduction;
     private final List<Military>         attackers;
     private final List<Military>         waitingAttackers;
     private final List<Military>         defenders;
@@ -518,46 +518,37 @@ public class Building implements Actor, EndPoint, Piece {
         return hs.size();
     }
 
-    public Map<Material, Integer> getTotalAmountNeededForProduction() {
-        log.log(Level.FINE, "Getting the required goods for this building");
+    public int getTotalAmountOfMaterialNeededForProduction(Material material) {
 
-        Map<Material, Integer> requiredGoods = new HashMap<>();
-
-        if (isMilitaryBuilding()) {
+        if (isMilitaryBuilding() && material == COIN) {
 
             if (getMaxCoins() > 0 && enablePromotions) {
-                requiredGoods.put(COIN, getMaxCoins());
+                return getMaxCoins();
             }
 
             if (isUpgrading()) {
                 int plancks = getTotalAmountNeededForUpgrade(PLANCK);
                 int stones = getTotalAmountNeededForUpgrade(STONE);
 
-                if (plancks > 0) {
-                    requiredGoods.put(PLANCK, plancks);
+                if (material == PLANCK && plancks > 0) {
+                    return plancks;
                 }
 
-                if (stones > 0) {
-                    requiredGoods.put(STONE, stones);
+                if (material == STONE && stones > 0) {
+                    return stones;
                 }
             }
         }
-        
-        log.log(Level.FINER, "Found annotations for {0} in class", requiredGoods);
 
-        if (requiredGoodsForProduction.length == 0) {
-            return requiredGoods;
-        }
+        int amount = 0;
 
         for (Material m : requiredGoodsForProduction) {
-            if (!requiredGoods.containsKey(m)) {
-                requiredGoods.put(m, 0);
+            if (m == material) {
+                amount++;
             }
-
-            requiredGoods.put(m, 1);
         }
 
-        return requiredGoods;
+        return amount;
     }
 
     private void consumeConstructionMaterial() {
@@ -623,7 +614,7 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean isAccepted(Material material) {
 
         /* Return true if the production in the building requires the material */
-        if (getTotalAmountNeededForProduction().containsKey(material)) {
+        if (getTotalAmountOfMaterialNeededForProduction(material) > 0) {
             return true;
         }
 
@@ -638,9 +629,30 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private boolean canAcceptGoods() {
-        Map<Material, Integer> requiredGoods = getTotalAmountNeededForProduction();
 
-        return !requiredGoods.keySet().isEmpty();
+        if (requiredGoodsForProduction.length > 0) {
+            return true;
+        }
+
+        if (isMilitaryBuilding()) {
+
+            if (isPromotionEnabled() && getMaxCoins() > getAmount(COIN)) {
+                return true;
+            }
+
+            if (isUpgrading()) {
+
+                if (getTotalAmountNeededForUpgrade(PLANCK) > getAmount(PLANCK)) {
+                    return true;
+                }
+                
+                if (getTotalAmountNeededForUpgrade(STONE) > getAmount(STONE)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean underConstruction() {
@@ -932,7 +944,7 @@ public class Building implements Actor, EndPoint, Piece {
 
             return getMaterialsToBuildHouse().get(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            Integer amount = getTotalAmountNeededForProduction().get(material);
+            Integer amount = getTotalAmountOfMaterialNeededForProduction(material);
             int amountToUpgrade = getTotalAmountNeededForUpgrade(material);
 
             if (amount == null) {
