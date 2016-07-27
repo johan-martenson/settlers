@@ -70,9 +70,16 @@ public class StorageWorker extends Worker {
 
         for (Material material : getPlayer().getTransportPriorityList()) {
 
+            /* Don't try to deliver materials that are not in stock */
+            if (!ownStorage.isInStock(material)) {
+                continue;
+            }
+
             /* Iterate over all buildings, instead of just the ones that can be
-               reached from the headquarter. This will perform the quick tests
-               first and only perform the expensive test if the quick ones pass
+               reached from the headquarter
+            
+               This will perform the quick tests first and only perform the
+               expensive test if the quick ones pass
             */
             for (Building b : getPlayer().getBuildings()) {
 
@@ -91,25 +98,24 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                if (b.needsMaterial(material) && ownStorage.isInStock(material)) {
-
-                    /* Filter out buildings that cannot be reached from the storage */
-                    if (map.findWayWithExistingRoads(getHome().getPosition(), b.getPosition()) == null) {
-                        continue;
-                    }
+                /* Check if the building needs the material */
+                if (b.needsMaterial(material)) {
 
                     /* Check that the building type is within its assigned quota */
-                    if (isWithinQuota(b, material) ||
-                        (resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
-                        b.promiseDelivery(material);
+                    if (isWithinQuota(b, material) || (resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
 
-                        Cargo cargo = ownStorage.retrieve(material);
-                        cargo.setTarget(b);
+                        /* Filter out buildings that cannot be reached from the storage */
+                        if (map.findWayWithExistingRoads(getHome().getPosition(), b.getPosition()) != null) {
+                            b.promiseDelivery(material);
 
-                        /* Track allocation */
-                        trackAllocation(b, material);
+                            Cargo cargo = ownStorage.retrieve(material);
+                            cargo.setTarget(b);
 
-                        return cargo;
+                            /* Track allocation */
+                            trackAllocation(b, material);
+
+                            return cargo;
+                        }
                     }
                 }
             }
