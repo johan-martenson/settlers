@@ -973,11 +973,7 @@ public class Building implements Actor, EndPoint, Piece {
             return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
             
-            if (!isAccepted(material)) {
-                return 0;
-            } else {
-                return getTotalAmountNeeded(material) - getProjectedAmount(material);
-            }
+            return getTotalAmountNeeded(material) - getProjectedAmount(material);
         }
 
         return 0;

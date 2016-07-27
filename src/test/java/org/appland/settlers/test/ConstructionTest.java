@@ -173,8 +173,13 @@ public class ConstructionTest {
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
 
+        sm.promiseDelivery(PLANCK);
         sm.putCargo(planckCargo);
+
+        sm.promiseDelivery(PLANCK);
         sm.putCargo(planckCargo);
+
+        sm.promiseDelivery(STONE);
         sm.putCargo(stoneCargo);
 
         for (int i = 0; i < 1000; i++) {
@@ -183,7 +188,9 @@ public class ConstructionTest {
         }
 
         /* Verify that construction can finish when all material is delivered */
+        sm.promiseDelivery(STONE);
         sm.putCargo(stoneCargo);
+
         sm.stepTime();
 
         assertTrue(sm.ready());
