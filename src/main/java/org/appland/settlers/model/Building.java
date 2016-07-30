@@ -520,22 +520,28 @@ public class Building implements Actor, EndPoint, Piece {
 
     public int getTotalAmountOfMaterialNeededForProduction(Material material) {
 
-        if (isMilitaryBuilding() && material == COIN) {
+        if (isMilitaryBuilding()) {
 
-            if (getMaxCoins() > 0 && enablePromotions) {
+            if (material == COIN && getMaxCoins() > 0 && enablePromotions) {
                 return getMaxCoins();
             }
 
             if (isUpgrading()) {
-                int plancks = getTotalAmountNeededForUpgrade(PLANCK);
-                int stones = getTotalAmountNeededForUpgrade(STONE);
 
-                if (material == PLANCK && plancks > 0) {
-                    return plancks;
+                if (material == PLANCK) {
+                    int plancks = getTotalAmountNeededForUpgrade(PLANCK);
+
+                    if (plancks > 0) {
+                        return plancks;
+                    }
                 }
 
-                if (material == STONE && stones > 0) {
-                    return stones;
+                if (material == STONE) {
+                    int stones = getTotalAmountNeededForUpgrade(STONE);
+
+                    if (stones > 0) {
+                        return stones;
+                    }
                 }
             }
         }
@@ -944,20 +950,7 @@ public class Building implements Actor, EndPoint, Piece {
 
             return getMaterialsToBuildHouse().get(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            Integer amount = getTotalAmountOfMaterialNeededForProduction(material);
-            int amountToUpgrade = getTotalAmountNeededForUpgrade(material);
-
-            if (amount == null) {
-                amount = 0;
-            }
-            
-            if (amount == 0 && amountToUpgrade == 0) {
-                return 0;
-            } else if (amount > amountToUpgrade) {
-                return amount;
-            } else {
-                return amountToUpgrade;
-            }
+            return getTotalAmountOfMaterialNeededForProduction(material);
         }
 
         return 0;

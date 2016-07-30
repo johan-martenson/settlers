@@ -157,43 +157,38 @@ public class GameUtils {
     }
 
     public static List<Point> findShortestPath(Point start, Point goal, 
-            Collection<Point> avoid, ConnectionsProvider pf) {
-        Set<Point>          evaluated       = new HashSet<>();
-        Set<Point>          toEvaluate      = new HashSet<>();
-        Map<Point, Double>  realCostToPoint = new HashMap<>();
-        Map<Point, Double>  estFullCost     = new HashMap<>();
-        Map<Point, Point>   cameFrom        = new HashMap<>();
+            Collection<Point> avoid, ConnectionsProvider connectionProvider) {
+        Set<Point>          evaluated         = new HashSet<>();
+        Set<Point>          toEvaluate        = new HashSet<>();
+        Map<Point, Double>  realCostToPoint   = new HashMap<>();
+        Map<Point, Double>  estimatedFullCost = new HashMap<>();
+        Map<Point, Point>   cameFrom          = new HashMap<>();
 
         /* Define starting parameters */
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
-        estFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point currentPoint;
-        double currentValue;
+        double currentEstimatedCost;
 
-        double tmpEstCost;
+        double tmpEstimatedCost;
 
-        double tentative_cost;
+        double tentativeCost;
 
         while (!toEvaluate.isEmpty()) {
             currentPoint = null;
-            currentValue = -1;
+            currentEstimatedCost = Double.MAX_VALUE;
 
             /* Find the point with the lowest estimated full cost */
-            for (Point itP : toEvaluate) {
+            for (Point iteratedPoint : toEvaluate) {
 
-                tmpEstCost = estFullCost.get(itP);
+                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
 
-                if (currentPoint == null) {
-                    currentPoint = itP;
-                    currentValue = tmpEstCost;
-                }
-
-                if (currentValue > tmpEstCost) {
-                    currentValue = tmpEstCost;
-                    currentPoint = itP;
+                if (currentEstimatedCost > tmpEstimatedCost) {
+                    currentEstimatedCost = tmpEstimatedCost;
+                    currentPoint = iteratedPoint;
                 }
             }
 
@@ -218,7 +213,7 @@ public class GameUtils {
             evaluated.add(currentPoint);
 
             /* Evaluate each direct neighbor */
-            for (Point neighbor : pf.getPossibleConnections(currentPoint, goal)) {
+            for (Point neighbor : connectionProvider.getPossibleConnections(currentPoint, goal)) {
 
                 /* Skip already evaluated points */
                 if (evaluated.contains(neighbor)) {
@@ -231,21 +226,21 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentative_cost = realCostToPoint.get(currentPoint) + 
-                        pf.distance(currentPoint, neighbor);
+                tentativeCost = realCostToPoint.get(currentPoint) + 
+                        connectionProvider.distance(currentPoint, neighbor);
 
                 /* Check if the neighbor hasn't been evaluated yet or if we 
                    have found a cheaper way to reach it */
-                if (!toEvaluate.contains(neighbor) || tentative_cost < realCostToPoint.get(neighbor)) {
+                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 
                     /* Keep track of how the neighbor was reached */
                     cameFrom.put(neighbor, currentPoint);
 
                     /* Remember the cost to reach the neighbor */
-                    realCostToPoint.put(neighbor, tentative_cost);
+                    realCostToPoint.put(neighbor, tentativeCost);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
 
                     /* Add the neighbor to the evaluation list */
                     toEvaluate.add(neighbor);
