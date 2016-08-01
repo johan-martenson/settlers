@@ -163,8 +163,10 @@ public class GameUtils {
         Map<Point, Double>  realCostToPoint   = new HashMap<>();
         Map<Point, Double>  estimatedFullCost = new HashMap<>();
         Map<Point, Point>   cameFrom          = new HashMap<>();
+        double              bestCaseCost;
 
         /* Define starting parameters */
+        bestCaseCost = start.distance(goal);
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
         estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
@@ -189,6 +191,10 @@ public class GameUtils {
                 if (currentEstimatedCost > tmpEstimatedCost) {
                     currentEstimatedCost = tmpEstimatedCost;
                     currentPoint = iteratedPoint;
+
+                    if (currentEstimatedCost == bestCaseCost) {
+                        break;
+                    }
                 }
             }
 
