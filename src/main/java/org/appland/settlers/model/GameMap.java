@@ -65,6 +65,8 @@ public class GameMap {
     private final int MINIMUM_HEIGHT = 5;
     private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
 
+    private Player winner;
+
     public List<Point> findAutoSelectedRoad(final Player player, Point start, 
             Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
@@ -180,6 +182,9 @@ public class GameMap {
         /* Set a constant initial seed for the random generator to get a 
            deterministic behavior */
         random.setSeed(1);
+
+        /* There is no winner when the game starts */
+        winner = null;
     }
 
     public void setStartingPoints(List<Point> points) {
@@ -302,6 +307,23 @@ public class GameMap {
 
             /* Remove projectiles that have hit the ground */
             projectiles.removeAll(projectilesToRemove);
+
+            /* Declare a winner if there is only one player still alive */
+            int playersWithBuildings = 0;
+            Player playerWithBuildings = null;
+
+            for (Player player : players) {
+                if (player.isAlive()) {
+                    playersWithBuildings++;
+
+                    playerWithBuildings = player;
+                }
+            }
+
+            /* There can only be a winner if there originally were more than one player */
+            if (playersWithBuildings == 1 && players.size() > 1) {
+                winner = playerWithBuildings;
+            }
         }
     }
 
@@ -2149,5 +2171,9 @@ public class GameMap {
         upgradedBuilding.getPlayer().addBuilding(upgradedBuilding);
 
         buildingsToAdd.add(upgradedBuilding);
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 }

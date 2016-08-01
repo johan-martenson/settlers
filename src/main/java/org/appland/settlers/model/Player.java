@@ -413,4 +413,14 @@ public class Player {
 
         return (Storage)storage;
     }
+
+    boolean isAlive() {
+        for (Building building : buildings) {
+            if (building.ready()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
