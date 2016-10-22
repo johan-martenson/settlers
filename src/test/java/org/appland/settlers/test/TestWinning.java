@@ -131,4 +131,14 @@ public class TestWinning {
         assertEquals(player1.getBuildings().size(), 1);
         assertTrue(player1.getBuildings().get(0).burningDown());
     }
+
+    /*
+    
+    - add test that the winner remains a winner
+    - add test that the winner remains a winner even if all his buildings are destroyed
+    
+    
+    
+    
+    */
 }
