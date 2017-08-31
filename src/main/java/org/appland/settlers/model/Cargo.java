@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -151,24 +150,44 @@ public class Cargo implements Piece {
             returnToStorage();
         } else {
 
-            /* Find the best way from this flag */
-            List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(getPosition(), getTarget().getPosition());
+            /* Re-evalute the route if the current one is not optimal or if it's
+             * no longer available
+            */
+            if (!optimalRoute(getPosition(), path)                  ||
+                !map.pathViaRoadsExists(getPosition(), path.get(0)) ||
+                !map.pathViaRoadsExists(path)) {
 
-            /* Return the cargo to storage if there is no available route to the target */
-            if (closestPath == null) {
+                /* Find the best way from this flag */
+                List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(getPosition(), getTarget().getPosition());
 
-                /* Break the promise to deliver to the target */
-                getTarget().cancelPromisedDelivery(this);
+                /* Return the cargo to storage if there is no available route to the target */
+                if (closestPath == null) {
 
-                /* Return the cargo to the storage */
-                returnToStorage();
-            } else {
+                    /* Break the promise to deliver to the target */
+                    getTarget().cancelPromisedDelivery(this);
 
-                /* Update the planned route to use the closest way */
-                closestPath.remove(0);
+                    /* Return the cargo to the storage */
+                    returnToStorage();
+                } else {
 
-                path = closestPath;
+                    /* Update the planned route to use the closest way */
+                    closestPath.remove(0);
+
+                    path = closestPath;
+                }
             }
         }
+    }
+
+    private boolean optimalRoute(Point start, List<Point> path) {
+
+        /* The start is one point before the path */
+
+        Point end = path.get(path.size() - 1);
+
+        int deltaY = Math.abs(end.y - start.y);
+        int deltaX = Math.abs(end.x - start.x);
+
+        return deltaY + (deltaX - deltaY) / 2 == path.size();
     }
 }

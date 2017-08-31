@@ -77,7 +77,7 @@ public class StorageWorker extends Worker {
 
             /* Iterate over all buildings, instead of just the ones that can be
                reached from the headquarter
-            
+
                This will perform the quick tests first and only perform the
                expensive test if the quick ones pass
             */
@@ -85,6 +85,11 @@ public class StorageWorker extends Worker {
 
                 /* Don't deliver to itself */
                 if (ownStorage.equals(b)) {
+                    continue;
+                }
+
+                /* Don't deliver to burning or destroyed buildings */
+                if (b.burningDown() || b.destroyed()) {
                     continue;
                 }
 
@@ -99,25 +104,30 @@ public class StorageWorker extends Worker {
                 }
 
                 /* Check if the building needs the material */
-                if (b.needsMaterial(material)) {
-
-                    /* Check that the building type is within its assigned quota */
-                    if (isWithinQuota(b, material) || (resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
-
-                        /* Filter out buildings that cannot be reached from the storage */
-                        if (map.isConnectedByRoads(getHome().getPosition(), b.getPosition())) {
-                            b.promiseDelivery(material);
-
-                            Cargo cargo = ownStorage.retrieve(material);
-                            cargo.setTarget(b);
-
-                            /* Track allocation */
-                            trackAllocation(b, material);
-
-                            return cargo;
-                        }
-                    }
+                if (!b.needsMaterial(material)) {
+                    continue;
                 }
+
+                /* Check that the building type is within its assigned quota */
+                if (!isWithinQuota(b, material) && !(resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
+                    continue;
+                }
+
+                /* Filter out buildings that cannot be reached from the storage */
+                if (!map.isConnectedByRoads(getHome().getPosition(), b.getPosition())) {
+                    continue;
+                }
+
+                /* Deliver to the building */
+                b.promiseDelivery(material);
+
+                Cargo cargo = ownStorage.retrieve(material);
+                cargo.setTarget(b);
+
+                /* Track allocation */
+                trackAllocation(b, material);
+
+                return cargo;
             }
         }
 
@@ -140,7 +150,7 @@ public class StorageWorker extends Worker {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 Cargo cargo = tryToStartDelivery();
-                    
+
                 if (cargo != null) {
                     setCargo(cargo);
 

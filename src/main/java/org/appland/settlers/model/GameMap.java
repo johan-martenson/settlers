@@ -2177,11 +2177,47 @@ public class GameMap {
     }
 
     public boolean isConnectedByRoads(Point start, Point end) {
-        return findShortestPath(start, end, null, connectedFlagsAndBuildingsProvider) != null;
+        return findWayWithExistingRoadsInFlagsAndBuildings(start, end) != null;
     }
 
     /* Only include points with flags and buildings - what's a good name? */
     public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(Point start, Point end) {
         return GameUtils.findShortestPathViaRoads(start, end, pointToGameObject);
+    }
+
+    boolean pathViaRoadsExists(Point... points) {
+
+        Point previous = null;
+
+        for (Point point : points) {
+
+            if (previous != null) {
+                MapPoint mp = pointToGameObject.get(previous);
+
+                if (!mp.getConnectedNeighbors().contains(point)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public boolean pathViaRoadsExists(List<Point> path) {
+
+        Point previous = null;
+
+        for (Point point : path) {
+
+            if (previous != null) {
+                MapPoint mp = pointToGameObject.get(previous);
+
+                if (!mp.getConnectedNeighbors().contains(point)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -519,4 +519,122 @@ public class GameUtils {
 
         return null;
     }
+
+    /* Returns a detailed path including points between flags. Can only be called 
+     * a building or flag as start and end point
+     */
+    public static List<Point> findShortestDetailedPathViaRoads(Point start, Point goal,
+            Map<Point, MapPoint> mapPoints) {
+        Set<Point>         evaluated         = new HashSet<>();
+        Set<Point>         toEvaluate        = new HashSet<>();
+        Map<Point, Double> realCostToPoint   = new HashMap<>();
+        Map<Point, Double> estimatedFullCost = new HashMap<>();
+        Map<Point, Road>   cameVia           = new HashMap<>();
+        double             bestCaseCost      = 2;
+
+        /* Define starting parameters */
+        bestCaseCost = start.distance(goal);
+        toEvaluate.add(start);
+        realCostToPoint.put(start, (double)0);
+        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+
+        /* Declare variables outside of the loop to keep memory churn down */
+        Point currentPoint;
+        double currentEstimatedCost;
+
+        double tmpEstimatedCost;
+
+        double tentativeCost;
+
+        while (!toEvaluate.isEmpty()) {
+            currentPoint = null;
+            currentEstimatedCost = Double.MAX_VALUE;
+
+            /* Find the point with the lowest estimated full cost */
+            for (Point iteratedPoint : toEvaluate) {
+
+                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
+
+                if (currentEstimatedCost > tmpEstimatedCost) {
+                    currentEstimatedCost = tmpEstimatedCost;
+                    currentPoint = iteratedPoint;
+
+                    if (currentEstimatedCost == bestCaseCost) {
+                        break;
+                    }
+                }
+            }
+
+            /* Handle if the goal is reached */
+            if (currentPoint.equals(goal)) {
+                List<Point> path = new ArrayList<>();
+
+                /* Re-construct the path taken */
+                while (currentPoint != start) {
+                    path.add(0, currentPoint);
+
+                    Road road = cameVia.get(currentPoint);
+
+                    /* Follow the road and add up the points */
+                    if (road.getStart().equals(currentPoint)) {
+                        for (int i = 1; i < road.getWayPoints().size(); i++) {
+                            path.add(0, road.getWayPoints().get(i));
+                        }
+
+                        currentPoint = road.getEnd();
+                    } else {
+                        for (int i = road.getWayPoints().size() - 2; i >= 0; i++) {
+                            path.add(0, road.getWayPoints().get(i));
+                        }
+
+                        currentPoint = road.getStart();
+                    }
+                }
+
+                path.add(0, start);
+
+                return path;
+            }
+
+            /* Do not re-evalute the same point */
+            toEvaluate.remove(currentPoint);
+            evaluated.add(currentPoint);
+
+            /* Evaluate each direct neighbor */
+            MapPoint mp = mapPoints.get(currentPoint);
+            for (Road road : mp.getConnectedRoads()) {
+
+                Point neighbor = road.getOtherPoint(currentPoint);
+
+                /* Skip already evaluated points */
+                if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+
+                /* Calculate the real cost to reach the neighbor from the start */
+                tentativeCost = realCostToPoint.get(currentPoint) +
+                        road.getWayPoints().size() - 1;
+
+                /* Check if the neighbor hasn't been evaluated yet or if we
+                 * have found a cheaper way to reach it
+                */
+                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
+
+                    /* Keep track of how the neighbor was reached */
+                    cameVia.put(neighbor, road);
+
+                    /* Remember the cost to reach the neighbor */
+                    realCostToPoint.put(neighbor, tentativeCost);
+
+                    /* Remember the estimated full cost to go via the neighbor */
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+
+                    /* Add the neighbor to the evaluation list */
+                    toEvaluate.add(neighbor);
+                }
+            }
+        }
+
+        return null;
+    }
 }
