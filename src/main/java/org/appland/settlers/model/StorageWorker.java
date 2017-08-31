@@ -105,7 +105,7 @@ public class StorageWorker extends Worker {
                     if (isWithinQuota(b, material) || (resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
 
                         /* Filter out buildings that cannot be reached from the storage */
-                        if (map.findWayWithExistingRoads(getHome().getPosition(), b.getPosition()) != null) {
+                        if (map.isConnectedByRoads(getHome().getPosition(), b.getPosition())) {
                             b.promiseDelivery(material);
 
                             Cargo cargo = ownStorage.retrieve(material);

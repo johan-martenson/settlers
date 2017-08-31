@@ -101,7 +101,8 @@ public class Flag implements EndPoint, Piece {
                 continue;
             }
 
-            if (!r.getWayPoints().contains(c.getNextStep())) {
+            if (!r.getEnd().equals(c.getNextFlagOrBuilding()) &&
+                !r.getStart().equals(c.getNextFlagOrBuilding())) {
                 continue;
             }
 

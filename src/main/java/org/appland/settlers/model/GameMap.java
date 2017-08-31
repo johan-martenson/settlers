@@ -56,8 +56,10 @@ public class GameMap {
     private final List<Player>         players;
     private final Random               random;
     private final List<Point>          startingPoints;
+    private final ConnectionsProvider  pathOnExistingRoadsProvider;
+    private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
 
-    private String theLeader = "Mai Thi Van Anh";
+    private final String theLeader = "Mai Thi Van Anh";
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -83,8 +85,13 @@ public class GameMap {
             }
 
             @Override
-            public Double distance(Point currentPoint, Point neighbor) {
+            public Double realDistance(Point currentPoint, Point neighbor) {
                 return (double)1;
+            }
+
+            @Override
+            public Double estimateDistance(Point from, Point to) {
+                return from.distance(to);
             }
         });
     }
@@ -169,6 +176,9 @@ public class GameMap {
         fullGrid            = buildFullGrid();
         pointToGameObject   = populateMapPoints(fullGrid);
 
+        pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
+        connectedFlagsAndBuildingsProvider = new GameUtils.ConnectedFlagsAndBuildingsProvider(pointToGameObject);
+
         /* Give the players a reference to the map */
         for (Player player : players) {
             player.setMap(this);
@@ -207,123 +217,115 @@ public class GameMap {
 
     public void stepTime() throws Exception {
 
-        synchronized (this) {
-            projectilesToRemove.clear();
-            workersToRemove.clear();
-            workersToAdd.clear();
-            signsToRemove.clear();
-            buildingsToRemove.clear();
-            animalsToRemove.clear();
-            cropsToRemove.clear();
-            buildingsToAdd.clear();
+        projectilesToRemove.clear();
+        workersToRemove.clear();
+        workersToAdd.clear();
+        signsToRemove.clear();
+        buildingsToRemove.clear();
+        animalsToRemove.clear();
+        cropsToRemove.clear();
+        buildingsToAdd.clear();
 
-            for (Projectile p : projectiles) {
-                p.stepTime();
+        for (Projectile p : projectiles) {
+            p.stepTime();
+        }
+
+        for (Worker w : workers) {
+            w.stepTime();
+        }
+
+        for (Building b : buildings) {
+            b.stepTime();
+        }
+
+        for (Tree t : trees) {
+            t.stepTime();
+        }
+
+        for (Crop c : crops) {
+            c.stepTime();
+        }
+
+        for (Sign s : signs) {
+            s.stepTime();
+        }
+
+        for (WildAnimal w : wildAnimals) {
+            w.stepTime();
+        }
+
+        /* Possibly add wild animals */
+        handleWildAnimalPopulation();
+
+        /* Remove completely mined stones */
+        List<Stone> stonesToRemove = new ArrayList<>();
+        for (Stone s : stones) {
+            if (s.noMoreStone()) {
+                stonesToRemove.add(s);
             }
+        }
 
-            for (Worker w : workers) {
-                w.stepTime();
+        for (Stone s : stonesToRemove) {
+            removeStone(s);
+        }
+
+        /* Resume transport of stuck cargos */
+        for (Flag f : flags) {
+            for (Cargo cargo : f.getStackedCargo()) {
+                cargo.rerouteIfNeeded();
             }
+        }
 
-            for (Building b : buildings) {
-                b.stepTime();
+        /* Remove workers that are invalid after the round */
+        workers.removeAll(workersToRemove);
+
+        /* Add workers that were placed during the round */
+        workers.addAll(workersToAdd);
+
+        /* Remove crops that were removed during this round */
+        crops.removeAll(cropsToRemove);
+
+        /* Remove signs that have expired during this round */
+        signs.removeAll(signsToRemove);
+
+        /* Remove wild animals that have been killed and turned to cargo */
+        wildAnimals.removeAll(animalsToRemove);
+
+        /* Update buildings list to handle upgraded buildings where the old
+           building gets removed and a new building is added */
+        for (Building removedBuilding: buildingsToRemove) {
+            buildings.remove(removedBuilding);
+        }
+
+        for (Building addedBuilding: buildingsToAdd) {
+            buildings.add(addedBuilding);
+        }
+
+        /* Remove buildings that have been destroyed some time ago */
+        buildings.removeAll(buildingsToRemove);
+
+        for (Building b : buildingsToRemove) {
+            b.getPlayer().removeBuilding(b);
+        }
+
+        /* Remove projectiles that have hit the ground */
+        projectiles.removeAll(projectilesToRemove);
+
+        /* Declare a winner if there is only one player still alive */
+        int playersWithBuildings = 0;
+        Player playerWithBuildings = null;
+
+        for (Player player : players) {
+            if (player.isAlive()) {
+                playersWithBuildings++;
+
+                playerWithBuildings = player;
             }
+        }
 
-            for (Tree t : trees) {
-                t.stepTime();
-            }
-
-            for (Crop c : crops) {
-                c.stepTime();
-            }
-
-            for (Sign s : signs) {
-                s.stepTime();
-            }
-
-            for (WildAnimal w : wildAnimals) {
-                w.stepTime();
-            }
-
-            /* Possibly add wild animals */
-            handleWildAnimalPopulation();
-
-            /* Remove completely mined stones */
-            List<Stone> stonesToRemove = new ArrayList<>();
-            for (Stone s : stones) {
-                if (s.noMoreStone()) {
-                    stonesToRemove.add(s);
-                }
-            }
-
-            for (Stone s : stonesToRemove) {
-                removeStone(s);
-            }
-
-            /* Resume transport of stuck cargos */
-            for (Flag f : flags) {
-                for (Cargo cargo : f.getStackedCargo()) {
-                    cargo.rerouteIfNeeded();
-                }
-            }
-
-            /* Remove workers that are invalid after the round */
-            synchronized (workers) {
-                workers.removeAll(workersToRemove);
-            }
-
-            /* Add workers that were placed during the round */
-            synchronized (workers) {
-                workers.addAll(workersToAdd);
-            }
-
-            /* Remove crops that were removed during this round */
-            synchronized (crops) {
-                crops.removeAll(cropsToRemove);
-            }
-
-            /* Remove signs that have expired during this round */
-            signs.removeAll(signsToRemove);
-
-            /* Remove wild animals that have been killed and turned to cargo */
-            wildAnimals.removeAll(animalsToRemove);
-
-            /* Update buildings list to handle upgraded buildings where the old
-               building gets removed and a new building is added */
-            for (Building removedBuilding: buildingsToRemove) {
-                buildings.remove(removedBuilding);
-            }
-
-            for (Building addedBuilding: buildingsToAdd) {
-                buildings.add(addedBuilding);
-            }
-
-            /* Remove buildings that have been destroyed some time ago */
-            buildings.removeAll(buildingsToRemove);
-
-            for (Building b : buildingsToRemove) {
-                b.getPlayer().removeBuilding(b);
-            }
-
-            /* Remove projectiles that have hit the ground */
-            projectiles.removeAll(projectilesToRemove);
-
-            /* Declare a winner if there is only one player still alive */
-            int playersWithBuildings = 0;
-            Player playerWithBuildings = null;
-
-            for (Player player : players) {
-                if (player.isAlive()) {
-                    playersWithBuildings++;
-
-                    playerWithBuildings = player;
-                }
-            }
-
-            /* There can only be a winner if there originally were more than one player */
-            if (playersWithBuildings == 1 && players.size() > 1) {
-                winner = playerWithBuildings;
-            }
+        /* There can only be a winner if there originally were more than one player */
+        if (playersWithBuildings == 1 && players.size() > 1) {
+            winner = playerWithBuildings;
         }
     }
 
@@ -784,20 +786,7 @@ public class GameMap {
             throw new InvalidRouteException("Start and end are the same.");
         }
 
-        return findShortestPath(start, end, null, new ConnectionsProvider() {
-
-            @Override
-            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
-                MapPoint mp = pointToGameObject.get(start);
-
-                return mp.getConnectedNeighbors();
-            }
-
-            @Override
-            public Double distance(Point currentPoint, Point neighbor) {
-                return (double)1;
-            }
-        });
+        return findShortestPath(start, end, null, pathOnExistingRoadsProvider);
     }
 
     public Road getRoad(Point start, Point end) throws Exception {
@@ -1174,21 +1163,25 @@ public class GameMap {
     }
 
     public List<Point> getPossibleAdjacentRoadConnections(Player player, Point point, Point end) throws Exception {
-        Point[] adjacentPoints  = point.getAdjacentPoints();
-        List<Point>  resultList = new ArrayList<>();
-        
+        Point[] adjacentPoints = new Point[] {
+            new Point(point.x - 2, point.y),
+            new Point(point.x + 2, point.y),
+            new Point(point.x - 1, point.y - 1),
+            new Point(point.x - 1, point.y + 1),
+            new Point(point.x + 1, point.y - 1),
+            new Point(point.x + 1, point.y + 1),
+        };
+
+        List<Point> resultList = new ArrayList<>();
+
         for (Point p : adjacentPoints) {
             if (p.equals(end) && isPossibleAsEndPointInRoad(player, p)) {
                 resultList.add(p);
-            } else if (isPossibleAsAnyPointInRoad(player, p)) {
+            } else if (!p.equals(end) && isPossibleAsAnyPointInRoad(player, p)) {
                 resultList.add(p);
             }
         }
-    
-        resultList.remove(point.up());
-        
-        resultList.remove(point.down());
-        
+
         return resultList;
     }
 
@@ -1314,30 +1307,27 @@ public class GameMap {
     }
     
     private boolean isPossibleAsEndPointInRoad(Player player, Point p) throws Exception {
+
         if (!isWithinMap(p)) {
             return false;
+        }
+
+        MapPoint mp = pointToGameObject.get(p);
+
+        if (mp.isFlag() && player.isWithinBorder(p)) {
+            return true;
         }
 
         if (isPossibleAsAnyPointInRoad(player, p)) {
             return true;
         }
-        
-        MapPoint mp = pointToGameObject.get(p);
-        
-        if (mp.isFlag() && player.isWithinBorder(p)) {
-            return true;
-        }
-        
+
         return false;
     }
 
-    private boolean isPossibleAsAnyPointInRoad(Player player, Point p) throws Exception {
-        MapPoint mp = pointToGameObject.get(p);
+    private boolean isPossibleAsAnyPointInRoad(Player player, Point point) throws Exception {
+        MapPoint mp = pointToGameObject.get(point);
 
-        if (!player.isWithinBorder(p)) {
-            return false;
-        }
-        
         if (mp.isRoad()) {
             return false;
         }
@@ -1358,17 +1348,21 @@ public class GameMap {
             return false;
         }
 
-        if (terrain.isInWater(p)) {
+        if (mp.isCrop(point)) {
             return false;
         }
 
-        if (mp.isCrop(p)) {
+        if (!player.isWithinBorder(point)) {
+            return false;
+        }
+
+        if (terrain.isInWater(point)) {
             return false;
         }
 
         return true;
     }
-    
+
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
@@ -1470,8 +1464,13 @@ public class GameMap {
             }
 
             @Override
-            public Double distance(Point currentPoint, Point neighbor) {
+            public Double realDistance(Point currentPoint, Point neighbor) {
                 return (double)1;
+            }
+
+            @Override
+            public Double estimateDistance(Point from, Point to) {
+                return from.distance(to);
             }
         });
     }
@@ -2049,8 +2048,8 @@ public class GameMap {
         projectiles.add(projectile);
     }
 
-    void removeProjectileFromWithinStepTime(Projectile aThis) {
-        projectilesToRemove.add(aThis);
+    void removeProjectileFromWithinStepTime(Projectile projectile) {
+        projectilesToRemove.add(projectile);
     }
 
     public List<WildAnimal> getWildAnimals() {
@@ -2175,5 +2174,14 @@ public class GameMap {
 
     public Player getWinner() {
         return winner;
+    }
+
+    public boolean isConnectedByRoads(Point start, Point end) {
+        return findShortestPath(start, end, null, connectedFlagsAndBuildingsProvider) != null;
+    }
+
+    /* Only include points with flags and buildings - what's a good name? */
+    public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(Point start, Point end) {
+        return GameUtils.findShortestPathViaRoads(start, end, pointToGameObject);
     }
 }

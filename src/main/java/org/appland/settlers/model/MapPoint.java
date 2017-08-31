@@ -19,6 +19,7 @@ public class MapPoint {
     private final Point      point;
     private final Set<Point> connectedNeighbors;
     private final Set<Road>  connectedRoads;
+    private final Set<Point> connectedFlagsAndBuildings;
 
     private Building building;
     private Flag     flag;
@@ -28,15 +29,16 @@ public class MapPoint {
     private Sign     sign;
 
     public MapPoint(Point p) {
-        point              = p;
-        building           = null;
-        flag               = null;
-        tree               = null;
-        stone              = null;
-        crop               = null;
-        sign               = null;
-        connectedNeighbors = new HashSet<>();
-        connectedRoads     = new HashSet<>();
+        point                      = p;
+        building                   = null;
+        flag                       = null;
+        tree                       = null;
+        stone                      = null;
+        crop                       = null;
+        sign                       = null;
+        connectedNeighbors         = new HashSet<>();
+        connectedRoads             = new HashSet<>();
+        connectedFlagsAndBuildings = new HashSet<>();
     }
 
     void setBuilding(Building b) throws Exception {
@@ -79,6 +81,12 @@ public class MapPoint {
         }
 
         connectedRoads.add(r);
+
+        if (r.getEnd().equals(point)) {
+            connectedFlagsAndBuildings.add(r.getStart());
+        } else if (r.getStart().equals(point)) {
+            connectedFlagsAndBuildings.add(r.getEnd());
+        }
     }
 
     void removeConnectingRoad(Road r) throws Exception {
@@ -87,6 +95,12 @@ public class MapPoint {
         }
 
         connectedRoads.remove(r);
+
+        if (r.getEnd().equals(point)) {
+            connectedFlagsAndBuildings.remove(r.getStart());
+        } else  if (r.getStart().equals(point)) {
+            connectedFlagsAndBuildings.remove(r.getEnd());
+        }
 
         Point previous = null;
 
@@ -126,6 +140,10 @@ public class MapPoint {
 
     Set<Point> getConnectedNeighbors() {
         return connectedNeighbors;
+    }
+
+    Set<Point> getConnectedFlagsAndBuildings() {
+        return connectedFlagsAndBuildings;
     }
 
     Building getBuilding() {

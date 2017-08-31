@@ -662,24 +662,35 @@ public class TestTransportation {
 
     @Test
     public void testCargoTargetRemainsWhenItIsPutDownAtFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
+        /* Create the game map */
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
         Point point1 = new Point(6, 6);
         Point point2 = new Point(7, 7);
         Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
-        
+
+        /* Place the headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
+        /* Place a sawmill */
         Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
+        /* Place flags */
         Flag flag0 = map.placeFlag(player0, point0);
         Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place road from the first flag to the second flag */
         Road road0 = map.placeRoad(player0, point0, point1, point2);
+
+        /* Place road from the second flag to the sawmill's flag */
         Road road1 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
@@ -693,7 +704,7 @@ public class TestTransportation {
         
         /* Let the couriers reach their roads and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
-        
+
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
         cargo.setTarget(sm);
@@ -729,7 +740,7 @@ public class TestTransportation {
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 
-        assertTrue(road1.getWayPoints().contains(cargo.getNextStep()));
+        assertEquals(cargo.getNextFlagOrBuilding(), sm.getFlag().getPosition());
         assertEquals(cargo.getTarget(), sm);
         assertEquals(cargo.getPosition(), point2);
         assertEquals(flag1.getStackedCargo().get(0), cargo);
@@ -953,9 +964,8 @@ public class TestTransportation {
         cargo.setTarget(sm);
         sm.promiseDelivery(PLANCK);
 
-        /* Verify that the cargo is planned to go via the two straight roads */
-        assertTrue(cargo.getPlannedSteps().contains(flag0.getPosition()));
-        assertFalse(cargo.getPlannedSteps().contains(flag1.getPosition()));
+        /* Verify that the cargo is planned to go via first flag */
+        assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
 
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
@@ -1048,7 +1058,7 @@ public class TestTransportation {
         Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
-        /* Place a cargo on the first flag */
+        /* Place a cargo on the headquarter's flag */
         Cargo cargo = new Cargo(PLANCK, map);
         headquarter0.getFlag().putCargo(cargo);
         cargo.setTarget(sm);
@@ -1057,8 +1067,8 @@ public class TestTransportation {
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
 
-        /* Verify that the cargo is planned to go via the third flag */
-        assertTrue(cargo.getPlannedSteps().contains(flag1.getPosition()));
+        /* Verify that the cargo will go via the second flag */
+        assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
 
         /* Add a shortcut from the second flag to the sawmill */
         Road road3 = map.placeAutoSelectedRoad(player0, flag0, sm.getFlag());
@@ -1075,7 +1085,7 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
         /* Verify that the cargo takes the new, shorter road instead of the old road */
-        assertFalse(cargo.getPlannedSteps().contains(flag1.getPosition()));
+        assertEquals(cargo.getNextFlagOrBuilding(), sm.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
 
@@ -1086,4 +1096,102 @@ public class TestTransportation {
 
         assertNull(courier4.getCargo());
     }
+
+    @Test
+    public void testFindDirectWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place flag */
+        Point point0 = new Point(19, 15);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Verify that there is a road between the two flags */
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point0);
+        assertNotNull(path);
+        assertEquals(path.size(), 2);
+        assertEquals(path.get(0), headquarter0.getFlag().getPosition());
+        assertEquals(path.get(1), flag0.getPosition());
+    }
+
+    @Test
+    public void testFindNoWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place flag */
+        Point point0 = new Point(19, 15);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Verify that there is a road between the two flags */
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point0);
+        assertNull(path);
+    }
+
+    @Test
+    public void testFindShortestWayBetweenTwoFlagsWithNoStepsInBetween() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place first flag */
+        Point point0 = new Point(19, 15);
+        Flag flag0 = map.placeFlag(player0, point0);
+
+        /* Place second flag */
+        Point point1 = new Point(23, 15);
+        Flag flag1 = map.placeFlag(player0, point1);
+
+        /* Place roads */
+        Point point2 = new Point(22, 14);
+        Point point3 = new Point(20, 14);
+        Point point4 = new Point(19, 13);
+        Point point5 = new Point(17, 13);
+        Point point6 = new Point(16, 14);
+        Road road0 = map.placeRoad(player0, point1, point2, point3, point4, point5, point6, headquarter0.getFlag().getPosition());
+        Road road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        Road road2 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Verify that the short road is chosen */
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point1);
+        System.out.println(path);
+        assertNotNull(path);
+        assertEquals(path.size(), 3);
+        assertEquals(path.get(0), headquarter0.getFlag().getPosition());
+        assertEquals(path.get(1), flag0.getPosition());
+        assertEquals(path.get(2), flag1.getPosition());
+    }
+
 }

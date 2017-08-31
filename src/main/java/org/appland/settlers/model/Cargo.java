@@ -33,7 +33,7 @@ public class Cargo implements Piece {
         log.log(Level.FINE, "Setting target to {0}", target);
         this.target = target;
         
-        path = map.findWayWithExistingRoads(position, target.getPosition());
+        path = map.findWayWithExistingRoadsInFlagsAndBuildings(position, target.getPosition());
 
         path.remove(0);
     }
@@ -52,23 +52,14 @@ public class Cargo implements Piece {
         return target;
     }
 
-    public void setPlannedSteps(List<Point> steps) {
-        log.log(Level.FINE, "Setting planned route to {0}", steps);
-        path = steps;
-    }
-
-    public List<Point> getPlannedSteps() {
-        return Collections.unmodifiableList(path);
-    }
-
-    public Point getNextStep() {
+    public Point getNextFlagOrBuilding() {
         if (path == null || path.isEmpty()) {
             return null;
         }
         
         return path.get(0);
     }
-    
+
     public void setPosition(Point p) throws Exception {
         log.log(Level.FINE, "Setting position to {0}", p);
 
@@ -131,7 +122,7 @@ public class Cargo implements Piece {
         }
     }
 
-    void resumeTransport() throws Exception {
+    void returnToClosestStorage() throws Exception {
         Storage stg = map.getClosestStorage(getPosition());
         
         if (stg != null) {
@@ -151,7 +142,7 @@ public class Cargo implements Piece {
 
         /* Handle the case where the targeted building cannot receive the cargo */
         if (getTarget() == null) {
-            resumeTransport();
+            returnToClosestStorage();
         } else if (!map.getBuildings().contains(getTarget())) {
             returnToStorage();
         } else if (getTarget().burningDown()) {
@@ -161,7 +152,7 @@ public class Cargo implements Piece {
         } else {
 
             /* Find the best way from this flag */
-            List<Point> closestPath = map.findWayWithExistingRoads(getPosition(), getTarget().getPosition());
+            List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(getPosition(), getTarget().getPosition());
 
             /* Return the cargo to storage if there is no available route to the target */
             if (closestPath == null) {

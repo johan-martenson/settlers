@@ -645,10 +645,7 @@ public class TestWoodcutter {
         Cargo cargo = wc.getFlag().getStackedCargo().get(0);
         
         assertEquals(cargo.getTarget(), hq);
-
-        Road wcToHqRoad = map.getRoad(wc.getFlag().getPosition(), hq.getFlag().getPosition());
-
-        assertEquals(cargo.getNextStep(), wcToHqRoad.getWayPoints().get(1));
+        assertEquals(cargo.getNextFlagOrBuilding(), hq.getFlag().getPosition());
     }
     
     @Test
