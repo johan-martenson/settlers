@@ -604,7 +604,7 @@ public class TestForesterHut {
             map.surroundPointWithWater(p);
         }
 
-        map.surroundPointWithLand(point1);
+        map.surroundPointWithGrass(point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -661,7 +661,7 @@ public class TestForesterHut {
             map.surroundPointWithWater(p);
         }
 
-        map.surroundPointWithLand(point1);
+        map.surroundPointWithGrass(point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);

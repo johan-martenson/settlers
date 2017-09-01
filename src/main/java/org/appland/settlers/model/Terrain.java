@@ -179,11 +179,11 @@ public class Terrain {
         return true;
     }
 
-    boolean isNextToWater(Point point) throws Exception {
+    boolean isNextToWater(Point point) {
         return isAnyAdjacentTile(point, WATER);
     }
 
-    boolean isOnEdgeOf(Point point, Vegetation vegetation) throws Exception {
+    boolean isOnEdgeOf(Point point, Vegetation vegetation) {
 
         boolean matchFound = false;
         boolean nonMatchFound = false;
@@ -202,7 +202,7 @@ public class Terrain {
         return matchFound && nonMatchFound;
     }
 
-    protected void placeMountainOnTile(Point p1, Point p2, Point p3) throws Exception {
+    protected void placeMountainOnTile(Point p1, Point p2, Point p3) {
         Tile tile = getTile(p1, p2, p3);
 
         tile.setVegetationType(MOUNTAIN);

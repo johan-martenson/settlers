@@ -995,11 +995,11 @@ public class GameMap {
         return points;
     }
 
-    public boolean isAvailableFlagPoint(Player player, Point p) throws Exception {
+    public boolean isAvailableFlagPoint(Player player, Point p) {
         return isAvailableFlagPoint(player, p, true);
     }
 
-    private boolean isAvailableFlagPoint(Player player, Point p, boolean checkBorder) throws Exception {
+    private boolean isAvailableFlagPoint(Player player, Point p, boolean checkBorder) {
         if (!isWithinMap(p)) {
             return false;
         }
@@ -1665,8 +1665,8 @@ public class GameMap {
         flags.remove(flag);
     }
 
-    boolean isNextToWater(Point p) throws Exception {
-        for (Tile t : terrain.getSurroundingTiles(p)) {
+    boolean isNextToWater(Point point) {
+        for (Tile t : terrain.getSurroundingTiles(point)) {
             if (t.getVegetationType() == Vegetation.WATER) {
                 return true;
             }
@@ -1675,7 +1675,7 @@ public class GameMap {
         return false;
     }
 
-    public int getAmountOfMineralAtPoint(Material mineral, Point point) throws Exception {
+    public int getAmountOfMineralAtPoint(Material mineral, Point point) {
         int amount = 0;
 
         for (Tile t : terrain.getSurroundingTiles(point)) {
@@ -1685,7 +1685,7 @@ public class GameMap {
         return amount;
     }
 
-    public int getAmountFishAtPoint(Point point) throws Exception {
+    public int getAmountFishAtPoint(Point point) {
         int amount = 0;
         
         for (Tile t : terrain.getSurroundingTiles(point)) {
@@ -1767,7 +1767,7 @@ public class GameMap {
         workersToRemove.add(w);
     }
 
-    void removeBuilding(Building b) throws Exception {
+    void removeBuilding(Building b) {
         MapPoint mp = getMapPoint(b.getPosition());
 
         mp.removeBuilding();
@@ -1819,7 +1819,14 @@ public class GameMap {
         return true;
     }
 
-    public Size isAvailableHousePoint(Player player, Point point) throws Exception {
+    /**
+     * Tells whether a house can be placed on the given point and if so, what
+     * size of house.
+     * @param player The player that would build the house
+     * @param point The point that the house would be placed on
+     * @return The max size of the potential house, otherwise null.
+     */
+    public Size isAvailableHousePoint(Player player, Point point) {
 
         Size result     = null;
         Point flagPoint = point.downRight();
@@ -1979,47 +1986,72 @@ public class GameMap {
         return result;
     }
 
+    /**
+     * Returns the stone at the given point if there is one. Otherwise null.
+     *
+     * @param point The point with the stone
+     * @return Stone on the given point
+     */
     public Stone getStoneAtPoint(Point point) {
         return getMapPoint(point).getStone();
     }
 
+    /**
+     * Returns a list of roads that connect to the given flag
+     *
+     * @param flag that the connect to
+     * @return List of roads that connect to the flag
+     */
     public List<Road> getRoadsFromFlag(Flag flag) {
         return getMapPoint(flag.getPosition()).getConnectedRoads();
     }
 
-    public boolean isAvailableMinePoint(Player p, Point point0) throws Exception {
+    /**
+     * Tells whether the given point is available to construct a mine on
+     *
+     * @param player The player who may construct the mine
+     * @param point The point that may be available for mine construction
+     * @return true if a mine can be constructed on the point
+     */
+    public boolean isAvailableMinePoint(Player player, Point point) {
 
         /* Return false if the point is outside the border */
-        if (!p.isWithinBorder(point0)) {
+        if (!player.isWithinBorder(point)) {
             return false;
         }
 
         /* Return false if the point is not on a mountain */
-        if (!getTerrain().isOnMountain(point0)) {
+        if (!getTerrain().isOnMountain(point)) {
             return false;
         }
 
         /* Return false if the point is on a flag */
-        if (isFlagAtPoint(point0)) {
+        if (isFlagAtPoint(point)) {
             return false;
         }
 
         /* Return false if the point is on a road */
-        if (isRoadAtPoint(point0)) {
+        if (isRoadAtPoint(point)) {
             return false;
         }
 
         /* Return false if it's not possible to place a flag */
-        Point flagPoint = point0.downRight();
+        Point flagPoint = point.downRight();
 
-        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(p, flagPoint)) {
+        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint)) {
             return false;
         }
 
         return true;
     }
 
-    public List<Point> getAvailableMinePoints(Player p) throws Exception {
+    /**
+     * Returns the available mine points for the given player
+     *
+     * @param player The player to return mine points for
+     * @return List of available mine points
+     */
+    public List<Point> getAvailableMinePoints(Player player) {
 
         List<Point> availableMinePoints = new LinkedList<>();
 
@@ -2027,11 +2059,11 @@ public class GameMap {
            This iterates over a collection and the order may be
            non-deterministic
         */
-        for (Land land : p.getLands()) {
+        for (Land land : player.getLands()) {
             for (Point point : land.getPointsInLand()) {
 
                 /* Add the point if it's possible to build a mine there */
-                if (isAvailableMinePoint(p, point)) {
+                if (isAvailableMinePoint(player, point)) {
                     availableMinePoints.add(point);
                 }
             }
@@ -2040,6 +2072,10 @@ public class GameMap {
         return availableMinePoints;
     }
 
+    /**
+     * Returns a list of the projectiles
+     * @return List of projectiles
+     */
     public List<Projectile> getProjectiles() {
         return Collections.unmodifiableList(projectiles);
     }
@@ -2052,6 +2088,10 @@ public class GameMap {
         projectilesToRemove.add(projectile);
     }
 
+    /**
+     * Returns a list with the wild animals
+     * @return List of wild animals
+     */
     public List<WildAnimal> getWildAnimals() {
         return Collections.unmodifiableList(wildAnimals);
     }
@@ -2121,29 +2161,50 @@ public class GameMap {
         animalsToRemove.add(animal);
     }
 
-    public void placeMountainHexagonOnMap(Point p) throws Exception {
+    /**
+     * Places a hexagon-shaped mountain on the map with the given point in center.
+     * @param point The center for the hexagon-shaped mountain
+     * @throws Exception 
+     */
+    public void placeMountainHexagonOnMap(Point point) {
 
-        terrain.placeMountainOnTile(p, p.left(), p.upLeft());
-        terrain.placeMountainOnTile(p, p.upLeft(), p.upRight());
-        terrain.placeMountainOnTile(p, p.upRight(), p.right());
-        terrain.placeMountainOnTile(p, p.right(), p.downRight());
-        terrain.placeMountainOnTile(p, p.downRight(), p.downLeft());
-        terrain.placeMountainOnTile(p, p.downLeft(), p.left());
+        terrain.placeMountainOnTile(point, point.left(), point.upLeft());
+        terrain.placeMountainOnTile(point, point.upLeft(), point.upRight());
+        terrain.placeMountainOnTile(point, point.upRight(), point.right());
+        terrain.placeMountainOnTile(point, point.right(), point.downRight());
+        terrain.placeMountainOnTile(point, point.downRight(), point.downLeft());
+        terrain.placeMountainOnTile(point, point.downLeft(), point.left());
     }
 
-    public void surroundPointWithMineral(Point p, Material material) throws Exception {
-        for (Tile t : terrain.getSurroundingTiles(p)) {
+    /**
+     * Changes the tiles surrounding the given point to contain large amounts of
+     * the given mineral.
+     * @param point Point to surround with large quantities of mineral
+     * @param material The type of mineral
+     * @throws Exception 
+     */
+    public void surroundPointWithMineral(Point point, Material material) {
+        for (Tile t : terrain.getSurroundingTiles(point)) {
             t.setAmountMineral(material, LARGE);
         }
     }
 
-    public void surroundPointWithWater(Point point) throws Exception {
+    /**
+     * Changes the vegetation of the tiles surrounding the given point to water.
+     * @param point Point to surround with water
+     */
+    public void surroundPointWithWater(Point point) {
         for (Tile t : terrain.getSurroundingTiles(point)) {
             t.setVegetationType(Vegetation.WATER);
         }
     }
 
-    public void surroundPointWithLand(Point point) throws Exception {
+    /**
+     * Changes the vegetation of the tiles surrounding the given point to grass.
+     * @param point Point to surround with grass
+     * @throws Exception 
+     */
+    public void surroundPointWithGrass(Point point) {
         for (Tile t : terrain.getSurroundingTiles(point)) {
             t.setVegetationType(Vegetation.GRASS);
         }
@@ -2172,10 +2233,21 @@ public class GameMap {
         buildingsToAdd.add(upgradedBuilding);
     }
 
+    /**
+     * Returns the winning player of the game if there is a winner. Otherwise null.
+     * @return Returns the winngin player of the game if there is a winner. Otherwise null.
+     */
     public Player getWinner() {
         return winner;
     }
 
+    /**
+     * Determines whether two points are connected by roads.
+     *
+     * @param start The point to start form
+     * @param end The point to reach
+     * @return true if the two points are connected by roads.
+     */
     public boolean arePointsConnectedByRoads(Point start, Point end) {
         return GameUtils.arePointsConnectedByRoads(start, end, pointToGameObject);
     }
