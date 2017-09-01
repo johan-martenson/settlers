@@ -269,6 +269,9 @@ public class TestGameMap {
         
         assertNotNull(map.findWayWithExistingRoads(point0, point1));
         assertNotNull(map.findWayWithExistingRoads(point1, point0));
+
+        assertTrue(map.arePointsConnectedByRoads(point0, point1));
+        assertTrue(map.arePointsConnectedByRoads(point1, point0));
     }
 
     @Test

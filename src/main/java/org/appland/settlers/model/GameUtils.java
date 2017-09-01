@@ -421,7 +421,18 @@ public class GameUtils {
         }
     }
 
-    public static List<Point> findShortestPathViaRoads(Point start, Point goal,
+    /**
+     * Finds the shortest path following roads via any two points. The points
+     * don't need to be flags or buildings but can be any point on a road.
+     *
+     * All the required steps are returned, including points between flags.
+     *
+     * @param start The point to start from
+     * @param goal The point to reach
+     * @param mapPoints The map with information about each point on the map
+     * @return the detailed list of steps required to travel from start to goal
+     */
+    static List<Point> findShortestPathViaRoads(Point start, Point goal,
             Map<Point, MapPoint> mapPoints) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
@@ -520,17 +531,121 @@ public class GameUtils {
         return null;
     }
 
-    /* Returns a detailed path including points between flags. Can only be called 
-     * a building or flag as start and end point
+    /**
+     * Determines whether any two points are connected by roads. The points
+     * don't need to be flags or buildings but can be any point on a road.
+     *
+     * All the required steps are returned, including points between flags.
+     *
+     * @param start The point to start from
+     * @param goal The point to reach
+     * @param mapPoints The map with information about each point on the map
+     * @return the detailed list of steps required to travel from start to goal
      */
-    public static List<Point> findShortestDetailedPathViaRoads(Point start, Point goal,
+    static boolean arePointsConnectedByRoads(Point start, Point goal,
+            Map<Point, MapPoint> mapPoints) {
+        Set<Point>         evaluated         = new HashSet<>();
+        Set<Point>         toEvaluate        = new HashSet<>();
+        Map<Point, Double> realCostToPoint   = new HashMap<>();
+        Map<Point, Double> estimatedFullCost = new HashMap<>();
+        double             bestCaseCost;
+
+        /* Define starting parameters */
+        bestCaseCost = start.distance(goal);
+        toEvaluate.add(start);
+        realCostToPoint.put(start, (double)0);
+        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+
+        /* Declare variables outside of the loop to keep memory churn down */
+        Point currentPoint;
+        double currentEstimatedCost;
+
+        double tmpEstimatedCost;
+
+        double tentativeCost;
+
+        while (!toEvaluate.isEmpty()) {
+            currentPoint = null;
+            currentEstimatedCost = Double.MAX_VALUE;
+
+            /* Find the point with the lowest estimated full cost */
+            for (Point iteratedPoint : toEvaluate) {
+
+                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
+
+                if (currentEstimatedCost > tmpEstimatedCost) {
+                    currentEstimatedCost = tmpEstimatedCost;
+                    currentPoint = iteratedPoint;
+
+                    if (currentEstimatedCost == bestCaseCost) {
+                        break;
+                    }
+                }
+            }
+
+            /* Handle if the goal is reached */
+            if (currentPoint.equals(goal)) {
+                return true;
+            }
+
+            /* Do not re-evalute the same point */
+            toEvaluate.remove(currentPoint);
+            evaluated.add(currentPoint);
+
+            /* Evaluate each direct neighbor */
+            MapPoint mp = mapPoints.get(currentPoint);
+            for (Road road : mp.getConnectedRoads()) {
+
+                Point neighbor = road.getOtherPoint(currentPoint);
+
+                /* Skip already evaluated points */
+                if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+
+                /* Calculate the real cost to reach the neighbor from the start */
+                tentativeCost = realCostToPoint.get(currentPoint) +
+                        road.getWayPoints().size() - 1;
+
+                /* Check if the neighbor hasn't been evaluated yet or if we
+                   have found a cheaper way to reach it */
+                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
+
+                    /* Remember the cost to reach the neighbor */
+                    realCostToPoint.put(neighbor, tentativeCost);
+
+                    /* Remember the estimated full cost to go via the neighbor */
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+
+                    /* Add the neighbor to the evaluation list */
+                    toEvaluate.add(neighbor);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns a detailed path including points between flags. Can only be
+     * called with a building or flag as start and end point.
+     *
+     * @param start
+     * @param goal
+     * @param mapPoints
+     * @return a detailed list with the steps required to travel from the start to the goal.
+     */
+    static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint,
             Map<Point, MapPoint> mapPoints) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();
         Map<Point, Double> estimatedFullCost = new HashMap<>();
         Map<Point, Road>   cameVia           = new HashMap<>();
-        double             bestCaseCost      = 2;
+        double             bestCaseCost;
+
+        Point start = startEndPoint.getPosition();
+        Point goal = goalEndPoint.getPosition();
 
         /* Define starting parameters */
         bestCaseCost = start.distance(goal);
@@ -636,5 +751,101 @@ public class GameUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Determines if two points with flags or buildings are connected by roads.
+     *
+     * @param start
+     * @param goal
+     * @param mapPoints
+     * @return
+     */
+    public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint,
+            Map<Point, MapPoint> mapPoints) {
+        Set<Point>         evaluated         = new HashSet<>();
+        Set<Point>         toEvaluate        = new HashSet<>();
+        Map<Point, Double> realCostToPoint   = new HashMap<>();
+        Map<Point, Double> estimatedFullCost = new HashMap<>();
+        double             bestCaseCost;
+
+        Point start = startEndPoint.getPosition();
+        Point goal = goalEndPoint.getPosition();
+
+        /* Define starting parameters */
+        bestCaseCost = start.distance(goal);
+        toEvaluate.add(start);
+        realCostToPoint.put(start, (double)0);
+        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+
+        /* Declare variables outside of the loop to keep memory churn down */
+        Point currentPoint;
+        double currentEstimatedCost;
+
+        double tmpEstimatedCost;
+
+        double tentativeCost;
+
+        while (!toEvaluate.isEmpty()) {
+            currentPoint = null;
+            currentEstimatedCost = Double.MAX_VALUE;
+
+            /* Find the point with the lowest estimated full cost */
+            for (Point iteratedPoint : toEvaluate) {
+
+                tmpEstimatedCost = estimatedFullCost.get(iteratedPoint);
+
+                if (currentEstimatedCost > tmpEstimatedCost) {
+                    currentEstimatedCost = tmpEstimatedCost;
+                    currentPoint = iteratedPoint;
+
+                    if (currentEstimatedCost == bestCaseCost) {
+                        break;
+                    }
+                }
+            }
+
+            /* Handle if the goal is reached */
+            if (currentPoint.equals(goal)) {
+                return true;
+            }
+
+            /* Do not re-evalute the same point */
+            toEvaluate.remove(currentPoint);
+            evaluated.add(currentPoint);
+
+            /* Evaluate each direct neighbor */
+            MapPoint mp = mapPoints.get(currentPoint);
+            for (Road road : mp.getConnectedRoads()) {
+
+                Point neighbor = road.getOtherPoint(currentPoint);
+
+                /* Skip already evaluated points */
+                if (evaluated.contains(neighbor)) {
+                    continue;
+                }
+
+                /* Calculate the real cost to reach the neighbor from the start */
+                tentativeCost = realCostToPoint.get(currentPoint) +
+                        road.getWayPoints().size() - 1;
+
+                /* Check if the neighbor hasn't been evaluated yet or if we
+                 * have found a cheaper way to reach it
+                */
+                if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
+
+                    /* Remember the cost to reach the neighbor */
+                    realCostToPoint.put(neighbor, tentativeCost);
+
+                    /* Remember the estimated full cost to go via the neighbor */
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+
+                    /* Add the neighbor to the evaluation list */
+                    toEvaluate.add(neighbor);
+                }
+            }
+        }
+
+        return false;
     }
 }

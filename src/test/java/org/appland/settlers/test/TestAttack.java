@@ -3512,9 +3512,7 @@ public class TestAttack {
             map.stepTime();
         }
 
-        List<Point> path = map.findWayWithExistingRoads(headquarter1.getPosition(), barracks0.getFlag().getPosition());
-
-        assertNull(path);
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(headquarter0, barracks0.getFlag()));
     }
 
     @Test

@@ -114,7 +114,7 @@ public class StorageWorker extends Worker {
                 }
 
                 /* Filter out buildings that cannot be reached from the storage */
-                if (!map.isConnectedByRoads(getHome().getPosition(), b.getPosition())) {
+                if (!map.arePointsConnectedByRoads(getHome().getPosition(), b.getPosition())) {
                     continue;
                 }
 

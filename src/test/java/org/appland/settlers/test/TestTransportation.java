@@ -885,7 +885,7 @@ public class TestTransportation {
 
         /* Remove the second road */
         map.removeRoad(road1);
-        assertNull(map.findWayWithExistingRoads(flag0.getPosition(), sm.getPosition()));
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, sm));
 
         /* Verify that the cargo is placed at the flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());

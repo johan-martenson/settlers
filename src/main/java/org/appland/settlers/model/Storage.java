@@ -137,9 +137,7 @@ public class Storage extends Building implements Actor {
             if (f.needsGeologist()) {
 
                 /* Don't send out scout if there is no way to the flag */
-                List<Point> path = getMap().findWayWithExistingRoads(getPosition(), f.getPosition());
-
-                if (path == null) {
+                if (!getMap().arePointsConnectedByRoads(getPosition(), f.getPosition())) {
                     continue;
                 }
 
@@ -173,10 +171,8 @@ public class Storage extends Building implements Actor {
         for (Flag f : getMap().getFlags()) {
             if (f.needsScout()) {
 
-                List<Point> path = getMap().findWayWithExistingRoads(getPosition(), f.getPosition());
-
                 /* Don't send out a scout if there is no way to the flag */
-                if (path == null) {
+                if (!getMap().arePointsConnectedByRoads(getPosition(), f.getPosition())) {
                     continue;
                 }
  

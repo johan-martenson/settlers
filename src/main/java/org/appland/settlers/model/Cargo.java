@@ -153,9 +153,9 @@ public class Cargo implements Piece {
             /* Re-evalute the route if the current one is not optimal or if it's
              * no longer available
             */
-            if (!optimalRoute(getPosition(), path)                  ||
-                !map.pathViaRoadsExists(getPosition(), path.get(0)) ||
-                !map.pathViaRoadsExists(path)) {
+            if (!optimalRoute(getPosition(), path)                    ||
+                !map.isValidRouteViaRoads(getPosition(), path.get(0)) ||
+                !map.isValidRouteViaRoads(path)) {
 
                 /* Find the best way from this flag */
                 List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(getPosition(), getTarget().getPosition());

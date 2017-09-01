@@ -2176,8 +2176,8 @@ public class GameMap {
         return winner;
     }
 
-    public boolean isConnectedByRoads(Point start, Point end) {
-        return findWayWithExistingRoadsInFlagsAndBuildings(start, end) != null;
+    public boolean arePointsConnectedByRoads(Point start, Point end) {
+        return GameUtils.arePointsConnectedByRoads(start, end, pointToGameObject);
     }
 
     /* Only include points with flags and buildings - what's a good name? */
@@ -2185,7 +2185,14 @@ public class GameMap {
         return GameUtils.findShortestPathViaRoads(start, end, pointToGameObject);
     }
 
-    boolean pathViaRoadsExists(Point... points) {
+    /**
+     * Determines whether two points are connected. The points can be any points
+     * on a road, not only flags or buildings.
+     *
+     * @param points List of each point in the planned path
+     * @return true if the list of points follows existing roads
+     */
+    boolean isValidRouteViaRoads(Point... points) {
 
         Point previous = null;
 
@@ -2203,11 +2210,18 @@ public class GameMap {
         return true;
     }
 
-    public boolean pathViaRoadsExists(List<Point> path) {
+    /**
+     * Determines whether two points are connected. The points can be any points
+     * on a road, not only flags or buildings.
+     *
+     * @param points List of each point in the planned path
+     * @return true if the list of points follows existing roads
+     */
+    public boolean isValidRouteViaRoads(List<Point> points) {
 
         Point previous = null;
 
-        for (Point point : path) {
+        for (Point point : points) {
 
             if (previous != null) {
                 MapPoint mp = pointToGameObject.get(previous);
@@ -2219,5 +2233,16 @@ public class GameMap {
         }
 
         return true;
+    }
+
+    /**
+     * Determines if two points with flags or buildings are connected by roads
+     *
+     * @param from A flag or building
+     * @param to A flag or building
+     * @return true if the given endpoints are connected
+     */
+    public boolean areFlagsOrBuildingsConnectedViaRoads(EndPoint from, EndPoint to) {
+        return GameUtils.areBuildingsOrFlagsConnected(from, to, pointToGameObject);
     }
 }

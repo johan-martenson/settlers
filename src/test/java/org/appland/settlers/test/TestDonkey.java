@@ -1329,7 +1329,7 @@ public class TestDonkey {
         /* Destroy the fortress so the main road is not connected to the headquarter */
         fortress0.tearDown();
 
-        assertNull(map.findWayWithExistingRoads(road1.getStart(), headquarter0.getPosition()));
+        assertFalse(map.arePointsConnectedByRoads(road1.getStart(), headquarter0.getPosition()));
 
         /* Place an opponent */
         Point point4 = new Point(40, 40);
