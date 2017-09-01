@@ -1120,7 +1120,7 @@ public class TestTransportation {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
         /* Verify that there is a road between the two flags */
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point0);
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
         assertNotNull(path);
         assertEquals(path.size(), 2);
         assertEquals(path.get(0), headquarter0.getFlag().getPosition());
@@ -1147,7 +1147,7 @@ public class TestTransportation {
         Flag flag0 = map.placeFlag(player0, point0);
 
         /* Verify that there is a road between the two flags */
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point0);
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag0);
         assertNull(path);
     }
 
@@ -1185,7 +1185,7 @@ public class TestTransportation {
         Road road2 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         /* Verify that the short road is chosen */
-        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag().getPosition(), point1);
+        List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag1);
         System.out.println(path);
         assertNotNull(path);
         assertEquals(path.size(), 3);

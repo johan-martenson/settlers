@@ -2180,14 +2180,20 @@ public class GameMap {
         return GameUtils.arePointsConnectedByRoads(start, end, pointToGameObject);
     }
 
-    /* Only include points with flags and buildings - what's a good name? */
-    public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(Point start, Point end) {
-        return GameUtils.findShortestPathViaRoads(start, end, pointToGameObject);
+    /**
+     * Finds the shortest path following roads between any two points. The points
+     * don't need to be flags or buildings but can be any point on a road.
+     *
+     * @param start The flag or building to start from
+     * @param end The flag or building to reach
+     * @return the list of points with flags or buildings to pass by
+     */
+    public List<Point> findWayWithExistingRoadsInFlagsAndBuildings(EndPoint start, EndPoint end) {
+        return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject);
     }
 
     /**
-     * Determines whether two points are connected. The points can be any points
-     * on a road, not only flags or buildings.
+     * Determines whether a list of points describes a valid path via roads.
      *
      * @param points List of each point in the planned path
      * @return true if the list of points follows existing roads
@@ -2211,8 +2217,7 @@ public class GameMap {
     }
 
     /**
-     * Determines whether two points are connected. The points can be any points
-     * on a road, not only flags or buildings.
+     * Determines whether a list of points describes a valid path via roads.
      *
      * @param points List of each point in the planned path
      * @return true if the list of points follows existing roads

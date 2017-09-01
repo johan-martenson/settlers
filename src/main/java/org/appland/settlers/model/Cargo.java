@@ -31,8 +31,9 @@ public class Cargo implements Piece {
     public void setTarget(Building target) throws InvalidRouteException, Exception {
         log.log(Level.FINE, "Setting target to {0}", target);
         this.target = target;
-        
-        path = map.findWayWithExistingRoadsInFlagsAndBuildings(position, target.getPosition());
+
+        Flag flag = map.getFlagAtPoint(getPosition());
+        path = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, target);
 
         path.remove(0);
     }
@@ -158,7 +159,8 @@ public class Cargo implements Piece {
                 !map.isValidRouteViaRoads(path)) {
 
                 /* Find the best way from this flag */
-                List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(getPosition(), getTarget().getPosition());
+                Flag flag = map.getFlagAtPoint(getPosition());
+                List<Point> closestPath = map.findWayWithExistingRoadsInFlagsAndBuildings(flag, getTarget());
 
                 /* Return the cargo to storage if there is no available route to the target */
                 if (closestPath == null) {

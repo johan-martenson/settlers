@@ -422,10 +422,10 @@ public class GameUtils {
     }
 
     /**
-     * Finds the shortest path following roads via any two points. The points
+     * Finds the shortest path following roads between any two points. The points
      * don't need to be flags or buildings but can be any point on a road.
      *
-     * All the required steps are returned, including points between flags.
+     * Only points with flags or buildings are returned.
      *
      * @param start The point to start from
      * @param goal The point to reach
@@ -535,12 +535,10 @@ public class GameUtils {
      * Determines whether any two points are connected by roads. The points
      * don't need to be flags or buildings but can be any point on a road.
      *
-     * All the required steps are returned, including points between flags.
-     *
      * @param start The point to start from
      * @param goal The point to reach
      * @param mapPoints The map with information about each point on the map
-     * @return the detailed list of steps required to travel from start to goal
+     * @return true if the start and end are connected
      */
     static boolean arePointsConnectedByRoads(Point start, Point goal,
             Map<Point, MapPoint> mapPoints) {
@@ -627,12 +625,12 @@ public class GameUtils {
     }
 
     /**
-     * Returns a detailed path including points between flags. Can only be
-     * called with a building or flag as start and end point.
+     * Returns a detailed path including points between flags or buildings. Can
+     * only be called with a building or flag as start and end point.
      *
-     * @param start
-     * @param goal
-     * @param mapPoints
+     * @param start Flag or building to start from
+     * @param goal Flag or building to reach
+     * @param mapPoints The map with information about each point on the game map
      * @return a detailed list with the steps required to travel from the start to the goal.
      */
     static List<Point> findShortestDetailedPathViaRoads(EndPoint startEndPoint, EndPoint goalEndPoint,
@@ -756,10 +754,10 @@ public class GameUtils {
     /**
      * Determines if two points with flags or buildings are connected by roads.
      *
-     * @param start
-     * @param goal
-     * @param mapPoints
-     * @return
+     * @param start Flag or building to start from
+     * @param goal Flag or building to reach
+     * @param mapPoints The map with information about each point on the game map
+     * @return true if the start and end are connected
      */
     public static boolean areBuildingsOrFlagsConnected(EndPoint startEndPoint, EndPoint goalEndPoint,
             Map<Point, MapPoint> mapPoints) {
