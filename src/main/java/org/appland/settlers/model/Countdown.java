@@ -14,7 +14,7 @@ public class Countdown {
 
     private int count = -1;
     private int startedAt;
-    
+
     public Countdown() {
     }
 

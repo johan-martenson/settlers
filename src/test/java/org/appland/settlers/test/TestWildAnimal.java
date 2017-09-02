@@ -60,7 +60,7 @@ public class TestWildAnimal {
 
         /* Wait for an animal to appear */
         WildAnimal animal = Utils.waitForAnimalToAppear(map);
-        
+
         /* Verify that the animal moves sometimes */
         Point origin = animal.getPosition();
 
@@ -88,7 +88,7 @@ public class TestWildAnimal {
 
         /* Wait for an animal to appear */
         WildAnimal animal = Utils.waitForAnimalToAppear(map);
-        
+
         /* Verify that the animal moves sometimes */
         Point oldPlace = animal.getPosition();
         int timeInSamePlace = 0;

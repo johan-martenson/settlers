@@ -22,20 +22,20 @@ import org.junit.Test;
  * @author johan
  */
 public class TestSign {
-    
+
     @Test
     public void testSignExpires() throws Exception {
-        
+
         /* Create a new game map */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-    
+
         /* Place sign */
         Point point0 = new Point(6, 6);
         map.placeSign(IRON, SMALL, point0);
@@ -43,10 +43,10 @@ public class TestSign {
         /* Verify that the sign remains for the right time */
         for (int i = 0; i < 2000; i++) {
             assertTrue(map.isSignAtPoint(point0));
-            
+
             map.stepTime();
         }
-    
+
         assertFalse(map.isSignAtPoint(point0));
     }
 }

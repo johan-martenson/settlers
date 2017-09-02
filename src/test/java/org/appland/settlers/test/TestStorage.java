@@ -61,7 +61,7 @@ public class TestStorage {
         /* Placing storage */
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
-        
+
         /* Deliver four planck and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -73,11 +73,11 @@ public class TestStorage {
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
-    
+
         /* Verify that this is enough to construct the storage */
         for (int i = 0; i < 150; i++) {
             assertTrue(storage0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -100,7 +100,7 @@ public class TestStorage {
         /* Placing storage */
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
-        
+
         /* Deliver three plancks and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -138,7 +138,7 @@ public class TestStorage {
         /* Placing storage */
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
-        
+
         /* Deliver four plancks and two stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -178,7 +178,7 @@ public class TestStorage {
         /* Unfinished samwill doesn't need worker */
         assertFalse(storage.needsWorker());
     }
-    
+
     @Test
     public void testStorageNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -193,15 +193,15 @@ public class TestStorage {
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3);
-        
+
         /* Finish construction of the storage */
         Utils.constructHouse(storage, map);
-        
+
         assertTrue(storage.ready());
-        
+
         assertTrue(storage.needsWorker());
     }
-    
+
     @Test
     public void testStorageWorkerGetsAssignedToFinishedStorage() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -227,25 +227,25 @@ public class TestStorage {
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage, map);
-        
+
         /* Run game logic once to let the headquarter assign a storage worker to the storage */
         map.stepTime();
-        
+
         Worker sw = null;
-        
+
         for (Worker w : map.getWorkers()) {
             if (w instanceof StorageWorker) {
                 sw = w;
             }
         }
-        
+
         assertNotNull(sw);
-        
+
         assertTrue(sw instanceof StorageWorker);
         assertEquals(sw.getTarget(), storage.getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getPosition());
-        
+
         assertTrue(sw.isInsideBuilding());
         assertEquals(storage.getWorker(), sw);
     }
@@ -266,11 +266,11 @@ public class TestStorage {
         Building storage = map.placeBuilding(new Storage(player0), point3);
 
         Utils.constructHouse(storage, map);
-        
+
         StorageWorker sw = new StorageWorker(player0, map);
-        
+
         Utils.occupyBuilding(sw, storage, map);
-        
+
         /* Verify that the storage worker rests */
         int i;
         for (i = 0; i < 50; i++) {
@@ -292,39 +292,39 @@ public class TestStorage {
 
         Point point1 = new Point(11, 9);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
-        
+
         Point point2 = new Point(9, 9);
-        
+
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
         map.placeRoad(player0, point1, point2, point3);
-        
+
         Utils.constructHouse(storage, map);
-        
+
         StorageWorker sw = new StorageWorker(player0, map);
-        
+
         Utils.occupyBuilding(sw, storage, map);
-        
+
         /* The storage worker rests */
         Utils.fastForward(19, map);
-        
+
         /* Put plancks in the storage */
         storage.putCargo(new Cargo(PLANCK, map));
-        
+
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
-        
+
         map.stepTime();
-        
+
         assertFalse(sw.isInsideBuilding());
         assertNotNull(sw.getCargo());
         assertEquals(sw.getTarget(), storage.getFlag().getPosition());
         assertTrue(storage.getFlag().getStackedCargo().isEmpty());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
-        
+
         assertNull(sw.getCargo());
         assertFalse(storage.getFlag().getStackedCargo().isEmpty());
     }
@@ -342,43 +342,43 @@ public class TestStorage {
 
         Point point1 = new Point(11, 9);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
-        
+
         Point point2 = new Point(9, 9);
-        
+
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
         map.placeRoad(player0, point1, point2, point3);
-        
+
         Utils.constructHouse(storage, map);
-        
+
         StorageWorker sw = new StorageWorker(player0, map);
-        
+
         Utils.occupyBuilding(sw, storage, map);
-        
+
         /* The storage worker rests */
         Utils.fastForward(19, map);
-        
+
         /* Put plancks in the storage */
         storage.putCargo(new Cargo(PLANCK, map));
-        
+
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
-        
+
         map.stepTime();
-        
+
         assertFalse(sw.isInsideBuilding());
         assertNotNull(sw.getCargo());
         assertEquals(sw.getTarget(), storage.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
-        
+
         /* Verify that the storage worker goes back to the storage */
         assertEquals(sw.getTarget(), storage.getPosition());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, sw);
-        
+
         assertTrue(sw.isInsideBuilding());
     }
 
@@ -395,44 +395,44 @@ public class TestStorage {
 
         Point point1 = new Point(11, 9);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
-        
+
         Point point2 = new Point(9, 9);
-        
+
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
         map.placeRoad(player0, point1, point2, point3);
-        
+
         Utils.constructHouse(storage, map);
-        
+
         StorageWorker sw = new StorageWorker(player0, map);
-        
+
         Utils.occupyBuilding(sw, storage, map);
-        
+
         /* The storage worker rests */
         Utils.fastForward(19, map);
-        
+
         /* Put plancks in the storage */
         storage.putCargo(new Cargo(PLANCK, map));
-        
+
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
-        
+
         map.stepTime();
-        
+
         assertFalse(sw.isInsideBuilding());
         assertEquals(sw.getTarget(), storage.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
-        
+
         assertNull(sw.getCargo());
 
         /* Let the storage worker go back to the storage */
         assertEquals(sw.getTarget(), storage.getPosition());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, sw);
-        
+
         /* Verify that the storage worker stays in the storage and rests */
         int i;
         for (i = 0; i < 20; i++) {
@@ -463,10 +463,10 @@ public class TestStorage {
 
         /* Occupy the storage */
         Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
-        
+
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
-        
+
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storage0.getPosition());
 
@@ -475,9 +475,9 @@ public class TestStorage {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(STORAGE_WORKER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
         /* Verify that the storage worker is stored correctly in the headquarter */
@@ -503,16 +503,16 @@ public class TestStorage {
 
         /* Connect the storage with the headquarter */
         map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
 
         /* Occupy the storage */
         Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
-        
+
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
-        
+
         assertTrue(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getPosition(), storage0.getPosition());
 
@@ -521,7 +521,7 @@ public class TestStorage {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(storageWorker.isInsideBuilding());
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : storageWorker.getPlannedPath()) {
@@ -553,7 +553,7 @@ public class TestStorage {
 
         /* Connect the storage with the headquarter */
         map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
 
@@ -564,16 +564,16 @@ public class TestStorage {
 
         /* Wait for the storage to stop burning */
         Utils.fastForward(50, map);
-        
+
         assertTrue(storage0.destroyed());
-        
+
         /* Wait for the storage to disappear */
         for (int i = 0; i < 100; i++) {
             assertEquals(map.getBuildingAtPoint(point26), storage0);
-            
+
             map.stepTime();
         }
-        
+
         assertFalse(map.isBuildingAtPoint(point26));
         assertFalse(map.getBuildings().contains(storage0));
         assertNull(map.getBuildingAtPoint(point26));
@@ -595,13 +595,13 @@ public class TestStorage {
         /* Placing storage */
         Point point26 = new Point(8, 8);
         Building storage0 = map.placeBuilding(new Storage(player0), point26);
-        
+
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
-        
+
         map.removeFlag(storage0.getFlag());
 
         assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
@@ -623,13 +623,13 @@ public class TestStorage {
         /* Placing storage */
         Point point26 = new Point(8, 8);
         Building storage0 = map.placeBuilding(new Storage(player0), point26);
-        
+
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
-        
+
         storage0.tearDown();
 
         assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
@@ -643,27 +643,27 @@ public class TestStorage {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place storage */
         Point point1 = new Point(8, 6);
         Building storage0 = map.placeBuilding(new Storage(player0), point1);
-        
+
         /* Connect the storage and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the storage */
         Utils.constructHouse(storage0, map);
-        
+
         /* Assign a worker to the storage */
         StorageWorker storageWorker = new StorageWorker(player0, map);
-        
+
         Utils.occupyBuilding(storageWorker, storage0, map);
 
         /* Verify that production can't be stopped */
@@ -691,7 +691,7 @@ public class TestStorage {
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0, map);
-        
+
         /* Connect the storage with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storage0.getFlag());
 

@@ -134,7 +134,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -265,7 +265,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -393,7 +393,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -521,7 +521,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -649,7 +649,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -760,7 +760,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, ironMine0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -903,7 +903,7 @@ public class TestPrioritization {
         Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
-            
+
             /* Add one bread to the headquarter */
             Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
 
@@ -1047,7 +1047,7 @@ public class TestPrioritization {
         Worker carrier = headquarter0.getWorker();
 
         for (int i = 0; i < 5000; i++) {
-            
+
             /* Add one bread to the headquarter */
             Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
 
@@ -1129,7 +1129,7 @@ public class TestPrioritization {
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
@@ -1223,7 +1223,7 @@ public class TestPrioritization {
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
         map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
-        
+
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 

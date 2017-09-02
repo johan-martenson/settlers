@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author johan
  */
 public class TestWorker {
-    
+
     @Test
     public void testWorkerCannotEnterBuildingWhenItsNotAtRightPosition() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -51,7 +51,7 @@ public class TestWorker {
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
-        
+
         SawmillWorker worker = new SawmillWorker(player0, map);
         map.placeWorker(worker, sawmill.getFlag());
 
@@ -59,19 +59,19 @@ public class TestWorker {
             worker.enterBuilding(sawmill);
             assertFalse(true);
         } catch (Exception e) {}
-        
+
         assertFalse(worker.isInsideBuilding());
     }
 
     @Test
     public void testWalking() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
@@ -79,7 +79,7 @@ public class TestWorker {
         /* Place well */
         Point point1 = new Point(13, 5);
         Building well = map.placeBuilding(new Well(player0), point1);
-        
+
         /* Place flag */
         Point point4 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point4);
@@ -113,7 +113,7 @@ public class TestWorker {
         for (int i = 1; i < 10; i++) {
 
             map.stepTime();
-            
+
             /* Verify that these are unaffected */
             assertEquals(courier.getNextPoint(), hq.getFlag().getPosition());
             assertEquals(courier.getLastPoint(), hq.getPosition());
@@ -395,7 +395,7 @@ public class TestWorker {
 
             distance = newDistance;
         }
-        
+
         assertEquals(winner.getPosition(), barracks1.getFlag().getPosition());
     }
 }

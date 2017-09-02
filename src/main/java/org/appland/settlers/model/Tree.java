@@ -19,14 +19,14 @@ public class Tree implements Actor, Piece {
 
     private final Countdown countdown;
     private final Point position;
-    
+
     Tree(Point p) {
         size = SMALL;
-        
+
         position = p;
-        
+
         countdown = new Countdown();
-                
+
         countdown.countFrom(200);
     }
 
@@ -35,15 +35,15 @@ public class Tree implements Actor, Piece {
         if (size == LARGE) {
             return;
         }
-        
+
         if (countdown.reachedZero()) {
             if (size == MEDIUM) {
                 size = LARGE;
-                
+
                 countdown.countFrom(200);
             } else if (size == SMALL) {
                 size = MEDIUM;
-                
+
                 countdown.countFrom(200);
             }
         } else {

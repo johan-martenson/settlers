@@ -51,17 +51,17 @@ public class TestHunterHut {
         /* Placing hunter hut */
         Point point22 = new Point(6, 22);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
-        
+
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
 
         hunterHut0.putCargo(cargo);
         hunterHut0.putCargo(cargo);
-    
+
         /* Verify that this is enough to construct the hunter hut */
         for (int i = 0; i < 100; i++) {
             assertTrue(hunterHut0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -84,12 +84,12 @@ public class TestHunterHut {
         /* Placing hunter hut */
         Point point22 = new Point(6, 22);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
-        
+
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
 
         hunterHut0.putCargo(cargo);
-    
+
         /* Verify that this is enough to construct the hunter hut */
         for (int i = 0; i < 500; i++) {
             assertTrue(hunterHut0.underConstruction());
@@ -207,7 +207,7 @@ public class TestHunterHut {
 
         /* Finish the hunter hut */
         Utils.constructHouse(hunterHut, map);
-        
+
         /* Run game logic twice, once to place courier and once to place hunter */
         Utils.fastForward(2, map);
 
@@ -238,7 +238,7 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Run game logic twice, once to place courier and once to place hunter */
         Utils.fastForward(2, map);
 
@@ -269,21 +269,21 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
         Utils.occupyBuilding(hunter, hunterHut, map);
-        
+
         assertTrue(hunter.isInsideBuilding());
-        
+
         /* Run the game logic 99 times and make sure the hunter stays in the hut */        
         int i;
         for (i = 0; i < 99; i++) {
             assertTrue(hunter.isInsideBuilding());
             map.stepTime();
         }
-        
+
         assertTrue(hunter.isInsideBuilding());
     }
 
@@ -306,14 +306,14 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
         Utils.occupyBuilding(hunter, hunterHut, map);
-        
+
         assertTrue(hunter.isInsideBuilding());
-        
+
         /* Verify that the hunter stays in the hut as long as there are no wild 
            animals close */
         boolean animalClose;
@@ -358,7 +358,7 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
@@ -402,7 +402,7 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
@@ -439,7 +439,7 @@ public class TestHunterHut {
             if (animal.getPosition().distance(hunter.getPosition()) <= 2) {
                 break;
             }
-            
+
             /* Verify that the next planned step is toward the animal */
             assertTrue(hunter.getTarget().distance(animal.getPosition()) <= 
                     hunter.getPosition().distance(animal.getPosition()));
@@ -471,7 +471,7 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
@@ -556,7 +556,7 @@ public class TestHunterHut {
 
         /* Construct the hunter hut */
         constructHouse(hunterHut, map);
-        
+
         /* Manually place hunter */
         Hunter hunter = new Hunter(player0, map);
 
@@ -637,10 +637,10 @@ public class TestHunterHut {
 
         /* Occupy the hunter hut */
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
-        
+
         /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();
-        
+
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
 
@@ -649,9 +649,9 @@ public class TestHunterHut {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(HUNTER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
@@ -677,16 +677,16 @@ public class TestHunterHut {
 
         /* Connect the hunter hut with the headquarter */
         map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the hunter hut */
         Utils.constructHouse(hunterHut0, map);
 
         /* Occupy the hunter hut */
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
-        
+
         /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();
-        
+
         assertTrue(hunter.isInsideBuilding());
         assertEquals(hunter.getPosition(), hunterHut0.getPosition());
 
@@ -695,7 +695,7 @@ public class TestHunterHut {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(hunter.isInsideBuilding());
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : hunter.getPlannedPath()) {
@@ -716,29 +716,29 @@ public class TestHunterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
-        
+
         /* Connect the hunter hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the hunter hut */
         Utils.constructHouse(hunterHut0, map);
-        
+
         /* Assign a worker to the hunter hut */
         Hunter hunter = new Hunter(player0, map);
-        
+
         Utils.occupyBuilding(hunter, hunterHut0, map);
-        
+
         assertTrue(hunter.isInsideBuilding());
 
         /* Let the worker rest */
@@ -766,15 +766,15 @@ public class TestHunterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
-        
+
         /* Connect the hunter hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
@@ -783,17 +783,17 @@ public class TestHunterHut {
 
         /* Finish the hunter hut */
         Utils.constructHouse(hunterHut0, map);
-        
+
         /* Assign a worker to the hunter hut */
         Hunter hunter = new Hunter(player0, map);
-        
+
         Utils.occupyBuilding(hunter, hunterHut0, map);
-        
+
         assertTrue(hunter.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the hunter to leave the hunter hut */
         for (int i = 0; i < 5000; i++) {
             if (!hunter.isInsideBuilding()) {
@@ -810,7 +810,7 @@ public class TestHunterHut {
             if (hunter.isInsideBuilding()) {
                 break;
             }
-        
+
             map.stepTime();
         }
 
@@ -821,7 +821,7 @@ public class TestHunterHut {
 
         for (int i = 0; i < 10000; i++) {
             assertNull(hunter.getCargo());
-            
+
             map.stepTime();
         }
 
@@ -834,7 +834,7 @@ public class TestHunterHut {
             if (!hunter.isInsideBuilding()) {
                 break;
             }
-            
+
             map.stepTime();
         }
 
@@ -862,7 +862,7 @@ public class TestHunterHut {
 
         /* Finish construction of the hunter hut */
         Utils.constructHouse(hunterHut0, map);
-        
+
         /* Connect the hunter hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
 

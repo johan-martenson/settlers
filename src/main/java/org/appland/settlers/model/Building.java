@@ -84,7 +84,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         state = State.UNDER_CONSTRUCTION;
         player = p;
-        
+
         flag.setPlayer(p);
 
         /* Initialize goods required for production if the building does any
@@ -98,10 +98,10 @@ public class Building implements Actor, EndPoint, Piece {
             requiredGoodsForProduction = new Material[0];
         }
     }
-    
+
     void setFlag(Flag flagAtPoint) {
         flag = flagAtPoint;
-        
+
         flag.setPlayer(player);
     }
 
@@ -125,13 +125,13 @@ public class Building implements Actor, EndPoint, Piece {
 
     void consumeOne(Material material) {
         int amount = getAmount(material);
-        
+
         receivedMaterial.put(material, amount - 1);
     }
 
     Collection<Point> getDiscoveredLand() {
         MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
-        
+
         if (mb == null) {
             return new LinkedList<>();
         }
@@ -148,18 +148,18 @@ public class Building implements Actor, EndPoint, Piece {
 
     private int getMaxCoins() {
         MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
-        
+
         return mb.maxCoins();
     }
 
     protected void setMap(GameMap m) throws Exception {
         map = m;
     }
-    
+
     public GameMap getMap() {
         return map;
     }
-    
+
     public boolean isMilitaryBuilding() {
         MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
 
@@ -222,7 +222,7 @@ public class Building implements Actor, EndPoint, Piece {
         if (evacuated) {
             return false;
         }
-        
+
         if (ready()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
@@ -268,7 +268,7 @@ public class Building implements Actor, EndPoint, Piece {
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
         }
-        
+
         if (!isMilitaryBuilding()) {
             throw new Exception("Cannot assign military to non-military building");
         }
@@ -354,7 +354,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         existingQuantity = promisedDeliveries.get(material);
         promisedDeliveries.put(material, existingQuantity - 1);
-        
+
         /* Start the promotion countdown if it's a coin */
         if (material == COIN && isMilitaryBuilding()) {
             countdown.countFrom(PROMOTION_DELAY - 1);
@@ -433,7 +433,7 @@ public class Building implements Actor, EndPoint, Piece {
         } else if (burningDown()) {
             if (countdown.reachedZero()) {
                 state = State.DESTROYED;
-                
+
                 countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
             } else {
                 countdown.step();
@@ -457,7 +457,7 @@ public class Building implements Actor, EndPoint, Piece {
         if (isUpgrading()) {
 
             if (upgradeCountdown.reachedZero()) {
-        
+
                 if (isMaterialForUpgradeAvailable()) {
 
                     /* Replace the current building from the map */
@@ -506,7 +506,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         /* Remove driveway */
         Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
-        
+
         if (driveway != null) {
             map.removeRoad(driveway);
         }
@@ -651,7 +651,7 @@ public class Building implements Actor, EndPoint, Piece {
                 if (getTotalAmountNeededForUpgrade(PLANCK) > getAmount(PLANCK)) {
                     return true;
                 }
-                
+
                 if (getTotalAmountNeededForUpgrade(STONE) > getAmount(STONE)) {
                     return true;
                 }
@@ -711,22 +711,22 @@ public class Building implements Actor, EndPoint, Piece {
 
     private void doPromotion() {
         Collection<Military> promoted = new LinkedList<>();
-        
+
         for (Rank rank : Rank.values()) {
             if (rank == GENERAL_RANK) {
                 continue;
             }
-            
+
             for (Military m : hostedMilitary) {
                 if (promoted.contains(m)) {
                     continue;
                 }
-                
+
                 if (m.getRank() == rank) {
                     m.promote();
-                    
+
                     promoted.add(m);
-                    
+
                     break;
                 }
             }
@@ -743,7 +743,7 @@ public class Building implements Actor, EndPoint, Piece {
                 return true;
             }
         }
-    
+
         return false;
     }
 
@@ -800,18 +800,18 @@ public class Building implements Actor, EndPoint, Piece {
     boolean canAttack(Building buildingToAttack) {
         if (isMilitaryBuilding()) {
             double distance = getPosition().distance(buildingToAttack.getPosition());
-            
+
             if (distance < getAttackRadius()) {
                 return true;
             }
         }
-    
+
         return false;
     }
 
     private int getAttackRadius() {
         MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
-    
+
         return mb.attackRadius();
     }
 
@@ -965,7 +965,7 @@ public class Building implements Actor, EndPoint, Piece {
 
             return getMaterialsToBuildHouse().get(material) - getProjectedAmount(material);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
-            
+
             return getTotalAmountNeeded(material) - getProjectedAmount(material);
         }
 
@@ -1053,7 +1053,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         int planckAvailable = receivedMaterial.get(PLANCK);
         int stoneAvailable = receivedMaterial.get(STONE);
-        
+
         /* Determine if an upgrade is possible */
         if (plancksNeeded <= planckAvailable && stoneNeeded <= stoneAvailable) {
             return true;

@@ -465,7 +465,7 @@ public class TestScout {
 
         assertEquals(scout.getPosition(), flag.getPosition());
     }
-    
+
     @Test
     public void testDepositingScoutIncreasesAmountOfScouts() throws Exception {
 
@@ -578,7 +578,7 @@ public class TestScout {
 
         /* Call for a second scout */
         flag.callScout();
-        
+
         /* Wait for the scout to explore and then return to the flag */
         for (int i = 0; i < 1000; i++) {
             if (flag.getPosition().equals(scout.getTarget())) {

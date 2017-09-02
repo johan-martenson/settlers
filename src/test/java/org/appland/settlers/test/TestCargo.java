@@ -31,7 +31,7 @@ import org.junit.Test;
  * @author johan
  */
 public class TestCargo {
-    
+
     @Test
     public void testNextStepIsNullForCargoWithoutTarget() throws Exception {
         Cargo cargo = new Cargo(WOOD, null);
@@ -83,17 +83,17 @@ public class TestCargo {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
         Cargo cargo = new Cargo(PLANCK, map);
-        
+
         flag0.putCargo(cargo);
-        
+
         assertEquals(cargo.getPosition(), point1);
     }
 
@@ -124,45 +124,45 @@ public class TestCargo {
         Point point42 = new Point(7, 5);
         Point point43 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point40, point41, point2);
-        
+
         /* Placing road between (9, 5) and (6, 4) */
         Road road1 = map.placeRoad(player0, point2, point42, point43);
 
         /* Place couriers on the roads */
         Utils.occupyRoad(road0, map);
         Utils.occupyRoad(road1, map);
-        
+
         /* Wait for a cargo with the forester hut as target to get picked up by the first courier */
         for (int i = 0; i < 2000; i++) {
-            
+
             Cargo c = road1.getCourier().getCargo();
-            
+
             if (c != null && c.getTarget().equals(foresterHut0)) {
                 break;
             }
-        
+
             map.stepTime();
         }
-    
+
         /* Remove the forester hut */
         foresterHut0.tearDown();
 
         /* Verify that the courier delivers the cargo to the next flag */
         Courier courier = road1.getCourier();
         Cargo cargo = courier.getCargo();
-        
+
         assertEquals(courier.getTarget(), point2);
         assertTrue(flag0.getStackedCargo().isEmpty());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
 
         /* Verify that the courier picks up the cargo again and returns it to the storage */
         for (int i = 0; i < 200; i++) {
-            
+
             if (cargo.equals(courier.getCargo())) {
                 break;
             }
-            
+
             map.stepTime();
         }
 

@@ -38,7 +38,7 @@ public class IronFounder extends Worker {
     }
 
     private State state;
-    
+
     public IronFounder(Player player, GameMap m) {
         super(player, m);
 
@@ -105,13 +105,13 @@ public class IronFounder extends Worker {
             returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-            
+
             state = RESTING_IN_HOUSE;
-            
+
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -124,10 +124,10 @@ public class IronFounder extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

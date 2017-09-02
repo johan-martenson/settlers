@@ -7,7 +7,7 @@ import java.util.List;
 public class Road {
 
     private static final int MAIN_ROAD_THRESHOLD = 99;
-    
+
     public int          usage;
     private EndPoint    start;
     private EndPoint    end;
@@ -21,24 +21,24 @@ public class Road {
         if (roadStepsTooLong(wayPoints)) {
             throw new Exception("The steps are too long in " + wayPoints);
         }
-        
+
         this.start = start;
         this.end = end;
 
         courier = null;
         donkey  = null;
-        
+
         steps = new ArrayList<>();
         steps.addAll(wayPoints);
-        
+
         needsCourier = true;
-        
+
         usage = 0;
     }
 
     protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
         this(startFlag, wayPoints, endFlag);
-        
+
         this.player = player;
     }
 
@@ -100,7 +100,7 @@ public class Road {
             if (previous.equals(current.up()) || previous.equals(current.down())) {
                 return true;
             }
-            
+
             previous = current;
         }
 

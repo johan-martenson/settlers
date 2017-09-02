@@ -28,9 +28,9 @@ import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
 public class Miner extends Worker {
     private final static int RESTING_TIME = 99;
     private final static int TIME_TO_MINE = 49;
-    
+
     private final Countdown countdown;
-    
+
     private Material mineral;
     private States state;
 
@@ -42,25 +42,25 @@ public class Miner extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
-    
+
+
     public Miner(Player player, GameMap map) {
         super(player, map);
-        
+
         mineral = null;
-        
+
         countdown = new Countdown();
-        
+
         state = WALKING_TO_TARGET;
     }
 
     public boolean isMining() {
         return state == MINING;
     }
-    
+
     private void consumeFood() {
         Building home = getHome();
-        
+
         if (home.getAmount(BREAD) > 0) {
             home.consumeOne(BREAD);
         } else if (home.getAmount(FISH) > 0) {
@@ -75,7 +75,7 @@ public class Miner extends Worker {
         if (b.isMine()) {
             setHome(b);
         }
-        
+
         if (b instanceof GoldMine) {
             mineral = GOLD;    
         } else if (b instanceof IronMine) {
@@ -85,12 +85,12 @@ public class Miner extends Worker {
         } else if (b instanceof GraniteMine) {
             mineral = STONE;
         }
-        
+
         state = RESTING_IN_HOUSE;
-        
+
         countdown.countFrom(RESTING_TIME);
     }
-    
+
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
@@ -106,7 +106,7 @@ public class Miner extends Worker {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
-                    
+
                     Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
 
                     setCargo(cargo);
@@ -141,20 +141,20 @@ public class Miner extends Worker {
             state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-            
+
             state = RESTING_IN_HOUSE;
-            
+
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
-    
+
     private boolean hasFood() {
         Building home = getHome();
-        
+
         return home.getAmount(BREAD) > 0 || 
                home.getAmount(FISH)  > 0 ||
                home.getAmount(MEAT)  > 0;
@@ -163,10 +163,10 @@ public class Miner extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

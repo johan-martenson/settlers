@@ -25,7 +25,7 @@ public class StorageWorker extends Worker {
 
     private final static int RESTING_TIME = 19;
     private final static int TREE_CONSERVATION_LIMIT = 10;
-    
+
     private final Countdown countdown;
     private final Map<Class<? extends Building>, Integer> assignedFood;
     private final Map<Class<? extends Building>, Integer> assignedCoal;
@@ -45,9 +45,9 @@ public class StorageWorker extends Worker {
         super(player, m);
 
         state = State.WALKING_TO_TARGET;
-        
+
         countdown = new Countdown();
-        
+
         countdown.countFrom(RESTING_TIME);
 
         /* Set the initial assignments of food to zero */
@@ -138,13 +138,13 @@ public class StorageWorker extends Worker {
     protected void onEnterBuilding(Building b) {
         if (b instanceof Storage) {
             setHome(b);
-            
+
             ownStorage = (Storage)b;
         }
-    
+
         state = State.RESTING_IN_HOUSE;
     }
-    
+
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {
@@ -168,23 +168,23 @@ public class StorageWorker extends Worker {
     protected void onArrival() throws Exception {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
             Flag f = getHome().getFlag();
-                
+
             f.putCargo(getCargo());
-                
+
             setCargo(null);
-                
+
             returnHome();
-                
+
             state = State.GOING_BACK_TO_HOUSE;
         } else if (state == State.GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-            
+
             state = State.RESTING_IN_HOUSE;
-            
+
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -192,10 +192,10 @@ public class StorageWorker extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition(), getHome());
-    
+
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
@@ -211,7 +211,7 @@ public class StorageWorker extends Worker {
     }
 
     private boolean resetAllocationIfNeeded(Material m) {
-        
+
         if (isFood(m)) {
 
         /* Reset count if all building types have reached their quota */

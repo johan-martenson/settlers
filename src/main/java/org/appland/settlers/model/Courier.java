@@ -272,7 +272,7 @@ public class Courier extends Worker {
 
         setCargo(null);
     }
-    
+
     private void planAfterDelivery() throws Exception {
         Point currentPosition = getPosition();
 
@@ -293,7 +293,7 @@ public class Courier extends Worker {
             planToPickUpCargo(cargoToPickUp, otherEnd);
 
             state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
-        
+
         /* Go back to the idle spot if neither end has any cargo to be picked up */
         } else {
             state = RETURNING_TO_IDLE_SPOT;
@@ -303,7 +303,7 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargo() throws Exception {
-        
+
         EndPoint endPoint = getEndPointAtPoint(getPosition());
         EndPoint otherEnd = assignedRoad.getOtherFlag(endPoint);
 
@@ -328,7 +328,7 @@ public class Courier extends Worker {
             setTarget(cargoTarget);
         } else {
             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
-            
+
             setTarget(otherEnd.getPosition());
         }
     }

@@ -25,10 +25,10 @@ public class DonkeyBreeder extends Worker {
     private static final int TIME_TO_REST           = 99;
     private static final int TIME_TO_FEED           = 19;
     private static final int TIME_TO_PREPARE_DONKEY = 19;
-    
+
     private States state;
     private final Countdown countdown;
-    
+
     protected enum States {
         WALKING_TO_TARGET, 
         RESTING_IN_HOUSE, 
@@ -39,7 +39,7 @@ public class DonkeyBreeder extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
+
     public DonkeyBreeder(Player player, GameMap map) {
         super(player, map);
 
@@ -50,7 +50,7 @@ public class DonkeyBreeder extends Worker {
     public boolean isFeeding() {
         return state == FEEDING;
     }
-    
+
     @Override
     protected void onEnterBuilding(Building b) {
         if (b instanceof Storage) {
@@ -58,12 +58,12 @@ public class DonkeyBreeder extends Worker {
         } else if (b instanceof DonkeyFarm) {
             setHome(b);
         }
-        
+
         state = RESTING_IN_HOUSE;
-        
+
         countdown.countFrom(TIME_TO_REST);
     }
-    
+
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
@@ -80,12 +80,12 @@ public class DonkeyBreeder extends Worker {
             }
         } else if (state == FEEDING) {
             if (countdown.reachedZero()) {
-                    
+
                 getHome().consumeOne(WATER);
                 getHome().consumeOne(WHEAT);
-                
+
                 state = GOING_BACK_TO_HOUSE_AFTER_FEEDING;
-                    
+
                 returnHomeOffroad();
             } else {
                 countdown.step();
@@ -121,17 +121,17 @@ public class DonkeyBreeder extends Worker {
     public void onArrival() throws Exception {
         if (state == GOING_BACK_TO_HOUSE_AFTER_FEEDING) {
             enterBuilding(getHome());
-            
+
             state = PREPARING_DONKEY_FOR_DELIVERY;
-            
+
             countdown.countFrom(TIME_TO_PREPARE_DONKEY);
         } else if (state == GOING_OUT_TO_FEED) {
             countdown.countFrom(TIME_TO_FEED);
-            
+
             state = FEEDING;
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -139,10 +139,10 @@ public class DonkeyBreeder extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition(), getHome());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

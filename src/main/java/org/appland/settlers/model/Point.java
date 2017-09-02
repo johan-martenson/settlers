@@ -82,31 +82,31 @@ public class Point extends java.awt.Point {
         adjacentPoints[5] = new Point(x + 1, y - 1);
         adjacentPoints[6] = new Point(x    , y - 2);
         adjacentPoints[7] = new Point(x - 1, y - 1);
-    
+
         return adjacentPoints;
     }
-    
+
     Iterable<Point> getDiagonalPoints() {
         List<Point> result = new ArrayList<>();
-        
+
         result.add(upRight());
         result.add(downRight());
         result.add(upLeft());
         result.add(downLeft());
-        
+
         return result;
     }
 
     List<Point> getDiagonalPointsAndSides() {
         List<Point> result = new ArrayList<>();
-        
+
         result.add(upRight());
         result.add(downRight());
         result.add(upLeft());
         result.add(downLeft());
         result.add(left());
         result.add(right());
-        
+
         return result;
     }
 }

@@ -48,14 +48,14 @@ import org.appland.settlers.policy.ProductionDelays;
 public class Storage extends Building implements Actor {
 
     protected final Map<Material, Integer> inventory;
-    
+
     private final Countdown draftCountdown;
 
     private static final Logger log = Logger.getLogger(Storage.class.getName());
 
     public Storage(Player p) {
         super(p);
-        
+
         inventory = createEmptyMaterialIntMap();
 
         draftCountdown = new Countdown();
@@ -86,7 +86,7 @@ public class Storage extends Building implements Actor {
     @Override
     public void stepTime() throws Exception {
         super.stepTime();
-        
+
         /* Handle draft with delay */
         if (isDraftPossible(inventory)) {
             if (draftCountdown.reachedZero()) {
@@ -98,7 +98,7 @@ public class Storage extends Building implements Actor {
                 draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
             }
         }
-        
+
         /* Send out new workers */
         assignNewWorkerToUnoccupiedPlaces(getMap());
     }
@@ -111,15 +111,15 @@ public class Storage extends Building implements Actor {
         if (assignDonkeys()) {
             return;
         }
-        
+
         if (assignWorkerToUnoccupiedBuildings()) {
             return;
         }
-    
+
         if (assignGeologists()) {
             return;
         }
-    
+
         if (assignScouts()) {
             return;
         }
@@ -175,7 +175,7 @@ public class Storage extends Building implements Actor {
                 if (!getMap().arePointsConnectedByRoads(getPosition(), f.getPosition())) {
                     continue;
                 }
- 
+
                 /* Don't send out a scout if there is a closer storage */
                 if (!isClosestStorage(this)) {
                     continue;
@@ -194,7 +194,7 @@ public class Storage extends Building implements Actor {
 
         return false;
     }
-    
+
     private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
         for (Building b : getPlayer().getBuildings()) {
             if (b.isMilitaryBuilding()) {
@@ -211,7 +211,7 @@ public class Storage extends Building implements Actor {
                     getMap().placeWorker(m, this);
                     m.setTargetBuilding(b);
                     b.promiseMilitary(m);
-                    
+
                     return true;
                 }
             } else {
@@ -223,7 +223,7 @@ public class Storage extends Building implements Actor {
                     }
 
                     Storage stg = getMap().getClosestStorage(b.getPosition(), b);
-                    
+
                     if (!equals(stg)) {
                         continue;
                     }
@@ -295,11 +295,11 @@ public class Storage extends Building implements Actor {
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve " + material);
         }
-        
+
         if (isWorker(material)) {
             throw new Exception("Can't retrieve " + material + " as stuff");
         }
-        
+
         retrieveOneFromInventory(material);
 
         Cargo c = new Cargo(material, getMap());
@@ -307,7 +307,7 @@ public class Storage extends Building implements Actor {
         c.setPosition(getFlag().getPosition());
 
         log.log(Level.FINER, "Inventory is {0} after retrieval", inventory);
-        
+
         return c;
     }
 
@@ -380,7 +380,7 @@ public class Storage extends Building implements Actor {
         } else if (w instanceof Hunter) {
             storeOneInInventory(HUNTER);
         }
-    
+
         getMap().removeWorker(w);
     }
 
@@ -390,7 +390,7 @@ public class Storage extends Building implements Actor {
         if (!hasAtLeastOne(material)) {
             throw new Exception("There are no " + material + " to retrieve");
         }
-        
+
         switch (material) {
         case FORESTER:
             w = new Forester(getPlayer(), getMap());
@@ -465,7 +465,7 @@ public class Storage extends Building implements Actor {
         w.setPosition(getFlag().getPosition());
 
         retrieveOneFromInventory(material);
-        
+
         return w;
     }
 
@@ -475,9 +475,9 @@ public class Storage extends Building implements Actor {
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve military " + material);
         }
-        
+
         retrieveOneFromInventory(material);
-        
+
         switch (material) {
         case GENERAL:
             r = Military.Rank.GENERAL_RANK;
@@ -495,7 +495,7 @@ public class Storage extends Building implements Actor {
         Military m = new Military(getPlayer(), r, getMap());
 
         m.setPosition(getFlag().getPosition());
-        
+
         return m;
     }
 
@@ -546,7 +546,7 @@ public class Storage extends Building implements Actor {
         } else if (m == CATAPULT_WORKER) {
             return;
         }
-        
+
         int amount = inventory.get(m);
 
         inventory.put(m, amount - 1);
@@ -569,7 +569,7 @@ public class Storage extends Building implements Actor {
         if (m == COURIER) {
             return 1;
         }
-        
+
         return inventory.get(m);
     }
 
@@ -590,7 +590,7 @@ public class Storage extends Building implements Actor {
         if (!hasAtLeastOne(PRIVATE) && !hasAtLeastOne(SERGEANT) && !hasAtLeastOne(GENERAL)) {
             return false;
         }
-    
+
         return true;
     }
 
@@ -600,7 +600,7 @@ public class Storage extends Building implements Actor {
 
     private boolean isClosestStorage(Building b) throws InvalidRouteException {
         Storage stg = getMap().getClosestStorage(b.getPosition());
-                    
+
         return equals(stg);
     }
 
@@ -639,10 +639,10 @@ public class Storage extends Building implements Actor {
     private Donkey retrieveDonkey() {
         if (hasAtLeastOne(DONKEY)) {
             retrieveOneFromInventory(DONKEY);
-            
+
             return new Donkey(getPlayer(), getMap());
         }
-    
+
         return null;
     }
 

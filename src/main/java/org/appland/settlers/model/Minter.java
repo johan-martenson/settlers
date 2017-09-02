@@ -36,7 +36,7 @@ public class Minter extends Worker {
     }
 
     private State state;
-    
+
     public Minter(Player player, GameMap m) {
         super(player, m);
 
@@ -87,28 +87,28 @@ public class Minter extends Worker {
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag f = map.getFlagAtPoint(getPosition());
-                
+
             Cargo cargo = getCargo();
-                
+
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
             f.putCargo(getCargo());
-                
+
             setCargo(null);
-                
+
             state = GOING_BACK_TO_HOUSE;
-                
+
             returnHome();
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-            
+
             state = RESTING_IN_HOUSE;
-            
+
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
 
@@ -122,10 +122,10 @@ public class Minter extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

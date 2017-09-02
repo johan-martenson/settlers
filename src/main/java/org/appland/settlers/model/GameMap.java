@@ -80,7 +80,7 @@ public class GameMap {
                 } catch (Exception ex) {
                     Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 return new LinkedList<>();
             }
 
@@ -102,9 +102,9 @@ public class GameMap {
 
     public Road getRoadAtPoint(Point point) {
         MapPoint p = pointToGameObject.get(point);
-        
+
         Iterable<Road> roadsFromPoint = p.getConnectedRoads();
-        
+
         for (Road r : roadsFromPoint) {
             if (!r.getFlags()[0].getPosition().equals(point) &&
                 !r.getFlags()[1].getPosition().equals(point)) {
@@ -141,7 +141,7 @@ public class GameMap {
         if (playersToSet.isEmpty()) {
             throw new Exception("Can't create game map with no players");
         }
-        
+
         players = playersToSet;
         width = w;
         height = h;
@@ -149,7 +149,7 @@ public class GameMap {
         if (width < MINIMUM_WIDTH || height < MINIMUM_HEIGHT) {
             throw new Exception("Can't create too small map (" + width + "x" + height + ")");
         }
-        
+
         buildings           = new ArrayList<>();
         buildingsToRemove   = new LinkedList<>();
         buildingsToAdd      = new LinkedList<>();
@@ -342,13 +342,13 @@ public class GameMap {
         if (!players.contains(house.getPlayer())) {
             throw new Exception("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
         }
-        
+
         /* Handle the first building separately */
         if (house.getPlayer().getBuildings().isEmpty()) {
             if (! (house instanceof Headquarter)) {
                 throw new Exception("Can not place " + house + " as initial building");
             }
-            
+
             firstHouse = true;
         }
 
@@ -406,9 +406,9 @@ public class GameMap {
             house.setFlag(getFlagAtPoint(p.downRight()));
         } else {
             Flag flag = house.getFlag();
-            
+
             flag.setPosition(p.downRight());
-            
+
             if (firstHouse) {
                 placeFlagRegardlessOfBorder(flag);
             } else {
@@ -433,9 +433,9 @@ public class GameMap {
         }
 
         getMapPoint(p).setBuilding(house);
-        
+
         placeDriveWay(house);
-        
+
         return house;
     }
 
@@ -655,21 +655,21 @@ public class GameMap {
             removeRoad(road);
         }
     }
-    
+
     private Road placeDriveWay(Building building) throws Exception {
         List<Point> wayPoints = new ArrayList<>();
-        
+
         wayPoints.add(building.getPosition());
         wayPoints.add(building.getFlag().getPosition());
-        
+
         Road road = new Road(building.getPlayer(), building, wayPoints, building.getFlag());
-        
+
         road.setNeedsCourier(false);
-        
+
         roads.add(road);
-    
+
         addRoadToMapPoints(road);
-        
+
         return road;
     }
 
@@ -677,7 +677,7 @@ public class GameMap {
         if (!players.contains(player)) {
             throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
         }
-        
+
         return placeRoad(player, Arrays.asList(points));
     }
 
@@ -690,7 +690,7 @@ public class GameMap {
         if (!isFlagAtPoint(start)) {
             throw new InvalidEndPointException(start);
         }
-        
+
         if (!isFlagAtPoint(end)) {
             throw new InvalidEndPointException(end);
         }
@@ -705,12 +705,12 @@ public class GameMap {
                 throw new Exception("Can't place road " + wayPoints + "with " + p + " outside the border");
             }
         }
-        
+
         /* Verify that the road does not overlap itself */
         if (!GameUtils.isUnique(wayPoints)) {
             throw new Exception("Cannot create a road that overlaps itself");
         }
-        
+
         /* 
            Verify that the road has at least one free point between the 
            endpoints so the courier has somewhere to stand
@@ -718,32 +718,32 @@ public class GameMap {
         if (wayPoints.size() < 3) {
             throw new Exception("Road " + wayPoints + " is too short.");
         }
-        
+
         for (Point p : wayPoints) {
             if (p.equals(start)) {
                 continue;
             }
-            
+
             if (p.equals(end) && isPossibleAsEndPointInRoad(player, p)) {
                 continue;
             }
-            
+
             if (isPossibleAsAnyPointInRoad(player, p)) {
                 continue;
             }
 
             throw new Exception(p + " in road is invalid");
         }
-        
+
         Flag startFlag = getFlagAtPoint(start);
         Flag endFlag   = getFlagAtPoint(end);
 
         Road road = new Road(player, startFlag, wayPoints, endFlag);
-        
+
         roads.add(road);
 
         addRoadToMapPoints(road);
-        
+
         return road;
     }
 
@@ -752,7 +752,7 @@ public class GameMap {
     }
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
-        
+
 	if (wayPoints == null) {
             throw new InvalidEndPointException(end);
         }
@@ -770,17 +770,17 @@ public class GameMap {
         } else if (via.equals(end)) {
             return findWayWithExistingRoads(start, end);
         }
-        
+
         List<Point> path1 = findWayWithExistingRoads(start, via);
         List<Point> path2 = findWayWithExistingRoads(via, end);
-        
+
         path2.remove(0);
-        
+
         path1.addAll(path2);
-        
+
         return path1;
     }
-    
+
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
         if (start.equals(end)) {
             throw new InvalidRouteException("Start and end are the same.");
@@ -796,7 +796,7 @@ public class GameMap {
                 return r;
             }
         }
-        
+
         return null;
     }
 
@@ -813,11 +813,11 @@ public class GameMap {
     private Flag placeFlag(Flag f) throws Exception {
         return doPlaceFlag(f, true);
     }
-    
+
     private Flag placeFlagRegardlessOfBorder(Flag flag) throws Exception {
         return doPlaceFlag(flag, false);
     }    
-    
+
     private synchronized Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
 
@@ -831,7 +831,7 @@ public class GameMap {
         if (isSignAtPoint(flagPoint)) {
             removeSign(getSignAtPoint(flagPoint));
         }
-        
+
         /* Handle the case where the flag is on an existing road that will be split */
         if (pointIsOnRoad(flagPoint)) {
 
@@ -928,16 +928,16 @@ public class GameMap {
     public Storage getClosestStorage(Point p) throws InvalidRouteException {
         return getClosestStorage(p, null);
     }
-    
+
     public Storage getClosestStorage(Point p, Building avoid) throws InvalidRouteException {
         Storage stg = null;
         int distance = Integer.MAX_VALUE;
-        
+
         for (Building b : buildings) {
             if (b.equals(avoid)) {
                 continue;
             }
-            
+
             if (b instanceof Storage) {
                 if (b.getFlag().getPosition().equals(p)) {
                     stg = (Storage)b;
@@ -967,7 +967,7 @@ public class GameMap {
     public List<Flag> getFlags() {
         return Collections.unmodifiableList(flags);
     }
-    
+
     public synchronized void placeWorker(Worker w, EndPoint e) {
         w.setPosition(e.getPosition());
         workers.add(w);
@@ -987,11 +987,11 @@ public class GameMap {
                 if (!isAvailableFlagPoint(player, p)) {
                     continue;
                 }
-                
+
                 points.add(p);
             }
         }
-    
+
         return points;
     }
 
@@ -1126,23 +1126,23 @@ public class GameMap {
         List<Point> result = new ArrayList<>();
         boolean rowFlip    = true;
         boolean columnFlip;
-        
+
         /* Place all possible flag points in the list */
         int x, y;
         for (y = 1; y < height; y++) {
             columnFlip = rowFlip;
-            
+
             for (x = 1; x < width; x++) {
                 if (columnFlip) {
                     result.add(new Point(x, y));
                 }
-                
+
                 columnFlip = !columnFlip;
             }
-        
+
             rowFlip = !rowFlip;
         }
-        
+
         return result;
     }
 
@@ -1222,17 +1222,17 @@ public class GameMap {
             /* Add the point to the list if it passed the filters */
             resultList.add(p);
         }
-    
+
         resultList.remove(point.up());
-        
+
         resultList.remove(point.down());
-        
+
         return resultList;
     }
 
     private boolean isVegetationCorrect(Building house, Point site) throws Exception {
         Size size = house.getSize();
-    
+
         if (house.isMine()) {
             return terrain.isOnMountain(site);
         } else {        
@@ -1288,11 +1288,11 @@ public class GameMap {
 
     private Map<Point, MapPoint> populateMapPoints(List<Point> fullGrid) {
         Map<Point, MapPoint> resultMap = new HashMap<>();
-    
+
         for (Point p : fullGrid) {
             resultMap.put(p, new MapPoint(p));
         }
-    
+
         return resultMap;
     }
 
@@ -1305,7 +1305,7 @@ public class GameMap {
 
         return mp.getFlag();
     }
-    
+
     private boolean isPossibleAsEndPointInRoad(Player player, Point p) throws Exception {
 
         if (!isWithinMap(p)) {
@@ -1366,24 +1366,24 @@ public class GameMap {
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
-        
+
         for (Point p : adjacentPoints) {
             if (isPossibleAsAnyPointInRoad(player, p)) {
                 resultList.add(p);
             }
         }
-    
+
         resultList.remove(point.up());
-        
+
         resultList.remove(point.down());
-        
+
         return resultList;        
     }
-    
+
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point point) throws Exception {
         Point[] adjacentPoints  = point.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
-        
+
         for (Point p : adjacentPoints) {
             if (isPossibleAsEndPointInRoad(player, p)) {
                 resultList.add(p);
@@ -1391,11 +1391,11 @@ public class GameMap {
                 resultList.add(p);
             }
         }
-    
+
         resultList.remove(point.up());
-        
+
         resultList.remove(point.down());
-        
+
         return resultList;
     }
 
@@ -1417,7 +1417,7 @@ public class GameMap {
 
     public boolean isTreeAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
-        
+
         return mp.getTree() != null;
     }
 
@@ -1447,7 +1447,7 @@ public class GameMap {
 
         return path1;
     }
-    
+
     public List<Point> findWayOffroad(Point start, Point goal, 
             Collection<Point> avoid) {
         return GameUtils.findShortestPath(start, goal, avoid, new ConnectionsProvider() {
@@ -1459,7 +1459,7 @@ public class GameMap {
                 } catch (Exception ex) {
                     Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 return new LinkedList<>();
             }
 
@@ -1477,7 +1477,7 @@ public class GameMap {
 
     public Tree placeTree(Point position) throws Exception {
         MapPoint mp = pointToGameObject.get(position);
-    
+
         if (mp.isFlag()) {
             throw new Exception("Can't place tree on " + position + " on existing flag");
         } else if (mp.isRoad()) {
@@ -1491,13 +1491,13 @@ public class GameMap {
         if (getTerrain().isOnMountain(position)) {
             throw new Exception("Can't place tree on a mountain");
         }
-        
+
         Tree tree = new Tree(position);
-        
+
         mp.setTree(tree);
-        
+
         trees.add(tree);
-        
+
         return tree;
     }
 
@@ -1507,17 +1507,17 @@ public class GameMap {
 
     void removeTree(Point position) {
         MapPoint mp = pointToGameObject.get(position);
-        
+
         Tree tree = mp.getTree();
-        
+
         mp.removeTree();
-        
+
         trees.remove(tree);
     }
 
     Tree getTreeAtPoint(Point p) {
         MapPoint mp = pointToGameObject.get(p);
-        
+
         return mp.getTree();
     }
 
@@ -1525,11 +1525,11 @@ public class GameMap {
         MapPoint mp = pointToGameObject.get(point);
 
         Stone stone = new Stone(point);
-        
+
         mp.setStone(stone);
-        
+
         stones.add(stone);
-        
+
         return stone;
     }
 
@@ -1538,12 +1538,12 @@ public class GameMap {
 
         if (isCropAtPoint(point)) {
             Crop crop = mp.getCrop();
-            
+
             if (crop.getGrowthState() != HARVESTED) {
                 throw new Exception("Can't place crop on non-harvested crop at " + point);
             }
         }
-        
+
         Crop crop = new Crop(point, this);
 
         mp.setCrop(crop);
@@ -1552,30 +1552,30 @@ public class GameMap {
 
         return crop;
     }
-    
+
     public boolean isCropAtPoint(Point p) {
         MapPoint mp = pointToGameObject.get(p);
 
         return mp.getCrop() != null;
     }
-    
+
     public boolean isStoneAtPoint(Point point2) {
         MapPoint mp = pointToGameObject.get(point2);
-        
+
         return mp.getStone() != null;
     }
 
     Cargo removePartOfStone(Point position) {
         MapPoint mp = pointToGameObject.get(position);
-        
+
         Stone stone = mp.getStone();
-        
+
         if (stone.noMoreStone()) {
             return null;
         }
-        
+
         stone.removeOnePart();
-        
+
         if (stone.noMoreStone()) {
             mp.setStone(null);
         }
@@ -1585,18 +1585,18 @@ public class GameMap {
 
     public List<Point> getPointsWithinRadius(Point point, int radius) {
         List<Point> result = new ArrayList<>();
-    
+
         int x;
         int y;
         boolean rowFlip = false;
-        
+
         for (y = point.y - radius; y <= point.y + radius; y++) {
             int startX = point.x - radius;
-            
+
             if (rowFlip) {
                 startX++;
             }
-            
+
             for (x = startX; x <= point.x + radius; x += 2) {
                 Point p = new Point(x, y);
                 if (isWithinMap(p) && point.distance(p) <= radius) {
@@ -1624,23 +1624,23 @@ public class GameMap {
 
     private void removeStone(Stone s) {
         MapPoint mp = pointToGameObject.get(s.getPosition());
-        
+
         mp.setStone(null);
-        
+
         stones.remove(s);
     }
 
     public void removeFlag(Flag flag) throws Exception {
         MapPoint mpUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
         MapPoint mp = pointToGameObject.get(flag.getPosition());
-        
+
         /* Destroy the house if the flag is connected to a house */
         if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
             Building attachedBuilding = mpUpLeft.getBuilding();
 
             attachedBuilding.tearDown();
         }
-        
+
         /* Remove the road if the flag is an endpoint to a road */
         List<Road> roadsToRemove = new LinkedList<>();
         for (Road r : mp.getConnectedRoads()) {
@@ -1671,7 +1671,7 @@ public class GameMap {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -1687,11 +1687,11 @@ public class GameMap {
 
     public int getAmountFishAtPoint(Point point) {
         int amount = 0;
-        
+
         for (Tile t : terrain.getSurroundingTiles(point)) {
             amount += t.getAmountFish();
         }
-        
+
         return amount;
     }
 
@@ -1699,11 +1699,11 @@ public class GameMap {
         for (Tile t : terrain.getSurroundingTiles(position)) {
             if (t.getAmountFish() > 0) {
                 t.consumeFish();
-                
+
                 return new Cargo(FISH, this);
             }
         }
-    
+
         throw new Exception("Can't find any fish to catch at " + position);
     }
 
@@ -1711,7 +1711,7 @@ public class GameMap {
         for (Tile t : terrain.getSurroundingTiles(position)) {
             if (t.getAmountOfMineral(mineral) > 0) {
                 t.mine(mineral);
-                
+
                 return new Cargo(mineral, this);
             }
         }
@@ -1729,9 +1729,9 @@ public class GameMap {
 
     public void placeSign(Material mineral, Size amount, Point point) {
         Sign sign = new Sign(mineral, amount, point, this);
-        
+
         getMapPoint(point).setSign(sign);
-        
+
         signs.add(sign);
     }
 
@@ -1749,17 +1749,17 @@ public class GameMap {
 
     void removeSignWithinStepTime(Sign sign) {
         MapPoint mp = getMapPoint(sign.getPosition());
-        
+
         mp.setSign(null);
-    
+
         signsToRemove.add(sign);
     }
-    
+
     void removeSign(Sign sign) {
         MapPoint mp = getMapPoint(sign.getPosition());
-        
+
         mp.setSign(null);
-        
+
         signs.remove(sign);
     }
 
@@ -1771,7 +1771,7 @@ public class GameMap {
         MapPoint mp = getMapPoint(b.getPosition());
 
         mp.removeBuilding();
-        
+
         buildingsToRemove.add(b);
     }
 
@@ -1867,7 +1867,7 @@ public class GameMap {
         if (terrain.isOnEdgeOf(point, MOUNTAIN)) {
             return result;
         }
-        
+
         if (isRoadAtPoint(point)) {
             return result;
         }

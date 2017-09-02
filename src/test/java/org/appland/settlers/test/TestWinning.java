@@ -133,12 +133,12 @@ public class TestWinning {
     }
 
     /*
-    
+
     - add test that the winner remains a winner
     - add test that the winner remains a winner even if all his buildings are destroyed
-    
-    
-    
-    
+
+
+
+
     */
 }

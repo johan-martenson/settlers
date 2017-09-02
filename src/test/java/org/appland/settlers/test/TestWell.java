@@ -57,17 +57,17 @@ public class TestWell {
         /* Placing well */
         Point point22 = new Point(6, 22);
         Building well0 = map.placeBuilding(new Well(player0), point22);
-        
+
         /* Deliver three planck and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
 
         well0.putCargo(planckCargo);
         well0.putCargo(planckCargo);
-    
+
         /* Verify that this is enough to construct the well */
         for (int i = 0; i < 100; i++) {
             assertTrue(well0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -90,7 +90,7 @@ public class TestWell {
         /* Placing well */
         Point point22 = new Point(6, 22);
         Building well0 = map.placeBuilding(new Well(player0), point22);
-        
+
         /* Deliver one planck */
         Cargo planckCargo = new Cargo(PLANCK, map);
 
@@ -108,17 +108,17 @@ public class TestWell {
 
     @Test
     public void testFinishedWellNeedsWorker() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place well */
         Point point1 = new Point(8, 6);
         Well well = map.placeBuilding(new Well(player0), point1);
@@ -129,10 +129,10 @@ public class TestWell {
         assertTrue(well.ready());
         assertTrue(well.needsWorker());
     }
-    
+
     @Test
     public void testWellWorkerIsAssignedToFinishedHouse() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -155,18 +155,18 @@ public class TestWell {
 
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Run game logic twice, once to place courier and once to place well worker */
         Utils.fastForward(2, map);
-        
+
         assertEquals(map.getWorkers().size(), 3);
-        
+
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), WellWorker.class);
     }
 
     @Test
     public void testUnoccupiedWellProducesNothing() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -180,10 +180,10 @@ public class TestWell {
         /* Connect the well with the headquarter */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(player0), point1);
-        
+
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Verify that the unoccupied well produces nothing */
         int i;
         for (i = 0; i < 200; i++) {
@@ -194,7 +194,7 @@ public class TestWell {
 
     @Test
     public void testAssignedWellWorkerEntersTheWell() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -214,20 +214,20 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, hq.getFlag());
         courier.assignToRoad(road0);
-        
+
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Run game logic twice, once to place courier and once to place well worker */
         Utils.fastForward(2, map);
-        
+
         /* Get the well worker */
         Worker ww = null;
-        
+
         for (Worker w : map.getWorkers()) {
             if (w instanceof WellWorker) {
                 ww = w;
@@ -236,15 +236,15 @@ public class TestWell {
 
         /* Let the well worker reach the well */
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getPosition());
-        
+
         assertNotNull(ww);
         assertTrue(ww.isInsideBuilding());
         assertEquals(well.getWorker(), ww);
     }
-    
+
     @Test
     public void testWellWorkerRests() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -264,15 +264,15 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(player0, map);
-        
+
         Utils.occupyBuilding(ww, well, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Verify that the worker rests first without producing anything */
@@ -285,13 +285,13 @@ public class TestWell {
 
     @Test
     public void testWellWorkerProducesWater() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
@@ -299,40 +299,40 @@ public class TestWell {
         /* Place well */
         Point point1 = new Point(8, 6);
         Building well = map.placeBuilding(new Well(player0), point1);
-        
+
         /* Connect the well with the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(player0, map);
-        
+
         Utils.occupyBuilding(ww, well, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Verify that it the worker produces water at the right time */
         int i;
         for (i = 0; i < 50; i++) {
             assertNull(ww.getCargo());
             map.stepTime();
         }
-    
+
         assertNotNull(ww.getCargo());
         assertEquals(ww.getCargo().getMaterial(), WATER);
     }
 
     @Test
     public void testWellWorkerPlacesWaterCargoAtTheFlag() throws Exception {
-        
+
         /* Create gamemap */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -352,41 +352,41 @@ public class TestWell {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the well */
         Utils.constructHouse(well, map);
-        
+
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(player0, map);
-        
+
         Utils.occupyBuilding(ww, well, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the well worker to produce water */
         Utils.fastForward(50, map);
-        
+
         assertNotNull(ww.getCargo());
         assertEquals(ww.getTarget(), well.getFlag().getPosition());
-        
+
         /* Let the worker reach the flag and place the cargo*/
         assertTrue(well.getFlag().getStackedCargo().isEmpty());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
 
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the water cargo has the right target */
         assertEquals(well.getFlag().getStackedCargo().get(0).getTarget(), hq);
-        
+
         /* Let the worker walk back to the well */
         assertEquals(ww.getTarget(), well.getPosition());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, ww);
-        
+
         assertTrue(ww.isInsideBuilding());
     }
 
@@ -431,10 +431,10 @@ public class TestWell {
 
         assertNull(ww.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
-        
+
         /* Wait for the worker to go back to the well */
         assertEquals(ww.getTarget(), well0.getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
@@ -444,9 +444,9 @@ public class TestWell {
 
         /* Verify that the second cargo is put at the flag */
         assertEquals(ww.getTarget(), well0.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well0.getFlag().getPosition());
-        
+
         assertNull(ww.getCargo());
         assertEquals(well0.getFlag().getStackedCargo().size(), 2);
     }
@@ -492,48 +492,48 @@ public class TestWell {
 
         assertNull(ww.getCargo());
         assertFalse(well0.getFlag().getStackedCargo().isEmpty());
-        
+
         /* Wait to let the cargo remain at the flag without any connection to the storage */
         Cargo cargo = well0.getFlag().getStackedCargo().get(0);
-        
+
         Utils.fastForward(50, map);
-        
+
         assertEquals(cargo.getPosition(), well0.getFlag().getPosition());
-    
+
         /* Connect the well with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
-    
+
         /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
-    
+
         /* Wait for the courier to reach the idle point of the road */
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(well0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-    
-    
+
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-    
+
         /* Verify that the courier walks to pick up the cargo */
         map.stepTime();
-        
+
         assertEquals(courier.getTarget(), well0.getFlag().getPosition());
-    
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-        
+
         /* Verify that the courier has picked up the cargo */
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
-    
+
         /* Verify that the courier delivers the cargo to the headquarter */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
-        
+
         int amount = headquarter0.getAmount(WATER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
-        
+
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(WATER), amount + 1);
@@ -561,10 +561,10 @@ public class TestWell {
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
-        
+
         /* Destroy the well */
         Worker ww = well0.getWorker();
-        
+
         assertTrue(ww.isInsideBuilding());
         assertEquals(ww.getPosition(), well0.getPosition());
 
@@ -573,9 +573,9 @@ public class TestWell {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(ww.isInsideBuilding());
         assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(WELL_WORKER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
 
         /* Verify that the well worker is stored correctly in the headquarter */
@@ -601,16 +601,16 @@ public class TestWell {
 
         /* Connect the well with the headquarter */
         map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
 
         /* Occupy the well */
         Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
-        
+
         /* Destroy the well */
         Worker ww = well0.getWorker();
-        
+
         assertTrue(ww.isInsideBuilding());
         assertEquals(ww.getPosition(), well0.getPosition());
 
@@ -619,7 +619,7 @@ public class TestWell {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(ww.isInsideBuilding());
         assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : ww.getPlannedPath()) {
@@ -651,7 +651,7 @@ public class TestWell {
 
         /* Connect the well with the headquarter */
         map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
 
@@ -662,16 +662,16 @@ public class TestWell {
 
         /* Wait for the well to stop burning */
         Utils.fastForward(50, map);
-        
+
         assertTrue(well0.destroyed());
-        
+
         /* Wait for the well to disappear */
         for (int i = 0; i < 100; i++) {
             assertEquals(map.getBuildingAtPoint(point26), well0);
-            
+
             map.stepTime();
         }
-        
+
         assertFalse(map.isBuildingAtPoint(point26));
         assertFalse(map.getBuildings().contains(well0));
         assertNull(map.getBuildingAtPoint(point26));
@@ -693,13 +693,13 @@ public class TestWell {
         /* Placing well */
         Point point26 = new Point(8, 8);
         Building well0 = map.placeBuilding(new Well(player0), point26);
-        
+
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
-        
+
         map.removeFlag(well0.getFlag());
 
         assertNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
@@ -721,13 +721,13 @@ public class TestWell {
         /* Placing well */
         Point point26 = new Point(8, 8);
         Building well0 = map.placeBuilding(new Well(player0), point26);
-        
+
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
-        
+
         well0.tearDown();
 
         assertNull(map.getRoad(well0.getPosition(), well0.getFlag().getPosition()));
@@ -741,37 +741,37 @@ public class TestWell {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place well */
         Point point1 = new Point(8, 6);
         Building well0 = map.placeBuilding(new Well(player0), point1);
-        
+
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the well */
         Utils.constructHouse(well0, map);
-        
+
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(player0, map);
-        
+
         Utils.occupyBuilding(ww, well0, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the well worker to produce cargo */
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
-        
+
         assertEquals(ww.getCargo().getMaterial(), WATER);
 
         /* Wait for the worker to deliver the cargo */
@@ -781,12 +781,12 @@ public class TestWell {
 
         /* Stop production and verify that no water is produced */
         well0.stopProduction();
-        
+
         assertFalse(well0.isProductionEnabled());
-        
+
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
-            
+
             map.stepTime();
         }
     }
@@ -799,34 +799,34 @@ public class TestWell {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place well */
         Point point1 = new Point(8, 6);
         Building well0 = map.placeBuilding(new Well(player0), point1);
-        
+
         /* Connect the well and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the well */
         Utils.constructHouse(well0, map);
-        
+
         /* Assign a worker to the well */
         WellWorker ww = new WellWorker(player0, map);
-        
+
         Utils.occupyBuilding(ww, well0, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the well worker to produce water */
         Utils.fastForwardUntilWorkerProducesCargo(map, ww);
 
@@ -842,7 +842,7 @@ public class TestWell {
 
         for (int i = 0; i < 300; i++) {
             assertNull(ww.getCargo());
-            
+
             map.stepTime();
         }
 
@@ -877,7 +877,7 @@ public class TestWell {
 
         /* Finish construction of the well */
         Utils.constructHouse(well0, map);
-        
+
         /* Connect the well with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
 

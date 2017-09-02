@@ -32,15 +32,15 @@ public class MilitaryCreationAndPromotionTest {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         storage = new Storage(player0);
-        
+
         Point point1 = new Point(10, 10);
         map.placeBuilding(storage, point1);
-        
+
         Utils.constructHouse(storage, map);
     }
 

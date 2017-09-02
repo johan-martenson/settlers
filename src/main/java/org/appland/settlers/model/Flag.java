@@ -26,7 +26,7 @@ public class Flag implements EndPoint, Piece {
 
     Flag(Player player, Point p) {
         this(p);
-    
+
         this.player = player;
     }
 
@@ -41,7 +41,7 @@ public class Flag implements EndPoint, Piece {
 
         c.setPosition(getPosition());
         stackedCargo.add(c);
-        
+
         /* Give the cargo a chance to re-plan */
         c.rerouteIfNeeded();
     }
@@ -95,7 +95,7 @@ public class Flag implements EndPoint, Piece {
 
         Cargo waitingCargo = null;
         int priority = Integer.MAX_VALUE;
-        
+
         for (Cargo c : stackedCargo) {
             if (c.isDeliveryPromised()) {
                 continue;
@@ -120,7 +120,7 @@ public class Flag implements EndPoint, Piece {
 
         return waitingCargo;
     }
-    
+
     public void callGeologist() {
         geologistsCalled++;
     }

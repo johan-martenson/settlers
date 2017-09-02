@@ -23,7 +23,7 @@ import static org.appland.settlers.model.Miller.States.WALKING_TO_TARGET;
 public class Miller extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME = 99;
-    
+
     private final Countdown countdown;
 
     private States state;
@@ -33,7 +33,7 @@ public class Miller extends Worker {
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
     }
-    
+
     protected enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -42,7 +42,7 @@ public class Miller extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
+
     @Override
     protected void onEnterBuilding(Building b) {
         if (b instanceof Mill) {
@@ -50,7 +50,7 @@ public class Miller extends Worker {
         }
 
         state = RESTING_IN_HOUSE;
-        
+
         countdown.countFrom(RESTING_TIME);
     }
 
@@ -59,7 +59,7 @@ public class Miller extends Worker {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = GRINDING_WHEAT;
-                
+
                 countdown.countFrom(PRODUCTION_TIME);
             } else {
                 countdown.step();
@@ -70,7 +70,7 @@ public class Miller extends Worker {
                     Cargo cargo = new Cargo(FLOUR, map);
 
                     getHome().consumeOne(WHEAT);
-                        
+
                     setCargo(cargo);
 
                     setTarget(getHome().getFlag().getPosition());
@@ -82,32 +82,32 @@ public class Miller extends Worker {
             }
         }
     }
-    
+
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag f = getHome().getFlag();
-                
+
             Cargo cargo = getCargo();
-                
+
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
             f.putCargo(getCargo());
-                
+
             setCargo(null);
-                
+
             returnHome();
-                
+
             state = GOING_BACK_TO_HOUSE;
         } else if (state == GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
-            
+
             state = RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }    
@@ -115,10 +115,10 @@ public class Miller extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

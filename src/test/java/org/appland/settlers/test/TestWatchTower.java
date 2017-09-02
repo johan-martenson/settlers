@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author johan
  */
 public class TestWatchTower {
-    
+
     @Test
     public void testWatchTowerNeedsThreePlancksAndFourStonesForConstruction() throws Exception {
 
@@ -53,7 +53,7 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Deliver two plancks and three stones*/
         Cargo cargo = new Cargo(PLANCK, map);
 
@@ -71,13 +71,13 @@ public class TestWatchTower {
         /* Verify that this is enough to construct the watch tower */
         for (int i = 0; i < 150; i++) {
             assertTrue(watchTower0.underConstruction());
-            
+
             map.stepTime();
         }
 
         assertTrue(watchTower0.ready());
     }
-    
+
     @Test
     public void testWatchTowerCannotBeConstructedWithOnePlanckTooLittle() throws Exception {
 
@@ -94,7 +94,7 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Deliver one planck and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
@@ -110,7 +110,7 @@ public class TestWatchTower {
 
         /* Verify that the watch tower needs a planck */
         assertTrue(watchTower0.needsMaterial(PLANCK));
-        
+
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {
             assertTrue(watchTower0.underConstruction());
@@ -137,7 +137,7 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Deliver one planck and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
@@ -191,23 +191,23 @@ public class TestWatchTower {
 
         /* Verify that a military is sent from the headquarter */
         map.stepTime();
-        
+
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
-        
+
         Military m = null;
         for (Worker w : map.getWorkers()) {
             if (w instanceof Military) {
                 m = (Military)w;
             }
         }
-        
+
         assertNotNull(m);
-        
+
         /* Wait for the military to reach the watch tower */
         assertEquals(m.getTarget(), watchTower0.getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
-        
+
         assertTrue(m.isInsideBuilding());
     }
 
@@ -240,7 +240,7 @@ public class TestWatchTower {
 
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
-    
+
     @Test
     public void testBorderIsExtendedWhenWatchTowerIsPopulated() throws Exception {
 
@@ -266,26 +266,26 @@ public class TestWatchTower {
 
         /* Verify that a military is sent from the headquarter */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
-        
+
         map.stepTime();
-        
+
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
-        
+
         Military m = null;
         for (Worker w : map.getWorkers()) {
             if (w instanceof Military) {
                 m = (Military)w;
             }
         }
-        
+
         assertNotNull(m);
-        
+
         /* Verify that the border is extended when the military reaches the watch tower */
         assertEquals(m.getTarget(), watchTower0.getPosition());
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
-        
+
         assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 39)));
     }
@@ -306,7 +306,7 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower with six militaries */
@@ -340,9 +340,9 @@ public class TestWatchTower {
 
         /* Verify that the watch tower can't hold militaries before it's finished */
         assertFalse(watchTower0.needsMilitaryManning());
-        
+
         Military military = new Military(player0, PRIVATE_RANK, map);
-        
+
         map.placeWorker(military, watchTower0);
 
         military.enterBuilding(watchTower0);
@@ -364,7 +364,7 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower with six militaries */
@@ -377,7 +377,7 @@ public class TestWatchTower {
 
         /* Verify that the watch tower does not need another military */
         Military military = new Military(player0, PRIVATE_RANK, map);
-        
+
         map.placeWorker(military, watchTower0);
 
         military.enterBuilding(watchTower0);
@@ -399,18 +399,18 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
 
         /* Verify that the border is grown with the correct radius */
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
-        
+
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 38)));
     }
-    
+
     @Test
     public void testWatchTowerNeedsCoin() throws Exception {
 
@@ -427,12 +427,12 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
 
         assertTrue(watchTower0.needsMaterial(COIN));
     }
-    
+
     @Test
     public void testUnfinishedWatchTowerNotNeedsCoin() throws Exception {
 
@@ -449,10 +449,10 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         assertFalse(watchTower0.needsMaterial(COIN));
     }
-    
+
     @Test
     public void testWatchTowerCanHoldThreeCoins() throws Exception {
 
@@ -469,14 +469,14 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
 
         assertTrue(watchTower0.needsMaterial(COIN));
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.promiseDelivery(COIN);
         watchTower0.promiseDelivery(COIN);
         watchTower0.promiseDelivery(COIN);
@@ -513,17 +513,17 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
         Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Verify that the private is promoted at the right time */
         for (int i = 0; i < 100; i++) {
             assertEquals(military.getRank(), PRIVATE_RANK);
@@ -549,18 +549,18 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
         Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
         Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
 
@@ -570,7 +570,7 @@ public class TestWatchTower {
 
     @Test
     public void testTimeSpentWithCoinButNoMilitaryDoesNotSpeedUpPromotion() throws Exception {
-        
+
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -584,25 +584,25 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
 
         /* Wait before the watch tower is populated */
         Utils.fastForward(200, map);
-        
+
         /* Occupy the watch tower with one private */
         Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         /* Verify that it still takes the same time for the private to get promoted */
         Utils.fastForward(99, map);
-        
+
         assertEquals(military.getRank(), PRIVATE_RANK);
-        
+
         map.stepTime();
 
         assertEquals(military.getRank(), SERGEANT_RANK);
@@ -624,20 +624,20 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
         Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Verify that the promotion consumes the coin */
         assertEquals(watchTower0.getAmount(COIN), 1);
-        
+
         Utils.fastForward(100, map);
 
         assertEquals(watchTower0.getAmount(COIN), 0);
@@ -659,22 +659,22 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
         Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
         Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, watchTower0, map);
-        
+
         /* Verify that the promotion consumes the coin */
         assertEquals(watchTower0.getAmount(COIN), 2);
-        
+
         Utils.fastForward(100, map);
 
         assertEquals(watchTower0.getAmount(COIN), 1);
@@ -696,26 +696,26 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         Cargo cargo = new Cargo(COIN, map);
-        
+
         watchTower0.putCargo(cargo);
 
         /* Occupy the watch tower with one private */
         Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0, map);
         Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, watchTower0, map);
-        
+
         /* Verify that coin is not consumed */
         assertEquals(watchTower0.getAmount(COIN), 1);
-        
+
         Utils.fastForward(100, map);
 
         assertEquals(watchTower0.getAmount(COIN), 1);
     }
-    
+
     @Test
     public void testCanDisableCoinsToWatchTower() throws Exception {
 
@@ -732,15 +732,15 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         Utils.constructHouse(watchTower0, map);
-        
+
         /* Deliver one coin to the watch tower */
         assertTrue(watchTower0.needsMaterial(COIN));
-        
+
         /* Disable coins to the watch tower and verify that it doesn't need coins*/
         watchTower0.disablePromotions();
-        
+
         assertFalse(watchTower0.needsMaterial(COIN));
     }
 
@@ -760,23 +760,23 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Connect headquarter and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
         Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Evacuate the watch tower and verify that the military leaves the watch tower */
         assertTrue(m.isInsideBuilding());
-        
+
         watchTower0.evacuate();
-        
+
         map.stepTime();
-        
+
         assertFalse(m.isInsideBuilding());
         assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
     }
@@ -797,31 +797,31 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Connect headquarter and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
         Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Evacuate the watch tower */
         assertTrue(m.isInsideBuilding());
-        
+
         watchTower0.evacuate();
-        
+
         map.stepTime();
-        
+
         assertFalse(m.isInsideBuilding());
-        
+
         /* Verify that the evacuated military returns to the storage */
         assertEquals(m.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
-        
+
         assertTrue(m.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
@@ -842,28 +842,28 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
         Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Evacuate the watch tower */
         assertTrue(m.isInsideBuilding());
-        
+
         watchTower0.evacuate();
-        
+
         map.stepTime();
-        
+
         assertFalse(m.isInsideBuilding());
-        
+
         /* Verify that the evacuated military returns to the storage */
         assertEquals(m.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
-        
+
         assertTrue(m.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
@@ -884,10 +884,10 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Connect headquarters and watch tower */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
@@ -900,7 +900,7 @@ public class TestWatchTower {
             map.stepTime();
         }
     }
-    
+
     @Test
     public void testEvacuationCanBeCanceled() throws Exception {
 
@@ -917,36 +917,36 @@ public class TestWatchTower {
         /* Placing watch tower */
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
         Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Evacuate the watch tower */
         assertTrue(m.isInsideBuilding());
-        
+
         watchTower0.evacuate();
-        
+
         map.stepTime();
-        
+
         assertFalse(m.isInsideBuilding());
-        
+
         /* Wait for the evacuated military to return to the storage */
         assertEquals(m.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
-        
+
         assertTrue(m.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
-    
+
         /* Cancel evacuation */
         assertFalse(watchTower0.needsMilitaryManning());
-        
+
         watchTower0.cancelEvacuation();
-        
+
         assertTrue(watchTower0.needsMilitaryManning());
     }
 
@@ -972,7 +972,7 @@ public class TestWatchTower {
 
         /* Occupy the watch tower */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Destroy the watch tower */
         assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
 
@@ -1010,13 +1010,13 @@ public class TestWatchTower {
 
         /* Connect the watch tower with the headquarter */
         map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the watch tower */
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
-        
+
         /* Destroy the watch tower */
         assertEquals(watchTower0.getNumberOfHostedMilitary(), 1);
 

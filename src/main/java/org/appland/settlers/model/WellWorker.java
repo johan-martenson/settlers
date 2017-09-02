@@ -16,7 +16,7 @@ import static org.appland.settlers.model.Material.WATER;
 public class WellWorker extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
-    
+
     private final Countdown countdown;
 
     private States  state;
@@ -27,7 +27,7 @@ public class WellWorker extends Worker {
         countdown = new Countdown();
         state     = States.WALKING_TO_TARGET;
     }
-    
+
     private enum States {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -36,7 +36,7 @@ public class WellWorker extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
+
     @Override
     protected void onEnterBuilding(Building b) {
         if (b instanceof Well) {
@@ -44,7 +44,7 @@ public class WellWorker extends Worker {
         }
 
         state = States.RESTING_IN_HOUSE;
-        
+
         countdown.countFrom(RESTING_TIME);
     }
 
@@ -53,7 +53,7 @@ public class WellWorker extends Worker {
         if (state == States.RESTING_IN_HOUSE) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 state = States.DRAWING_WATER;
-                
+
                 countdown.countFrom(PRODUCTION_TIME);
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
@@ -61,18 +61,18 @@ public class WellWorker extends Worker {
         } else if (state == States.DRAWING_WATER) {
             if (countdown.reachedZero()) {
                 Cargo cargo = new Cargo(WATER, map);
-                    
+
                 setCargo(cargo);
-                    
+
                 setTarget(getHome().getFlag().getPosition());
-                    
+
                 state = States.GOING_TO_FLAG_WITH_CARGO;
             } else {
                 countdown.step();
             }
         }
     }
-    
+
     @Override
     protected void onArrival() throws Exception {
         if (state == States.GOING_TO_FLAG_WITH_CARGO) {
@@ -96,7 +96,7 @@ public class WellWorker extends Worker {
             countdown.countFrom(RESTING_TIME);
         } else if (state == States.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -104,10 +104,10 @@ public class WellWorker extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = States.RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

@@ -13,14 +13,14 @@ package org.appland.settlers.model;
 public class Sign implements Actor, Piece {
 
     private final static int SIGN_EXPIRATION_TIME = 1999;
-    
+
     private final Material type;
     private final Size     size;
     private final Point    position;
     private final GameMap  map;
 
     private int age;
-    
+
     Sign(Material m, Size s, Point p, GameMap mapToSet) {
         position = p;
         type     = m;
@@ -49,7 +49,7 @@ public class Sign implements Actor, Piece {
     @Override
     public void stepTime() {
         age++;
-        
+
         if (age > SIGN_EXPIRATION_TIME) {
             map.removeSignWithinStepTime(this);
         }

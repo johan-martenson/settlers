@@ -41,15 +41,15 @@ public class TestInventory {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         storage = new Storage(player0);
-        
+
         Point point1 = new Point(10, 10);
         map.placeBuilding(storage, point1);
-        
+
         Utils.constructHouse(storage, map);
     }
 
@@ -67,7 +67,7 @@ public class TestInventory {
         assertEquals(storage.getAmount(STONE), 0);
         assertEquals(storage.getAmount(WHEAT), 0);
         assertEquals(storage.getAmount(FORESTER), 0);
-        
+
         assertFalse(storage.isInStock(SWORD));
         assertFalse(storage.isInStock(SHIELD));
         assertFalse(storage.isInStock(PRIVATE));
@@ -81,7 +81,7 @@ public class TestInventory {
         assertFalse(storage.isInStock(WHEAT));
         assertFalse(storage.isInStock(FORESTER));
     }
-    
+
     @Test
     public void testDepositRetrieveDeadMatter() throws Exception {
 
@@ -151,7 +151,7 @@ public class TestInventory {
         assertEquals(storage.getAmount(FORESTER), 0);        
         assertFalse(storage.isInStock(FORESTER));
     }
-    
+
     @Test
     public void testDepositRetriveMilitary() throws Exception {
 
@@ -177,16 +177,16 @@ public class TestInventory {
         assertNoMilitaryInInventory(storage);
         assertFalse(storage.isInStock(SERGEANT));
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveWoodFromEmptyInventory() throws Exception {
         storage.retrieve(WOOD);
     }
-    
+
     @Test
     public void testRetrieveCourierFromEmptyInventory() {
         /* This should always work */
-        
+
         storage.retrieveCourier();
     }
 
@@ -195,7 +195,7 @@ public class TestInventory {
         assertEquals(storage.getAmount(PRIVATE), 0);
         assertEquals(storage.getAmount(SERGEANT), 0);
         assertEquals(storage.getAmount(GENERAL), 0);
-        
+
         storage.retrieveAnyMilitary();
     }
 
@@ -203,65 +203,65 @@ public class TestInventory {
     public void testRetrieveAnyMilitary() throws Exception {
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertTrue(storage.isInStock(PRIVATE));
-        
+
         Military m = storage.retrieveAnyMilitary();
         assertNotNull(m);
-        
+
         storage.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertTrue(storage.isInStock(SERGEANT));
-        
+
         m = storage.retrieveAnyMilitary();
         assertNotNull(m);
-        
+
         storage.depositWorker(new Military(null, GENERAL_RANK, null));
         assertTrue(storage.isInStock(GENERAL));
-        
+
         m = storage.retrieveAnyMilitary();
         assertNotNull(m);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrievePrivateFromEmptyInventory() throws Exception {
         assertFalse(storage.isInStock(PRIVATE));
         storage.retrieveMilitary(PRIVATE);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveSergeantFromEmptyInventory() throws Exception {
         assertFalse(storage.isInStock(SERGEANT));
         storage.retrieveMilitary(SERGEANT);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveGeneralFromEmptyInventory() throws Exception {
         assertFalse(storage.isInStock(GENERAL));
         storage.retrieveMilitary(GENERAL);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveCourierLikeMaterial() throws Exception {
         storage.depositWorker(new Courier(null, null));
         storage.retrieve(COURIER);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveCourierLikeWorker() throws Exception {
         storage.depositWorker(new Courier(null, null));
         storage.retrieveWorker(COURIER);
     }
-    
+
     @Test
     public void testDepositAndRetrieveMilitaryOfEachKind() throws Exception {
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertEquals(storage.getAmount(PRIVATE), 1);
         storage.retrieveMilitary(PRIVATE);
         assertEquals(storage.getAmount(PRIVATE), 0);
-    
+
         storage.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertEquals(storage.getAmount(SERGEANT), 1);
         storage.retrieveMilitary(SERGEANT);
         assertEquals(storage.getAmount(SERGEANT), 0);
-        
+
         storage.depositWorker(new Military(null, GENERAL_RANK, null));
         assertEquals(storage.getAmount(GENERAL), 1);
         storage.retrieveMilitary(GENERAL);
@@ -271,17 +271,17 @@ public class TestInventory {
     @Test(expected=Exception.class)
     public void testRetrieveMilitaryAsWorker() throws Exception {
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));
-        
+
         storage.retrieveWorker(PRIVATE);
     }
-    
+
     @Test(expected=Exception.class)
     public void testRetrieveMilitaryAsMaterial() throws Exception {
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));
-        
+
         storage.retrieve(PRIVATE);
     }
-    
+
     private void assertNoMilitaryInInventory(Storage storage) {
         assertEquals(storage.getAmount(PRIVATE), 0);
         assertEquals(storage.getAmount(SERGEANT), 0);

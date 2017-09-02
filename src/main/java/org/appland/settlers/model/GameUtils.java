@@ -28,26 +28,26 @@ public class GameUtils {
 
     static boolean isUnique(List<Point> wayPoints) {
         List<Point> safeCopy = new ArrayList<>();
-        
+
         safeCopy.addAll(wayPoints);
-        
+
         Collections.sort(safeCopy, new SortPointsByY());
 
         Point prev = null;
         for (Point iter : safeCopy) {
             if (prev == null) {
                 prev = iter;
-                
+
                 continue;
             }
 
             if (prev == iter) {
                 return false;
             }
-            
+
             prev = iter;
         }
-        
+
         return true;
     }
 
@@ -65,12 +65,12 @@ public class GameUtils {
         public SortPointsByPolarOrder(Point p) {
             center = p;
         }
-        
+
         @Override
         public int compare(Point t, Point t1) {
             double a = getAngle(t);
             double a1 = getAngle(t1);
-            
+
             if (a > a1) {
                 return 1;
             } else if (a < a1) {
@@ -79,14 +79,14 @@ public class GameUtils {
                 return 0;
             }
         }
-        
+
         private double getAngle(Point p) {
             double dy = p.y - center.y;
             double dx = p.x - center.x;
             double hy = Math.sqrt(dy*dy + dx*dx);
-            
+
             double angle = dy / hy;
-            
+
             if (angle < 0) {
                 angle = Math.PI - angle;
             }
@@ -94,7 +94,7 @@ public class GameUtils {
             return angle;
         }
     }
-    
+
     static class SortPointsByY implements Comparator<Point> {
 
         @Override
@@ -102,19 +102,19 @@ public class GameUtils {
             if (t.y < t1.y) {
                 return -1;
             } 
-            
+
             if (t.y > t1.y) {
                 return 1;
             }
-            
+
             if (t.x < t1.x) {
                 return -1;
             }
-            
+
             if (t.x > t1.x) {
                 return 1;
             }
-            
+
             return 0;
         }
 
@@ -137,7 +137,7 @@ public class GameUtils {
             return hash;
         }
     }
-    
+
     static Map<Material, Integer> createEmptyMaterialIntMap() {
         Map<Material, Integer> result = new HashMap<>();
         for (Material m : Material.values()) {
@@ -255,44 +255,46 @@ public class GameUtils {
                 }
             }
         }
-        
+
         return null;
     }
 
-    public static List<Point> hullWanderer(Collection<Point> pts) {
-        List<Point> points = new ArrayList<>();
+    public static List<Point> hullWanderer(Collection<Point> points) {
+        List<Point> sortedPoints = new ArrayList<>();
         List<Point> hull = new LinkedList<>();
-        
-        points.addAll(pts);
-        
-        Collections.sort(points, new SortPointsByY());
-        
-        Point lowestLeft = points.get(0);
-        Point current = lowestLeft;
-        Point previous = lowestLeft.down();
+
+        /* Sort the points bottom to top, and left to right */
+        sortedPoints.addAll(points);
+
+        Collections.sort(sortedPoints, new SortPointsByY());
+
+        /* Start with the bottom left point */
+        Point bottomLeft = sortedPoints.get(0);
+        Point current = bottomLeft;
+        Point previous = bottomLeft.downRight();
         while (true) {
             hull.add(current);
-            
+
             for (Point it : getSurroundingPointsCounterClockwise(current, previous)) {
-                if (pts.contains(it)) {
+                if (points.contains(it)) {
                     previous = current;
                     current = it;
                     break;
                 }
             }
 
-            if (current.equals(lowestLeft)) {
+            if (current.equals(bottomLeft)) {
                 break;
             }
         }
-        
+
         return hull;
     }
-    
+
     private static Iterable<Point> getSurroundingPointsCounterClockwise(Point center, Point arm) {
         List<Point> surrounding = new LinkedList<>();
         List<Point> result = new LinkedList<>();
-        
+
         surrounding.add(center.down());
         surrounding.add(center.downRight());
         surrounding.add(center.right());
@@ -301,12 +303,12 @@ public class GameUtils {
         surrounding.add(center.upLeft());
         surrounding.add(center.left());
         surrounding.add(center.downLeft());
-        
+
         int armIndex = surrounding.indexOf(arm);
-        
+
         result.addAll(surrounding.subList(armIndex + 1, surrounding.size()));
         result.addAll(surrounding.subList(0, armIndex + 1));
-        
+
         return result;
     }
 

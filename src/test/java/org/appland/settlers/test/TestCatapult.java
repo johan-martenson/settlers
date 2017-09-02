@@ -58,7 +58,7 @@ public class TestCatapult {
         /* Placing catapult */
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
-        
+
         /* Deliver four plancks and three stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -70,11 +70,11 @@ public class TestCatapult {
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
-    
+
         /* Verify that this is enough to construct the catapult */
         for (int i = 0; i < 150; i++) {
             assertTrue(catapult0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -97,7 +97,7 @@ public class TestCatapult {
         /* Placing catapult */
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
-        
+
         /* Deliver three planck and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -135,7 +135,7 @@ public class TestCatapult {
         /* Placing catapult */
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
-        
+
         /* Deliver four plancks and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -478,7 +478,7 @@ public class TestCatapult {
 
         assertTrue(projectile.arrived());
         assertTrue(map.getProjectiles().isEmpty());
-    
+
     }
 
     @Test
@@ -859,16 +859,16 @@ public class TestCatapult {
 
         /* Connect the catapult with the headquarter */
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0, map);
 
         /* Occupy the catapult */
         Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
-        
+
         /* Destroy the catapult */
         Worker catapultWorker = catapult0.getWorker();
-        
+
         assertTrue(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
 
@@ -877,7 +877,7 @@ public class TestCatapult {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(catapultWorker.isInsideBuilding());
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : catapultWorker.getPlannedPath()) {
@@ -929,7 +929,7 @@ public class TestCatapult {
 
             map.stepTime();
         }
-        
+
         assertFalse(map.isBuildingAtPoint(point26));
         assertFalse(map.getBuildings().contains(catapult0));
         assertNull(map.getBuildingAtPoint(point26));
@@ -951,13 +951,13 @@ public class TestCatapult {
         /* Placing catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
-        
+
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0, map);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
-        
+
         map.removeFlag(catapult0.getFlag());
 
         assertNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
@@ -979,13 +979,13 @@ public class TestCatapult {
         /* Placing catapult */
         Point point26 = new Point(8, 8);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
-        
+
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0, map);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
-        
+
         catapult0.tearDown();
 
         assertNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
@@ -1017,7 +1017,7 @@ public class TestCatapult {
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult0, map);
-        
+
         /* Connect the catapult with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
 

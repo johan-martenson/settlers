@@ -58,10 +58,10 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Flag f1 = map.placeFlag(player0, new Point(6, 4));
         Flag f2 = map.placeFlag(player0, new Point(11, 5));
 
@@ -86,10 +86,10 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Storage s = new Storage(player0);
 
         map.placeBuilding(s, new Point(4, 6));
@@ -125,10 +125,10 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         map.placeAutoSelectedRoad(player0, new Flag(new Point(1, 1)), new Flag(new Point(3, 5)));
     }
 
@@ -172,10 +172,10 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         map.placeFlag(player0, new Point(3, 3));
         map.placeAutoSelectedRoad(player0, new Flag(new Point(3, 3)), new Flag(new Point(3, 3)));
     }
@@ -196,7 +196,7 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
-        
+
         /*
          * F--F1--F2--F3--F4
          *    |    |
@@ -248,7 +248,7 @@ public class TestTransportation {
 
         map.placeFlag(player0, f6);
         map.placeAutoSelectedRoad(player0, f5, f6);
-        
+
         map.placeFlag(player0, f7);
         map.placeAutoSelectedRoad(player0, f1, f7);
 
@@ -276,7 +276,7 @@ public class TestTransportation {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, f1.right());
         assertTrue(forester.getPosition().equals(f1.right()));
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, f2);
         assertTrue(forester.getPosition().equals(f2));
 
@@ -294,14 +294,14 @@ public class TestTransportation {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point away = new Point(6, 2);
         Point start = new Point(2, 2);
         Flag end = map.placeFlag(player0, new Point(4, 2));
-        
+
         Point middle = new Point(3, 3);
 
         map.placeFlag(player0, start);
@@ -358,23 +358,23 @@ public class TestTransportation {
 
         /* Production starts, wait for it to finish */
         Utils.fastForward(100, map);
-        
+
         assertFalse(mason.isInsideBuilding());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, mason, mason.getTarget());
-        
+
         assertTrue(mason.isGettingStone());
-        
+
         Utils.fastForward(50, map);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getPosition());
-        
+
         assertTrue(mason.isInsideBuilding());
-        
+
         map.stepTime();
-        
+
         assertEquals(mason.getTarget(), qry.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getFlag().getPosition());
 
         assertFalse(qry.getFlag().getStackedCargo().isEmpty());
@@ -410,7 +410,7 @@ public class TestTransportation {
 
         hqToMdlCr.assignToRoad(hqToMiddleRoad);
         mdlToEndCr.assignToRoad(middleToEndRoad);
-        
+
         /* Let couriers walk to the middle of their roads and become idle */
         for (int i = 0; i < 500; i++) {
             if (hqToMdlCr.isIdle() && mdlToEndCr.isIdle()) {
@@ -501,7 +501,7 @@ public class TestTransportation {
                 c = (Courier)w;
             }
         }
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, c);
 
         assertFalse(hqToMiddleRoad.needsCourier());
@@ -698,10 +698,10 @@ public class TestTransportation {
 
         map.placeWorker(courier, flag0);
         courier.assignToRoad(road0);
-        
+
         map.placeWorker(secondCourier, flag1);
         secondCourier.assignToRoad(road1);
-        
+
         /* Let the couriers reach their roads and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, secondCourier);
 
@@ -724,19 +724,19 @@ public class TestTransportation {
         assertNull(courier.getCargo());
         assertEquals(courier.getTarget(), point0);
         assertTrue(cargo.isDeliveryPromised());
-        
+
         /* Let the courier reach the cargo and pick it up */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
-        
+
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTarget(), flag1.getPosition());
         assertTrue(flag1.getStackedCargo().isEmpty());
         assertEquals(courier.getTarget(), point2);
         assertFalse(cargo.isDeliveryPromised());
-        
+
         /* Fast forward until the courier reaches the other flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
-        
+
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 

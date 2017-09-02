@@ -58,7 +58,7 @@ public class TestMill {
         /* Placing mill */
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
-        
+
         /* Deliver two planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -67,7 +67,7 @@ public class TestMill {
         mill0.putCargo(planckCargo);
         mill0.putCargo(stoneCargo);
         mill0.putCargo(stoneCargo);
-    
+
         /* Verify that this is enough to construct the mill */
         for (int i = 0; i < 150; i++) {
             assertTrue(mill0.underConstruction());
@@ -94,7 +94,7 @@ public class TestMill {
         /* Placing mill */
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
-        
+
         /* Deliver one planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -129,7 +129,7 @@ public class TestMill {
         /* Placing mill */
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
-        
+
         /* Deliver two plancks and one stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);

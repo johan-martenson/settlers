@@ -58,7 +58,7 @@ public class TestDonkeyFarm {
         /* Placing donkey farm */
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
-        
+
         /* Deliver three planck and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -69,11 +69,11 @@ public class TestDonkeyFarm {
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
-    
+
         /* Verify that this is enough to construct the donkey farm */
         for (int i = 0; i < 200; i++) {
             assertTrue(farm0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -96,7 +96,7 @@ public class TestDonkeyFarm {
         /* Placing donkey farm */
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
-        
+
         /* Deliver two planck and three stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -133,7 +133,7 @@ public class TestDonkeyFarm {
         /* Placing donkey farm */
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
-        
+
         /* Deliver three plancks and two stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -160,11 +160,11 @@ public class TestDonkeyFarm {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         /* Place donkey farm */
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new DonkeyFarm(player0), point0);
@@ -179,17 +179,17 @@ public class TestDonkeyFarm {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         /* Place donkey farm */
         Point point0 = new Point(10, 6);
         Building farm = map.placeBuilding(new DonkeyFarm(player0), point0);
 
         Utils.constructHouse(farm, map);
-        
+
         assertTrue(farm.ready());
         assertTrue(farm.needsWorker());
     }
@@ -218,7 +218,7 @@ public class TestDonkeyFarm {
 
         /* Finish the donkey farm */
         Utils.constructHouse(farm, map);
-        
+
         /* Fast forward so the headquarter dispatches a courier and a donkey breeder */
         Utils.fastForward(20, map);
 
@@ -251,30 +251,30 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm, map);
 
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
 
         donkeyFarm.putCargo(waterCargo);
         donkeyFarm.putCargo(wheatCargo);
-        
+
         /* Run the game logic 99 times and make sure the donkey breeder stays in the donkey farm */
         int i;
         for (i = 0; i < 99; i++) {
             assertTrue(donkeyBreeder.isInsideBuilding());
             map.stepTime();
         }
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Step once and make sure the donkey breedre goes out of the donkey farm */
         map.stepTime();        
-        
+
         assertFalse(donkeyBreeder.isInsideBuilding());
     }
 
@@ -305,38 +305,38 @@ public class TestDonkeyFarm {
         /* Deliver wheat and donkey to the farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
         Cargo waterCargo = new Cargo(WATER, map);
-        
+
         donkeyFarm.putCargo(wheatCargo);
         donkeyFarm.putCargo(waterCargo);
-        
+
         /* Occupy the donkey farm with a donkey breeder */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Step once and make sure the donkey breeder goes out of the farm */
         map.stepTime();        
-        
+
         assertFalse(donkeyBreeder.isInsideBuilding());
 
         Point point = donkeyBreeder.getTarget();
 
         assertTrue(donkeyBreeder.isTraveling());
-        
+
         /* Let the donkey breeder reach the spot and start to feed the donkeys */
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
-        
+
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         int i;
         for (i = 0; i < 19; i++) {
             assertTrue(donkeyBreeder.isFeeding());
@@ -347,7 +347,7 @@ public class TestDonkeyFarm {
         assertFalse(map.isCropAtPoint(point));
 
         map.stepTime();
-        
+
         /* Verify that the donkey breeder stopped feeding */
         assertFalse(donkeyBreeder.isFeeding());
         assertNull(donkeyBreeder.getCargo());
@@ -379,11 +379,11 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -393,32 +393,32 @@ public class TestDonkeyFarm {
 
         /* Wait for the donkey breeder to rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Step once to let the donkey breeder go out to plant */
         map.stepTime();        
-        
+
         assertFalse(donkeyBreeder.isInsideBuilding());
 
         Point point = donkeyBreeder.getTarget();
 
         assertTrue(donkeyBreeder.isTraveling());
-        
+
         /* Let the donkey breeder reach the intended spot and start to feed */
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
-        
+
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         /* Wait for the donkey breeder to feed */
         Utils.fastForward(19, map);
-        
+
         assertTrue(donkeyBreeder.isFeeding());
 
         map.stepTime();
-        
+
         /* Verify that the donkey breeder stopped feeding and is walking back to the farm */
         assertFalse(donkeyBreeder.isFeeding());
         assertTrue(donkeyBreeder.isTraveling());
@@ -426,7 +426,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.getPlannedPath().contains(donkeyFarm.getFlag().getPosition()));
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
-        
+
         assertTrue(donkeyBreeder.isArrived());        
         assertTrue(donkeyBreeder.isInsideBuilding());
     }
@@ -452,9 +452,9 @@ public class TestDonkeyFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
-        
+
         Utils.constructHouse(donkeyFarm, map);
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -464,44 +464,44 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Step once and to let the donkey breeder go out to feed */
         map.stepTime();        
-        
+
         assertFalse(donkeyBreeder.isInsideBuilding());
 
         Point point = donkeyBreeder.getTarget();
-        
+
         assertTrue(donkeyBreeder.isTraveling());
-        
+
         /* Let the donkey breeder reach the intended spot */
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
-        
+
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         /* Wait for the donkey breeder to feed the donkeys */
         Utils.fastForward(19, map);
-        
+
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         map.stepTime();
-        
+
         /* DonkeyBreeder is walking back to farm without carrying a cargo */
         assertFalse(donkeyBreeder.isFeeding());
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm.getPosition());
         assertNull(donkeyBreeder.getCargo());
-        
+
         /* Let the donkey breeder reach the farm */
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
 
@@ -525,17 +525,17 @@ public class TestDonkeyFarm {
         for (Worker w : map.getWorkers()) {
             if (w instanceof Donkey && w.getTarget().equals(hq.getPosition())) {
                 donkey = (Donkey)w;
-                
+
                 break;
             }
         }
 
         assertNotNull(donkey);
         assertEquals(donkey.getTarget(), hq.getPosition());
-    
+
         /* Verify that the donkey walks to the headquarter */
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, hq.getPosition());
-        
+
         assertEquals(donkey.getPosition(), hq.getPosition());
     }
 
@@ -562,15 +562,15 @@ public class TestDonkeyFarm {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Verify that the farm does not produce any donkeys */
         boolean newDonkeyFound = false;
-        
+
         for (int i = 0; i < 500; i++) {
             for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-                    
+
                     break;
                 }
             }
@@ -578,10 +578,10 @@ public class TestDonkeyFarm {
             if (newDonkeyFound) {
                 break;
             }
-        
+
             map.stepTime();
         }
-    
+
         assertFalse(newDonkeyFound);
     }
 
@@ -617,7 +617,7 @@ public class TestDonkeyFarm {
 
         donkeyFarm0.putCargo(waterCargo);
         donkeyFarm0.putCargo(waterCargo);
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(100, map);
 
@@ -665,10 +665,10 @@ public class TestDonkeyFarm {
 
         /* Occupy the donkey farm */
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
-        
+
         /* Destroy the donkey farm */
         Worker ww = donkeyFarm0.getWorker();
-        
+
         assertTrue(ww.isInsideBuilding());
         assertEquals(ww.getPosition(), donkeyFarm0.getPosition());
 
@@ -677,9 +677,9 @@ public class TestDonkeyFarm {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(ww.isInsideBuilding());
         assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(DONKEY_BREEDER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
 
         /* Verify that the donkey breeder is stored correctly in the headquarter */
@@ -705,16 +705,16 @@ public class TestDonkeyFarm {
 
         /* Connect the donkey farm with the headquarter */
         map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Occupy the donkey farm */
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
-        
+
         /* Destroy the donkey farm */
         Worker ww = donkeyFarm0.getWorker();
-        
+
         assertTrue(ww.isInsideBuilding());
         assertEquals(ww.getPosition(), donkeyFarm0.getPosition());
 
@@ -723,7 +723,7 @@ public class TestDonkeyFarm {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(ww.isInsideBuilding());
         assertEquals(ww.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : ww.getPlannedPath()) {
@@ -755,20 +755,20 @@ public class TestDonkeyFarm {
 
         /* Occupy the donkey farm with a donkey breeder */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Verify that the donkey breeder doesn't produce anything */
         for (int i = 0; i < 300; i++) {
             assertEquals(donkeyBreeder.getCargo(), null);
-            
+
             map.stepTime();
         }
     }
@@ -792,20 +792,20 @@ public class TestDonkeyFarm {
 
         /* Occupy the donkey farm with a donkey breeder */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Verify that the donkey breeder doesn't produce anything */
         for (int i = 0; i < 300; i++) {
             assertTrue(donkeyBreeder.isInsideBuilding());
-            
+
             map.stepTime();
         }
     }
@@ -824,7 +824,7 @@ public class TestDonkeyFarm {
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
-        
+
         Utils.constructHouse(donkeyFarm, map);
 
         /* Deliver resources to the donkey farm */
@@ -836,39 +836,39 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Let the donkey breeder rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Step once and to let the donkey breeder go out to feed */
         map.stepTime();        
-        
+
         assertFalse(donkeyBreeder.isInsideBuilding());
 
         Point point = donkeyBreeder.getTarget();
-        
+
         assertTrue(donkeyBreeder.isTraveling());
-        
+
         /* Let the donkey breeder reach the intended spot */
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
-        
+
         assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isAt(point));
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         /* Wait for the donkey breeder to feed the donkeys */
         Utils.fastForward(19, map);
-        
+
         assertTrue(donkeyBreeder.isFeeding());
-        
+
         map.stepTime();
-        
+
         /* Verify that the donkey breeder is done feeding and has consumed the water and wheat */
         assertFalse(donkeyBreeder.isFeeding());
         assertEquals(donkeyFarm.getAmount(WATER), 0);
@@ -894,7 +894,7 @@ public class TestDonkeyFarm {
 
         /* Connect the donkey farm with the headquarter */
         map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
 
@@ -905,16 +905,16 @@ public class TestDonkeyFarm {
 
         /* Wait for the donkey farm to stop burning */
         Utils.fastForward(50, map);
-        
+
         assertTrue(donkeyFarm0.destroyed());
-        
+
         /* Wait for the donkey farm to disappear */
         for (int i = 0; i < 100; i++) {
             assertEquals(map.getBuildingAtPoint(point26), donkeyFarm0);
-            
+
             map.stepTime();
         }
-        
+
         assertFalse(map.isBuildingAtPoint(point26));
         assertFalse(map.getBuildings().contains(donkeyFarm0));
         assertNull(map.getBuildingAtPoint(point26));
@@ -936,13 +936,13 @@ public class TestDonkeyFarm {
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
-        
+
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(donkeyFarm0.getPosition(), donkeyFarm0.getFlag().getPosition()));
-        
+
         map.removeFlag(donkeyFarm0.getFlag());
 
         assertNull(map.getRoad(donkeyFarm0.getPosition(), donkeyFarm0.getFlag().getPosition()));
@@ -964,13 +964,13 @@ public class TestDonkeyFarm {
         /* Placing donkey farm */
         Point point26 = new Point(8, 8);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
-        
+
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(donkeyFarm0.getPosition(), donkeyFarm0.getFlag().getPosition()));
-        
+
         donkeyFarm0.tearDown();
 
         assertNull(map.getRoad(donkeyFarm0.getPosition(), donkeyFarm0.getFlag().getPosition()));
@@ -984,29 +984,29 @@ public class TestDonkeyFarm {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place donkey farm */
         Point point1 = new Point(8, 6);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
-        
+
         /* Connect the donkey farm and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Assign a worker to the donkey farm */
         DonkeyBreeder ww = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(ww, donkeyFarm0, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Deliver resources to the donkey farm */
@@ -1018,13 +1018,13 @@ public class TestDonkeyFarm {
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         boolean newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-                    
+
                     break;
                 }
 
@@ -1041,12 +1041,12 @@ public class TestDonkeyFarm {
 
         /* Wait for the new donkey to walk away from the donkey farm */
         Utils.fastForward(20, map);
-        
+
         /* Stop production and verify that no donkey is produced */
         donkeyFarm0.stopProduction();
-        
+
         assertFalse(donkeyFarm0.isProductionEnabled());
-        
+
         newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (Worker w : map.getWorkers()) {
@@ -1090,10 +1090,10 @@ public class TestDonkeyFarm {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -1106,21 +1106,21 @@ public class TestDonkeyFarm {
 
         /* Assign a worker to the donkey farm */
         DonkeyBreeder ww = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(ww, donkeyFarm0, map);
-        
+
         assertTrue(ww.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the donkey breeder to produce donkey */
         boolean newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
             for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-                    
+
                     break;
                 }
             }
@@ -1128,7 +1128,7 @@ public class TestDonkeyFarm {
             if (newDonkeyFound) {
                 break;
             }
-            
+
             map.stepTime();
         }
 
@@ -1136,7 +1136,7 @@ public class TestDonkeyFarm {
 
         /* Wait for the new donkey to walk away from the donkey farm */
         Utils.fastForward(20, map);
-        
+
         /* Stop production */
         donkeyFarm0.stopProduction();
 
@@ -1145,7 +1145,7 @@ public class TestDonkeyFarm {
             for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-                    
+
                     break;
                 }
             }
@@ -1153,7 +1153,7 @@ public class TestDonkeyFarm {
             if (newDonkeyFound) {
                 break;
             }
-            
+
             map.stepTime();
         }
 
@@ -1169,7 +1169,7 @@ public class TestDonkeyFarm {
             for (Worker w : map.getWorkers()) {
                 if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
-                    
+
                     break;
                 }
             }
@@ -1177,7 +1177,7 @@ public class TestDonkeyFarm {
             if (newDonkeyFound) {
                 break;
             }
-            
+
             map.stepTime();
         }
 
@@ -1217,9 +1217,9 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Verify that the donkey breeder does not pick up any cargo */
@@ -1251,9 +1251,9 @@ public class TestDonkeyFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
-        
+
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -1263,11 +1263,11 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Wait for the donkey farm to create a donkey */
         Donkey donkey = null;
 
@@ -1292,7 +1292,7 @@ public class TestDonkeyFarm {
 
         /* Verify that the donkey walks to the storage on existing roads */
         Point previous = null;
-        
+
         for (Point p : donkey.getPlannedPath()) {
             if (previous == null) {
                 previous = p;
@@ -1331,9 +1331,9 @@ public class TestDonkeyFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
-        
+
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -1343,11 +1343,11 @@ public class TestDonkeyFarm {
 
         /* Assign a donkey breeder to the farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
-        
+
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
-        
+
         assertTrue(donkeyBreeder.isInsideBuilding());
-        
+
         /* Wait for the donkey farm to create a donkey */
         Donkey donkey = null;
 
@@ -1369,14 +1369,14 @@ public class TestDonkeyFarm {
         }
 
         assertNotNull(donkey);
-        
+
         /* Verify that the donkey is only added once */
         for (int i = 0; i < 600; i++) {
             assertEquals(map.getWorkers().indexOf(donkey), map.getWorkers().lastIndexOf(donkey));
 
             map.stepTime();
         }
-    
+
     }
 
     @Test
@@ -1400,7 +1400,7 @@ public class TestDonkeyFarm {
 
         /* Finish construction of the donkey farm */
         Utils.constructHouse(donkeyFarm0, map);
-        
+
         /* Connect the donkey farm with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm0.getFlag());
 

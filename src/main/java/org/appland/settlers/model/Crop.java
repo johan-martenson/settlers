@@ -48,7 +48,7 @@ public class Crop implements Actor, Piece {
         if (growthCountdown.reachedZero()) {
             if (state == JUST_PLANTED) {
                 state = HALFWAY;
-                
+
                 growthCountdown.countFrom(TIME_TO_GROW);
             } else if (state == HALFWAY) {
                 state = FULL_GROWN;

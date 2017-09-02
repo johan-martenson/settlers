@@ -16,9 +16,9 @@ import java.lang.annotation.RetentionPolicy;
 public @interface MilitaryBuilding {
 
     int maxHostedMilitary();
-    
+
     int defenceRadius();
-    
+
     int attackRadius();
 
     int maxCoins() default 0;

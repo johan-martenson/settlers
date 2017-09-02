@@ -17,28 +17,28 @@ public class Tile {
     private static final int SMALL_AMOUNT_OF_GOLD  = 5;
     private static final int MEDIUM_AMOUNT_OF_GOLD = 10;
     private static final int LARGE_AMOUNT_OF_GOLD  = 15;
-    
+
     private Vegetation vegetationType;
     private int        amountGold;
     private int        amountFish;
     private int        amountIron;
     private int amountGranite;
     private int amountCoal;
-    
+
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;
-        
+
         amountGold    = 0;
         amountIron    = 0;
         amountCoal    = 0;
         amountGranite = 0;
-        
+
         amountFish = 0;
     }
 
     public void setVegetationType(Vegetation vegetation) {
         vegetationType = vegetation;
-        
+
         if (vegetationType == WATER) {
             amountFish = DEFAULT_AMOUNT_FISH;
         }
@@ -79,7 +79,7 @@ public class Tile {
 
     public void setAmountMineral(Material mineral, Size amount) {
         int nrAmount = 0;
-        
+
         switch (amount) {
         case SMALL:
             nrAmount = SMALL_AMOUNT_OF_GOLD;
@@ -90,7 +90,7 @@ public class Tile {
         case LARGE:
             nrAmount = LARGE_AMOUNT_OF_GOLD;
         }
-    
+
         switch (mineral) {
         case GOLD:
             amountGold = nrAmount;
@@ -105,10 +105,10 @@ public class Tile {
             amountGranite = nrAmount;
             break;
         default:
-            
+
         }
     }
-    
+
     int getAmountOfMineral(Material mineral) {
         switch (mineral) {
         case GOLD:
@@ -123,7 +123,7 @@ public class Tile {
             return 0;
         }
     }
-    
+
     int getAmountFish() {
         return amountFish;
     }

@@ -10,7 +10,7 @@ public class InvalidEndPointException extends Exception {
 
     public InvalidEndPointException() {
     }
-    
+
     InvalidEndPointException(Point start) {
         super("Invalid endpoint: " + start);
     }

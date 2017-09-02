@@ -25,7 +25,7 @@ public enum Material {
     PIG,
     MEAT,
     DONKEY,
-    
+
     PRIVATE, 
     SERGEANT, 
     GENERAL, 

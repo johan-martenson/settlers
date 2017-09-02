@@ -94,7 +94,7 @@ public class Land {
                 border.add(collectingBorder);
             }
         }
-    
+
     }
 
     List<List<Point>> getBorders() {

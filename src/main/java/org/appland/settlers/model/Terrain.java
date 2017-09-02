@@ -21,7 +21,7 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
  * @author johan
  */
 public class Terrain {
-    
+
     private final Map<Integer, Tile> tileBelowMap;
     private final Map<Integer, Tile> tileDownRightMap;
     private final int width;

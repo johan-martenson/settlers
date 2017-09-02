@@ -23,7 +23,7 @@ public class Headquarter extends Storage {
     @Override
     protected void setMap(GameMap m) throws Exception {
         super.setMap(m);
-            
+
         Worker w = new StorageWorker(getPlayer(), m);
         getMap().placeWorker(w, this);
 
@@ -31,7 +31,7 @@ public class Headquarter extends Storage {
 
         assignWorker(w);
     }
-    
+
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {
         inventory.put(SHIELD, InitialState.STORAGE_INITIAL_SHIELDS);
         inventory.put(SWORD, InitialState.STORAGE_INITIAL_SWORDS);

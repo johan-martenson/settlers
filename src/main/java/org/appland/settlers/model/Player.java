@@ -186,7 +186,7 @@ public class Player {
             }
 
             boolean foundSpot;
-            
+
             while (b.getNumberOfHostedMilitary() > 1) {
                 if (allocated == nrAttackers) {
                     break;

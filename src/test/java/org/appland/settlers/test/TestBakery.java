@@ -60,7 +60,7 @@ public class TestBakery {
         /* Placing bakery */
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
-        
+
         /* Deliver two planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -69,11 +69,11 @@ public class TestBakery {
         bakery0.putCargo(planckCargo);
         bakery0.putCargo(stoneCargo);
         bakery0.putCargo(stoneCargo);
-    
+
         /* Verify that this is enough to construct the bakery */
         for (int i = 0; i < 150; i++) {
             assertTrue(bakery0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -96,7 +96,7 @@ public class TestBakery {
         /* Placing bakery */
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
-        
+
         /* Deliver one planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -131,7 +131,7 @@ public class TestBakery {
         /* Placing bakery */
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
-        
+
         /* Deliver two plancks and one stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
@@ -175,20 +175,20 @@ public class TestBakery {
 
         /* Unfinished samwill doesn't need worker */
         assertFalse(bakery.needsWorker());
-        
+
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         assertTrue(bakery.needsWorker());
     }
 
     @Test
     public void testHeadquarterHasOneBakerAtStart() {
         Headquarter hq = new Headquarter(null);
-        
+
         assertEquals(hq.getAmount(BAKER), 1);
     }
-    
+
     @Test
     public void testBakeryGetsAssignedWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -214,12 +214,12 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         assertTrue(bakery.needsWorker());
 
         /* Verify that a bakery worker leaves the hq */
         Utils.fastForward(3, map);
-        
+
         assertEquals(map.getWorkers().size(), 3);
 
         /* Let the bakery worker reach the bakery */
@@ -233,14 +233,14 @@ public class TestBakery {
 
         assertNotNull(baker);
         assertEquals(baker.getTarget(), bakery.getPosition());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, baker);
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);
     }
-    
+
     @Test
     public void testOccupiedBakeryWithoutIngredientsProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -258,10 +258,10 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);        
@@ -274,7 +274,7 @@ public class TestBakery {
             map.stepTime();
         }
     }
-    
+
     @Test
     public void testUnoccupiedBakeryProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -326,10 +326,10 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);        
@@ -337,7 +337,7 @@ public class TestBakery {
         /* Deliver wood to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
-        
+
         /* Verify that the bakery produces bread */
         int i;
         for (i = 0; i < 149; i++) {
@@ -347,7 +347,7 @@ public class TestBakery {
         }
 
         map.stepTime();
-        
+
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
         assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
@@ -378,10 +378,10 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
         assertEquals(bakery.getWorker(), baker);        
@@ -389,7 +389,7 @@ public class TestBakery {
         /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
-        
+
         /* Verify that the bakery produces bread */
         int i;
         for (i = 0; i < 149; i++) {
@@ -399,23 +399,23 @@ public class TestBakery {
         }
 
         map.stepTime();
-        
+
         assertNotNull(baker.getCargo());
         assertEquals(baker.getCargo().getMaterial(), BREAD);
         assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-        
+
         /* Verify that the bakery worker leaves the cargo at the flag */
         assertEquals(baker.getTarget(), bakery.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery.getFlag().getPosition());
-        
+
         assertFalse(bakery.getFlag().getStackedCargo().isEmpty());
         assertNull(baker.getCargo());
         assertEquals(baker.getTarget(), bakery.getPosition());
-        
+
         /* Verify that the baker goes back to the bakery */
         Utils.fastForwardUntilWorkersReachTarget(map, baker);
-        
+
         assertTrue(baker.isInsideBuilding());
     }
 
@@ -436,20 +436,20 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
-        
+
         /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
-        
+
         /* Wait until the bakery worker produces a bread */
         assertEquals(bakery.getAmount(WATER), 1);
         assertEquals(bakery.getAmount(FLOUR), 1);
-        
+
         Utils.fastForward(150, map);
-        
+
         assertEquals(bakery.getAmount(FLOUR), 0);
         assertEquals(bakery.getAmount(WATER), 0);
     }
@@ -471,28 +471,28 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
-        
+
         /* Populate the bakery */        
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
-        
+
         /* Fast forward so that the bakery worker would have produced bread
            if it had had the ingredients
         */        
         Utils.fastForward(150, map);
-        
+
         assertNull(baker.getCargo());
-        
+
         /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
-        
+
         /* Verify that it takes 50 steps for the bakery worker to produce the planck */
         int i;
         for (i = 0; i < 50; i++) {
             assertNull(baker.getCargo());
             map.stepTime();
         }
-        
+
         assertNotNull(baker.getCargo());
     }
 
@@ -522,13 +522,13 @@ public class TestBakery {
         /* Deliver material to the bakery */
         Cargo ironCargo = new Cargo(FLOUR, map);
         Cargo coalCargo = new Cargo(WATER, map);
-        
+
         bakery0.putCargo(ironCargo);
         bakery0.putCargo(ironCargo);
 
         bakery0.putCargo(coalCargo);
         bakery0.putCargo(coalCargo);
-        
+
         /* Let the baker rest */
         Utils.fastForward(100, map);
 
@@ -547,10 +547,10 @@ public class TestBakery {
 
         assertNull(baker.getCargo());
         assertFalse(bakery0.getFlag().getStackedCargo().isEmpty());
-        
+
         /* Wait for the worker to go back to the bakery */
         assertEquals(baker.getTarget(), bakery0.getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
@@ -560,9 +560,9 @@ public class TestBakery {
 
         /* Verify that the second cargo is put at the flag */
         assertEquals(baker.getTarget(), bakery0.getFlag().getPosition());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
-        
+
         assertNull(baker.getCargo());
         assertEquals(bakery0.getFlag().getStackedCargo().size(), 2);
     }
@@ -590,7 +590,7 @@ public class TestBakery {
         /* Deliver material to the bakery */
         Cargo ironCargo = new Cargo(FLOUR, map);
         Cargo coalCargo = new Cargo(WATER, map);
-        
+
         bakery0.putCargo(ironCargo);
         bakery0.putCargo(ironCargo);
 
@@ -618,48 +618,48 @@ public class TestBakery {
 
         assertNull(baker.getCargo());
         assertFalse(bakery0.getFlag().getStackedCargo().isEmpty());
-        
+
         /* Wait to let the cargo remain at the flag without any connection to the storage */
         Cargo cargo = bakery0.getFlag().getStackedCargo().get(0);
-        
+
         Utils.fastForward(50, map);
-        
+
         assertEquals(cargo.getPosition(), bakery0.getFlag().getPosition());
-    
+
         /* Connect the bakery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
-    
+
         /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
-    
+
         /* Wait for the courier to reach the idle point of the road */
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(bakery0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-    
-    
+
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-    
+
         /* Verify that the courier walks to pick up the cargo */
         map.stepTime();
-        
+
         assertEquals(courier.getTarget(), bakery0.getFlag().getPosition());
-    
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
-        
+
         /* Verify that the courier has picked up the cargo */
         assertNotNull(courier.getCargo());
         assertEquals(courier.getCargo(), cargo);
-        
+
         /* Verify that the courier delivers the cargo to the headquarter */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
-        
+
         int amount = headquarter0.getAmount(BREAD);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
-        
+
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
         assertEquals(headquarter0.getAmount(BREAD), amount + 1);
@@ -687,10 +687,10 @@ public class TestBakery {
 
         /* Occupy the bakery */
         Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
-        
+
         /* Destroy the bakery */
         Worker baker = bakery0.getWorker();
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getPosition(), bakery0.getPosition());
 
@@ -699,9 +699,9 @@ public class TestBakery {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(BAKER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
 
         /* Verify that the baker is stored correctly in the headquarter */
@@ -727,16 +727,16 @@ public class TestBakery {
 
         /* Connect the bakery with the headquarter */
         map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
 
         /* Occupy the bakery */
         Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
-        
+
         /* Destroy the bakery */
         Worker baker = bakery0.getWorker();
-        
+
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getPosition(), bakery0.getPosition());
 
@@ -745,7 +745,7 @@ public class TestBakery {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(baker.isInsideBuilding());
         assertEquals(baker.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : baker.getPlannedPath()) {
@@ -766,28 +766,28 @@ public class TestBakery {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place bakery */
         Point point1 = new Point(8, 6);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
-        
+
         /* Connect the bakery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the bakery */
         Utils.constructHouse(bakery0, map);
-        
+
         /* Deliver material to the bakery */
         Cargo ironCargo = new Cargo(FLOUR, map);
         Cargo coalCargo = new Cargo(WATER, map);
-        
+
         bakery0.putCargo(ironCargo);
         bakery0.putCargo(ironCargo);
 
@@ -796,17 +796,17 @@ public class TestBakery {
 
         /* Assign a worker to the bakery */
         Baker baker = new Baker(player0, map);
-        
+
         Utils.occupyBuilding(baker, bakery0, map);
-        
+
         assertTrue(baker.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the baker to produce cargo */
         Utils.fastForwardUntilWorkerProducesCargo(map, baker);
-        
+
         assertEquals(baker.getCargo().getMaterial(), BREAD);
 
         /* Wait for the worker to deliver the cargo */
@@ -816,12 +816,12 @@ public class TestBakery {
 
         /* Stop production and verify that no bread is produced */
         bakery0.stopProduction();
-        
+
         assertFalse(bakery0.isProductionEnabled());
-        
+
         for (int i = 0; i < 300; i++) {
             assertNull(baker.getCargo());
-            
+
             map.stepTime();
         }
     }
@@ -834,28 +834,28 @@ public class TestBakery {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place bakery */
         Point point1 = new Point(8, 6);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
-        
+
         /* Connect the bakery and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the bakery */
         Utils.constructHouse(bakery0, map);
-        
+
         /* Deliver material to the bakery */
         Cargo ironCargo = new Cargo(FLOUR, map);
         Cargo coalCargo = new Cargo(WATER, map);
-        
+
         bakery0.putCargo(ironCargo);
         bakery0.putCargo(ironCargo);
 
@@ -864,14 +864,14 @@ public class TestBakery {
 
         /* Assign a worker to the bakery */
         Baker baker = new Baker(player0, map);
-        
+
         Utils.occupyBuilding(baker, bakery0, map);
-        
+
         assertTrue(baker.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the baker to produce bread */
         Utils.fastForwardUntilWorkerProducesCargo(map, baker);
 
@@ -887,7 +887,7 @@ public class TestBakery {
 
         for (int i = 0; i < 300; i++) {
             assertNull(baker.getCargo());
-            
+
             map.stepTime();
         }
 
@@ -922,7 +922,7 @@ public class TestBakery {
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery0, map);
-        
+
         /* Connect the bakery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery0.getFlag());
 

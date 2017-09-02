@@ -36,7 +36,7 @@ public class Military extends Worker {
         SERGEANT_RANK,
         GENERAL_RANK;
     }
-    
+
     protected enum State {
         WALKING_TO_TARGET,
         DEPLOYED,
@@ -71,7 +71,7 @@ public class Military extends Worker {
     private Rank      rank;
     private State     state;
     private int       health;
-    
+
     public Military(Player player, Rank r, GameMap map) {
         super(player, map);
 
@@ -313,7 +313,7 @@ public class Military extends Worker {
 
                     setOffroadTarget(buildingToAttack.getPosition());
                 } else {
-                    
+
                     /* Notify the building about this attacker if it can still be defended */
                     buildingToAttack.registerAttacker(this);
 
@@ -327,7 +327,7 @@ public class Military extends Worker {
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_DEFENSE) {
 
             if (defendedBuilding.getAttackers().isEmpty()) {
-                
+
                 /* Go home or to storage if there are no more attackers */
                 returnAfterAttackIsOver();
             } else if (getHome().equals(defendedBuilding)) {
@@ -374,12 +374,12 @@ public class Military extends Worker {
         Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;
-        
+
         if (stg != null) {
             setTarget(stg.getPosition());
         } else {
             stg = getClosestStorageOffroad();
-            
+
             setOffroadTarget(stg.getPosition());
         }
     }

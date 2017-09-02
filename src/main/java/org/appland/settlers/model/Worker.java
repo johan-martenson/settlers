@@ -30,13 +30,13 @@ public abstract class Worker implements Actor, Piece {
         WALKING_HALFWAY_AND_EXACTLY_AT_POINT, 
         IDLE_HALF_WAY
     }
-    
+
     private final static int SPEED_ADJUST = 1;
     private final static Logger log = Logger.getLogger(Worker.class.getName());
     private final Countdown     walkCountdown;
 
     protected GameMap     map;
-    
+
     private List<Point> path;
     private States      state;
     private Cargo       carriedCargo;
@@ -67,7 +67,7 @@ public abstract class Worker implements Actor, Piece {
             /* Start the next part of the road if the worker is not at the target */
             if (!position.equals(target)) {
                 walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
-                
+
                 state = WALKING_BETWEEN_POINTS;
             }
         } else if (state == WALKING_BETWEEN_POINTS) {
@@ -80,7 +80,7 @@ public abstract class Worker implements Actor, Piece {
                 /* Update the worker's position */
                 position = path.get(0);
                 path.remove(0);
-                
+
                 /* Update the cargo's position */
                 updateCargoPosition();
 
@@ -102,7 +102,7 @@ public abstract class Worker implements Actor, Piece {
             /* Start the next part of the road if the worker is not at the target */
             if (!position.equals(target)) {
                 walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
-                
+
                 state = States.WALKING_HALF_WAY;
             }
         } else if (state == States.WALKING_HALF_WAY) {
@@ -133,7 +133,7 @@ public abstract class Worker implements Actor, Piece {
             } else {
                 str = "Courier latest at " + getLastPoint() + " traveling to " + target;
             }
-                
+
             if (buildingToEnter != null) {
                 str += " for " + buildingToEnter;
             }
@@ -141,28 +141,28 @@ public abstract class Worker implements Actor, Piece {
             if (carriedCargo != null) {
                 str += " carrying " + carriedCargo;
             }
-            
+
             return str;
         }
-        
+
         return "Idle courier at " + getPosition();
     }
 
     protected void onArrival() throws Exception {
         log.log(Level.FINE, "On handle hook arrival with nothing to do");
     }
-    
+
     protected void onIdle() throws Exception {
         log.log(Level.FINE, "On idle hook with nothing to do");
     }
-    
+
     protected void onEnterBuilding(Building b) throws Exception {
         log.log(Level.FINE, "On enter building hook with nothing to do");
     }
-            
+
     private void handleArrival() throws Exception {
         log.log(Level.FINE, "Arrived at target: {0}", target);
-        
+
         /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
@@ -195,7 +195,7 @@ public abstract class Worker implements Actor, Piece {
         if (state == IDLE_INSIDE || state == IDLE_OUTSIDE) {
             return true;
         }
-        
+
         log.log(Level.FINER, "Worker has not arrived at target");
         return false;
     }
@@ -255,15 +255,15 @@ public abstract class Worker implements Actor, Piece {
         if (!getPosition().equals(b.getPosition())) {
             throw new Exception("Can't enter " + b + " when worker is at " + getPosition());
         }
-        
+
         state = IDLE_INSIDE;
-        
+
         home = b;
-        
+
         /* Allow subclasses to add logic */
         onEnterBuilding(b);
     }
-    
+
     public boolean isInsideBuilding() {
         return state == IDLE_INSIDE;
     }
@@ -279,21 +279,21 @@ public abstract class Worker implements Actor, Piece {
     protected void setOffroadTarget(Point p) throws Exception {
         setOffroadTarget(p, null);
     }
-    
+
     protected void setOffroadTarget(Point p, Point via) throws Exception {
         boolean wasInside = false;
 
         log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {p, via});
-        
+
         target = p;
-        
+
         if (state == IDLE_INSIDE) {
             wasInside = true;
         }
 
         if (position.equals(p)) {
             state = IDLE_OUTSIDE;
-                
+
             handleArrival();
         } else {
             if (wasInside && !target.equals(home.getFlag().getPosition())) {                
@@ -318,7 +318,7 @@ public abstract class Worker implements Actor, Piece {
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
     }
-    
+
     protected void setTarget(Point p) throws Exception {
         if (state == IDLE_INSIDE) {
             if (!p.equals(home.getFlag().getPosition())) {        
@@ -330,7 +330,7 @@ public abstract class Worker implements Actor, Piece {
             setTarget(p, null);
         }
     }
-    
+
     protected void setTarget(Point p, Point via) throws InvalidRouteException, Exception {
         log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
 
@@ -338,17 +338,17 @@ public abstract class Worker implements Actor, Piece {
 
         if (position.equals(p)) {
             state = IDLE_OUTSIDE;
-                
+
             handleArrival();
         } else {
             Point start = getPosition();
-            
+
             if (via != null) {
                 path = map.findWayWithExistingRoads(start, target, via);
             } else  {
                 path = map.findWayWithExistingRoads(start, target);
             }
-            
+
             if (path == null) {
                 throw new InvalidRouteException("No way on existing roads from " + start + " to " + target);
             }
@@ -360,7 +360,7 @@ public abstract class Worker implements Actor, Piece {
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
     }
-    
+
     public Point getTarget() {
         return target;
     }
@@ -408,7 +408,7 @@ public abstract class Worker implements Actor, Piece {
     }
 
     protected void onReturnToStorage() throws Exception {
-        
+
     }
 
     public Player getPlayer() {

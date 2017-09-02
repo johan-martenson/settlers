@@ -14,12 +14,12 @@ public class Stone implements Piece {
 
     private int amount;
     private final Point position;
-    
+
     public Stone(Point p) {
         amount = 10;
         position = p;
     }
-    
+
     public void removeOnePart() {
         amount--;
     }
@@ -27,7 +27,7 @@ public class Stone implements Piece {
     boolean noMoreStone() {
         return amount == 0;
     }
-    
+
     public int getAmount() {
         return amount;
     }

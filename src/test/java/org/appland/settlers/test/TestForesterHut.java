@@ -55,17 +55,17 @@ public class TestForesterHut {
         /* Placing forester hut */
         Point point22 = new Point(6, 22);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
-        
+
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
 
         foresterHut0.putCargo(cargo);
         foresterHut0.putCargo(cargo);
-    
+
         /* Verify that this is enough to construct the forester hut */
         for (int i = 0; i < 100; i++) {
             assertTrue(foresterHut0.underConstruction());
-            
+
             map.stepTime();
         }
 
@@ -88,12 +88,12 @@ public class TestForesterHut {
         /* Placing forester hut */
         Point point22 = new Point(6, 22);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
-        
+
         /* Deliver two plancks */
         Cargo cargo = new Cargo(PLANCK, map);
 
         foresterHut0.putCargo(cargo);
-    
+
         /* Verify that this is enough to construct the forester hut */
         for (int i = 0; i < 500; i++) {
             assertTrue(foresterHut0.underConstruction());
@@ -211,7 +211,7 @@ public class TestForesterHut {
 
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut, map);
-        
+
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
 
@@ -242,7 +242,7 @@ public class TestForesterHut {
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
 
@@ -260,35 +260,35 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Run the game logic 99 times and make sure the forester stays in the hut */        
         int i;
         for (i = 0; i < 99; i++) {
             assertTrue(forester.isInsideBuilding());
             map.stepTime();
         }
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();        
-        
+
         assertFalse(forester.isInsideBuilding());
     }
 
@@ -298,36 +298,36 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Let the forester rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
-        
+
         assertFalse(forester.isInsideBuilding());    
 
         Point point = forester.getTarget();
         assertNotNull(point);
-        
+
         assertFalse(map.isBuildingAtPoint(point));
         assertFalse(map.isRoadAtPoint(point));
         assertFalse(map.isFlagAtPoint(point));
@@ -341,37 +341,37 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         /* Let the forester rest */
         Utils.fastForward(99, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
-        
+
         assertFalse(forester.isInsideBuilding());    
 
         Point point = forester.getTarget();
 
         assertTrue(forester.isTraveling());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
-        
+
         assertEquals(forester.getPosition(), point);
         assertFalse(forester.isTraveling());
         assertTrue(forester.isArrived());
@@ -384,41 +384,41 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         /* Let the forester rest */
         Utils.fastForward(99, map);
-                
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
-        
+
         assertFalse(forester.isInsideBuilding());    
 
         Point point = forester.getTarget();
 
         assertTrue(forester.isTraveling());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
-        
+
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));        
         assertTrue(forester.isPlanting());
-        
+
         int i;
         for (i = 0; i < 19; i++) {
             assertTrue(forester.isPlanting());
@@ -429,7 +429,7 @@ public class TestForesterHut {
         assertFalse(map.isTreeAtPoint(point));
 
         map.stepTime();
-        
+
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
         assertNull(forester.getCargo());
@@ -441,83 +441,83 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         /* Let the forester rest */
         Utils.fastForward(99, map);
-                
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
-        
+
         assertFalse(forester.isInsideBuilding());    
 
         Point point = forester.getTarget();
 
         assertTrue(forester.isTraveling());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
-        
+
         assertTrue(forester.isArrived());
         assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
-        
+
         /* Wait for the forester to plant the tree */
         Utils.fastForward(19, map);
-        
+
         assertTrue(forester.isPlanting());
         assertFalse(map.isTreeAtPoint(point));
 
         map.stepTime();
-        
+
         /* Verify that the forester goes back home */
         assertFalse(forester.isPlanting());
         assertTrue(map.isTreeAtPoint(point));
 
         assertEquals(forester.getTarget(), foresterHut.getPosition());
         assertTrue(forester.isTraveling());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());        
         assertTrue(forester.isInsideBuilding());
     }
-    
+
     @Test
     public void testForesterHutProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
         assertNull(forester.getCargo());
 
@@ -555,7 +555,7 @@ public class TestForesterHut {
             if (p.equals(point1)) {
                 continue;
             }
-            
+
             if (map.isBuildingAtPoint(p) || 
                 map.isFlagAtPoint(p)     || 
                 map.isRoadAtPoint(p)     || 
@@ -563,17 +563,17 @@ public class TestForesterHut {
                 !map.isWithinMap(p)) {
                 continue;
             }
-            
+
             map.placeTree(p);
         }
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Verify that the forester stays in the hut */
         int i;
         for (i = 0; i < 200; i++) {
@@ -671,7 +671,7 @@ public class TestForesterHut {
             if (p.equals(point1)) {
                 continue;
             }
-            
+
             if (map.isBuildingAtPoint(p)  || 
                     map.isFlagAtPoint(p)  || 
                     map.isRoadAtPoint(p)  || 
@@ -687,9 +687,9 @@ public class TestForesterHut {
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Verify that the forester stays in the hut */
         int i;
         for (i = 0; i < 200; i++) {
@@ -704,10 +704,10 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
-        
+
         Point point1 = new Point(10, 4);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
@@ -719,29 +719,29 @@ public class TestForesterHut {
             if (p.equals(point1)) {
                 continue;
             }
-            
+
             if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
                 continue;
             }
-            
+
             map.placeStone(p);
         }
-        
+
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
         Utils.occupyBuilding(forester, foresterHut, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Wait for the forester to rest */        
         Utils.fastForward(99, map);
-        
+
         assertTrue(forester.isInsideBuilding());
-        
+
         /* Step once and make sure the forester stays in the hut */
         map.stepTime();
-        
+
         assertTrue(forester.isInsideBuilding());
     }
 
@@ -830,10 +830,10 @@ public class TestForesterHut {
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
-        
+
         /* Destroy the forester hut */
         Worker forester = foresterHut0.getWorker();
-        
+
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -842,9 +842,9 @@ public class TestForesterHut {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
-    
+
         int amount = headquarter0.getAmount(FORESTER);
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
@@ -870,16 +870,16 @@ public class TestForesterHut {
 
         /* Connect the forester hut with the headquarter */
         map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
-        
+
         /* Finish construction of the forester hut */
         Utils.constructHouse(foresterHut0, map);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
-        
+
         /* Destroy the forester hut */
         Worker forester = foresterHut0.getWorker();
-        
+
         assertTrue(forester.isInsideBuilding());
         assertEquals(forester.getPosition(), foresterHut0.getPosition());
 
@@ -888,7 +888,7 @@ public class TestForesterHut {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(forester.isInsideBuilding());
         assertEquals(forester.getTarget(), headquarter0.getPosition());
-    
+
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
         for (Point p : forester.getPlannedPath()) {
@@ -909,51 +909,51 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place forester hut */
         Point point1 = new Point(8, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
-        
+
         /* Connect the forester hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut0, map);
-        
+
         /* Assign a worker to the forester hut */
         Forester forester = new Forester(player0, map);
-        
+
         Utils.occupyBuilding(forester, foresterHut0, map);
-        
+
         assertTrue(forester.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the forester to leave the forester hut */
         for (int i = 0; i < 300; i++) {
             if (!forester.isInsideBuilding()) {
                 break;
             }
-        
+
             map.stepTime();
         }
 
         assertFalse(forester.isInsideBuilding());
-        
+
         /* Wait for the forester to go back to the forester hut */
         for (int i = 0; i < 300; i++) {
             if (forester.isInsideBuilding()) {
                 break;
             }
-        
+
             map.stepTime();
         }
 
@@ -961,12 +961,12 @@ public class TestForesterHut {
 
         /* Stop production and verify that no tree is planted */
         foresterHut0.stopProduction();
-        
+
         assertFalse(foresterHut0.isProductionEnabled());
-        
+
         for (int i = 0; i < 300; i++) {
             assertTrue(forester.isInsideBuilding());
-            
+
             map.stepTime();
         }
     }
@@ -979,51 +979,51 @@ public class TestForesterHut {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Place forester hut */
         Point point1 = new Point(8, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
-        
+
         /* Connect the forester hut and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
-        
+
         /* Finish the forester hut */
         Utils.constructHouse(foresterHut0, map);
-        
+
         /* Assign a worker to the forester hut */
         Forester forester = new Forester(player0, map);
-        
+
         Utils.occupyBuilding(forester, foresterHut0, map);
-        
+
         assertTrue(forester.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
-        
+
         /* Wait for the forester to leave the forester hut */
         for (int i = 0; i < 300; i++) {
             if (!forester.isInsideBuilding()) {
                 break;
             }
-        
+
             map.stepTime();
         }
 
         assertFalse(forester.isInsideBuilding());
-        
+
         /* Wait for the forester to go back to the forester hut */
         for (int i = 0; i < 300; i++) {
             if (forester.isInsideBuilding()) {
                 break;
             }
-        
+
             map.stepTime();
         }
 
@@ -1034,7 +1034,7 @@ public class TestForesterHut {
 
         for (int i = 0; i < 300; i++) {
             assertNull(forester.getCargo());
-            
+
             map.stepTime();
         }
 
@@ -1047,7 +1047,7 @@ public class TestForesterHut {
             if (!forester.isInsideBuilding()) {
                 break;
             }
-            
+
             map.stepTime();
         }
 
@@ -1075,7 +1075,7 @@ public class TestForesterHut {
 
         /* Finish construction of the forester hut */
         Utils.constructHouse(foresterHut0, map);
-        
+
         /* Connect the forester hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
@@ -1221,7 +1221,7 @@ public class TestForesterHut {
         /* Verify that the forester goes back home */
         assertEquals(forester.getTarget(), foresterHut.getPosition());
         assertTrue(forester.isTraveling());
-        
+
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());        

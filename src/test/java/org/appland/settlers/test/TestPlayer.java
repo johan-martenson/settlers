@@ -53,17 +53,17 @@ public class TestPlayer {
 
     @Test
     public void testCreatePlayer() {
-        
+
         /* Create player 'player one' */
         Player p = new Player("Player one", BLUE);
     }
-    
+
     @Test
     public void testCreateHouseWithPlayer() {
 
         /* Create player 'player one' */
         Player p = new Player("Player one", BLUE);
-        
+
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(p);
     }
@@ -73,10 +73,10 @@ public class TestPlayer {
 
         /* Create player 'player one' */
         Player p = new Player("Player one", BLUE);
-        
+
         /* Create house belonging to player one */
         Woodcutter woodcutter0 = new Woodcutter(p);
-        
+
         /* Verify that the building's flag has the player set correctly */
         assertEquals(woodcutter0.getFlag().getPlayer(), p);
     }

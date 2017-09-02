@@ -13,9 +13,9 @@ package org.appland.settlers.model;
 public interface EndPoint {
 
     public Iterable<Cargo> getStackedCargo();
-    
+
     public void putCargo(Cargo c) throws Exception;
-    
+
     public boolean hasCargoWaitingForRoad(Road r);
 
     public Cargo retrieveCargo(Cargo c);

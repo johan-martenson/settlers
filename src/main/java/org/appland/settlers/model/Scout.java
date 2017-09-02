@@ -36,10 +36,10 @@ public class Scout extends Worker {
     private int   segmentCount;
     private int   directionX;
     private int   directionY;
-    
+
     public Scout(Player player, GameMap m) {
         super(player, m);
-    
+
         state        = WALKING_TO_TARGET;
         segmentCount = 0;
     }
@@ -50,9 +50,9 @@ public class Scout extends Worker {
             flagPoint = getPosition();
 
             map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
-            
+
             Point borderPoint = findDirectionToBorder();
-            
+
             /* Calculate direction */
             directionX = borderPoint.x - getPosition().x;
             directionY = borderPoint.y - getPosition().y;
@@ -61,7 +61,7 @@ public class Scout extends Worker {
 
             if (!map.isWithinMap(point)) {
                 state = RETURNING_TO_FLAG;
-                
+
                 setOffroadTarget(flagPoint);
             } else {
                 state = GOING_TO_NEXT_POINT;
@@ -85,7 +85,7 @@ public class Scout extends Worker {
 
             if (!map.isWithinMap(point)) {
                 state = RETURNING_TO_FLAG;
-                
+
                 setOffroadTarget(flagPoint);
             } else {
                 state = GOING_TO_NEXT_POINT;
@@ -94,13 +94,13 @@ public class Scout extends Worker {
             }
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
-            
+
             setTarget(map.getClosestStorage(flagPoint).getPosition());
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
-            
+
             storage.putCargo(new Cargo(SCOUT, map));
-            
+
             enterBuilding(storage);
         }
     }
@@ -122,7 +122,7 @@ public class Scout extends Worker {
                 next = pos.down();
             }
         }
-        
+
         return next;
     }
 
@@ -130,7 +130,7 @@ public class Scout extends Worker {
         List<Collection<Point>> borders = getPlayer().getBorders();
         Point closestPointOnBorder      = null;
         double distanceToBorder         = Integer.MAX_VALUE;
-        
+
         for (Collection<Point> border : borders) {
             for (Point p : border) {
                 if (getPosition().distance(p) < distanceToBorder) {

@@ -56,7 +56,7 @@ public class Cargo implements Piece {
         if (path == null || path.isEmpty()) {
             return null;
         }
-        
+
         return path.get(0);
     }
 
@@ -84,7 +84,7 @@ public class Cargo implements Piece {
         }
 
         position = p;
-        
+
         if (path != null && path.size() > 0 && path.get(0).equals(p)) {
             path.remove(0);
         }
@@ -103,7 +103,7 @@ public class Cargo implements Piece {
     void promiseDelivery() {
         deliveryPromised = true;
     }
-    
+
     public boolean isDeliveryPromised() {
         return deliveryPromised;
     }
@@ -124,7 +124,7 @@ public class Cargo implements Piece {
 
     void returnToClosestStorage() throws Exception {
         Storage stg = map.getClosestStorage(getPosition());
-        
+
         if (stg != null) {
             setTarget(stg);
         }

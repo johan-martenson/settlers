@@ -116,7 +116,7 @@ public class TestSeveralPlayers {
         /* Place headquarter for second player */
         Point point1 = new Point(40, 40);
         Building headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
-    
+
         /* Verify that the player is set correctly in both headquarters */
         assertEquals(headquarter0.getPlayer(), player0);
         assertEquals(headquarter1.getPlayer(), player1);
@@ -141,12 +141,12 @@ public class TestSeveralPlayers {
         Building headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
-    
+
         /* Place player 1's headquarter far away from player 0 */
         Building headquarter1 = new Headquarter(player1);
         Point point1 = new Point(90, 90);
         map.placeBuilding(headquarter1, point1);
-    
+
         /* Place woodcutter for player 0 */
         Point point2 = new Point(10, 6);
         Building woodcutter0 = new Woodcutter(player0);        

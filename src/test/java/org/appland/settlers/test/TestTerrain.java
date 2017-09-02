@@ -26,9 +26,9 @@ public class TestTerrain {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        
+
         Point p = new Point(5, 6);
-        
+
         Tile tile = map.getTerrain().getTile(p, p.upRight(), p.right());
     }
 }

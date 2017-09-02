@@ -134,7 +134,7 @@ public class Utils {
 
     public static void assertNoStepDirectlyUpwards(List<Point> route) {
         Point previous = null;
-        
+
         for (Point iter : route) {
             if (previous == null) {
                 previous = iter;
@@ -142,7 +142,7 @@ public class Utils {
             }
 
             assertFalse(iter.x == previous.x && abs(iter.y - previous.y) == 2);
-            
+
             previous = iter;
         }
     }
@@ -201,7 +201,7 @@ public class Utils {
         worker.enterBuilding(building);
 
         assertEquals(building.getWorker(), worker);
-        
+
         return worker;
     }
 
@@ -209,7 +209,7 @@ public class Utils {
         int i;
         for (i = 0; i < 500; i++) {
             map.stepTime();
-            
+
             if (tree.getSize() == LARGE) {
                 break;
             }
@@ -233,13 +233,13 @@ public class Utils {
 
     public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<? extends Worker> aClass) {
         boolean found = false;
-        
+
         for (Worker w : allWorkers) {
             if (w.getClass().equals(aClass)) {
                 found = true;
             }
         }
-    
+
         assertTrue(found);
     }
 
@@ -248,10 +248,10 @@ public class Utils {
             t.setVegetationType(WATER);
         }
     }
-    
+
     public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {        
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
-        
+
         waterTile.setVegetationType(WATER);
     }
 
@@ -272,10 +272,10 @@ public class Utils {
             if (building.ready()) {
                 break;
             }
-            
+
             map.stepTime();
         }
-    
+
         assertTrue(building.ready());
     }
 
@@ -284,10 +284,10 @@ public class Utils {
             if (building.getWorker() != null) {
                 break;
             }
-        
+
             map.stepTime();
         }
-    
+
         assertNotNull(building.getWorker());
     }
 
@@ -318,7 +318,7 @@ public class Utils {
     public static void createMountainWithinRadius(Point point1, int i, GameMap map) throws Exception {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
-        
+
         for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
             tiles.addAll(terrain.getSurroundingTiles(p));
         }
@@ -331,7 +331,7 @@ public class Utils {
     public static void putMineralWithinRadius(Material mineral, Point point1, int i, GameMap map) throws Exception {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
-        
+
         for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
             tiles.addAll(terrain.getSurroundingTiles(p));
         }
@@ -354,13 +354,13 @@ public class Utils {
 
     public static void adjustInventoryTo(Storage storage, Material material, int amount, GameMap map) throws Exception {
         for (int i = 0; i < 1000; i++) {
-        
+
             if (storage.getAmount(material) == amount) {
                 break;
             }
 
             if (storage.getAmount(material) > amount) {
-                
+
                 if (material == PRIVATE || material == SERGEANT || material == GENERAL) {
                     storage.retrieveMilitary(material);
                 } else {
@@ -400,15 +400,15 @@ public class Utils {
                 }
             }
         }
-        
+
         for (int i = 0; i < 500; i++) {
             if (b.ready()) {
                 break;
             }
-        
+
             b.stepTime();
         }
-        
+
         assertTrue(b.ready());
     }
 
@@ -442,7 +442,7 @@ public class Utils {
             if (worker.getCargo() != null) {
                 break;
             }
-        
+
             map.stepTime();
         }
 

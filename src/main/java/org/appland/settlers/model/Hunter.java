@@ -35,7 +35,7 @@ public class Hunter extends Worker {
         super(player, map);
 
         state = State.WALKING_TO_TARGET;
-        
+
         countdown = new Countdown();
 
         prey = null;
@@ -51,7 +51,7 @@ public class Hunter extends Worker {
 
         countdown.countFrom(TIME_TO_REST);
     }
-    
+
     @Override
     protected void onIdle() throws Exception {
 
@@ -119,11 +119,11 @@ public class Hunter extends Worker {
             }
         } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
-            
+
             setTarget(getHome().getFlag().getPosition());
         } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         } else if (state == State.GOING_TO_PICK_UP_MEAT) {
             Cargo cargo = prey.pickUpCargo();
@@ -152,10 +152,10 @@ public class Hunter extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
@@ -184,7 +184,7 @@ public class Hunter extends Worker {
 
         return null;
     }
-    
+
     public boolean isShooting() {
         return state == State.SHOOTING;
     }

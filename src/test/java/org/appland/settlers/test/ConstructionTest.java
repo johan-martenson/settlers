@@ -130,10 +130,10 @@ public class ConstructionTest {
         GameMap map = new GameMap(players,30, 30);
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
-        
+
         Point point1 = new Point(13, 13);
         map.placeBuilding(brks, point1);
-        
+
         Utils.constructHouse(brks, map);
 
         assertTrue(brks.isMilitaryBuilding());
@@ -313,9 +313,9 @@ public class ConstructionTest {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,20, 20);
-        
+
         map.placeBuilding(new Headquarter(player0), new Point(10, 10));
-        
+
         Building sm = map.placeBuilding(new Sawmill(player0), new Point(4, 4));
 
         Utils.constructHouse(sm, map);

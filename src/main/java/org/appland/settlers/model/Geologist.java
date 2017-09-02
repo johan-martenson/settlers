@@ -34,11 +34,11 @@ public class Geologist extends Worker {
         RETURNING_TO_FLAG,
         RETURNING_TO_STORAGE
     }
-    
+
     private final static int TIME_TO_INVESTIGATE   = 19;
     private final static int RADIUS_TO_INVESTIGATE = 5;
     private final static Random RANDOM = new Random(1);
-    
+
     private final Countdown countdown;
 
     private State state;
@@ -47,7 +47,7 @@ public class Geologist extends Worker {
 
     public Geologist(Player player, GameMap m) {
         super(player, m);
-    
+
         countdown           = new Countdown();
         nrSitesInvestigated = 0;
 
@@ -63,15 +63,15 @@ public class Geologist extends Worker {
         if (state == INVESTIGATING) {
             if (countdown.reachedZero()) {
                 placeSignWithResult(getPosition());
-                
+
                 nrSitesInvestigated++;
-                
+
                 /* Return after investigating five sites */
                 if (nrSitesInvestigated == 5) {
                     state = RETURNING_TO_FLAG;
-                    
+
                     setOffroadTarget(flagPoint);
-                    
+
                     return;
                 }
 
@@ -79,11 +79,11 @@ public class Geologist extends Worker {
 
                 if (nextSite == null) {
                     state = RETURNING_TO_FLAG;
-                
+
                     setOffroadTarget(flagPoint);
                 } else {
                     state = GOING_TO_NEXT_SITE;
-                    
+
                     setOffroadTarget(nextSite);
                 }
             } else {
@@ -91,26 +91,26 @@ public class Geologist extends Worker {
             }
         }
     }
-    
+
     @Override
     protected void onArrival() throws Exception {
         if (state == WALKING_TO_TARGET) {
             flagPoint = getPosition();
-            
+
             Point point = findSiteToExamine();
-            
+
             if (point == null) {
                 state = RETURNING_TO_STORAGE;
-                
+
                 setTarget(map.getClosestStorage(flagPoint).getPosition(), flagPoint);
             } else {            
                 state = GOING_TO_NEXT_SITE;
-            
+
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_NEXT_SITE) {
             state = INVESTIGATING;
-            
+
             countdown.countFrom(TIME_TO_INVESTIGATE);
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
@@ -129,9 +129,9 @@ public class Geologist extends Worker {
             }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
-            
+
             storage.putCargo(new Cargo(GEOLOGIST, map));
-            
+
             enterBuilding(storage);
         }
     }
@@ -162,7 +162,7 @@ public class Geologist extends Worker {
                 }
             }
         } 
-        
+
         if (!placedSign) {
             map.placeEmptySign(point);
         }
@@ -179,15 +179,15 @@ public class Geologist extends Worker {
             if (p.equals(getPosition())) {
                 continue;
             }
-            
+
             if (map.isSignAtPoint(p)) {
                 continue;
             }
-        
+
             if (map.isTreeAtPoint(p)) {
                 continue;
             }
-            
+
             if (map.isStoneAtPoint(p)) {
                 continue;
             }
@@ -203,7 +203,7 @@ public class Geologist extends Worker {
             if (map.findWayOffroad(getPosition(), p, null) == null) {
                 continue;
             }
-            
+
             return p;
         }
 

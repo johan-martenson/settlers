@@ -42,7 +42,7 @@ public class TestHeadquarter {
         assertEquals(hq.getAmount(DONKEY), 1);
 
         assertEquals(hq.getAmount(MINER),   3);
-        
+
         // TODO: add all other material
     }
 
@@ -102,31 +102,31 @@ public class TestHeadquarter {
 
         Point point1 = new Point(11, 9);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
-        
+
         map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
-                
+
         /* The storage worker rests */
         Utils.fastForward(19, map);
-        
+
         /* Verify that the hq has plancks */
         assertTrue(hq.getAmount(PLANCK) > 0);
-        
+
         /* The storage worker delivers stone or plancks to the woodcutter */
         assertTrue(hq.getWorker() instanceof StorageWorker);
-        
+
         StorageWorker sw = (StorageWorker)hq.getWorker();
-        
+
         assertTrue(sw.isInsideBuilding());
-        
+
         map.stepTime();
-        
+
         assertFalse(sw.isInsideBuilding());
         assertNotNull(sw.getCargo());
         assertEquals(sw.getTarget(), hq.getFlag().getPosition());
         assertTrue(hq.getFlag().getStackedCargo().isEmpty());
-        
+
         Utils.fastForwardUntilWorkerReachesPoint(map, sw, hq.getFlag().getPosition());
-        
+
         assertNull(sw.getCargo());
         assertFalse(hq.getFlag().getStackedCargo().isEmpty());
     }
@@ -141,7 +141,7 @@ public class TestHeadquarter {
         /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building hq = map.placeBuilding(new Headquarter(player0), point0);
-        
+
         /* Verify that trying to tear it down causes an exception */
         hq.tearDown();
     }

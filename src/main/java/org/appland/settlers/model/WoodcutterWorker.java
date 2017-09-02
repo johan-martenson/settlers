@@ -55,14 +55,14 @@ public class WoodcutterWorker extends Worker {
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
-    
+
     public WoodcutterWorker(Player player, GameMap map) {
         super(player, map);
-        
+
         state     = States.WALKING_TO_TARGET;
         countdown = new Countdown();
     }
-    
+
     public boolean isCuttingTree() {
         return state == States.CUTTING_TREE;
     }
@@ -72,24 +72,24 @@ public class WoodcutterWorker extends Worker {
         if (b instanceof Woodcutter) {
             setHome(b);
         }
-        
+
         state = States.RESTING_IN_HOUSE;
-        
+
         countdown.countFrom(TIME_TO_REST);
     }
-    
+
     @Override
     protected void onIdle() throws Exception {
         if (state == States.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
-                
+
                 if (p == null) {
                     return;
                 }
 
                 setOffroadTarget(p);
-                
+
                 state = States.GOING_OUT_TO_CUT_TREE;
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
@@ -97,11 +97,11 @@ public class WoodcutterWorker extends Worker {
         } else if (state == States.CUTTING_TREE) {
             if (countdown.reachedZero()) {
                 map.removeTree(getPosition());
-                
+
                 setCargo(new Cargo(WOOD, map));
-                
+
                 state = States.GOING_BACK_TO_HOUSE_WITH_CARGO;
-                
+
                 returnHomeOffroad();
             } else {
                 countdown.step();
@@ -117,33 +117,33 @@ public class WoodcutterWorker extends Worker {
     public void onArrival() throws Exception {
         if (state == States.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
-                
+
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
             getHome().getFlag().putCargo(cargo);
-                                
+
             setCargo(null);
-                
+
             setTarget(getHome().getPosition());
-                
+
             state = States.GOING_BACK_TO_HOUSE;
         } else if (state == States.GOING_BACK_TO_HOUSE) {
             state = States.RESTING_IN_HOUSE;
-            
+
             enterBuilding(getHome());
 
             countdown.countFrom(TIME_TO_REST);
         } else if (state == States.GOING_OUT_TO_CUT_TREE) {
             state = States.CUTTING_TREE;
-            
+
             countdown.countFrom(TIME_TO_CUT_TREE);
         } else if (state == States.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
-                
+
             state = States.IN_HOUSE_WITH_CARGO;
         } else if (state == States.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
-        
+
             storage.depositWorker(this);
         }
     }
@@ -151,10 +151,10 @@ public class WoodcutterWorker extends Worker {
     @Override
     protected void onReturnToStorage() throws Exception {
         Building storage = map.getClosestStorage(getPosition());
-    
+
         if (storage != null) {
             state = States.RETURNING_TO_STORAGE;
-            
+
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {

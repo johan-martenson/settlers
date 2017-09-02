@@ -95,7 +95,7 @@ public class Stonemason extends Worker {
                             distanceToAccessPoint = path.size();
 
                             potentialAccessPoint = p2;
-                        
+
                         }
                     }
 
@@ -107,7 +107,7 @@ public class Stonemason extends Worker {
                     /* Check if this is the closest access point this far */
                     if (distanceToAccessPoint < distance) {
                         distance = distanceToAccessPoint;
-                        
+
                         accessPoint = potentialAccessPoint;
 
                         stoneTarget = p;
