@@ -378,7 +378,7 @@ public class Military extends Worker {
         if (stg != null) {
             setTarget(stg.getPosition());
         } else {
-            stg = getClosestStorageOffroad();
+            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
             setOffroadTarget(stg.getPosition());
         }
@@ -396,24 +396,6 @@ public class Military extends Worker {
         default:
             return null;
         }
-    }
-
-    private Building getClosestStorageOffroad() {
-        int distance = Integer.MAX_VALUE;
-        Building storage = null;
-
-        for (Building b : getPlayer().getBuildings()) {
-            if (b instanceof Storage) {
-                int currentDistance = map.findWayOffroad(getPosition(), b.getPosition(), null).size();
-
-                if (currentDistance < distance) {
-                    storage = b;
-                    distance = currentDistance;
-                }
-            }
-        }
-
-        return storage;
     }
 
     void attack(Building building, Point meetingPoint) throws Exception {

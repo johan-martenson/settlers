@@ -848,4 +848,23 @@ public class GameUtils {
 
         return false;
     }
+
+    static Building getClosestStorageOffroad(Player player, Point point) {
+        int distance = Integer.MAX_VALUE;
+        Building storage = null;
+        GameMap map = player.getMap();
+
+        for (Building b : player.getBuildings()) {
+            if (b instanceof Storage) {
+                int currentDistance = map.findWayOffroad(point, b.getPosition(), null).size();
+
+                if (currentDistance < distance) {
+                    storage = b;
+                    distance = currentDistance;
+                }
+            }
+        }
+
+        return storage;
+    }
 }

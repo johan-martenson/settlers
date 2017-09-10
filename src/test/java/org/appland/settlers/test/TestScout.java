@@ -15,10 +15,12 @@ import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.SCOUT;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -765,4 +767,205 @@ public class TestScout {
     }
 
     // TODO: test that scout goes via the flag when it returns to the storage
+
+    @Test
+    public void testScoutReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call scout from the second flag */
+        flag1.callScout();
+
+        /* Wait for the scout to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+
+        Scout scout = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Scout) {
+                scout = (Scout) w;
+            }
+        }
+
+        assertNotNull(scout);
+        assertEquals(scout.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the scout has started walking */
+        assertFalse(scout.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the scout continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+
+        assertEquals(scout.getPosition(), flag0.getPosition());
+
+        /* Verify that the scout returns to the headquarter when it reaches the flag */
+        assertEquals(scout.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
+
+        assertTrue(scout.isInsideBuilding());
+    }
+
+    @Test
+    public void testScoutContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call scout from the second flag */
+        flag1.callScout();
+
+        /* Wait for the scout to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+
+        Scout scout = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Scout) {
+                scout = (Scout) w;
+            }
+        }
+
+        assertNotNull(scout);
+        assertEquals(scout.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the scout has started walking */
+        assertFalse(scout.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the scout continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+
+        assertEquals(scout.getPosition(), flag0.getPosition());
+
+        /* Verify that the scout continues to the final flag */
+        assertEquals(scout.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag1.getPosition());
+
+        /* Verify that the scout goes out to scout instead of going directly back */
+        assertNotEquals(scout.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testScoutContinuesEvenIfFlagIsRemovedWhenItIsClose() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call scout from the second flag */
+        flag1.callScout();
+
+        /* Wait for the scout to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+
+        Scout scout = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Scout) {
+                scout = (Scout) w;
+            }
+        }
+
+        assertNotNull(scout);
+        assertEquals(scout.getTarget(), flag1.getPosition());
+
+        /* Wait for the scout to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the scout has started walking */
+        assertFalse(scout.isExactlyAtPoint());
+
+        /* Remove the second flag */
+        map.removeFlag(flag1);
+
+        /* Verify that the scout continues walking to the second flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag1.getPosition());
+
+        assertEquals(scout.getPosition(), flag1.getPosition());
+
+        /* Verify that the scout goes out to scout instead of going directly back */
+        map.stepTime();
+
+        assertNotEquals(scout.getTarget(), headquarter0.getPosition());
+    }
 }

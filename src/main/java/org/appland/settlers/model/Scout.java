@@ -47,6 +47,7 @@ public class Scout extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == WALKING_TO_TARGET) {
+
             flagPoint = getPosition();
 
             map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
@@ -105,6 +106,16 @@ public class Scout extends Worker {
         }
     }
 
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            returnToStorage();
+        }
+    }
+
     private Point findNextPoint() {
         Point pos = getPosition();
         Point next = null;
@@ -141,5 +152,21 @@ public class Scout extends Worker {
         }
 
         return closestPointOnBorder;
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
+
+        state = State.RETURNING_TO_STORAGE;
+
+        if (stg != null) {
+            setTarget(stg.getPosition());
+        } else {
+            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+
+            setOffroadTarget(stg.getPosition());
+        }
+
     }
 }
