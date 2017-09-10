@@ -96,7 +96,7 @@ public class Scout extends Worker {
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
 
-            setTarget(map.getClosestStorage(flagPoint).getPosition());
+            setTarget(GameUtils.getClosestStorage(flagPoint, map).getPosition());
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
 

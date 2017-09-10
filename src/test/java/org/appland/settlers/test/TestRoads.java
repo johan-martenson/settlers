@@ -16,6 +16,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
@@ -1217,7 +1218,7 @@ public class TestRoads {
 
         assertTrue(r.needsCourier());
 
-        assertEquals(map.getClosestStorage(r.getStart()), hq);
+        assertEquals(GameUtils.getClosestStorage(r.getStart(), map), hq);
 
         map.stepTime();
 

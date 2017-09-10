@@ -253,7 +253,7 @@ public class Farmer extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = map.getClosestStorage(getPosition());
+        Building storage = GameUtils.getClosestStorage(getPosition(), map);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;

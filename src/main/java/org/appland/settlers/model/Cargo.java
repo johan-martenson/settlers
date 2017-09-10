@@ -113,7 +113,7 @@ public class Cargo implements Piece {
     }
 
     void transportToStorage() throws Exception {
-        Storage stg = map.getClosestStorage(getPosition());
+        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
 
         if (stg != null) {
             setTarget(stg);
@@ -123,7 +123,7 @@ public class Cargo implements Piece {
     }
 
     void returnToClosestStorage() throws Exception {
-        Storage stg = map.getClosestStorage(getPosition());
+        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
 
         if (stg != null) {
             setTarget(stg);
@@ -131,7 +131,7 @@ public class Cargo implements Piece {
     }
 
     void returnToStorage() throws Exception {
-        Storage stg = map.getClosestStorage(getPosition());
+        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
 
         if (stg != null) {
             setTarget(stg);

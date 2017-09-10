@@ -102,7 +102,7 @@ public class Geologist extends Worker {
             if (point == null) {
                 state = RETURNING_TO_STORAGE;
 
-                setTarget(map.getClosestStorage(flagPoint).getPosition(), flagPoint);
+                setTarget(GameUtils.getClosestStorage(flagPoint, map).getPosition(), flagPoint);
             } else {            
                 state = GOING_TO_NEXT_SITE;
 
@@ -116,7 +116,7 @@ public class Geologist extends Worker {
             state = RETURNING_TO_STORAGE;
 
             /* Try to go to the storage on roads */
-            Building storage = map.getClosestStorage(flagPoint);
+            Building storage = GameUtils.getClosestStorage(flagPoint, map);
 
             if (storage != null) {
                 setTarget(storage.getPosition());

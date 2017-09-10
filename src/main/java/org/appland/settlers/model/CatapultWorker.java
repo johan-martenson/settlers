@@ -88,7 +88,7 @@ public class CatapultWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = map.getClosestStorage(getPosition());
+        Building storage = GameUtils.getClosestStorage(getPosition(), map);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;

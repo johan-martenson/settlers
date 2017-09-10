@@ -11,6 +11,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidMaterialException;
@@ -487,7 +488,7 @@ public class TestTransportation {
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertTrue(map.getClosestStorage(hqToMiddleRoad.getStart()).equals(storage));
+        assertTrue(GameUtils.getClosestStorage(hqToMiddleRoad.getStart(), map).equals(storage));
 
         /* Step time to let the headquarter send new workers */
         map.stepTime();
