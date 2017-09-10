@@ -15,6 +15,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -32,6 +33,7 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1203,4 +1205,192 @@ public class TestQuarry {
     }
 
     // Add test for stones in/out of range
+
+    @Test
+    public void teststoneMasonReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing quarry */
+        Point point2 = new Point(14, 4);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+
+        /* Wait for the stone mason to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+
+        Stonemason stoneMason = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Stonemason) {
+                stoneMason = (Stonemason) w;
+            }
+        }
+
+        assertNotNull(stoneMason);
+        assertEquals(stoneMason.getTarget(), quarry0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the stone mason has started walking */
+        assertFalse(stoneMason.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the stone mason continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+
+        assertEquals(stoneMason.getPosition(), flag0.getPosition());
+
+        /* Verify that the stone mason returns to the headquarter when it reaches the flag */
+        assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStoneMasonContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing quarry */
+        Point point2 = new Point(14, 4);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+
+        /* Wait for the stone mason to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+
+        Stonemason stoneMason = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Stonemason) {
+                stoneMason = (Stonemason) w;
+            }
+        }
+
+        assertNotNull(stoneMason);
+        assertEquals(stoneMason.getTarget(), quarry0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the stone mason has started walking */
+        assertFalse(stoneMason.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the stone mason continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+
+        assertEquals(stoneMason.getPosition(), flag0.getPosition());
+
+        /* Verify that the stone mason continues to the final flag */
+        assertEquals(stoneMason.getTarget(), quarry0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, quarry0.getFlag().getPosition());
+
+        /* Verify that the stone mason goes out to quarry instead of going directly back */
+        assertNotEquals(stoneMason.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStonemasonReturnsToStorageIfQuarryIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing quarry */
+        Point point2 = new Point(14, 4);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
+
+        /* Wait for the stoneMason to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+
+        Stonemason stoneMason = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Stonemason) {
+                stoneMason = (Stonemason) w;
+            }
+        }
+
+        assertNotNull(stoneMason);
+        assertEquals(stoneMason.getTarget(), quarry0.getPosition());
+
+        /* Wait for the stone mason to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the stone mason has started walking */
+        assertFalse(stoneMason.isExactlyAtPoint());
+
+        /* Tear down the quarry */
+        quarry0.tearDown();
+
+        /* Verify that the stone mason continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, quarry0.getFlag().getPosition());
+
+        assertEquals(stoneMason.getPosition(), quarry0.getFlag().getPosition());
+
+        /* Verify that the stone mason goes back to storage */
+        assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
+    }
 }

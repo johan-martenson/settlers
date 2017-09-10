@@ -3,7 +3,6 @@ package org.appland.settlers.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -943,5 +942,18 @@ public class Utils {
         assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).equals(barracks0));
 
         return map.getBuildingAtPoint(barracks0.getPosition());
+    }
+
+    static void waitForBuildingToBurnDown(Building building, GameMap map) throws Exception {
+        for (int i = 0; i < 10000; i++) {
+
+            if (building.destroyed()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(building.destroyed());
     }
 }

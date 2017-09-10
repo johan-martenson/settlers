@@ -9,6 +9,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.HunterHut;
 import org.appland.settlers.model.Fortress;
@@ -28,6 +29,7 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -935,5 +937,193 @@ public class TestHunterHut {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testHunterReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing hunter hut */
+        Point point2 = new Point(14, 4);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, hunterHut0.getFlag());
+
+        /* Wait for the hunter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0, map);
+
+        Hunter hunter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Hunter) {
+                hunter = (Hunter) w;
+            }
+        }
+
+        assertNotNull(hunter);
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the hunter has started walking */
+        assertFalse(hunter.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the hunter continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+
+        assertEquals(hunter.getPosition(), flag0.getPosition());
+
+        /* Verify that the hunter returns to the headquarter when it reaches the flag */
+        assertEquals(hunter.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testHunterContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing hunter hut */
+        Point point2 = new Point(14, 4);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, hunterHut0.getFlag());
+
+        /* Wait for the hunter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0, map);
+
+        Hunter hunter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Hunter) {
+                hunter = (Hunter) w;
+            }
+        }
+
+        assertNotNull(hunter);
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the hunter has started walking */
+        assertFalse(hunter.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the hunter continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+
+        assertEquals(hunter.getPosition(), flag0.getPosition());
+
+        /* Verify that the hunter continues to the final flag */
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+
+        /* Verify that the hunter goes out to hunter instead of going directly back */
+        assertNotEquals(hunter.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testHunterReturnsToStorageIfHunterHutIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing hunter hut */
+        Point point2 = new Point(14, 4);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, hunterHut0.getFlag());
+
+        /* Wait for the hunter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Hunter.class, 1, player0, map);
+
+        Hunter hunter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Hunter) {
+                hunter = (Hunter) w;
+            }
+        }
+
+        assertNotNull(hunter);
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        /* Wait for the hunter to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the hunter has started walking */
+        assertFalse(hunter.isExactlyAtPoint());
+
+        /* Tear down the hunterHut */
+        hunterHut0.tearDown();
+
+        /* Verify that the hunter continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+
+        assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
+
+        /* Verify that the hunter goes back to storage */
+        assertEquals(hunter.getTarget(), headquarter0.getPosition());
     }
 }

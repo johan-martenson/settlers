@@ -9,15 +9,15 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.PigBreeder.States.FEEDING;
-import static org.appland.settlers.model.PigBreeder.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.PigBreeder.States.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
-import static org.appland.settlers.model.PigBreeder.States.GOING_OUT_TO_FEED;
-import static org.appland.settlers.model.PigBreeder.States.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.PigBreeder.States.PREPARING_PIG_FOR_DELIVERY;
-import static org.appland.settlers.model.PigBreeder.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.PigBreeder.States.WALKING_TO_TARGET;
-import static org.appland.settlers.model.PigBreeder.States.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.PigBreeder.State.FEEDING;
+import static org.appland.settlers.model.PigBreeder.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.PigBreeder.State.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
+import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_FEED;
+import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_PUT_CARGO;
+import static org.appland.settlers.model.PigBreeder.State.PREPARING_PIG_FOR_DELIVERY;
+import static org.appland.settlers.model.PigBreeder.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.PigBreeder.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.PigBreeder.State.RETURNING_TO_STORAGE;
 
 /**
  *
@@ -30,10 +30,10 @@ public class PigBreeder extends Worker {
     private static final int TIME_TO_FEED        = 19;
     private static final int TIME_TO_PREPARE_PIG = 19;
 
-    private States state;
+    private State state;
     private final Countdown countdown;
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET, 
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_FEED, 
@@ -165,6 +165,22 @@ public class PigBreeder extends Worker {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the pig farm upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

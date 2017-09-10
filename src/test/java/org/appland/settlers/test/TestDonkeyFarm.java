@@ -16,6 +16,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
 import org.appland.settlers.model.DonkeyBreeder;
 import org.appland.settlers.model.DonkeyFarm;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -31,6 +32,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1473,5 +1475,193 @@ public class TestDonkeyFarm {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testDonkeyBreederReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing donkey farm */
+        Point point2 = new Point(14, 4);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, donkeyFarm0.getFlag());
+
+        /* Wait for the donkey breeder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0, map);
+
+        DonkeyBreeder donkeyBreeder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) w;
+            }
+        }
+
+        assertNotNull(donkeyBreeder);
+        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the donkey breeder has started walking */
+        assertFalse(donkeyBreeder.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the donkey breeder continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+
+        assertEquals(donkeyBreeder.getPosition(), flag0.getPosition());
+
+        /* Verify that the donkey breeder returns to the headquarter when it reaches the flag */
+        assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testDonkeyBreederContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing donkey farm */
+        Point point2 = new Point(14, 4);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, donkeyFarm0.getFlag());
+
+        /* Wait for the donkey breeder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0, map);
+
+        DonkeyBreeder donkeyBreeder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) w;
+            }
+        }
+
+        assertNotNull(donkeyBreeder);
+        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the donkey breeder has started walking */
+        assertFalse(donkeyBreeder.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the donkey breeder continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+
+        assertEquals(donkeyBreeder.getPosition(), flag0.getPosition());
+
+        /* Verify that the donkey breeder continues to the final flag */
+        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+
+        /* Verify that the donkey breeder goes out to the donkey farm instead of going directly back */
+        assertNotEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testDonkeyBreederReturnsToStorageIfDonkeyFarmIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing donkey farm */
+        Point point2 = new Point(14, 4);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, donkeyFarm0.getFlag());
+
+        /* Wait for the donkey breeder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(DonkeyBreeder.class, 1, player0, map);
+
+        DonkeyBreeder donkeyBreeder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) w;
+            }
+        }
+
+        assertNotNull(donkeyBreeder);
+        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+
+        /* Wait for the donkey breeder to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the donkey breeder has started walking */
+        assertFalse(donkeyBreeder.isExactlyAtPoint());
+
+        /* Tear down the donkey farm */
+        donkeyFarm0.tearDown();
+
+        /* Verify that the donkey breeder continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getFlag().getPosition());
+
+        /* Verify that the donkey breeder goes back to storage */
+        assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
     }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
@@ -31,6 +32,7 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1227,5 +1229,193 @@ public class TestForesterHut {
         assertTrue(forester.isArrived());        
         assertTrue(forester.isInsideBuilding());
         assertFalse(map.isTreeAtPoint(point));
+    }
+
+    @Test
+    public void testForesterReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing forester hut */
+        Point point2 = new Point(14, 4);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
+
+        /* Wait for the forester to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+
+        Forester forester = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Forester) {
+                forester = (Forester) w;
+            }
+        }
+
+        assertNotNull(forester);
+        assertEquals(forester.getTarget(), foresterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the forester has started walking */
+        assertFalse(forester.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the forester continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+
+        assertEquals(forester.getPosition(), flag0.getPosition());
+
+        /* Verify that the forester returns to the headquarter when it reaches the flag */
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testForesterContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing forester hut */
+        Point point2 = new Point(14, 4);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
+
+        /* Wait for the forester to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+
+        Forester forester = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Forester) {
+                forester = (Forester) w;
+            }
+        }
+
+        assertNotNull(forester);
+        assertEquals(forester.getTarget(), foresterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the forester has started walking */
+        assertFalse(forester.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the forester continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+
+        assertEquals(forester.getPosition(), flag0.getPosition());
+
+        /* Verify that the forester continues to the final flag */
+        assertEquals(forester.getTarget(), foresterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut0.getFlag().getPosition());
+
+        /* Verify that the forester goes out to forester instead of going directly back */
+        assertNotEquals(forester.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testForesterReturnsToStorageIfForesterHutIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing forester hut */
+        Point point2 = new Point(14, 4);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
+
+        /* Wait for the forester to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+
+        Forester forester = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Forester) {
+                forester = (Forester) w;
+            }
+        }
+
+        assertNotNull(forester);
+        assertEquals(forester.getTarget(), foresterHut0.getPosition());
+
+        /* Wait for the forester to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the forester has started walking */
+        assertFalse(forester.isExactlyAtPoint());
+
+        /* Tear down the forester hut */
+        foresterHut0.tearDown();
+
+        /* Verify that the forester continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut0.getFlag().getPosition());
+
+        assertEquals(forester.getPosition(), foresterHut0.getFlag().getPosition());
+
+        /* Verify that the forester goes back to storage */
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
     }
 }

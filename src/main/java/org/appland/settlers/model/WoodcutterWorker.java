@@ -19,7 +19,7 @@ public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_CUT_TREE = 49;
     private final static int RANGE            = 7;
 
-    private States  state;
+    private State  state;
     private final Countdown countdown;
 
     private Point getTreeToCutDown() {
@@ -44,7 +44,7 @@ public class WoodcutterWorker extends Worker {
         return null;
     }
 
-    private enum States {
+    private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_CUT_TREE,
@@ -59,12 +59,12 @@ public class WoodcutterWorker extends Worker {
     public WoodcutterWorker(Player player, GameMap map) {
         super(player, map);
 
-        state     = States.WALKING_TO_TARGET;
+        state     = State.WALKING_TO_TARGET;
         countdown = new Countdown();
     }
 
     public boolean isCuttingTree() {
-        return state == States.CUTTING_TREE;
+        return state == State.CUTTING_TREE;
     }
 
     @Override
@@ -73,14 +73,14 @@ public class WoodcutterWorker extends Worker {
             setHome(b);
         }
 
-        state = States.RESTING_IN_HOUSE;
+        state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(TIME_TO_REST);
     }
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == States.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
+        if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
                 Point p = getTreeToCutDown();
 
@@ -90,32 +90,32 @@ public class WoodcutterWorker extends Worker {
 
                 setOffroadTarget(p);
 
-                state = States.GOING_OUT_TO_CUT_TREE;
+                state = State.GOING_OUT_TO_CUT_TREE;
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
-        } else if (state == States.CUTTING_TREE) {
+        } else if (state == State.CUTTING_TREE) {
             if (countdown.reachedZero()) {
                 map.removeTree(getPosition());
 
                 setCargo(new Cargo(WOOD, map));
 
-                state = States.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 
                 returnHomeOffroad();
             } else {
                 countdown.step();
             }
-        } else if (state == States.IN_HOUSE_WITH_CARGO) {
+        } else if (state == State.IN_HOUSE_WITH_CARGO) {
             setTarget(getHome().getFlag().getPosition());
 
-            state = States.GOING_OUT_TO_PUT_CARGO;
+            state = State.GOING_OUT_TO_PUT_CARGO;
         }
     }
 
     @Override
     public void onArrival() throws Exception {
-        if (state == States.GOING_OUT_TO_PUT_CARGO) {
+        if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
@@ -126,22 +126,22 @@ public class WoodcutterWorker extends Worker {
 
             setTarget(getHome().getPosition());
 
-            state = States.GOING_BACK_TO_HOUSE;
-        } else if (state == States.GOING_BACK_TO_HOUSE) {
-            state = States.RESTING_IN_HOUSE;
+            state = State.GOING_BACK_TO_HOUSE;
+        } else if (state == State.GOING_BACK_TO_HOUSE) {
+            state = State.RESTING_IN_HOUSE;
 
             enterBuilding(getHome());
 
             countdown.countFrom(TIME_TO_REST);
-        } else if (state == States.GOING_OUT_TO_CUT_TREE) {
-            state = States.CUTTING_TREE;
+        } else if (state == State.GOING_OUT_TO_CUT_TREE) {
+            state = State.CUTTING_TREE;
 
             countdown.countFrom(TIME_TO_CUT_TREE);
-        } else if (state == States.GOING_BACK_TO_HOUSE_WITH_CARGO) {
+        } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
             enterBuilding(getHome());
 
-            state = States.IN_HOUSE_WITH_CARGO;
-        } else if (state == States.RETURNING_TO_STORAGE) {
+            state = State.IN_HOUSE_WITH_CARGO;
+        } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
 
             storage.depositWorker(this);
@@ -153,19 +153,35 @@ public class WoodcutterWorker extends Worker {
         Building storage = map.getClosestStorage(getPosition());
 
         if (storage != null) {
-            state = States.RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = States.RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the woodcutter upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

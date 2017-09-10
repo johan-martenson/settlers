@@ -15,6 +15,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -33,6 +34,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1096,5 +1098,193 @@ public class TestMint {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinterReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing mint */
+        Point point2 = new Point(14, 4);
+        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
+
+        /* Wait for the minter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+
+        Minter minter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Minter) {
+                minter = (Minter) w;
+            }
+        }
+
+        assertNotNull(minter);
+        assertEquals(minter.getTarget(), mint0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the minter has started walking */
+        assertFalse(minter.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the minter continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+
+        assertEquals(minter.getPosition(), flag0.getPosition());
+
+        /* Verify that the minter returns to the headquarter when it reaches the flag */
+        assertEquals(minter.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinterContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing mint */
+        Point point2 = new Point(14, 4);
+        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
+
+        /* Wait for the minter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+
+        Minter minter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Minter) {
+                minter = (Minter) w;
+            }
+        }
+
+        assertNotNull(minter);
+        assertEquals(minter.getTarget(), mint0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the minter has started walking */
+        assertFalse(minter.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the minter continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+
+        assertEquals(minter.getPosition(), flag0.getPosition());
+
+        /* Verify that the minter continues to the final flag */
+        assertEquals(minter.getTarget(), mint0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint0.getFlag().getPosition());
+
+        /* Verify that the minter goes out to minter instead of going directly back */
+        assertNotEquals(minter.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinterReturnsToStorageIfMintIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing mint */
+        Point point2 = new Point(14, 4);
+        Building mint0 = map.placeBuilding(new Mint(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
+
+        /* Wait for the minter to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+
+        Minter minter = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Minter) {
+                minter = (Minter) w;
+            }
+        }
+
+        assertNotNull(minter);
+        assertEquals(minter.getTarget(), mint0.getPosition());
+
+        /* Wait for the minter to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the minter has started walking */
+        assertFalse(minter.isExactlyAtPoint());
+
+        /* Tear down the mint */
+        mint0.tearDown();
+
+        /* Verify that the minter continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, mint0.getFlag().getPosition());
+
+        assertEquals(minter.getPosition(), mint0.getFlag().getPosition());
+
+        /* Verify that the minter goes back to storage */
+        assertEquals(minter.getTarget(), headquarter0.getPosition());
     }
 }

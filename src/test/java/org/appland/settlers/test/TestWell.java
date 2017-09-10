@@ -15,6 +15,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -30,6 +31,7 @@ import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -950,5 +952,193 @@ public class TestWell {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWellWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing well */
+        Point point2 = new Point(14, 4);
+        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, well0.getFlag());
+
+        /* Wait for the well worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0, map);
+
+        WellWorker wellWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof WellWorker) {
+                wellWorker = (WellWorker) w;
+            }
+        }
+
+        assertNotNull(wellWorker);
+        assertEquals(wellWorker.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the well worker has started walking */
+        assertFalse(wellWorker.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the well worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+
+        assertEquals(wellWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the well worker returns to the headquarter when it reaches the flag */
+        assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWellWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing well */
+        Point point2 = new Point(14, 4);
+        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, well0.getFlag());
+
+        /* Wait for the well worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0, map);
+
+        WellWorker wellWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof WellWorker) {
+                wellWorker = (WellWorker) w;
+            }
+        }
+
+        assertNotNull(wellWorker);
+        assertEquals(wellWorker.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the well worker has started walking */
+        assertFalse(wellWorker.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the well worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+
+        assertEquals(wellWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the well worker continues to the final flag */
+        assertEquals(wellWorker.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+
+        /* Verify that the well worker goes out to well instead of going directly back */
+        assertNotEquals(wellWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWellWorkerReturnsToStorageIfWellIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing well */
+        Point point2 = new Point(14, 4);
+        Building well0 = map.placeBuilding(new Well(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, well0.getFlag());
+
+        /* Wait for the well worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0, map);
+
+        WellWorker wellWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof WellWorker) {
+                wellWorker = (WellWorker) w;
+            }
+        }
+
+        assertNotNull(wellWorker);
+        assertEquals(wellWorker.getTarget(), well0.getPosition());
+
+        /* Wait for the well worker to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the well worker has started walking */
+        assertFalse(wellWorker.isExactlyAtPoint());
+
+        /* Tear down the well */
+        well0.tearDown();
+
+        /* Verify that the well worker continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker, well0.getFlag().getPosition());
+
+        assertEquals(wellWorker.getPosition(), well0.getFlag().getPosition());
+
+        /* Verify that the well worker goes back to storage */
+        assertEquals(wellWorker.getTarget(), headquarter0.getPosition());
     }
 }

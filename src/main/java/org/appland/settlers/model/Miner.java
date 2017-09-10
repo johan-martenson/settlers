@@ -13,12 +13,12 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Miner.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Miner.States.GOING_OUT_TO_FLAG;
-import static org.appland.settlers.model.Miner.States.MINING;
-import static org.appland.settlers.model.Miner.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Miner.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Miner.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Miner.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Miner.State.GOING_OUT_TO_FLAG;
+import static org.appland.settlers.model.Miner.State.MINING;
+import static org.appland.settlers.model.Miner.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Miner.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Miner.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -32,9 +32,9 @@ public class Miner extends Worker {
     private final Countdown countdown;
 
     private Material mineral;
-    private States state;
+    private State state;
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         MINING,
@@ -178,6 +178,22 @@ public class Miner extends Worker {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the mine upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

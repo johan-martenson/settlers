@@ -15,8 +15,9 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.CoalMine;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.BREAD;
@@ -36,6 +37,7 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1252,5 +1254,205 @@ public class TestCoalMine {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Put a small mountain on the map */
+        Point point2 = new Point(14, 4);
+        Utils.surroundPointWithMountain(point2, map);
+        Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+
+        /* Wait for the miner to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+
+        Miner miner = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Miner) {
+                miner = (Miner) w;
+            }
+        }
+
+        assertNotNull(miner);
+        assertEquals(miner.getTarget(), coalMine0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the miner has started walking */
+        assertFalse(miner.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the miner continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+
+        assertEquals(miner.getPosition(), flag0.getPosition());
+
+        /* Verify that the miner returns to the headquarter when it reaches the flag */
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Put a small mountain on the map */
+        Point point2 = new Point(14, 4);
+        Utils.surroundPointWithMountain(point2, map);
+        Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+
+        /* Wait for the miner to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+
+        Miner miner = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Miner) {
+                miner = (Miner) w;
+            }
+        }
+
+        assertNotNull(miner);
+        assertEquals(miner.getTarget(), coalMine0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the miner has started walking */
+        assertFalse(miner.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the miner continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+
+        assertEquals(miner.getPosition(), flag0.getPosition());
+
+        /* Verify that the miner continues to the final flag */
+        assertEquals(miner.getTarget(), coalMine0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
+
+        /* Verify that the miner goes out to miner instead of going directly back */
+        assertNotEquals(miner.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinerReturnsToStorageIfCoalMineIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Put a small mountain on the map */
+        Point point2 = new Point(14, 4);
+        Utils.surroundPointWithMountain(point2, map);
+        Utils.putCoalAtSurroundingTiles(point2, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, coalMine0.getFlag());
+
+        /* Wait for the miner to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+
+        Miner miner = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Miner) {
+                miner = (Miner) w;
+            }
+        }
+
+        assertNotNull(miner);
+        assertEquals(miner.getTarget(), coalMine0.getPosition());
+
+        /* Wait for the miner to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the miner has started walking */
+        assertFalse(miner.isExactlyAtPoint());
+
+        /* Tear down the coal mine */
+        coalMine0.tearDown();
+
+        /* Verify that the miner continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, coalMine0.getFlag().getPosition());
+
+        assertEquals(miner.getPosition(), coalMine0.getFlag().getPosition());
+
+        /* Verify that the miner goes back to storage */
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
     }
 }

@@ -12,11 +12,12 @@ import static java.awt.Color.RED;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import org.appland.settlers.model.Baker;
-import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Bakery;
+import org.appland.settlers.model.Baker;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -33,6 +34,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -995,5 +997,193 @@ public class TestBakery {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBakerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing bakery */
+        Point point2 = new Point(14, 4);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, bakery0.getFlag());
+
+        /* Wait for the baker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0, map);
+
+        Baker baker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker) w;
+            }
+        }
+
+        assertNotNull(baker);
+        assertEquals(baker.getTarget(), bakery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the baker has started walking */
+        assertFalse(baker.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the baker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+
+        assertEquals(baker.getPosition(), flag0.getPosition());
+
+        /* Verify that the baker returns to the headquarter when it reaches the flag */
+        assertEquals(baker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBakerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing bakery */
+        Point point2 = new Point(14, 4);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, bakery0.getFlag());
+
+        /* Wait for the baker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0, map);
+
+        Baker baker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker) w;
+            }
+        }
+
+        assertNotNull(baker);
+        assertEquals(baker.getTarget(), bakery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the baker has started walking */
+        assertFalse(baker.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the baker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+
+        assertEquals(baker.getPosition(), flag0.getPosition());
+
+        /* Verify that the baker continues to the final flag */
+        assertEquals(baker.getTarget(), bakery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+
+        /* Verify that the baker goes out to baker instead of going directly back */
+        assertNotEquals(baker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBakerReturnsToStorageIfBakeryIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing bakery */
+        Point point2 = new Point(14, 4);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, bakery0.getFlag());
+
+        /* Wait for the baker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Baker.class, 1, player0, map);
+
+        Baker baker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Baker) {
+                baker = (Baker) w;
+            }
+        }
+
+        assertNotNull(baker);
+        assertEquals(baker.getTarget(), bakery0.getPosition());
+
+        /* Wait for the baker to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the baker has started walking */
+        assertFalse(baker.isExactlyAtPoint());
+
+        /* Tear down the bakery */
+        bakery0.tearDown();
+
+        /* Verify that the baker continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+
+        assertEquals(baker.getPosition(), bakery0.getFlag().getPosition());
+
+        /* Verify that the baker goes back to storage */
+        assertEquals(baker.getTarget(), headquarter0.getPosition());
     }
 }

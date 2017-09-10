@@ -16,9 +16,10 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Brewer;
-import org.appland.settlers.model.Brewery;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Brewery;
+import org.appland.settlers.model.Brewer;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
@@ -33,6 +34,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1048,5 +1050,194 @@ public class TestBrewery {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBrewerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing brewer */
+        Point point2 = new Point(14, 4);
+        Building brewery = map.placeBuilding(new Brewery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery.getFlag());
+
+        /* Wait for the brewer to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+
+        Brewer brewer = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Brewer) {
+                brewer = (Brewer) w;
+            }
+        }
+
+        assertNotNull(brewer);
+        assertEquals(brewer.getTarget(), brewery.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the brewer has started walking */
+        assertFalse(brewer.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the brewer continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, flag0.getPosition());
+
+        assertEquals(brewer.getPosition(), flag0.getPosition());
+
+        /* Verify that the brewer returns to the headquarter when it reaches the flag */
+        assertEquals(brewer.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBrewerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing brewer */
+        Point point2 = new Point(14, 4);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
+
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery0.getFlag());
+
+        /* Wait for the brewer to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+
+        Brewer brewer = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Brewer) {
+                brewer = (Brewer) w;
+            }
+        }
+
+        assertNotNull(brewer);
+        assertEquals(brewer.getTarget(), brewery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the brewer has started walking */
+        assertFalse(brewer.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the brewer continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, flag0.getPosition());
+
+        assertEquals(brewer.getPosition(), flag0.getPosition());
+
+        /* Verify that the brewer continues to the final flag */
+        assertEquals(brewer.getTarget(), brewery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, brewery0.getFlag().getPosition());
+
+        /* Verify that the brewer goes out to brewer instead of going directly back */
+        assertNotEquals(brewer.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBrewerReturnsToStorageIfBreweryIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing brewery */
+        Point point2 = new Point(14, 4);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery0.getFlag());
+
+        /* Wait for the brewer to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+
+        Brewer brewer = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Brewer) {
+                brewer = (Brewer) w;
+            }
+        }
+
+        assertNotNull(brewer);
+        assertEquals(brewer.getTarget(), brewery0.getPosition());
+
+        /* Wait for the brewer to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the brewer has started walking */
+        assertFalse(brewer.isExactlyAtPoint());
+
+        /* Tear down the brewery */
+        brewery0.tearDown();
+
+        /* Verify that the brewer continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, brewery0.getFlag().getPosition());
+
+        assertEquals(brewer.getPosition(), brewery0.getFlag().getPosition());
+
+        /* Verify that the brewer goes back to storage */
+        assertEquals(brewer.getTarget(), headquarter0.getPosition());
     }
 }

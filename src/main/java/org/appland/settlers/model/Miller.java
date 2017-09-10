@@ -8,12 +8,12 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WHEAT;
-import static org.appland.settlers.model.Miller.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Miller.States.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Miller.States.GRINDING_WHEAT;
-import static org.appland.settlers.model.Miller.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Miller.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Miller.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Miller.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Miller.State.GOING_TO_FLAG_WITH_CARGO;
+import static org.appland.settlers.model.Miller.State.GRINDING_WHEAT;
+import static org.appland.settlers.model.Miller.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Miller.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Miller.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -26,7 +26,7 @@ public class Miller extends Worker {
 
     private final Countdown countdown;
 
-    private States state;
+    private State state;
 
     public Miller(Player player, GameMap m) {
         super(player, m);
@@ -34,7 +34,7 @@ public class Miller extends Worker {
         state = WALKING_TO_TARGET;
     }
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         GRINDING_WHEAT,
@@ -130,6 +130,22 @@ public class Miller extends Worker {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the mill upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

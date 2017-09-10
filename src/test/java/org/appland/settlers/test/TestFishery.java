@@ -18,6 +18,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -37,6 +38,7 @@ import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1466,5 +1468,193 @@ public class TestFishery {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testFishermanReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing fishery */
+        Point point2 = new Point(14, 4);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, fishery0.getFlag());
+
+        /* Wait for the fisherman to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0, map);
+
+        Fisherman fisherman = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Fisherman) {
+                fisherman = (Fisherman) w;
+            }
+        }
+
+        assertNotNull(fisherman);
+        assertEquals(fisherman.getTarget(), fishery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the fisherman has started walking */
+        assertFalse(fisherman.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the fisherman continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, flag0.getPosition());
+
+        assertEquals(fisherman.getPosition(), flag0.getPosition());
+
+        /* Verify that the fisherman returns to the headquarter when it reaches the flag */
+        assertEquals(fisherman.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testFishermanContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing fishery */
+        Point point2 = new Point(14, 4);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, fishery0.getFlag());
+
+        /* Wait for the fisherman to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0, map);
+
+        Fisherman fisherman = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Fisherman) {
+                fisherman = (Fisherman) w;
+            }
+        }
+
+        assertNotNull(fisherman);
+        assertEquals(fisherman.getTarget(), fishery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the fisherman has started walking */
+        assertFalse(fisherman.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the fisherman continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, flag0.getPosition());
+
+        assertEquals(fisherman.getPosition(), flag0.getPosition());
+
+        /* Verify that the fisherman continues to the final flag */
+        assertEquals(fisherman.getTarget(), fishery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery0.getFlag().getPosition());
+
+        /* Verify that the fisherman goes out to fisherman instead of going directly back */
+        assertNotEquals(fisherman.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testFishermanReturnsToStorageIfFisheryIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing fishery */
+        Point point2 = new Point(14, 4);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, fishery0.getFlag());
+
+        /* Wait for the fisherman to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0, map);
+
+        Fisherman fisherman = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Fisherman) {
+                fisherman = (Fisherman) w;
+            }
+        }
+
+        assertNotNull(fisherman);
+        assertEquals(fisherman.getTarget(), fishery0.getPosition());
+
+        /* Wait for the fisherman to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the fisherman has started walking */
+        assertFalse(fisherman.isExactlyAtPoint());
+
+        /* Tear down the fishery */
+        fishery0.tearDown();
+
+        /* Verify that the fisherman continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery0.getFlag().getPosition());
+
+        assertEquals(fisherman.getPosition(), fishery0.getFlag().getPosition());
+
+        /* Verify that the fisherman goes back to storage */
+        assertEquals(fisherman.getTarget(), headquarter0.getPosition());
     }
 }

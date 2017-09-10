@@ -453,4 +453,8 @@ public abstract class Worker implements Actor, Piece {
     protected void cancelWalkingToTarget() {
         state = States.IDLE_OUTSIDE;
     }
+
+    protected void clearTargetBuilding() {
+        this.buildingToEnter = null;
+    }
 }

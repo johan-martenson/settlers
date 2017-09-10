@@ -6,15 +6,15 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Fisherman.States.FISHING;
-import static org.appland.settlers.model.Fisherman.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Fisherman.States.GOING_BACK_TO_HOUSE_WITH_FISH;
-import static org.appland.settlers.model.Fisherman.States.GOING_OUT_TO_FISH;
-import static org.appland.settlers.model.Fisherman.States.GOING_TO_FLAG;
-import static org.appland.settlers.model.Fisherman.States.IN_HOUSE_WITH_FISH;
-import static org.appland.settlers.model.Fisherman.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Fisherman.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Fisherman.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Fisherman.State.FISHING;
+import static org.appland.settlers.model.Fisherman.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Fisherman.State.GOING_BACK_TO_HOUSE_WITH_FISH;
+import static org.appland.settlers.model.Fisherman.State.GOING_OUT_TO_FISH;
+import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG;
+import static org.appland.settlers.model.Fisherman.State.IN_HOUSE_WITH_FISH;
+import static org.appland.settlers.model.Fisherman.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Fisherman.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Fisherman.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Fisherman extends Worker {
 
     private final Countdown countdown;
 
-    private States  state;
+    private State  state;
 
     private Point getFishingSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
@@ -60,7 +60,7 @@ public class Fisherman extends Worker {
         return null;
     }
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET, 
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_FISH, 
@@ -192,4 +192,19 @@ public class Fisherman extends Worker {
         }
     }
 
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the fishery upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
+        }
+    }
 }

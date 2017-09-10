@@ -34,6 +34,7 @@ import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -485,6 +486,297 @@ public class TestStorage {
     }
 
     @Test
+    public void testStorageWorkerDoesNotGoBackToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Connect the storages */
+        Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           burning, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerDoesNotGoBackToBurningStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Connect the storages */
+        Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
+
+        /* Finish construction of the second storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the second storage */
+        storage1.tearDown();
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           burning, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerDoesNotGoBackToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Connect the storages */
+        Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
+
+        /* Finish construction of the second storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the second storage */
+        storage1.tearDown();
+
+        /* Wait for the second storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage1, map);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           destroyed, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerDoesNotGoBackOffroadToUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           burning, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerDoesNotGoBackOffroadToBurningStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the second storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the second storage */
+        storage1.tearDown();
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           burning, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerDoesNotGoBackOffroadToDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place second storage */
+        Point point2 = new Point(15, 15);
+        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the second storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the second storage */
+        storage1.tearDown();
+
+        /* Wait for the second storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage1, map);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the storage worker avoids the second storage because it's
+           destroyed, although it's close
+        */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
+    }
+
+    @Test
     public void testStorageWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenStorageIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -883,5 +1175,202 @@ public class TestStorage {
         assertTrue(road3.getWayPoints().contains(road3.getCourier().getPosition()));
         assertEquals(road3.getCourier().getPlayer(), player0);
         assertEquals(Utils.findWorkersOfTypeOutsideForPlayer(Courier.class, player0, map).size(), player0Couriers + 1);
+    }
+
+    @Test
+    public void testStorageWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing storage */
+        Point point2 = new Point(14, 4);
+        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storage0.getFlag());
+
+        /* Wait for the storage worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0, map);
+
+        StorageWorker storageWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
+                storageWorker = (StorageWorker) w;
+            }
+        }
+
+        assertNotNull(storageWorker);
+        assertEquals(storageWorker.getTarget(), storage0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the storage worker has started walking */
+        assertFalse(storageWorker.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the storage worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, flag0.getPosition());
+
+        assertEquals(storageWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the storage worker returns to the headquarter when it reaches the flag */
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing storage */
+        Point point2 = new Point(14, 4);
+        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storage0.getFlag());
+
+        /* Wait for the storage worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0, map);
+
+        StorageWorker storageWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
+                storageWorker = (StorageWorker) w;
+            }
+        }
+
+        assertNotNull(storageWorker);
+        assertEquals(storageWorker.getTarget(), storage0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the storageWorker has started walking */
+        assertFalse(storageWorker.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the storage worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, flag0.getPosition());
+
+        assertEquals(storageWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the storage worker continues to the final flag */
+        assertEquals(storageWorker.getTarget(), storage0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage0.getFlag().getPosition());
+
+        /* Verify that the storage worker goes out to storage instead of going directly back */
+        assertNotEquals(storageWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStorageWorkerReturnsToStorageIfStorageIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing storage */
+        Point point2 = new Point(14, 4);
+        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, storage0.getFlag());
+
+        /* Wait for the storage worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(StorageWorker.class, 1, player0, map);
+
+        StorageWorker storageWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
+                storageWorker = (StorageWorker) w;
+            }
+        }
+
+        assertNotNull(storageWorker);
+        assertEquals(storageWorker.getTarget(), storage0.getPosition());
+
+        /* Wait for the storageWorker to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the storage worker has started walking */
+        assertFalse(storageWorker.isExactlyAtPoint());
+
+        /* Tear down the storage */
+        storage0.tearDown();
+
+        /* Verify that the storage worker continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage0.getFlag().getPosition());
+
+        assertEquals(storageWorker.getPosition(), storage0.getFlag().getPosition());
+
+        /* Verify that the storage worker goes back to storage */
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
     }
 }

@@ -19,16 +19,16 @@ public class WellWorker extends Worker {
 
     private final Countdown countdown;
 
-    private States  state;
+    private State  state;
 
     public WellWorker(Player player, GameMap m) {
         super(player, m);
 
         countdown = new Countdown();
-        state     = States.WALKING_TO_TARGET;
+        state     = State.WALKING_TO_TARGET;
     }
 
-    private enum States {
+    private enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
         DRAWING_WATER,
@@ -43,22 +43,22 @@ public class WellWorker extends Worker {
             setHome(b);
         }
 
-        state = States.RESTING_IN_HOUSE;
+        state = State.RESTING_IN_HOUSE;
 
         countdown.countFrom(RESTING_TIME);
     }
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == States.RESTING_IN_HOUSE) {
+        if (state == State.RESTING_IN_HOUSE) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
-                state = States.DRAWING_WATER;
+                state = State.DRAWING_WATER;
 
                 countdown.countFrom(PRODUCTION_TIME);
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
-        } else if (state == States.DRAWING_WATER) {
+        } else if (state == State.DRAWING_WATER) {
             if (countdown.reachedZero()) {
                 Cargo cargo = new Cargo(WATER, map);
 
@@ -66,7 +66,7 @@ public class WellWorker extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                state = States.GOING_TO_FLAG_WITH_CARGO;
+                state = State.GOING_TO_FLAG_WITH_CARGO;
             } else {
                 countdown.step();
             }
@@ -75,7 +75,7 @@ public class WellWorker extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
-        if (state == States.GOING_TO_FLAG_WITH_CARGO) {
+        if (state == State.GOING_TO_FLAG_WITH_CARGO) {
             Flag f = getHome().getFlag();
             Cargo cargo = getCargo();
 
@@ -88,13 +88,13 @@ public class WellWorker extends Worker {
 
             returnHome();
 
-            state = States.GOING_BACK_TO_HOUSE;
-        } else if (state == States.GOING_BACK_TO_HOUSE) {
+            state = State.GOING_BACK_TO_HOUSE;
+        } else if (state == State.GOING_BACK_TO_HOUSE) {
             enterBuilding(getHome());
 
-            state = States.RESTING_IN_HOUSE;
+            state = State.RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
-        } else if (state == States.RETURNING_TO_STORAGE) {
+        } else if (state == State.RETURNING_TO_STORAGE) {
             Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
 
             storage.depositWorker(this);
@@ -106,19 +106,35 @@ public class WellWorker extends Worker {
         Building storage = map.getClosestStorage(getPosition());
 
         if (storage != null) {
-            state = States.RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = States.RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the well upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

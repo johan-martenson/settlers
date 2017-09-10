@@ -24,13 +24,15 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
+import org.appland.settlers.model.Catapult;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1090,5 +1092,193 @@ public class TestCatapult {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing catapult */
+        Point point2 = new Point(14, 4);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+
+        /* Wait for the catapult worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+
+        CatapultWorker catapultWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) w;
+            }
+        }
+
+        assertNotNull(catapultWorker);
+        assertEquals(catapultWorker.getTarget(), catapult0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the catapult worker has started walking */
+        assertFalse(catapultWorker.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the catapult worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, flag0.getPosition());
+
+        assertEquals(catapultWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the catapult worker returns to the headquarter when it reaches the flag */
+        assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing catapult */
+        Point point2 = new Point(14, 4);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+
+        /* Wait for the catapult worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+
+        CatapultWorker catapultWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) w;
+            }
+        }
+
+        assertNotNull(catapultWorker);
+        assertEquals(catapultWorker.getTarget(), catapult0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the catapult worker has started walking */
+        assertFalse(catapultWorker.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the catapult worker continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, flag0.getPosition());
+
+        assertEquals(catapultWorker.getPosition(), flag0.getPosition());
+
+        /* Verify that the catapultWorker continues to the final flag */
+        assertEquals(catapultWorker.getTarget(), catapult0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, catapult0.getFlag().getPosition());
+
+        /* Verify that the catapultWorker goes out to catapultWorker instead of going directly back */
+        assertNotEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapulterReturnsToStorageIfCatapultIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing catapult */
+        Point point2 = new Point(14, 4);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
+
+        /* Wait for the catapult worker to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+
+        CatapultWorker catapultWorker = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) w;
+            }
+        }
+
+        assertNotNull(catapultWorker);
+        assertEquals(catapultWorker.getTarget(), catapult0.getPosition());
+
+        /* Wait for the catapult worker to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the catapult worker has started walking */
+        assertFalse(catapultWorker.isExactlyAtPoint());
+
+        /* Tear down the catapult */
+        catapult0.tearDown();
+
+        /* Verify that the catapult worker continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, catapult0.getFlag().getPosition());
+
+        assertEquals(catapultWorker.getPosition(), catapult0.getFlag().getPosition());
+
+        /* Verify that the catapult worker goes back to storage */
+        assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
     }
 }

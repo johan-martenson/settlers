@@ -5,13 +5,13 @@
  */
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.DonkeyBreeder.States.FEEDING;
-import static org.appland.settlers.model.DonkeyBreeder.States.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
-import static org.appland.settlers.model.DonkeyBreeder.States.GOING_OUT_TO_FEED;
-import static org.appland.settlers.model.DonkeyBreeder.States.PREPARING_DONKEY_FOR_DELIVERY;
-import static org.appland.settlers.model.DonkeyBreeder.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.DonkeyBreeder.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.DonkeyBreeder.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.DonkeyBreeder.State.FEEDING;
+import static org.appland.settlers.model.DonkeyBreeder.State.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
+import static org.appland.settlers.model.DonkeyBreeder.State.GOING_OUT_TO_FEED;
+import static org.appland.settlers.model.DonkeyBreeder.State.PREPARING_DONKEY_FOR_DELIVERY;
+import static org.appland.settlers.model.DonkeyBreeder.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.DonkeyBreeder.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.DonkeyBreeder.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -26,10 +26,10 @@ public class DonkeyBreeder extends Worker {
     private static final int TIME_TO_FEED           = 19;
     private static final int TIME_TO_PREPARE_DONKEY = 19;
 
-    private States state;
+    private State state;
     private final Countdown countdown;
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET, 
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_FEED, 
@@ -157,4 +157,19 @@ public class DonkeyBreeder extends Worker {
         }
     }
 
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the donkey farm upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
+        }
+    }
 }

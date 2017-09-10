@@ -929,22 +929,31 @@ public class GameMap {
         return getClosestStorage(p, null);
     }
 
-    public Storage getClosestStorage(Point p, Building avoid) throws InvalidRouteException {
-        Storage stg = null;
+    public Storage getClosestStorage(Point point, Building avoid) throws InvalidRouteException {
+        Storage storage = null;
         int distance = Integer.MAX_VALUE;
 
-        for (Building b : buildings) {
-            if (b.equals(avoid)) {
+        for (Building building : buildings) {
+
+            /* Filter buildings to avoid */
+            if (building.equals(avoid)) {
                 continue;
             }
 
-            if (b instanceof Storage) {
-                if (b.getFlag().getPosition().equals(p)) {
-                    stg = (Storage)b;
+            /* Filter buildings that are destroyed */
+            if (building.burningDown() ||
+                building.destroyed()   ||
+                building.underConstruction()) {
+                continue;
+            }
+
+            if (building instanceof Storage) {
+                if (building.getFlag().getPosition().equals(point)) {
+                    storage = (Storage)building;
                     break;
                 }
 
-                List<Point> path = findWayWithExistingRoads(p, b.getFlag().getPosition());
+                List<Point> path = findWayWithExistingRoads(point, building.getFlag().getPosition());
 
                 if (path == null) {
                     continue;
@@ -952,12 +961,12 @@ public class GameMap {
 
                 if (path.size() < distance) {
                     distance = path.size();
-                    stg = (Storage) b;
+                    storage = (Storage) building;
                 }
             }
         }
 
-        return stg;
+        return storage;
     }
 
     public List<Building> getBuildings() {

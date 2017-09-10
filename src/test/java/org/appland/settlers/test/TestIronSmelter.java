@@ -15,6 +15,7 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -33,6 +34,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1140,5 +1142,193 @@ public class TestIronSmelter {
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testIronFounderReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing iron smelter */
+        Point point2 = new Point(14, 4);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, ironSmelter0.getFlag());
+
+        /* Wait for the iron founder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0, map);
+
+        IronFounder ironFounder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof IronFounder) {
+                ironFounder = (IronFounder) w;
+            }
+        }
+
+        assertNotNull(ironFounder);
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the iron founder has started walking */
+        assertFalse(ironFounder.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the iron founder continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+
+        assertEquals(ironFounder.getPosition(), flag0.getPosition());
+
+        /* Verify that the iron founder returns to the headquarter when it reaches the flag */
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testIronFounderContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing iron smelter */
+        Point point2 = new Point(14, 4);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, ironSmelter0.getFlag());
+
+        /* Wait for the iron founder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0, map);
+
+        IronFounder ironFounder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof IronFounder) {
+                ironFounder = (IronFounder) w;
+            }
+        }
+
+        assertNotNull(ironFounder);
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the iron founder has started walking */
+        assertFalse(ironFounder.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the iron founder continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+
+        assertEquals(ironFounder.getPosition(), flag0.getPosition());
+
+        /* Verify that the iron founder continues to the final flag */
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+
+        /* Verify that the iron founder goes out to ironFounder instead of going directly back */
+        assertNotEquals(ironFounder.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testIronFounderReturnsToStorageIfIronSmelterIsDestroyed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing iron smelter */
+        Point point2 = new Point(14, 4);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point2.upLeft());
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, ironSmelter0.getFlag());
+
+        /* Wait for the iron founder to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(IronFounder.class, 1, player0, map);
+
+        IronFounder ironFounder = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof IronFounder) {
+                ironFounder = (IronFounder) w;
+            }
+        }
+
+        assertNotNull(ironFounder);
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
+
+        /* Wait for the iron founder to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the iron founder has started walking */
+        assertFalse(ironFounder.isExactlyAtPoint());
+
+        /* Tear down the iron smelter */
+        ironSmelter0.tearDown();
+
+        /* Verify that the iron founder continues walking to the next flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getFlag().getPosition());
+
+        /* Verify that the iron founder goes back to storage */
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
     }
 }

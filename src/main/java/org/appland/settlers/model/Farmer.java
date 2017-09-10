@@ -14,17 +14,17 @@ import java.util.List;
 import java.util.Set;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Farmer.States.GOING_BACK_TO_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_HARVEST;
-import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_PLANT;
-import static org.appland.settlers.model.Farmer.States.GOING_OUT_TO_PUT_CARGO;
-import static org.appland.settlers.model.Farmer.States.HARVESTING;
-import static org.appland.settlers.model.Farmer.States.IN_HOUSE_WITH_CARGO;
-import static org.appland.settlers.model.Farmer.States.PLANTING;
-import static org.appland.settlers.model.Farmer.States.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Farmer.States.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Farmer.States.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_HARVEST;
+import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PLANT;
+import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PUT_CARGO;
+import static org.appland.settlers.model.Farmer.State.HARVESTING;
+import static org.appland.settlers.model.Farmer.State.IN_HOUSE_WITH_CARGO;
+import static org.appland.settlers.model.Farmer.State.PLANTING;
+import static org.appland.settlers.model.Farmer.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Farmer.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Farmer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.WHEAT;
 
 /**
@@ -38,7 +38,7 @@ public class Farmer extends Worker {
     private final static int TIME_TO_HARVEST = 19;
 
     private final Countdown countdown;
-    private States state;
+    private State state;
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
         Point hutPoint = getHome().getPosition();
@@ -96,7 +96,7 @@ public class Farmer extends Worker {
         return null;
     }
 
-    protected enum States {
+    protected enum State {
         WALKING_TO_TARGET, 
         RESTING_IN_HOUSE, 
         GOING_OUT_TO_PLANT, 
@@ -269,6 +269,22 @@ public class Farmer extends Worker {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the farm upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }

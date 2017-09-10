@@ -131,13 +131,13 @@ public class Armorer extends Worker {
         Building storage = map.getClosestStorage(getPosition());
 
         if (storage != null) {
-            state = RETURNING_TO_STORAGE;
+            state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
             for (Building b : getPlayer().getBuildings()) {
                 if (b instanceof Storage) {
-                    state = RETURNING_TO_STORAGE;
+                    state = State.RETURNING_TO_STORAGE;
 
                     setOffroadTarget(b.getPosition());
 
@@ -147,9 +147,24 @@ public class Armorer extends Worker {
         }
     }
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + state.name().toLowerCase();
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the armory upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
+        }
     }
 }

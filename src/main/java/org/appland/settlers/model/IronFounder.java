@@ -6,8 +6,6 @@
 
 package org.appland.settlers.model;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import static org.appland.settlers.model.IronFounder.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.IronFounder.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.IronFounder.State.MELTING_IRON;
@@ -139,6 +137,22 @@ public class IronFounder extends Worker {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter the iron foundery upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
+            returnToStorage();
         }
     }
 }
