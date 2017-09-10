@@ -29,6 +29,7 @@ import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -1584,4 +1585,204 @@ public class TestGeologist {
     }
     // TODO: test that geologist doesn't investigate trees, stones, houses, flags, signs etc
     // TODO: test that geologist goes via the flag when it returns to the storage
+    @Test
+    public void testGeologistReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call geologist from the second flag */
+        flag1.callGeologist();
+
+        /* Wait for the geologist to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+
+        Geologist geologist = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Geologist) {
+                geologist = (Geologist) w;
+            }
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the geologist has started walking */
+        assertFalse(geologist.isExactlyAtPoint());
+
+        /* Remove the next road */
+        map.removeRoad(road1);
+
+        /* Verify that the geologist continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+
+        assertEquals(geologist.getPosition(), flag0.getPosition());
+
+        /* Verify that the geologist returns to the headquarter when it reaches the flag */
+        assertEquals(geologist.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getPosition());
+
+        assertTrue(geologist.isInsideBuilding());
+    }
+
+    @Test
+    public void testGeologistContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call geologist from the second flag */
+        flag1.callGeologist();
+
+        /* Wait for the geologist to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+
+        Geologist geologist = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Geologist) {
+                geologist = (Geologist) w;
+            }
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* See that the geologist has started walking */
+        assertFalse(geologist.isExactlyAtPoint());
+
+        /* Remove the current road */
+        map.removeRoad(road0);
+
+        /* Verify that the geologist continues walking to the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+
+        assertEquals(geologist.getPosition(), flag0.getPosition());
+
+        /* Verify that the geologist continues to the final flag */
+        assertEquals(geologist.getTarget(), flag1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag1.getPosition());
+
+        /* Verify that the geologist goes out to geologist instead of going directly back */
+        assertNotEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testGeologistContinuesEvenIfFlagIsRemovedWhenItIsClose() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing first flag */
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Placing second flag */
+        Point point2 = new Point(14, 4);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Connect headquarter and first flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+
+        /* Connect the first flag with the second flag */
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Call geologist from the second flag */
+        flag1.callGeologist();
+
+        /* Wait for the geologist to be on the second road on its way to the flag */
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+
+        Geologist geologist = null;
+
+        for (Worker w : map.getWorkers()) {
+            if (w instanceof Geologist) {
+                geologist = (Geologist) w;
+            }
+        }
+
+        assertNotNull(geologist);
+        assertEquals(geologist.getTarget(), flag1.getPosition());
+
+        /* Wait for the geologist to reach the first flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag0.getPosition());
+
+        map.stepTime();
+
+        /* See that the geologist has started walking */
+        assertFalse(geologist.isExactlyAtPoint());
+
+        /* Remove the second flag */
+        map.removeFlag(flag1);
+
+        /* Verify that the geologist continues walking to the second flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag1.getPosition());
+
+        assertEquals(geologist.getPosition(), flag1.getPosition());
+
+        /* Verify that the geologist goes out to geologist instead of going directly back */
+        map.stepTime();
+
+        assertNotEquals(geologist.getTarget(), headquarter0.getPosition());
+    }
 }

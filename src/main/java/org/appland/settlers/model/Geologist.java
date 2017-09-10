@@ -209,4 +209,30 @@ public class Geologist extends Worker {
 
         return null;
     }
+
+    @Override
+    protected void onWalkingAndAtFixedPoint() throws Exception {
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == State.WALKING_TO_TARGET &&
+            map.isFlagAtPoint(getPosition()) &&
+            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            returnToStorage();
+        }
+    }
+
+    @Override
+    protected void onReturnToStorage() throws Exception {
+        Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
+
+        state = State.RETURNING_TO_STORAGE;
+
+        if (stg != null) {
+            setTarget(stg.getPosition());
+        } else {
+            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+
+            setOffroadTarget(stg.getPosition());
+        }
+    }
 }
