@@ -874,6 +874,52 @@ public class GameUtils {
         return storage;
     }
 
+    public static Storage getClosestStorage(Point point, Player player) throws InvalidRouteException {
+        return getClosestStorage(point, null, player);
+    }
+
+    public static Storage getClosestStorage(Point point, Building avoid, Player player) throws InvalidRouteException {
+        Storage storage = null;
+        int distance = Integer.MAX_VALUE;
+        GameMap map = player.getMap();
+
+        for (Building building : player.getBuildings()) {
+
+            /* Filter buildings to avoid */
+            if (building.equals(avoid)) {
+                continue;
+            }
+
+            /* Filter buildings that are destroyed */
+            if (building.burningDown() ||
+                building.destroyed()   ||
+                building.underConstruction()) {
+                continue;
+            }
+
+            if (building instanceof Storage) {
+                if (building.getFlag().getPosition().equals(point)) {
+                    storage = (Storage)building;
+                    break;
+                }
+
+                List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+
+                if (path == null) {
+                    continue;
+                }
+
+                if (path.size() < distance) {
+                    distance = path.size();
+                    storage = (Storage) building;
+                }
+            }
+        }
+
+        return storage;
+    }
+
+
     public static Storage getClosestStorage(Point point, GameMap map) throws InvalidRouteException {
         return getClosestStorage(point, null, map);
     }

@@ -1218,7 +1218,7 @@ public class TestRoads {
 
         assertTrue(r.needsCourier());
 
-        assertEquals(GameUtils.getClosestStorage(r.getStart(), map), hq);
+        assertEquals(GameUtils.getClosestStorage(r.getStart(), player0), hq);
 
         map.stepTime();
 

@@ -119,7 +119,7 @@ public class SawmillWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), map);
+        Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;

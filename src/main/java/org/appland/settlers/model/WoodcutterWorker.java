@@ -150,7 +150,7 @@ public class WoodcutterWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), getMap());
+        Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;

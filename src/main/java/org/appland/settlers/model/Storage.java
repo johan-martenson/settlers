@@ -221,7 +221,7 @@ public class Storage extends Building implements Actor {
                         continue;
                     }
 
-                    Storage storage = GameUtils.getClosestStorage(building.getPosition(), building, getMap());
+                    Storage storage = GameUtils.getClosestStorage(building.getPosition(), building, getPlayer());
 
                     if (!equals(storage)) {
                         continue;
@@ -252,7 +252,7 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage stg = GameUtils.getClosestStorage(road.getStart(), getMap());
+                Storage stg = GameUtils.getClosestStorage(road.getStart(), getPlayer());
 
                 if (!equals(stg)) {
                     continue;
@@ -598,7 +598,7 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isClosestStorage(Building b) throws InvalidRouteException {
-        Storage stg = GameUtils.getClosestStorage(b.getPosition(), getMap());
+        Storage stg = GameUtils.getClosestStorage(b.getPosition(), getPlayer());
 
         return equals(stg);
     }
@@ -618,7 +618,7 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage stg = GameUtils.getClosestStorage(road.getStart(), getMap());
+                Storage stg = GameUtils.getClosestStorage(road.getStart(), getPlayer());
 
                 if (stg != null && !this.equals(stg)) {
                     continue;

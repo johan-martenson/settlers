@@ -488,7 +488,7 @@ public class TestTransportation {
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertTrue(GameUtils.getClosestStorage(hqToMiddleRoad.getStart(), map).equals(storage));
+        assertTrue(GameUtils.getClosestStorage(hqToMiddleRoad.getStart(), player0).equals(storage));
 
         /* Step time to let the headquarter send new workers */
         map.stepTime();

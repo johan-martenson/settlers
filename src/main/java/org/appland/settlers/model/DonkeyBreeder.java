@@ -94,7 +94,7 @@ public class DonkeyBreeder extends Worker {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
 
                 /* Don't create a donkey if there is no road to a storage */
-                Storage storage = GameUtils.getClosestStorage(getHome().getPosition(), map);
+                Storage storage = GameUtils.getClosestStorage(getHome().getPosition(), getPlayer());
 
                 if (storage == null) {
                     return;
@@ -138,7 +138,7 @@ public class DonkeyBreeder extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), getHome(), map);
+        Building storage = GameUtils.getClosestStorage(getPosition(), getHome(), getPlayer());
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;

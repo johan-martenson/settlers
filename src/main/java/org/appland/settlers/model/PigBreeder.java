@@ -149,7 +149,7 @@ public class PigBreeder extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), getHome(), map);
+        Building storage = GameUtils.getClosestStorage(getPosition(), getHome(), getPlayer());
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
