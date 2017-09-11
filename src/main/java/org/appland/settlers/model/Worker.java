@@ -45,14 +45,14 @@ public abstract class Worker implements Actor, Piece {
     private Point       target;
     private Building    home;
 
-    public Worker(Player p, GameMap m) {
-        player          = p;
+    public Worker(Player player, GameMap map) {
+        this.player     = player;
         target          = null;
         position        = null;
         path            = null;
         buildingToEnter = null;
         home            = null;
-        map             = m;
+        this.map        = map;
 
         walkCountdown  = new Countdown();
 
@@ -179,8 +179,8 @@ public abstract class Worker implements Actor, Piece {
         onArrival();
     }
 
-    public void setPosition(Point p) {
-        position = p;
+    public void setPosition(Point point) {
+        position = point;
     }
 
     @Override
@@ -215,9 +215,9 @@ public abstract class Worker implements Actor, Piece {
         return w.speed();
     }
 
-    public void setTargetBuilding(Building b) throws Exception {
-        buildingToEnter = b;
-        setTarget(b.getPosition());
+    public void setTargetBuilding(Building building) throws Exception {
+        buildingToEnter = building;
+        setTarget(building.getPosition());
     }
 
     public Building getTargetBuilding() {
@@ -251,64 +251,64 @@ public abstract class Worker implements Actor, Piece {
         return (int)(((double)(getSpeed() - walkCountdown.getCount()) / (double)getSpeed()) * 100);
     }
 
-    public void enterBuilding(Building b) throws Exception {
-        if (!getPosition().equals(b.getPosition())) {
-            throw new Exception("Can't enter " + b + " when worker is at " + getPosition());
+    public void enterBuilding(Building building) throws Exception {
+        if (!getPosition().equals(building.getPosition())) {
+            throw new Exception("Can't enter " + building + " when worker is at " + getPosition());
         }
 
         state = IDLE_INSIDE;
 
-        home = b;
+        home = building;
 
         /* Allow subclasses to add logic */
-        onEnterBuilding(b);
+        onEnterBuilding(building);
     }
 
     public boolean isInsideBuilding() {
         return state == IDLE_INSIDE;
     }
 
-    public boolean isAt(Point p2) {
-        return isExactlyAtPoint() && position.equals(p2);
+    public boolean isAt(Point point) {
+        return isExactlyAtPoint() && position.equals(point);
     }
 
     public Cargo getCargo() {
         return carriedCargo;
     }
 
-    protected void setOffroadTarget(Point p) throws Exception {
-        setOffroadTarget(p, null);
+    protected void setOffroadTarget(Point point) throws Exception {
+        setOffroadTarget(point, null);
     }
 
-    protected void setOffroadTarget(Point p, Point via) throws Exception {
+    protected void setOffroadTarget(Point point, Point via) throws Exception {
         boolean wasInside = false;
 
-        log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {p, via});
+        log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {point, via});
 
-        target = p;
+        target = point;
 
         if (state == IDLE_INSIDE) {
             wasInside = true;
         }
 
-        if (position.equals(p)) {
+        if (position.equals(point)) {
             state = IDLE_OUTSIDE;
 
             handleArrival();
         } else {
             if (wasInside && !target.equals(home.getFlag().getPosition())) {                
                 if (via != null) {
-                    path = map.findWayOffroad(home.getFlag().getPosition(), p, via, null);
+                    path = map.findWayOffroad(home.getFlag().getPosition(), point, via, null);
                 } else {
-                    path = map.findWayOffroad(home.getFlag().getPosition(), p, null);
+                    path = map.findWayOffroad(home.getFlag().getPosition(), point, null);
                 }
 
                 path.add(0, home.getPosition());
             } else {
                 if (via != null) {
-                    path = map.findWayOffroad(getPosition(), p, via, null);
+                    path = map.findWayOffroad(getPosition(), point, via, null);
                 } else {
-                    path = map.findWayOffroad(getPosition(), p, null);
+                    path = map.findWayOffroad(getPosition(), point, null);
                 }
             }
 
@@ -319,24 +319,24 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    protected void setTarget(Point p) throws Exception {
+    protected void setTarget(Point point) throws Exception {
         if (state == IDLE_INSIDE) {
-            if (!p.equals(home.getFlag().getPosition())) {        
-                setTarget(p, home.getFlag().getPosition());
+            if (!point.equals(home.getFlag().getPosition())) {        
+                setTarget(point, home.getFlag().getPosition());
             } else {
-                setTarget(p, null);
+                setTarget(point, null);
             }
         } else {
-            setTarget(p, null);
+            setTarget(point, null);
         }
     }
 
-    protected void setTarget(Point p, Point via) throws InvalidRouteException, Exception {
-        log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {p, via});
+    protected void setTarget(Point point, Point via) throws InvalidRouteException, Exception {
+        log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {point, via});
 
-        target = p;
+        target = point;
 
-        if (position.equals(p)) {
+        if (position.equals(point)) {
             state = IDLE_OUTSIDE;
 
             handleArrival();
@@ -399,8 +399,8 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    protected void setHome(Building h) {
-        home = h;
+    protected void setHome(Building building) {
+        home = building;
     }
 
     void returnToStorage() throws Exception {

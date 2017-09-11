@@ -59,7 +59,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     private static final Logger log = Logger.getLogger(Building.class.getName());
 
-    public Building(Player p) {
+    public Building(Player player) {
         receivedMaterial      = createEmptyMaterialIntMap();
         promisedDeliveries    = createEmptyMaterialIntMap();
         countdown             = new Countdown();
@@ -83,9 +83,9 @@ public class Building implements Actor, EndPoint, Piece {
         countdown.countFrom(getConstructionCountdown());
 
         state = State.UNDER_CONSTRUCTION;
-        player = p;
+        this.player = player;
 
-        flag.setPlayer(p);
+        flag.setPlayer(player);
 
         /* Initialize goods required for production if the building does any
            any production
@@ -106,12 +106,12 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     int getDefenceRadius() {
-        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (mb == null) {
+        if (militaryBuilding == null) {
             return 0;
         } else {
-            return mb.defenceRadius();
+            return militaryBuilding.defenceRadius();
         }    
     }
 
@@ -130,13 +130,13 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     Collection<Point> getDiscoveredLand() {
-        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (mb == null) {
+        if (militaryBuilding == null) {
             return new LinkedList<>();
         }
 
-        return map.getPointsWithinRadius(getPosition(), mb.defenceRadius() + 2);
+        return map.getPointsWithinRadius(getPosition(), militaryBuilding.defenceRadius() + 2);
     }
 
     boolean isMine() {
@@ -147,13 +147,13 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private int getMaxCoins() {
-        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        return mb.maxCoins();
+        return militaryBuilding.maxCoins();
     }
 
-    protected void setMap(GameMap m) throws Exception {
-        map = m;
+    protected void setMap(GameMap map) throws Exception {
+        this.map = map;
     }
 
     public GameMap getMap() {
@@ -161,18 +161,18 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean isMilitaryBuilding() {
-        MilitaryBuilding a = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        return a != null;
+        return militaryBuilding != null;
     }
 
     public int getMaxHostedMilitary() {
-        MilitaryBuilding mb = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (mb == null) {
+        if (militaryuilding == null) {
             return 0;
         } else {
-            return mb.maxHostedMilitary();
+            return militaryuilding.maxHostedMilitary();
         }
     }
 
@@ -193,20 +193,20 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public Material getWorkerType() throws Exception {
-        RequiresWorker rw = getClass().getAnnotation(RequiresWorker.class);
+        RequiresWorker requiresWorker = getClass().getAnnotation(RequiresWorker.class);
 
-        if (rw == null) {
+        if (requiresWorker == null) {
             throw new Exception("No worker needed in " + this);
         }
 
-        return rw.workerType();
+        return requiresWorker.workerType();
     }
 
-    public void promiseMilitary(Military m) {
-        promisedMilitary.add(m);
+    public void promiseMilitary(Military military) {
+        promisedMilitary.add(military);
     }
 
-    public void promiseWorker(Worker w) throws Exception {
+    public void promiseWorker(Worker worker) throws Exception {
         if (!ready()) {
             throw new Exception("Can't promise worker to building in state " + state);
         }
@@ -215,7 +215,7 @@ public class Building implements Actor, EndPoint, Piece {
             throw new Exception("Building " + this + " is already promised worker " + promisedWorker);
         }
 
-        promisedWorker = w;
+        promisedWorker = worker;
     }
 
     public boolean needsMilitaryManning() {
@@ -238,11 +238,11 @@ public class Building implements Actor, EndPoint, Piece {
         return promisedMilitary.size();
     }
 
-    public void assignWorker(Worker w) throws Exception {
+    public void assignWorker(Worker worker) throws Exception {
 
         /* A building can't get an assigned worker while it's still under construction */
         if (underConstruction()) {
-            throw new Exception("Can't assign " + w + " to unfinished " + this);
+            throw new Exception("Can't assign " + worker + " to unfinished " + this);
         }
 
         /* A building can only have one worker */
@@ -255,9 +255,9 @@ public class Building implements Actor, EndPoint, Piece {
             throw new Exception("Can't assign worker to military building");
         }
 
-        log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[]{w, this});
+        log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[]{worker, this});
 
-        worker = w;
+        this.worker = worker;
         promisedWorker = null;
 
         state = State.OCCUPIED;
@@ -303,15 +303,15 @@ public class Building implements Actor, EndPoint, Piece {
         return position;
     }
 
-    void setPosition(Point p) {
-        position = p;
+    void setPosition(Point point) {
+        position = point;
     }
 
     @Override
-    public void putCargo(Cargo c) throws Exception {
-        log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{c, receivedMaterial});
+    public void putCargo(Cargo cargo) throws Exception {
+        log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{cargo, receivedMaterial});
 
-        Material material = c.getMaterial();
+        Material material = cargo.getMaterial();
 
         /* Plancks and stone can be delivered during construction */
         if (underConstruction()) {
@@ -319,7 +319,7 @@ public class Building implements Actor, EndPoint, Piece {
             Map<Material, Integer> materialsNeeded = getMaterialsToBuildHouse();
 
             /* Throw an exception if another material is being delivered */
-            if (!materialsNeeded.containsKey(c.getMaterial())) {
+            if (!materialsNeeded.containsKey(cargo.getMaterial())) {
                 throw new InvalidMaterialException(material);
             }
 
@@ -341,7 +341,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
 
             if (!canAcceptGoods()) {
-                throw new DeliveryNotPossibleException(this, c);
+                throw new DeliveryNotPossibleException(this, cargo);
             }
 
             if (!isAccepted(material)) {
@@ -390,10 +390,10 @@ public class Building implements Actor, EndPoint, Piece {
         return str;
     }
 
-    public void promiseDelivery(Material m) {
-        int amount = promisedDeliveries.get(m);
+    public void promiseDelivery(Material material) {
+        int amount = promisedDeliveries.get(material);
 
-        promisedDeliveries.put(m, amount + 1);
+        promisedDeliveries.put(material, amount + 1);
     }
 
     @Override
@@ -569,19 +569,19 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private Map<Material, Integer> getMaterialsToBuildHouse() {
-        HouseSize hs                     = getClass().getAnnotation(HouseSize.class);
-        Material[] materialsArray        = hs.material();
+        HouseSize houseSize              = getClass().getAnnotation(HouseSize.class);
+        Material[] materialsArray        = houseSize.material();
         Map<Material, Integer> materials = new HashMap<>();
 
         if (materialsArray.length != 0) {
-            for (Material m : materialsArray) {
+            for (Material material : materialsArray) {
 
-                if (!materials.containsKey(m)) {
-                    materials.put(m, 0);
+                if (!materials.containsKey(material)) {
+                    materials.put(material, 0);
                 }
 
-                int amount = materials.get(m);
-                materials.put(m, amount + 1);
+                int amount = materials.get(material);
+                materials.put(material, amount + 1);
             }
         }
 
@@ -687,17 +687,17 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     @Override
-    public boolean hasCargoWaitingForRoad(Road r) {
+    public boolean hasCargoWaitingForRoad(Road road) {
         return false;
     }
 
     @Override
-    public Cargo retrieveCargo(Cargo c) {
+    public Cargo retrieveCargo(Cargo cargo) {
         return null;
     }
 
     @Override
-    public Cargo getCargoWaitingForRoad(Road r) {
+    public Cargo getCargoWaitingForRoad(Road road) {
         return null;
     }
 
@@ -785,14 +785,14 @@ public class Building implements Actor, EndPoint, Piece {
         return player;
     }
 
-    void setPlayer(Player p) {
-        if (player != null) {
+    void setPlayer(Player player) {
+        if (this.player != null) {
             player.removeBuilding(this);
         }
 
-        player = p;
+        this.player = player;
 
-        flag.setPlayer(p);
+        flag.setPlayer(player);
 
         player.addBuilding(this);
     }
@@ -916,10 +916,10 @@ public class Building implements Actor, EndPoint, Piece {
         return false;
     }
 
-    void capture(Player p) throws Exception {
+    void capture(Player player) throws Exception {
 
         /* Change the ownership of the building */
-        setPlayer(p);
+        setPlayer(player);
 
         /* Reset the number of promised militaries */
         promisedMilitary.clear();
@@ -930,10 +930,10 @@ public class Building implements Actor, EndPoint, Piece {
         ownDefender = null;
     }
 
-    void cancelPromisedDelivery(Cargo aThis) {
-        int amount = promisedDeliveries.get(aThis.getMaterial());
+    void cancelPromisedDelivery(Cargo cargo) {
+        int amount = promisedDeliveries.get(cargo.getMaterial());
 
-        promisedDeliveries.put(aThis.getMaterial(), amount - 1);
+        promisedDeliveries.put(cargo.getMaterial(), amount - 1);
     }
 
     private Integer getProjectedAmount(Material material) {

@@ -72,10 +72,10 @@ public class Military extends Worker {
     private State     state;
     private int       health;
 
-    public Military(Player player, Rank r, GameMap map) {
+    public Military(Player player, Rank rank, GameMap map) {
         super(player, map);
 
-        rank = r;
+        this.rank = rank;
 
         health = getHealthForRank(rank);
 
@@ -356,31 +356,31 @@ public class Military extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) throws Exception {
-        if (b.isMilitaryBuilding()) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) throws Exception {
+        if (building.isMilitaryBuilding()) {
+            setHome(building);
         }
 
 	if (state == State.WALKING_TO_TARGET             ||
 	    state == State.WALKING_TO_TAKE_OVER_BUILDING ||
 	    state == State.WALKING_HOME_AFTER_FIGHT      ||
             state == State.DEPLOYED) {
-            b.deployMilitary(this);
+            building.deployMilitary(this);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
+        Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;
 
-        if (stg != null) {
-            setTarget(stg.getPosition());
+        if (storage != null) {
+            setTarget(storage.getPosition());
         } else {
-            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
-            setOffroadTarget(stg.getPosition());
+            setOffroadTarget(storage.getPosition());
         }
     }
 
@@ -477,7 +477,7 @@ public class Military extends Worker {
         }
     }
 
-    private void hit(Military m) {
+    private void hit(Military military) {
 
         /* Decrease health */
         health--;
@@ -564,10 +564,10 @@ public class Military extends Worker {
         }
     }
 
-    private void prepareForFight(Military m) throws Exception {
+    private void prepareForFight(Military military) throws Exception {
 
         /* Remember the opponent */
-        opponent = m;
+        opponent = military;
 
         /* Walk half way to the next point to not stand on top of the defender */
         walkHalfWayOffroadTo(getPosition().left());

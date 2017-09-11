@@ -41,8 +41,8 @@ public class StorageWorker extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public StorageWorker(Player player, GameMap m) {
-        super(player, m);
+    public StorageWorker(Player player, GameMap map) {
+        super(player, map);
 
         state = State.WALKING_TO_TARGET;
 
@@ -81,15 +81,15 @@ public class StorageWorker extends Worker {
                This will perform the quick tests first and only perform the
                expensive test if the quick ones pass
             */
-            for (Building b : getPlayer().getBuildings()) {
+            for (Building building : getPlayer().getBuildings()) {
 
                 /* Don't deliver to itself */
-                if (ownStorage.equals(b)) {
+                if (ownStorage.equals(building)) {
                     continue;
                 }
 
                 /* Don't deliver to burning or destroyed buildings */
-                if (b.burningDown() || b.destroyed()) {
+                if (building.burningDown() || building.destroyed()) {
                     continue;
                 }
 
@@ -97,35 +97,35 @@ public class StorageWorker extends Worker {
                    the limit is critically low */
                 if (material == PLANCK && 
                     ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
-                    !(b instanceof Sawmill)     &&
-                    !(b instanceof ForesterHut) &&
-                    !(b instanceof Woodcutter)) {
+                    !(building instanceof Sawmill)     &&
+                    !(building instanceof ForesterHut) &&
+                    !(building instanceof Woodcutter)) {
                     continue;
                 }
 
                 /* Check if the building needs the material */
-                if (!b.needsMaterial(material)) {
+                if (!building.needsMaterial(material)) {
                     continue;
                 }
 
                 /* Check that the building type is within its assigned quota */
-                if (!isWithinQuota(b, material) && !(resetAllocationIfNeeded(material) && isWithinQuota(b, material))) {
+                if (!isWithinQuota(building, material) && !(resetAllocationIfNeeded(material) && isWithinQuota(building, material))) {
                     continue;
                 }
 
                 /* Filter out buildings that cannot be reached from the storage */
-                if (!map.arePointsConnectedByRoads(getHome().getPosition(), b.getPosition())) {
+                if (!map.arePointsConnectedByRoads(getHome().getPosition(), building.getPosition())) {
                     continue;
                 }
 
                 /* Deliver to the building */
-                b.promiseDelivery(material);
+                building.promiseDelivery(material);
 
                 Cargo cargo = ownStorage.retrieve(material);
-                cargo.setTarget(b);
+                cargo.setTarget(building);
 
                 /* Track allocation */
-                trackAllocation(b, material);
+                trackAllocation(building, material);
 
                 return cargo;
             }
@@ -135,11 +135,11 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Storage) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Storage) {
+            setHome(building);
 
-            ownStorage = (Storage)b;
+            ownStorage = (Storage)building;
         }
 
         state = State.RESTING_IN_HOUSE;
@@ -254,16 +254,16 @@ public class StorageWorker extends Worker {
         return false;
     }
 
-    private void trackAllocation(Building b, Material m) {
+    private void trackAllocation(Building building, Material material) {
 
-        if (isFood(m)) {
+        if (isFood(material)) {
 
-            int amount = assignedFood.get(b.getClass());
-            assignedFood.put(b.getClass(), amount + 1);
+            int amount = assignedFood.get(building.getClass());
+            assignedFood.put(building.getClass(), amount + 1);
 
-        } else if (m == COAL) {
-            int amount = assignedCoal.get(b.getClass());
-            assignedCoal.put(b.getClass(), amount + 1);
+        } else if (material == COAL) {
+            int amount = assignedCoal.get(building.getClass());
+            assignedCoal.put(building.getClass(), amount + 1);
         }
     }
 
@@ -271,41 +271,41 @@ public class StorageWorker extends Worker {
         return material == FISH || material == BREAD || material == MEAT;
     }
 
-    private boolean isWithinQuota(Building b, Material m) {
+    private boolean isWithinQuota(Building building, Material material) {
 
         /* Handle quota for food */
-        if (isFood(m)) {
-            int quota = getPlayer().getFoodQuota(b.getClass());
+        if (isFood(material)) {
+            int quota = getPlayer().getFoodQuota(building.getClass());
 
-            return assignedFood.get(b.getClass()) < quota;
+            return assignedFood.get(building.getClass()) < quota;
         }
 
         /* Handle quota for coal */
-        if (m == COAL) {
-            int quota = getPlayer().getCoalQuota(b.getClass());
+        if (material == COAL) {
+            int quota = getPlayer().getCoalQuota(building.getClass());
 
-            return assignedCoal.get(b.getClass()) < quota;
+            return assignedCoal.get(building.getClass()) < quota;
         }
 
         /* All other materials are without quota */
         return true;
     }
 
-    private boolean overQuota(Class<? extends Building> aClass) {
+    private boolean overQuota(Class<? extends Building> buildingType) {
 
         /* Handle food quota for mines */
-        if (aClass.equals(GoldMine.class) ||
-            aClass.equals(IronMine.class) ||
-            aClass.equals(CoalMine.class) ||
-            aClass.equals(GraniteMine.class)) {
-            return assignedFood.get(aClass) >= getPlayer().getFoodQuota(aClass);
+        if (buildingType.equals(GoldMine.class) ||
+            buildingType.equals(IronMine.class) ||
+            buildingType.equals(CoalMine.class) ||
+            buildingType.equals(GraniteMine.class)) {
+            return assignedFood.get(buildingType) >= getPlayer().getFoodQuota(buildingType);
         }
 
         /* Handle coal quota for coal consumers */
-        if (aClass.equals(IronSmelter.class) ||
-            aClass.equals(Mint.class)        ||
-            aClass.equals(Armory.class)) {
-            return assignedCoal.get(aClass) >= getPlayer().getCoalQuota(aClass);
+        if (buildingType.equals(IronSmelter.class) ||
+            buildingType.equals(Mint.class)        ||
+            buildingType.equals(Armory.class)) {
+            return assignedCoal.get(buildingType) >= getPlayer().getCoalQuota(buildingType);
         }
 
         /* All other buildlings have no quota */
@@ -316,10 +316,10 @@ public class StorageWorker extends Worker {
             Class<? extends Building> aClass,
             Material material) {
 
-        for (Building b : buildings) {
-            if (b.getClass().equals(aClass) && 
-                b.ready()                   && 
-                b.needsMaterial(material)) {
+        for (Building building : buildings) {
+            if (building.getClass().equals(aClass) && 
+                building.ready()                   && 
+                building.needsMaterial(material)) {
                 return true;
             }
         }
