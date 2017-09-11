@@ -28,6 +28,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -1417,5 +1418,211 @@ public class TestForesterHut {
 
         /* Verify that the forester goes back to storage */
         assertEquals(forester.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testForesterGoesOffroadBackToClosestStorageWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(17, 17);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
+
+        /* Finish construction of the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+
+        /* Occupy the foresterHut */
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+
+        /* Place a second storage closer to the forester hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the forester hut */
+        Worker forester = foresterHut0.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(FORESTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, storage0.getPosition());
+
+        /* Verify that the forester is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(FORESTER), amount + 1);
+    }
+
+    @Test
+    public void testForesterReturnsOffroadAndAvoidsBurningStorageWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(17, 17);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
+
+        /* Finish construction of the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+
+        /* Occupy the forester hut */
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+
+        /* Place a second storage closer to the forester hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the forester hut */
+        Worker forester = foresterHut0.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(FORESTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+
+        /* Verify that the forester is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
+    }
+
+    @Test
+    public void testForesterReturnsOffroadAndAvoidsDestroyedStorageWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(17, 17);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
+
+        /* Finish construction of the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+
+        /* Occupy the foresterHut */
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+
+        /* Place a second storage closer to the forester hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the forester hut */
+        Worker forester = foresterHut0.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(FORESTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+
+        /* Verify that the forester is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
+    }
+
+    @Test
+    public void testForesterReturnsOffroadAndAvoidsUnfinishedStorageWhenForesterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing forester hut */
+        Point point26 = new Point(17, 17);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
+
+        /* Finish construction of the foresterHut */
+        Utils.constructHouse(foresterHut0, map);
+
+        /* Occupy the forester hut */
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+
+        /* Place a second storage closer to the foresterHut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the forester hut */
+        Worker forester = foresterHut0.getWorker();
+
+        assertTrue(forester.isInsideBuilding());
+        assertEquals(forester.getPosition(), foresterHut0.getPosition());
+
+        foresterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(forester.isInsideBuilding());
+        assertEquals(forester.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(FORESTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, forester, headquarter0.getPosition());
+
+        /* Verify that the forester is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(FORESTER), amount + 1);
     }
 }

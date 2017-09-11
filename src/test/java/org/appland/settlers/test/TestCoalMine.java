@@ -33,6 +33,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -1454,5 +1455,227 @@ public class TestCoalMine {
 
         /* Verify that the miner goes back to storage */
         assertEquals(miner.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testMinerGoesOffroadBackToClosestStorageWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Put a small mountain on the map */
+        Point point3 = new Point(17, 17);
+        Utils.surroundPointWithMountain(point3, map);
+        Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+
+        /* Finish construction of the coal mine */
+        Utils.constructHouse(coalMine0, map);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
+
+        /* Place a second storage closer to the coal mine */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the coal mine */
+        Worker miner = coalMine0.getWorker();
+
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(MINER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, storage0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(MINER), amount + 1);
+    }
+
+    @Test
+    public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Put a small mountain on the map */
+        Point point3 = new Point(17, 17);
+        Utils.surroundPointWithMountain(point3, map);
+        Utils.putCoalAtSurroundingTiles(point3, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point3);
+
+        /* Finish construction of the coal mine */
+        Utils.constructHouse(coalMine0, map);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
+
+        /* Place a second storage closer to the coal mine */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the coal mine */
+        Worker miner = coalMine0.getWorker();
+
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(MINER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MINER), amount + 1);
+    }
+
+    @Test
+    public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(17, 17);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Finish construction of the coal mine */
+        Utils.constructHouse(coalMine0, map);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
+
+        /* Place a second storage closer to the coal mine */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the coal mine */
+        Worker miner = coalMine0.getWorker();
+
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(MINER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MINER), amount + 1);
+    }
+
+    @Test
+    public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenCoalMineIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(17, 17);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
+
+        /* Placing coal mine */
+        Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
+
+        /* Finish construction of the coal mine */
+        Utils.constructHouse(coalMine0, map);
+
+        /* Occupy the coal mine */
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
+
+        /* Place a second storage closer to the coal mine */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the coal mine */
+        Worker miner = coalMine0.getWorker();
+
+        assertTrue(miner.isInsideBuilding());
+        assertEquals(miner.getPosition(), coalMine0.getPosition());
+
+        coalMine0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(miner.isInsideBuilding());
+        assertEquals(miner.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(MINER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getPosition());
+
+        /* Verify that the miner is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(MINER), amount + 1);
     }
 }

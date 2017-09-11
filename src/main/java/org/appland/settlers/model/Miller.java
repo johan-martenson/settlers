@@ -121,14 +121,13 @@ public class Miller extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            for (Building b : getPlayer().getBuildings()) {
-                if (b instanceof Storage) {
-                    state = RETURNING_TO_STORAGE;
 
-                    setOffroadTarget(b.getPosition());
+            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
-                    break;
-                }
+            if (storage != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setOffroadTarget(storage.getPosition());
             }
         }
     }

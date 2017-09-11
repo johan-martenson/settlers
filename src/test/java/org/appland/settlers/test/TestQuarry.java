@@ -29,6 +29,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -1392,5 +1393,211 @@ public class TestQuarry {
 
         /* Verify that the stone mason goes back to storage */
         assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testStonemasonGoesOffroadBackToClosestStorageWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(17, 17);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        /* Place a second storage closer to the quarry */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the quarry */
+        Worker stonemason = quarry0.getWorker();
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(STONEMASON);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storage0.getPosition());
+
+        /* Verify that the stonemason is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(STONEMASON), amount + 1);
+    }
+
+    @Test
+    public void testStonemasonReturnsOffroadAndAvoidsBurningStorageWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(17, 17);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        /* Place a second storage closer to the quarry */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the quarry */
+        Worker stonemason = quarry0.getWorker();
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STONEMASON);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+
+        /* Verify that the stonemason is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
+    }
+
+    @Test
+    public void testStonemasonReturnsOffroadAndAvoidsDestroyedStorageWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(17, 17);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        /* Place a second storage closer to the quarry */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the quarry */
+        Worker stonemason = quarry0.getWorker();
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STONEMASON);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+
+        /* Verify that the stonemason is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
+    }
+
+    @Test
+    public void testStonemasonReturnsOffroadAndAvoidsUnfinishedStorageWhenQuarryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing quarry */
+        Point point26 = new Point(17, 17);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Occupy the quarry */
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        /* Place a second storage closer to the quarry */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the quarry */
+        Worker stonemason = quarry0.getWorker();
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getPosition(), quarry0.getPosition());
+
+        quarry0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STONEMASON);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getPosition());
+
+        /* Verify that the stonemason is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STONEMASON), amount + 1);
     }
 }

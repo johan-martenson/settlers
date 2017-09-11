@@ -31,6 +31,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1330,5 +1331,211 @@ public class TestIronSmelter {
 
         /* Verify that the iron founder goes back to storage */
         assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testIronFounderGoesOffroadBackToClosestStorageWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(17, 17);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point26);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+
+        /* Place a second storage closer to the iron smelter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the iron smelter */
+        Worker ironFounder = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getPosition());
+
+        ironSmelter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(IRON_FOUNDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, storage0.getPosition());
+
+        /* Verify that the ironFounder is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(IRON_FOUNDER), amount + 1);
+    }
+
+    @Test
+    public void testIronFounderReturnsOffroadAndAvoidsBurningStorageWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(17, 17);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point26);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+
+        /* Place a second storage closer to the iron smelter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the iron smelter */
+        Worker ironFounder = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getPosition());
+
+        ironSmelter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(IRON_FOUNDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+
+        /* Verify that the iron founder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
+    }
+
+    @Test
+    public void testIronFounderReturnsOffroadAndAvoidsDestroyedStorageWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(17, 17);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point26);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+
+        /* Place a second storage closer to the iron smelter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the iron smelter */
+        Worker ironFounder = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getPosition());
+
+        ironSmelter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(IRON_FOUNDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+
+        /* Verify that the iron founder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
+    }
+
+    @Test
+    public void testIronFounderReturnsOffroadAndAvoidsUnfinishedStorageWhenIronSmelterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing iron smelter */
+        Point point26 = new Point(17, 17);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point26);
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Occupy the iron smelter */
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
+
+        /* Place a second storage closer to the iron smelter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the iron smelter */
+        Worker ironFounder = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getPosition());
+
+        ironSmelter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(ironFounder.isInsideBuilding());
+        assertEquals(ironFounder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(IRON_FOUNDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getPosition());
+
+        /* Verify that the iron founder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), amount + 1);
     }
 }

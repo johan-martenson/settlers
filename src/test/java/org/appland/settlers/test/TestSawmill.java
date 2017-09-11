@@ -29,6 +29,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1248,5 +1249,211 @@ public class TestSawmill {
 
         /* Verify that the sawmill worker goes back to storage */
         assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testSawmillWorkerGoesOffroadBackToClosestStorageWhenSawmillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(17, 17);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Occupy the sawmill */
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+
+        /* Place a second storage closer to the sawmill */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the sawmill */
+        Worker sawmillWorker = sawmill0.getWorker();
+
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+
+        sawmill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(SAWMILL_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storage0.getPosition());
+
+        /* Verify that the sawmill worker is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(SAWMILL_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testSawmillWorkerReturnsOffroadAndAvoidsBurningStorageWhenSawmillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(17, 17);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Occupy the sawmill */
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+
+        /* Place a second storage closer to the sawmill */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the sawmill */
+        Worker sawmillWorker = sawmill0.getWorker();
+
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+
+        sawmill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+
+        /* Verify that the sawmill worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testSawmillWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenSawmillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(17, 17);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Occupy the sawmill */
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+
+        /* Place a second storage closer to the sawmill */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the sawmill */
+        Worker sawmillWorker = sawmill0.getWorker();
+
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+
+        sawmill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+
+        /* Verify that the sawmill worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testSawmillWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenSawmillIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing sawmill */
+        Point point26 = new Point(17, 17);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Occupy the sawmill */
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+
+        /* Place a second storage closer to the sawmill */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the sawmill */
+        Worker sawmillWorker = sawmill0.getWorker();
+
+        assertTrue(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getPosition(), sawmill0.getPosition());
+
+        sawmill0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(sawmillWorker.isInsideBuilding());
+        assertEquals(sawmillWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(SAWMILL_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, headquarter0.getPosition());
+
+        /* Verify that the sawmill worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
     }
 }

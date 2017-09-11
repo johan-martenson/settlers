@@ -24,6 +24,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
@@ -1125,5 +1126,211 @@ public class TestHunterHut {
 
         /* Verify that the hunter goes back to storage */
         assertEquals(hunter.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testHunterGoesOffroadBackToClosestStorageWhenHunterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing hunterHut */
+        Point point26 = new Point(17, 17);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
+
+        /* Finish construction of the hunterHut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Occupy the hunterHut */
+        Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Place a second storage closer to the hunterHut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the hunterHut */
+        Worker hunter = hunterHut0.getWorker();
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+
+        hunterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(hunter.isInsideBuilding());
+        assertEquals(hunter.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(HUNTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, storage0.getPosition());
+
+        /* Verify that the hunter is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(HUNTER), amount + 1);
+    }
+
+    @Test
+    public void testHunterReturnsOffroadAndAvoidsBurningStorageWhenHunterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing hunter hut */
+        Point point26 = new Point(17, 17);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Occupy the hunter hut */
+        Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Place a second storage closer to the hunter hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the hunter hut */
+        Worker hunter = hunterHut0.getWorker();
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+
+        hunterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(hunter.isInsideBuilding());
+        assertEquals(hunter.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(HUNTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+
+        /* Verify that the hunter is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
+    }
+
+    @Test
+    public void testHunterReturnsOffroadAndAvoidsDestroyedStorageWhenHunterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing hunter hut */
+        Point point26 = new Point(17, 17);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Occupy the hunter hut */
+        Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Place a second storage closer to the hunter hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the hunter hut */
+        Worker hunter = hunterHut0.getWorker();
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+
+        hunterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(hunter.isInsideBuilding());
+        assertEquals(hunter.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(HUNTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+
+        /* Verify that the hunter is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
+    }
+
+    @Test
+    public void testHunterReturnsOffroadAndAvoidsUnfinishedStorageWhenHunterHutIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing hunter hut */
+        Point point26 = new Point(17, 17);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Occupy the hunter hut */
+        Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Place a second storage closer to the hunter hut */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the hunter hut */
+        Worker hunter = hunterHut0.getWorker();
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+
+        hunterHut0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(hunter.isInsideBuilding());
+        assertEquals(hunter.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(HUNTER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getPosition());
+
+        /* Verify that the hunter is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(HUNTER), amount + 1);
     }
 }

@@ -1,6 +1,5 @@
 package org.appland.settlers.model;
 
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -196,42 +195,42 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
-        for (Building b : getPlayer().getBuildings()) {
-            if (b.isMilitaryBuilding()) {
+        for (Building building : getPlayer().getBuildings()) {
+            if (building.isMilitaryBuilding()) {
                 if (!hasMilitary()) {
                     continue;
                 }
 
-                if (b.needsMilitaryManning()) {
-                    if (!isClosestStorage(b)) {
+                if (building.needsMilitaryManning()) {
+                    if (!isClosestStorage(building)) {
                         continue;
                     }
 
                     Military m = retrieveAnyMilitary();
                     getMap().placeWorker(m, this);
-                    m.setTargetBuilding(b);
-                    b.promiseMilitary(m);
+                    m.setTargetBuilding(building);
+                    building.promiseMilitary(m);
 
                     return true;
                 }
             } else {
-                if (b.needsWorker()) {
-                    Material m = b.getWorkerType();
+                if (building.needsWorker()) {
+                    Material material = building.getWorkerType();
 
-                    if (!hasAtLeastOne(m)) {
+                    if (!hasAtLeastOne(material)) {
                         continue;
                     }
 
-                    Storage stg = GameUtils.getClosestStorage(b.getPosition(), b, getMap());
+                    Storage storage = GameUtils.getClosestStorage(building.getPosition(), building, getMap());
 
-                    if (!equals(stg)) {
+                    if (!equals(storage)) {
                         continue;
                     }
 
-                    Worker w = stg.retrieveWorker(m);
-                    getMap().placeWorker(w, stg.getFlag());
-                    w.setTargetBuilding(b);
-                    b.promiseWorker(w);
+                    Worker worker = storage.retrieveWorker(material);
+                    getMap().placeWorker(worker, storage.getFlag());
+                    worker.setTargetBuilding(building);
+                    building.promiseWorker(worker);
 
                     return true;
                 }

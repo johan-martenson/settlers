@@ -30,6 +30,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
@@ -1838,5 +1839,211 @@ public class TestWoodcutter {
 
         /* Verify that the woodcutter worker goes back to storage */
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWoodcutterWorkerGoesOffroadBackToClosestStorageWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(17, 17);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Place a second storage closer to the woodcutter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the woodcutter */
+        Worker woodcutterWorker = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(WOODCUTTER_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, storage0.getPosition());
+
+        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(WOODCUTTER_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWoodcutterWorkerReturnsOffroadAndAvoidsBurningStorageWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(17, 17);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Place a second storage closer to the woodcutter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the woodcutter */
+        Worker woodcutterWorker = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+
+        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWoodcutterWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(17, 17);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Place a second storage closer to the woodcutter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the woodcutter */
+        Worker woodcutterWorker = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+
+        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWoodcutterWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenWoodcutterIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing woodcutter */
+        Point point26 = new Point(17, 17);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Place a second storage closer to the woodcutter */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the woodcutter */
+        Worker woodcutterWorker = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getPosition());
+
+        woodcutter0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(WOODCUTTER_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+
+        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 }

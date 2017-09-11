@@ -31,6 +31,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1185,5 +1186,211 @@ public class TestBakery {
 
         /* Verify that the baker goes back to storage */
         assertEquals(baker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testBakerGoesOffroadBackToClosestStorageWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(17, 17);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
+
+        /* Place a second storage closer to the bakery */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the bakery */
+        Worker baker = bakery0.getWorker();
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(baker.isInsideBuilding());
+        assertEquals(baker.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(BAKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, storage0.getPosition());
+
+        /* Verify that the baker is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(BAKER), amount + 1);
+    }
+
+    @Test
+    public void testBakerReturnsOffroadAndAvoidsBurningStorageWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(17, 17);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
+
+        /* Place a second storage closer to the bakery */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the bakery */
+        Worker baker = bakery0.getWorker();
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(baker.isInsideBuilding());
+        assertEquals(baker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(BAKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+
+        /* Verify that the baker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BAKER), amount + 1);
+    }
+
+    @Test
+    public void testBakerReturnsOffroadAndAvoidsDestroyedStorageWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(17, 17);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
+
+        /* Place a second storage closer to the bakery */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the bakery */
+        Worker baker = bakery0.getWorker();
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(baker.isInsideBuilding());
+        assertEquals(baker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(BAKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+
+        /* Verify that the baker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BAKER), amount + 1);
+    }
+
+    @Test
+    public void testBakerReturnsOffroadAndAvoidsUnfinishedStorageWhenBakeryIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing bakery */
+        Point point26 = new Point(17, 17);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point26);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Occupy the bakery */
+        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
+
+        /* Place a second storage closer to the bakery */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the bakery */
+        Worker baker = bakery0.getWorker();
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getPosition(), bakery0.getPosition());
+
+        bakery0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(baker.isInsideBuilding());
+        assertEquals(baker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(BAKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getPosition());
+
+        /* Verify that the baker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(BAKER), amount + 1);
     }
 }

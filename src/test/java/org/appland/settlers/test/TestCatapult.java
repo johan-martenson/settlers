@@ -27,7 +27,9 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Flag;
+import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import org.appland.settlers.model.Projectile;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
@@ -1280,5 +1282,199 @@ public class TestCatapult {
 
         /* Verify that the catapult worker goes back to storage */
         assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerGoesOffroadBackToClosestStorageWhenCatapultIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing catapult */
+        Point point26 = new Point(17, 17);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult0, map);
+
+        /* Occupy the catapult */
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+
+        /* Place a second storage closer to the catapult */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the catapult */
+        Worker catapultWorker = catapult0.getWorker();
+
+        assertTrue(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
+
+        catapult0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(CATAPULT_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, storage0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerReturnsOffroadAndAvoidsBurningStorageWhenCatapultIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing catapult */
+        Point point26 = new Point(17, 17);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult0, map);
+
+        /* Occupy the catapult */
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+
+        /* Place a second storage closer to the catapult */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the catapult */
+        Worker catapultWorker = catapult0.getWorker();
+
+        assertTrue(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
+
+        catapult0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenCatapultIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing catapult */
+        Point point26 = new Point(17, 17);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult0, map);
+
+        /* Occupy the catapult */
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+
+        /* Place a second storage closer to the catapult */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the catapult */
+        Worker catapultWorker = catapult0.getWorker();
+
+        assertTrue(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
+
+        catapult0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCatapultWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenCatapultIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing catapult */
+        Point point26 = new Point(17, 17);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult0, map);
+
+        /* Occupy the catapult */
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+
+        /* Place a second storage closer to the catapult */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the catapult */
+        Worker catapultWorker = catapult0.getWorker();
+
+        assertTrue(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getPosition(), catapult0.getPosition());
+
+        catapult0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(CATAPULT_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, headquarter0.getPosition());
     }
 }

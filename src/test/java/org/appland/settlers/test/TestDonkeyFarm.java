@@ -29,6 +29,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1663,5 +1664,211 @@ public class TestDonkeyFarm {
 
         /* Verify that the donkey breeder goes back to storage */
         assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testDonkeyBreederGoesOffroadBackToClosestStorageWhenDonkeyFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing donkey farm */
+        Point point26 = new Point(17, 17);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Occupy the donkey farm */
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
+
+        /* Place a second storage closer to the donkey farm */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the donkey farm */
+        Worker donkeyBreeder = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getPosition());
+
+        donkeyFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getTarget(), storage0.getPosition());
+
+        int amount = storage0.getAmount(DONKEY_BREEDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, storage0.getPosition());
+
+        /* Verify that the donkey breeder is stored correctly in the headquarter */
+        assertEquals(storage0.getAmount(DONKEY_BREEDER), amount + 1);
+    }
+
+    @Test
+    public void testDonkeyBreederReturnsOffroadAndAvoidsBurningStorageWhenDonkeyFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing donkey farm */
+        Point point26 = new Point(17, 17);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Occupy the donkey farm */
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
+
+        /* Place a second storage closer to the donkey farm */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Destroy the donkey farm */
+        Worker donkeyBreeder = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getPosition());
+
+        donkeyFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+
+        /* Verify that the donkey breeder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
+    }
+
+    @Test
+    public void testDonkeyBreederReturnsOffroadAndAvoidsDestroyedStorageWhenDonkeyFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing donkey farm */
+        Point point26 = new Point(17, 17);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Occupy the donkey farm */
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
+
+        /* Place a second storage closer to the donkey farm */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Destroy the storage */
+        storage0.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage0, map);
+
+        /* Destroy the donkey farm */
+        Worker donkeyBreeder = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getPosition());
+
+        donkeyFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+
+        /* Verify that the donkey breeder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
+    }
+
+    @Test
+    public void testDonkeyBreederReturnsOffroadAndAvoidsUnfinishedStorageWhenDonkeyFarmIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing donkey farm */
+        Point point26 = new Point(17, 17);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Occupy the donkey farm */
+        Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
+
+        /* Place a second storage closer to the donkey farm */
+        Point point2 = new Point(13, 13);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the donkey farm */
+        Worker donkeyBreeder = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getPosition());
+
+        donkeyFarm0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(donkeyBreeder.isInsideBuilding());
+        assertEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(DONKEY_BREEDER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getPosition());
+
+        /* Verify that the donkey breeder is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
     }
 }
