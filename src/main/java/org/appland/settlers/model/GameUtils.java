@@ -963,4 +963,48 @@ public class GameUtils {
 
         return storage;
     }
+
+    static public Set<Building> getBuildingsWithinReach(Flag startFlag) {
+        List<Point>   toEvaluate = new LinkedList<>();
+        Set<Point>    visited    = new HashSet<>();
+        Set<Building> reachable  = new HashSet<>();
+        Player        player     = startFlag.getPlayer();
+        GameMap       map        = player.getMap();
+
+        toEvaluate.add(startFlag.getPosition());
+
+        /* Declare variables outside of the loop to keep memory churn down */
+        Point point;
+        Point oppositePoint;
+
+        while (!toEvaluate.isEmpty()) {
+
+            point = toEvaluate.get(0);
+            toEvaluate.remove(point);
+
+            /* Test if this point is connected to a building */
+            if (map.isBuildingAtPoint(point)) {
+                reachable.add(map.getBuildingAtPoint(point));
+            }
+
+            /* Remember that this point has been tested */
+            visited.add(point);
+
+            /* Go through the neighbors and add the new points to the list to be evaluated */
+            for (Road road : map.getMapPoint(point).getConnectedRoads()) {
+
+                oppositePoint = road.getOtherPoint(point);
+
+                /* Filter already visited */
+                if (visited.contains(oppositePoint)) {
+                    continue;
+                }
+
+                /* Add the point to the list */
+                toEvaluate.add(oppositePoint);
+            }
+        }
+
+        return reachable;
+    }
 }
