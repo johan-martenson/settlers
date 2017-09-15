@@ -408,7 +408,7 @@ public class Utils {
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material material) throws Exception {
 
-        for (int j = 0; j < 2000; j++) {
+        for (int j = 0; j < 20000; j++) {
             if (worker.getCargo() != null && worker.getCargo().getMaterial().equals(material)) {
                 break;
             }

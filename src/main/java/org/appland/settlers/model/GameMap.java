@@ -843,10 +843,6 @@ public class GameMap {
 
             int index = points.indexOf(flagPoint);
 
-            if (index < 2 || points.size() - index < 3) {
-                throw new Exception("Splitting road creates too short roads");
-            }
-
             removeRoadButNotWorker(existingRoad);
 
             pointToGameObject.get(flag.getPosition()).setFlag(flag);
@@ -1405,8 +1401,6 @@ public class GameMap {
             throw new Exception("Can't place tree on " + position + " on existing flag");
         } else if (mp.isRoad()) {
             throw new Exception("Can't place tree on " + position + " on existing road");
-        } else if (mp.isBuilding()) {
-            throw new Exception("Can't place tree on " + position + " on existing building");
         } else if (mp.isStone()) {
             throw new Exception("Can't place tree on " + position + " on existing stone");
         }

@@ -6,6 +6,7 @@
 
 package org.appland.settlers.test;
 
+import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
@@ -49,6 +50,60 @@ public class TestGameMap {
 
         players.add(player0);
         map = new GameMap(players, 50, 50);
+    }
+
+    @Test
+    public void testSetPlayers() {
+
+        /* Verify that the player list can be set */
+        Player player0 = new Player("Player 0", GREEN);
+        Player player1 = new Player("Player 1", BLUE);
+
+        List<Player> newPlayers = new ArrayList<>();
+
+        newPlayers.add(player0);
+        newPlayers.add(player1);
+
+        map.setPlayers(newPlayers);
+
+        assertEquals(map.getPlayers().size(), 2);
+        assertTrue(map.getPlayers().contains(player0));
+        assertTrue(map.getPlayers().contains(player1));
+    }
+
+    @Test
+    public void testSetStartingPoints() {
+
+        /* Verify that starting points can be set */
+        List<Point> points = new ArrayList<>();
+
+        points.add(new Point(3, 3));
+        points.add(new Point(7, 7));
+
+        assertEquals(map.getStartingPoints().size(), 0);
+
+        map.setStartingPoints(points);
+
+        assertEquals(map.getStartingPoints().size(), 2);
+    }
+
+    @Test
+    public void testMapIsCorrectAfterSetPlayers() {
+
+        /* Verify that the player list can be set */
+        Player player0 = new Player("Player 0", GREEN);
+        Player player1 = new Player("Player 1", BLUE);
+
+        List<Player> newPlayers = new ArrayList<>();
+
+        newPlayers.add(player0);
+        newPlayers.add(player1);
+
+        map.setPlayers(newPlayers);
+
+        assertEquals(map.getPlayers().size(), 2);
+        assertEquals(map.getPlayers().get(0).getMap(), map);
+        assertEquals(map.getPlayers().get(1).getMap(), map);
     }
 
     @Test

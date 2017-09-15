@@ -22,6 +22,7 @@ import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.WATER;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -875,6 +876,56 @@ public class TestRoads {
     }
 
     @Test
+    public void testPlaceFlagInReverseExistingRoadSplitsTheRoad() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flags */
+        Point start = new Point(9, 5);
+        Point end = new Point(13, 9);
+        map.placeFlag(player0, start);
+        map.placeFlag(player0, end);
+
+        /* Place the reversed road */
+        Point m1 = new Point(10, 6);
+        Point m2 = new Point(11, 7);
+        Point m3 = new Point(12, 8);
+        map.placeRoad(player0, end, m3, m2, m1, start);
+
+        assertEquals(map.getRoads().size(), 2);
+
+        /* Place a flag on the road to split it */
+        map.placeFlag(player0, m2);
+
+        assertEquals(map.getRoads().size(), 3);
+        List<Road> roads = new ArrayList<>();
+        roads.addAll(map.getRoads());
+
+        roads.remove(map.getRoad(point0, point0.downRight()));
+
+        Road r1 = roads.get(0);
+        Road r2 = roads.get(1);
+
+        assertTrue((r1.getStart().equals(start) && r1.getEnd().equals(m2))
+                || (r1.getStart().equals(m2) && r1.getEnd().equals(start))
+                || (r2.getStart().equals(start) && r2.getEnd().equals(m2))
+                || (r2.getStart().equals(m2) && r2.getEnd().equals(start)));
+
+        assertTrue((r1.getStart().equals(m2) && r1.getEnd().equals(end))
+                || (r1.getStart().equals(end) && r1.getEnd().equals(m2))
+                || (r2.getStart().equals(m2) && r2.getEnd().equals(end))
+                || (r2.getStart().equals(end) && r2.getEnd().equals(m2)));
+    }
+
+    @Test
     public void testIdleCourierIsAssignedWhenRoadIsSplit() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -910,6 +961,230 @@ public class TestRoads {
         assertTrue(courier.isWalkingToRoad());
         assertTrue(courier.getAssignedRoad().getStart().equals(middlePoint2)
                 || courier.getAssignedRoad().getEnd().equals(middlePoint2));
+    }
+
+    @Test
+    public void testCourierDeliveringToBuildingChosesClosestRoadWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place woodcutter at the end of the road */
+        Point endPoint = new Point(14, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), endPoint.upLeft());
+
+        /* Place road from the flag to the headquarter's flag */
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(),
+                middlePoint1,
+                middlePoint2,
+                middlePoint3,
+                woodcutter.getFlag().getPosition());
+
+        /* Wait for a courier to reach the first half of the road */
+        Courier courier = null;
+        for (int i = 0; i < 1000; i++) {
+
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Courier) {
+                    if (((Courier)worker).getAssignedRoad().equals(road)) {
+                        courier = (Courier)worker;
+                        break;
+                    }
+                }
+            }
+
+            if (courier != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(courier);
+        assertEquals(courier.getTarget(), middlePoint2);
+        assertEquals(courier.getAssignedRoad(), road);
+
+        /* Wait for the courier to start delivering planck cargo to the woodcutter */
+        assertTrue(woodcutter.needsMaterial(PLANCK));
+        assertTrue(hq.getAmount(PLANCK) > 0);
+        assertTrue(map.arePointsConnectedByRoads(hq.getPosition(), woodcutter.getPosition()));
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANCK);
+
+        /* Wait for the courier to reach the woodcutter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
+
+        /* Make the courier take a step toward the woodcutter */
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+
+        /* Verify that the courier choses the closest road when the road is split*/
+        map.placeFlag(player0, middlePoint2);
+
+        assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
+    }
+
+    @Test
+    public void testCourierJustAfterDeliveryToBuildingChosesClosestRoadWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place woodcutter at the end of the road */
+        Point endPoint = new Point(14, 4);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), endPoint.upLeft());
+
+        /* Place road from the flag to the headquarter's flag */
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(),
+                middlePoint1,
+                middlePoint2,
+                middlePoint3,
+                woodcutter.getFlag().getPosition());
+
+        /* Wait for a courier to reach the first half of the road */
+        Courier courier = null;
+        for (int i = 0; i < 1000; i++) {
+
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Courier) {
+                    if (((Courier)worker).getAssignedRoad().equals(road)) {
+                        courier = (Courier)worker;
+                        break;
+                    }
+                }
+            }
+
+            if (courier != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(courier);
+        assertEquals(courier.getTarget(), middlePoint2);
+        assertEquals(courier.getAssignedRoad(), road);
+
+        /* Wait for the courier to start delivering planck cargo to the woodcutter */
+        assertTrue(woodcutter.needsMaterial(PLANCK));
+        assertTrue(hq.getAmount(PLANCK) > 0);
+        assertTrue(map.arePointsConnectedByRoads(hq.getPosition(), woodcutter.getPosition()));
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANCK);
+
+        /* Wait for the courier to reach the woodcutter */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getPosition());
+
+        /* Make the courier take a step from the woodcutter */
+        map.stepTime();
+
+        assertFalse(courier.isExactlyAtPoint());
+
+        /* Verify that the courier choses the closest road when the road is split*/
+        map.placeFlag(player0, middlePoint2);
+
+        assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
+    }
+
+    @Test
+    public void testIdleCourierIsAssignedToClosestFromLeftRoadWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road from the flag to the headquarter's flag */
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(),
+                middlePoint1,
+                middlePoint2,
+                middlePoint3,
+                endPoint);
+
+        /* Wait for a courier to reach the first half of the road */
+        Courier courier = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0, map).get(0);
+
+        assertEquals(courier.getTarget(), middlePoint2);
+        assertEquals(courier.getAssignedRoad(), road);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
+
+        assertTrue(courier.isAt(middlePoint1));
+
+        /* Split road */
+        map.placeFlag(player0, middlePoint2);
+
+        assertEquals(courier.getAssignedRoad(), map.getRoad(hq.getFlag().getPosition(), middlePoint2));
+    }
+
+    @Test
+    public void testIdleCourierIsAssignedToClosestFromRightRoadWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road from the flag to the headquarter's flag */
+        Point middlePoint1 = new Point(8, 4);
+        Point middlePoint2 = new Point(10, 4);
+        Point middlePoint3 = new Point(12, 4);
+        Road road = map.placeRoad(player0, hq.getFlag().getPosition(),
+                middlePoint1,
+                middlePoint2,
+                middlePoint3,
+                endPoint);
+
+        /* Put a courier on the second half of the road */
+        Courier courier = new Courier(player0, map);
+        map.placeWorker(courier, endFlag);
+        courier.assignToRoad(road);
+
+        assertEquals(courier.getTarget(), middlePoint2);
+        assertEquals(courier.getAssignedRoad(), road);
+
+        /* Verify that the courier choses the road to the right after the split */
+        map.placeFlag(player0, middlePoint2);
+
+        assertEquals(courier.getAssignedRoad(), map.getRoad(middlePoint2, endPoint));
     }
 
     @Test
@@ -1593,19 +1868,24 @@ public class TestRoads {
 
     @Test
     public void testSplitHorisontalRoadInEndWithTooShortRemainingRoads() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        map.placeFlag(player0, new Point(9, 5));
-        map.placeFlag(player0, new Point(17, 5));
-
+        /* Place start and end flag */
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
+        map.placeFlag(player0, start);
+        map.placeFlag(player0, end);
+
+        /* Create the road */
         Point m1 = new Point(11, 5);
         Point m2 = new Point(13, 5);
         Point m3 = new Point(15, 5);
@@ -1613,6 +1893,7 @@ public class TestRoads {
 
         assertEquals(map.getRoads().size(), 2);
 
+        /* Verify that the road is too small to split and an exception is thrown */
         try {
             map.placeFlag(player0, m3);
             assertFalse(true);

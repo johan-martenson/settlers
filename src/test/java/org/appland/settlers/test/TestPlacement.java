@@ -60,11 +60,14 @@ public class TestPlacement {
 
     @Test
     public void testDefaultMapIsEmpty() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
+        /* Verify that the map starts out empty */
         assertTrue(map.getBuildings().isEmpty());
         assertTrue(map.getRoads().isEmpty());
         assertTrue(map.getStones().isEmpty());
@@ -76,11 +79,14 @@ public class TestPlacement {
 
     @Test
     public void testEmptyMapHasNoBorders() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
+        /* Verify that the player has no borders yet */
         assertEquals(player0.getBorders().size(), 0);
     }
 
@@ -174,6 +180,34 @@ public class TestPlacement {
         /* Points on right, sampled*/
         assertFalse(possibleHouses.containsKey(point1.upRight()));
         assertFalse(possibleHouses.containsKey(point1.left()));
+    }
+
+    @Test
+    public void testCannotPlaceHouseTwice() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(6, 6);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Verify that it's not possible to place the woodcutter again */
+        Point point2 = new Point(12, 10);
+        try {
+            map.placeBuilding(woodcutter, point2);
+            assertFalse(true);
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -923,6 +957,93 @@ public class TestPlacement {
     }
 
     @Test
+    public void testWoodcutterCannotBePlacedOnMountain() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(9, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+
+        /* Verify that it's not possible to place a woodcutter on the mountain */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getTrees().isEmpty());
+    }
+
+    @Test
+    public void testWoodcutterCannotBePlacedRightNextToMountain() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(9, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+
+        /* Verify that it's not possible to place a woodcutter on the mountain */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1.downRight());
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getTrees().isEmpty());
+    }
+
+    @Test
+    public void testBuildingCannotBePlacedDirectlyNextToWater() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small lake on the map */
+        Point point1 = new Point(9, 9);
+        Utils.surroundPointWithWater(point1, map);
+
+        /* Verify that it's not possible to place a woodcutter right next to the lake */
+        try {
+            Point point2 = new Point(10, 8);
+            map.placeBuilding(new Woodcutter(player0), point2);
+            assertFalse(true);
+        } catch (Exception e) {}
+
+        assertTrue(map.getTrees().isEmpty());
+    }
+
+    @Test
     public void testCanNotPlaceFlagOnStone() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -1327,6 +1448,102 @@ public class TestPlacement {
 
         assertNull(map.isAvailableHousePoint(player0, point1));
         assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+    }
+
+    @Test
+    public void testNoAvailablePointForHouseOutsideBorder() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 60, 60);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that there is no available space for a house outside the border */
+        Point point1 = new Point(58, 58);
+
+        assertNull(map.isAvailableHousePoint(player0, point1));
+        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+    }
+
+    @Test
+    public void testNoAvailablePointOnTree() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 60, 60);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place tree */
+        Point point1 = new Point(8, 8);
+        map.placeTree(point1);
+
+        /* Verify that there is no available space for a house on a tree */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+    }
+
+    @Test
+    public void testNoAvailablePointTooCloseToExistingHouseDiagonally() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 60, 60);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(9, 9);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Verify that there is no available space for a house on a tree */
+        assertNull(map.isAvailableHousePoint(player0, point1.upRight()));
+        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1.upRight()));
+    }
+
+    @Test
+    public void testCannotPlaceTreeOnBuilding() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 60, 60);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(9, 9);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Verify that it's not possible to place a tree on the woodcutter */
+        try {
+            map.placeTree(point1);
+            assertFalse(true);
+        } catch (Exception e) {}
     }
 
     @Test (expected = Exception.class)
