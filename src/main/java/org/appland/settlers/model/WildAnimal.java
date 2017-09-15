@@ -70,25 +70,25 @@ public class WildAnimal extends Worker {
         }
     }
 
-    private boolean canGoTo(Point p) throws Exception {
+    private boolean canGoTo(Point point) throws Exception {
 
-        if (!map.isWithinMap(p)) {
+        if (!map.isWithinMap(point)) {
             return false;
         }
 
-        if (map.isBuildingAtPoint(p)) {
+        if (map.isBuildingAtPoint(point)) {
             return false;
         }
 
-        if (map.isStoneAtPoint(p)) {
+        if (map.isStoneAtPoint(point)) {
             return false;
         }
 
-        if (map.getTerrain().isInWater(p)) {
+        if (map.getTerrain().isInWater(point)) {
             return false;
         }
 
-        if (map.findWayOffroad(getPosition(), p, null) == null) {
+        if (map.findWayOffroad(getPosition(), point, null) == null) {
             return false;
         }
 

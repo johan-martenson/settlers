@@ -451,10 +451,10 @@ public class GameMap {
         allBuildings.removeAll(buildingsToRemove);
 
         /* Calculate claims for all military buildings */
-        for (Building b : allBuildings) {
+        for (Building building : allBuildings) {
 
             /* Filter non-military buildings and un-occupied military buildings */
-            if (!b.isMilitaryBuilding() || !b.ready() || !b.occupied()) {
+            if (!building.isMilitaryBuilding() || !building.ready() || !building.occupied()) {
                 continue;
             }
 
@@ -462,11 +462,11 @@ public class GameMap {
                This iterates over a collection and the order may be
                non-deterministic
             */
-            for (Point p : b.getDefendedLand()) {
-                if (!claims.containsKey(p)) {
-                    claims.put(p, b);
-                } else if (calculateClaim(b, p) > calculateClaim(claims.get(p), p)) {
-                    claims.put(p, b);
+            for (Point point : building.getDefendedLand()) {
+                if (!claims.containsKey(point)) {
+                    claims.put(point, building);
+                } else if (calculateClaim(building, point) > calculateClaim(claims.get(point), point)) {
+                    claims.put(point, building);
                 }
             }
         }

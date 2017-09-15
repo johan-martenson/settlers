@@ -109,9 +109,9 @@ public class Player {
     }
 
     private void updateDiscoveredLand() {
-        for (Building b : buildings) {
-            if (b.isMilitaryBuilding()) {
-                discoveredLand.addAll(b.getDiscoveredLand());
+        for (Building building : buildings) {
+            if (building.isMilitaryBuilding()) {
+                discoveredLand.addAll(building.getDiscoveredLand());
             }
         }
     }

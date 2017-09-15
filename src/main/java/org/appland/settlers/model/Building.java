@@ -45,7 +45,7 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean        productionEnabled;
     private boolean        upgrading;
 
-    private final Material[]             requiredGoodsForProduction;
+    private final Map<Material, Integer> requiredGoodsForProduction;
     private final List<Military>         attackers;
     private final List<Military>         waitingAttackers;
     private final List<Military>         defenders;
@@ -89,12 +89,16 @@ public class Building implements Actor, EndPoint, Piece {
         /* Initialize goods required for production if the building does any
            any production
         */
+        requiredGoodsForProduction = new HashMap<>();
         Production production = getClass().getAnnotation(Production.class);
 
         if (production != null) {
-            requiredGoodsForProduction = production.requiredGoods();
-        } else {
-            requiredGoodsForProduction = new Material[0];
+            for (Material material : production.requiredGoods()) {
+                requiredGoodsForProduction.put(
+                        material,
+                        requiredGoodsForProduction.getOrDefault(material, 0) + 1
+                );
+            }
         }
     }
 
@@ -503,8 +507,8 @@ public class Building implements Actor, EndPoint, Piece {
         }
 
         /* Send home deployed militaries */
-        for (Military m : hostedMilitary) {
-            m.returnToStorage();
+        for (Military military : hostedMilitary) {
+            military.returnToStorage();
         }
 
         /* Remove driveway */
@@ -549,15 +553,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
         }
 
-        int amount = 0;
-
-        for (Material m : requiredGoodsForProduction) {
-            if (m == material) {
-                amount++;
-            }
-        }
-
-        return amount;
+        return requiredGoodsForProduction.getOrDefault(material, 0);
     }
 
     private void consumeConstructionMaterial() {
@@ -637,7 +633,7 @@ public class Building implements Actor, EndPoint, Piece {
 
     private boolean canAcceptGoods() {
 
-        if (requiredGoodsForProduction.length > 0) {
+        if (requiredGoodsForProduction.size() > 0) {
             return true;
         }
 
@@ -718,15 +714,15 @@ public class Building implements Actor, EndPoint, Piece {
                 continue;
             }
 
-            for (Military m : hostedMilitary) {
-                if (promoted.contains(m)) {
+            for (Military military : hostedMilitary) {
+                if (promoted.contains(military)) {
                     continue;
                 }
 
-                if (m.getRank() == rank) {
-                    m.promote();
+                if (military.getRank() == rank) {
+                    military.promote();
 
-                    promoted.add(m);
+                    promoted.add(military);
 
                     break;
                 }
@@ -739,8 +735,8 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     private boolean hostsPromotableMilitaries() {
-        for (Military m : hostedMilitary) {
-            if (m.getRank() != GENERAL_RANK) {
+        for (Military military : hostedMilitary) {
+            if (military.getRank() != GENERAL_RANK) {
                 return true;
             }
         }
@@ -757,8 +753,8 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public void evacuate() throws Exception {
-        for (Military m : hostedMilitary) {
-            m.returnToStorage();
+        for (Military military : hostedMilitary) {
+            military.returnToStorage();
         }
 
         hostedMilitary.clear();
@@ -908,8 +904,8 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     boolean isDefenseLess() {
-        if (getNumberOfHostedMilitary() == 0       && 
-            getRemoteDefenders().isEmpty() &&
+        if (getNumberOfHostedMilitary() == 0  &&
+            getRemoteDefenders().isEmpty()    &&
             ownDefender == null) {
             return true;
         }
