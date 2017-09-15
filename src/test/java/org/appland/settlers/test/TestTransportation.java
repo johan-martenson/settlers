@@ -5,6 +5,7 @@ import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
@@ -291,24 +292,31 @@ public class TestTransportation {
 
     @Test(expected = Exception.class)
     public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place first flag */
         Point away = new Point(6, 2);
-        Point start = new Point(2, 2);
         Flag end = map.placeFlag(player0, new Point(4, 2));
 
-        Point middle = new Point(3, 3);
-
+        /* Place second flag */
+        Point start = new Point(2, 2);
         map.placeFlag(player0, start);
         Flag flag = map.placeFlag(player0, away);
 
+        /* Place road */
+        Point middle = new Point(3, 3);
         Road targetRoad = map.placeRoad(player0, start, middle, end.getPosition());
+
+        /* Place a coutier */
         Courier worker = new Courier(player0, map);
 
         map.placeWorker(worker, flag);
@@ -901,7 +909,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCargoIsDeliveredViaNewRouteIfRoadIsRemoved() throws Exception {
+    public void testCargoIsReturnedToStorageIfItCannotBeDelivered() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -922,20 +930,14 @@ public class TestTransportation {
         /* Place flags */
         Point point0 = new Point(19, 5);
         Flag flag0 = map.placeFlag(player0, point0);
-        Point point1 = new Point(4, 4);
-        Flag flag1 = map.placeFlag(player0, point1);
 
         /* Place roads */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, sm.getFlag());
-        Road road2 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
-        Road road3 = map.placeAutoSelectedRoad(player0, flag1, sm.getFlag());
 
         /* Populate the roads */
         Courier courier = new Courier(player0, map);
         Courier courier2 = new Courier(player0, map);
-        Courier courier3 = new Courier(player0, map);
-        Courier courier4 = new Courier(player0, map);
 
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
@@ -943,19 +945,12 @@ public class TestTransportation {
         map.placeWorker(courier2, flag0);
         courier2.assignToRoad(road1);
 
-        map.placeWorker(courier3, headquarter0.getFlag());
-        courier3.assignToRoad(road2);
-
-        map.placeWorker(courier4, flag1);
-        courier4.assignToRoad(road3);
-
-        /* Remove all plancks, wood and stones in the headquarter */
+        /* Empty the headquarter's store of plancks and stones */
         Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, WOOD, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
-        /* Give the couriers time to get to the middle of their roads */
-        Utils.fastForward(100, map);
+        /* Let the couriers reach their target road and become idle */
+        Utils.fastForwardUntilWorkersReachTarget(map, courier, courier2);
 
         /* Place a cargo on the headquarter's flag */
         Cargo cargo = new Cargo(PLANCK, map);
@@ -964,6 +959,72 @@ public class TestTransportation {
         /* Target the cargo to the sawmill */
         cargo.setTarget(sm);
         sm.promiseDelivery(PLANCK);
+
+        /* Promise plancks to the sawmill until it doesn't need any new deliveries of plancks */
+        sm.promiseDelivery(PLANCK);
+
+        assertFalse(sm.needsMaterial(PLANCK));
+
+        /* Wait for the first courier to pick up the cargo */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        assertEquals(courier.getTarget(), flag0.getPosition());
+        assertFalse(flag0.getStackedCargo().contains(cargo));
+
+        /* Remove the second road */
+        map.removeRoad(road1);
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, sm));
+
+        /* Verify that the cargo is placed at the flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
+
+        /* Verify that the cargo is picked up and about to be returned to the headquarter */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        assertEquals(cargo.getTarget(), headquarter0);
+
+        /* Verify that the cargo isn't promised to the sawmill any longer */
+        assertTrue(sm.needsMaterial(PLANCK));
+    }
+
+    @Test
+    public void testCargoIsDeliveredViaNewRouteIfRoadIsRemoved() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place sawmill */
+        Point point4 = new Point(23, 15);
+        Building catapult = map.placeBuilding(new Catapult(player0), point4.upLeft());
+
+        /* Place road connecting the headquarter and the catapult */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult.getFlag());
+
+        /* Populate the roads */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult, map);
+
+        /* Wait for the courier to carry a cargo of stone to the catapult */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, STONE);
+
+        /* Place a cargo on the headquarter's flag */
+        Cargo cargo = new Cargo(PLANCK, map);
+        headquarter0.getFlag().putCargo(cargo);
+
+        /* Target the cargo to the sawmill */
+        cargo.setTarget(catapult);
+        catapult.promiseDelivery(PLANCK);
 
         /* Verify that the cargo is planned to go via first flag */
         assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
@@ -1004,9 +1065,9 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
 
         /* Verify that the fourth courier delivers the cargo to the sawmill */
-        assertEquals(courier4.getTarget(), sm.getPosition());
+        assertEquals(courier4.getTarget(), catapult.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, catapult.getPosition());
 
         assertNull(courier4.getCargo());
     }
