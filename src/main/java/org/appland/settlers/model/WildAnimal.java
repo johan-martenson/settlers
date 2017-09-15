@@ -113,15 +113,15 @@ public class WildAnimal extends Worker {
         }
 
         /* Give up and search through all available points sequentially */
-        for (Point p : adjacentPoints) {
+        for (Point point : adjacentPoints) {
 
             /* Filter points where the animal cannot stand */
-            if (!canGoTo(p)) {
+            if (!canGoTo(point)) {
                 continue;
             }
 
             /* Return the found point */
-            return p;
+            return point;
         }
 
         /* Return null if there is no available point */

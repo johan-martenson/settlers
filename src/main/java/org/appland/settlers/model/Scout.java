@@ -37,8 +37,8 @@ public class Scout extends Worker {
     private int   directionX;
     private int   directionY;
 
-    public Scout(Player player, GameMap m) {
-        super(player, m);
+    public Scout(Player player, GameMap map) {
+        super(player, map);
 
         state        = WALKING_TO_TARGET;
         segmentCount = 0;
@@ -143,10 +143,10 @@ public class Scout extends Worker {
         double distanceToBorder         = Integer.MAX_VALUE;
 
         for (Collection<Point> border : borders) {
-            for (Point p : border) {
-                if (getPosition().distance(p) < distanceToBorder) {
-                    distanceToBorder = getPosition().distance(p);
-                    closestPointOnBorder = p;
+            for (Point point : border) {
+                if (getPosition().distance(point) < distanceToBorder) {
+                    distanceToBorder = getPosition().distance(point);
+                    closestPointOnBorder = point;
                 }
             }
         }
@@ -156,16 +156,16 @@ public class Scout extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
+        Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = State.RETURNING_TO_STORAGE;
 
-        if (stg != null) {
-            setTarget(stg.getPosition());
+        if (storage != null) {
+            setTarget(storage.getPosition());
         } else {
-            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
-            setOffroadTarget(stg.getPosition());
+            setOffroadTarget(storage.getPosition());
         }
 
     }

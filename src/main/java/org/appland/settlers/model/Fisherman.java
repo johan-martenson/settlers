@@ -32,29 +32,29 @@ public class Fisherman extends Worker {
     private Point getFishingSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
 
-        for (Point p : adjacentPoints) {
-            if (map.isBuildingAtPoint(p)) {
+        for (Point point : adjacentPoints) {
+            if (map.isBuildingAtPoint(point)) {
                 continue;
             }
 
-            if (map.isStoneAtPoint(p)) {
+            if (map.isStoneAtPoint(point)) {
                 continue;
             }
 
-            if (map.getAmountFishAtPoint(p) == 0) {
+            if (map.getAmountFishAtPoint(point) == 0) {
                 continue;
             }
 
-            if (!map.isNextToWater(p)) {
+            if (!map.isNextToWater(point)) {
                 continue;
             }
 
             /* Filter out points that the fisherman can't reach */
-            if (map.findWayOffroad(getHome().getFlag().getPosition(), p, null) == null) {
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
                 continue;
             }
 
-            return p;
+            return point;
         }
 
         return null;
@@ -85,9 +85,9 @@ public class Fisherman extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Fishery) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Fishery) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;
@@ -101,9 +101,9 @@ public class Fisherman extends Worker {
             getHome().isProductionEnabled() &&
             !getHome().outOfNaturalResources()) {
             if (countdown.reachedZero()) {
-                Point p = getFishingSpot();
+                Point point = getFishingSpot();
 
-                if (p == null) {
+                if (point == null) {
 
                     /* Report that there's no more fish */
                     getHome().reportNoMoreNaturalResources();
@@ -111,7 +111,7 @@ public class Fisherman extends Worker {
                     return;
                 }
 
-                setOffroadTarget(p);
+                setOffroadTarget(point);
 
                 state = GOING_OUT_TO_FISH;
             } else {

@@ -198,11 +198,11 @@ public class StorageWorker extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            for (Building b : getPlayer().getBuildings()) {
-                if (b instanceof Storage && !b.equals(getHome())) {
+            for (Building building : getPlayer().getBuildings()) {
+                if (building instanceof Storage && !building.equals(getHome())) {
                     state = State.RETURNING_TO_STORAGE;
 
-                    setOffroadTarget(b.getPosition());
+                    setOffroadTarget(building.getPosition());
 
                     break;
                 }
@@ -210,20 +210,20 @@ public class StorageWorker extends Worker {
         }
     }
 
-    private boolean resetAllocationIfNeeded(Material m) {
+    private boolean resetAllocationIfNeeded(Material material) {
 
-        if (isFood(m)) {
+        if (isFood(material)) {
 
         /* Reset count if all building types have reached their quota */
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
-            if ((!needyConsumerExists(reachableBuildings, GoldMine.class, m)    || 
+            if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material)    || 
                   overQuota(GoldMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, IronMine.class, m)    || 
+                (!needyConsumerExists(reachableBuildings, IronMine.class, material)    || 
                   overQuota(IronMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, CoalMine.class, m)    || 
+                (!needyConsumerExists(reachableBuildings, CoalMine.class, material)    || 
                   overQuota(CoalMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, GraniteMine.class, m) || 
+                (!needyConsumerExists(reachableBuildings, GraniteMine.class, material) || 
                   overQuota(GraniteMine.class))) {
                 assignedFood.put(GoldMine.class, 0);
                 assignedFood.put(IronMine.class, 0);
@@ -232,16 +232,16 @@ public class StorageWorker extends Worker {
 
                 return true;
             }
-        } else if (m == COAL) {
+        } else if (material == COAL) {
 
             /* Reset count if all building types have reached their quota */
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
-            if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, m)  ||
+            if ((!needyConsumerExists(reachableBuildings, IronSmelter.class, material)  ||
                   overQuota(IronSmelter.class))                                    &&
-                (!needyConsumerExists(reachableBuildings, Mint.class, m)         ||
+                (!needyConsumerExists(reachableBuildings, Mint.class, material)         ||
                   overQuota(Mint.class))                                           &&
-                (!needyConsumerExists(reachableBuildings, Armory.class, m)       ||
+                (!needyConsumerExists(reachableBuildings, Armory.class, material)       ||
                   overQuota(Armory.class))) {
                 assignedCoal.put(IronSmelter.class, 0);
                 assignedCoal.put(Mint.class, 0);

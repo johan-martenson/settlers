@@ -62,8 +62,8 @@ public class GameUtils {
     static class SortPointsByPolarOrder implements Comparator<Point> {
         private final Point center;
 
-        public SortPointsByPolarOrder(Point p) {
-            center = p;
+        public SortPointsByPolarOrder(Point point) {
+            center = point;
         }
 
         @Override
@@ -80,9 +80,9 @@ public class GameUtils {
             }
         }
 
-        private double getAngle(Point p) {
-            double dy = p.y - center.y;
-            double dx = p.x - center.x;
+        private double getAngle(Point point) {
+            double dy = point.y - center.y;
+            double dx = point.x - center.x;
             double hy = Math.sqrt(dy*dy + dx*dx);
 
             double angle = dy / hy;
@@ -385,17 +385,17 @@ public class GameUtils {
             int distance = Integer.MAX_VALUE;
 
             /* Find the shortest road that connects the two points */
-            for (Road r : mp.getConnectedRoads()) {
-                if (!r.getStart().equals(currentPoint) && !r.getEnd().equals(currentPoint)) {
+            for (Road road : mp.getConnectedRoads()) {
+                if (!road.getStart().equals(currentPoint) && !road.getEnd().equals(currentPoint)) {
                     continue;
                 }
 
-                if (!r.getStart().equals(neighbor) && !r.getEnd().equals(neighbor)) {
+                if (!road.getStart().equals(neighbor) && !road.getEnd().equals(neighbor)) {
                     continue;
                 }
 
                 /* Count the number of segments to walk and don't include the starting point */
-                int tmpDistance = r.getWayPoints().size() - 1;
+                int tmpDistance = road.getWayPoints().size() - 1;
 
                 if (tmpDistance < distance) {
                     distance = tmpDistance;

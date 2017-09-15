@@ -45,8 +45,8 @@ public class Geologist extends Worker {
     private int   nrSitesInvestigated;
     private Point flagPoint;
 
-    public Geologist(Player player, GameMap m) {
-        super(player, m);
+    public Geologist(Player player, GameMap map) {
+        super(player, map);
 
         countdown           = new Countdown();
         nrSitesInvestigated = 0;
@@ -175,36 +175,36 @@ public class Geologist extends Worker {
 
         int startIndex = RANDOM.nextInt(points.size() / 2);
 
-        for (Point p : points.subList(startIndex, points.size() - 1)) {
-            if (p.equals(getPosition())) {
+        for (Point point : points.subList(startIndex, points.size() - 1)) {
+            if (point.equals(getPosition())) {
                 continue;
             }
 
-            if (map.isSignAtPoint(p)) {
+            if (map.isSignAtPoint(point)) {
                 continue;
             }
 
-            if (map.isTreeAtPoint(p)) {
+            if (map.isTreeAtPoint(point)) {
                 continue;
             }
 
-            if (map.isStoneAtPoint(p)) {
+            if (map.isStoneAtPoint(point)) {
                 continue;
             }
 
-            if (map.isFlagAtPoint(p)) {
+            if (map.isFlagAtPoint(point)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p)) {
+            if (map.isBuildingAtPoint(point)) {
                 continue;
             }
 
-            if (map.findWayOffroad(getPosition(), p, null) == null) {
+            if (map.findWayOffroad(getPosition(), point, null) == null) {
                 continue;
             }
 
-            return p;
+            return point;
         }
 
         return null;
@@ -223,16 +223,16 @@ public class Geologist extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building stg = getPlayer().getClosestStorage(getPosition(), getHome());
+        Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = State.RETURNING_TO_STORAGE;
 
-        if (stg != null) {
-            setTarget(stg.getPosition());
+        if (storage != null) {
+            setTarget(storage.getPosition());
         } else {
-            stg = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
-            setOffroadTarget(stg.getPosition());
+            setOffroadTarget(storage.getPosition());
         }
     }
 }

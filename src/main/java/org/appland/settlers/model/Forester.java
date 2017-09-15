@@ -57,15 +57,15 @@ public class Forester extends Worker {
     private Point getTreeSpot() throws Exception {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 
-        for (Point p : adjacentPoints) {
+        for (Point point : adjacentPoints) {
 
             /* Filter points where trees cannot be placed */
-            if (!spotIsClearForTree(p)) {
+            if (!spotIsClearForTree(point)) {
                 continue;
             }
 
             /* Return the first point that passed the filter */
-            return p;
+            return point;
         }
 
         return null;
@@ -93,9 +93,9 @@ public class Forester extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof ForesterHut) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof ForesterHut) {
+            setHome(building);
         }
 
         state = State.RESTING_IN_HOUSE;
@@ -107,13 +107,13 @@ public class Forester extends Worker {
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
-                Point p = getTreeSpot();
+                Point point = getTreeSpot();
 
-                if (p == null) {
+                if (point == null) {
                     return;
                 }
 
-                setOffroadTarget(p);
+                setOffroadTarget(point);
 
                 state = State.GOING_OUT_TO_PLANT;
             } else {

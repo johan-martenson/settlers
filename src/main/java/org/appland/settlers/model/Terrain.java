@@ -27,9 +27,9 @@ public class Terrain {
     private final int width;
     private final int height;
 
-    public Terrain(int w, int h) {
-        width   = w;
-        height  = h;
+    public Terrain(int width, int height) {
+        this.width   = width;
+        this.height  = height;
 
         tileBelowMap = new HashMap<>();
         tileDownRightMap = new HashMap<>();
@@ -37,14 +37,14 @@ public class Terrain {
         constructDefaultTiles();
     }
 
-    public Tile getTile(Point p1, Point p3, Point p2) {
+    public Tile getTile(Point point1, Point point2, Point point3) {
 
-        int left = Math.min(Math.min(p1.x, p2.x), p3.x);
-        int top  = Math.max(Math.max(p1.y, p2.y), p3.y);
+        int left = Math.min(Math.min(point1.x, point3.x), point2.x);
+        int top  = Math.max(Math.max(point1.y, point3.y), point2.y);
 
         Tile tile = null;
 
-        if (p1.y + p2.y + p3.y % 3 == 1) { // Tile with pointy end upwards
+        if (point1.y + point3.y + point2.y % 3 == 1) { // Tile with pointy end upwards
             tile = tileBelowMap.get(top * width + left + 1);
         } else {
             tile = tileDownRightMap.get(top * width + left);
@@ -76,27 +76,27 @@ public class Terrain {
         }
     }
 
-    public boolean isOnMountain(Point p) {
-        return isSurroundedBy(p, MOUNTAIN);
+    public boolean isOnMountain(Point point) {
+        return isSurroundedBy(point, MOUNTAIN);
     }
 
-    public boolean isInWater(Point p) {
-        return isSurroundedBy(p, WATER);
+    public boolean isInWater(Point point) {
+        return isSurroundedBy(point, WATER);
     }
 
-    boolean isInSwamp(Point p) {
-        return isSurroundedBy(p, SWAMP);
+    boolean isInSwamp(Point point) {
+        return isSurroundedBy(point, SWAMP);
     }
 
-    protected boolean isOnGrass(Point p) {
-        return isSurroundedBy(p, GRASS);
+    protected boolean isOnGrass(Point point) {
+        return isSurroundedBy(point, GRASS);
     }
 
     private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) {
         List<Tile> tiles = getSurroundingTiles(point);
 
-        for (Tile t : tiles) {
-            if (t.getVegetationType() == vegetation) {
+        for (Tile tile : tiles) {
+            if (tile.getVegetationType() == vegetation) {
                 return true;
             }
         }
@@ -104,11 +104,11 @@ public class Terrain {
         return false;        
     }
 
-    private boolean isSurroundedBy(Point p, Vegetation vegetation) {
-        List<Tile> tiles = getSurroundingTiles(p);
+    private boolean isSurroundedBy(Point point, Vegetation vegetation) {
+        List<Tile> tiles = getSurroundingTiles(point);
 
-        for (Tile t : tiles) {
-            if (t.getVegetationType() != vegetation) {
+        for (Tile tile : tiles) {
+            if (tile.getVegetationType() != vegetation) {
                 return false;
             }
         }
@@ -126,53 +126,53 @@ public class Terrain {
         Point p1 = new Point(center.x - 1, center.y + 1);
         Point p2 = new Point(center.x + 1, center.y + 1);
 
-        Tile t = getTile(p4, center, rightPoint);
+        Tile tile = getTile(p4, center, rightPoint);
 
         /* This method is called frequently. Treat the tiles one-by-one
            to avoid creating a temporary list */
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
-        t = getTile(p5, center, p4);
+        tile = getTile(p5, center, p4);
 
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
-        t = getTile(leftPoint, center, p5);
+        tile = getTile(leftPoint, center, p5);
 
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
-        t = getTile(p1, center, leftPoint);
+        tile = getTile(p1, center, leftPoint);
 
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
-        t = getTile(p2, center, p1);
+        tile = getTile(p2, center, p1);
 
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
-        t = getTile(rightPoint, center, p2);
+        tile = getTile(rightPoint, center, p2);
 
-        if (t != null) {
-            result.add(t);
+        if (tile != null) {
+            result.add(tile);
         }
 
         return result;
     }
 
-    public boolean terrainMakesFlagPossible(Point p) throws Exception {
-        if (isInWater(p)) {
+    public boolean terrainMakesFlagPossible(Point point) throws Exception {
+        if (isInWater(point)) {
             return false;
         }
 
-        if (isInSwamp(p)) {
+        if (isInSwamp(point)) {
             return false;
         }
 
@@ -190,11 +190,11 @@ public class Terrain {
 
         /* Go through the surrounding tiles and verify that they contain at least 
            on matching and one non-matching*/
-        for (Tile t : getSurroundingTiles(point)) {
+        for (Tile tile : getSurroundingTiles(point)) {
 
-            if (t.getVegetationType().equals(vegetation)) {
+            if (tile.getVegetationType().equals(vegetation)) {
                 matchFound = true;
-            } else if (!t.getVegetationType().equals(vegetation)) {
+            } else if (!tile.getVegetationType().equals(vegetation)) {
                 nonMatchFound = true;
             }
         }
@@ -202,8 +202,8 @@ public class Terrain {
         return matchFound && nonMatchFound;
     }
 
-    protected void placeMountainOnTile(Point p1, Point p2, Point p3) {
-        Tile tile = getTile(p1, p2, p3);
+    protected void placeMountainOnTile(Point point1, Point point2, Point point3) {
+        Tile tile = getTile(point1, point2, point3);
 
         tile.setVegetationType(MOUNTAIN);
     }

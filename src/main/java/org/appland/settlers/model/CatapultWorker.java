@@ -26,17 +26,17 @@ public class CatapultWorker extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public CatapultWorker(Player player, GameMap m) {
-        super(player, m);
+    public CatapultWorker(Player player, GameMap map) {
+        super(player, map);
 
         countdown = new Countdown();
         state = State.WALKING_TO_TARGET;
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Catapult) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Catapult) {
+            setHome(building);
         }
 
         state = State.RESTING_IN_HOUSE;
@@ -108,14 +108,14 @@ public class CatapultWorker extends Worker {
 
     private Building findReachableTarget() {
 
-        for (Point p : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
+        for (Point point : map.getPointsWithinRadius(getPosition(), MAX_RANGE)) {
 
             /* Filter points without a building */
-            if (!map.isBuildingAtPoint(p)) {
+            if (!map.isBuildingAtPoint(point)) {
                 continue;
             }
 
-            Building building = map.getBuildingAtPoint(p);
+            Building building = map.getBuildingAtPoint(point);
 
             /* Filter buildings belonging to the same player */
             if (building.getPlayer().equals(getPlayer())) {

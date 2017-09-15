@@ -25,18 +25,18 @@ public class WoodcutterWorker extends Worker {
     private Point getTreeToCutDown() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 
-        for (Point p : adjacentPoints) {
-            if (!map.isTreeAtPoint(p)) {
+        for (Point point : adjacentPoints) {
+            if (!map.isTreeAtPoint(point)) {
                 continue;
             }
 
-            Tree tree = map.getTreeAtPoint(p);
+            Tree tree = map.getTreeAtPoint(point);
             if (tree.getSize() != LARGE) {
                 continue;
             }
 
-            if (map.findWayOffroad(p, getHome().getFlag().getPosition(), null) != null) {
-                return p;
+            if (map.findWayOffroad(point, getHome().getFlag().getPosition(), null) != null) {
+                return point;
             }
 
         }
@@ -68,9 +68,9 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Woodcutter) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Woodcutter) {
+            setHome(building);
         }
 
         state = State.RESTING_IN_HOUSE;

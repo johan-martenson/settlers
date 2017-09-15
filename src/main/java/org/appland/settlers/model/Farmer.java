@@ -59,23 +59,23 @@ public class Farmer extends Worker {
     private Point getFreeSpotToPlant() {
         Point chosenPoint = null;
 
-        for (Point p : getSurroundingSpotsForCrops()) {
-            if (map.isBuildingAtPoint(p) || 
-                map.isFlagAtPoint(p)     ||
-                map.isRoadAtPoint(p)     ||
-                map.isTreeAtPoint(p)) {
+        for (Point point : getSurroundingSpotsForCrops()) {
+            if (map.isBuildingAtPoint(point) || 
+                map.isFlagAtPoint(point)     ||
+                map.isRoadAtPoint(point)     ||
+                map.isTreeAtPoint(point)) {
                 continue;
             }
 
-            if (map.isCropAtPoint(p)) {
-                Crop crop = map.getCropAtPoint(p);
+            if (map.isCropAtPoint(point)) {
+                Crop crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() != HARVESTED) {
                     continue;
                 }
             }
 
-            chosenPoint = p;
+            chosenPoint = point;
             break;
         }
 
@@ -83,9 +83,9 @@ public class Farmer extends Worker {
     }
 
     private Crop findCropToHarvest() {
-        for (Point p : getSurroundingSpotsForCrops()) {
-            if (map.isCropAtPoint(p)) {
-                Crop crop = map.getCropAtPoint(p);
+        for (Point point : getSurroundingSpotsForCrops()) {
+            if (map.isCropAtPoint(point)) {
+                Crop crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() == FULL_GROWN) {
                     return crop;
@@ -126,11 +126,11 @@ public class Farmer extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Storage) {
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Storage) {
             return;
-        } else if (b instanceof Farm) {
-            setHome(b);
+        } else if (building instanceof Farm) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;
@@ -150,13 +150,13 @@ public class Farmer extends Worker {
 
                     setOffroadTarget(cropToHarvest.getPosition());
                 } else if (getSurroundingNonHarvestedCrops().size() < 5) {
-                    Point p = getFreeSpotToPlant();
+                    Point point = getFreeSpotToPlant();
 
-                    if (p == null) {
+                    if (point == null) {
                         return;
                     }
 
-                    setOffroadTarget(p);
+                    setOffroadTarget(point);
 
                     state = GOING_OUT_TO_PLANT;
                 }
@@ -198,12 +198,12 @@ public class Farmer extends Worker {
     private Collection<Crop> getSurroundingNonHarvestedCrops() {
         List<Crop> result = new ArrayList<>();
 
-        for (Point p : getSurroundingSpotsForCrops()) {
-            if (map.isCropAtPoint(p)) {
-                Crop crop = map.getCropAtPoint(p);
+        for (Point point : getSurroundingSpotsForCrops()) {
+            if (map.isCropAtPoint(point)) {
+                Crop crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() != HARVESTED) {
-                    result.add(map.getCropAtPoint(p));
+                    result.add(map.getCropAtPoint(point));
                 }
             }
         }

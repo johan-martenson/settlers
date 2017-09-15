@@ -32,9 +32,9 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
 
-    public Player(String n, Color c) {
-        name                = n;
-        color               = c;
+    public Player(String name, Color color) {
+        this.name           = name;
+        this.color          = color;
         buildings           = new LinkedList<>();
         ownedLands          = new LinkedList<>();
         fieldOfView         = new LinkedList<>();
@@ -64,8 +64,8 @@ public class Player {
         return name;
     }
 
-    void removeBuilding(Building b) {
-        buildings.remove(b);
+    void removeBuilding(Building building) {
+        buildings.remove(building);
     }
 
     void addBuilding(Building house) {
@@ -120,9 +120,9 @@ public class Player {
         return discoveredLand;
     }
 
-    void discover(Point p) {
-        if (!discoveredLand.contains(p)) {
-            discoveredLand.add(p);
+    void discover(Point point) {
+        if (!discoveredLand.contains(point)) {
+            discoveredLand.add(point);
 
             fieldOfView = calculateFieldOfView(discoveredLand);
         }
@@ -140,13 +140,13 @@ public class Player {
         }
 
         /* Count militaries in military buildings that can reach the building */
-        for (Building b : getBuildings()) {
-            if (!b.isMilitaryBuilding()) {
+        for (Building building : getBuildings()) {
+            if (!building.isMilitaryBuilding()) {
                 continue;
             }
 
-            if (b.canAttack(buildingToAttack) && b.getNumberOfHostedMilitary() > 1) {
-                availableAttackers += b.getNumberOfHostedMilitary() - 1;
+            if (building.canAttack(buildingToAttack) && building.getNumberOfHostedMilitary() > 1) {
+                availableAttackers += building.getNumberOfHostedMilitary() - 1;
             }
         }
 
@@ -157,16 +157,16 @@ public class Player {
         List<Building> eligibleBuildings = new LinkedList<>();
 
         /* Find all eligible buildings to attack from */
-        for (Building b : getBuildings()) {
-            if (!b.isMilitaryBuilding()) {
+        for (Building building : getBuildings()) {
+            if (!building.isMilitaryBuilding()) {
                 continue;
             }
 
-            if (!b.canAttack(buildingToAttack)) {
+            if (!building.canAttack(buildingToAttack)) {
                 continue;
             }
 
-            eligibleBuildings.add(b);
+            eligibleBuildings.add(building);
         }
 
         /* Retrieve militaries from the buildings */
@@ -175,25 +175,25 @@ public class Player {
         Set<Point> reservedSpots = new HashSet<>();
         Point center             = buildingToAttack.getFlag().getPosition();
 
-        for (Building b : eligibleBuildings) {
+        for (Building building : eligibleBuildings) {
 
             if (allocated == nrAttackers) {
                 break;
             }
 
-            if (b.getNumberOfHostedMilitary() < 2) {
+            if (building.getNumberOfHostedMilitary() < 2) {
                 continue;
             }
 
             boolean foundSpot;
 
-            while (b.getNumberOfHostedMilitary() > 1) {
+            while (building.getNumberOfHostedMilitary() > 1) {
                 if (allocated == nrAttackers) {
                     break;
                 }
 
                 /* Retrieve a military from the building */
-                Military military = b.retrieveMilitary();
+                Military military = building.retrieveMilitary();
 
                 /* Make the military move to close to the building to attack */
                 foundSpot = false;
@@ -210,7 +210,7 @@ public class Player {
                                 continue;
                             }
 
-                            if (map.findWayOffroad(b.getPosition(), point, null) == null) {
+                            if (map.findWayOffroad(building.getPosition(), point, null) == null) {
                                 continue;
                             }
 
@@ -234,8 +234,8 @@ public class Player {
         }
     }
 
-    void setMap(GameMap m) {
-        map = m;
+    void setMap(GameMap map) {
+        this.map = map;
     }
 
     void setLands(List<Land> value) {
@@ -266,25 +266,25 @@ public class Player {
         Storage storage = null;
         int distance = Integer.MAX_VALUE;
 
-        for (Building b : getBuildings()) {
-            if (b.equals(avoid)) {
+        for (Building building : getBuildings()) {
+            if (building.equals(avoid)) {
                 continue;
             }
 
-            if (! (b instanceof Storage)) {
+            if (! (building instanceof Storage)) {
                 continue;
             }
 
-            if (b.getFlag().getPosition().equals(position)) {
-                storage = (Storage)b;
+            if (building.getFlag().getPosition().equals(position)) {
+                storage = (Storage)building;
                 break;
             }
 
-            if (position.equals(b.getFlag().getPosition())) {
-                return b;
+            if (position.equals(building.getFlag().getPosition())) {
+                return building;
             }
 
-            List<Point> path = map.findWayWithExistingRoads(position, b.getFlag().getPosition());
+            List<Point> path = map.findWayWithExistingRoads(position, building.getFlag().getPosition());
 
             if (path == null) {
                 continue;
@@ -292,7 +292,7 @@ public class Player {
 
             if (path.size() < distance) {
                 distance = path.size();
-                storage = (Storage) b;
+                storage = (Storage) building;
             }
         }
 
@@ -304,22 +304,22 @@ public class Player {
         Map<Material, Integer> result = new HashMap<>();
         int current;
 
-        for (Building b : getBuildings()) {
+        for (Building building : getBuildings()) {
 
-            if ( !( b instanceof Storage)) {
+            if ( !( building instanceof Storage)) {
                 continue;
             }
 
-            for (Material m : Material.values()) {
-                if (!result.containsKey(m)) {
-                    result.put(m, 0);
+            for (Material material : Material.values()) {
+                if (!result.containsKey(material)) {
+                    result.put(material, 0);
                 }
 
-                current = result.get(m);
+                current = result.get(material);
 
-                current = current + b.getAmount(m);
+                current = current + building.getAmount(material);
 
-                result.put(m, current);
+                result.put(material, current);
             }
         }
 
@@ -354,11 +354,11 @@ public class Player {
         }
     }
 
-    int getTransportPriority(Cargo c) {
+    int getTransportPriority(Cargo crop) {
         int i = 0;
 
-        for (Material m : transportPriorities) {
-            if (c.getMaterial() == m) {
+        for (Material material : transportPriorities) {
+            if (crop.getMaterial() == material) {
                 return i;
             }
 
@@ -372,10 +372,10 @@ public class Player {
         return transportPriorities;
     }
 
-    public Player getPlayerAtPoint(Point p) {
+    public Player getPlayerAtPoint(Point point) {
 
         /* Don't allow lookup of points the player hasn't discovered yet */
-        if (!getDiscoveredLand().contains(p)) {
+        if (!getDiscoveredLand().contains(point)) {
             return null;
         }
 
@@ -383,7 +383,7 @@ public class Player {
            does
         */
         for (Player player : map.getPlayers()) {
-            if (player.isWithinBorder(p)) {
+            if (player.isWithinBorder(point)) {
                 return player;
             }
         }

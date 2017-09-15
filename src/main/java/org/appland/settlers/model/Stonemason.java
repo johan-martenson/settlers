@@ -48,9 +48,9 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Quarry) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Quarry) {
+            setHome(building);
         }
 
         state = State.RESTING_IN_HOUSE;

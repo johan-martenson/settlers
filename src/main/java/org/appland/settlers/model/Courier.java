@@ -243,11 +243,11 @@ public class Courier extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            for (Building b : getPlayer().getBuildings()) {
-                if (b instanceof Storage) {
+            for (Building building : getPlayer().getBuildings()) {
+                if (building instanceof Storage) {
                     state = RETURNING_TO_STORAGE;
 
-                    setOffroadTarget(b.getPosition());
+                    setOffroadTarget(building.getPosition());
 
                     break;
                 }

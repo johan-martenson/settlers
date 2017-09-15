@@ -52,8 +52,8 @@ public class Storage extends Building implements Actor {
 
     private static final Logger log = Logger.getLogger(Storage.class.getName());
 
-    public Storage(Player p) {
-        super(p);
+    public Storage(Player player) {
+        super(player);
 
         inventory = new HashMap<>();
 
@@ -132,11 +132,11 @@ public class Storage extends Building implements Actor {
         }
 
         /* Go through the flags and look for flags waiting for geologists */
-        for (Flag f : getMap().getFlags()) {
-            if (f.needsGeologist()) {
+        for (Flag flag : getMap().getFlags()) {
+            if (flag.needsGeologist()) {
 
                 /* Don't send out scout if there is no way to the flag */
-                if (!getMap().arePointsConnectedByRoads(getPosition(), f.getPosition())) {
+                if (!getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition())) {
                     continue;
                 }
 
@@ -149,8 +149,8 @@ public class Storage extends Building implements Actor {
                 Geologist geologist = (Geologist)retrieveWorker(GEOLOGIST);
 
                 getMap().placeWorker(geologist, this);
-                geologist.setTarget(f.getPosition());
-                f.geologistSent(geologist);
+                geologist.setTarget(flag.getPosition());
+                flag.geologistSent(geologist);
 
                 return true;
             }
@@ -167,11 +167,11 @@ public class Storage extends Building implements Actor {
         }
 
         /* Go through flags and look for flags that are waiting for scouts */
-        for (Flag f : getMap().getFlags()) {
-            if (f.needsScout()) {
+        for (Flag flag : getMap().getFlags()) {
+            if (flag.needsScout()) {
 
                 /* Don't send out a scout if there is no way to the flag */
-                if (!getMap().arePointsConnectedByRoads(getPosition(), f.getPosition())) {
+                if (!getMap().arePointsConnectedByRoads(getPosition(), flag.getPosition())) {
                     continue;
                 }
 
@@ -184,8 +184,8 @@ public class Storage extends Building implements Actor {
                 Scout scout = (Scout)retrieveWorker(SCOUT);
 
                 getMap().placeWorker(scout, this);
-                scout.setTarget(f.getPosition());
-                f.scoutSent();
+                scout.setTarget(flag.getPosition());
+                flag.scoutSent();
 
                 return true;
             }
@@ -206,10 +206,10 @@ public class Storage extends Building implements Actor {
                         continue;
                     }
 
-                    Military m = retrieveAnyMilitary();
-                    getMap().placeWorker(m, this);
-                    m.setTargetBuilding(building);
-                    building.promiseMilitary(m);
+                    Military military = retrieveAnyMilitary();
+                    getMap().placeWorker(military, this);
+                    military.setTargetBuilding(building);
+                    building.promiseMilitary(military);
 
                     return true;
                 }
@@ -252,15 +252,15 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage stg = GameUtils.getClosestStorage(road.getStart(), getPlayer());
+                Storage storage = GameUtils.getClosestStorage(road.getStart(), getPlayer());
 
-                if (!equals(stg)) {
+                if (!equals(storage)) {
                     continue;
                 }
 
-                Courier w = stg.retrieveCourier();
-                getMap().placeWorker(w, stg.getFlag());
-                w.assignToRoad(road);
+                Courier courier = storage.retrieveCourier();
+                getMap().placeWorker(courier, storage.getFlag());
+                courier.assignToRoad(road);
 
                 return true;
             }
@@ -276,13 +276,13 @@ public class Storage extends Building implements Actor {
     }
 
     @Override
-    public void putCargo(Cargo c) throws Exception {
+    public void putCargo(Cargo cargo) throws Exception {
         if (!isWorking()) {
-            super.putCargo(c);
+            super.putCargo(cargo);
         } else {
-            log.log(Level.FINE, "Depositing cargo {0}", c);
+            log.log(Level.FINE, "Depositing cargo {0}", cargo);
 
-            storeOneInInventory(c.getMaterial());
+            storeOneInInventory(cargo.getMaterial());
 
             log.log(Level.FINER, "Inventory is {0} after deposit", inventory);
         }
@@ -301,25 +301,25 @@ public class Storage extends Building implements Actor {
 
         retrieveOneFromInventory(material);
 
-        Cargo c = new Cargo(material, getMap());
+        Cargo cargo = new Cargo(material, getMap());
 
-        c.setPosition(getFlag().getPosition());
+        cargo.setPosition(getFlag().getPosition());
 
         log.log(Level.FINER, "Inventory is {0} after retrieval", inventory);
 
-        return c;
+        return cargo;
     }
 
-    public boolean isInStock(Material m) {
-        return hasAtLeastOne(m);
+    public boolean isInStock(Material material) {
+        return hasAtLeastOne(material);
     }
 
-    public void depositWorker(Worker w) throws Exception {
-        if (w instanceof Military) {
-            Military m = (Military) w;
+    public void depositWorker(Worker worker) throws Exception {
+        if (worker instanceof Military) {
+            Military military = (Military) worker;
             Material material;
 
-            switch (m.getRank()) {
+            switch (military.getRank()) {
             case PRIVATE_RANK:
                 material = Material.PRIVATE;
                 break;
@@ -330,61 +330,61 @@ public class Storage extends Building implements Actor {
                 material = Material.GENERAL;
                 break;
             default:
-                throw new Exception("Can't handle military with rank " + m.getRank());
+                throw new Exception("Can't handle military with rank " + military.getRank());
             }
 
             storeOneInInventory(material);
-        } else if (w instanceof Forester) {
+        } else if (worker instanceof Forester) {
             storeOneInInventory(FORESTER);
-        } else if (w instanceof WellWorker) {
+        } else if (worker instanceof WellWorker) {
             storeOneInInventory(WELL_WORKER);
-        } else if (w instanceof WoodcutterWorker) {
+        } else if (worker instanceof WoodcutterWorker) {
             storeOneInInventory(WOODCUTTER_WORKER);
-        } else if (w instanceof StorageWorker) {
+        } else if (worker instanceof StorageWorker) {
             storeOneInInventory(STORAGE_WORKER);
-        } else if (w instanceof Butcher) {
+        } else if (worker instanceof Butcher) {
             storeOneInInventory(BUTCHER);
-        } else if (w instanceof SawmillWorker) {
+        } else if (worker instanceof SawmillWorker) {
             storeOneInInventory(SAWMILL_WORKER);
-        } else if (w instanceof Stonemason) {
+        } else if (worker instanceof Stonemason) {
             storeOneInInventory(STONEMASON);
-        } else if (w instanceof PigBreeder) {
+        } else if (worker instanceof PigBreeder) {
             storeOneInInventory(PIG_BREEDER);
-        } else if (w instanceof Minter) {
+        } else if (worker instanceof Minter) {
             storeOneInInventory(MINTER);
-        } else if (w instanceof Miller) {
+        } else if (worker instanceof Miller) {
             storeOneInInventory(MILLER);
-        } else if (w instanceof IronFounder) {
+        } else if (worker instanceof IronFounder) {
             storeOneInInventory(IRON_FOUNDER);
-        } else if (w instanceof Miner) {
+        } else if (worker instanceof Miner) {
             storeOneInInventory(MINER);
-        } else if (w instanceof Forester) {
+        } else if (worker instanceof Forester) {
             storeOneInInventory(FORESTER);
-        } else if (w instanceof Fisherman) {
+        } else if (worker instanceof Fisherman) {
             storeOneInInventory(FISHERMAN);
-        } else if (w instanceof Farmer) {
+        } else if (worker instanceof Farmer) {
             storeOneInInventory(FARMER);
-        } else if (w instanceof Brewer) {
+        } else if (worker instanceof Brewer) {
             storeOneInInventory(BREWER);
-        } else if (w instanceof Baker) {
+        } else if (worker instanceof Baker) {
             storeOneInInventory(BAKER);
-        } else if (w instanceof Armorer) {
+        } else if (worker instanceof Armorer) {
             storeOneInInventory(ARMORER);
-        } else if (w instanceof Geologist) {
+        } else if (worker instanceof Geologist) {
             storeOneInInventory(GEOLOGIST);
-        } else if (w instanceof DonkeyBreeder) {
+        } else if (worker instanceof DonkeyBreeder) {
             storeOneInInventory(DONKEY_BREEDER);
-        } else if (w instanceof Scout) {
+        } else if (worker instanceof Scout) {
             storeOneInInventory(SCOUT);
-        } else if (w instanceof Hunter) {
+        } else if (worker instanceof Hunter) {
             storeOneInInventory(HUNTER);
         }
 
-        getMap().removeWorker(w);
+        getMap().removeWorker(worker);
     }
 
     public Worker retrieveWorker(Material material) throws Exception {
-        Worker w = null;
+        Worker worker = null;
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("There are no " + material + " to retrieve");
@@ -392,84 +392,84 @@ public class Storage extends Building implements Actor {
 
         switch (material) {
         case FORESTER:
-            w = new Forester(getPlayer(), getMap());
+            worker = new Forester(getPlayer(), getMap());
             break;
         case WOODCUTTER_WORKER:
-            w = new WoodcutterWorker(getPlayer(), getMap());
+            worker = new WoodcutterWorker(getPlayer(), getMap());
             break;
         case STONEMASON:
-            w = new Stonemason(getPlayer(), getMap());
+            worker = new Stonemason(getPlayer(), getMap());
             break;
         case FARMER:
-            w = new Farmer(getPlayer(), getMap());
+            worker = new Farmer(getPlayer(), getMap());
             break;
         case SAWMILL_WORKER:
-            w = new SawmillWorker(getPlayer(), getMap());
+            worker = new SawmillWorker(getPlayer(), getMap());
             break;
         case WELL_WORKER:
-            w = new WellWorker(getPlayer(), getMap());
+            worker = new WellWorker(getPlayer(), getMap());
             break;
         case MILLER:
-            w = new Miller(getPlayer(), getMap());
+            worker = new Miller(getPlayer(), getMap());
             break;
         case BAKER:
-            w = new Baker(getPlayer(), getMap());
+            worker = new Baker(getPlayer(), getMap());
             break;
         case STORAGE_WORKER:
-            w = new StorageWorker(getPlayer(), getMap());
+            worker = new StorageWorker(getPlayer(), getMap());
             break;
         case FISHERMAN:
-            w = new Fisherman(getPlayer(), getMap());
+            worker = new Fisherman(getPlayer(), getMap());
             break;
         case MINER:
-            w = new Miner(getPlayer(), getMap());
+            worker = new Miner(getPlayer(), getMap());
             break;
         case IRON_FOUNDER:
-            w = new IronFounder(getPlayer(), getMap());
+            worker = new IronFounder(getPlayer(), getMap());
             break;
         case BREWER:
-            w = new Brewer(getPlayer(), getMap());
+            worker = new Brewer(getPlayer(), getMap());
             break;
         case MINTER:
-            w = new Minter(getPlayer(), getMap());
+            worker = new Minter(getPlayer(), getMap());
             break;
         case ARMORER:
-            w = new Armorer(getPlayer(), getMap());
+            worker = new Armorer(getPlayer(), getMap());
             break;
         case PIG_BREEDER:
-            w = new PigBreeder(getPlayer(), getMap());
+            worker = new PigBreeder(getPlayer(), getMap());
             break;
         case BUTCHER:
-            w = new Butcher(getPlayer(), getMap());
+            worker = new Butcher(getPlayer(), getMap());
             break;
         case GEOLOGIST:
-            w = new Geologist(getPlayer(), getMap());
+            worker = new Geologist(getPlayer(), getMap());
             break;
         case DONKEY_BREEDER:
-            w = new DonkeyBreeder(getPlayer(), getMap());
+            worker = new DonkeyBreeder(getPlayer(), getMap());
             break;
         case SCOUT:
-            w = new Scout(getPlayer(), getMap());
+            worker = new Scout(getPlayer(), getMap());
             break;
         case CATAPULT_WORKER:
-            w = new CatapultWorker(getPlayer(), getMap());
+            worker = new CatapultWorker(getPlayer(), getMap());
             break;
         case HUNTER:
-            w = new Hunter(getPlayer(), getMap());
+            worker = new Hunter(getPlayer(), getMap());
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        w.setPosition(getFlag().getPosition());
+        worker.setPosition(getFlag().getPosition());
 
         retrieveOneFromInventory(material);
 
-        return w;
+        return worker;
     }
 
     public Military retrieveMilitary(Material material) throws Exception {
-        Military.Rank r = Military.Rank.PRIVATE_RANK;
+        Military.Rank rank = Military.Rank.PRIVATE_RANK;
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve military " + material);
@@ -479,97 +479,97 @@ public class Storage extends Building implements Actor {
 
         switch (material) {
         case GENERAL:
-            r = Military.Rank.GENERAL_RANK;
+            rank = Military.Rank.GENERAL_RANK;
             break;
         case SERGEANT:
-            r = Military.Rank.SERGEANT_RANK;
+            rank = Military.Rank.SERGEANT_RANK;
             break;
         case PRIVATE:
-            r = Military.Rank.PRIVATE_RANK;
+            rank = Military.Rank.PRIVATE_RANK;
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
         }
 
-        Military m = new Military(getPlayer(), r, getMap());
+        Military military = new Military(getPlayer(), rank, getMap());
 
-        m.setPosition(getFlag().getPosition());
+        military.setPosition(getFlag().getPosition());
 
-        return m;
+        return military;
     }
 
     public Courier retrieveCourier() {
         /* The storage never runs out of couriers */
 
-        Courier c = new Courier(getPlayer(), getMap());
+        Courier courier = new Courier(getPlayer(), getMap());
 
-        c.setPosition(getFlag().getPosition());
+        courier.setPosition(getFlag().getPosition());
 
-        return c;
+        return courier;
     }
 
     public Military retrieveAnyMilitary() throws Exception {
-        Military m = null;
+        Military military = null;
 
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);
-            m = new Military(getPlayer(), PRIVATE_RANK, getMap());
+            military = new Military(getPlayer(), PRIVATE_RANK, getMap());
         } else if (hasAtLeastOne(SERGEANT)) {
             retrieveOneFromInventory(SERGEANT);
-            m = new Military(getPlayer(), SERGEANT_RANK, getMap());
+            military = new Military(getPlayer(), SERGEANT_RANK, getMap());
         } else if (hasAtLeastOne(GENERAL)) {
             retrieveOneFromInventory(GENERAL);
-            m = new Military(getPlayer(), GENERAL_RANK, getMap());
+            military = new Military(getPlayer(), GENERAL_RANK, getMap());
         } else {
             throw new Exception("No militaries available");
         }
 
-        m.setPosition(getFlag().getPosition());
+        military.setPosition(getFlag().getPosition());
 
-        return m;
+        return military;
     }
 
-    private boolean hasAtLeastOne(Material m) {
-        if (m == COURIER) {
+    private boolean hasAtLeastOne(Material material) {
+        if (material == COURIER) {
             return true;
-        } else if (m == CATAPULT_WORKER) {
+        } else if (material == CATAPULT_WORKER) {
             return true;
         }
 
-        return inventory.getOrDefault(m, 0) > 0;
+        return inventory.getOrDefault(material, 0) > 0;
     }
 
-    private void retrieveOneFromInventory(Material m) {
-        if (m == COURIER) {
+    private void retrieveOneFromInventory(Material material) {
+        if (material == COURIER) {
             return;
-        } else if (m == CATAPULT_WORKER) {
+        } else if (material == CATAPULT_WORKER) {
             return;
         }
 
-        int amount = inventory.getOrDefault(m, 0);
+        int amount = inventory.getOrDefault(material, 0);
 
-        inventory.put(m, amount - 1);
+        inventory.put(material, amount - 1);
     }
 
-    private void storeOneInInventory(Material m) {
-        if (m == COURIER) {
+    private void storeOneInInventory(Material material) {
+        if (material == COURIER) {
             return;
-        } else if (m == CATAPULT_WORKER) {
+        } else if (material == CATAPULT_WORKER) {
             return;
         }
 
-        int amount = inventory.getOrDefault(m, 0);
+        int amount = inventory.getOrDefault(material, 0);
 
-        inventory.put(m, amount + 1);
+        inventory.put(material, amount + 1);
     }
 
     @Override
-    public int getAmount(Material m) {
-        if (m == COURIER) {
+    public int getAmount(Material material) {
+        if (material == COURIER) {
             return 1;
         }
 
-        return inventory.getOrDefault(m, 0);
+        return inventory.getOrDefault(material, 0);
     }
 
     private boolean isWorker(Material material) {
@@ -597,10 +597,10 @@ public class Storage extends Building implements Actor {
         return ready();
     }
 
-    private boolean isClosestStorage(Building b) throws InvalidRouteException {
-        Storage stg = GameUtils.getClosestStorage(b.getPosition(), getPlayer());
+    private boolean isClosestStorage(Building building) throws InvalidRouteException {
+        Storage storage = GameUtils.getClosestStorage(building.getPosition(), getPlayer());
 
-        return equals(stg);
+        return equals(storage);
     }
 
     private boolean assignDonkeys() throws Exception {
@@ -618,15 +618,15 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage stg = GameUtils.getClosestStorage(road.getStart(), getPlayer());
+                Storage storage = GameUtils.getClosestStorage(road.getStart(), getPlayer());
 
-                if (stg != null && !this.equals(stg)) {
+                if (storage != null && !this.equals(storage)) {
                     continue;
                 }
 
-                Donkey d = retrieveDonkey();
-                getMap().placeWorker(d, getFlag());
-                d.assignToRoad(road);
+                Donkey donkey = retrieveDonkey();
+                getMap().placeWorker(donkey, getFlag());
+                donkey.assignToRoad(road);
 
                 return true;
             }

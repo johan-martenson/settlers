@@ -51,8 +51,8 @@ public class Flag implements EndPoint, Piece {
         return position;
     }
 
-    public void setPosition(Point p) {
-        this.position = p;
+    public void setPosition(Point point) {
+        this.position = point;
     }
 
     @Override
@@ -62,8 +62,8 @@ public class Flag implements EndPoint, Piece {
         } else {
             String s = "Flag at " + position + " (stacked cargo:";
 
-            for (Cargo c : stackedCargo) {
-                s += " " + c.getMaterial().name();
+            for (Cargo cargo : stackedCargo) {
+                s += " " + cargo.getMaterial().name();
             }
 
             s += ")";
@@ -73,44 +73,44 @@ public class Flag implements EndPoint, Piece {
     }
 
     @Override
-    public boolean hasCargoWaitingForRoad(Road r) {
-        return getCargoWaitingForRoad(r) != null;
+    public boolean hasCargoWaitingForRoad(Road road) {
+        return getCargoWaitingForRoad(road) != null;
     }
 
     @Override
-    public Cargo retrieveCargo(Cargo c) {
+    public Cargo retrieveCargo(Cargo cargo) {
 
-        if (stackedCargo.contains(c)) {
+        if (stackedCargo.contains(cargo)) {
 
-            stackedCargo.remove(c);
+            stackedCargo.remove(cargo);
 
-            return c;
+            return cargo;
         }
 
         return null;
     }
 
     @Override
-    public Cargo getCargoWaitingForRoad(Road r) {
+    public Cargo getCargoWaitingForRoad(Road road) {
 
         Cargo waitingCargo = null;
         int priority = Integer.MAX_VALUE;
 
-        for (Cargo c : stackedCargo) {
-            if (c.isDeliveryPromised()) {
+        for (Cargo cargo : stackedCargo) {
+            if (cargo.isDeliveryPromised()) {
                 continue;
             }
 
-            if (!r.getEnd().equals(c.getNextFlagOrBuilding()) &&
-                !r.getStart().equals(c.getNextFlagOrBuilding())) {
+            if (!road.getEnd().equals(cargo.getNextFlagOrBuilding()) &&
+                !road.getStart().equals(cargo.getNextFlagOrBuilding())) {
                 continue;
             }
 
-            int tmpPriority = player.getTransportPriority(c);
+            int tmpPriority = player.getTransportPriority(cargo);
 
             if (tmpPriority < priority) {
                 priority = tmpPriority;
-                waitingCargo = c;
+                waitingCargo = cargo;
             }
 
             if (priority == 0) {
@@ -125,7 +125,7 @@ public class Flag implements EndPoint, Piece {
         geologistsCalled++;
     }
 
-    void geologistSent(Geologist g) {
+    void geologistSent(Geologist geologist) {
         geologistsCalled--;
     }
 
@@ -149,7 +149,7 @@ public class Flag implements EndPoint, Piece {
         return player;
     }
 
-    void setPlayer(Player p) {
-        player = p;
+    void setPlayer(Player player) {
+        this.player = player;
     }
 }
