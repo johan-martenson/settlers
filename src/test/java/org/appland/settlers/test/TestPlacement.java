@@ -100,7 +100,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that there is a valid flag point in the available flag points */
-        List<Point> flagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
         assertTrue(flagPoints.contains(new Point(8, 6)));
     }
@@ -116,7 +116,7 @@ public class TestPlacement {
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        List<Point> flagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
         /* Test that flags can't be placed on the borders */
         for (int y = 0; y < 11; y += 2) {
@@ -193,7 +193,7 @@ public class TestPlacement {
         Utils.surroundPointWithWater(waterPoint, map);
 
         /* Verify that there is no available spot for a flag on the lake */
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(waterPoint));
     }
@@ -236,7 +236,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that there is no available spot for a flag on the stone */
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(point1));
     }
@@ -278,7 +278,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that there is no available spot for a flag on the tree */
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(point1));
     }
@@ -326,7 +326,7 @@ public class TestPlacement {
         map.placeRoad(player0, point1, point2, point3);
 
         /* Verify that there is no available spot for a flag on the tree */
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(point2));
     }
@@ -378,7 +378,7 @@ public class TestPlacement {
         Flag flag0 = map.placeFlag(player0, point0);
 
         /* Verify that the available flag points next to the flag are correct */
-        List<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
         /* The flag's own point */
         assertFalse(possibleFlagPoints.contains(point0));
@@ -424,7 +424,7 @@ public class TestPlacement {
 
         map.placeBuilding(wc, wcPoint);
 
-        List<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
         /* The house's own point */
         assertFalse(possibleFlagPoints.contains(new Point(6, 4)));
@@ -519,7 +519,7 @@ public class TestPlacement {
         Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point0);
 
         /* Verify that the available flag points next to the sawmill are correct */
-        List<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
         /* The house's own point */
         assertFalse(possibleFlagPoints.contains(point0));
@@ -628,7 +628,7 @@ public class TestPlacement {
         Farm farm = map.placeBuilding(new Farm(player0), point0);
 
         /* Verify that the available points for flags next to the farm are correct */
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         /* The house's own point */
         assertFalse(possibleFlags.contains(point0));
@@ -778,7 +778,7 @@ public class TestPlacement {
         waterTile.setVegetationType(WATER);
         grassTile.setVegetationType(GRASS);
 
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertTrue(possibleFlags.contains(sharedPoint1));
         assertTrue(possibleFlags.contains(sharedPoint2));
@@ -813,7 +813,7 @@ public class TestPlacement {
         waterTile5.setVegetationType(WATER);
         waterTile6.setVegetationType(WATER);
 
-        List<Point> possibleFlags = map.getAvailableFlagPoints(player0);
+        Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(centerPoint));
     }    
@@ -1498,7 +1498,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that there are no available flag spots on the border */
-        List<Point> availableFlagPoints = map.getAvailableFlagPoints(player0);
+        Collection<Point> availableFlagPoints = map.getAvailableFlagPoints(player0);
 
         for (Collection<Point> border : player0.getBorders()) {
             for (Point borderPoint : border) {

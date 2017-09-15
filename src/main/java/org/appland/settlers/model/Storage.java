@@ -1,9 +1,9 @@
 package org.appland.settlers.model;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
@@ -55,7 +55,7 @@ public class Storage extends Building implements Actor {
     public Storage(Player p) {
         super(p);
 
-        inventory = createEmptyMaterialIntMap();
+        inventory = new HashMap<>();
 
         draftCountdown = new Countdown();
     }
@@ -66,15 +66,15 @@ public class Storage extends Building implements Actor {
 
     /* This method updates the inventory as a side effect, without any locking */
     private void draftMilitary() {
-        int swords = inventory.get(SWORD);
-        int shields = inventory.get(SHIELD);
-        int beer = inventory.get(BEER);
+        int swords  = inventory.getOrDefault(SWORD, 0);
+        int shields = inventory.getOrDefault(SHIELD, 0);
+        int beer    = inventory.getOrDefault(BEER, 0);
 
         int privatesToAdd = Math.min(swords, shields);
 
         privatesToAdd = Math.min(privatesToAdd, beer);
 
-        int existingPirates = inventory.get(PRIVATE);
+        int existingPirates = inventory.getOrDefault(PRIVATE, 0);
 
         inventory.put(PRIVATE, existingPirates + privatesToAdd);
         inventory.put(BEER, beer - privatesToAdd);
@@ -270,9 +270,9 @@ public class Storage extends Building implements Actor {
     }
 
     public boolean isDraftPossible(Map<Material, Integer> inventory) {
-        return inventory.get(BEER) > 0
-                && inventory.get(SWORD) > 0
-                && inventory.get(SHIELD) > 0;
+        return inventory.getOrDefault(BEER, 0) > 0
+                && inventory.getOrDefault(SWORD, 0) > 0
+                && inventory.getOrDefault(SHIELD, 0) > 0;
     }
 
     @Override
@@ -536,7 +536,7 @@ public class Storage extends Building implements Actor {
             return true;
         }
 
-        return inventory.get(m) > 0;
+        return inventory.getOrDefault(m, 0) > 0;
     }
 
     private void retrieveOneFromInventory(Material m) {
@@ -546,7 +546,7 @@ public class Storage extends Building implements Actor {
             return;
         }
 
-        int amount = inventory.get(m);
+        int amount = inventory.getOrDefault(m, 0);
 
         inventory.put(m, amount - 1);
     }
@@ -558,7 +558,7 @@ public class Storage extends Building implements Actor {
             return;
         }
 
-        int amount = inventory.get(m);
+        int amount = inventory.getOrDefault(m, 0);
 
         inventory.put(m, amount + 1);
     }
@@ -569,7 +569,7 @@ public class Storage extends Building implements Actor {
             return 1;
         }
 
-        return inventory.get(m);
+        return inventory.getOrDefault(m, 0);
     }
 
     private boolean isWorker(Material material) {

@@ -138,14 +138,6 @@ public class GameUtils {
         }
     }
 
-    static Map<Material, Integer> createEmptyMaterialIntMap() {
-        Map<Material, Integer> result = new HashMap<>();
-        for (Material m : Material.values()) {
-            result.put(m, 0);
-        }
-        return result;
-    }
-
     static boolean isQueueEmpty(Map<Material, Integer> queue) {
         boolean isEmpty = true;
 

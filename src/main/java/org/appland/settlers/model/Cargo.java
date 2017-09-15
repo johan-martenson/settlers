@@ -141,13 +141,13 @@ public class Cargo implements Piece {
     void rerouteIfNeeded() throws Exception {
 
         /* Handle the case where the targeted building cannot receive the cargo */
-        if (getTarget() == null) {
+        if (target == null) {
             returnToClosestStorage();
-        } else if (!map.getBuildings().contains(getTarget())) {
+        } else if (!target.equals(map.getBuildingAtPoint(target.getPosition()))) {
             returnToStorage();
-        } else if (getTarget().burningDown()) {
+        } else if (target.burningDown()) {
             returnToStorage();
-        } else if (getTarget().destroyed()) {
+        } else if (target.destroyed()) {
             returnToStorage();
         } else {
 

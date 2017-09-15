@@ -942,8 +942,8 @@ public class GameMap {
         return Collections.unmodifiableList(workers);
     }
 
-    public List<Point> getAvailableFlagPoints(Player player) throws Exception {
-        List<Point> points = new LinkedList<>();
+    public Collection<Point> getAvailableFlagPoints(Player player) throws Exception {
+        Set<Point> points = new HashSet<>();
 
         for (Land land : player.getLands()) {
 

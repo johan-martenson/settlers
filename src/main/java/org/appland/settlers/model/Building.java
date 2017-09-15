@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.appland.settlers.model.GameUtils.createEmptyMaterialIntMap;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
@@ -60,8 +59,8 @@ public class Building implements Actor, EndPoint, Piece {
     private static final Logger log = Logger.getLogger(Building.class.getName());
 
     public Building(Player player) {
-        receivedMaterial      = createEmptyMaterialIntMap();
-        promisedDeliveries    = createEmptyMaterialIntMap();
+        receivedMaterial      = new HashMap<>();
+        promisedDeliveries    = new HashMap<>();
         countdown             = new Countdown();
         upgradeCountdown      = new Countdown();
         hostedMilitary        = new ArrayList<>();
@@ -120,7 +119,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public int getAmount(Material material) {
-        return receivedMaterial.get(material);
+        return receivedMaterial.getOrDefault(material, 0);
     }
 
     void consumeOne(Material material) {
@@ -349,10 +348,10 @@ public class Building implements Actor, EndPoint, Piece {
             }
         }
 
-        int existingQuantity = receivedMaterial.get(material);
+        int existingQuantity = receivedMaterial.getOrDefault(material, 0);
         receivedMaterial.put(material, existingQuantity + 1);
 
-        existingQuantity = promisedDeliveries.get(material);
+        existingQuantity = promisedDeliveries.getOrDefault(material, 0);
         promisedDeliveries.put(material, existingQuantity - 1);
 
         /* Start the promotion countdown if it's a coin */
@@ -391,7 +390,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public void promiseDelivery(Material material) {
-        int amount = promisedDeliveries.get(material);
+        int amount = promisedDeliveries.getOrDefault(material, 0);
 
         promisedDeliveries.put(material, amount + 1);
     }
@@ -562,7 +561,7 @@ public class Building implements Actor, EndPoint, Piece {
 
         for (Entry<Material, Integer> pair : materialToConsume.entrySet()) {
             int cost = pair.getValue();
-            int before = receivedMaterial.get(pair.getKey());
+            int before = receivedMaterial.getOrDefault(pair.getKey(), 0);
 
             receivedMaterial.put(pair.getKey(), before - cost);
         }
@@ -576,11 +575,7 @@ public class Building implements Actor, EndPoint, Piece {
         if (materialsArray.length != 0) {
             for (Material material : materialsArray) {
 
-                if (!materials.containsKey(material)) {
-                    materials.put(material, 0);
-                }
-
-                int amount = materials.get(material);
+                int amount = materials.getOrDefault(material, 0);
                 materials.put(material, amount + 1);
             }
         }
@@ -609,7 +604,7 @@ public class Building implements Actor, EndPoint, Piece {
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
             Material m = entry.getKey();
 
-            if (receivedMaterial.get(m) < entry.getValue()) {
+            if (receivedMaterial.getOrDefault(m, 0) < entry.getValue()) {
                 return false;
             }
         }
@@ -931,24 +926,20 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     void cancelPromisedDelivery(Cargo cargo) {
-        int amount = promisedDeliveries.get(cargo.getMaterial());
+        int amount = promisedDeliveries.getOrDefault(cargo.getMaterial(), 0);
 
         promisedDeliveries.put(cargo.getMaterial(), amount - 1);
     }
 
     private Integer getProjectedAmount(Material material) {
-        return promisedDeliveries.get(material) + getAmount(material);
+        return promisedDeliveries.getOrDefault(material, 0) + getAmount(material);
     }
 
     private int getTotalAmountNeeded(Material material) {
 
         if (state == State.UNDER_CONSTRUCTION) {
 
-            if (!getMaterialsToBuildHouse().containsKey(material)) {
-                return 0;
-            }
-
-            return getMaterialsToBuildHouse().get(material);
+            return getMaterialsToBuildHouse().getOrDefault(material, 0);
         } else if (state == State.OCCUPIED || state == State.UNOCCUPIED) {
             return getTotalAmountOfMaterialNeededForProduction(material);
         }
@@ -1051,8 +1042,8 @@ public class Building implements Actor, EndPoint, Piece {
 
         /* Get available resources */
 
-        int planckAvailable = receivedMaterial.get(PLANCK);
-        int stoneAvailable = receivedMaterial.get(STONE);
+        int planckAvailable = receivedMaterial.getOrDefault(PLANCK, 0);
+        int stoneAvailable = receivedMaterial.getOrDefault(STONE, 0);
 
         /* Determine if an upgrade is possible */
         if (plancksNeeded <= planckAvailable && stoneNeeded <= stoneAvailable) {
