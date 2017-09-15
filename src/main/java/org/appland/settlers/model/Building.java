@@ -382,16 +382,19 @@ public class Building implements Actor, EndPoint, Piece {
     public String buildingToString() {
         String str = " at " + flag + " with ";
 
-        if (GameUtils.isQueueEmpty(receivedMaterial)) {
-            str += "nothing in queue and ";
-        } else {
-            for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
-                if (pair.getValue() != 0) {
-                    str = str + pair.getKey() + ": " + pair.getValue();
-                }
-            }
+        boolean hasReceivedMaterial = false;
+        for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
+            if (pair.getValue() != 0) {
+                str = str + pair.getKey() + ": " + pair.getValue();
 
+                hasReceivedMaterial = true;
+            }
+        }
+
+        if (hasReceivedMaterial) {
             str += "in queue and ";
+        } else {
+            str += "nothing in queue and ";
         }
 
         return str;

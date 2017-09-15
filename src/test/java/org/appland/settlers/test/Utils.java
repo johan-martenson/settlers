@@ -52,11 +52,9 @@ import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 
 public class Utils {
 
-    private static final Logger log = Logger.getLogger(Courier.class.getName());
-
     public static void fastForward(int time, Actor b) throws Exception {
-        int i;
-        for (i = 0; i < time; i++) {
+
+        for (int i = 0; i < time; i++) {
             b.stepTime();
         }
     }
@@ -72,21 +70,19 @@ public class Utils {
     }
 
     public static void fastForward(int time, GameMap map) throws Exception {
-        int i;
-        for (i = 0; i < time; i++) {
+
+        for (int i = 0; i < time; i++) {
             map.stepTime();
         }
     }
 
     public static List<Building> getNeedForMaterial(Material wood, List<Building> buildings) {
-        log.log(Level.INFO, "Finding buildings requiring {0} in list {1}", new Object[]{wood, buildings});
 
         List<Building> result = new ArrayList<>();
 
-        for (Building b : buildings) {
-            if (b.needsMaterial(wood)) {
-                log.log(Level.FINE, "Building {0} requires {1}", new Object[]{b, wood});
-                result.add(b);
+        for (Building building : buildings) {
+            if (building.needsMaterial(wood)) {
+                result.add(building);
             }
         }
 
@@ -110,20 +106,19 @@ public class Utils {
         }
     }
 
-    public static void fillUpInventory(Storage hq, Material material, int amount) throws Exception {
-        Cargo c = new Cargo(material, null);
+    public static void fillUpInventory(Storage storage, Material material, int amount) throws Exception {
+        Cargo cargo = new Cargo(material, null);
 
-        int i;
-        for (i = 0; i < amount; i++) {
-            hq.putCargo(c);
+        for (int i = 0; i < amount; i++) {
+            storage.putCargo(cargo);
         }
     }
 
-    public static boolean materialIntMapIsEmpty(Map<Material, Integer> inQueue) {
+    public static boolean materialIntMapIsEmpty(Map<Material, Integer> map) {
         boolean isEmpty = true;
 
-        for (Material m : Material.values()) {
-            if (inQueue.get(m) != 0) {
+        for (Material material : Material.values()) {
+            if (map.get(material) != 0) {
                 isEmpty = false;
             }
         }
@@ -155,15 +150,15 @@ public class Utils {
         assertNotNull(map);
         assertFalse(workers.isEmpty());
 
-        for (Worker c : workers) {
-            assertTrue(c.isTraveling());
+        for (Worker worker : workers) {
+            assertTrue(worker.isTraveling());
         }
 
         for (int i = 0; i < 1000; i++) {
             boolean allDone = true;
 
-            for (Worker c : workers) {
-                if (!c.isArrived()) {
+            for (Worker worker : workers) {
+                if (!worker.isArrived()) {
                     allDone = false;
                 }
             }
@@ -205,8 +200,8 @@ public class Utils {
     }
 
     public static void fastForwardUntilTreeIsGrown(Tree tree, GameMap map) throws Exception {
-        int i;
-        for (i = 0; i < 500; i++) {
+
+        for (int i = 0; i < 500; i++) {
             map.stepTime();
 
             if (tree.getSize() == LARGE) {
@@ -218,8 +213,8 @@ public class Utils {
     }
 
     public static void fastForwardUntilCropIsGrown(Crop crop, GameMap map) throws Exception {
-        int i;
-        for (i = 0; i < 500; i++) {
+
+        for (int i = 0; i < 500; i++) {
             if (crop.getGrowthState() == FULL_GROWN) {
                 break;
             }
@@ -230,11 +225,11 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<? extends Worker> aClass) {
+    public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<? extends Worker> workerClass) {
         boolean found = false;
 
-        for (Worker w : allWorkers) {
-            if (w.getClass().equals(aClass)) {
+        for (Worker worker : allWorkers) {
+            if (worker.getClass().equals(workerClass)) {
                 found = true;
             }
         }
@@ -243,8 +238,8 @@ public class Utils {
     }
 
     public static void surroundPointWithWater(Point point0, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setVegetationType(WATER);
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+            tile.setVegetationType(WATER);
         }
     }
 
@@ -255,14 +250,14 @@ public class Utils {
     }
 
     public static void surroundPointWithMountain(Point point0, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setVegetationType(MOUNTAIN);
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+            tile.setVegetationType(MOUNTAIN);
         }
     }
 
     public static void surroundPointWithSwamp(Point point0, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setVegetationType(SWAMP);
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+            tile.setVegetationType(SWAMP);
         }
     }
 
@@ -290,63 +285,63 @@ public class Utils {
         assertNotNull(building.getWorker());
     }
 
-    public static void putGoldAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setAmountMineral(GOLD, size);
+    public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
+            tile.setAmountMineral(GOLD, size);
         }
     }
 
-    public static void putIronAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setAmountMineral(IRON, size);
+    public static void putIronAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
+            tile.setAmountMineral(IRON, size);
         }
     }
 
-    public static void putCoalAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setAmountMineral(COAL, size);
+    public static void putCoalAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
+            tile.setAmountMineral(COAL, size);
         }
     }
 
-    public static void putGraniteAtSurroundingTiles(Point point0, Size size, GameMap map) throws Exception {
-        for (Tile t : map.getTerrain().getSurroundingTiles(point0)) {
-            t.setAmountMineral(STONE, size);
+    public static void putGraniteAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
+            tile.setAmountMineral(STONE, size);
         }
     }
 
-    public static void createMountainWithinRadius(Point point1, int i, GameMap map) throws Exception {
+    public static void createMountainWithinRadius(Point point, int i, GameMap map) throws Exception {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
 
-        for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
+        for (Point p : map.getPointsWithinRadius(point, i - 1)) {
             tiles.addAll(terrain.getSurroundingTiles(p));
         }
 
-        for (Tile t : tiles) {
-            t.setVegetationType(MOUNTAIN);
+        for (Tile tile : tiles) {
+            tile.setVegetationType(MOUNTAIN);
         }
     }
 
-    public static void putMineralWithinRadius(Material mineral, Point point1, int i, GameMap map) throws Exception {
+    public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) throws Exception {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
 
-        for (Point p : map.getPointsWithinRadius(point1, i - 1)) {
+        for (Point p : map.getPointsWithinRadius(point1, radius - 1)) {
             tiles.addAll(terrain.getSurroundingTiles(p));
         }
 
-        for (Tile t : tiles) {
-            t.setAmountMineral(mineral, LARGE);
+        for (Tile tile : tiles) {
+            tile.setAmountMineral(mineral, LARGE);
         }
     }
 
-    public static Courier occupyRoad(Road road1, GameMap map) throws Exception {
-        Courier courier = new Courier(road1.getPlayer(), map);
+    public static Courier occupyRoad(Road road, GameMap map) throws Exception {
+        Courier courier = new Courier(road.getPlayer(), map);
 
-        map.placeWorker(courier, road1.getFlags()[0]);
-        courier.assignToRoad(road1);
+        map.placeWorker(courier, road.getFlags()[0]);
+        courier.assignToRoad(road);
 
-        assertEquals(road1.getCourier(), courier);
+        assertEquals(road.getCourier(), courier);
 
         return courier;
     }
@@ -373,27 +368,27 @@ public class Utils {
         assertEquals(storage.getAmount(material), amount);
     }
 
-    public static void constructHouse(Building b, GameMap map) throws Exception {
-        assertTrue(b.underConstruction());
+    public static void constructHouse(Building building, GameMap map) throws Exception {
+        assertTrue(building.underConstruction());
 
         for (int i = 0; i < 20; i++) {
-            if (b.needsMaterial(PLANCK)) {
+            if (building.needsMaterial(PLANCK)) {
                 try {
                     Cargo cargo = new Cargo(PLANCK, map);
 
-                    b.promiseDelivery(PLANCK);
-                    b.putCargo(cargo);
+                    building.promiseDelivery(PLANCK);
+                    building.putCargo(cargo);
                 } catch (Exception ex) {
                     Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
-            if (b.needsMaterial(STONE)) {                
+            if (building.needsMaterial(STONE)) {
                 try {
                     Cargo cargo = new Cargo(STONE, map);
 
-                    b.promiseDelivery(STONE);
-                    b.putCargo(cargo);
+                    building.promiseDelivery(STONE);
+                    building.putCargo(cargo);
                 } catch (Exception ex) {
                     Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -401,27 +396,27 @@ public class Utils {
         }
 
         for (int i = 0; i < 500; i++) {
-            if (b.ready()) {
+            if (building.ready()) {
                 break;
             }
 
-            b.stepTime();
+            building.stepTime();
         }
 
-        assertTrue(b.ready());
+        assertTrue(building.ready());
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material m) throws Exception {
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material material) throws Exception {
 
         for (int j = 0; j < 2000; j++) {
-            if (worker.getCargo() != null && worker.getCargo().getMaterial().equals(m)) {
+            if (worker.getCargo() != null && worker.getCargo().getMaterial().equals(material)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(worker.getCargo().getMaterial(), m);
+        assertEquals(worker.getCargo().getMaterial(), material);
     }
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws Exception {
@@ -437,6 +432,7 @@ public class Utils {
     }
 
     public static void fastForwardUntilWorkerProducesCargo(GameMap map, Worker worker) throws Exception {
+
         for (int i = 0; i < 300; i++) {
             if (worker.getCargo() != null) {
                 break;
@@ -448,10 +444,12 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building barracks0, int nr) throws Exception {
+    public static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building building, int nr) throws Exception {
+
         boolean populated = false;
+
         for (int i = 0; i < 1000; i++) {
-            if (barracks0.getNumberOfHostedMilitary() == nr) {
+            if (building.getNumberOfHostedMilitary() == nr) {
                 populated = true;
 
                 break;
@@ -461,13 +459,13 @@ public class Utils {
         }
 
         assertTrue(populated);
-        assertEquals(barracks0.getNumberOfHostedMilitary(), nr);
+        assertEquals(building.getNumberOfHostedMilitary(), nr);
     }
 
-    public static void verifyPointIsWithinBorder(GameMap map, Player player0, Point position) {
+    public static void verifyPointIsWithinBorder(GameMap map, Player player, Point position) {
         boolean insideLand = false;
 
-        for (Land land : player0.getLands()) {
+        for (Land land : player.getLands()) {
             if (land.isWithinBorder(position)) {
                 insideLand = true;
 
@@ -478,10 +476,10 @@ public class Utils {
         assertTrue(insideLand);
     }
 
-    public static void verifyPointIsNotWithinBorder(GameMap map, Player player0, Point position) {
+    public static void verifyPointIsNotWithinBorder(GameMap map, Player player, Point position) {
         boolean insideLand = false;
 
-        for (Land land : player0.getLands()) {
+        for (Land land : player.getLands()) {
             if (land.isWithinBorder(position)) {
                 insideLand = true;
 
@@ -500,6 +498,8 @@ public class Utils {
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
                 delivery = true;
+
+                break;
             }
 
             map.stepTime();
@@ -508,8 +508,8 @@ public class Utils {
         assertTrue(delivery);
     }
 
-    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road0, Material material) throws Exception {
-        Courier courier = road0.getCourier();
+    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road, Material material) throws Exception {
+        Courier courier = road.getCourier();
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
@@ -543,9 +543,9 @@ public class Utils {
 
     public static Military findMilitaryOutsideBuilding(Player player, GameMap map) {
         Military attacker = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
-                attacker = (Military)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                attacker = (Military)worker;
             }
         }
 
@@ -594,11 +594,11 @@ public class Utils {
         return null;
     }
 
-    public static <T> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player0, GameMap map) {
+    public static <T> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player, GameMap map) {
         List<T> workersFound = new LinkedList<>();
 
         for (Worker w : map.getWorkers()) {
-            if (w.getClass().equals(aClass) && !w.isInsideBuilding() && w.getPlayer().equals(player0)) {
+            if (w.getClass().equals(aClass) && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
                 workersFound.add((T)w);
             }
         }
@@ -606,15 +606,16 @@ public class Utils {
         return workersFound;
     }
 
-    public static <T> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player0, GameMap map) throws Exception {
+    public static <T> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player, GameMap map) throws Exception {
         List<T> workers = new LinkedList<>();
 
         for (int i = 0; i < 1000; i++) {
+
             workers.clear();
 
-            for (Worker w : map.getWorkers()) {
-                if (w.getClass().equals(type) && !w.isInsideBuilding() && player0.equals(w.getPlayer())) {
-                    workers.add((T)w);
+            for (Worker worker : map.getWorkers()) {
+                if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
+                    workers.add((T)worker);
                 }
             }
 
@@ -658,12 +659,12 @@ public class Utils {
         assertTrue(attacker.isFighting());
     }
 
-    static Military getMainAttacker(GameMap map, Player player0, Building building, Collection<Military> attackers) throws Exception {
+    static Military getMainAttacker(GameMap map, Player player, Building building, Collection<Military> attackers) throws Exception {
         Military firstAttacker = null;
 
-        for (Military m : attackers) {
-            if (m.getTarget().equals(building.getFlag().getPosition())) {
-                firstAttacker = m;
+        for (Military military : attackers) {
+            if (military.getTarget().equals(building.getFlag().getPosition())) {
+                firstAttacker = military;
 
                 break;
             }
@@ -756,16 +757,16 @@ public class Utils {
         return animal;
     }
 
-    static void waitForActorsToGetClose(Hunter hunter, WildAnimal animal, int d, GameMap map) throws Exception {
+    static void waitForActorsToGetClose(Hunter hunter, WildAnimal animal, int distance, GameMap map) throws Exception {
         for (int i = 0; i < 5000; i++) {
-            if (hunter.getPosition().distance(animal.getPosition()) <= d) {
+            if (hunter.getPosition().distance(animal.getPosition()) <= distance) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(hunter.getPosition().distance(animal.getPosition()) <= d);
+        assertTrue(hunter.getPosition().distance(animal.getPosition()) <= distance);
     }
 
     static void fastForwardUntilWorkerCarriesNoCargo(GameMap map, Worker worker) throws Exception {
@@ -795,26 +796,26 @@ public class Utils {
         assertEquals(cargo.getPosition(), cargo.getTarget().getPosition());
     }
 
-    static void waitUntilAmountIs(GameMap map, Building target, Material m, int amount) throws Exception {
+    static void waitUntilAmountIs(GameMap map, Building target, Material material, int amount) throws Exception {
 
         for (int i = 0; i < 2000; i++) {
 
-            if (target.getAmount(m) == amount) {
+            if (target.getAmount(material) == amount) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(target.getAmount(m), amount);
+        assertEquals(target.getAmount(material), amount);
     }
 
-    static void deliverCargo(Building coalMine0, Material material, GameMap map) throws Exception {
+    static void deliverCargo(Building building, Material material, GameMap map) throws Exception {
         Cargo cargo = new Cargo(material, map);
 
-        coalMine0.promiseDelivery(material);
+        building.promiseDelivery(material);
 
-        coalMine0.putCargo(cargo);
+        building.putCargo(cargo);
     }
 
     static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker) throws Exception {
@@ -862,32 +863,32 @@ public class Utils {
         return map.getCropAtPoint(position);
     }
 
-    private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer0) throws Exception {
+    private static void waitForFarmerToStopPlanting(GameMap map, Farmer farmer) throws Exception {
 
         for (int i = 0; i < 10000; i++) {
 
-            if (!farmer0.isPlanting()) {
+            if (!farmer.isPlanting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertFalse(farmer0.isPlanting());
+        assertFalse(farmer.isPlanting());
     }
 
-    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer0) throws Exception {
+    private static void waitForFarmerToStartPlanting(GameMap map, Farmer farmer) throws Exception {
 
         for (int i = 0; i < 10000; i++) {
 
-            if (farmer0.isPlanting()) {
+            if (farmer.isPlanting()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(farmer0.isPlanting());
+        assertTrue(farmer.isPlanting());
     }
 
     static void waitForCropToGetHarvested(GameMap map, Crop crop) throws Exception {
@@ -905,21 +906,21 @@ public class Utils {
     }
 
     static int getAmountMilitary(Headquarter headquarter0) {
-        return headquarter0.getAmount(PRIVATE) + 
-                headquarter0.getAmount(SERGEANT) + 
-                headquarter0.getAmount(GENERAL);
+        return headquarter0.getAmount(PRIVATE)  +
+               headquarter0.getAmount(SERGEANT) +
+               headquarter0.getAmount(GENERAL);
     }
 
     static <T> int countNumberElementAppearsInList(List<T> transportPriorityList, T element) {
         int sum = 0;
 
-        for (T t : transportPriorityList) {
+        for (T type : transportPriorityList) {
             if (element == null) {
-                if (t == null) {
+                if (type == null) {
                     sum++;
                 }
             } else {
-                if (element.equals(t)) {
+                if (element.equals(type)) {
                     sum++;
                 }
             }
@@ -928,20 +929,20 @@ public class Utils {
         return sum;
     }
 
-    static Building waitForBuildingToGetUpgraded(Building barracks0) throws Exception {
-        GameMap map = barracks0.getMap();
+    static Building waitForBuildingToGetUpgraded(Building building) throws Exception {
+        GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
-            if (!map.getBuildingAtPoint(barracks0.getPosition()).equals(barracks0)) {
+            if (!map.getBuildingAtPoint(building.getPosition()).equals(building)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).equals(barracks0));
+        assertFalse(map.getBuildingAtPoint(building.getPosition()).equals(building));
 
-        return map.getBuildingAtPoint(barracks0.getPosition());
+        return map.getBuildingAtPoint(building.getPosition());
     }
 
     static void waitForBuildingToBurnDown(Building building, GameMap map) throws Exception {

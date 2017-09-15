@@ -27,28 +27,11 @@ import java.util.Set;
 public class GameUtils {
 
     static boolean isUnique(List<Point> wayPoints) {
-        List<Point> safeCopy = new ArrayList<>();
+        Set<Point> pointsSet = new HashSet<>();
 
-        safeCopy.addAll(wayPoints);
+        pointsSet.addAll(wayPoints);
 
-        Collections.sort(safeCopy, new SortPointsByY());
-
-        Point prev = null;
-        for (Point iter : safeCopy) {
-            if (prev == null) {
-                prev = iter;
-
-                continue;
-            }
-
-            if (prev == iter) {
-                return false;
-            }
-
-            prev = iter;
-        }
-
-        return true;
+        return wayPoints.size() == pointsSet.size();
     }
 
     protected interface ConnectionsProvider {
@@ -136,18 +119,6 @@ public class GameUtils {
             int hash = 5;
             return hash;
         }
-    }
-
-    static boolean isQueueEmpty(Map<Material, Integer> queue) {
-        boolean isEmpty = true;
-
-        for (Integer amount : queue.values()) {
-            if (amount != 0) {
-                isEmpty = false;
-            }
-        }
-
-        return isEmpty;
     }
 
     public static List<Point> findShortestPath(Point start, Point goal, 
@@ -748,8 +719,8 @@ public class GameUtils {
     /**
      * Determines if two points with flags or buildings are connected by roads.
      *
-     * @param start Flag or building to start from
-     * @param goal Flag or building to reach
+     * @param startEndPoint Flag or building to start from
+     * @param goalEndPoint Flag or building to reach
      * @param mapPoints The map with information about each point on the game map
      * @return true if the start and end are connected
      */
