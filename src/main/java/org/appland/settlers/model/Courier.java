@@ -231,6 +231,21 @@ public class Courier extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
         if (getCargo() != null) {
             getCargo().setPosition(getPosition());
+
+            /* Return the cargo to storage if the building is torn down */
+            if (map.isFlagAtPoint(getPosition()) &&
+                (getCargo().getTarget().burningDown() || getCargo().getTarget().destroyed())) {
+
+                Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
+
+                Cargo cargo = getCargo();
+
+                cargo.setTarget(storage);
+
+                state = States.GOING_TO_FLAG_TO_DELIVER_CARGO;
+
+                setTarget(getAssignedRoad().getOtherPoint(getPosition()));
+            }
         }
     }
 
