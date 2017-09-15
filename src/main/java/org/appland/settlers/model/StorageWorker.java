@@ -191,21 +191,20 @@ public class StorageWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), getHome(), getPlayer());
+        Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            for (Building building : getPlayer().getBuildings()) {
-                if (building instanceof Storage && !building.equals(getHome())) {
-                    state = State.RETURNING_TO_STORAGE;
 
-                    setOffroadTarget(building.getPosition());
+            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
-                    break;
-                }
+            if (storage != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setOffroadTarget(storage.getPosition());
             }
         }
     }

@@ -1373,4 +1373,210 @@ public class TestStorage {
         /* Verify that the storage worker goes back to storage */
         assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
     }
+
+    @Test
+    public void testStorageWorkerGoesOffroadBackToClosestStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place a second storage closer to the storage */
+        Point point2 = new Point(13, 13);
+        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), storage1.getPosition());
+
+        int amount = storage1.getAmount(STORAGE_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage1.getPosition());
+
+        /* Verify that the storage worker is stored correctly in the headquarter */
+        assertEquals(storage1.getAmount(STORAGE_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testStorageWorkerReturnsOffroadAndAvoidsBurningStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place a second storage closer to the storage */
+        Point point2 = new Point(13, 13);
+        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the storage */
+        storage1.tearDown();
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STORAGE_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
+
+        /* Verify that the storage worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testStorageWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place a second storage closer to the storage */
+        Point point2 = new Point(13, 13);
+        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage1, map);
+
+        /* Destroy the storage */
+        storage1.tearDown();
+
+        /* Wait for the storage to burn down */
+        Utils.waitForBuildingToBurnDown(storage1, map);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STORAGE_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
+
+        /* Verify that the storage worker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testStorageWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenStorageIsDestroyed() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing storage */
+        Point point26 = new Point(17, 17);
+        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+
+        /* Finish construction of the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Occupy the storage */
+        Utils.occupyBuilding(new StorageWorker(player0, map), storage0, map);
+
+        /* Place a second storage closer to the storage */
+        Point point2 = new Point(13, 13);
+        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+
+        /* Destroy the storage */
+        Worker storageWorker = storage0.getWorker();
+
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getPosition(), storage0.getPosition());
+
+        storage0.tearDown();
+
+        /* Verify that the worker leaves the building and goes back to the headquarter */
+        assertFalse(storageWorker.isInsideBuilding());
+        assertEquals(storageWorker.getTarget(), headquarter0.getPosition());
+
+        int amount = headquarter0.getAmount(STORAGE_WORKER);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
+
+        /* Verify that the storageWorker is stored correctly in the headquarter */
+        assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
+    }
 }
