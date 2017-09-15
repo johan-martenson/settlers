@@ -218,19 +218,22 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public boolean needsMilitaryManning() {
+
+        /* The building needs no manning if evacuation has been ordered */
         if (evacuated) {
             return false;
         }
 
+        /* The building may need military manning if construction is finished */
         if (ready()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
             int maxHost = getMaxHostedMilitary();
 
             return maxHost > promised + actual;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public int getPromisedMilitary() {
@@ -348,6 +351,7 @@ public class Building implements Actor, EndPoint, Piece {
             }
         }
 
+        /* Update the list of received materials and the list of promised deliveries */
         int existingQuantity = receivedMaterial.getOrDefault(material, 0);
         receivedMaterial.put(material, existingQuantity + 1);
 
@@ -601,10 +605,12 @@ public class Building implements Actor, EndPoint, Piece {
     private boolean isMaterialForConstructionAvailable() {
         Map<Material, Integer> materialsToBuild = getMaterialsToBuildHouse();
 
+        /* Check the if the required amount is available for each required material */
         for (Entry<Material, Integer> entry : materialsToBuild.entrySet()) {
-            Material m = entry.getKey();
+            Material material = entry.getKey();
 
-            if (receivedMaterial.getOrDefault(m, 0) < entry.getValue()) {
+            /* Return false if there is missing material */
+            if (receivedMaterial.getOrDefault(material, 0) < entry.getValue()) {
                 return false;
             }
         }
