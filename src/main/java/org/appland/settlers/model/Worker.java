@@ -167,9 +167,23 @@ public abstract class Worker implements Actor, Piece {
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
+            /* Enter the building for non-military workers. Militaries enter on their own */
             if ( !(this instanceof Military)) {
-                building.assignWorker(this);
-                enterBuilding(building);
+
+                /* Go back to storage if the building is not ok to enter */
+                if (building.burningDown() || building.destroyed()) {
+
+                    buildingToEnter = null;
+
+                    returnToStorage();
+
+                    return;
+
+                /* Enter the building */
+                } else {
+                    building.assignWorker(this);
+                    enterBuilding(building);
+                }
             }
 
             buildingToEnter = null;

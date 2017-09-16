@@ -242,9 +242,8 @@ public class Courier extends Worker {
 
                 cargo.setTarget(storage);
 
-                state = States.GOING_TO_FLAG_TO_DELIVER_CARGO;
-
-                setTarget(getAssignedRoad().getOtherPoint(getPosition()));
+                /* Deliver the cargo either to the storage's flag or directly to the storage */
+                deliverToFlagOrBuilding(cargo);
             }
         }
     }
@@ -334,17 +333,24 @@ public class Courier extends Worker {
             pickUpCargoForRoad(endPoint, assignedRoad);
         }
 
-        /* If the intended building is directly after the flag, deliver it all the way */
-        Point cargoTarget = getCargo().getTarget().getPosition();
+        /* Deliver the cargo to the other flag or all the way to the building */
+        deliverToFlagOrBuilding(getCargo());
+    }
 
-        if (cargoTarget.downRight().equals(otherEnd.getPosition())) {
+    private void deliverToFlagOrBuilding(Cargo cargo) throws Exception {
+
+        /* If the intended building is directly after the flag, deliver it all the way */
+        Point cargoTarget = cargo.getTarget().getPosition();
+
+        if (cargoTarget.downRight().equals(assignedRoad.getStart()) ||
+            cargoTarget.downRight().equals(assignedRoad.getEnd())) {
             state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
             setTarget(cargoTarget);
         } else {
             state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
-            setTarget(otherEnd.getPosition());
+            setTarget(assignedRoad.getOtherPoint(getPosition()));
         }
     }
 }

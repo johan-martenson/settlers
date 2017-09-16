@@ -1348,4 +1348,48 @@ public class TestWell {
         /* Verify that the well worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(WELL_WORKER), amount + 1);
     }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place well */
+        Point point26 = new Point(17, 17);
+        Building well0 = map.placeBuilding(new Well(player0), point26);
+
+        /* Place road to connect the headquarter and the well */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), well0.getFlag());
+
+        /* Finish construction of the well */
+        Utils.constructHouse(well0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(WellWorker.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getFlag().getPosition());
+
+        /* Tear down the building */
+        well0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), well0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, well0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
 }

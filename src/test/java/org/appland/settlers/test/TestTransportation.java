@@ -977,11 +977,11 @@ public class TestTransportation {
         /* Verify that the courier walks to the catapult's flag and then returns with the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, catapult.getFlag().getPosition());
 
-        assertEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
         assertNotNull(courier.getCargo());
 
         /* Wait for the first courier to go back to the headquarter */
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
         /* Verify that the courier has put the stone back on the flag */
         assertNull(courier.getCargo());
@@ -1274,7 +1274,7 @@ public class TestTransportation {
 
         /* Verify that the short road is chosen */
         List<Point> path = map.findWayWithExistingRoadsInFlagsAndBuildings(headquarter0.getFlag(), flag1);
-        System.out.println(path);
+
         assertNotNull(path);
         assertEquals(path.size(), 3);
         assertEquals(path.get(0), headquarter0.getFlag().getPosition());
