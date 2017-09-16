@@ -24,12 +24,12 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Mill;
-import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1422,5 +1422,49 @@ public class TestMill {
 
         /* Verify that the miller is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(MILLER), amount + 1);
+    }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place mill */
+        Point point26 = new Point(17, 17);
+        Building mill0 = map.placeBuilding(new Mill(player0), point26);
+
+        /* Place road to connect the headquarter and the mill */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mill0.getFlag());
+
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miller.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
+
+        /* Tear down the building */
+        mill0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), mill0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
 }

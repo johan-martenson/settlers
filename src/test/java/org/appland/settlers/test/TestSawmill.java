@@ -27,9 +27,9 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1455,5 +1455,49 @@ public class TestSawmill {
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(SAWMILL_WORKER), amount + 1);
+    }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place sawmill */
+        Point point26 = new Point(17, 17);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point26);
+
+        /* Place road to connect the headquarter and the sawmill */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(SawmillWorker.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, sawmill0.getFlag().getPosition());
+
+        /* Tear down the building */
+        sawmill0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), sawmill0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, sawmill0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
 }

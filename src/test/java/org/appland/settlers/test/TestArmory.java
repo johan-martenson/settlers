@@ -20,8 +20,6 @@ import static org.appland.settlers.model.Material.ARMORER;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Armory;
-import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.InvalidUserActionException;
@@ -35,6 +33,8 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1486,5 +1486,49 @@ public class TestArmory {
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
+    }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place armory */
+        Point point26 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+
+        /* Place road to connect the headquarter and the armory */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getFlag().getPosition());
+
+        /* Tear down the building */
+        armory0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), armory0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, armory0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
 }

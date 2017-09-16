@@ -15,10 +15,8 @@ import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.PigFarm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
-import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
@@ -32,6 +30,8 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.PigFarm;
+import org.appland.settlers.model.PigBreeder;
 import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1727,5 +1727,49 @@ public class TestPigFarm {
 
         /* Verify that the pig breeder is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(PIG_BREEDER), amount + 1);
+    }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place pigFarm */
+        Point point26 = new Point(17, 17);
+        Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point26);
+
+        /* Place road to connect the headquarter and the pig farm */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), pigFarm0.getFlag());
+
+        /* Finish construction of the pig farm */
+        Utils.constructHouse(pigFarm0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(PigBreeder.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+
+        /* Tear down the building */
+        pigFarm0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), pigFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
 }

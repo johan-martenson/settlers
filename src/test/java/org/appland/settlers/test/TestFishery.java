@@ -16,8 +16,6 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
-import org.appland.settlers.model.Fisherman;
-import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -35,6 +33,8 @@ import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import org.appland.settlers.model.Fishery;
+import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -1863,5 +1863,49 @@ public class TestFishery {
 
         /* Verify that the fisherman is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(FISHERMAN), amount + 1);
+    }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place fishery */
+        Point point26 = new Point(17, 17);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point26);
+
+        /* Place road to connect the headquarter and the fishery */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery0.getFlag());
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Fisherman.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getFlag().getPosition());
+
+        /* Tear down the building */
+        fishery0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), fishery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
 }

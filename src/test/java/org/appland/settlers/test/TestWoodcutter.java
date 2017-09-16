@@ -2046,4 +2046,48 @@ public class TestWoodcutter {
         /* Verify that the woodcutterWorker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
+
+    @Test
+    public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place woodcutter */
+        Point point26 = new Point(17, 17);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
+
+        /* Place road to connect the headquarter and the woodcutter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Wait for a worker to start walking to the building */
+        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map).get(0);
+
+        /* Wait for the worker to get to the building's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getFlag().getPosition());
+
+        /* Tear down the building */
+        woodcutter0.tearDown();
+
+        /* Verify that the worker goes to the building and then returns to the
+           headquarter instead of entering
+        */
+        assertEquals(worker.getTarget(), woodcutter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getPosition());
+
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
 }
