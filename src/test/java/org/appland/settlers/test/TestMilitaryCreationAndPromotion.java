@@ -2,7 +2,6 @@ package org.appland.settlers.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
@@ -18,54 +17,49 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-public class MilitaryCreationAndPromotionTest {
+public class TestMilitaryCreationAndPromotion {
 
-    Storage storage;
-    Map<Material, Integer> inventory;
+    @Test
+    public void createPrivate() throws Exception {
 
-    @Before
-    public void setupTest() throws Exception {
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
-        storage = new Storage(player0);
-
+        /* Place storage */
         Point point1 = new Point(10, 10);
-        map.placeBuilding(storage, point1);
+        Storage storage0 = map.placeBuilding(new Storage(player0), point1);
 
-        Utils.constructHouse(storage, map);
-    }
+        Utils.constructHouse(storage0, map);
 
-    @Test
-    public void createPrivate() throws Exception {
-        int numberOfPrivates = storage.getAmount(Material.PRIVATE);
+        int numberOfPrivates = storage0.getAmount(Material.PRIVATE);
 
-        storage.putCargo(new Cargo(Material.BEER, null));
-        storage.putCargo(new Cargo(Material.SWORD, null));
-        storage.putCargo(new Cargo(Material.SWORD, null));
-        storage.putCargo(new Cargo(Material.SHIELD, null));
-        storage.putCargo(new Cargo(Material.SHIELD, null));
-        storage.putCargo(new Cargo(Material.SHIELD, null));
+        storage0.putCargo(new Cargo(Material.BEER, null));
+        storage0.putCargo(new Cargo(Material.SWORD, null));
+        storage0.putCargo(new Cargo(Material.SWORD, null));
+        storage0.putCargo(new Cargo(Material.SHIELD, null));
+        storage0.putCargo(new Cargo(Material.SHIELD, null));
+        storage0.putCargo(new Cargo(Material.SHIELD, null));
 
-        assertEquals(storage.getAmount(Material.PRIVATE), numberOfPrivates);
-        assertEquals(storage.getAmount(Material.BEER), 1);
-        assertEquals(storage.getAmount(Material.SWORD), 2);
-        assertEquals(storage.getAmount(Material.SHIELD), 3);
+        assertEquals(storage0.getAmount(Material.PRIVATE), numberOfPrivates);
+        assertEquals(storage0.getAmount(Material.BEER), 1);
+        assertEquals(storage0.getAmount(Material.SWORD), 2);
+        assertEquals(storage0.getAmount(Material.SHIELD), 3);
 
-        Utils.fastForward(110, storage);
+        Utils.fastForward(110, storage0);
 
-        assertEquals(storage.getAmount(Material.PRIVATE), numberOfPrivates + 1);
-        assertEquals(storage.getAmount(Material.BEER), 0);
-        assertEquals(storage.getAmount(Material.SWORD), 1);
-        assertEquals(storage.getAmount(Material.SHIELD), 2);
+        assertEquals(storage0.getAmount(Material.PRIVATE), numberOfPrivates + 1);
+        assertEquals(storage0.getAmount(Material.BEER), 0);
+        assertEquals(storage0.getAmount(Material.SWORD), 1);
+        assertEquals(storage0.getAmount(Material.SHIELD), 2);
     }
 
     @Test
@@ -78,8 +72,8 @@ public class MilitaryCreationAndPromotionTest {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Utils.adjustInventoryTo(headquarter0, COIN, 10, map);
         Utils.adjustInventoryTo(headquarter0, GOLD, 10, map);
@@ -110,12 +104,12 @@ public class MilitaryCreationAndPromotionTest {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        Point point1 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0, map);
@@ -139,12 +133,12 @@ public class MilitaryCreationAndPromotionTest {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        Point point1 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0, map);
@@ -173,12 +167,12 @@ public class MilitaryCreationAndPromotionTest {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point22 = new Point(6, 22);
-        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+        Point point1 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
         Utils.constructHouse(fortress0, map);
