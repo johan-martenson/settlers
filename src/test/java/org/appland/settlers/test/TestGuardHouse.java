@@ -54,7 +54,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        /* Deliver two plancks and three stones*/
+        /* Deliver two plancks and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
         guardHouse0.putCargo(cargo);
@@ -720,7 +720,7 @@ public class TestGuardHouse {
         /* Deliver one coin to the guard house */
         assertTrue(guardHouse0.needsMaterial(COIN));
 
-        /* Disable coins to the guard house and verify that it doesn't need coins*/
+        /* Disable coins to the guard house and verify that it doesn't need coins */
         guardHouse0.disablePromotions();
 
         assertFalse(guardHouse0.needsMaterial(COIN));

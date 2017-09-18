@@ -189,7 +189,7 @@ public class Terrain {
         boolean nonMatchFound = false;
 
         /* Go through the surrounding tiles and verify that they contain at least 
-           on matching and one non-matching*/
+           on matching and one non-matching */
         for (Tile tile : getSurroundingTiles(point)) {
 
             if (tile.getVegetationType().equals(vegetation)) {

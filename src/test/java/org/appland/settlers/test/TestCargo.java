@@ -65,7 +65,7 @@ public class TestCargo {
         Point point3 = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, point3, wc.getFlag().getPosition());
 
-        /* Create a cargo and put on the flag*/
+        /* Create a cargo and put on the flag */
         Cargo cargo = new Cargo(PLANCK, map);
 
         flag0.putCargo(cargo);

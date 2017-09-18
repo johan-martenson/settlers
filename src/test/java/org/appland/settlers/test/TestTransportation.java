@@ -443,7 +443,7 @@ public class TestTransportation {
 
         assertEquals(mdlToEndCr.getTarget(), endFlag.getPosition());
 
-        /* Let the courier walk to the cargo at end flag and picks up the cargo*/
+        /* Let the courier walk to the cargo at end flag and picks up the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, endFlag.getPosition());
 
         assertEquals(mdlToEndCr.getCargo(), c);

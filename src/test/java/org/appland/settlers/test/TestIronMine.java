@@ -140,7 +140,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a ironmine*/
+        /* Place a ironmine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         assertTrue(mine.underConstruction());
@@ -191,7 +191,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a iron mine*/
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Verify that the unfinished mine does not need a worker */
@@ -213,7 +213,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a iron mine*/
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         Utils.constructHouse(mine, map);
@@ -1161,7 +1161,7 @@ public class TestIronMine {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place iron mine*/
+        /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         /* Finish construction of the iron mine */

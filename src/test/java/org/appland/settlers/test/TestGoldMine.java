@@ -140,7 +140,7 @@ public class TestGoldMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a goldmine*/
+        /* Place a goldmine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         assertTrue(mine.underConstruction());
@@ -191,7 +191,7 @@ public class TestGoldMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a gold mine*/
+        /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Verify that the unfinished mine does not need a worker */
@@ -213,7 +213,7 @@ public class TestGoldMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a gold mine*/
+        /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
         Utils.constructHouse(mine, map);
@@ -1165,7 +1165,7 @@ public class TestGoldMine {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place gold mine*/
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Finish construction of the gold mine */
@@ -1243,7 +1243,7 @@ public class TestGoldMine {
         Miner worker = Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

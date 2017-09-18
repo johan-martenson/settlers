@@ -1395,7 +1395,7 @@ public class TestDonkeyFarm {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place donkey farm*/
+        /* Place donkey farm */
         Point point1 = new Point(20, 14);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 
@@ -1470,7 +1470,7 @@ public class TestDonkeyFarm {
         DonkeyBreeder worker = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

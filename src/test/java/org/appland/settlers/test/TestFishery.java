@@ -1387,7 +1387,7 @@ public class TestFishery {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place fishery*/
+        /* Place fishery */
         Point point1 = new Point(20, 14);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
 
@@ -1462,7 +1462,7 @@ public class TestFishery {
         Fisherman worker = Utils.occupyBuilding(new Fisherman(player0, map), fishery0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

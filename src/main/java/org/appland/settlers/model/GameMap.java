@@ -1109,7 +1109,7 @@ public class GameMap {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
 
-        /* Houses can only be left via the driveway so handle this case separately*/
+        /* Houses can only be left via the driveway so handle this case separately */
         if (isBuildingAtPoint(from) && getBuildingAtPoint(from).getPosition().equals(from)) {
             resultList.add(from.downRight());
 

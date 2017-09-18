@@ -1663,7 +1663,7 @@ public class TestAttack {
         assertEquals(defender.getPosition(), attacker.getPosition());
 
         /* Wait for the attacker to win the fight and verify that no additional 
-         defender goes out from the barracks*/
+         defender goes out from the barracks */
         for (int i = 0; i < 1000; i++) {
 
             if (!map.getWorkers().contains(defender)) {
@@ -3261,7 +3261,7 @@ public class TestAttack {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
 
-        /* Let the attacker get started walking to the barracks*/
+        /* Let the attacker get started walking to the barracks */
         assertEquals(attacker.getTarget(), barracks1.getPosition());
 
         map.stepTime();

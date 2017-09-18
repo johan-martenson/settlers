@@ -481,7 +481,7 @@ public class TestScout {
         Point point0 = new Point(5, 5);
         Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Add a scout to the headquarter and verify that the amount goes up*/
+        /* Add a scout to the headquarter and verify that the amount goes up */
         int amount = headquarter0.getAmount(SCOUT);
 
         headquarter0.depositWorker(new Scout(player0, map));
@@ -525,7 +525,7 @@ public class TestScout {
 
         assertEquals(map.getWorkers().size(), workers + 1);
 
-        /* Call for another scout and verify that there is a new scout on the way*/
+        /* Call for another scout and verify that there is a new scout on the way */
         flag.callScout();
 
         map.stepTime();

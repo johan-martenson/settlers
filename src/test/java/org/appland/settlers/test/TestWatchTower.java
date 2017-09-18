@@ -54,7 +54,7 @@ public class TestWatchTower {
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Deliver two plancks and three stones*/
+        /* Deliver two plancks and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
         watchTower0.putCargo(cargo);
@@ -738,7 +738,7 @@ public class TestWatchTower {
         /* Deliver one coin to the watch tower */
         assertTrue(watchTower0.needsMaterial(COIN));
 
-        /* Disable coins to the watch tower and verify that it doesn't need coins*/
+        /* Disable coins to the watch tower and verify that it doesn't need coins */
         watchTower0.disablePromotions();
 
         assertFalse(watchTower0.needsMaterial(COIN));

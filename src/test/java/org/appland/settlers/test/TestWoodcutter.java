@@ -489,7 +489,7 @@ public class TestWoodcutter {
         /* Wait for the woodcutter to cut down the tree */
         Utils.fastForward(50, map);
 
-        /* The woodcutter has cut down the tree and goes back via the flag*/
+        /* The woodcutter has cut down the tree and goes back via the flag */
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
         assertNotNull(wcWorker.getCargo());
@@ -613,7 +613,7 @@ public class TestWoodcutter {
         /* Wait for the woodcutter to cut down the tree */
         Utils.fastForward(50, map);
 
-        /* The woodcutter has cut down the tree and goes back via the flag*/
+        /* The woodcutter has cut down the tree and goes back via the flag */
         assertFalse(wcWorker.isCuttingTree());
         assertFalse(map.isTreeAtPoint(point));
 
@@ -725,7 +725,7 @@ public class TestWoodcutter {
 
         assertTrue(wcWorker.isInsideBuilding());
 
-        /* Grow tree to medium*/
+        /* Grow tree to medium */
         for (int i = 0; i < 500; i++) {
             map.stepTime();
 
@@ -1458,7 +1458,7 @@ public class TestWoodcutter {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place woodcutter*/
+        /* Place woodcutter */
         Point point1 = new Point(20, 14);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
@@ -1535,7 +1535,7 @@ public class TestWoodcutter {
         WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -1560,7 +1560,7 @@ public class TestWoodcutter {
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place and grow the tree directly behind the woodcutter*/
+        /* Place and grow the tree directly behind the woodcutter */
         Point point2 = new Point(9, 5);
         Tree tree = map.placeTree(point2);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
@@ -1622,7 +1622,7 @@ public class TestWoodcutter {
         Point point1 = new Point(10, 4);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
 
-        /* Place and grow the tree directly behind the woodcutter*/
+        /* Place and grow the tree directly behind the woodcutter */
         Point point2 = new Point(15, 3);
         Tree tree = map.placeTree(point2);
         Utils.fastForwardUntilTreeIsGrown(tree, map);

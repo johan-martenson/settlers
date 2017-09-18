@@ -977,7 +977,7 @@ public class TestSawmill {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place sawmill*/
+        /* Place sawmill */
         Point point1 = new Point(20, 14);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
@@ -1052,7 +1052,7 @@ public class TestSawmill {
         SawmillWorker worker = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

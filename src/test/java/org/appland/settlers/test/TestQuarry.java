@@ -265,7 +265,7 @@ public class TestQuarry {
         /* Construct the forester hut */
         constructHouse(quarry, map);
 
-        /* Assign a stonemason to the quarry*/
+        /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
         Utils.occupyBuilding(mason, quarry, map);
@@ -1120,7 +1120,7 @@ public class TestQuarry {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place quarry*/
+        /* Place quarry */
         Point point1 = new Point(20, 14);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
@@ -1195,7 +1195,7 @@ public class TestQuarry {
         Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

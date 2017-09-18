@@ -152,7 +152,7 @@ public class Military extends Worker {
             /* Go home if there are no more attackers */
             if (defendedBuilding.getAttackers().isEmpty()) {
 
-                /* Return home or to storage*/
+                /* Return home or to storage */
                 returnAfterAttackIsOver();
 
             /* Look for an attacker at the flag if this is the militaries own building */

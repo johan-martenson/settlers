@@ -56,7 +56,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Deliver two plancks and three stones*/
+        /* Deliver two plancks and three stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
         fortress0.putCargo(cargo);
@@ -763,7 +763,7 @@ public class TestFortress {
         /* Deliver one coin to the fortress */
         assertTrue(fortress0.needsMaterial(COIN));
 
-        /* Disable coins to the fortress and verify that it doesn't need coins*/
+        /* Disable coins to the fortress and verify that it doesn't need coins */
         fortress0.disablePromotions();
 
         assertFalse(fortress0.needsMaterial(COIN));

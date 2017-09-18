@@ -876,7 +876,7 @@ public class TestGeologist {
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
 
-        /* Surround the flag with trees except for one point*/
+        /* Surround the flag with trees except for one point */
         Point point2 = new Point(11, 11);
 
         for (Point p : map.getPointsWithinRadius(point1, 10)) {
@@ -1143,7 +1143,7 @@ public class TestGeologist {
         Point point0 = new Point(5, 5);
         Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Add a geologist to the headquarter and verify that the amount goes up*/
+        /* Add a geologist to the headquarter and verify that the amount goes up */
         int amount = headquarter0.getAmount(GEOLOGIST);
 
         headquarter0.depositWorker(new Geologist(player0, map));
@@ -1187,7 +1187,7 @@ public class TestGeologist {
 
         assertEquals(map.getWorkers().size(), workers + 1);
 
-        /* Call for another geologist and verify that there is a new geologist on the way*/
+        /* Call for another geologist and verify that there is a new geologist on the way */
         flag.callGeologist();
 
         map.stepTime();

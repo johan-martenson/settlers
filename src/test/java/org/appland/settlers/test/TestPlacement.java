@@ -176,7 +176,7 @@ public class TestPlacement {
         assertFalse(possibleHouses.containsKey(point1.upLeft()));
         assertEquals(possibleHouses.get(point1.up()), MEDIUM);
 
-        /* Points on right, sampled*/
+        /* Points on right, sampled */
         assertFalse(possibleHouses.containsKey(point1.upRight()));
         assertFalse(possibleHouses.containsKey(point1.left()));
     }

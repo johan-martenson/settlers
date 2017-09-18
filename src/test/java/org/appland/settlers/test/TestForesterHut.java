@@ -1070,7 +1070,7 @@ public class TestForesterHut {
         Point point0 = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place forester hut*/
+        /* Place forester hut */
         Point point1 = new Point(20, 14);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 

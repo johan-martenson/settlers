@@ -372,7 +372,7 @@ public class TestWell {
         assertNotNull(ww.getCargo());
         assertEquals(ww.getTarget(), well.getFlag().getPosition());
 
-        /* Let the worker reach the flag and place the cargo*/
+        /* Let the worker reach the flag and place the cargo */
         assertTrue(well.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ww, well.getFlag().getPosition());
@@ -871,7 +871,7 @@ public class TestWell {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place well*/
+        /* Place well */
         Point point1 = new Point(20, 14);
         Building well0 = map.placeBuilding(new Well(player0), point1);
 
@@ -946,7 +946,7 @@ public class TestWell {
         WellWorker worker = Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

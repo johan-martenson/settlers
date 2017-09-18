@@ -965,7 +965,7 @@ public class TestBrewery {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place brewery*/
+        /* Place brewery */
         Point point1 = new Point(20, 14);
         Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
@@ -1040,7 +1040,7 @@ public class TestBrewery {
         Brewer worker = Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

@@ -217,7 +217,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
         assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
 
-        /* Get the wood transported to the sawmill and deliver it*/
+        /* Get the wood transported to the sawmill and deliver it */
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getPosition());
 
         /* Cargo has arrived at the sawmill and the courier has delivered it */
@@ -273,7 +273,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getPromisedDelivery(), woodCargo);
         assertNull(courierSmToHq.getCargo());
 
-        /* Transport plancks and new wood to nearest storage*/
+        /* Transport plancks and new wood to nearest storage */
         assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getFlag().getPosition());

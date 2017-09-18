@@ -140,7 +140,7 @@ public class TestGraniteMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a granitemine*/
+        /* Place a granitemine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         assertTrue(mine.underConstruction());
@@ -199,7 +199,7 @@ public class TestGraniteMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a granite mine*/
+        /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Verify that the unfinished mine does not need a worker */
@@ -225,7 +225,7 @@ public class TestGraniteMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a granite mine*/
+        /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         Utils.constructHouse(mine, map);
@@ -1172,7 +1172,7 @@ public class TestGraniteMine {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place granite mine*/
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
@@ -1250,7 +1250,7 @@ public class TestGraniteMine {
         Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

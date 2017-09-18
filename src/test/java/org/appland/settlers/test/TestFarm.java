@@ -1287,7 +1287,7 @@ public class TestFarm {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place farm*/
+        /* Place farm */
         Point point1 = new Point(20, 14);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
@@ -1362,7 +1362,7 @@ public class TestFarm {
         Farmer worker = Utils.occupyBuilding(new Farmer(player0, map), farm0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

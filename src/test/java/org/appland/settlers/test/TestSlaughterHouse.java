@@ -439,7 +439,7 @@ public class TestSlaughterHouse {
         /* Deliver ingredients to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
 
-        /* Wait until the slaughterHouse worker produces meat*/
+        /* Wait until the slaughterHouse worker produces meat */
         assertEquals(slaughterHouse.getAmount(PIG), 1);
 
         Utils.fastForward(150, map);
@@ -992,7 +992,7 @@ public class TestSlaughterHouse {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place slaughter house*/
+        /* Place slaughter house */
         Point point1 = new Point(20, 14);
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
@@ -1070,7 +1070,7 @@ public class TestSlaughterHouse {
         Butcher worker = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-           is torn down*/
+           is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

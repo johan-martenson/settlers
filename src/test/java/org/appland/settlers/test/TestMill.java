@@ -426,7 +426,7 @@ public class TestMill {
         assertNotNull(miller.getCargo());
         assertEquals(miller.getTarget(), mill.getFlag().getPosition());
 
-        /* Let the worker reach the flag and place the cargo*/
+        /* Let the worker reach the flag and place the cargo */
         assertTrue(mill.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller, mill.getFlag().getPosition());
@@ -945,7 +945,7 @@ public class TestMill {
         Point hqPoint = new Point(15, 15);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place mill*/
+        /* Place mill */
         Point point1 = new Point(20, 14);
         Building mill0 = map.placeBuilding(new Mill(player0), point1);
 
@@ -1020,7 +1020,7 @@ public class TestMill {
         Miller worker = Utils.occupyBuilding(new Miller(player0, map), mill0, map);
 
         /* Verify that the worker goes back to its own storage when the fortress
-         is torn down*/
+         is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

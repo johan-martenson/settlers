@@ -1027,7 +1027,7 @@ public class TestRoads {
 
         assertFalse(courier.isExactlyAtPoint());
 
-        /* Verify that the courier choses the closest road when the road is split*/
+        /* Verify that the courier choses the closest road when the road is split */
         map.placeFlag(player0, middlePoint2);
 
         assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
@@ -1098,7 +1098,7 @@ public class TestRoads {
 
         assertFalse(courier.isExactlyAtPoint());
 
-        /* Verify that the courier choses the closest road when the road is split*/
+        /* Verify that the courier choses the closest road when the road is split */
         map.placeFlag(player0, middlePoint2);
 
         assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
@@ -1574,7 +1574,7 @@ public class TestRoads {
         /* Let the courier get close to the hq */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
 
-        /* Split road with the courier close to the hq*/
+        /* Split road with the courier close to the hq */
         Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertEquals(hq.getAmount(BEER), 0);
