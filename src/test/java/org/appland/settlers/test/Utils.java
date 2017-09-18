@@ -968,4 +968,17 @@ public class Utils {
 
         assertEquals(stone.getAmount(), amountLeft);
     }
+
+    static void waitForTreeToGetPlanted(GameMap map, Point point) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+            if (map.isTreeAtPoint(point)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(map.isTreeAtPoint(point));
+
+    }
 }
