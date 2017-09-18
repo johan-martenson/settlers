@@ -59,13 +59,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point22 = new Point(6, 22);
-        Building armory0 = map.placeBuilding(new Armory(player0), point22);
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
@@ -95,13 +95,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point22 = new Point(6, 22);
-        Building armory0 = map.placeBuilding(new Armory(player0), point22);
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver one planck and two stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
@@ -130,13 +130,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point22 = new Point(6, 22);
-        Building armory0 = map.placeBuilding(new Armory(player0), point22);
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Deliver two plancks and one stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
@@ -163,15 +163,15 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
 
-        /* 64 ticks from start */
+        /* Place road */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -197,31 +197,33 @@ public class TestArmory {
 
     @Test
     public void testArmoryGetsAssignedWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road to connect the armory with the headquarter */
+        Point point2 = new Point(8, 8);
+        Point point3 = new Point(7, 7);
+        Point point4 = new Point(8, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
-        assertTrue(armory.needsWorker());
+        assertTrue(armory0.needsWorker());
 
         /* Verify that a armory worker leaves the hq */
         Utils.fastForward(3, map);
@@ -229,70 +231,73 @@ public class TestArmory {
         assertEquals(map.getWorkers().size(), 3);
 
         /* Let the armory worker reach the armory */
-        Armorer armorer = null;
+        Armorer armorer0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Armorer) {
-                armorer = (Armorer)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer)worker;
             }
         }
 
-        assertNotNull(armorer);
-        assertEquals(armorer.getTarget(), armory.getPosition());
+        assertNotNull(armorer0);
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer);
+        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getHome(), armory);
-        assertEquals(armory.getWorker(), armorer);
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory0);
+        assertEquals(armory0.getWorker(), armorer0);
     }
 
     @Test
     public void testOccupiedArmoryWithoutCoalAndIronProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory, map);
 
         /* Populate the armory */
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getHome(), armory);
-        assertEquals(armory.getWorker(), armorer);        
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory);
+        assertEquals(armory.getWorker(), armorer0);
 
         /* Verify that the armory doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(armory.getFlag().getStackedCargo().isEmpty());
-            assertNull(armorer.getCargo());
+            assertNull(armorer0.getCargo());
             map.stepTime();
         }
     }
 
     @Test
     public void testUnoccupiedArmoryProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place armory */
         Point point3 = new Point(7, 9);
         Building armory = map.placeBuilding(new Armory(player0), point3);
 
@@ -300,8 +305,7 @@ public class TestArmory {
         Utils.constructHouse(armory, map);
 
         /* Verify that the armory doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(armory.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -316,253 +320,258 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Armory armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road to connect the armory with the headquarter */
+        Point point2 = new Point(8, 8);
+        Point point3 = new Point(7, 7);
+        Point point4 = new Point(8, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
         /* Populate the armory */        
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getHome(), armory);
-        assertEquals(armory.getWorker(), armorer);        
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory0);
+        assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver material to the armory */
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(COAL, map));
 
         /* Verify that the armory produces weapons */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
-            assertTrue(armory.getFlag().getStackedCargo().isEmpty());
-            assertNull(armorer.getCargo());
+            assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
+            assertNull(armorer0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(armorer.getCargo());
-        assertEquals(armorer.getCargo().getMaterial(), SWORD);
-        assertTrue(armory.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(armorer0.getCargo());
+        assertEquals(armorer0.getCargo().getMaterial(), SWORD);
+        assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
     }
 
     @Test
     public void testArmorerLeavesWeaponAtTheFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road to connect the armory with the headquarter */
+        Point point2 = new Point(8, 8);
+        Point point3 = new Point(7, 7);
+        Point point4 = new Point(8, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
         /* Populate the armory */        
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getHome(), armory);
-        assertEquals(armory.getWorker(), armorer);        
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory0);
+        assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(COAL, map));
 
         /* Verify that the armory produces weapons */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
-            assertTrue(armory.getFlag().getStackedCargo().isEmpty());
-            assertNull(armorer.getCargo());
+            assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
+            assertNull(armorer0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(armorer.getCargo());
-        assertEquals(armorer.getCargo().getMaterial(), SWORD);
-        assertTrue(armory.getFlag().getStackedCargo().isEmpty());
+        assertNotNull(armorer0.getCargo());
+        assertEquals(armorer0.getCargo().getMaterial(), SWORD);
+        assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the armory worker leaves the cargo at the flag */
-        assertEquals(armorer.getTarget(), armory.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        assertFalse(armory.getFlag().getStackedCargo().isEmpty());
-        assertNull(armorer.getCargo());
-        assertEquals(armorer.getTarget(), armory.getPosition());
+        assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
+        assertNull(armorer0.getCargo());
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
         /* Verify that the armorer goes back to the armory */
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer);
+        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
 
-        assertTrue(armorer.isInsideBuilding());
+        assertTrue(armorer0.isInsideBuilding());
     }
 
     @Test
     public void testProductionOfOneSwordConsumesOneCoalAndOneIron() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
         /* Populate the armory */        
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(COAL, map));
 
         /* Wait until the armory worker produces a weapons */
-        assertEquals(armory.getAmount(IRON_BAR), 1);
-        assertEquals(armory.getAmount(COAL), 1);
+        assertEquals(armory0.getAmount(IRON_BAR), 1);
+        assertEquals(armory0.getAmount(COAL), 1);
 
         Utils.fastForward(150, map);
 
-        assertEquals(armory.getAmount(COAL), 0);
-        assertEquals(armory.getAmount(IRON_BAR), 0);
+        assertEquals(armory0.getAmount(COAL), 0);
+        assertEquals(armory0.getAmount(IRON_BAR), 0);
     }
 
     @Test
     public void testProductionCountdownStartsWhenMaterialsAreAvailable() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
         /* Populate the armory */        
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Fast forward so that the armory worker would have produced weapons
            if it had had the ingredients
         */        
         Utils.fastForward(150, map);
 
-        assertNull(armorer.getCargo());
+        assertNull(armorer0.getCargo());
 
         /* Deliver ingredients to the armory */
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(COAL, map));
 
         /* Verify that it takes 50 steps for the armory worker to produce the planck */
-        int i;
-        for (i = 0; i < 50; i++) {
-            assertNull(armorer.getCargo());
+        for (int i = 0; i < 50; i++) {
+            assertNull(armorer0.getCargo());
             map.stepTime();
         }
 
-        assertNotNull(armorer.getCargo());
+        assertNotNull(armorer0.getCargo());
     }
 
     @Test
     public void testArmoryShiftsBetweenProducingSwordsAndShields() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
-        Point point3 = new Point(7, 9);
-        Building armory = map.placeBuilding(new Armory(player0), point3);
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* 64 ticks from start */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road to connect the armory with the headquarter */
+        Point point2 = new Point(8, 8);
+        Point point3 = new Point(7, 7);
+        Point point4 = new Point(8, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
 
         /* Finish construction of the armory */
-        Utils.constructHouse(armory, map);
+        Utils.constructHouse(armory0, map);
 
         /* Populate the armory */        
-        Worker armorer = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getHome(), armory);
-        assertEquals(armory.getWorker(), armorer);        
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory0);
+        assertEquals(armory0.getWorker(), armorer0);
 
         /* Deliver material to the armory */
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(IRON_BAR, map));
-        armory.putCargo(new Cargo(COAL, map));
-        armory.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(IRON_BAR, map));
+        armory0.putCargo(new Cargo(COAL, map));
+        armory0.putCargo(new Cargo(COAL, map));
 
         /* Verify that the armory produces a sword*/
         Utils.fastForward(150, map);
 
-        assertNotNull(armorer.getCargo());
-        assertEquals(armorer.getCargo().getMaterial(), SWORD);
+        assertNotNull(armorer0.getCargo());
+        assertEquals(armorer0.getCargo().getMaterial(), SWORD);
 
         /* Wait for the armorer to put the sword at the flag */
-        assertEquals(armorer.getTarget(), armory.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
         /* Wait for the armorer to go back to the armory */
-        assertEquals(armorer.getTarget(), armory.getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, armorer);
+        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
 
         /* Verify that the armorer produces a shield */
         Utils.fastForward(150, map);
 
-        assertEquals(armorer.getCargo().getMaterial(), SHIELD);
+        assertEquals(armorer0.getCargo().getMaterial(), SHIELD);
     }
 
     @Test
@@ -574,13 +583,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -604,35 +613,35 @@ public class TestArmory {
         /* Wait for the armorer to produce a new weapon cargo */
         Utils.fastForward(50, map);
 
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertNotNull(armorer.getCargo());
+        assertNotNull(armorer0.getCargo());
 
         /* Verify that the armorer puts the weapon cargo at the flag */
-        assertEquals(armorer.getTarget(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
         assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        assertNull(armorer.getCargo());
+        assertNull(armorer0.getCargo());
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait for the worker to go back to the armory */
-        assertEquals(armorer.getTarget(), armory0.getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(armorer.getCargo());
+        assertNotNull(armorer0.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(armorer.getTarget(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        assertNull(armorer.getCargo());
+        assertNull(armorer0.getCargo());
         assertEquals(armory0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -645,13 +654,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -675,17 +684,17 @@ public class TestArmory {
         /* Wait for the armorer to produce a new weapon cargo */
         Utils.fastForward(50, map);
 
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertNotNull(armorer.getCargo());
+        assertNotNull(armorer0.getCargo());
 
         /* Verify that the armorer puts the weapon cargo at the flag */
-        assertEquals(armorer.getTarget(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
         assertTrue(armory0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        assertNull(armorer.getCargo());
+        assertNull(armorer0.getCargo());
         assertFalse(armory0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -745,13 +754,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -760,20 +769,20 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -788,13 +797,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(8, 8);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(8, 8);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Connect the armory with the headquarter */
         map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
@@ -806,26 +815,26 @@ public class TestArmory {
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : armorer.getPlannedPath()) {
+        for (Point point : armorer0.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
@@ -840,7 +849,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 6);
@@ -866,22 +875,22 @@ public class TestArmory {
         armory0.putCargo(coalCargo);
 
         /* Assign a worker to the armory */
-        Armorer armorer = new Armorer(player0, map);
+        Armorer armorer0 = new Armorer(player0, map);
 
-        Utils.occupyBuilding(armorer, armory0, map);
+        Utils.occupyBuilding(armorer0, armory0, map);
 
-        assertTrue(armorer.isInsideBuilding());
+        assertTrue(armorer0.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
 
         /* Wait for the armorer to produce cargo */
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer);
+        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(armorer.getTarget(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
         /* Stop production and verify that no water is produced */
         armory0.stopProduction();
@@ -889,7 +898,7 @@ public class TestArmory {
         assertFalse(armory0.isProductionEnabled());
 
         for (int i = 0; i < 300; i++) {
-            assertNull(armorer.getCargo());
+            assertNull(armorer0.getCargo());
 
             map.stepTime();
         }
@@ -906,7 +915,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 6);
@@ -922,11 +931,11 @@ public class TestArmory {
         Utils.constructHouse(armory0, map);
 
         /* Assign a worker to the armory */
-        Armorer armorer = new Armorer(player0, map);
+        Armorer armorer0 = new Armorer(player0, map);
 
-        Utils.occupyBuilding(armorer, armory0, map);
+        Utils.occupyBuilding(armorer0, armory0, map);
 
-        assertTrue(armorer.isInsideBuilding());
+        assertTrue(armorer0.isInsideBuilding());
 
         /* Deliver material to the armory */
         Cargo ironCargo = new Cargo(IRON_BAR, map);
@@ -942,18 +951,18 @@ public class TestArmory {
         Utils.fastForward(100, map);
 
         /* Wait for the armorer to produce water */
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer);
+        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(armorer.getTarget(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
         /* Stop production */
         armory0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
-            assertNull(armorer.getCargo());
+            assertNull(armorer0.getCargo());
 
             map.stepTime();
         }
@@ -963,9 +972,9 @@ public class TestArmory {
 
         assertTrue(armory0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, armorer);
+        Utils.fastForwardUntilWorkerProducesCargo(map, armorer0);
 
-        assertNotNull(armorer.getCargo());
+        assertNotNull(armorer0.getCargo());
     }
 
     @Test
@@ -980,10 +989,10 @@ public class TestArmory {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place armory*/
+        /* Place armory */
         Point point1 = new Point(20, 14);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
@@ -1080,10 +1089,10 @@ public class TestArmory {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place armory*/
+        /* Place armory */
         Point point1 = new Point(20, 14);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
@@ -1103,15 +1112,15 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing armory */
+        /* Place armory */
         Point point2 = new Point(14, 4);
         Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
@@ -1124,36 +1133,36 @@ public class TestArmory {
         /* Wait for the armorer to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0, map);
 
-        Armorer armorer = null;
+        Armorer armorer0 = null;
 
         for (Worker w : map.getWorkers()) {
             if (w instanceof Armorer) {
-                armorer = (Armorer) w;
+                armorer0 = (Armorer) w;
             }
         }
 
-        assertNotNull(armorer);
-        assertEquals(armorer.getTarget(), armory0.getPosition());
+        assertNotNull(armorer0);
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
         /* See that the armorer has started walking */
-        assertFalse(armorer.isExactlyAtPoint());
+        assertFalse(armorer0.isExactlyAtPoint());
 
         /* Remove the next road */
         map.removeRoad(road1);
 
         /* Verify that the armorer continues walking to the flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
 
-        assertEquals(armorer.getPosition(), flag0.getPosition());
+        assertEquals(armorer0.getPosition(), flag0.getPosition());
 
         /* Verify that the armorer returns to the headquarter when it reaches the flag */
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
     }
 
     @Test
@@ -1165,15 +1174,15 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing armory */
+        /* Place armory */
         Point point2 = new Point(14, 4);
         Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
@@ -1186,39 +1195,39 @@ public class TestArmory {
         /* Wait for the armorer to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0, map);
 
-        Armorer armorer = null;
+        Armorer armorer0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Armorer) {
-                armorer = (Armorer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer) worker;
             }
         }
 
-        assertNotNull(armorer);
-        assertEquals(armorer.getTarget(), armory0.getPosition());
+        assertNotNull(armorer0);
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getFlag().getPosition());
 
         map.stepTime();
 
         /* See that the armorer has started walking */
-        assertFalse(armorer.isExactlyAtPoint());
+        assertFalse(armorer0.isExactlyAtPoint());
 
         /* Remove the current road */
         map.removeRoad(road0);
 
         /* Verify that the armorer continues walking to the flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
 
-        assertEquals(armorer.getPosition(), flag0.getPosition());
+        assertEquals(armorer0.getPosition(), flag0.getPosition());
 
         /* Verify that the armorer continues to the final flag */
-        assertEquals(armorer.getTarget(), armory0.getPosition());
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        /* Verify that the armorer goes out to armorer instead of going directly back */
-        assertNotEquals(armorer.getTarget(), headquarter0.getPosition());
+        /* Verify that the armorer goes out to the armory instead of going directly back */
+        assertNotEquals(armorer0.getTarget(), headquarter0.getPosition());
     }
 
     @Test
@@ -1230,15 +1239,15 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing first flag */
+        /* Place first flag */
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing armory */
+        /* Place armory */
         Point point2 = new Point(14, 4);
         Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
 
@@ -1251,35 +1260,35 @@ public class TestArmory {
         /* Wait for the armorer to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(Armorer.class, 1, player0, map);
 
-        Armorer armorer = null;
+        Armorer armorer0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Armorer) {
-                armorer = (Armorer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer) worker;
             }
         }
 
-        assertNotNull(armorer);
-        assertEquals(armorer.getTarget(), armory0.getPosition());
+        assertNotNull(armorer0);
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
 
         /* Wait for the armorer to reach the first flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, flag0.getPosition());
 
         map.stepTime();
 
         /* See that the armorer has started walking */
-        assertFalse(armorer.isExactlyAtPoint());
+        assertFalse(armorer0.isExactlyAtPoint());
 
         /* Tear down the armory */
         armory0.tearDown();
 
         /* Verify that the armorer continues walking to the next flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, armory0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, armory0.getFlag().getPosition());
 
-        assertEquals(armorer.getPosition(), armory0.getFlag().getPosition());
+        assertEquals(armorer0.getPosition(), armory0.getFlag().getPosition());
 
         /* Verify that the armorer goes back to storage */
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
     }
 
     @Test
@@ -1291,13 +1300,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -1313,20 +1322,20 @@ public class TestArmory {
         Utils.constructHouse(storage0, map);
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), storage0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), storage0.getPosition());
 
         int amount = storage0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storage0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(storage0.getAmount(ARMORER), amount + 1);
@@ -1341,13 +1350,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -1366,20 +1375,20 @@ public class TestArmory {
         storage0.tearDown();
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1394,13 +1403,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -1422,20 +1431,20 @@ public class TestArmory {
         Utils.waitForBuildingToBurnDown(storage0, map);
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1450,13 +1459,13 @@ public class TestArmory {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing armory */
-        Point point26 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        /* Place armory */
+        Point point1 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
@@ -1469,20 +1478,20 @@ public class TestArmory {
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Destroy the armory */
-        Worker armorer = armory0.getWorker();
+        Worker armorer0 = armory0.getWorker();
 
-        assertTrue(armorer.isInsideBuilding());
-        assertEquals(armorer.getPosition(), armory0.getPosition());
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getPosition(), armory0.getPosition());
 
         armory0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(armorer.isInsideBuilding());
-        assertEquals(armorer.getTarget(), headquarter0.getPosition());
+        assertFalse(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, headquarter0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(ARMORER), amount + 1);
@@ -1498,12 +1507,12 @@ public class TestArmory {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Point point1 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place armory */
-        Point point26 = new Point(17, 17);
-        Building armory0 = map.placeBuilding(new Armory(player0), point26);
+        Point point2 = new Point(17, 17);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Place road to connect the headquarter and the armory */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
