@@ -271,8 +271,7 @@ public class TestPigFarm {
         pigFarm.putCargo(wheatCargo);
 
         /* Run the game logic 99 times and make sure the pig breeder stays in the pig farm */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(pigBreeder.isInsideBuilding());
             map.stepTime();
         }
@@ -344,8 +343,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isAt(point));
         assertTrue(pigBreeder.isFeeding());
 
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertTrue(pigBreeder.isFeeding());
             map.stepTime();
         }
@@ -569,8 +567,7 @@ public class TestPigFarm {
         Utils.constructHouse(farm, map);
 
         /* Verify that the farm does not produce any wheat */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
 
             map.stepTime();

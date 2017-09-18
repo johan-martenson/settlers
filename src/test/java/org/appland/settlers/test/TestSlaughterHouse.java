@@ -269,8 +269,7 @@ public class TestSlaughterHouse {
         assertEquals(slaughterHouse.getWorker(), butcher);        
 
         /* Verify that the slaughterHouse doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(slaughterHouse.getFlag().getStackedCargo().isEmpty());
             assertNull(butcher.getCargo());
             map.stepTime();
@@ -296,8 +295,7 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse, map);
 
         /* Verify that the slaughterHouse doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(slaughterHouse.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -340,8 +338,7 @@ public class TestSlaughterHouse {
         slaughterHouse.putCargo(new Cargo(PIG, map));
 
         /* Verify that the slaughterHouse produces meat */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(slaughterHouse.getFlag().getStackedCargo().isEmpty());
             assertNull(butcher.getCargo());
@@ -391,8 +388,7 @@ public class TestSlaughterHouse {
         slaughterHouse.putCargo(new Cargo(PIG, map));
 
         /* Verify that the slaughterHouse produces meat */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(slaughterHouse.getFlag().getStackedCargo().isEmpty());
             assertNull(butcher.getCargo());
@@ -483,8 +479,7 @@ public class TestSlaughterHouse {
         slaughterHouse.putCargo(new Cargo(PIG, map));
 
         /* Verify that it takes 50 steps for the slaughterHouse worker to produce the meat */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(butcher.getCargo());
             map.stepTime();
         }

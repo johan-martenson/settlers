@@ -266,8 +266,7 @@ public class TestIronSmelter {
         assertEquals(ironSmelter.getWorker(), sw);        
 
         /* Verify that the iron smelter doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
             map.stepTime();
@@ -293,8 +292,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Verify that the iron smelter doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -330,8 +328,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(IRON, map));
 
         /* Verify that the iron smelter produces iron bars */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -382,8 +379,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(COAL, map));
 
         /* Verify that the iron smelter produces iron bars */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -479,8 +475,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(COAL, map));
 
         /* Verify that it takes 50 steps for the iron smelter worker to produce the iron bar */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }
@@ -513,8 +508,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(IRON, map));
 
         /* Verify that the iron founder doesn't produce iron bars since it doesn't have any coal */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }
@@ -545,8 +539,7 @@ public class TestIronSmelter {
         ironSmelter.putCargo(new Cargo(COAL, map));
 
         /* Verify that the iron founder doesn't produce iron bars since it doesn't have any coal */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }

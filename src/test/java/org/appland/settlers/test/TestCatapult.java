@@ -315,8 +315,7 @@ public class TestCatapult {
         catapult.putCargo(cargo);
 
         /* Verify that the catapult doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(catapult.getFlag().getStackedCargo().isEmpty());
             assertNull(worker.getCargo());
             map.stepTime();

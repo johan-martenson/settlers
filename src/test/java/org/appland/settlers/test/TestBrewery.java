@@ -266,8 +266,7 @@ public class TestBrewery {
         assertEquals(brewery.getWorker(), sw);        
 
         /* Verify that the brewery doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
             map.stepTime();
@@ -293,8 +292,7 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Verify that the brewery doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -330,8 +328,7 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WATER, map));
 
         /* Verify that the brewery produces beer */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -382,8 +379,7 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WATER, map));
 
         /* Verify that the brewery produces beer */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -479,8 +475,7 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WATER, map));
 
         /* Verify that it takes 50 steps for the brewery worker to produce the wheat bar */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }
@@ -513,8 +508,7 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WHEAT, map));
 
         /* Verify that the wheat founder doesn't produce beer since it doesn't have any water */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }
@@ -545,8 +539,7 @@ public class TestBrewery {
         brewery.putCargo(new Cargo(WATER, map));
 
         /* Verify that the wheat founder doesn't produce beer since it doesn't have any water */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }

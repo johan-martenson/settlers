@@ -311,8 +311,7 @@ public class TestGoldMine {
         assertTrue(miner.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the miner stays in the house */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(miner.isInsideBuilding());
             assertNull(miner.getCargo());
             assertFalse(miner.isMining());
@@ -363,8 +362,7 @@ public class TestGoldMine {
         /* Verify that the miner mines for gold */
         int amountGold = map.getAmountOfMineralAtPoint(GOLD, point0);
 
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertTrue(miner.isMining());
             map.stepTime();
         }

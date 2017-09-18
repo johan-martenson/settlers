@@ -188,8 +188,7 @@ public class TestWell {
         Utils.constructHouse(well, map);
 
         /* Verify that the unoccupied well produces nothing */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(well.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -279,8 +278,7 @@ public class TestWell {
         assertTrue(ww.isInsideBuilding());
 
         /* Verify that the worker rests first without producing anything */
-        int i;
-        for (i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             assertNull(ww.getCargo());
             map.stepTime();
         }
@@ -323,8 +321,7 @@ public class TestWell {
         Utils.fastForward(100, map);
 
         /* Verify that it the worker produces water at the right time */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(ww.getCargo());
             map.stepTime();
         }

@@ -164,8 +164,7 @@ public class TestRoads {
             new Point(14, 6), // F9
             new Point(23, 3)};  // F10
 
-        int i;
-        for (i = 0; i < points.length; i++) {
+        for (int i = 0; i < points.length; i++) {
             map.placeFlag(player0, points[i]);
         }
 

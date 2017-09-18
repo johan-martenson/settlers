@@ -264,8 +264,7 @@ public class TestSawmill {
         assertEquals(sawmill.getWorker(), sw);        
 
         /* Verify that the sawmill doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
             map.stepTime();
@@ -291,8 +290,7 @@ public class TestSawmill {
         Utils.constructHouse(sawmill, map);
 
         /* Verify that the sawmill doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -328,8 +326,7 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
 
         /* Verify that the sawmill produces plancks */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -380,8 +377,7 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
 
         /* Verify that the sawmill produces plancks */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
             assertNull(sw.getCargo());
@@ -472,8 +468,7 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
 
         /* Verify that it takes 50 steps for the sawmill worker to produce the planck */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
         }

@@ -322,8 +322,7 @@ public class TestFishery {
         assertTrue(fisherman.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the fisherman stays in the fishery */        
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(fisherman.isInsideBuilding());
             map.stepTime();
         }
@@ -487,8 +486,7 @@ public class TestFishery {
         assertTrue(fisherman.isFishing());
 
         /* Verify that the fisherman fishes the right time */
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertTrue(fisherman.isFishing());
             map.stepTime();
         }
@@ -702,8 +700,7 @@ public class TestFishery {
         assertTrue(fisherman.isInsideBuilding());
 
         /* Verify that the fisherman stays in the hut */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(fisherman.isInsideBuilding());
             map.stepTime();
         }

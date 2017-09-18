@@ -270,8 +270,7 @@ public class TestMint {
         assertEquals(mint.getWorker(), minter);        
 
         /* Verify that the mint doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(mint.getFlag().getStackedCargo().isEmpty());
             assertNull(minter.getCargo());
             map.stepTime();
@@ -297,8 +296,7 @@ public class TestMint {
         Utils.constructHouse(mint, map);
 
         /* Verify that the mint doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(mint.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -342,8 +340,7 @@ public class TestMint {
         mint.putCargo(new Cargo(COAL, map));
 
         /* Verify that the mint produces coin */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(mint.getFlag().getStackedCargo().isEmpty());
             assertNull(minter.getCargo());
@@ -394,8 +391,7 @@ public class TestMint {
         mint.putCargo(new Cargo(COAL, map));
 
         /* Verify that the mint produces bread */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(mint.getFlag().getStackedCargo().isEmpty());
             assertNull(minter.getCargo());
@@ -490,8 +486,7 @@ public class TestMint {
         mint.putCargo(new Cargo(COAL, map));
 
         /* Verify that it takes 50 steps for the mint worker to produce the planck */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(minter.getCargo());
             map.stepTime();
         }

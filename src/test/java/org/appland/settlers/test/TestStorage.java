@@ -273,8 +273,7 @@ public class TestStorage {
         Utils.occupyBuilding(sw, storage, map);
 
         /* Verify that the storage worker rests */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertTrue(sw.isInsideBuilding());
             map.stepTime();
         }
@@ -435,8 +434,7 @@ public class TestStorage {
         Utils.fastForwardUntilWorkersReachTarget(map, sw);
 
         /* Verify that the storage worker stays in the storage and rests */
-        int i;
-        for (i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             assertTrue(sw.isInsideBuilding());
             map.stepTime();
         }

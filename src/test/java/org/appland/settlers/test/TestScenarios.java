@@ -121,8 +121,7 @@ public class TestScenarios {
         /* Fast forward until the woodcutter has cut some wood */
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
 
-        int i;
-        for (i = 0; i < 700; i++) {
+        for (int i = 0; i < 700; i++) {
             if (!wc.getFlag().getStackedCargo().isEmpty()) {
                 break;
             }
@@ -155,7 +154,7 @@ public class TestScenarios {
 
         int amountWood = hq.getAmount(WOOD);
 
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             if (courierWcToHq.getPosition().equals(hq.getPosition())) {
                 break;
             }
@@ -174,7 +173,7 @@ public class TestScenarios {
         /* Find out that the sawmill needs the wood */
         Worker w = hq.getWorker();
 
-        for (i = 0; i < 300; i++) {
+        for (int i = 0; i < 300; i++) {
 
             if (w.getTarget().equals(hq.getFlag().getPosition()) && w.getCargo().getMaterial().equals(WOOD)) {
                 break;
@@ -198,7 +197,7 @@ public class TestScenarios {
         assertTrue(cargo.getTarget().equals(sm));
 
         /* Wait for smToHqRoad's courier to pick up the cargo */
-        for (i = 0; i < 400; i++) {
+        for (int i = 0; i < 400; i++) {
             if (cargo.equals(courierSmToHq.getCargo())) {
                 break;
             }
@@ -228,7 +227,7 @@ public class TestScenarios {
         /* Produce plancks in sawmill. 
 
         /* Make sure the sawmill worker is done with the previous planck */
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             if (sm.getWorker().getCargo() == null) {
                 break;
             }
@@ -243,7 +242,7 @@ public class TestScenarios {
               in the worker list so it will get called to step time once before 
               this section is reached
         */
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             if (sm.getWorker().getCargo() != null) {
                 break;
             }
@@ -263,7 +262,7 @@ public class TestScenarios {
         Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
 
         /* Wait for the courier to pick up the wood cargo */
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             if (woodCargo.equals(courierSmToHq.getPromisedDelivery())) {
                 break;
             }

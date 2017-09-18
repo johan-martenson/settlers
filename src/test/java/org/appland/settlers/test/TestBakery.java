@@ -270,8 +270,7 @@ public class TestBakery {
         assertEquals(bakery.getWorker(), baker);        
 
         /* Verify that the bakery doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
             map.stepTime();
@@ -297,8 +296,7 @@ public class TestBakery {
         Utils.constructHouse(bakery, map);
 
         /* Verify that the bakery doesn't produce anything */
-        int i;
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -342,8 +340,7 @@ public class TestBakery {
         bakery.putCargo(new Cargo(FLOUR, map));
 
         /* Verify that the bakery produces bread */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
@@ -394,8 +391,7 @@ public class TestBakery {
         bakery.putCargo(new Cargo(FLOUR, map));
 
         /* Verify that the bakery produces bread */
-        int i;
-        for (i = 0; i < 149; i++) {
+        for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
             assertNull(baker.getCargo());
@@ -490,8 +486,7 @@ public class TestBakery {
         bakery.putCargo(new Cargo(FLOUR, map));
 
         /* Verify that it takes 50 steps for the bakery worker to produce the planck */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(baker.getCargo());
             map.stepTime();
         }

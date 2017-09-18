@@ -213,8 +213,7 @@ public class TestMill {
         /* Finish the mill */
         Utils.constructHouse(mill, map);
 
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(mill.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
         }
@@ -292,8 +291,7 @@ public class TestMill {
         assertTrue(miller.isInsideBuilding());
 
         /* Verify that the worker rests first without producing anything */
-        int i;
-        for (i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             assertNull(miller.getCargo());
             map.stepTime();
         }
@@ -332,8 +330,7 @@ public class TestMill {
         Utils.fastForward(100, map);
 
         /* Verify that it the worker doesn't produce any wheat */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertNull(miller.getCargo());
             map.stepTime();
         }
@@ -377,8 +374,7 @@ public class TestMill {
         Utils.fastForward(100, map);
 
         /* Verify that it the worker produces flour at the right time */
-        int i;
-        for (i = 0; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             assertNull(miller.getCargo());
             map.stepTime();
         }

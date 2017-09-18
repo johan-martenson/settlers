@@ -201,8 +201,7 @@ public class TestCourier {
         assertEquals(courier.getPosition(), point0);
         assertTrue(courier.isArrived());
 
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(courier.isArrived());
             assertTrue(courier.isIdle());
 

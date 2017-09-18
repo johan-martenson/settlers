@@ -267,8 +267,7 @@ public class TestDonkeyFarm {
         donkeyFarm.putCargo(wheatCargo);
 
         /* Run the game logic 99 times and make sure the donkey breeder stays in the donkey farm */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(donkeyBreeder.isInsideBuilding());
             map.stepTime();
         }
@@ -340,8 +339,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isAt(point));
         assertTrue(donkeyBreeder.isFeeding());
 
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertTrue(donkeyBreeder.isFeeding());
             map.stepTime();
         }

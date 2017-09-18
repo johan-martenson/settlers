@@ -213,8 +213,7 @@ public class TestWoodcutter {
         int nrWorkers = map.getWorkers().size();
 
         /* Keep running the gameloop and make sure no more workers are allocated */
-        int i;
-        for (i = 0; i < 20; i++) {
+        for (int i = 0; i < 20; i++) {
             Utils.fastForward(10, map);
         }
 
@@ -250,8 +249,7 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             assertTrue(wcWorker.isInsideBuilding());
             Utils.fastForward(10, map);
         }
@@ -419,8 +417,7 @@ public class TestWoodcutter {
         assertNull(wcWorker.getCargo());
 
         /* Wait for the woodcutter to finish cutting the tree */
-        int i;
-        for (i = 0; i < 49; i++) {
+        for (int i = 0; i < 49; i++) {
             assertTrue(wcWorker.isCuttingTree());
             assertTrue(map.isTreeAtPoint(point));
             map.stepTime();
@@ -676,8 +673,7 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isInsideBuilding());
         assertNull(wcWorker.getCargo());
 
-        int i;
-        for (i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             map.stepTime();
             assertNull(wcWorker.getCargo());
         }
@@ -711,8 +707,7 @@ public class TestWoodcutter {
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
 
-        int i;
-        for (i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             Utils.fastForward(10, map);
         }
 
@@ -731,7 +726,7 @@ public class TestWoodcutter {
         assertTrue(wcWorker.isInsideBuilding());
 
         /* Grow tree to medium*/
-        for (i = 0; i < 500; i++) {
+        for (int i = 0; i < 500; i++) {
             map.stepTime();
 
             if (tree.getSize() == MEDIUM) {

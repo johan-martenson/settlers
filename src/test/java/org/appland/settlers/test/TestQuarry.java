@@ -187,8 +187,7 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(mason.isInsideBuilding());
             map.stepTime();
         }
@@ -353,8 +352,7 @@ public class TestQuarry {
         assertTrue(mason.isGettingStone());
 
         /* Verify that the stonemason gets stone */
-        int i;
-        for (i = 0; i < 49; i++) {
+        for (int i = 0; i < 49; i++) {
             assertTrue(mason.isGettingStone());
             map.stepTime();
         }
@@ -488,8 +486,7 @@ public class TestQuarry {
         assertNull(mason.getCargo());
 
         /* Verify that no stone is available from the quarry or its flag */
-        int i;
-        for (i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             map.stepTime();
             assertTrue(quarry.getStackedCargo().isEmpty());
             assertNull(mason.getCargo());
@@ -560,8 +557,7 @@ public class TestQuarry {
 
         Stone stone0 = map.placeStone(point1);
 
-        int i;
-        for (i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             stone0.removeOnePart();
             map.stepTime();
             assertTrue(map.isStoneAtPoint(point1));

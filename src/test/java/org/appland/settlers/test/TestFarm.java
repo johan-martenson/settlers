@@ -305,8 +305,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
             map.stepTime();
         }
@@ -348,8 +347,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(farmer.isInsideBuilding());
             map.stepTime();
         }
@@ -414,8 +412,7 @@ public class TestFarm {
         assertTrue(farmer.isAt(point));
         assertTrue(farmer.isPlanting());
 
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
             map.stepTime();
         }
@@ -552,8 +549,7 @@ public class TestFarm {
         assertTrue(farmer.isHarvesting());
         assertFalse(farmer.isPlanting());
 
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertFalse(farmer.isPlanting());
             assertTrue(farmer.isHarvesting());
             map.stepTime();
@@ -687,8 +683,7 @@ public class TestFarm {
         Utils.constructHouse(farm, map);
 
         /* Verify that the farm does not produce any wheat */
-        int i;
-        for (i = 0; i < 200; i++) {
+        for (int i = 0; i < 200; i++) {
             assertTrue(farm.getFlag().getStackedCargo().isEmpty());
 
             map.stepTime();
@@ -775,8 +770,7 @@ public class TestFarm {
         assertTrue(farmer.isPlanting());
 
         /* Verify that the farmer plants */
-        int i;
-        for (i = 0; i < 19; i++) {
+        for (int i = 0; i < 19; i++) {
             assertTrue(farmer.isPlanting());
             map.stepTime();
         }

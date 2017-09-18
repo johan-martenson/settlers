@@ -281,8 +281,7 @@ public class TestHunterHut {
         assertTrue(hunter.isInsideBuilding());
 
         /* Run the game logic 99 times and make sure the hunter stays in the hut */        
-        int i;
-        for (i = 0; i < 99; i++) {
+        for (int i = 0; i < 99; i++) {
             assertTrue(hunter.isInsideBuilding());
             map.stepTime();
         }
