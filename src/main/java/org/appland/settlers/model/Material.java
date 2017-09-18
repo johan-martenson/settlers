@@ -1,5 +1,6 @@
 package org.appland.settlers.model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,24 +54,9 @@ public enum Material {
     SCOUT,
     HUNTER;
 
-    private static List<Material> minerals = null;
-
-    private final static Object initLock = new Object();
+    private final static List<Material> minerals = Arrays.asList(new Material[] {GOLD, IRON, COAL, STONE});
 
     static Iterable<Material> getMinerals() {
-        synchronized (initLock) {
-            if (minerals == null) {
-                List<Material> tempList = new LinkedList<>();
-
-                tempList.add(GOLD);
-                tempList.add(IRON);
-                tempList.add(COAL);
-                tempList.add(STONE);
-
-                minerals = Collections.unmodifiableList(tempList);
-            }
-        }
-
         return minerals;
     }
 }

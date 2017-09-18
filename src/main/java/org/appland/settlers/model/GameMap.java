@@ -125,7 +125,7 @@ public class GameMap {
         removeRoadButNotWorker(road);
     }
 
-    private synchronized void removeRoadButNotWorker(Road road) throws Exception {
+    private void removeRoadButNotWorker(Road road) throws Exception {
 
         roads.remove(road);
 
@@ -329,7 +329,7 @@ public class GameMap {
         }
     }
 
-    public synchronized <T extends Building> T placeBuilding(T house, Point point) throws Exception {
+    public <T extends Building> T placeBuilding(T house, Point point) throws Exception {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, point});
 
         boolean firstHouse = false;
@@ -681,7 +681,7 @@ public class GameMap {
         return placeRoad(player, Arrays.asList(points));
     }
 
-    public synchronized Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
+    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
 
         Point start = wayPoints.get(0);
@@ -801,7 +801,7 @@ public class GameMap {
         return null;
     }
 
-    public synchronized Flag placeFlag(Player player, Point point) throws Exception {
+    public Flag placeFlag(Player player, Point point) throws Exception {
 
         /* Verify that the player is valid */
         if (!players.contains(player)) {
@@ -819,7 +819,7 @@ public class GameMap {
         return doPlaceFlag(flag, false);
     }    
 
-    private synchronized Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
+    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
 
         Point flagPoint = flag.getPosition();
@@ -930,7 +930,7 @@ public class GameMap {
         return Collections.unmodifiableList(flags);
     }
 
-    public synchronized void placeWorker(Worker worker, EndPoint endPoint) {
+    public void placeWorker(Worker worker, EndPoint endPoint) {
         worker.setPosition(endPoint.getPosition());
         workers.add(worker);
     }

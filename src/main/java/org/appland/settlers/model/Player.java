@@ -347,11 +347,9 @@ public class Player {
     }
 
     public void setTransportPriority(int priority, Material material) {
-        synchronized (transportPriorities) {
-            transportPriorities.remove(material);
+        transportPriorities.remove(material);
 
-            transportPriorities.add(priority, material);
-        }
+        transportPriorities.add(priority, material);
     }
 
     int getTransportPriority(Cargo crop) {
