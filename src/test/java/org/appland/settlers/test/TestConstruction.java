@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class ConstructionTest {
+public class TestConstruction {
 
     @Test
     public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
@@ -38,111 +38,116 @@ public class ConstructionTest {
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point1 = new Point(9, 9);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
+        Building sawmill0 = map.placeBuilding(new Woodcutter(player0), point1);
 
-        assertFalse(wc.isMilitaryBuilding());
+        /* Verify that the sawmill is not a military building */
+        assertFalse(sawmill0.isMilitaryBuilding());
 
-        assertEquals(wc.getAmount(WOOD), 0);
-        assertEquals(wc.getAmount(PLANCK), 0);
-        assertTrue(wc.underConstruction());
+        /* Verify that the sawmill needs the right amount of material for construction */
+        assertEquals(sawmill0.getAmount(WOOD), 0);
+        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertTrue(sawmill0.underConstruction());
 
-        assertTrue(wc.needsMaterial(PLANCK));
+        assertTrue(sawmill0.needsMaterial(PLANCK));
 
-        assertFalse(wc.needsMaterial(SERGEANT));
+        assertFalse(sawmill0.needsMaterial(SERGEANT));
 
-        assertTrue(wc.needsMaterial(PLANCK));
+        assertTrue(sawmill0.needsMaterial(PLANCK));
 
-        wc.promiseDelivery(PLANCK);
-        assertTrue(wc.needsMaterial(PLANCK));
+        sawmill0.promiseDelivery(PLANCK);
+        assertTrue(sawmill0.needsMaterial(PLANCK));
 
-        wc.promiseDelivery(PLANCK);
-        assertFalse(wc.needsMaterial(PLANCK));
+        sawmill0.promiseDelivery(PLANCK);
+        assertFalse(sawmill0.needsMaterial(PLANCK));
 
         /* Verify that construction doesn't finish before material is delivered */
-        int i;
-        for (i = 0; i < 1000; i++) {
-            assertTrue(wc.underConstruction());
-            wc.stepTime();
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(sawmill0.underConstruction());
+            sawmill0.stepTime();
         }
 
         Cargo planckCargo = new Cargo(PLANCK, null);
 
-        wc.putCargo(planckCargo);
+        sawmill0.putCargo(planckCargo);
 
-        for (i = 0; i < 1000; i++) {
-            assertTrue(wc.underConstruction());
-            wc.stepTime();
+        for (int i = 0; i < 1000; i++) {
+            assertTrue(sawmill0.underConstruction());
+            sawmill0.stepTime();
         }
 
         /* Verify that construction can finish when all material is delivered */
-        wc.putCargo(planckCargo);
-        wc.stepTime();
+        sawmill0.putCargo(planckCargo);
+        sawmill0.stepTime();
 
-        assertTrue(wc.ready());
+        assertTrue(sawmill0.ready());
 
-        assertFalse(wc.isMilitaryBuilding());
+        assertFalse(sawmill0.isMilitaryBuilding());
 
         /* Verify that all material was consumed by the construction */
-        assertEquals(wc.getAmount(PLANCK), 0);
-        assertEquals(wc.getAmount(STONE), 0);
+        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertEquals(sawmill0.getAmount(STONE), 0);
 
-        /* Verify that the woodcutter doesn't need any material when it's finished */
-        for (Material m : Material.values()) {
-            assertFalse(wc.needsMaterial(m));
+        /* Verify that the sawmill doesn't need any material when it's finished */
+        for (Material material : Material.values()) {
+            assertFalse(sawmill0.needsMaterial(material));
         }
 
-        wc.tearDown();
+        sawmill0.tearDown();
 
-        assertTrue(wc.burningDown());
+        assertTrue(sawmill0.burningDown());
 
-        for (i = 0; i < 50; i++) {
-            assertTrue(wc.burningDown());
-            wc.stepTime();
+        for (int i = 0; i < 50; i++) {
+            assertTrue(sawmill0.burningDown());
+            sawmill0.stepTime();
         }
 
-        assertTrue(wc.destroyed());
+        assertTrue(sawmill0.destroyed());
     }
 
     @Test
     public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        Barracks brks = new Barracks(player0);
+        /* Create barracks */
+        Barracks barracks0 = new Barracks(player0);
 
-        assertTrue(brks.underConstruction());
+        assertTrue(barracks0.underConstruction());
 
-        assertTrue(brks.isMilitaryBuilding());
-        assertEquals(brks.getMaxHostedMilitary(), 2);
-        assertEquals(brks.getNumberOfHostedMilitary(), 0);
-        assertEquals(brks.getPromisedMilitary(), 0);
+        assertTrue(barracks0.isMilitaryBuilding());
+        assertEquals(barracks0.getMaxHostedMilitary(), 2);
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks0.getPromisedMilitary(), 0);
 
-        assertFalse(brks.needsMilitaryManning());
+        assertFalse(barracks0.needsMilitaryManning());
 
-        /* brks needs a reference to the game map and this is set implicityly when it's placed on the map */
+        /* The barracks needs a reference to the game map and this is set implicityly
+           when it's placed on the map */
         GameMap map = new GameMap(players,30, 30);
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(13, 13);
-        map.placeBuilding(brks, point1);
+        map.placeBuilding(barracks0, point1);
 
-        Utils.constructHouse(brks, map);
+        Utils.constructHouse(barracks0, map);
 
-        assertTrue(brks.isMilitaryBuilding());
-        assertTrue(brks.ready());
-        assertEquals(brks.getNumberOfHostedMilitary(), 0);
-        assertEquals(brks.getMaxHostedMilitary(), 2);
-        assertTrue(brks.needsMilitaryManning());
+        assertTrue(barracks0.isMilitaryBuilding());
+        assertTrue(barracks0.ready());
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks0.getMaxHostedMilitary(), 2);
+        assertTrue(barracks0.needsMilitaryManning());
 
-        assertTrue(brks.isMilitaryBuilding());
+        assertTrue(barracks0.isMilitaryBuilding());
     }
 
     @Test
@@ -154,64 +159,64 @@ public class ConstructionTest {
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point1 = new Point(9, 9);
-        Building sm = map.placeBuilding(new Sawmill(player0), point1);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        assertTrue(sm.underConstruction());
+        assertTrue(sawmill0.underConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sm.underConstruction());
-            sm.stepTime();
+            assertTrue(sawmill0.underConstruction());
+            sawmill0.stepTime();
         }
 
         Cargo planckCargo = new Cargo(PLANCK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
 
-        sm.promiseDelivery(PLANCK);
-        sm.putCargo(planckCargo);
+        sawmill0.promiseDelivery(PLANCK);
+        sawmill0.putCargo(planckCargo);
 
-        sm.promiseDelivery(PLANCK);
-        sm.putCargo(planckCargo);
+        sawmill0.promiseDelivery(PLANCK);
+        sawmill0.putCargo(planckCargo);
 
-        sm.promiseDelivery(STONE);
-        sm.putCargo(stoneCargo);
+        sawmill0.promiseDelivery(STONE);
+        sawmill0.putCargo(stoneCargo);
 
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sm.underConstruction());
-            sm.stepTime();
+            assertTrue(sawmill0.underConstruction());
+            sawmill0.stepTime();
         }
 
         /* Verify that construction can finish when all material is delivered */
-        sm.promiseDelivery(STONE);
-        sm.putCargo(stoneCargo);
+        sawmill0.promiseDelivery(STONE);
+        sawmill0.putCargo(stoneCargo);
 
-        sm.stepTime();
+        sawmill0.stepTime();
 
-        assertTrue(sm.ready());
+        assertTrue(sawmill0.ready());
 
         /* Verify that all material was consumed by the construction */
-        assertEquals(sm.getAmount(PLANCK), 0);
-        assertEquals(sm.getAmount(STONE), 0);
+        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertEquals(sawmill0.getAmount(STONE), 0);
 
         /* Verify that the sawmill needs only WOOD when it's finished */
-        assertTrue(sm.needsMaterial(WOOD));
-        assertFalse(sm.needsMaterial(PLANCK));
-        assertFalse(sm.needsMaterial(STONE));
+        assertTrue(sawmill0.needsMaterial(WOOD));
+        assertFalse(sawmill0.needsMaterial(PLANCK));
+        assertFalse(sawmill0.needsMaterial(STONE));
 
-        sm.tearDown();
+        sawmill0.tearDown();
 
         for (int i = 0; i < 50; i++) {
-            assertTrue(sm.burningDown());
-            sm.stepTime();
+            assertTrue(sawmill0.burningDown());
+            sawmill0.stepTime();
         }
 
-        assertTrue(sm.destroyed());
+        assertTrue(sawmill0.destroyed());
     }
 
     @Test
@@ -223,11 +228,11 @@ public class ConstructionTest {
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing sawmill */
+        /* Place farm */
         Point point1 = new Point(9, 9);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
@@ -290,42 +295,49 @@ public class ConstructionTest {
         players.add(player0);
         GameMap map = new GameMap(players,40, 40);
 
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Placing sawmill */
+        /* Place sawmill */
         Point point1 = new Point(9, 9);
-        Building sm = map.placeBuilding(new Sawmill(player0), point1);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        Utils.constructHouse(sm, null);
+        Utils.constructHouse(sawmill0, null);
 
-        assertTrue(sm.ready());
+        assertTrue(sawmill0.ready());
 
-        sm.tearDown();
+        sawmill0.tearDown();
 
-        sm.putCargo(new Cargo(WOOD, null));
+        sawmill0.putCargo(new Cargo(WOOD, null));
     }
 
     @Test(expected = InvalidStateForProduction.class)
     public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players,20, 20);
 
+        /* Place headquarter */
         map.placeBuilding(new Headquarter(player0), new Point(10, 10));
 
-        Building sm = map.placeBuilding(new Sawmill(player0), new Point(4, 4));
+        /* Place sawmill */
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), new Point(4, 4));
 
-        Utils.constructHouse(sm, map);
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill0, map);
 
-        assertTrue(sm.ready());
+        assertTrue(sawmill0.ready());
 
-        sm.tearDown();
+        /* Tear down the sawmill */
+        sawmill0.tearDown();
 
         Utils.fastForward(1000, map);
 
-        sm.putCargo(new Cargo(WOOD, null));
+        /* Verify that it's not possible to deliver wood to a sawmill that doesn't exist on the map */
+        sawmill0.putCargo(new Cargo(WOOD, null));
     }
 }
