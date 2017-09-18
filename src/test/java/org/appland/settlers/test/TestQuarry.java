@@ -1644,4 +1644,72 @@ public class TestQuarry {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
+    @Test
+    public void testTwoStonemasonsGettingLastStone() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place stone */
+        Point point1 = new Point(8, 8);
+        Stone stone = map.placeStone(point1);
+
+        /* Place two quarries with the same distance to the stone */
+        Point point2 = new Point(5, 9);
+        Point point3 = new Point(9, 9);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
+        Quarry quarry1 = map.placeBuilding(new Quarry(player0), point3);
+
+        /* Finish construction of the quarries */
+        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry1, map);
+
+        /* Occupy the quarries */
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry1, map);
+
+        /* Remove almost all of the stone so there is only a single piece left */
+        Utils.removePiecesFromStoneUntil(stone, 1);
+
+        /* Wait for the stone masons to go out and try to get the same piece of stone */
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 2, player0, map);
+
+        Worker stonemason0 = quarry0.getWorker();
+        Worker stonemason1 = quarry1.getWorker();
+
+        assertTrue(stonemason0.getTarget().isAdjacent(stone.getPosition()));
+        assertTrue(stonemason0.getTarget().isAdjacent(stone.getPosition()));
+
+        /* Wait for the stonemasons to try to get the same stone */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, stonemason0.getTarget());
+
+        /* Wait for the stone mason to get a new stone */
+        for (int i = 0; i < 1000; i++) {
+            if (stonemason0.getCargo() != null || stonemason1.getCargo() != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(stonemason0.getCargo() != null || stonemason1.getCargo() != null);
+        assertFalse(stonemason0.getCargo() != null && stonemason1.getCargo() != null);
+
+        /* Wait for the stone masons to go back to the quarries */
+        assertEquals(stonemason0.getTarget(), quarry0.getPosition());
+        assertEquals(stonemason1.getTarget(), quarry1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getPosition());
+
+        assertTrue(stonemason0.isInsideBuilding());
+        assertTrue(stonemason1.isInsideBuilding());
+    }
 }

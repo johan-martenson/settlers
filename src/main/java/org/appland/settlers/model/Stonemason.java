@@ -129,11 +129,16 @@ public class Stonemason extends Worker {
             }
         } else if (state == State.GETTING_STONE) {
             if (countdown.reachedZero()) {
-                map.removePartOfStone(stoneTarget);
 
-                setCargo(new Cargo(STONE, map));
+                /* Remove a piece of the stone if it still exists */
+                if (map.isStoneAtPoint(stoneTarget)) {
+                    map.removePartOfStone(stoneTarget);
 
-                state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                    setCargo(new Cargo(STONE, map));
+                    state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                } else {
+                    state = State.GOING_BACK_TO_HOUSE;
+                }
 
                 stoneTarget = null;
 

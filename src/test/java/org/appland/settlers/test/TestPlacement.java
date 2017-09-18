@@ -41,7 +41,6 @@ import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
-import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 
 import static org.junit.Assert.assertEquals;
@@ -212,18 +211,19 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnLake() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-
-        Point waterPoint   = new Point(2, 2);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create mini-lake */
+        Point waterPoint   = new Point(2, 2);
         Utils.surroundPointWithWater(waterPoint, map);
 
         /* Verify that there is no available spot for a flag on the lake */

@@ -84,11 +84,11 @@ public class Terrain {
         return isSurroundedBy(point, WATER);
     }
 
-    boolean isInSwamp(Point point) {
+    public boolean isInSwamp(Point point) {
         return isSurroundedBy(point, SWAMP);
     }
 
-    protected boolean isOnGrass(Point point) {
+    public boolean isOnGrass(Point point) {
         return isSurroundedBy(point, GRASS);
     }
 

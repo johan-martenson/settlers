@@ -48,6 +48,7 @@ import static org.junit.Assert.assertNull;
 
 import static org.junit.Assert.assertTrue;
 import static java.lang.Math.abs;
+import org.appland.settlers.model.Stone;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 
 public class Utils {
@@ -956,5 +957,15 @@ public class Utils {
         }
 
         assertTrue(building.destroyed());
+    }
+
+    static void removePiecesFromStoneUntil(Stone stone, int amountLeft) {
+        for (int i = 0; i < 1000; i++) {
+            if (stone.getAmount() > amountLeft) {
+                stone.removeOnePart();
+            }
+        }
+
+        assertEquals(stone.getAmount(), amountLeft);
     }
 }
