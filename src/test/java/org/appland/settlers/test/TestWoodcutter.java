@@ -2085,4 +2085,82 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
+    @Test
+    public void testTwoWoodcuttersTryToCutDownSameTree() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place and grow the tree */
+        Point point1 = new Point(10, 4);
+        Tree tree = map.placeTree(point1);
+        Utils.fastForwardUntilTreeIsGrown(tree, map);
+
+        /* Place the woodcutters */
+        Point point2 = new Point(7, 5);
+        Point point3 = new Point(11, 5);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        Building woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
+
+        /* Construct the woodcutters */
+        constructHouse(woodcutter0, map);
+        constructHouse(woodcutter1, map);
+
+        /* Manually place woodcutters */
+        WoodcutterWorker wcWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker wcWorker1 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter1, map);
+
+        /* Wait for the woodcutters to leave the buildings and try to cut down the same tree */
+        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 2, player0, map);
+
+        assertEquals(wcWorker0.getTarget(), tree.getPosition());
+        assertEquals(wcWorker1.getTarget(), tree.getPosition());
+
+        /* Let the woodcutters reach the tree and start cutting */
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker0, tree.getPosition());
+
+        assertEquals(wcWorker0.getPosition(), tree.getPosition());
+        assertEquals(wcWorker1.getPosition(), tree.getPosition());
+
+        /* Wait for one of them to cut down the tree */
+        assertTrue(wcWorker0.isCuttingTree() || wcWorker1.isCuttingTree());
+
+        /* Wait for the woodcutter to finish cutting the tree */
+        for (int i = 0; i < 1000; i++) {
+
+            if (!map.isTreeAtPoint(tree.getPosition())) {
+                break;
+            }
+
+            assertTrue(wcWorker0.isCuttingTree() || wcWorker1.isCuttingTree());
+            assertTrue(map.isTreeAtPoint(tree.getPosition()));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.isTreeAtPoint(tree.getPosition()));
+
+        /* Verify that one of the woodcutters got the wood and both are going back */
+        assertTrue(wcWorker0.getCargo() == null || wcWorker1.getCargo() == null);
+        assertTrue(wcWorker0.getCargo() != null || wcWorker1.getCargo() != null);
+        assertTrue((wcWorker0.getCargo() != null && wcWorker0.getCargo().getMaterial().equals(WOOD)) ||
+                   (wcWorker1.getCargo() != null && wcWorker1.getCargo().getMaterial().equals(WOOD)));
+
+        /* Verify that both woodcutters go back home */
+        assertEquals(wcWorker0.getTarget(), woodcutter0.getPosition());
+        assertEquals(wcWorker1.getTarget(), woodcutter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker0, woodcutter0.getPosition());
+
+        assertTrue(wcWorker0.isInsideBuilding());
+        assertTrue(wcWorker1.isInsideBuilding());
+    }
 }

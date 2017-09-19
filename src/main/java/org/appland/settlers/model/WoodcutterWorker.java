@@ -19,7 +19,7 @@ public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_CUT_TREE = 49;
     private final static int RANGE            = 7;
 
-    private State  state;
+    private State state;
     private final Countdown countdown;
 
     private Point getTreeToCutDown() {
@@ -96,11 +96,17 @@ public class WoodcutterWorker extends Worker {
             }
         } else if (state == State.CUTTING_TREE) {
             if (countdown.reachedZero()) {
-                map.removeTree(getPosition());
 
-                setCargo(new Cargo(WOOD, map));
+                /* Remove the tree if it's still in place */
+                if (map.isTreeAtPoint(getPosition())) {
+                    map.removeTree(getPosition());
 
-                state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                    setCargo(new Cargo(WOOD, map));
+
+                    state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+                } else {
+                    state = State.GOING_BACK_TO_HOUSE;
+                }
 
                 returnHomeOffroad();
             } else {
