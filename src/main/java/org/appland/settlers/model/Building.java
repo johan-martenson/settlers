@@ -184,7 +184,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public List<Military> getHostedMilitary() {
-        return Collections.unmodifiableList(hostedMilitary);
+        return hostedMilitary;
     }
 
     public boolean needsWorker() {
@@ -828,7 +828,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getRemoteDefenders() {
-        return Collections.unmodifiableList(defenders);
+        return defenders;
     }
 
     void registerDefender(Military defender) {
@@ -868,7 +868,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getWaitingAttackers() {
-        return Collections.unmodifiableList(waitingAttackers);
+        return waitingAttackers;
     }
 
     Military pickWaitingAttacker() {
@@ -876,7 +876,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     List<Military> getAttackers() {
-        return Collections.unmodifiableList(attackers);
+        return attackers;
     }
 
     public boolean isUnderAttack() {

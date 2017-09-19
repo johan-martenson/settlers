@@ -762,7 +762,7 @@ public class GameMap {
     }
 
     public List<Road> getRoads() {
-        return Collections.unmodifiableList(roads);
+        return roads;
     }
 
     public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
@@ -923,11 +923,11 @@ public class GameMap {
     }
 
     public List<Building> getBuildings() {
-        return Collections.unmodifiableList(buildings);
+        return buildings;
     }
 
     public List<Flag> getFlags() {
-        return Collections.unmodifiableList(flags);
+        return flags;
     }
 
     public void placeWorker(Worker worker, EndPoint endPoint) {
@@ -936,7 +936,7 @@ public class GameMap {
     }
 
     public List<Worker> getWorkers() {
-        return Collections.unmodifiableList(workers);
+        return workers;
     }
 
     public Collection<Point> getAvailableFlagPoints(Player player) throws Exception {
@@ -1419,7 +1419,7 @@ public class GameMap {
     }
 
     public Collection<Tree> getTrees() {
-        return Collections.unmodifiableCollection(trees);
+        return trees;
     }
 
     void removeTree(Point position) {
@@ -1528,7 +1528,7 @@ public class GameMap {
     }
 
     public List<Stone> getStones() {
-        return Collections.unmodifiableList(stones);
+        return stones;
     }
 
     public Crop getCropAtPoint(Point point) {
@@ -1536,7 +1536,7 @@ public class GameMap {
     }
 
     public Iterable<Crop> getCrops() {
-        return Collections.unmodifiableList(crops);
+        return crops;
     }
 
     private void removeStone(Stone stone) {
@@ -1657,7 +1657,7 @@ public class GameMap {
     }
 
     public Collection<Sign> getSigns() {
-        return Collections.unmodifiableCollection(signs);
+        return signs;
     }
 
     public void placeEmptySign(Point point) {
@@ -1712,7 +1712,7 @@ public class GameMap {
     }
 
     public List<Player> getPlayers() {
-        return Collections.unmodifiableList(players);
+        return players;
     }
 
     private double calculateClaim(Building building, Point point) {
@@ -1994,7 +1994,7 @@ public class GameMap {
      * @return List of projectiles
      */
     public List<Projectile> getProjectiles() {
-        return Collections.unmodifiableList(projectiles);
+        return projectiles;
     }
 
     void placeProjectile(Projectile projectile, Point position) {
@@ -2010,7 +2010,7 @@ public class GameMap {
      * @return List of wild animals
      */
     public List<WildAnimal> getWildAnimals() {
-        return Collections.unmodifiableList(wildAnimals);
+        return wildAnimals;
     }
 
     private void handleWildAnimalPopulation() throws Exception {

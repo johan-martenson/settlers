@@ -73,7 +73,7 @@ public class Player {
     }
 
     public List<Building> getBuildings() {
-        return Collections.unmodifiableList(buildings);
+        return buildings;
     }
 
     public boolean isWithinBorder(Point position) {
@@ -97,11 +97,11 @@ public class Player {
     }
 
     public Collection<Land> getLands() {
-        return Collections.unmodifiableCollection(ownedLands);
+        return ownedLands;
     }
 
     public List<Point> getFieldOfView() {
-        return Collections.unmodifiableList(fieldOfView);
+        return fieldOfView;
     }
 
     private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {

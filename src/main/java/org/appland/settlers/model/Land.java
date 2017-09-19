@@ -98,11 +98,11 @@ public class Land {
     }
 
     List<List<Point>> getBorders() {
-        return Collections.unmodifiableList(border);
+        return border;
     }
 
     public Set<Point> getPointsInLand() {
-        return Collections.unmodifiableSet(points);
+        return points;
     }
 
     public boolean isWithinBorder(Point position) {

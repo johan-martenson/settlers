@@ -398,7 +398,7 @@ public abstract class Worker implements Actor, Piece {
     }
 
     public List<Point> getPlannedPath() {
-        return Collections.unmodifiableList(path);
+        return path;
     }
 
     protected void returnHomeOffroad() throws Exception {

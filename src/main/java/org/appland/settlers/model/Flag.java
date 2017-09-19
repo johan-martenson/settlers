@@ -32,7 +32,7 @@ public class Flag implements EndPoint, Piece {
 
     @Override
     public List<Cargo> getStackedCargo() {
-        return Collections.unmodifiableList(stackedCargo);
+        return stackedCargo;
     }
 
     @Override

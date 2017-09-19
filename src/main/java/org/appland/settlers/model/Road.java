@@ -81,7 +81,7 @@ public class Road {
     }
 
     public List<Point> getWayPoints() {
-        return Collections.unmodifiableList(steps);
+        return steps;
     }
 
     private boolean roadStepsTooLong(List<Point> wayPoints) {
