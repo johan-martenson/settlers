@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -1048,11 +1047,10 @@ public class GameMap {
         boolean columnFlip;
 
         /* Place all possible flag points in the list */
-        int x, y;
-        for (y = 1; y < height; y++) {
+        for (int y = 1; y < height; y++) {
             columnFlip = rowFlip;
 
-            for (x = 1; x < width; x++) {
+            for (int x = 1; x < width; x++) {
                 if (columnFlip) {
                     result.add(new Point(x, y));
                 }
@@ -1341,6 +1339,16 @@ public class GameMap {
         return mp.getTree() != null;
     }
 
+    /**
+     * Finds an offroad way from the start to the goal via the given point and without
+     * reaching any points to avoid
+     *
+     * @param start The start of the trip
+     * @param goal The end of the trip
+     * @param via The point to pass by
+     * @param avoid The points to avoid
+     * @return The path found or null
+     */
     public List<Point> findWayOffroad(Point start, Point goal, Point via, 
             Collection<Point> avoid) {
 
@@ -1368,6 +1376,14 @@ public class GameMap {
         return path1;
     }
 
+    /**
+     * Finds an offroad way from the start to the goal without using any points to avoid
+     *
+     * @param start The start of the trip
+     * @param goal The end of the trip
+     * @param avoid The points to avoid
+     * @return The path found or null if there is no way
+     */
     public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
         return GameUtils.findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
@@ -1394,22 +1410,28 @@ public class GameMap {
         });
     }
 
-    public Tree placeTree(Point position) throws Exception {
-        MapPoint mp = pointToGameObject.get(position);
+    /**
+     * Places a tree at the given point
+     * @param point The point to place the tree at
+     * @return The placed tree
+     * @throws Exception Throws exception if the tree cannot be placed
+     */
+    public Tree placeTree(Point point) throws Exception {
+        MapPoint mp = pointToGameObject.get(point);
 
         if (mp.isFlag()) {
-            throw new Exception("Can't place tree on " + position + " on existing flag");
+            throw new Exception("Can't place tree on " + point + " on existing flag");
         } else if (mp.isRoad()) {
-            throw new Exception("Can't place tree on " + position + " on existing road");
+            throw new Exception("Can't place tree on " + point + " on existing road");
         } else if (mp.isStone()) {
-            throw new Exception("Can't place tree on " + position + " on existing stone");
+            throw new Exception("Can't place tree on " + point + " on existing stone");
         }
 
-        if (getTerrain().isOnMountain(position)) {
+        if (getTerrain().isOnMountain(point)) {
             throw new Exception("Can't place tree on a mountain");
         }
 
-        Tree tree = new Tree(position);
+        Tree tree = new Tree(point);
 
         mp.setTree(tree);
 
@@ -1418,6 +1440,11 @@ public class GameMap {
         return tree;
     }
 
+    /**
+     * Returns the list of trees on the map
+     *
+     * @return The list of trees
+     */
     public Collection<Tree> getTrees() {
         return trees;
     }
@@ -1438,6 +1465,12 @@ public class GameMap {
         return mp.getTree();
     }
 
+    /**
+     * Places a stone at the given point
+     *
+     * @param point The point to place the stone on
+     * @return The placed stone
+     */
     public Stone placeStone(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
@@ -1450,6 +1483,13 @@ public class GameMap {
         return stone;
     }
 
+    /**
+     * Places a crop at the given point
+     *
+     * @param point The point to place the crop on
+     * @return The placed crop
+     * @throws Exception Throws exception if the crop cannot be placed
+     */
     public Crop placeCrop(Point point) throws Exception {
         MapPoint mp = pointToGameObject.get(point);
 
@@ -1470,12 +1510,24 @@ public class GameMap {
         return crop;
     }
 
+    /**
+     * Returns true if there is a crop at the point
+     *
+     * @param point The point where there might be a crop
+     * @return True if there is a crop at the point
+     */
     public boolean isCropAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
         return mp.getCrop() != null;
     }
 
+    /**
+     * Returns true if there is a stone at the point
+     *
+     * @param point The point where there might be a stone
+     * @return True if there is a stone at the point
+     */
     public boolean isStoneAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
@@ -1500,22 +1552,29 @@ public class GameMap {
         return new Cargo(Material.STONE, this);
     }
 
+    /**
+     * Returns a list of points within the given radius to the given point
+     *
+     * @param point The center point
+     * @param radius The radius to collect points within
+     * @return The list of points within the radius
+     */
     public List<Point> getPointsWithinRadius(Point point, int radius) {
         List<Point> result = new ArrayList<>();
 
-        int x;
-        int y;
         boolean rowFlip = false;
 
-        for (y = point.y - radius; y <= point.y + radius; y++) {
+        for (int y = point.y - radius; y <= point.y + radius; y++) {
             int startX = point.x - radius;
 
             if (rowFlip) {
                 startX++;
             }
 
-            for (x = startX; x <= point.x + radius; x += 2) {
+            for (int x = startX; x <= point.x + radius; x += 2) {
+
                 Point p = new Point(x, y);
+
                 if (isWithinMap(p) && point.distance(p) <= radius) {
                     result.add(p);
                 }
@@ -1527,14 +1586,30 @@ public class GameMap {
         return result;
     }
 
+    /**
+     * Returns the stones on the map
+     *
+     * @return The list of stones on the map
+     */
     public List<Stone> getStones() {
         return stones;
     }
 
+    /**
+     * Returns the crops at a given point
+     *
+     * @param point The point to get crops at
+     * @return The crops at the given point
+     */
     public Crop getCropAtPoint(Point point) {
         return pointToGameObject.get(point).getCrop();
     }
 
+    /**
+     * Returns the crops on the map
+     *
+     * @return List of crops
+     */
     public Iterable<Crop> getCrops() {
         return crops;
     }
@@ -1547,7 +1622,13 @@ public class GameMap {
         stones.remove(stone);
     }
 
-    public void removeFlag(Flag flag) throws Exception {
+    /**
+     * Removes the given flag from the game
+     *
+     * @param flag The flag to remove
+     * @throws Exception Throws exception if there is a fault when removing connected roads
+     */
+    public void removeFlag(Flag flag) throws Exception{
         MapPoint mpUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
         MapPoint mp = pointToGameObject.get(flag.getPosition());
 
@@ -1592,6 +1673,13 @@ public class GameMap {
         return false;
     }
 
+    /**
+     * Returns the amount of the given mineral at the given point
+     *
+     * @param mineral Type of mineral
+     * @param point The point to get the amount of mineral at
+     * @return The amount of the given mineral at the given point
+     */
     public int getAmountOfMineralAtPoint(Material mineral, Point point) {
         int amount = 0;
 
@@ -1602,6 +1690,12 @@ public class GameMap {
         return amount;
     }
 
+    /**
+     * Returns the amount of fish at a given point
+     *
+     * @param point The point to get the amount of fish for
+     * @return The amount of fish at the given point
+     */
     public int getAmountFishAtPoint(Point point) {
         int amount = 0;
 
@@ -1612,8 +1706,15 @@ public class GameMap {
         return amount;
     }
 
-    public Cargo catchFishAtPoint(Point position) throws Exception {
-        for (Tile tile : terrain.getSurroundingTiles(position)) {
+    /**
+     * Catches a fish at the given point
+     *
+     * @param point Where to catch the fish
+     * @return A cargo containing the fish
+     * @throws Exception Thrown if there was no fish to catch
+     */
+    public Cargo catchFishAtPoint(Point point) throws Exception {
+        for (Tile tile : terrain.getSurroundingTiles(point)) {
             if (tile.getAmountFish() > 0) {
                 tile.consumeFish();
 
@@ -1621,7 +1722,7 @@ public class GameMap {
             }
         }
 
-        throw new Exception("Can't find any fish to catch at " + position);
+        throw new Exception("Can't find any fish to catch at " + point);
     }
 
     /**
