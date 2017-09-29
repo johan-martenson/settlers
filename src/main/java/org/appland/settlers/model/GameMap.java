@@ -1624,8 +1624,16 @@ public class GameMap {
         throw new Exception("Can't find any fish to catch at " + position);
     }
 
-    public Cargo mineMineralAtPoint(Material mineral, Point position) throws Exception {
-        for (Tile tile : terrain.getSurroundingTiles(position)) {
+    /**
+     * Mines one bit of ore from the given point
+     *
+     * @param mineral the type of mineral to attempt to mine
+     * @param point the point to mine at
+     * @return a cargo containing the mined ore
+     * @throws Exception is thrown if there is no ore to mine
+     */
+    public Cargo mineMineralAtPoint(Material mineral, Point point) throws Exception {
+        for (Tile tile : terrain.getSurroundingTiles(point)) {
             if (tile.getAmountOfMineral(mineral) > 0) {
                 tile.mine(mineral);
 
@@ -1633,9 +1641,15 @@ public class GameMap {
             }
         }
 
-        throw new Exception("Can't find any gold to mine at " + position);
+        throw new Exception("Can't find any gold to mine at " + point);
     }
 
+    /**
+     * Returns the sign at the given point
+     *
+     * @param point the point where the sign is
+     * @return the sign at the given point
+     */
     public Sign getSignAtPoint(Point point) {
         return getMapPoint(point).getSign();
     }
@@ -1644,6 +1658,14 @@ public class GameMap {
         return pointToGameObject.get(point);
     }
 
+    /**
+     * Places a sign at the given point, with the given type of mineral and the
+     * given amount
+     *
+     * @param mineral the type of mineral
+     * @param amount the amount of mineral
+     * @param point the point where the mineral was found
+     */
     public void placeSign(Material mineral, Size amount, Point point) {
         Sign sign = new Sign(mineral, amount, point, this);
 
@@ -1652,14 +1674,29 @@ public class GameMap {
         signs.add(sign);
     }
 
+    /**
+     * Returns true if there is a sign on the given point
+     * @param point the point where the sign may be
+     * @return true if there is a sign on the point
+     */
     public boolean isSignAtPoint(Point point) {
         return getMapPoint(point).getSign() != null;
     }
 
+    /**
+     * Returns all the signs on the map
+     *
+     * @return the signs on the map
+     */
     public Collection<Sign> getSigns() {
         return signs;
     }
 
+    /**
+     * Places an empty sign on the given point
+     *
+     * @param point the point to place th empty sign
+     */
     public void placeEmptySign(Point point) {
         placeSign(null, null, point);
     }
@@ -1692,10 +1729,20 @@ public class GameMap {
         buildingsToRemove.add(building);
     }
 
+    /**
+     * Returns the width of the current map.
+     *
+     * @return the width of the map
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Returns the height of the current map.
+     *
+     * @return the height of the map
+     */
     public int getHeight() {
         return height;
     }
@@ -1711,6 +1758,11 @@ public class GameMap {
         }
     }
 
+    /**
+     * Returns the list of players in the game
+     *
+     * @return The list of players
+     */
     public List<Player> getPlayers() {
         return players;
     }
@@ -1739,6 +1791,7 @@ public class GameMap {
     /**
      * Tells whether a house can be placed on the given point and if so, what
      * size of house.
+     *
      * @param player The player that would build the house
      * @param point The point that the house would be placed on
      * @return The max size of the potential house, otherwise null.
@@ -2042,7 +2095,7 @@ public class GameMap {
         }
     }
 
-    Point findRandomPossiblePointToPlaceFreeMovingActor() throws Exception {
+    private Point findRandomPossiblePointToPlaceFreeMovingActor() throws Exception {
 
         /* Pick centered point randomly */
         double x = random.nextDouble() * getWidth();
@@ -2081,7 +2134,6 @@ public class GameMap {
     /**
      * Places a hexagon-shaped mountain on the map with the given point in center.
      * @param point The center for the hexagon-shaped mountain
-     * @throws Exception 
      */
     public void placeMountainHexagonOnMap(Point point) {
 
@@ -2098,7 +2150,6 @@ public class GameMap {
      * the given mineral.
      * @param point Point to surround with large quantities of mineral
      * @param material The type of mineral
-     * @throws Exception 
      */
     public void surroundPointWithMineral(Point point, Material material) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
@@ -2119,7 +2170,6 @@ public class GameMap {
     /**
      * Changes the vegetation of the tiles surrounding the given point to grass.
      * @param point Point to surround with grass
-     * @throws Exception 
      */
     public void surroundPointWithGrass(Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
