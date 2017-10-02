@@ -44,13 +44,21 @@ public class Terrain {
 
         Tile tile = null;
 
-        if (point1.y + point3.y + point2.y % 3 == 1) { // Tile with pointy end upwards
+        if ((point1.y + point3.y + point2.y) % 3 == 1) { // Tile with pointy end upwards
             tile = tileBelowMap.get(top * width + left + 1);
         } else {
             tile = tileDownRightMap.get(top * width + left);
         }
 
         return tile;
+    }
+
+    public Tile getTileBelow(Point point) {
+        return tileBelowMap.get(point.y * width + point.x);
+    }
+
+    public Tile getTileDownRight(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x);
     }
 
     private void constructDefaultTiles() {
@@ -119,46 +127,50 @@ public class Terrain {
     public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> result   = new LinkedList<>();
 
-        Point rightPoint = new Point(center.x + 2, center.y);
-        Point leftPoint  = new Point(center.x - 2, center.y);
-        Point p4 = new Point(center.x + 1, center.y - 1);
-        Point p5 = new Point(center.x - 1, center.y - 1);
-        Point p1 = new Point(center.x - 1, center.y + 1);
-        Point p2 = new Point(center.x + 1, center.y + 1);
-
-        Tile tile = getTile(p4, center, rightPoint);
+        Point left    = new Point(center.x - 2, center.y);
+        Point upLeft  = new Point(center.x - 1, center.y + 1);
+        Point upRight = new Point(center.x + 1, center.y + 1);
 
         /* This method is called frequently. Treat the tiles one-by-one
            to avoid creating a temporary list */
-        if (tile != null) {
-            result.add(tile);
-        }
 
-        tile = getTile(p5, center, p4);
+        /* Tile down right */
+        Tile tile = getTileDownRight(center);
 
         if (tile != null) {
             result.add(tile);
         }
 
-        tile = getTile(leftPoint, center, p5);
+        /* Tile below */
+        tile = getTileBelow(center);
 
         if (tile != null) {
             result.add(tile);
         }
 
-        tile = getTile(p1, center, leftPoint);
+        /* Tile down left */
+        tile = getTileDownRight(left);
 
         if (tile != null) {
             result.add(tile);
         }
 
-        tile = getTile(p2, center, p1);
+        /* Tile up left */
+        tile = getTileBelow(upLeft);
 
         if (tile != null) {
             result.add(tile);
         }
 
-        tile = getTile(rightPoint, center, p2);
+        /* Tile above */
+        tile = getTileDownRight(upLeft);
+
+        if (tile != null) {
+            result.add(tile);
+        }
+
+        /* Tile up right */
+        tile = getTileBelow(upRight);
 
         if (tile != null) {
             result.add(tile);
