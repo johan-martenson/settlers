@@ -2167,6 +2167,17 @@ public class GameMap {
         return wildAnimals;
     }
 
+    public WildAnimal placeWildAnimal(Point point) {
+
+        /* Place the new wild animal */
+        WildAnimal animal = new WildAnimal(this);
+
+        animal.setPosition(point);
+        wildAnimals.add(animal);
+
+        return animal;
+    }
+
     private void handleWildAnimalPopulation() throws Exception {
 
         double density = (double)wildAnimals.size() / (double)(width * height);
@@ -2182,10 +2193,7 @@ public class GameMap {
                 }
 
                 /* Place the new wild animal */
-                WildAnimal animal = new WildAnimal(this);
-
-                animal.setPosition(point);
-                wildAnimals.add(animal);
+                placeWildAnimal(point);
 
                 animalCountdown.countFrom(Constants.WILD_ANIMAL_TIME_BETWEEN_REPOPULATION);
             } else if (!animalCountdown.isActive()) {
