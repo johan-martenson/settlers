@@ -53,12 +53,28 @@ public class Terrain {
         return tile;
     }
 
+    public Tile getTileAbove(Point point) {
+        return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
+    }
+
     public Tile getTileBelow(Point point) {
         return tileBelowMap.get(point.y * width + point.x);
     }
 
     public Tile getTileDownRight(Point point) {
         return tileDownRightMap.get(point.y * width + point.x);
+    }
+
+    public Tile getTileDownLeft(Point point) {
+        return tileDownRightMap.get(point.y * width + point.x - 2);
+    }
+
+    public Tile getTileUpRight(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x + 1);
+    }
+
+    public Tile getTileUpLeft(Point point) {
+        return tileBelowMap.get((point.y + 1) * width + point.x - 1);
     }
 
     private void constructDefaultTiles() {
@@ -127,10 +143,6 @@ public class Terrain {
     public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> result   = new LinkedList<>();
 
-        Point left    = new Point(center.x - 2, center.y);
-        Point upLeft  = new Point(center.x - 1, center.y + 1);
-        Point upRight = new Point(center.x + 1, center.y + 1);
-
         /* This method is called frequently. Treat the tiles one-by-one
            to avoid creating a temporary list */
 
@@ -149,28 +161,28 @@ public class Terrain {
         }
 
         /* Tile down left */
-        tile = getTileDownRight(left);
+        tile = getTileDownLeft(center);
 
         if (tile != null) {
             result.add(tile);
         }
 
         /* Tile up left */
-        tile = getTileBelow(upLeft);
+        tile = getTileUpLeft(center);
 
         if (tile != null) {
             result.add(tile);
         }
 
         /* Tile above */
-        tile = getTileDownRight(upLeft);
+        tile = getTileAbove(center);
 
         if (tile != null) {
             result.add(tile);
         }
 
         /* Tile up right */
-        tile = getTileBelow(upRight);
+        tile = getTileUpRight(center);
 
         if (tile != null) {
             result.add(tile);
