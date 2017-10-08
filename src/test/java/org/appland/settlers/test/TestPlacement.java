@@ -932,7 +932,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testTreeCannotBePlacedOnMountain() throws Exception {
+    public void testTreeCanBePlacedOnMountain() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -947,13 +947,10 @@ public class TestPlacement {
         Utils.surroundPointWithMountain(point0, map);
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
-        /* Verify that it's not possible to place a tree on the mountain */
-        try {
-            map.placeTree(point0);
-            assertFalse(true);
-        } catch (Exception e) {}
+        /* Verify that it's possible to place a tree on the mountain */
+        map.placeTree(point0);
 
-        assertTrue(map.getTrees().isEmpty());
+        assertTrue(map.isTreeAtPoint(point0));
     }
 
     @Test

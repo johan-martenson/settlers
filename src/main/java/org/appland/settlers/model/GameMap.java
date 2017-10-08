@@ -1529,10 +1529,6 @@ public class GameMap {
             throw new Exception("Can't place tree on " + point + " on existing stone");
         }
 
-        if (getTerrain().isOnMountain(point)) {
-            throw new Exception("Can't place tree on a mountain");
-        }
-
         Tree tree = new Tree(point);
 
         mp.setTree(tree);
