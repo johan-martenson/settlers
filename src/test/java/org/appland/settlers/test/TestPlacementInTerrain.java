@@ -13,7 +13,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
 
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.model.Tile.Vegetation.*;
 import static org.junit.Assert.*;
 
 import org.appland.settlers.model.Player;
@@ -23,6 +23,7 @@ import org.appland.settlers.model.Terrain;
 
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.WoodcutterWorker;
 import org.junit.Test;
 
 /**
@@ -81,7 +82,7 @@ public class TestPlacementInTerrain {
         /* Verify that it's possible to build a road between the flags that follows
            the edge of the lake
         */
-        Point point7 = new Point(6, 4);
+        Point point7 = new Point(7, 5);
         Point point8 = new Point(8, 4);
 
         Terrain terrain = map.getTerrain();
@@ -92,9 +93,9 @@ public class TestPlacementInTerrain {
                 WATER);
         assertEquals(terrain.getTile(fishery0.getFlag().getPosition(), fishery0.getFlag().getPosition().downRight(), fishery0.getFlag().getPosition().downLeft()).getVegetationType(), WATER);
 
-        assertEquals(terrain.getTile(point7, point7.left(), point7.downLeft()).getVegetationType(), WATER);
-        assertEquals(terrain.getTile(point7, point7.downRight(), point7.downLeft()).getVegetationType(), WATER);
-        assertEquals(terrain.getTile(point7, point7.right(), point7.downRight()).getVegetationType(), WATER);
+        assertEquals(terrain.getTileDownLeft(point7).getVegetationType(), WATER);
+        assertEquals(terrain.getTileBelow(point7).getVegetationType(), WATER);
+        assertEquals(terrain.getTileDownRight(point7).getVegetationType(), Tile.Vegetation.GRASS);
 
         assertFalse(terrain.isOnGrass(fishery0.getFlag().getPosition()));
         assertFalse(terrain.isOnGrass(fishery1.getFlag().getPosition()));
@@ -116,11 +117,12 @@ public class TestPlacementInTerrain {
         );
 
         /* Then place the road */
-        Road road0 = map.placeRoad(player0, fishery0.getFlag().getPosition(), point7, fishery1.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, fishery0.getFlag().getPosition(), point7, point8, fishery1.getFlag().getPosition());
 
         assertTrue(map.arePointsConnectedByRoads(point5, point6));
     }
 
+    // Desert
     @Test
     public void testAvailableFlagInDesert() throws Exception {
 
@@ -339,7 +341,55 @@ public class TestPlacementInTerrain {
             assertTrue(false);
         } catch (Exception e) {}
     }
-// Snow
+
+    @Test
+    public void testWorkerCanWalkOffroadAcrossDesert() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with a desert */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.DESERT, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.DESERT, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.DESERT, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.DESERT, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.DESERT, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    // Snow
 // Also test: -build road next to snow. Is that OK?
 
     @Test
@@ -360,7 +410,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.SNOW, map);
 
-        /* Verify that there is no available flag point in the desert */
+        /* Verify that there is no available flag point in the snow */
         assertFalse(map.isAvailableFlagPoint(player0, point1));
     }
 
@@ -567,6 +617,60 @@ public class TestPlacementInTerrain {
         } catch (Exception e) {}
     }
 
+    @Test
+    public void testWorkerCannotWalkOffroadAcrossSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SNOW, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can't go back to the headquarter */
+        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), SNOW);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), SNOW);
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1000; i++) {
+
+            assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
+
+            map.stepTime();
+        }
+    }
+
     // Grass (meadow)
 
     @Test
@@ -587,7 +691,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.GRASS, map);
 
-        /* Verify that there is an available flag point on the snow */
+        /* Verify that there is an available flag point on the grass */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
     }
 
@@ -730,6 +834,53 @@ public class TestPlacementInTerrain {
 
         /* Verify that it's possible to build a road across the grass */
         Road road0 = map.placeRoad(player0, point2, point1, point3);
+    }
+
+    @Test
+    public void testWorkerCanWalkOffroadAcrossGrass() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with grass */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.GRASS, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.GRASS, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.GRASS, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.GRASS, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.GRASS, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.GRASS, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
     // Savannah
@@ -897,6 +1048,53 @@ public class TestPlacementInTerrain {
         Road road0 = map.placeRoad(player0, point2, point1, point3);
     }
 
+    @Test
+    public void testWorkerCanWalkOffroadAcrossSavannah() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with savannah */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.SAVANNAH, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SAVANNAH, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
 // Shallow water (buildable water)
 
     @Test
@@ -1062,6 +1260,53 @@ public class TestPlacementInTerrain {
         Road road0 = map.placeRoad(player0, point2, point1, point3);
     }
 
+    @Test
+    public void testWorkerCanWalkOffroadAcrossBuildableWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with buildable water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.SHALLOW_WATER, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SHALLOW_WATER, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
     // Steppe
 
     @Test
@@ -1082,7 +1327,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.STEPPE, map);
 
-        /* Verify that there is an available flag point on the snow */
+        /* Verify that there is an available flag point on the steppe */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
     }
 
@@ -1227,6 +1472,53 @@ public class TestPlacementInTerrain {
         Road road0 = map.placeRoad(player0, point2, point1, point3);
     }
 
+    @Test
+    public void testWorkerCanWalkOffroadAcrossSteppe() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with steppe */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.STEPPE, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.STEPPE, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
 // Mountain meadow
 
     @Test
@@ -1247,7 +1539,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN_MEADOW, map);
 
-        /* Verify that there is an available flag point on the snow */
+        /* Verify that there is an available flag point on the mountain meadow */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
     }
 
@@ -1392,6 +1684,53 @@ public class TestPlacementInTerrain {
         Road road0 = map.placeRoad(player0, point2, point1, point3);
     }
 
+    @Test
+    public void testWorkerCanWalkOffroadAcrossMountainMeadow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with mountain meadow */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
     // Buildable mountain
 
     @Test
@@ -1412,7 +1751,7 @@ public class TestPlacementInTerrain {
         Point point1 = new Point(10, 10);
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
 
-        /* Verify that there is an available flag point on the snow */
+        /* Verify that there is an available flag point on the buildable mountain */
         assertTrue(map.isAvailableFlagPoint(player0, point1));
     }
 
@@ -1557,4 +1896,1706 @@ public class TestPlacementInTerrain {
         Road road0 = map.placeRoad(player0, point2, point1, point3);
     }
 
+    @Test
+    public void testWorkerCanWalkOffroadAcrossBuildableMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with buildable mountain */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    // Lava
+
+    @Test
+    public void testNoAvailableFlagOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that there is no available flag point in the lava */
+        assertFalse(map.isAvailableFlagPoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that it is not possible to place a flag on the lava */
+        try {
+            map.placeFlag(player0, point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that there is no available house point on the lava */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that it's not possible to place a house on the lava */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableMineOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that there is no available house point on the lava */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceMineOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Verify that it's not possible to place a house on the lava */
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testCannotBuildRoadAcrossLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's not possible to Build a road across the lava */
+        try {
+            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA, map);
+
+        /* Verify that there is no available house point on the border of the lava */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of lava on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, LAVA, map);
+        Utils.surroundPointWithVegetation(point2, LAVA, map);
+
+        /* Verify that it's not possible to place a house on the border of the lava */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCannotWalkOffroadAcrossLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, LAVA, map);
+        Utils.surroundPointWithVegetation(point3, LAVA, map);
+        Utils.surroundPointWithVegetation(point4, LAVA, map);
+        Utils.surroundPointWithVegetation(point5, LAVA, map);
+        Utils.surroundPointWithVegetation(point6, LAVA, map);
+        Utils.surroundPointWithVegetation(point7, LAVA, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can't go back to the headquarter */
+        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), LAVA);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), LAVA);
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1000; i++) {
+
+            assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
+
+            map.stepTime();
+        }
+    }
+
+    // Deep water
+
+    @Test
+    public void testNoAvailableFlagOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that there is no available flag point in the deep water */
+        assertFalse(map.isAvailableFlagPoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that it is not possible to place a flag on the deep water */
+        try {
+            map.placeFlag(player0, point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that there is no available house point on the deep water */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that it's not possible to place a house on the deep water */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableMineOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that there is no available house point on the deep water */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceMineOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Verify that it's not possible to place a house on the deep water */
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testCannotBuildRoadAcrossDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's not possible to Build a road across the deep water */
+        try {
+            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+
+        /* Verify that there is no available house point on the border of the deep water */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of deep water on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+
+        /* Verify that it's not possible to place a house on the border of the deep water */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCannotWalkOffroadAcrossDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point3, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point4, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point5, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point6, DEEP_WATER, map);
+        Utils.surroundPointWithVegetation(point7, DEEP_WATER, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can't go back to the headquarter */
+        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), DEEP_WATER);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), DEEP_WATER);
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1000; i++) {
+
+            assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
+
+            map.stepTime();
+        }
+    }
+
+    // Regular water
+
+    @Test
+    public void testNoAvailableFlagOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of Water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that there is no available flag point in the water */
+        assertFalse(map.isAvailableFlagPoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that it is not possible to place a flag on the water */
+        try {
+            map.placeFlag(player0, point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that there is no available house point on the water */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that it's not possible to place a house on the water */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableMineOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that there is no available house point on the water */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceMineOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Verify that it's not possible to place a house on the water */
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testCannotBuildRoadAcrossWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's not possible to Build a road across the water */
+        try {
+            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Verify that there is no available house point on the border of the water */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of water on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Verify that it's not possible to place a house on the border of the water */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCannotWalkOffroadAcrossWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can't go back to the headquarter */
+        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), WATER);
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1000; i++) {
+
+            assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
+
+            map.stepTime();
+        }
+    }
+
+    // Swamp
+
+    @Test
+    public void testNoAvailableFlagOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that there is no available flag point in the swamp */
+        assertFalse(map.isAvailableFlagPoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that it is not possible to place a flag on the swamp */
+        try {
+            map.placeFlag(player0, point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that there is no available house point on the swamp */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that it's not possible to place a house on the swamp */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableMineOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that there is no available house point on the swamp */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceMineOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Verify that it's not possible to place a house on the swamp */
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testCannotBuildRoadAcrossSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's not possible to Build a road across the swamp */
+        try {
+            Road road0 = map.placeRoad(player0, point2, point1, point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+
+        /* Verify that there is no available house point on the border of the swamp */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small patch of swamp on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, SWAMP, map);
+        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+
+        /* Verify that it's not possible to place a house on the border of the swamp */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCannotWalkOffroadAcrossSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with water */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+        Utils.surroundPointWithVegetation(point3, SWAMP, map);
+        Utils.surroundPointWithVegetation(point4, SWAMP, map);
+        Utils.surroundPointWithVegetation(point5, SWAMP, map);
+        Utils.surroundPointWithVegetation(point6, SWAMP, map);
+        Utils.surroundPointWithVegetation(point7, SWAMP, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can't go back to the headquarter */
+        assertEquals(map.getTerrain().getTileAbove(point6).getVegetationType(), SWAMP);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), SWAMP);
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        for (int i = 0; i < 1000; i++) {
+
+            assertNotEquals(woodcutterWorker.getPosition(), headquarter0.getPosition());
+
+            map.stepTime();
+        }
+    }
+
+    // Magenta
+    @Test
+    public void testAvailableFlagInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that there is an available flag point in the magenta */
+        assertTrue(map.isAvailableFlagPoint(player0, point1));
+    }
+
+    @Test
+    public void testCanPlaceFlagInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that it is possible to place a flag in the magenta */
+        map.placeFlag(player0, point1);
+    }
+
+    @Test
+    public void testNoAvailableHouseInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that there is no available house point in the magenta */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that it's not possible to place a house in the magenta */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoAvailableMineInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that there is no available house point in the magenta */
+        assertFalse(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceMineInMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that it's not possible to place a house in the magenta */
+        try {
+            map.placeBuilding(new GoldMine(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testCanBuildRoadAcrossMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's possible to Build a road across the magenta */
+        Road road0 = map.placeRoad(player0, point2, point1, point3);
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that there is no available house point on the border of the magenta */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small magenta on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+
+        /* Verify that it's not possible to place a house on the border of the magenta */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCanWalkOffroadAcrossMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with magenta */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.MAGENTA, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MAGENTA, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    // Regular mountain (that can be mined)
+    @Test
+    public void testAvailableFlagInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that there is an available flag point in the mountain */
+        assertTrue(map.isAvailableFlagPoint(player0, point1));
+
+    }
+
+    @Test
+    public void testCanPlaceFlagInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that it is possible to place a flag in the mountain */
+        map.placeFlag(player0, point1);
+    }
+
+    @Test
+    public void testNoAvailableHouseInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that there is no available house point in the mountain */
+        assertNull(map.isAvailableHousePoint(player0, point1));
+    }
+
+    @Test
+    public void testCannotPlaceHouseInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that it's not possible to place a house in the mountain */
+        try {
+            map.placeBuilding(new Woodcutter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testAvailableMineInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that there is no available house point in the mountain */
+        assertTrue(map.isAvailableMinePoint(player0, point1));
+    }
+
+    @Test
+    public void testCanPlaceMineInMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that it's possible to place a house in the mountain */
+        map.placeBuilding(new GoldMine(player0), point1);
+    }
+
+    @Test
+    public void testCanBuildRoadAcrossMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Place flags */
+        Point point2 = new Point(8, 10);
+        Point point3 = new Point(12, 10);
+        Flag flag0 = map.placeFlag(player0, point2);
+        Flag flag1 = map.placeFlag(player0, point3);
+
+        /* Verify that it's possible to Build a road across the mountain */
+        Road road0 = map.placeRoad(player0, point2, point1, point3);
+    }
+
+    @Test
+    public void testNoAvailableHouseOnBorderOfMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that there is no available house point on the border of the mountain */
+        Point point3 = new Point(11, 11);
+        assertNull(map.isAvailableHousePoint(player0, point3));
+    }
+
+    @Test
+    public void testCannotPlaceHouseOnBorderOfMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(10, 10);
+        Point point2 = new Point(12, 10);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Verify that it's not possible to place a house on the border of the mountain */
+        Point point3 = new Point(11, 11);
+        try {
+            map.placeBuilding(new Woodcutter(player0), point3);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWorkerCanWalkOffroadAcrossMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a woodcutter hut on the map */
+        Point point1 = new Point(15, 5);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Surround the woodcutter hut with mountains */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Finish construction of the woodcutter hut */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter hut */
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Tear down the woodcutter hut */
+        woodcutter0.tearDown();
+
+        /* Verify that the woodcutter worker can go back to the headquarter */
+        assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
 }

@@ -68,8 +68,21 @@ public class Tile {
         }
     }
 
-    public enum Vegetation {
-        WATER, GRASS, SWAMP, MOUNTAIN
+    public enum Vegetation {    // House    Flag   Mine  Sail   Walk
+        WATER,                  //  -        -      -     -       -
+        GRASS,                  //  X        X      -     -       X
+        SWAMP,                  //  -        -      -     -       -
+        MOUNTAIN,               //  -        X      X     -       X  <--
+        SAVANNAH,               //  X        X      -     -       X
+        SNOW,                   //  -        -      -     -       -
+        DESERT,                 //  -        X      -     -       X
+        DEEP_WATER,             //  -        -      -     X       -
+        SHALLOW_WATER,          //  X        X      -     -       X
+        STEPPE,                 //  X        X      -     -       X
+        LAVA,                   //  -        -      -     -       -
+        MAGENTA,                //  -        X      -     -       X
+        MOUNTAIN_MEADOW,        //  X        X      -     -       X
+        BUILDABLE_MOUNTAIN      //  X        X      -     -       X
     }
 
     @Override

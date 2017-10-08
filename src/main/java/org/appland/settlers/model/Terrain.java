@@ -231,4 +231,44 @@ public class Terrain {
 
         tile.setVegetationType(MOUNTAIN);
     }
+
+    public boolean isInDesert(Point point) {
+        return isSurroundedBy(point, Vegetation.DESERT);
+    }
+
+    public boolean isNextToDesert(Point point) {
+        return isAnyAdjacentTile(point, Vegetation.DESERT);
+    }
+
+    public boolean isOnSnow(Point point) {
+        return isSurroundedBy(point, Vegetation.SNOW);
+    }
+
+    public boolean isNextToSnow(Point point) {
+        return isAnyAdjacentTile(point, Vegetation.SNOW);
+    }
+
+    public boolean isNextToLava(Point site) {
+        return isAnyAdjacentTile(site, Vegetation.LAVA);
+    }
+
+    public boolean isOnLava(Point point) {
+        return isSurroundedBy(point, Vegetation.LAVA);
+    }
+
+    public boolean isInDeepWater(Point site) {
+        return isSurroundedBy(site, Vegetation.DEEP_WATER);
+    }
+
+    public boolean isNextToDeepWater(Point site) {
+        return isAnyAdjacentTile(site, Vegetation.DEEP_WATER);
+    }
+
+    public boolean isNextToSwamp(Point site) {
+        return isAnyAdjacentTile(site, Vegetation.SWAMP);
+    }
+
+    public boolean isNextToMagenta(Point site) {
+        return isAnyAdjacentTile(site, Vegetation.MAGENTA);
+    }
 }

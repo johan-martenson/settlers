@@ -7,7 +7,9 @@ package org.appland.settlers.model;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -15,6 +17,10 @@ import java.util.List;
  */
 public class Point extends java.awt.Point {
     private static final long serialVersionUID = 1L;
+
+    /* Uncomment below to track allocations of points */
+    //static Map<String, Integer> allocators = new HashMap<>();
+    //static int printCount = 0;
 
     public Point(int x, int y) {
         super(x, y);
@@ -24,6 +30,27 @@ public class Point extends java.awt.Point {
         if ((x + y) % 2 == 1) {
             throw new RuntimeException("Can't create point " + x + ", " + y);
         }
+
+        /* Uncomment below to track allocations of points */
+        /*StackTraceElement frame1 = Thread.currentThread().getStackTrace()[2];
+        StackTraceElement frame2 = Thread.currentThread().getStackTrace()[3];
+        String method1 = frame1.getClassName() + "::" + frame1.getMethodName();
+        String method2 = frame2.getClassName() + "::" + frame2.getMethodName();
+
+        allocators.put(method1, allocators.getOrDefault(method1, 0) + 1);
+        allocators.put(method2, allocators.getOrDefault(method2, 0) + 1);
+
+        printCount++;
+
+        if (printCount % 20000 == 0) {
+            System.out.println("\n\nAllocated points at");
+
+            for (String key : allocators.keySet()) {
+                if (allocators.get(key) > 1000) {
+                    System.out.println("  " + key + " - " + allocators.get(key));
+                }
+            }
+        }*/
     }
 
     @Override
@@ -108,5 +135,29 @@ public class Point extends java.awt.Point {
         result.add(right());
 
         return result;
+    }
+
+    public boolean isLeftOf(Point from) {
+        return from.y == this.y && from.x == this.x - 2;
+    }
+
+    public boolean isUpLeftOf(Point from) {
+        return from.x == this.x - 1 && from.y == this.y + 1;
+    }
+
+    public boolean isUpRightOf(Point from) {
+        return from.x == this.x + 1 && from.y == this.y + 1;
+    }
+
+    public boolean isRightOf(Point from) {
+        return from.x == this.x + 2 && from.y == this.y;
+    }
+
+    public boolean isDownRightOf(Point from) {
+        return from.x == this.x + 1 && from.y == this.y - 1;
+    }
+
+    public boolean isDownLeftOf(Point from) {
+        return from.x == this.x - 1 && from.y == this.y - 1;
     }
 }

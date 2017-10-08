@@ -824,13 +824,23 @@ public class GameUtils {
                 continue;
             }
 
-            if (building instanceof Storage) {
-                int currentDistance = map.findWayOffroad(point, building.getPosition(), null).size();
+            /* Filter other buildings than storages */
+            if (! (building instanceof Storage)) {
+                continue;
+            }
 
-                if (currentDistance < distance) {
-                    storage = (Storage)building;
-                    distance = currentDistance;
-                }
+            List<Point> pathToStorage = map.findWayOffroad(point, building.getPosition(), null);
+
+            /* Filter storages that can't be reached */
+            if (pathToStorage == null) {
+                continue;
+            }
+
+            int currentDistance = pathToStorage.size();
+
+            if (currentDistance < distance) {
+                storage = (Storage)building;
+                distance = currentDistance;
             }
         }
 

@@ -981,4 +981,10 @@ public class Utils {
         assertTrue(map.isTreeAtPoint(point));
 
     }
+
+    static void surroundPointWithVegetation(Point point, Tile.Vegetation vegetation, GameMap map) {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
+            tile.setVegetationType(vegetation);
+        }
+    }
 }

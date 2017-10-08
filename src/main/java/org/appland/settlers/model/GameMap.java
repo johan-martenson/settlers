@@ -24,6 +24,8 @@ import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
+
 import org.appland.settlers.policy.Constants;
 
 public class GameMap {
@@ -981,7 +983,24 @@ public class GameMap {
             return false;
         }
 
+        // Future improvement: avoid iterating through adjacent tiles again and again...
         if (terrain.isInWater(point)) {
+            return false;
+        }
+
+        if (terrain.isInDeepWater(point)) {
+            return false;
+        }
+
+        if (terrain.isOnSnow(point)) {
+            return false;
+        }
+
+        if (terrain.isOnLava(point)) {
+            return false;
+        }
+
+        if (terrain.isInSwamp(point)) {
             return false;
         }
 
@@ -1127,8 +1146,25 @@ public class GameMap {
                 continue;
             }
 
-            /* Filter points in water */
-            if (terrain.isInWater(point)) {
+            /* Filter points separated by vegetation that can't be walked on */
+            if ((point.isLeftOf(from)                       &&
+                 !canWalkOn(terrain.getTileUpLeft(from))    &&
+                 !canWalkOn(terrain.getTileDownLeft(from)))      ||
+                (point.isUpLeftOf(from)                     &&
+                 !canWalkOn(terrain.getTileUpLeft(from))    &&
+                 !canWalkOn(terrain.getTileAbove(from)))         ||
+                (point.isUpRightOf(from)                    &&
+                 !canWalkOn(terrain.getTileUpRight(from))   &&
+                 !canWalkOn(terrain.getTileAbove(from)))         ||
+                (point.isRightOf(from)                      &&
+                 !canWalkOn(terrain.getTileUpRight(from))   &&
+                 !canWalkOn(terrain.getTileDownRight(from)))     ||
+                (point.isDownRightOf(from)                  &&
+                 !canWalkOn(terrain.getTileDownRight(from)) &&
+                 !canWalkOn(terrain.getTileBelow(from)))         ||
+                (point.isDownLeftOf(from)                   &&
+                 !canWalkOn(terrain.getTileDownLeft(from))  &&
+                 !canWalkOn(terrain.getTileBelow(from)))) {
                 continue;
             }
 
@@ -1148,6 +1184,20 @@ public class GameMap {
         return resultList;
     }
 
+    private boolean canWalkOn(Tile tile) {
+
+        switch (tile.getVegetationType()) {
+            case WATER:
+            case SWAMP:
+            case DEEP_WATER:
+            case LAVA:
+            case SNOW:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     private boolean isVegetationCorrect(Building house, Point site) throws Exception {
         Size size = house.getSize();
 
@@ -1157,7 +1207,39 @@ public class GameMap {
             switch (size) {
             case SMALL:
             case MEDIUM:
+
+                /* Cannot build houses on mining mountain */
                 if (terrain.isOnMountain(site)) {
+                    return false;
+                }
+
+                /* Cannot build next to deep water */
+                if (terrain.isNextToDeepWater(site)) {
+                    return false;
+                }
+
+                /* Cannot build next to magenta */
+                if (terrain.isNextToMagenta(site)) {
+                    return false;
+                }
+
+                /* Cannot build next to swamp */
+                if (terrain.isNextToSwamp(site)) {
+                    return false;
+                }
+
+                /* Cannot build houses in the desert */
+                if (terrain.isNextToDesert(site)) {
+                    return false;
+                }
+
+                /* Cannot build houses next to snow */
+                if (terrain.isNextToSnow(site)) {
+                    return false;
+                }
+
+                /* Cannot build houses next to lava */
+                if (terrain.isNextToLava(site)) {
                     return false;
                 }
 
@@ -1275,6 +1357,26 @@ public class GameMap {
         }
 
         if (terrain.isInWater(point)) {
+            return false;
+        }
+
+        /* Can't build road on snow */
+        if (terrain.isOnSnow(point)) {
+            return false;
+        }
+
+        /* Can't build road on lava */
+        if (terrain.isOnLava(point)) {
+            return false;
+        }
+
+        /* Can't place road in deep water */
+        if (terrain.isInDeepWater(point)) {
+            return false;
+        }
+
+        /* Can't place road in swamp */
+        if (terrain.isInSwamp(point)) {
             return false;
         }
 
@@ -1665,7 +1767,7 @@ public class GameMap {
 
     boolean isNextToWater(Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
-            if (tile.getVegetationType() == Vegetation.WATER) {
+            if (tile.getVegetationType() == WATER) {
                 return true;
             }
         }
@@ -1927,11 +2029,40 @@ public class GameMap {
             return result;
         }
 
+        // Future improvement collapse these to avoid iterating through tiles over and over again
         if (terrain.isOnMountain(point)) {
             return result;
         }
 
+        if (terrain.isNextToDeepWater(point)) {
+            return result;
+        }
+
+        if (terrain.isNextToMagenta(point)) {
+            return result;
+        }
+
+        if (terrain.isNextToSwamp(point)) {
+            return result;
+        }
+
+        if (terrain.isInDeepWater(point)) {
+            return result;
+        }
+
         if (terrain.isNextToWater(point)) {
+            return result;
+        }
+
+        if (terrain.isNextToDesert(point)) {
+            return result;
+        }
+
+        if (terrain.isNextToSnow(point)) {
+            return result;
+        }
+
+        if (terrain.isNextToLava(point)) {
             return result;
         }
 
@@ -2272,7 +2403,7 @@ public class GameMap {
      */
     public void surroundPointWithWater(Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
-            tile.setVegetationType(Vegetation.WATER);
+            tile.setVegetationType(WATER);
         }
     }
 
