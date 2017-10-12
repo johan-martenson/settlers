@@ -114,16 +114,22 @@ public class TestQuarry {
 
     @Test
     public void testFinishedQuarryNeedsWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place quarry */
         Point point1 = new Point(8, 6);
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
+        /* Verify that a finished quarry needs a worker */
         Utils.constructHouse(quarry, map);
 
         assertTrue(quarry.ready());
@@ -132,14 +138,18 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonIsAssignedToFinishedHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Building building0 = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place quarry */
         Point point1 = new Point(8, 6);
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
@@ -163,16 +173,22 @@ public class TestQuarry {
 
     @Test
     public void testArrivedStonemasonRestsInHutAndThenLeaves() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place quarry */
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place stone */
         Point point2 = new Point(12, 4);
         Stone stone = map.placeStone(point2);
 
