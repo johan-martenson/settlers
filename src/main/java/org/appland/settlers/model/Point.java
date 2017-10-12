@@ -138,26 +138,26 @@ public class Point extends java.awt.Point {
     }
 
     public boolean isLeftOf(Point from) {
-        return from.y == this.y && from.x == this.x - 2;
+        return this.x == from.x - 2 && this.y == from.y;
     }
 
     public boolean isUpLeftOf(Point from) {
-        return from.x == this.x - 1 && from.y == this.y + 1;
+        return this.x == from.x - 1 && this.y == from.y + 1;
     }
 
     public boolean isUpRightOf(Point from) {
-        return from.x == this.x + 1 && from.y == this.y + 1;
+        return this.x == from.x + 1 && this.y == from.y + 1;
     }
 
     public boolean isRightOf(Point from) {
-        return from.x == this.x + 2 && from.y == this.y;
+        return this.x == from.x + 2 && this.y == from.y;
     }
 
     public boolean isDownRightOf(Point from) {
-        return from.x == this.x + 1 && from.y == this.y - 1;
+        return this.x == from.x + 1 && this.y == from.y - 1;
     }
 
     public boolean isDownLeftOf(Point from) {
-        return from.x == this.x - 1 && from.y == this.y - 1;
+        return this.x == from.x - 1 && this.y == from.y - 1;
     }
 }
