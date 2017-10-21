@@ -125,7 +125,7 @@ public class Terrain {
             }
         }
 
-        return false;        
+        return false;
     }
 
     private boolean isSurroundedBy(Point point, Vegetation vegetation) {
@@ -212,7 +212,7 @@ public class Terrain {
         boolean matchFound = false;
         boolean nonMatchFound = false;
 
-        /* Go through the surrounding tiles and verify that they contain at least 
+        /* Go through the surrounding tiles and verify that they contain at least
            on matching and one non-matching */
         for (Tile tile : getSurroundingTiles(point)) {
 

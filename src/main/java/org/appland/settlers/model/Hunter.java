@@ -24,10 +24,10 @@ public class Hunter extends Worker {
         RESTING_IN_HOUSE,
         TRACKING,
         GOING_BACK_TO_HOUSE_WITH_CARGO,
-        RETURNING_TO_STORAGE, 
-        SHOOTING, 
-        GOING_TO_PICK_UP_MEAT, 
-        GOING_TO_FLAG_TO_LEAVE_CARGO, 
+        RETURNING_TO_STORAGE,
+        SHOOTING,
+        GOING_TO_PICK_UP_MEAT,
+        GOING_TO_FLAG_TO_LEAVE_CARGO,
         GOING_BACK_TO_HOUSE_WITHOUT_CARGO
     }
 
@@ -57,22 +57,31 @@ public class Hunter extends Worker {
 
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
-                prey = findPreyCloseEnough();
 
-                if (prey == null) {
-                    return;
+                /* Find an animal to hunt */
+                for (WildAnimal animal : getMap().getWildAnimals()) {
+
+                    /* Filter animals too far away */
+                    if (animal.getPosition().distance(getHome().getPosition()) > DETECTION_RANGE) {
+                        continue;
+                    }
+
+                    /* Filter animals that can't be reached */
+                    List<Point> path = getMap().findWayOffroad(getPosition(), animal.getPosition(), null);
+
+                    if (path == null) {
+                        continue;
+                    }
+
+                    /* Start hunting the prey */
+                    prey = animal;
+
+                    setOffroadTarget(path.get(1));
+
+                    state = State.TRACKING;
+
+                    break;
                 }
-
-                /* Get way to target */
-                List<Point> steps = getMap().findWayOffroad(getHome().getPosition(), 
-                                                            prey.getPosition(), 
-                                                            getHome().getFlag().getPosition(), 
-                                                            null);
-
-                /* Take the first step toward the prey */
-                setOffroadTarget(steps.get(1));
-
-                state = State.TRACKING;
             } else {
                 countdown.step();
             }
@@ -106,8 +115,8 @@ public class Hunter extends Worker {
             if (prey.getPosition().distance(getPosition()) > SHOOTING_DISTANCE) {
 
                 /* Get way to target */
-                List<Point> steps = getMap().findWayOffroad(getPosition(), 
-                                                            prey.getPosition(), 
+                List<Point> steps = getMap().findWayOffroad(getPosition(),
+                                                            prey.getPosition(),
                                                             null);
 
                 /* Take the first step toward the prey */
@@ -167,21 +176,6 @@ public class Hunter extends Worker {
                 setOffroadTarget(storage.getPosition());
             }
         }
-    }
-
-    private WildAnimal findPreyCloseEnough() {
-
-        for (WildAnimal animal : getMap().getWildAnimals()) {
-
-            /* Filter animals too far away */
-            if (animal.getPosition().distance(getHome().getPosition()) > DETECTION_RANGE) {
-                continue;
-            }
-
-            return animal;
-        }
-
-        return null;
     }
 
     public boolean isShooting() {

@@ -987,4 +987,12 @@ public class Utils {
             tile.setVegetationType(vegetation);
         }
     }
+
+    public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(worker.getHome().getPosition(), worker.getPosition());
+
+            map.stepTime();
+        }
+    }
 }

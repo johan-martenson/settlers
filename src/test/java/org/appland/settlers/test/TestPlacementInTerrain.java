@@ -5,26 +5,29 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
-
-import static org.appland.settlers.model.Tile.Vegetation.*;
-import static org.junit.Assert.*;
-
+import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.HunterHut;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Terrain;
-
 import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Tile.Vegetation.*;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -44,11 +47,11 @@ public class TestPlacementInTerrain {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place lake with this form:
-        
+
         _____
         W W  \______
              W  W  W
-        
+
         */
         Point pointX = new Point(4, 4);
         Point point1 = new Point(6, 4);
@@ -72,7 +75,7 @@ public class TestPlacementInTerrain {
         Flag_       \
         W W  \______Flag
              W  W  W
-        
+
         */
         Point point5 = new Point(4, 6);
         Point point6 = new Point(9, 5);
@@ -389,6 +392,109 @@ public class TestPlacementInTerrain {
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
+    @Test
+    public void testWorkerCanGoIntoDesert() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a desert on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfDesertAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a desert on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
+
+        /* Place snow next to the desert */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of desert and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfDesertAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a desert on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
+
+        /* Place snow next to the desert */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of desert and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Snow
 // Also test: -build road next to snow. Is that OK?
 
@@ -671,6 +777,104 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testWorkerCannotGoIntoSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a patch of snow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SNOW, map);
+
+        /* Place a wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can't reach the animal */
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            assertNotEquals(hunter.getPosition(), animal0.getPosition());
+        }
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnBorderOfSnowAndWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of water and snow */
+        Point point5 = new Point(5, 7);
+
+        try {
+            map.placeFlag(player0, point5);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoFlagPointAvailableOnBorderOfSnowAndWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of water and snow */
+        Point point5 = new Point(5, 7);
+        assertFalse(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Grass (meadow)
 
     @Test
@@ -881,6 +1085,109 @@ public class TestPlacementInTerrain {
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWorkerCanGoIntoGrass() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a patch of grass on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.GRASS, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfGrassAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a patch of grass on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.GRASS, map);
+
+        /* Place snow next to the grass */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of grass and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfGrassAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a patch of grass on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.GRASS, map);
+
+        /* Place snow next to the grass */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of grass and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
     // Savannah
@@ -1095,6 +1402,109 @@ public class TestPlacementInTerrain {
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
+    @Test
+    public void testWorkerCanGoIntoSavannah() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a savannah on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SAVANNAH, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfSavannahAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a savannah on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SAVANNAH, map);
+
+        /* Place snow next to the savannah */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of savannah and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfSavannahAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a savannah on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SAVANNAH, map);
+
+        /* Place snow next to the savannah */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of savannah and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
 // Shallow water (buildable water)
 
     @Test
@@ -1305,6 +1715,109 @@ public class TestPlacementInTerrain {
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWorkerCanGoIntoBuildableWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake of buildable water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SHALLOW_WATER, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfBuildableWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake of buildable water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SHALLOW_WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of buildable water and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfBuildableWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake of buildable water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SHALLOW_WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of buildable water and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
     // Steppe
@@ -1519,6 +2032,109 @@ public class TestPlacementInTerrain {
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
+    @Test
+    public void testWorkerCanGoIntoSteppe() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a steppe on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.STEPPE, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfSteppeAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a steppe on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.STEPPE, map);
+
+        /* Place snow next to the steppe */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of steppe and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfSteppeAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a steppe on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.STEPPE, map);
+
+        /* Place snow next to the steppe */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of steppe and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
 // Mountain meadow
 
     @Test
@@ -1731,6 +2347,109 @@ public class TestPlacementInTerrain {
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
+    @Test
+    public void testWorkerCanGoIntoMountainMeadow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain meadow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfMountainMeadowAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain meadow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+
+        /* Place snow next to the mountain meadow */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfMountainMeadowAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain meadow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN_MEADOW, map);
+
+        /* Place snow next to the mountain meadow */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Buildable mountain
 
     @Test
@@ -1941,6 +2660,109 @@ public class TestPlacementInTerrain {
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWorkerCanGoIntoBuildableMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a buildable mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfBuildableMountainAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a buildable mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+
+        /* Place snow next to the buildable mountain */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of buildable mountain and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfBuildableMountainAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a buildable mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
+
+        /* Place snow next to the buildable mountain */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of buildable mountain and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
     // Lava
@@ -2224,6 +3046,66 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testCannotPlaceFlagOnBorderOfLavaAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place lava on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.LAVA, map);
+
+        /* Place snow next to the swamp */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of lava and snow */
+        Point point5 = new Point(5, 7);
+
+        try {
+            map.placeFlag(player0, point5);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoFlagPointAvailableOnBorderOfLavaAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a swamp on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.LAVA, map);
+
+        /* Place snow next to the swamp */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of lava and snow */
+        Point point5 = new Point(5, 7);
+        assertFalse(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Deep water
 
     @Test
@@ -2503,6 +3385,66 @@ public class TestPlacementInTerrain {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnBorderOfDeepWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake with deep water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DEEP_WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of deep water and snow */
+        Point point5 = new Point(5, 7);
+
+        try {
+            map.placeFlag(player0, point5);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoFlagPointAvailableOnBorderOfDeepWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake with deep water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DEEP_WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of deep water and snow */
+        Point point5 = new Point(5, 7);
+        assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
     // Regular water
@@ -2786,6 +3728,66 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testCannotPlaceFlagOnBorderOfWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of water and snow */
+        Point point5 = new Point(5, 7);
+
+        try {
+            map.placeFlag(player0, point5);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoFlagPointAvailableOnBorderOfWaterAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a lake on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+
+        /* Place snow next to the lake */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of water and snow */
+        Point point5 = new Point(5, 7);
+        assertFalse(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Swamp
 
     @Test
@@ -3067,6 +4069,105 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testWorkerCannotGoIntoSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a swamp on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SWAMP, map);
+
+        /* Place tree */
+        //Tree tree = map.placeTree(point2);
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place woodcutter */
+        Point point1 = new Point(8, 6);
+        Building woodcutter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), woodcutter0, map);
+
+        /* Verify that the worker can't reach the tree */
+        for (int i = 0; i < 1000; i++) {
+            woodcutter0.getWorker().stepTime();
+
+            assertNotEquals(hunter.getPosition(), animal0.getPosition());
+        }
+    }
+
+    @Test
+    public void testCannotPlaceFlagOnBorderOfSwampAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a swamp on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SWAMP, map);
+
+        /* Place snow next to the swamp */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of swamp and snow */
+        Point point5 = new Point(5, 7);
+
+        try {
+            map.placeFlag(player0, point5);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testNoFlagPointAvailableOnBorderOfSwampAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a swamp on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SWAMP, map);
+
+        /* Place snow next to the swamp */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's not possible to place a flag on the border of swamp and snow */
+        Point point5 = new Point(5, 7);
+        assertFalse(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Magenta
     @Test
     public void testAvailableFlagInMagenta() throws Exception {
@@ -3334,6 +4435,109 @@ public class TestPlacementInTerrain {
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
     }
 
+    @Test
+    public void testWorkerCanGoIntoMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place magenta on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfMagentaAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place magenta on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+
+        /* Place snow next to the magenta */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of magenta and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfMagentaAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place magenta on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
+
+        /* Place snow next to the magenta */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of magenta and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
     // Regular mountain (that can be mined)
     @Test
     public void testAvailableFlagInMountain() throws Exception {
@@ -3597,5 +4801,108 @@ public class TestPlacementInTerrain {
         assertEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testWorkerCanGoIntoMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
+
+        /* Place hunter hut */
+        Point point1 = new Point(8, 6);
+        Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunter0, map);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+
+        /* Verify that the worker can reach the animal */
+        assertTrue(animal0.isExactlyAtPoint());
+
+        boolean meet = false;
+        for (int i = 0; i < 1000; i++) {
+            hunter0.getWorker().stepTime();
+
+            if (animal0.isExactlyAtPoint() && hunter.getPosition().equals(animal0.getPosition())) {
+                meet = true;
+
+                break;
+            }
+        }
+
+        assertTrue(meet);
+    }
+
+    @Test
+    public void testCanPlaceFlagOnBorderOfMountainAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Place snow next to the mountain */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of mountain and snow */
+        Point point5 = new Point(5, 7);
+        map.placeFlag(player0, point5);
+    }
+
+    @Test
+    public void testFlagPointAvailableOnBorderOfMountainAndSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
+
+        /* Place snow next to the mountain */
+        Point point3 = new Point(4, 8);
+        Point point4 = new Point(7, 7);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.SNOW, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.SNOW, map);
+
+        /* Verify that it's possible to place a flag on the border of mountain and snow */
+        Point point5 = new Point(5, 7);
+        assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 }

@@ -70,7 +70,7 @@ public class GameMap {
 
     private Player winner;
 
-    public List<Point> findAutoSelectedRoad(final Player player, Point start, 
+    public List<Point> findAutoSelectedRoad(final Player player, Point start,
             Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
@@ -190,7 +190,7 @@ public class GameMap {
             throw new Exception("Each player must have a unique color");
         }
 
-        /* Set a constant initial seed for the random generator to get a 
+        /* Set a constant initial seed for the random generator to get a
            deterministic behavior */
         random.setSeed(1);
 
@@ -426,7 +426,7 @@ public class GameMap {
         /* Add building to the player's list of buildings */
         house.getPlayer().addBuilding(house);
 
-        /* Initialize the border if it's the first house and it's a headquarter 
+        /* Initialize the border if it's the first house and it's a headquarter
            or if it's a military building
         */
         if (firstHouse) {
@@ -513,7 +513,7 @@ public class GameMap {
                     if (!globalCleared.contains(p) &&
                         !localCleared.contains(p)  &&
                         !toInvestigate.contains(p) &&
-                        isWithinMap(p) && 
+                        isWithinMap(p) &&
                         claims.containsKey(p)) {
                         toInvestigate.add(p);
                     }
@@ -712,8 +712,8 @@ public class GameMap {
             throw new Exception("Cannot create a road that overlaps itself");
         }
 
-        /* 
-           Verify that the road has at least one free point between the 
+        /*
+           Verify that the road has at least one free point between the
            endpoints so the courier has somewhere to stand
         */
         if (wayPoints.size() < 3) {
@@ -818,7 +818,7 @@ public class GameMap {
 
     private Flag placeFlagRegardlessOfBorder(Flag flag) throws Exception {
         return doPlaceFlag(flag, false);
-    }    
+    }
 
     private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
         log.log(Level.INFO, "Placing {0}", new Object[]{flag});
@@ -871,7 +871,7 @@ public class GameMap {
                     Point lastPoint = courier.getLastPoint();
                     Point nextPoint = courier.getNextPoint();
 
-                    /* If the courier is on the road between one of the flags and 
+                    /* If the courier is on the road between one of the flags and
                     a building, pick the road with the flag */
 
                     /*    - Courier walking from flag to building */
@@ -891,7 +891,7 @@ public class GameMap {
                         }
                     } else {
 
-                        /* Pick the road the worker's last point was on if the next 
+                        /* Pick the road the worker's last point was on if the next
                            point is the new flag point */
                         if (nextPoint.equals(flagPoint)) {
                             if (newRoad1.getWayPoints().contains(lastPoint)) {
@@ -983,24 +983,13 @@ public class GameMap {
             return false;
         }
 
-        // Future improvement: avoid iterating through adjacent tiles again and again...
-        if (terrain.isInWater(point)) {
-            return false;
-        }
-
-        if (terrain.isInDeepWater(point)) {
-            return false;
-        }
-
-        if (terrain.isOnSnow(point)) {
-            return false;
-        }
-
-        if (terrain.isOnLava(point)) {
-            return false;
-        }
-
-        if (terrain.isInSwamp(point)) {
+        /* Cannot build flag if all adjacent tiles are unbuildable */
+        if (!canBuildFlagOn(terrain.getTileAbove(point)) &&
+            !canBuildFlagOn(terrain.getTileUpRight(point)) &&
+            !canBuildFlagOn(terrain.getTileDownRight(point)) &&
+            !canBuildFlagOn(terrain.getTileBelow(point)) &&
+            !canBuildFlagOn(terrain.getTileDownLeft(point)) &&
+            !canBuildFlagOn(terrain.getTileUpLeft(point))) {
             return false;
         }
 
@@ -1184,6 +1173,19 @@ public class GameMap {
         return resultList;
     }
 
+    private boolean canBuildFlagOn(Tile tile) {
+        switch (tile.getVegetationType()) {
+            case SWAMP:
+            case SNOW:
+            case WATER:
+            case LAVA:
+            case DEEP_WATER:
+                return false;
+            default:
+                return true;
+        }
+    }
+
     private boolean canWalkOn(Tile tile) {
 
         switch (tile.getVegetationType()) {
@@ -1203,7 +1205,7 @@ public class GameMap {
 
         if (house.isMine()) {
             return terrain.isOnMountain(site);
-        } else {        
+        } else {
             switch (size) {
             case SMALL:
             case MEDIUM:
@@ -1278,7 +1280,7 @@ public class GameMap {
         return point.x > 0 && point.x < width && point.y > 0 && point.y < height;
     }
 
-    private void addRoadToMapPoints(Road road) throws Exception {    
+    private void addRoadToMapPoints(Road road) throws Exception {
         for (Point point : road.getWayPoints()) {
             MapPoint mapPoint = pointToGameObject.get(point);
 
@@ -1397,7 +1399,7 @@ public class GameMap {
 
         resultList.remove(from.down());
 
-        return resultList;        
+        return resultList;
     }
 
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) throws Exception {
@@ -1451,7 +1453,7 @@ public class GameMap {
      * @param avoid The points to avoid
      * @return The path found or null
      */
-    public List<Point> findWayOffroad(Point start, Point goal, Point via, 
+    public List<Point> findWayOffroad(Point start, Point goal, Point via,
             Collection<Point> avoid) {
 
         /* Handle the case where the "via" point is equal to the start or the goal */
