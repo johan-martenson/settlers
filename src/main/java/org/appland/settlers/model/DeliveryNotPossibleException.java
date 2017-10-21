@@ -9,7 +9,7 @@ public class DeliveryNotPossibleException extends Exception {
 
     public DeliveryNotPossibleException(Building building, Cargo cargo) {
         super("Building " + building.getClass().getSimpleName() + " at " +
-                building.getPosition() + 
+                building.getPosition() +
               " does not accept delivery of " + cargo.getMaterial());
     }
 }

@@ -96,7 +96,7 @@ public class TestDonkey {
             assertFalse(road1.isMainRoad());
         }
 
-        /* Deliver one more cargo and verify that the road becomes a main road */    
+        /* Deliver one more cargo and verify that the road becomes a main road */
         Cargo cargo = new Cargo(COIN, map);
 
         flag1.putCargo(cargo);
@@ -108,7 +108,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
 
-        /* Wait for the road to become a main road and verify that a donkey 
+        /* Wait for the road to become a main road and verify that a donkey
            gets dispatched from the headquarter */
         assertEquals(courier1.getTarget(), flag0.getPosition());
         assertNull(road1.getDonkey());
@@ -202,7 +202,7 @@ public class TestDonkey {
         Donkey donkey = new Donkey(player0, map);
         map.placeWorker(donkey, flag2);
 
-        donkey.assignToRoad(road0);        
+        donkey.assignToRoad(road0);
 
         /* Verify that the donkey goes to the middle point of the road */
         assertTrue(donkey.isWalkingToRoad());
@@ -357,7 +357,7 @@ public class TestDonkey {
 
         donkey.assignToRoad(road0);
 
-        /* Verify that the donkey walks to the middle of the road even when 
+        /* Verify that the donkey walks to the middle of the road even when
            there are cargos available for pickup */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isWalkingToRoad());
@@ -1338,7 +1338,7 @@ public class TestDonkey {
         /* Put donkeys in the opponent's inventory */
         Utils.adjustInventoryTo(headquarter1, DONKEY, 10, map);
 
-        /* Verify that the opponent's headquarter doesn't try to deliver 
+        /* Verify that the opponent's headquarter doesn't try to deliver
            donkeys
         */
         for (int i = 0; i < 500; i++) {

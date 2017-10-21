@@ -280,7 +280,7 @@ public class TestHunterHut {
 
         assertTrue(hunter.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the hunter stays in the hut */        
+        /* Run the game logic 99 times and make sure the hunter stays in the hut */
         for (int i = 0; i < 99; i++) {
             assertTrue(hunter.isInsideBuilding());
             map.stepTime();
@@ -316,7 +316,7 @@ public class TestHunterHut {
 
         assertTrue(hunter.isInsideBuilding());
 
-        /* Verify that the hunter stays in the hut as long as there are no wild 
+        /* Verify that the hunter stays in the hut as long as there are no wild
            animals close */
         boolean animalClose;
         for (int i = 0; i < 500; i++) {
@@ -443,7 +443,7 @@ public class TestHunterHut {
             }
 
             /* Verify that the next planned step is toward the animal */
-            assertTrue(hunter.getTarget().distance(animal.getPosition()) <= 
+            assertTrue(hunter.getTarget().distance(animal.getPosition()) <=
                     hunter.getPosition().distance(animal.getPosition()));
 
             /* Verify that the hunter doesn't plan too far ahead */

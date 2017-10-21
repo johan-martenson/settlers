@@ -46,7 +46,7 @@ public class Forester extends Worker {
         }
 
         if (map.findWayOffroad(
-                getHome().getFlag().getPosition(), 
+                getHome().getFlag().getPosition(),
                 point,
                 null) == null) {
             return false;

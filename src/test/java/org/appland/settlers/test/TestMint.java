@@ -267,7 +267,7 @@ public class TestMint {
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
-        assertEquals(mint.getWorker(), minter);        
+        assertEquals(mint.getWorker(), minter);
 
         /* Verify that the mint doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -328,12 +328,12 @@ public class TestMint {
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
 
-        /* Populate the mint */        
+        /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
-        assertEquals(mint.getWorker(), minter);        
+        assertEquals(mint.getWorker(), minter);
 
         /* Deliver wood to the mint */
         mint.putCargo(new Cargo(GOLD, map));
@@ -379,12 +379,12 @@ public class TestMint {
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
 
-        /* Populate the mint */        
+        /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
-        assertEquals(mint.getWorker(), minter);        
+        assertEquals(mint.getWorker(), minter);
 
         /* Deliver ingredients to the mint */
         mint.putCargo(new Cargo(GOLD, map));
@@ -436,7 +436,7 @@ public class TestMint {
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
 
-        /* Populate the mint */        
+        /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
 
         /* Deliver ingredients to the mint */
@@ -471,12 +471,12 @@ public class TestMint {
         /* Finish construction of the mint */
         Utils.constructHouse(mint, map);
 
-        /* Populate the mint */        
+        /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
 
         /* Fast forward so that the mint worker would have produced bread
            if it had had the ingredients
-        */        
+        */
         Utils.fastForward(150, map);
 
         assertNull(minter.getCargo());

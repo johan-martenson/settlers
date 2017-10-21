@@ -205,7 +205,7 @@ public class TestTransportation {
          *    |    |
          *    |    |---F9--Target building
          *    |
-         *    | 
+         *    |
          *    |---F5---F6
          *    |
          *    |---F7---F8

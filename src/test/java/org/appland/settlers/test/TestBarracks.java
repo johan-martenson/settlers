@@ -226,7 +226,7 @@ public class TestBarracks {
         assertNotNull(m);
 
         /* Verify that the border is extended when the military reaches the barracks */
-        assertEquals(m.getTarget(), barracks0.getPosition());        
+        assertEquals(m.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, m, barracks0.getPosition());
@@ -786,7 +786,7 @@ public class TestBarracks {
 
         map.stepTime();
 
-        assertFalse(m.isInsideBuilding());        
+        assertFalse(m.isInsideBuilding());
     }
 
     @Test
@@ -1106,7 +1106,7 @@ public class TestBarracks {
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0, map);
 
-        /* Verify that the field of view remains the same until the barracks 
+        /* Verify that the field of view remains the same until the barracks
            gets occupied */
         Point pointInOldFOV = new Point(27, 5);
         Point pointInNewFOV = new Point(31, 5);
@@ -2540,7 +2540,7 @@ public class TestBarracks {
 
     percentage of upgrade progress is getting updated
     is possible to see if upgrades are possible
-    promotion timers are running through upgrades    
+    promotion timers are running through upgrades
     it's not possible to deliver too much material to the barracks during upgrade
     barracks being upgraded can be attacked and won
     upgrades finish (and state goes back to normal)

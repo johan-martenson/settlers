@@ -630,7 +630,7 @@ public class Storage extends Building implements Actor {
 
                 return true;
             }
-        }    
+        }
 
         return false;
     }

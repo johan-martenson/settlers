@@ -22,8 +22,8 @@ public class Tile {
     private int        amountGold;
     private int        amountFish;
     private int        amountIron;
-    private int amountGranite;
-    private int amountCoal;
+    private int        amountGranite;
+    private int        amountCoal;
 
     public Tile(Vegetation vegetation) {
         vegetationType = vegetation;

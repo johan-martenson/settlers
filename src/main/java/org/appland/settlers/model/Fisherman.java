@@ -61,10 +61,10 @@ public class Fisherman extends Worker {
     }
 
     protected enum State {
-        WALKING_TO_TARGET, 
-        RESTING_IN_HOUSE, 
-        GOING_OUT_TO_FISH, 
-        FISHING, 
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE,
+        GOING_OUT_TO_FISH,
+        FISHING,
         GOING_BACK_TO_HOUSE_WITH_FISH,
         IN_HOUSE_WITH_FISH,
         GOING_TO_FLAG,
@@ -97,7 +97,7 @@ public class Fisherman extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE       && 
+        if (state == RESTING_IN_HOUSE       &&
             getHome().isProductionEnabled() &&
             !getHome().outOfNaturalResources()) {
             if (countdown.reachedZero()) {
@@ -151,7 +151,7 @@ public class Fisherman extends Worker {
         } else if (state == GOING_BACK_TO_HOUSE_WITH_FISH) {
             enterBuilding(getHome());
 
-            state = IN_HOUSE_WITH_FISH;            
+            state = IN_HOUSE_WITH_FISH;
         } else if (state == GOING_TO_FLAG) {
             Cargo cargo = getCargo();
 

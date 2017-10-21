@@ -84,7 +84,7 @@ public class GameUtils {
         public int compare(Point t, Point t1) {
             if (t.y < t1.y) {
                 return -1;
-            } 
+            }
 
             if (t.y > t1.y) {
                 return 1;
@@ -121,7 +121,7 @@ public class GameUtils {
         }
     }
 
-    public static List<Point> findShortestPath(Point start, Point goal, 
+    public static List<Point> findShortestPath(Point start, Point goal,
             Collection<Point> avoid, ConnectionsProvider connectionProvider) {
         Set<Point>          evaluated         = new HashSet<>();
         Set<Point>          toEvaluate        = new HashSet<>();
@@ -197,10 +197,10 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = realCostToPoint.get(currentPoint) + 
+                tentativeCost = realCostToPoint.get(currentPoint) +
                         connectionProvider.realDistance(currentPoint, neighbor);
 
-                /* Check if the neighbor hasn't been evaluated yet or if we 
+                /* Check if the neighbor hasn't been evaluated yet or if we
                    have found a cheaper way to reach it */
                 if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 
@@ -471,10 +471,10 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = realCostToPoint.get(currentPoint) + 
+                tentativeCost = realCostToPoint.get(currentPoint) +
                         road.getWayPoints().size() - 1;
 
-                /* Check if the neighbor hasn't been evaluated yet or if we 
+                /* Check if the neighbor hasn't been evaluated yet or if we
                    have found a cheaper way to reach it */
                 if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 

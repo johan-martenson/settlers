@@ -1294,7 +1294,7 @@ public class TestRoads {
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTarget(), hq.getPosition());
 
-        /* Split road with the courier on the new road further away from the 
+        /* Split road with the courier on the new road further away from the
          headquarter */
         Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
@@ -1371,7 +1371,7 @@ public class TestRoads {
         /* Let the courier pass the middle of the road */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
 
-        /* Split road with the courier on the new road closer to the 
+        /* Split road with the courier on the new road closer to the
          headquarter */
         Flag middleFlag = map.placeFlag(player0, middlePoint2);
 

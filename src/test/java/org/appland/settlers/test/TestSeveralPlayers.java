@@ -88,7 +88,7 @@ public class TestSeveralPlayers {
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that the other player can't place a building close to the 
+        /* Verify that the other player can't place a building close to the
            first player's headquarter
         */
         Point point1 = new Point(10, 10);
@@ -149,7 +149,7 @@ public class TestSeveralPlayers {
 
         /* Place woodcutter for player 0 */
         Point point2 = new Point(10, 6);
-        Building woodcutter0 = new Woodcutter(player0);        
+        Building woodcutter0 = new Woodcutter(player0);
         map.placeBuilding(woodcutter0, point2);
 
         /* Place woodcutter for player 1 */

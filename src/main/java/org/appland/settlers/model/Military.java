@@ -52,8 +52,8 @@ public class Military extends Worker {
         WALKING_HOME_AFTER_FIGHT,
         STANDBY_WAITING_DEFEND,
         WALKING_APART_TO_DEFEND,
-        WALKING_APART_TO_ATTACK, 
-        WALKING_TO_FIXED_POINT_AFTER_ATTACK, 
+        WALKING_APART_TO_ATTACK,
+        WALKING_TO_FIXED_POINT_AFTER_ATTACK,
         WALKING_TO_FIXED_POINT_AFTER_DEFENSE,
         DEAD
     }
@@ -116,7 +116,7 @@ public class Military extends Worker {
 
                 if (buildingToAttack.needsMilitaryManning()) {
 
-                    /* Enter the building if it has already been taken over and 
+                    /* Enter the building if it has already been taken over and
                        needs additional manning */
                     buildingToAttack.promiseMilitary(this);
 
@@ -213,7 +213,7 @@ public class Military extends Worker {
             enterBuilding(building);
 
             /* The building may have sent us back immediately, otherwise become
-               deployed 
+               deployed
             */
             if (state == WALKING_TO_TARGET) {
                 state = State.DEPLOYED;
@@ -332,13 +332,13 @@ public class Military extends Worker {
                 returnAfterAttackIsOver();
             } else if (getHome().equals(defendedBuilding)) {
 
-                /* Stay by the flag if the military is defending its own 
+                /* Stay by the flag if the military is defending its own
                    building and the attack isn't over */
                 state = STANDBY_WAITING_DEFEND;
 
             } else if (defendedBuilding.getWaitingAttackers().isEmpty()) {
 
-                /* All attackers are busy so stand by and wait to see if 
+                /* All attackers are busy so stand by and wait to see if
                    there is a need to defend again */
                 state = STANDBY_WAITING_DEFEND;
 

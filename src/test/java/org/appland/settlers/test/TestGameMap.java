@@ -268,7 +268,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceBuildingOnInvalidPoint() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);        
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Farm    farm      = new Farm(player0);
         Point   farmPoint = new Point(3, 4);
@@ -279,7 +279,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceFlagOnInvalidPoint() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);        
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point0 = new Point(4, 7);
 
@@ -294,7 +294,7 @@ public class TestGameMap {
     @Test
     public void testPlaceBuildingSetsMap() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);        
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Farm    farm   = new Farm(player0);
         Point   point0 = new Point(5, 5);
@@ -309,7 +309,7 @@ public class TestGameMap {
     @Test
     public void testFindWayBetweenHouseAndItsFlag() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);        
+        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter wc     = new Woodcutter(player0);
         Point      point0 = new Point(5, 5);
@@ -436,7 +436,7 @@ public class TestGameMap {
         Point point1 = new Point(49, 67);
         map.placeFlag(player0, point1);
 
-        Point point9 = new Point(51, 65);        
+        Point point9 = new Point(51, 65);
         map.placeFlag(player0, point9);
 
         /* Verify that it's not possible to create a road that goes outside the border */
@@ -476,7 +476,7 @@ public class TestGameMap {
         Point point1 = new Point(49, 67);
         map.placeFlag(player0, point1);
 
-        Point point9 = new Point(51, 65);        
+        Point point9 = new Point(51, 65);
         map.placeFlag(player0, point9);
 
         /* Verify that it's not possible to create a road that touches the border */
@@ -590,7 +590,7 @@ public class TestGameMap {
         border = player0.getBorders().get(0);
 
         assertFalse(border.contains(new Point(50, 74)));
-        assertTrue(border.contains(new Point(50, 80)));        
+        assertTrue(border.contains(new Point(50, 80)));
 
         Point point3 = new Point(50, 78);
         Building barracks2 = map.placeBuilding(new Barracks(player0), point3);

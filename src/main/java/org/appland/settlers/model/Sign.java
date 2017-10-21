@@ -27,7 +27,7 @@ public class Sign implements Actor, Piece {
         size     = s;
         map      = mapToSet;
         age      = 0;
-    }    
+    }
 
     public Material getType() {
         return type;

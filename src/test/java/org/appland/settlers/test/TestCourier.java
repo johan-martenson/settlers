@@ -95,7 +95,7 @@ public class TestCourier {
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
-        courier.assignToRoad(road1);        
+        courier.assignToRoad(road1);
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
@@ -125,7 +125,7 @@ public class TestCourier {
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
-        courier.assignToRoad(road0);        
+        courier.assignToRoad(road0);
 
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
@@ -914,7 +914,7 @@ public class TestCourier {
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 1);        
+        assertEquals(wc.getAmount(PLANCK), 1);
     }
 
     @Test
@@ -1231,7 +1231,7 @@ public class TestCourier {
         Point point4 = new Point(40, 40);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
 
-        /* Verify that the opponent's headquarter doesn't try to deliver 
+        /* Verify that the opponent's headquarter doesn't try to deliver
            a courier to the road
         */
         for (int i = 0; i < 500; i++) {

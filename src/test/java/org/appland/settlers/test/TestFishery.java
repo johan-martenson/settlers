@@ -321,7 +321,7 @@ public class TestFishery {
 
         assertTrue(fisherman.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the fisherman stays in the fishery */        
+        /* Run the game logic 99 times and make sure the fisherman stays in the fishery */
         for (int i = 0; i < 99; i++) {
             assertTrue(fisherman.isInsideBuilding());
             map.stepTime();
@@ -330,7 +330,7 @@ public class TestFishery {
         assertTrue(fisherman.isInsideBuilding());
 
         /* Step once and make sure the fisherman goes out of the fishery */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(fisherman.isInsideBuilding());
     }
@@ -373,7 +373,7 @@ public class TestFishery {
         /* Step once and make sure the fisherman goes out of the hut */
         map.stepTime();
 
-        assertFalse(fisherman.isInsideBuilding());    
+        assertFalse(fisherman.isInsideBuilding());
 
         Point point = fisherman.getTarget();
         assertTrue(point.equals(point2) || point.equals(point1) || point.equals(point0));
@@ -418,7 +418,7 @@ public class TestFishery {
         /* Step once and make sure the fisherman goes out of the house */
         map.stepTime();
 
-        assertFalse(fisherman.isInsideBuilding());    
+        assertFalse(fisherman.isInsideBuilding());
 
         Point point = fisherman.getTarget();
 
@@ -470,7 +470,7 @@ public class TestFishery {
         /* Step once and make sure the fisherman goes out of the hut */
         map.stepTime();
 
-        assertFalse(fisherman.isInsideBuilding());    
+        assertFalse(fisherman.isInsideBuilding());
 
         Point point = fisherman.getTarget();
 
@@ -482,7 +482,7 @@ public class TestFishery {
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
 
         assertTrue(fisherman.isArrived());
-        assertTrue(fisherman.isAt(point));        
+        assertTrue(fisherman.isAt(point));
         assertTrue(fisherman.isFishing());
 
         /* Verify that the fisherman fishes the right time */
@@ -496,7 +496,7 @@ public class TestFishery {
 
         map.stepTime();
 
-        /* Verify that the fisherman is done fishing and that the amount of fish 
+        /* Verify that the fisherman is done fishing and that the amount of fish
             has decreased
         */
         assertFalse(fisherman.isFishing());
@@ -541,7 +541,7 @@ public class TestFishery {
         /* Step once and make sure the fisherman goes out of the house */
         map.stepTime();
 
-        assertFalse(fisherman.isInsideBuilding());    
+        assertFalse(fisherman.isInsideBuilding());
 
         Point point = fisherman.getTarget();
 
@@ -612,7 +612,7 @@ public class TestFishery {
         /* Step once and make sure the fisherman goes out of the house */
         map.stepTime();
 
-        assertFalse(fisherman.isInsideBuilding());    
+        assertFalse(fisherman.isInsideBuilding());
 
         Point point = fisherman.getTarget();
 
@@ -900,7 +900,7 @@ public class TestFishery {
         Utils.fastForwardUntilWorkersReachTarget(map, fisherman);
 
         assertTrue(fisherman.isArrived());
-        assertTrue(fisherman.isAt(point));        
+        assertTrue(fisherman.isAt(point));
         assertTrue(fisherman.isFishing());
 
         /* Wait for the fisherman to finish fishing */
@@ -1269,7 +1269,7 @@ public class TestFishery {
 
         assertEquals(fisherman.getCargo().getMaterial(), FISH);
 
-        /* Wait for the worker to return to the fishery */        
+        /* Wait for the worker to return to the fishery */
         assertEquals(fisherman.getTarget(), fishery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery0.getPosition());

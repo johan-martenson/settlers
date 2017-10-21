@@ -410,7 +410,7 @@ public class TestGeologist {
         assertFalse(geologist.isInvestigating());
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-    }        
+    }
 
     @Test
     public void testGeologistFindsWaterOnGrass() throws Exception {
@@ -854,7 +854,7 @@ public class TestGeologist {
 
         /* Verify that cannot find a place to investigate and goes back */
         assertEquals(geologist.getTarget(), headquarter0.getPosition());
-    }        
+    }
 
     @Test
     public void testGeologistReturnsAfterNoMoreSignsCanBePlaced() throws Exception {

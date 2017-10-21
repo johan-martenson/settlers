@@ -86,7 +86,7 @@ public class Player {
         return false;
     }
 
-    public List<Collection<Point>> getBorders() {        
+    public List<Collection<Point>> getBorders() {
         List<Collection<Point>> result = new LinkedList<>();
 
         for (Land land : ownedLands) {
@@ -126,7 +126,7 @@ public class Player {
 
             fieldOfView = calculateFieldOfView(discoveredLand);
         }
-    }    
+    }
 
     public int getAvailableAttackersForBuilding(Building buildingToAttack) throws Exception {
         int availableAttackers = 0;
@@ -377,7 +377,7 @@ public class Player {
             return null;
         }
 
-        /* Check each player if they own the point and return the player that 
+        /* Check each player if they own the point and return the player that
            does
         */
         for (Player player : map.getPlayers()) {

@@ -77,7 +77,7 @@ public class Miner extends Worker {
         }
 
         if (b instanceof GoldMine) {
-            mineral = GOLD;    
+            mineral = GOLD;
         } else if (b instanceof IronMine) {
             mineral = IRON;
         } else if (b instanceof CoalMine) {
@@ -155,7 +155,7 @@ public class Miner extends Worker {
     private boolean hasFood() {
         Building home = getHome();
 
-        return home.getAmount(BREAD) > 0 || 
+        return home.getAmount(BREAD) > 0 ||
                home.getAmount(FISH)  > 0 ||
                home.getAmount(MEAT)  > 0;
     }

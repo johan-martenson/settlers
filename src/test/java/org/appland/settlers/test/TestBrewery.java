@@ -212,7 +212,7 @@ public class TestBrewery {
 
         assertTrue(brewery.needsWorker());
 
-        /* Verify that a brewery worker leaves the hq */        
+        /* Verify that a brewery worker leaves the hq */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -263,7 +263,7 @@ public class TestBrewery {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);        
+        assertEquals(brewery.getWorker(), sw);
 
         /* Verify that the brewery doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -321,7 +321,7 @@ public class TestBrewery {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);        
+        assertEquals(brewery.getWorker(), sw);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -372,7 +372,7 @@ public class TestBrewery {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);        
+        assertEquals(brewery.getWorker(), sw);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));

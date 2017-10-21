@@ -282,7 +282,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Run the game logic 99 times and make sure the forester stays in the hut */        
+        /* Run the game logic 99 times and make sure the forester stays in the hut */
         for (int i = 0; i < 99; i++) {
             assertTrue(forester.isInsideBuilding());
             map.stepTime();
@@ -291,7 +291,7 @@ public class TestForesterHut {
         assertTrue(forester.isInsideBuilding());
 
         /* Step once and make sure the forester goes out of the hut */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(forester.isInsideBuilding());
     }
@@ -329,7 +329,7 @@ public class TestForesterHut {
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
 
-        assertFalse(forester.isInsideBuilding());    
+        assertFalse(forester.isInsideBuilding());
 
         Point point = forester.getTarget();
         assertNotNull(point);
@@ -372,7 +372,7 @@ public class TestForesterHut {
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
 
-        assertFalse(forester.isInsideBuilding());    
+        assertFalse(forester.isInsideBuilding());
 
         Point point = forester.getTarget();
 
@@ -417,7 +417,7 @@ public class TestForesterHut {
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
 
-        assertFalse(forester.isInsideBuilding());    
+        assertFalse(forester.isInsideBuilding());
 
         Point point = forester.getTarget();
 
@@ -426,7 +426,7 @@ public class TestForesterHut {
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
         assertTrue(forester.isArrived());
-        assertTrue(forester.isAt(point));        
+        assertTrue(forester.isAt(point));
         assertTrue(forester.isPlanting());
 
         for (int i = 0; i < 19; i++) {
@@ -475,7 +475,7 @@ public class TestForesterHut {
         /* Step once and make sure the forester goes out of the hut */
         map.stepTime();
 
-        assertFalse(forester.isInsideBuilding());    
+        assertFalse(forester.isInsideBuilding());
 
         Point point = forester.getTarget();
 
@@ -504,7 +504,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
-        assertTrue(forester.isArrived());        
+        assertTrue(forester.isArrived());
         assertTrue(forester.isInsideBuilding());
     }
 
@@ -568,9 +568,9 @@ public class TestForesterHut {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) || 
-                map.isFlagAtPoint(p)     || 
-                map.isRoadAtPoint(p)     || 
+            if (map.isBuildingAtPoint(p) ||
+                map.isFlagAtPoint(p)     ||
+                map.isRoadAtPoint(p)     ||
                 map.isStoneAtPoint(p)    ||
                 !map.isWithinMap(p)) {
                 continue;
@@ -626,9 +626,9 @@ public class TestForesterHut {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p)  || 
-                    map.isFlagAtPoint(p)  || 
-                    map.isRoadAtPoint(p)  || 
+            if (map.isBuildingAtPoint(p)  ||
+                    map.isFlagAtPoint(p)  ||
+                    map.isRoadAtPoint(p)  ||
                     map.isStoneAtPoint(p) ||
                     map.getTerrain().isInWater(p)) {
                 continue;
@@ -682,9 +682,9 @@ public class TestForesterHut {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p)  || 
-                    map.isFlagAtPoint(p)  || 
-                    map.isRoadAtPoint(p)  || 
+            if (map.isBuildingAtPoint(p)  ||
+                    map.isFlagAtPoint(p)  ||
+                    map.isRoadAtPoint(p)  ||
                     map.isStoneAtPoint(p) ||
                     map.getTerrain().isInWater(p)) {
                 continue;
@@ -743,7 +743,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Wait for the forester to rest */        
+        /* Wait for the forester to rest */
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
@@ -788,9 +788,9 @@ public class TestForesterHut {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) || 
-                map.isFlagAtPoint(p)     || 
-                map.isRoadAtPoint(p)     || 
+            if (map.isBuildingAtPoint(p) ||
+                map.isFlagAtPoint(p)     ||
+                map.isRoadAtPoint(p)     ||
                 map.isStoneAtPoint(p)    ||
                 map.getTerrain().isOnMountain(p)) {
                 continue;
@@ -804,7 +804,7 @@ public class TestForesterHut {
 
         assertTrue(forester.isInsideBuilding());
 
-        /* Wait for the forester to rest */        
+        /* Wait for the forester to rest */
         Utils.fastForward(99, map);
 
         assertTrue(forester.isInsideBuilding());
@@ -1174,7 +1174,7 @@ public class TestForesterHut {
         /* Manually place forester */
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
 
-        /* Wait for the forester to pick a spot to plant a tree where a flag 
+        /* Wait for the forester to pick a spot to plant a tree where a flag
            can be placed
         */
         for (int i = 0; i < 10000; i++) {
@@ -1224,7 +1224,7 @@ public class TestForesterHut {
 
         Utils.fastForwardUntilWorkersReachTarget(map, forester);
 
-        assertTrue(forester.isArrived());        
+        assertTrue(forester.isArrived());
         assertTrue(forester.isInsideBuilding());
         assertFalse(map.isTreeAtPoint(point));
     }

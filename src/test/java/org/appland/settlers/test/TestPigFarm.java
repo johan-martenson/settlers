@@ -279,7 +279,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isInsideBuilding());
 
         /* Step once and make sure the pig breedre goes out of the pig farm */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
     }
@@ -328,7 +328,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isInsideBuilding());
 
         /* Step once and make sure the pigBreeder goes out of the farm */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
 
@@ -402,7 +402,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isInsideBuilding());
 
         /* Step once to let the pigBreeder go out to plant */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
 
@@ -432,7 +432,7 @@ public class TestPigFarm {
 
         Utils.fastForwardUntilWorkersReachTarget(map, pigBreeder);
 
-        assertTrue(pigBreeder.isArrived());        
+        assertTrue(pigBreeder.isArrived());
         assertTrue(pigBreeder.isInsideBuilding());
     }
 
@@ -480,7 +480,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isInsideBuilding());
 
         /* Step once and to let the pigBreeder go out to feed */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
 
@@ -967,7 +967,7 @@ public class TestPigFarm {
         assertTrue(pigBreeder.isInsideBuilding());
 
         /* Step once and to let the pigBreeder go out to feed */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());
 

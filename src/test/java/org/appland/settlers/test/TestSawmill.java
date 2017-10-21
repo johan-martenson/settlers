@@ -210,7 +210,7 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        /* Verify that a sawmill worker leaves the hq */        
+        /* Verify that a sawmill worker leaves the hq */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -261,7 +261,7 @@ public class TestSawmill {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sw);        
+        assertEquals(sawmill.getWorker(), sw);
 
         /* Verify that the sawmill doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -319,7 +319,7 @@ public class TestSawmill {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sw);        
+        assertEquals(sawmill.getWorker(), sw);
 
         /* Deliver wood to the sawmill */
         sawmill.putCargo(new Cargo(WOOD, map));
@@ -370,7 +370,7 @@ public class TestSawmill {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), sawmill);
-        assertEquals(sawmill.getWorker(), sw);        
+        assertEquals(sawmill.getWorker(), sw);
 
         /* Deliver wood to the sawmill */
         sawmill.putCargo(new Cargo(WOOD, map));

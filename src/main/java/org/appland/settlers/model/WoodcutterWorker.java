@@ -46,10 +46,10 @@ public class WoodcutterWorker extends Worker {
 
     private enum State {
         WALKING_TO_TARGET,
-        RESTING_IN_HOUSE, 
+        RESTING_IN_HOUSE,
         GOING_OUT_TO_CUT_TREE,
-        CUTTING_TREE, 
-        GOING_BACK_TO_HOUSE_WITH_CARGO, 
+        CUTTING_TREE,
+        GOING_BACK_TO_HOUSE_WITH_CARGO,
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,

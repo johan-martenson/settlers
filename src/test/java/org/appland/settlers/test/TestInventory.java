@@ -148,7 +148,7 @@ public class TestInventory {
         assertEquals(storage.getAmount(FORESTER), 1);
         assertTrue(storage.isInStock(FORESTER));
         storage.retrieveWorker(FORESTER);
-        assertEquals(storage.getAmount(FORESTER), 0);        
+        assertEquals(storage.getAmount(FORESTER), 0);
         assertFalse(storage.isInStock(FORESTER));
     }
 

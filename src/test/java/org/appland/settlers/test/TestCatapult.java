@@ -253,7 +253,7 @@ public class TestCatapult {
 
         assertTrue(catapult.needsWorker());
 
-        /* Verify that a catapult worker leaves the hq */        
+        /* Verify that a catapult worker leaves the hq */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -306,7 +306,7 @@ public class TestCatapult {
 
         assertTrue(worker.isInsideBuilding());
         assertEquals(worker.getHome(), catapult);
-        assertEquals(catapult.getWorker(), worker);        
+        assertEquals(catapult.getWorker(), worker);
 
         /* Deliver stones to the catapult */
         Cargo cargo = new Cargo(STONE, map);

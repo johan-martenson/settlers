@@ -1016,7 +1016,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
         Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
 
-        /* Make sure the headquarter has no miners so the coal mine will not be 
+        /* Make sure the headquarter has no miners so the coal mine will not be
            constructed */
         Utils.adjustInventoryTo(headquarter0, MINER, 0, map);
 
@@ -1159,7 +1159,7 @@ public class TestPrioritization {
         }
 
         /**
-         *  Reduce the food quota to below five and verify that food continues 
+         *  Reduce the food quota to below five and verify that food continues
          *  to be delivered
          */
         player0.setFoodQuota(GoldMine.class, 1);
@@ -1327,7 +1327,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        /* Set the quota for coal consumers to only give coal to the 
+        /* Set the quota for coal consumers to only give coal to the
            iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 0);
@@ -1447,7 +1447,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        /* Set the quota for coal consumers to only give coal to the 
+        /* Set the quota for coal consumers to only give coal to the
            iron smelter */
         player0.setCoalQuota(IronSmelter.class, 0);
         player0.setCoalQuota(Mint.class, 1);
@@ -1567,7 +1567,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        /* Set the quota for coal consumers to only give coal to the 
+        /* Set the quota for coal consumers to only give coal to the
            iron smelter */
         player0.setCoalQuota(IronSmelter.class, 0);
         player0.setCoalQuota(Mint.class, 0);
@@ -1681,7 +1681,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new Minter(player0, map), mint0, map);
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
-        /* Set the quota for coal consumers to only give coal to the 
+        /* Set the quota for coal consumers to only give coal to the
            iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 1);
@@ -1795,7 +1795,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
-        /* Set the quota for coal consumers to only give coal to the 
+        /* Set the quota for coal consumers to only give coal to the
            iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 1);
@@ -1917,7 +1917,7 @@ public class TestPrioritization {
         /* Make sure the headquarter has no coal */
         Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
 
-        /* Make sure the headquarter has no iron founder so the coal mine will 
+        /* Make sure the headquarter has no iron founder so the coal mine will
            not be constructed */
         Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0, map);
 
@@ -2169,7 +2169,7 @@ public class TestPrioritization {
         Utils.occupyRoad(road4, map);
 
         /* Verify that the storage worker in the headquarter delivers cargos
-           in the right order 
+           in the right order
         */
         assertTrue(mint0.needsMaterial(COAL));
         assertTrue(mint0.needsMaterial(GOLD));
@@ -2192,7 +2192,7 @@ public class TestPrioritization {
         player0.setTransportPriority(5, FLOUR);
 
         /* Ensure the headquarter has all the materials and enough to avoid the
-           tree conservation program 
+           tree conservation program
         */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 20, map);
         Utils.adjustInventoryTo(headquarter0, PLANCK, 20, map);
@@ -2222,7 +2222,7 @@ public class TestPrioritization {
         assertFalse(mill0.needsMaterial(WHEAT));
         assertTrue(well0.needsMaterial(PLANCK));
 
-        /* Verify that the storage worker then plancks until the well doesn't 
+        /* Verify that the storage worker then plancks until the well doesn't
            need them anymore */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 

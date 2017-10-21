@@ -141,7 +141,7 @@ public class Road {
         return usage > MAIN_ROAD_THRESHOLD;
     }
 
-    void registerUsage() {        
+    void registerUsage() {
         if (usage <= MAIN_ROAD_THRESHOLD) {
             usage++;
         }

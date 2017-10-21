@@ -110,7 +110,7 @@ public class Miller extends Worker {
 
             storage.depositWorker(this);
         }
-    }    
+    }
 
     @Override
     protected void onReturnToStorage() throws Exception {

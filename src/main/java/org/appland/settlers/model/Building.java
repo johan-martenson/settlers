@@ -115,7 +115,7 @@ public class Building implements Actor, EndPoint, Piece {
             return 0;
         } else {
             return militaryBuilding.defenceRadius();
-        }    
+        }
     }
 
     Collection<Point> getDefendedLand() {
@@ -143,7 +143,7 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     boolean isMine() {
-        return (this instanceof GoldMine || 
+        return (this instanceof GoldMine ||
                 this instanceof IronMine ||
                 this instanceof CoalMine ||
                 this instanceof GraniteMine);
@@ -448,7 +448,7 @@ public class Building implements Actor, EndPoint, Piece {
             } else {
                 countdown.step();
             }
-        } else if (occupied()) {            
+        } else if (occupied()) {
             if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableMilitaries()) {
                 if (countdown.reachedZero()) {
                     doPromotion();

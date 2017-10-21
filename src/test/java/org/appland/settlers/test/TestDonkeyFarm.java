@@ -275,7 +275,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Step once and make sure the donkey breedre goes out of the donkey farm */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());
     }
@@ -324,7 +324,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Step once and make sure the donkey breeder goes out of the farm */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());
 
@@ -398,7 +398,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Step once to let the donkey breeder go out to plant */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());
 
@@ -428,7 +428,7 @@ public class TestDonkeyFarm {
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkeyBreeder);
 
-        assertTrue(donkeyBreeder.isArrived());        
+        assertTrue(donkeyBreeder.isArrived());
         assertTrue(donkeyBreeder.isInsideBuilding());
     }
 
@@ -476,7 +476,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Step once and to let the donkey breeder go out to feed */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());
 
@@ -514,7 +514,7 @@ public class TestDonkeyFarm {
 
         Utils.fastForward(20, map);
 
-        /* Verify that the donkey walks to the storage by itself and the donkey 
+        /* Verify that the donkey walks to the storage by itself and the donkey
            breeder stays in the farm */
         map.stepTime();
 
@@ -848,7 +848,7 @@ public class TestDonkeyFarm {
         assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Step once and to let the donkey breeder go out to feed */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());
 

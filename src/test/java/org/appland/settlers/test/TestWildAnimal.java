@@ -232,7 +232,7 @@ public class TestWildAnimal {
 
         assertTrue(map.getWildAnimals().size() > 0);
 
-        /* Verify that the wild animal stays in the spot because it has nowhere 
+        /* Verify that the wild animal stays in the spot because it has nowhere
           to go
         */
         WildAnimal wildAnimal0 = map.getWildAnimals().get(0);

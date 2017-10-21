@@ -95,8 +95,8 @@ public class StorageWorker extends Worker {
 
                 /* Make sure plancks are only used for planck production if
                    the limit is critically low */
-                if (material == PLANCK && 
-                    ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT && 
+                if (material == PLANCK &&
+                    ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT &&
                     !(building instanceof Sawmill)     &&
                     !(building instanceof ForesterHut) &&
                     !(building instanceof Woodcutter)) {
@@ -216,13 +216,13 @@ public class StorageWorker extends Worker {
         /* Reset count if all building types have reached their quota */
             Set<Building> reachableBuildings = GameUtils.getBuildingsWithinReach(getHome().getFlag());
 
-            if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material)    || 
+            if ((!needyConsumerExists(reachableBuildings, GoldMine.class, material)    ||
                   overQuota(GoldMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, IronMine.class, material)    || 
+                (!needyConsumerExists(reachableBuildings, IronMine.class, material)    ||
                   overQuota(IronMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, CoalMine.class, material)    || 
+                (!needyConsumerExists(reachableBuildings, CoalMine.class, material)    ||
                   overQuota(CoalMine.class))                                  &&
-                (!needyConsumerExists(reachableBuildings, GraniteMine.class, material) || 
+                (!needyConsumerExists(reachableBuildings, GraniteMine.class, material) ||
                   overQuota(GraniteMine.class))) {
                 assignedFood.put(GoldMine.class, 0);
                 assignedFood.put(IronMine.class, 0);
@@ -311,13 +311,13 @@ public class StorageWorker extends Worker {
         return false;
     }
 
-    private boolean needyConsumerExists(Collection<Building> buildings, 
+    private boolean needyConsumerExists(Collection<Building> buildings,
             Class<? extends Building> aClass,
             Material material) {
 
         for (Building building : buildings) {
-            if (building.getClass().equals(aClass) && 
-                building.ready()                   && 
+            if (building.getClass().equals(aClass) &&
+                building.ready()                   &&
                 building.needsMaterial(material)) {
                 return true;
             }

@@ -45,7 +45,7 @@ public class CatapultWorker extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == State.RESTING_IN_HOUSE) {            
+        if (state == State.RESTING_IN_HOUSE) {
 
             /* Countdown if there are stones available */
             if (getHome().getAmount(STONE) > 0) {

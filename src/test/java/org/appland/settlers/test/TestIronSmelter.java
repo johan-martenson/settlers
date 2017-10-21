@@ -212,7 +212,7 @@ public class TestIronSmelter {
 
         assertTrue(ironSmelter.needsWorker());
 
-        /* Verify that a iron smelter worker leaves the hq */        
+        /* Verify that a iron smelter worker leaves the hq */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -263,7 +263,7 @@ public class TestIronSmelter {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);        
+        assertEquals(ironSmelter.getWorker(), sw);
 
         /* Verify that the iron smelter doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -321,7 +321,7 @@ public class TestIronSmelter {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);        
+        assertEquals(ironSmelter.getWorker(), sw);
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(COAL, map));
@@ -372,7 +372,7 @@ public class TestIronSmelter {
 
         assertTrue(sw.isInsideBuilding());
         assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);        
+        assertEquals(ironSmelter.getWorker(), sw);
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));

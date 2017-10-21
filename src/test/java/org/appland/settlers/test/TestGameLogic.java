@@ -233,7 +233,7 @@ public class TestGameLogic {
         Point point2 = new Point(5, 17);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
-        /* Assign new workers to unocupied places. Since there are no places 
+        /* Assign new workers to unocupied places. Since there are no places
          * that require workers this should not do anything */
         assertEquals(map.getWorkers().size(), 1);
 
@@ -256,8 +256,8 @@ public class TestGameLogic {
         assertEquals(headquarter0.getAmount(FORESTER), 3);
         assertEquals(map.getWorkers().size(), 1);
 
-        /* Assign new workers to unoccupied places and verify that there is a 
-         * worker designated for the road. There should be no worker for the 
+        /* Assign new workers to unoccupied places and verify that there is a
+         * worker designated for the road. There should be no worker for the
          * barracks as it's not finished yet
          */
         Utils.fastForward(3, map);
@@ -331,7 +331,7 @@ public class TestGameLogic {
 
         assertEquals(map.getWorkers().size(), 5);
 
-        /* Finish construction of the forester hut which requires a 
+        /* Finish construction of the forester hut which requires a
          * forester worker to function
          */
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);

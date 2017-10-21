@@ -22,12 +22,12 @@ public abstract class Worker implements Actor, Piece {
     private final Player player;
 
     enum States {
-        WALKING_AND_EXACTLY_AT_POINT, 
-        WALKING_BETWEEN_POINTS, 
-        IDLE_OUTSIDE, 
+        WALKING_AND_EXACTLY_AT_POINT,
+        WALKING_BETWEEN_POINTS,
+        IDLE_OUTSIDE,
         IDLE_INSIDE,
         WALKING_HALF_WAY,
-        WALKING_HALFWAY_AND_EXACTLY_AT_POINT, 
+        WALKING_HALFWAY_AND_EXACTLY_AT_POINT,
         IDLE_HALF_WAY
     }
 
@@ -115,7 +115,7 @@ public abstract class Worker implements Actor, Piece {
 
                 state = States.IDLE_HALF_WAY;
             }
-        } else if (state == IDLE_OUTSIDE) {            
+        } else if (state == IDLE_OUTSIDE) {
             onIdle();
         } else if (state == IDLE_INSIDE) {
             onIdle();
@@ -128,7 +128,7 @@ public abstract class Worker implements Actor, Piece {
     public String toString() {
         if (isTraveling()) {
             String str = "";
-            if (isExactlyAtPoint()) {            
+            if (isExactlyAtPoint()) {
                 str = "Courier at " + getPosition() + " traveling to " + target;
             } else {
                 str = "Courier latest at " + getLastPoint() + " traveling to " + target;
@@ -255,7 +255,7 @@ public abstract class Worker implements Actor, Piece {
     }
 
     public int getPercentageOfDistanceTraveled() {
-        if (state != WALKING_BETWEEN_POINTS  && 
+        if (state != WALKING_BETWEEN_POINTS  &&
             state != States.WALKING_HALF_WAY &&
             state != States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT &&
             state != States.IDLE_HALF_WAY) {
@@ -310,7 +310,7 @@ public abstract class Worker implements Actor, Piece {
 
             handleArrival();
         } else {
-            if (wasInside && !target.equals(home.getFlag().getPosition())) {                
+            if (wasInside && !target.equals(home.getFlag().getPosition())) {
                 if (via != null) {
                     path = map.findWayOffroad(home.getFlag().getPosition(), point, via, null);
                 } else {
@@ -335,7 +335,7 @@ public abstract class Worker implements Actor, Piece {
 
     protected void setTarget(Point point) throws Exception {
         if (state == IDLE_INSIDE) {
-            if (!point.equals(home.getFlag().getPosition())) {        
+            if (!point.equals(home.getFlag().getPosition())) {
                 setTarget(point, home.getFlag().getPosition());
             } else {
                 setTarget(point, null);

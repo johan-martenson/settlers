@@ -56,7 +56,7 @@ public class IronFounder extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {            
+        if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = MELTING_IRON;
                 countdown.countFrom(PRODUCTION_TIME);

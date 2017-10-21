@@ -621,7 +621,7 @@ public class TestPlacement {
         /* The house's flag */
         assertFalse(possibleHouses.containsKey(point0.downRight()));
 
-        /* Points in front, TBD sampled */ 
+        /* Points in front, TBD sampled */
         // assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
         // assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
         assertFalse(possibleHouses.containsKey(point0.down()));
@@ -675,7 +675,7 @@ public class TestPlacement {
         /* The house's flag */
         assertFalse(possibleFlags.contains(point0.downRight()));
 
-        /* Points in front, TBD sampled */ 
+        /* Points in front, TBD sampled */
         // assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
         // assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
         assertFalse(possibleFlags.contains(point0.down()));
@@ -693,7 +693,7 @@ public class TestPlacement {
 
         /* Points on right, sampled */
         assertTrue(possibleFlags.contains(point0.up()));
-        assertFalse(possibleFlags.contains(point0.upRight()));        
+        assertFalse(possibleFlags.contains(point0.upRight()));
     }
 
     @Test(expected=Exception.class)
@@ -739,7 +739,7 @@ public class TestPlacement {
         map.placeFlag(player0, wcPoint);
     }
 
-    @Test(expected=Exception.class) 
+    @Test(expected=Exception.class)
     public void testPlaceHouseOnFlag() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -850,7 +850,7 @@ public class TestPlacement {
         Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(centerPoint));
-    }    
+    }
 
     @Test
     public void testDifferentPointOrderGivesSameTile() throws Exception {
@@ -884,7 +884,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 10, 10);
         Point bottom1 = new Point(1, 1);
         Point bottom2 = new Point(3, 1);
-        Point middle  = new Point(2, 2);        
+        Point middle  = new Point(2, 2);
         Point top1    = new Point(1, 3);
         Point top2    = new Point(3, 3);
 
@@ -901,7 +901,7 @@ public class TestPlacement {
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
         Point left  = new Point(1, 1);
-        Point top   = new Point(2, 2);        
+        Point top   = new Point(2, 2);
         Point right = new Point(3, 1);
 
         Tile t1 = map.getTerrain().getTile(left, right, top);
@@ -1096,7 +1096,7 @@ public class TestPlacement {
         map.placeTree(point0.downRight());
 
         try {
-            map.placeBuilding(new Woodcutter(player0), point0);        
+            map.placeBuilding(new Woodcutter(player0), point0);
             assertFalse(true);
         } catch (Exception e) {}
 
@@ -1331,7 +1331,7 @@ public class TestPlacement {
         Point point0 = new Point(10, 10);
         Flag flag0 = map.placeFlag(player0, point0);
 
-        /* Verify that a building cannot be place so that its flag is too 
+        /* Verify that a building cannot be place so that its flag is too
            close to the other flag */
         Point point1 = new Point(7, 11);
         Building woodcutter0 = map.placeBuilding(new Building(player0), point1);

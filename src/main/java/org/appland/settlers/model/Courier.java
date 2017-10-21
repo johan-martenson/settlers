@@ -152,8 +152,8 @@ public class Courier extends Worker {
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
             List<Point> plannedPath = getPlannedPath();
 
-            /* Deliver cargo to the closest flag in the road if none of the 
-             flags are next to the current targeted building 
+            /* Deliver cargo to the closest flag in the road if none of the
+             flags are next to the current targeted building
              */
             if (!getTarget().equals(newRoad.getStart().upLeft())
                     && !getTarget().equals(newRoad.getEnd().upLeft())) {
@@ -169,8 +169,8 @@ public class Courier extends Worker {
                 }
             }
 
-            /* If the courier is on the road closest to the building, keep 
-             the state and target so that it goes to the building and 
+            /* If the courier is on the road closest to the building, keep
+             the state and target so that it goes to the building and
              delivers the cargo
              */
             /* If the courier is going to pick up a new cargo, cancel and go to the new road */
@@ -208,7 +208,7 @@ public class Courier extends Worker {
 
             if (map.getFlagAtPoint(getPosition()).hasCargoWaitingForRoad(assignedRoad)) {
                 pickUpCargo();
-            } else {            
+            } else {
                 planAfterDelivery();
             }
         } else if (state == GOING_BACK_TO_ROAD) {

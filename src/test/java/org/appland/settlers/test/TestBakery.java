@@ -267,7 +267,7 @@ public class TestBakery {
 
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
-        assertEquals(bakery.getWorker(), baker);        
+        assertEquals(bakery.getWorker(), baker);
 
         /* Verify that the bakery doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -328,12 +328,12 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
 
-        /* Populate the bakery */        
+        /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
 
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
-        assertEquals(bakery.getWorker(), baker);        
+        assertEquals(bakery.getWorker(), baker);
 
         /* Deliver wood to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
@@ -379,12 +379,12 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
 
-        /* Populate the bakery */        
+        /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
 
         assertTrue(baker.isInsideBuilding());
         assertEquals(baker.getHome(), bakery);
-        assertEquals(bakery.getWorker(), baker);        
+        assertEquals(bakery.getWorker(), baker);
 
         /* Deliver ingredients to the bakery */
         bakery.putCargo(new Cargo(WATER, map));
@@ -436,7 +436,7 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
 
-        /* Populate the bakery */        
+        /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
 
         /* Deliver ingredients to the bakery */
@@ -471,12 +471,12 @@ public class TestBakery {
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery, map);
 
-        /* Populate the bakery */        
+        /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
 
         /* Fast forward so that the bakery worker would have produced bread
            if it had had the ingredients
-        */        
+        */
         Utils.fastForward(150, map);
 
         assertNull(baker.getCargo());

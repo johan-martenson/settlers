@@ -251,7 +251,7 @@ public class TestQuarry {
         /* Step once and make sure the stone mason goes out of the hut */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());    
+        assertFalse(mason.isInsideBuilding());
 
         Point point = mason.getTarget();
         assertNotNull(point);
@@ -295,7 +295,7 @@ public class TestQuarry {
         /* Step once to let the stonemason go out to get stone */
         map.stepTime();
 
-        assertFalse(mason.isInsideBuilding());    
+        assertFalse(mason.isInsideBuilding());
 
         Point point = mason.getTarget();
 
@@ -541,7 +541,7 @@ public class TestQuarry {
 
         assertTrue(mason.isInsideBuilding());
 
-        /* Verify that the stone mason hasn't understood that there are no  
+        /* Verify that the stone mason hasn't understood that there are no
            resources available */
         assertFalse(quarry.outOfNaturalResources());
 

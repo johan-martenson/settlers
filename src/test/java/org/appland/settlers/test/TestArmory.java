@@ -340,7 +340,7 @@ public class TestArmory {
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
 
-        /* Populate the armory */        
+        /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         assertTrue(armorer0.isInsideBuilding());
@@ -393,7 +393,7 @@ public class TestArmory {
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
 
-        /* Populate the armory */        
+        /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         assertTrue(armorer0.isInsideBuilding());
@@ -452,7 +452,7 @@ public class TestArmory {
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
 
-        /* Populate the armory */        
+        /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Deliver ingredients to the armory */
@@ -489,12 +489,12 @@ public class TestArmory {
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
 
-        /* Populate the armory */        
+        /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Fast forward so that the armory worker would have produced weapons
            if it had had the ingredients
-        */        
+        */
         Utils.fastForward(150, map);
 
         assertNull(armorer0.getCargo());
@@ -540,7 +540,7 @@ public class TestArmory {
         /* Finish construction of the armory */
         Utils.constructHouse(armory0, map);
 
-        /* Populate the armory */        
+        /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         assertTrue(armorer0.isInsideBuilding());
@@ -1068,7 +1068,7 @@ public class TestArmory {
         Armorer worker = Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Verify that the enemy's headquarter is closer */
-        assertTrue(armory0.getPosition().distance(headquarter0.getPosition()) > 
+        assertTrue(armory0.getPosition().distance(headquarter0.getPosition()) >
                    armory0.getPosition().distance(headquarter1.getPosition()));
 
         /* Verify that the worker goes back to its own storage when the fortress

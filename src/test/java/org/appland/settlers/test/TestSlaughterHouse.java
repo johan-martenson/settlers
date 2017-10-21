@@ -266,7 +266,7 @@ public class TestSlaughterHouse {
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
-        assertEquals(slaughterHouse.getWorker(), butcher);        
+        assertEquals(slaughterHouse.getWorker(), butcher);
 
         /* Verify that the slaughterHouse doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -327,12 +327,12 @@ public class TestSlaughterHouse {
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
 
-        /* Populate the slaughterHouse */        
+        /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
-        assertEquals(slaughterHouse.getWorker(), butcher);        
+        assertEquals(slaughterHouse.getWorker(), butcher);
 
         /* Deliver pig to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
@@ -377,12 +377,12 @@ public class TestSlaughterHouse {
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
 
-        /* Populate the slaughterHouse */        
+        /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
-        assertEquals(slaughterHouse.getWorker(), butcher);        
+        assertEquals(slaughterHouse.getWorker(), butcher);
 
         /* Deliver ingredients to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
@@ -433,7 +433,7 @@ public class TestSlaughterHouse {
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
 
-        /* Populate the slaughterHouse */        
+        /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
 
         /* Deliver ingredients to the slaughterHouse */
@@ -465,12 +465,12 @@ public class TestSlaughterHouse {
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse, map);
 
-        /* Populate the slaughterHouse */        
+        /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
 
         /* Fast forward so that the slaughterHouse worker would have produced meat
            if it had had a pig
-        */        
+        */
         Utils.fastForward(150, map);
 
         assertNull(butcher.getCargo());

@@ -244,7 +244,7 @@ public class Utils {
         }
     }
 
-    public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {        
+    public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
 
         waterTile.setVegetationType(WATER);

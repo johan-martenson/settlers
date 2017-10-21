@@ -313,7 +313,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once and make sure the forester goes out of the hut */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
     }
@@ -355,7 +355,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once and make sure the forester goes out of the hut */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
@@ -397,7 +397,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once and make sure the farmer goes out of the farm */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
@@ -464,7 +464,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once to let the farmer go out to plant */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
@@ -496,7 +496,7 @@ public class TestFarm {
 
         Utils.fastForwardUntilWorkersReachTarget(map, farmer);
 
-        assertTrue(farmer.isArrived());        
+        assertTrue(farmer.isArrived());
         assertTrue(farmer.isInsideBuilding());
     }
 
@@ -532,7 +532,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once to let the farmer go out to harvest */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
@@ -600,7 +600,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Step once and to let the farmer go out to plant */
-        map.stepTime();        
+        map.stepTime();
 
         assertFalse(farmer.isInsideBuilding());
 
@@ -751,7 +751,7 @@ public class TestFarm {
         assertTrue(farmer.isInsideBuilding());
 
         /* Let the farmer go out to plant */
-        map.stepTime();        
+        map.stepTime();
 
         /* Check that the farmer goes out to plant */
         assertFalse(farmer.isInsideBuilding());
@@ -847,7 +847,7 @@ public class TestFarm {
 
         Crop crop = map.placeCrop(point0);
 
-        map.placeCrop(point0);        
+        map.placeCrop(point0);
     }
 
     @Test

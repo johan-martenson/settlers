@@ -56,7 +56,7 @@ public class Brewer extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE) {            
+        if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = BREWING_BEER;
                 countdown.countFrom(PRODUCTION_TIME);

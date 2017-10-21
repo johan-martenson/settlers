@@ -60,7 +60,7 @@ public class Farmer extends Worker {
         Point chosenPoint = null;
 
         for (Point point : getSurroundingSpotsForCrops()) {
-            if (map.isBuildingAtPoint(point) || 
+            if (map.isBuildingAtPoint(point) ||
                 map.isFlagAtPoint(point)     ||
                 map.isRoadAtPoint(point)     ||
                 map.isTreeAtPoint(point)) {
@@ -97,12 +97,12 @@ public class Farmer extends Worker {
     }
 
     protected enum State {
-        WALKING_TO_TARGET, 
-        RESTING_IN_HOUSE, 
-        GOING_OUT_TO_PLANT, 
-        PLANTING, 
-        GOING_BACK_TO_HOUSE, 
-        GOING_OUT_TO_HARVEST, 
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE,
+        GOING_OUT_TO_PLANT,
+        PLANTING,
+        GOING_BACK_TO_HOUSE,
+        GOING_OUT_TO_HARVEST,
         HARVESTING,
         GOING_BACK_TO_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
@@ -145,7 +145,7 @@ public class Farmer extends Worker {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 Crop cropToHarvest = findCropToHarvest();
 
-                if (cropToHarvest != null) {                    
+                if (cropToHarvest != null) {
                     state = GOING_OUT_TO_HARVEST;
 
                     setOffroadTarget(cropToHarvest.getPosition());

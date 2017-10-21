@@ -7,7 +7,7 @@ public enum Size {
     /**
      * Compares two Size instances and returns true if the second instance
      * fits within the first instance.
-     * 
+     *
      * @param available Instance of Size
      * @param needed Instance of Size
      * @return true if s2 fits in s1

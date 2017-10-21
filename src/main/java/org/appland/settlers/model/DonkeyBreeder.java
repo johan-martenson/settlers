@@ -30,9 +30,9 @@ public class DonkeyBreeder extends Worker {
     private final Countdown countdown;
 
     protected enum State {
-        WALKING_TO_TARGET, 
-        RESTING_IN_HOUSE, 
-        GOING_OUT_TO_FEED, 
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE,
+        GOING_OUT_TO_FEED,
         FEEDING,
         GOING_BACK_TO_HOUSE_AFTER_FEEDING,
         PREPARING_DONKEY_FOR_DELIVERY,

@@ -103,7 +103,7 @@ public class Geologist extends Worker {
                 state = RETURNING_TO_STORAGE;
 
                 setTarget(GameUtils.getClosestStorage(flagPoint, getPlayer()).getPosition(), flagPoint);
-            } else {            
+            } else {
                 state = GOING_TO_NEXT_SITE;
 
                 setOffroadTarget(point);
@@ -161,7 +161,7 @@ public class Geologist extends Worker {
                     break;
                 }
             }
-        } 
+        }
 
         if (!placedSign) {
             map.placeEmptySign(point);
