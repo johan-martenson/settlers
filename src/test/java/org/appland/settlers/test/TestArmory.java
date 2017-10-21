@@ -36,6 +36,7 @@ import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Worker;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
