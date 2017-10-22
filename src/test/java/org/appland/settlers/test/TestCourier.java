@@ -49,19 +49,22 @@ public class TestCourier {
 
     @Test
     public void testNewStorageHasCouriers() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Storage storage = new Storage(player0);
-
+        /* Place storage */
         Point point1 = new Point(10, 10);
-        map.placeBuilding(storage, point1);
+        Storage storage = map.placeBuilding(new Storage(player0), point1);
 
+        /* Finish construction of the storage */
         Utils.constructHouse(storage, map);
 
         assertTrue(storage.getAmount(COURIER) > 0);
@@ -69,34 +72,44 @@ public class TestCourier {
 
     @Test
     public void testCourierWalksToIntendedRoad() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place flag */
         Point point0 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point0);
 
+        /* Place flag */
         Point point1 = new Point(13, 3);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(player0, point2);
 
+        /* Place road */
         Point point3 = new Point(8, 4);
-        Point point4 = new Point(11, 3);
-
         Road road0 = map.placeRoad(player0, point2, point3, point0);
+
+        /* Place road */
+        Point point4 = new Point(11, 3);
         Road road1 = map.placeRoad(player0, point0, point4, point1);
 
+        /* Put a courier on a flag on another road and assign it to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road1);
 
+        /* Verify that the courier walks to its road and becomes idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         assertEquals(courier.getAssignedRoad(), road1);
@@ -105,28 +118,36 @@ public class TestCourier {
 
     @Test
     public void testCourierGoesToMiddlePointOfRoad() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(player0, point2);
 
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
+        /* Place a courier away from the road and assign it to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road0);
 
+        /* Verify that the courier walks to the middle of its assigned road */
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
 
@@ -140,28 +161,36 @@ public class TestCourier {
 
     @Test
     public void testCourierIsIdleWhenMiddlePointIsReached() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(player0, point2);
 
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
+        /* Place a courier away from the road and assign it to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag2);
 
         courier.assignToRoad(road0);
 
+        /* Verify that the courier walks to the middle of its assigned road and becomes idle */
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
 
@@ -174,33 +203,38 @@ public class TestCourier {
 
     @Test
     public void testCourierRemainsIdleWhenThereIsNoCargo() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag2 = map.placeFlag(player0, point2);
 
+        /* Place road */
+        Point point0 = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, point0, point1);
 
-        Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, flag2);
-
-        courier.assignToRoad(road0);
+        /* Occupy the road and wait for the courier to reach the middle of the road */
+        Courier courier = Utils.occupyRoad(road0, map);
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
         assertEquals(courier.getPosition(), point0);
         assertTrue(courier.isArrived());
 
+        /* Verify that the courier remains idle when there is no material to transport */
         for (int i = 0; i < 200; i++) {
             assertTrue(courier.isArrived());
             assertTrue(courier.isIdle());
@@ -217,45 +251,59 @@ public class TestCourier {
 
     @Test
     public void testCourierWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Place woodcutter hut */
         Point point3 = new Point(11, 5);
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter0, map);
 
+        /* Place road */
+        Point middle = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, middle, point1);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, point1, point3, point4);
 
+        /* Place wood cargo targeted for the woodcutter hut */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter0);
 
+        /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
         map.placeWorker(courier, flag0);
 
         courier.assignToRoad(road0);
 
+        /* Verify that the courier first walks to the middle of the road even if there is
+           a cargo to pick up
+         */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isWalkingToRoad());
-
         assertFalse(courier.isIdle());
+        assertEquals(courier.getTarget(), middle);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, courier);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, middle);
 
         assertEquals(courier.getPosition(), middle);
         assertTrue(courier.isArrived());
@@ -266,28 +314,37 @@ public class TestCourier {
 
     @Test
     public void testCourierPicksUpCargoFromFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Place woodcutter hut */
         Point point3 = new Point(11, 5);
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         Utils.constructHouse(wc, map);
 
+        /* Place road */
+        Point middle = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, middle, point1);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, point1, point3, point4);
 
         /* Place cargo at flag0 */
@@ -333,28 +390,37 @@ public class TestCourier {
 
     @Test
     public void testCourierDeliversCargoAndBecomesIdle() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middle = new Point(8, 4);
+        /* Place flag */
         Point point1 = new Point(10, 4);
         Flag flag1 = map.placeFlag(player0, point1);
 
+        /* Place flag */
         Point point2 = new Point(6, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Place woodcutter hut */
         Point point3 = new Point(12, 4);
         Point point4 = new Point(13, 5);
         Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         Utils.constructHouse(wc, map);
 
+        /* Place road */
+        Point middle = new Point(8, 4);
         Road road0 = map.placeRoad(player0, point2, middle, point1);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, point1, point3, point4);
 
         /* Place cargo at flag0 */
@@ -417,28 +483,38 @@ public class TestCourier {
 
     @Test
     public void testCourierPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(player0, middleFlagPoint);
 
         Point leftFlagPoint = new Point(6, 4);
 
+        /* Place woodcutter hut */
         Point point3 = new Point(12, 4);
         Point rightFlagPoint = new Point(13, 5);
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(player0), rightFlagPoint.upLeft());
+
+        /* Place woodcutter hut */
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
         Utils.constructHouse(rightWoodcutter, map);
 
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, middleFlagPoint);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, middleFlagPoint, point3, rightFlagPoint);
 
         /* Place cargo at flag0 */
@@ -500,28 +576,38 @@ public class TestCourier {
 
     @Test
     public void testCourierPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point flagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(player0, flagPoint);
 
         Point leftFlag = new Point(6, 4);
 
+        /* Place woodcutter hut */
         Point point3 = new Point(12, 4);
         Point point4 = new Point(13, 5);
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+
+        /* Place woodcutter hut */
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(player0), leftFlag.upLeft());
 
         Utils.constructHouse(rightWoodcutter, map);
 
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(player0, leftFlag, middlePoint, flagPoint);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, flagPoint, point3, point4);
 
         /* Place cargo at flag0 */
@@ -579,32 +665,38 @@ public class TestCourier {
 
     @Test
     public void testCourierDeliversToBuildingAfterBeingIdle() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(player0, rightFlagPoint);
 
         Point leftFlagPoint = new Point(6, 4);
 
-        Building wc = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
+        /* Place woodcutter hut */
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc);
+        cargoForRightWoodcutter.setTarget(woodcutter0);
 
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, wc.getFlag());
+        map.placeWorker(courier, woodcutter0.getFlag());
 
         courier.assignToRoad(road0);
 
@@ -633,57 +725,63 @@ public class TestCourier {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(courier.getCargo(), cargoForRightWoodcutter);
-        assertEquals(courier.getTarget(), wc.getPosition());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANCK), 0);
 
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
 
         /* Verify that courier does not deliver the cargo to the flag */
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
-        assertEquals(courier.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
+        assertEquals(woodcutter0.getAmount(PLANCK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
-        assertEquals(courier.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 1);
+        assertEquals(courier.getPosition(), woodcutter0.getPosition());
+        assertEquals(woodcutter0.getAmount(PLANCK), 1);
     }
 
     @Test
     public void testCourierGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
         Flag rightFlag = map.placeFlag(player0, rightFlagPoint);
 
         Point leftFlagPoint = new Point(6, 4);
 
-        Building wc = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
+        /* Place woodcutter hut */
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc);
+        cargoForRightWoodcutter.setTarget(woodcutter0);
 
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, wc.getFlag());
+        map.placeWorker(courier, woodcutter0.getFlag());
 
         courier.assignToRoad(road0);
 
@@ -712,29 +810,29 @@ public class TestCourier {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(courier.getCargo(), cargoForRightWoodcutter);
-        assertEquals(courier.getTarget(), wc.getPosition());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANCK), 0);
 
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, leftFlagPoint);
 
         /* Verify that courier does not deliver the cargo to the flag */
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
-        assertEquals(courier.getTarget(), wc.getPosition());
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertFalse(courier.isIdle());
-        assertEquals(courier.getPosition(), wc.getPosition());
-        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertEquals(courier.getPosition(), woodcutter0.getPosition());
+        assertEquals(courier.getTarget(), woodcutter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getFlag().getPosition());
 
-        assertEquals(courier.getPosition(), wc.getFlag().getPosition());
+        assertEquals(courier.getPosition(), woodcutter0.getFlag().getPosition());
         assertFalse(courier.isIdle());
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
@@ -746,7 +844,7 @@ public class TestCourier {
     @Test
     public void testCourierDeliversToBuildingAfterDeliveryToOtherBuilding() throws Exception {
 
-        /* Create game map */
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -831,33 +929,42 @@ public class TestCourier {
 
     @Test
     public void testCourierDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point middlePoint = new Point(8, 4);
+        /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
         Flag middleFlag = map.placeFlag(player0, middleFlagPoint);
 
+        /* Place flag */
         Point rightFlagPoint = new Point(14, 4);
         Flag rightFlag = map.placeFlag(player0, rightFlagPoint);
 
         Point wcFlagPoint = new Point(6, 4);
 
-        Building wc = map.placeBuilding(new Woodcutter(player0), wcFlagPoint.upLeft());
+        /* Place woodcutter hut */
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), wcFlagPoint.upLeft());
 
+        /* Place road */
+        Point middlePoint = new Point(8, 4);
         Road road0 = map.placeRoad(player0, wcFlagPoint, middlePoint, middleFlagPoint);
+
+        /* Place road */
         Road road1 = map.placeRoad(player0, middleFlagPoint, middleFlagPoint.right(), rightFlagPoint);
 
         Building quarry = map.placeBuilding(new Quarry(player0), rightFlagPoint.upLeft());
 
         /* Place cargo at the woodcutter's flag */
         Cargo cargoForQuarry = new Cargo(PLANCK, map);
-        wc.getFlag().putCargo(cargoForQuarry);
+        woodcutter0.getFlag().putCargo(cargoForQuarry);
         cargoForQuarry.setTarget(quarry);
 
         /* Place courier at middle flag */
@@ -879,12 +986,12 @@ public class TestCourier {
         /* Courier detects the cargo at the woodcutter */
         map.stepTime();
 
-        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertEquals(courier.getTarget(), woodcutter0.getFlag().getPosition());
         assertTrue(courier.isTraveling());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        assertTrue(courier.isAt(wc.getFlag().getPosition()));
+        assertTrue(courier.isAt(woodcutter0.getFlag().getPosition()));
 
         /* When worker arrives at the flag it automatically picks up the cargo
             - It picks up the cargo directly and sets the other flag as target
@@ -892,13 +999,13 @@ public class TestCourier {
         */
         assertEquals(courier.getCargo(), cargoForQuarry);
         assertEquals(courier.getTarget(), middleFlagPoint);
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
 
         /* Put the other cargo at the middle flag with the woodcutter as its target */
         Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
         middleFlag.putCargo(cargoForWoodcutter);
-        cargoForWoodcutter.setTarget(wc);
+        cargoForWoodcutter.setTarget(woodcutter0);
 
         /* Let the courier reach the middle flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlagPoint);
@@ -906,27 +1013,27 @@ public class TestCourier {
         /* Verify that courier puts down the cargo and picks up the new cargo */
         assertFalse(middleFlag.getStackedCargo().isEmpty());
         assertEquals(courier.getCargo(), cargoForWoodcutter);
-        assertEquals(courier.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
+        assertEquals(woodcutter0.getAmount(PLANCK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
-        assertEquals(courier.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 1);
+        assertEquals(courier.getPosition(), woodcutter0.getPosition());
+        assertEquals(woodcutter0.getAmount(PLANCK), 1);
     }
 
     @Test
     public void testCouriersStopCarryingThingsAtSplittingRoads() throws Exception {
 
-        /* Starting new game */
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point21 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
@@ -940,7 +1047,7 @@ public class TestCourier {
         /* 147 ticks from start */
         Utils.fastForward(14, map);
 
-        /* Placing woodcutter */
+        /* Place woodcutter hut */
         Point point23 = new Point(19, 5);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point23);
 
@@ -990,31 +1097,31 @@ public class TestCourier {
         /* 269 ticks from start */
         Utils.fastForward(15, map);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag0 = map.placeFlag(player0, point40);
 
         /* 282 ticks from start */
         Utils.fastForward(13, map);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag1 = map.placeFlag(player0, point38);
 
         /* 297 ticks from start */
         Utils.fastForward(15, map);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag2 = map.placeFlag(player0, point33);
 
         /* 311 ticks from start */
         Utils.fastForward(14, map);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag3 = map.placeFlag(player0, point31);
 
         /* 329 ticks from start */
         Utils.fastForward(18, map);
 
-        /* Placing flag */
+        /* Place flag */
         Flag flag4 = map.placeFlag(player0, point29);
 
         /* Wait for all couriers to become idle */
@@ -1048,7 +1155,7 @@ public class TestCourier {
     @Test (expected = Exception.class)
     public void testCannotAssignTwoCouriersToSameRoad() throws Exception {
 
-        /* Create game map */
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1113,9 +1220,11 @@ public class TestCourier {
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
 
-        /* Place flags */
+        /* Place flag */
         Point point3 = new Point(29, 19);
         Flag flag0 = map.placeFlag(player0, point3);
+
+        /* Place flag */
         Point point5 = new Point(29, 17);
         Flag flag1 = map.placeFlag(player0, point5);
 
@@ -1141,12 +1250,11 @@ public class TestCourier {
     @Test
     public void testAssignedCourierHasCorrectlySetPlayer() throws Exception {
 
-        /* Create players */
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create game map */
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
@@ -1184,7 +1292,7 @@ public class TestCourier {
 
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Placing headquarter */
+        /* Place headquarter */
         Point point38 = new Point(5, 45);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
