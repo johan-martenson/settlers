@@ -421,4 +421,16 @@ public class Player {
 
         return false;
     }
+
+    public Collection<Point> getAvailableFlagPoints() throws Exception {
+        return map.getAvailableFlagPoints(this);
+    }
+
+    public Map<Point, Size> getAvailableHousePoints() throws Exception {
+        return map.getAvailableHousePoints(this);
+    }
+
+    public Collection<Point> getAvailableMiningPoints() {
+        return map.getAvailableMinePoints(this);
+    }
 }
