@@ -105,9 +105,7 @@ public class Armorer extends Worker {
 
                 productivityMeasurer.reportUnproductivity();
 
-                if (productivityMeasurer.isProductivityCycleReached()) {
-                    productivityMeasurer.nextProductivityCycle();
-                }
+                productivityMeasurer.nextProductivityCycle();
             }
         }
     }
@@ -183,6 +181,7 @@ public class Armorer extends Worker {
         }
     }
 
+    @Override
     int getProductivity() {
 
         /* Measure productivity across the length of four rest-work periods */

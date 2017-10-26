@@ -87,6 +87,10 @@ public abstract class Worker implements Actor, Piece {
 
         void reportUnproductivity() {
             currentUnproductivityMeasurement++;
+
+            if (isProductivityCycleReached()) {
+                nextProductivityCycle();
+            }
         }
 
         public int getSumMeasured() {
@@ -97,6 +101,10 @@ public abstract class Worker implements Actor, Piece {
             }
 
             return sum;
+        }
+
+        public int getNumberOfCycles() {
+            return productiveTime.length;
         }
     }
 
