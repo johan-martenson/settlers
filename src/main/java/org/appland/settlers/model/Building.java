@@ -1097,4 +1097,8 @@ public class Building implements Actor, EndPoint, Piece {
     void setOccupied() {
         state = State.OCCUPIED;
     }
+
+    public int getProductivity() {
+        return worker.getProductivity();
+    }
 }

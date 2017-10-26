@@ -6,12 +6,12 @@
 
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Armorer.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Armorer.State.PRODUCING_WEAPON;
 import static org.appland.settlers.model.Armorer.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Armorer.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Armorer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Armorer.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Armorer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.SHIELD;
@@ -27,8 +27,12 @@ public class Armorer extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
+    private int      currentProductivityMeasurement;
+    private int      productionCycle;
     private Material nextWeapon = SWORD;
-    private State state;
+    private State    state;
+    private int[]    productiveTime;
+    private int      currentUnproductivityMeasurement;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -45,6 +49,11 @@ public class Armorer extends Worker {
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
+
+        productionCycle = 0;
+        productiveTime = new int[] {0, 0, 0, 0};
+        currentProductivityMeasurement = 0;
+        currentUnproductivityMeasurement = 0;
     }
 
     private Material getNextWeapon(Material current) {
@@ -71,11 +80,14 @@ public class Armorer extends Worker {
             if (countdown.reachedZero()) {
                 state = PRODUCING_WEAPON;
                 countdown.countFrom(PRODUCTION_TIME);
+
+                nextProductivityCycle();
             } else {
                 countdown.step();
             }
         } else if (state == PRODUCING_WEAPON) {
             if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
+
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(nextWeapon, map);
 
@@ -89,10 +101,50 @@ public class Armorer extends Worker {
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
+
+                    /* Count this as a productive step */
+                    reportProductivity();
+                }
+            } else {
+
+                reportUnproductivity();
+
+                if (isProductivityCycleReached()) {
+                    nextProductivityCycle();
                 }
             }
+        }
+    }
+
+    private boolean isProductivityCycleReached() {
+        int measuredLength = currentProductivityMeasurement + currentUnproductivityMeasurement;
+        int fullCycleLength = RESTING_TIME + PRODUCTION_TIME;
+        return  measuredLength >= fullCycleLength;
+    }
+
+    private void reportProductivity() {
+        currentProductivityMeasurement++;
+    }
+
+    private void reportUnproductivity() {
+        currentUnproductivityMeasurement++;
+    }
+
+    private void nextProductivityCycle() {
+
+        /* Store the productivity measurement */
+        productiveTime[productionCycle] = currentProductivityMeasurement;
+
+        currentProductivityMeasurement = 0;
+        currentUnproductivityMeasurement = 0;
+
+        /* Sample the next production cycle */
+        productionCycle++;
+
+        if (productionCycle >= productiveTime.length) {
+            productionCycle = 0;
         }
     }
 
@@ -131,7 +183,7 @@ public class Armorer extends Worker {
         Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
 
         if (storage != null) {
-            state = State.RETURNING_TO_STORAGE;
+            state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
@@ -139,7 +191,7 @@ public class Armorer extends Worker {
             storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             }
@@ -155,7 +207,7 @@ public class Armorer extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
@@ -165,5 +217,13 @@ public class Armorer extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)(productiveTime[0] + productiveTime[1] + productiveTime[2] + productiveTime[3]) /
+                (double)(4 * PRODUCTION_TIME)) * 100);
     }
 }

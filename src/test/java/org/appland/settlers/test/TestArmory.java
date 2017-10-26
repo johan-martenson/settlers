@@ -1541,4 +1541,157 @@ public class TestArmory {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
+    @Test
+    public void testArmoryWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory, map);
+
+        /* Populate the armory */
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory);
+        assertEquals(armory.getWorker(), armorer0);
+
+        /* Verify that the productivity is 0% when the armory doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(armory.getFlag().getStackedCargo().isEmpty());
+            assertNull(armorer0.getCargo());
+            assertEquals(armory.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testArmoryWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory, map);
+
+        /* Populate the armory */
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory);
+        assertEquals(armory.getWorker(), armorer0);
+
+        /* Connect the armory with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
+
+        /* Make the armory create some weapons with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (armory.needsMaterial(COAL)) {
+                armory.putCargo(new Cargo(COAL, map));
+            }
+
+            if (armory.needsMaterial(IRON_BAR)) {
+                armory.putCargo(new Cargo(IRON_BAR, map));
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(armory.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (armory.needsMaterial(COAL)) {
+                armory.putCargo(new Cargo(COAL, map));
+            }
+
+            if (armory.needsMaterial(IRON_BAR)) {
+                armory.putCargo(new Cargo(IRON_BAR, map));
+            }
+
+            assertEquals(armory.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testArmoryLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory, map);
+
+        /* Populate the armory */
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory);
+        assertEquals(armory.getWorker(), armorer0);
+
+        /* Connect the armory with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());
+
+        /* Make the armory create some weapons with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (armory.needsMaterial(COAL) && armory.getAmount(COAL) < 2) {
+                armory.putCargo(new Cargo(COAL, map));
+            }
+
+            if (armory.needsMaterial(IRON_BAR) && armory.getAmount(IRON_BAR) < 2) {
+                armory.putCargo(new Cargo(IRON_BAR, map));
+            }
+        }
+
+        /* Verify that the productivity goes down when resources run out */
+        assertEquals(armory.getProductivity(), 100);
+
+        for (int i = 0; i < 2000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(armory.getProductivity(), 0);
+    }
 }

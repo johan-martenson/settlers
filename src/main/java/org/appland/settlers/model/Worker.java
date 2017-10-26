@@ -471,4 +471,9 @@ public abstract class Worker implements Actor, Piece {
     protected void clearTargetBuilding() {
         this.buildingToEnter = null;
     }
+
+    int getProductivity() {
+        return 0;
+    }
 }
+
