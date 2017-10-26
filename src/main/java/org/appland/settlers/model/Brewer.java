@@ -23,6 +23,7 @@ import static org.appland.settlers.model.Material.WHEAT;
 @Walker(speed = 10)
 public class Brewer extends Worker {
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
@@ -42,6 +43,8 @@ public class Brewer extends Worker {
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     @Override
@@ -60,6 +63,8 @@ public class Brewer extends Worker {
             if (countdown.reachedZero()) {
                 state = BREWING_BEER;
                 countdown.countFrom(PRODUCTION_TIME);
+
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -70,15 +75,24 @@ public class Brewer extends Worker {
 
                     setCargo(cargo);
 
+                    /* Consume the ingredients */
                     getHome().consumeOne(WATER);
                     getHome().consumeOne(WHEAT);
 
+                    /* Go place the beer at the flag */
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
+
+                    /* Report the production */
+                    productivityMeasurer.reportProductivity();
                 } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
+            } else {
+
+                /* Report the unproductivity */
+                productivityMeasurer.reportUnproductivity();
             }
         }
     }
@@ -147,5 +161,14 @@ public class Brewer extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

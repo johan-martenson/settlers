@@ -1,5 +1,31 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Actor;
+import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Catapult;
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Crop;
+import org.appland.settlers.model.Farmer;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.Land;
+import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Projectile;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Size;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Terrain;
+import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.Tree;
+import org.appland.settlers.model.WildAnimal;
+import org.appland.settlers.model.Worker;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,46 +36,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.appland.settlers.model.Actor;
-import org.appland.settlers.model.Building;
-import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Catapult;
-import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.Crop;
+
+import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
-import org.appland.settlers.model.Farmer;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Hunter;
-import org.appland.settlers.model.Land;
-import org.appland.settlers.model.Material;
-
-import static org.appland.settlers.model.Material.*;
-import org.appland.settlers.model.Military;
-import org.appland.settlers.model.Player;
-
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Projectile;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Size;
+import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.LARGE;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Terrain;
-import org.appland.settlers.model.Tile;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
-import org.appland.settlers.model.Tree;
-import org.appland.settlers.model.WildAnimal;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-
 import static org.junit.Assert.assertTrue;
-import static java.lang.Math.abs;
-import org.appland.settlers.model.Stone;
-import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 
 public class Utils {
 
@@ -993,6 +1000,29 @@ public class Utils {
             assertEquals(worker.getHome().getPosition(), worker.getPosition());
 
             map.stepTime();
+        }
+    }
+
+    public static void plantTreesOnPlayersLand(Player player) {
+
+        for (Land land : player.getLands()) {
+            for (Point point : land.getPointsInLand()) {
+                try {
+                    player.getMap().placeTree(point);
+                } catch (Exception e) {}
+            }
+        }
+    }
+
+    public static void plantTreesOnPoints(List<Point> pointsWithinRadius, GameMap map) {
+        for (Point point : pointsWithinRadius) {
+            if (map.isTreeAtPoint(point)) {
+                continue;
+            }
+
+            try {
+                map.placeTree(point);
+            } catch (Exception e) {}
         }
     }
 }

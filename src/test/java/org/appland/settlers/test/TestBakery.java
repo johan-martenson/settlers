@@ -6,12 +6,8 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.appland.settlers.model.Baker;
+import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -19,6 +15,20 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
@@ -26,20 +36,12 @@ import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Bakery;
-import org.appland.settlers.model.Baker;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1431,5 +1433,185 @@ public class TestBakery {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
+    @Test
+    public void testBakeryWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery, map);
+
+        /* Populate the bakery */
+        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), armorer0);
+
+        /* Verify that the productivity is 0% when the bakery doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
+            assertNull(armorer0.getCargo());
+            assertEquals(bakery.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testBakeryWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery, map);
+
+        /* Populate the bakery */
+        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), armorer0);
+
+        /* Connect the bakery with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
+
+        /* Make the bakery create some bread with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (bakery.needsMaterial(WATER)) {
+                bakery.putCargo(new Cargo(WATER, map));
+            }
+
+            if (bakery.needsMaterial(FLOUR)) {
+                bakery.putCargo(new Cargo(FLOUR, map));
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(bakery.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (bakery.needsMaterial(WATER)) {
+                bakery.putCargo(new Cargo(WATER, map));
+            }
+
+            if (bakery.needsMaterial(FLOUR)) {
+                bakery.putCargo(new Cargo(FLOUR, map));
+            }
+
+            assertEquals(bakery.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testBakeryLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery, map);
+
+        /* Populate the bakery */
+        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), armorer0);
+
+        /* Connect the bakery with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
+
+        /* Make the bakery create some bread with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (bakery.needsMaterial(WATER) && bakery.getAmount(WATER) < 2) {
+                bakery.putCargo(new Cargo(WATER, map));
+            }
+
+            if (bakery.needsMaterial(FLOUR) && bakery.getAmount(FLOUR) < 2) {
+                bakery.putCargo(new Cargo(FLOUR, map));
+            }
+        }
+
+        /* Verify that the productivity goes down when resources run out */
+        assertEquals(bakery.getProductivity(), 100);
+
+        for (int i = 0; i < 2000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(bakery.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedBakeryHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery, map);
+
+        /* Verify that the unoccupied bakery is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(bakery.getProductivity(), 0);
+
+            map.stepTime();
+        }
     }
 }

@@ -19,8 +19,10 @@ public class WoodcutterWorker extends Worker {
     private final static int TIME_TO_CUT_TREE = 49;
     private final static int RANGE            = 7;
 
-    private State state;
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
+
+    private State state;
 
     private Point getTreeToCutDown() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
@@ -61,6 +63,8 @@ public class WoodcutterWorker extends Worker {
 
         state     = State.WALKING_TO_TARGET;
         countdown = new Countdown();
+
+        productivityMeasurer = new ProductivityMeasurer(2 * TIME_TO_REST);
     }
 
     public boolean isCuttingTree() {
@@ -85,6 +89,8 @@ public class WoodcutterWorker extends Worker {
                 Point p = getTreeToCutDown();
 
                 if (p == null) {
+                    productivityMeasurer.reportUnproductivity();
+
                     return;
                 }
 
@@ -104,6 +110,10 @@ public class WoodcutterWorker extends Worker {
                     setCargo(new Cargo(WOOD, map));
 
                     state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
+
+                    productivityMeasurer.reportProductivity();
+
+                    productivityMeasurer.nextProductivityCycle();
                 } else {
                     state = State.GOING_BACK_TO_HOUSE;
                 }
@@ -188,5 +198,13 @@ public class WoodcutterWorker extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        return (int)
+                ((double)(productivityMeasurer.getSumMeasured()) /
+                        (double)(productivityMeasurer.getNumberOfCycles()) * 100);
     }
 }
