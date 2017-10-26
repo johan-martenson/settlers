@@ -19,8 +19,6 @@ RE-FACTOR
 
 *  Remove depositWorker and use putCargo instead
 
-*  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2
-
 *  Remove or rename state methods in Building
 
 *  Figure out how to make Size::contains(Size, Size) non-static
@@ -34,19 +32,15 @@ TEST
 
 *  Test one gold mine, one iron mine, one coal mine, and one un-occupied coal mine. All mines should get food
 
-*  Test farmed crop fields eventually disappear
-
 *  Test that all mines wants all types of food!!
 
-*  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers
+*  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers 
 
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed
 
 *  Test GameMap::getRoadsFromFlag(Flag)
 
 *  Test Size::contains(Size, Size)
-
-*  Test that player is set correctly in militaries
 
 *  Test that all deployed militaries in a military building return to the storage if it's torn down
 
@@ -110,8 +104,6 @@ TEST
 
 *  Exception caused by    org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:422)    
 
-*  getClosestStorage
-
 *  farm puts crops on road
  
 *  farm seems to always place crop on its flag
@@ -132,7 +124,6 @@ TEST
 
 *  Geologist gets stuck when its flag is removed
 
-*  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely
 
 
 
@@ -157,23 +148,15 @@ TO IMPLEMENT
 
 *  Verify limits next to small, medium and large houses
 
-*  Implement option to set delivery priority for materials
-
 *  Make measurement used for tree conservation program consider all storages
 
 *  Make tree conservation program optional
-
-*  Fix so workers go back to _closest_ storage when their building is destroyed
 
 *  Implement MetalWorks, Shipyard, Harbour, Ship
 
 *  Add messages
 
 *  fix building to use a single state variable
-
-*  extract app's canvas to its own class
-
-*  add to app that 'S' dumps both state and code
 
 *  adjust the defense radius of barracks and the headquarter
 
@@ -661,3 +644,20 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add method to see whether a military building is accepting coins - DONE
 
+*  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2 - IGNORE
+
+*  Test farmed crop fields eventually disappear - DONE
+
+*  Test that player is set correctly in militaries - DONE
+
+*  Implement option to set delivery priority for materials - DONE 
+
+*  Fix so workers go back to _closest_ storage when their building is destroyed - DONE
+
+*  extract app's canvas to its own class - DONE
+
+*  add to app that 'S' dumps both state and code - IGNORE
+
+*  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely - RESOLVED (it was because of the tree conservation program)
+
+*  getClosestStorage - DONE
