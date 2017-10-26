@@ -2,6 +2,8 @@ package org.appland.settlers.test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
@@ -185,5 +187,34 @@ public class TestMilitaryCreationAndPromotion {
 
         assertEquals(military0.getRank(), Military.Rank.PRIVATE_RANK);
         assertEquals(military1.getRank(), Military.Rank.PRIVATE_RANK);
+    }
+
+    @Test
+    public void testPlayerIsCorrectInMilitaryDispatchedFromHeadquarter() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Finish construction of the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Connect the barracks to the headquarter */
+        map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for a military to start walking to the barracks */
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+
+        assertEquals(military.getPlayer(), player0);
     }
 }
