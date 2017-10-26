@@ -6,44 +6,45 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import org.appland.settlers.model.Armorer;
+import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.ARMORER;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
-import static org.appland.settlers.model.Material.SWORD;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Armory;
-import org.appland.settlers.model.Armorer;
-import org.appland.settlers.model.Worker;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1693,5 +1694,33 @@ public class TestArmory {
         }
 
         assertEquals(armory.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedArmoryHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory, map);
+
+        /* Verify that the unoccupied armory is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(armory.getProductivity(), 0);
+
+            map.stepTime();
+        }
     }
 }

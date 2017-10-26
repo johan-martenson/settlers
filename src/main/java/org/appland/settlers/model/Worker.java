@@ -5,10 +5,10 @@
  */
 package org.appland.settlers.model;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Worker.States.IDLE_INSIDE;
 import static org.appland.settlers.model.Worker.States.IDLE_OUTSIDE;
 import static org.appland.settlers.model.Worker.States.WALKING_AND_EXACTLY_AT_POINT;
@@ -44,6 +44,61 @@ public abstract class Worker implements Actor, Piece {
     private Point       position;
     private Point       target;
     private Building    home;
+
+    class ProductivityMeasurer {
+        private int   cycleLength;
+        private int   currentProductivityMeasurement;
+        private int   productionCycle;
+        private int[] productiveTime;
+        private int   currentUnproductivityMeasurement;
+
+        ProductivityMeasurer(int cycleLength) {
+            this.cycleLength = cycleLength;
+            this.currentProductivityMeasurement = 0;
+            this.productiveTime = new int[] {0, 0, 0, 0};
+            this.productionCycle = 0;
+            this.currentUnproductivityMeasurement = 0;
+        }
+
+        void nextProductivityCycle() {
+
+        /* Store the productivity measurement */
+            productiveTime[productionCycle] = currentProductivityMeasurement;
+
+            currentProductivityMeasurement = 0;
+            currentUnproductivityMeasurement = 0;
+
+        /* Sample the next production cycle */
+            productionCycle++;
+
+            if (productionCycle >= productiveTime.length) {
+                productionCycle = 0;
+            }
+        }
+
+        boolean isProductivityCycleReached() {
+            int measuredLength = currentProductivityMeasurement + currentUnproductivityMeasurement;
+            return  measuredLength >= cycleLength;
+        }
+
+        void reportProductivity() {
+            currentProductivityMeasurement++;
+        }
+
+        void reportUnproductivity() {
+            currentUnproductivityMeasurement++;
+        }
+
+        public int getSumMeasured() {
+            int sum = 0;
+
+            for (int measurement : productiveTime) {
+                sum = sum + measurement;
+            }
+
+            return sum;
+        }
+    }
 
     public Worker(Player player, GameMap map) {
         this.player     = player;

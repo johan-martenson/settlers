@@ -1,8 +1,9 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.Military.Rank;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,10 +11,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
-import org.appland.settlers.model.Military.Rank;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
@@ -1099,6 +1100,12 @@ public class Building implements Actor, EndPoint, Piece {
     }
 
     public int getProductivity() {
+
+        /* An unoccupied building has no productivity */
+        if (worker == null) {
+            return 0;
+        }
+
         return worker.getProductivity();
     }
 }

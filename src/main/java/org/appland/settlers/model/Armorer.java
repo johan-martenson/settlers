@@ -26,13 +26,10 @@ public class Armorer extends Worker {
     private final Countdown countdown;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
+    private final ProductivityMeasurer productivityMeasurer;
 
-    private int      currentProductivityMeasurement;
-    private int      productionCycle;
     private Material nextWeapon = SWORD;
     private State    state;
-    private int[]    productiveTime;
-    private int      currentUnproductivityMeasurement;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -50,10 +47,7 @@ public class Armorer extends Worker {
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
 
-        productionCycle = 0;
-        productiveTime = new int[] {0, 0, 0, 0};
-        currentProductivityMeasurement = 0;
-        currentUnproductivityMeasurement = 0;
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     private Material getNextWeapon(Material current) {
@@ -81,7 +75,7 @@ public class Armorer extends Worker {
                 state = PRODUCING_WEAPON;
                 countdown.countFrom(PRODUCTION_TIME);
 
-                nextProductivityCycle();
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -105,46 +99,16 @@ public class Armorer extends Worker {
                     countdown.step();
 
                     /* Count this as a productive step */
-                    reportProductivity();
+                    productivityMeasurer.reportProductivity();
                 }
             } else {
 
-                reportUnproductivity();
+                productivityMeasurer.reportUnproductivity();
 
-                if (isProductivityCycleReached()) {
-                    nextProductivityCycle();
+                if (productivityMeasurer.isProductivityCycleReached()) {
+                    productivityMeasurer.nextProductivityCycle();
                 }
             }
-        }
-    }
-
-    private boolean isProductivityCycleReached() {
-        int measuredLength = currentProductivityMeasurement + currentUnproductivityMeasurement;
-        int fullCycleLength = RESTING_TIME + PRODUCTION_TIME;
-        return  measuredLength >= fullCycleLength;
-    }
-
-    private void reportProductivity() {
-        currentProductivityMeasurement++;
-    }
-
-    private void reportUnproductivity() {
-        currentUnproductivityMeasurement++;
-    }
-
-    private void nextProductivityCycle() {
-
-        /* Store the productivity measurement */
-        productiveTime[productionCycle] = currentProductivityMeasurement;
-
-        currentProductivityMeasurement = 0;
-        currentUnproductivityMeasurement = 0;
-
-        /* Sample the next production cycle */
-        productionCycle++;
-
-        if (productionCycle >= productiveTime.length) {
-            productionCycle = 0;
         }
     }
 
@@ -223,7 +187,6 @@ public class Armorer extends Worker {
 
         /* Measure productivity across the length of four rest-work periods */
         return (int)
-                (((double)(productiveTime[0] + productiveTime[1] + productiveTime[2] + productiveTime[3]) /
-                (double)(4 * PRODUCTION_TIME)) * 100);
+                (((double)productivityMeasurer.getSumMeasured() / (double)(4 * PRODUCTION_TIME)) * 100);
     }
 }
