@@ -1497,6 +1497,7 @@ public class TestSawmill {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
     @Test
     public void testSawmillWithoutResourcesHasZeroProductivity() throws Exception {
 

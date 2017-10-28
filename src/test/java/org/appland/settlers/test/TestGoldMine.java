@@ -6,19 +6,29 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
@@ -26,15 +36,8 @@ import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.GoldMine;
-import org.appland.settlers.model.Miner;
-import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -42,7 +45,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1717,5 +1719,189 @@ public class TestGoldMine {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
+    @Test
+    public void testGoldMineWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place gold mine */
+        Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Finish construction of the gold mine */
+        Utils.constructHouse(goldMine, map);
+
+        /* Populate the gold mine */
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine, map);
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), goldMine);
+        assertEquals(goldMine.getWorker(), miner0);
+
+        /* Verify that the productivity is 0% when the gold mine doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(goldMine.getFlag().getStackedCargo().isEmpty());
+            assertNull(miner0.getCargo());
+            assertEquals(goldMine.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testGoldMineWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place gold mine */
+        Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Finish construction of the gold mine */
+        Utils.constructHouse(goldMine, map);
+
+        /* Populate the gold mine */
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine, map);
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), goldMine);
+        assertEquals(goldMine.getWorker(), miner0);
+
+        /* Connect the gold mine with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
+
+        /* Make the gold mine create some gold with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (goldMine.needsMaterial(FISH)) {
+                goldMine.putCargo(new Cargo(FISH, map));
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(goldMine.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (goldMine.needsMaterial(FISH)) {
+                goldMine.putCargo(new Cargo(FISH, map));
+            }
+
+            assertEquals(goldMine.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testGoldMineLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place gold mine */
+        Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Finish construction of the gold mine */
+        Utils.constructHouse(goldMine, map);
+
+        /* Populate the gold mine */
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), goldMine, map);
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), goldMine);
+        assertEquals(goldMine.getWorker(), miner0);
+
+        /* Connect the gold mine with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), goldMine.getFlag());
+
+        /* Make the gold mine create some gold with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (goldMine.needsMaterial(FISH) && goldMine.getAmount(FISH) < 2) {
+                goldMine.putCargo(new Cargo(FISH, map));
+            }
+        }
+
+        /* Verify that the productivity goes down when resources run out */
+        assertEquals(goldMine.getProductivity(), 100);
+
+        for (int i = 0; i < 5000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(goldMine.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedGoldMineHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place gold mine */
+        Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Finish construction of the gold mine */
+        Utils.constructHouse(goldMine, map);
+
+        /* Verify that the unoccupied gold mine is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(goldMine.getProductivity(), 0);
+
+            map.stepTime();
+        }
     }
 }

@@ -30,6 +30,7 @@ public class Miner extends Worker {
     private final static int TIME_TO_MINE = 49;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     private Material mineral;
     private State state;
@@ -52,6 +53,8 @@ public class Miner extends Worker {
         countdown = new Countdown();
 
         state = WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + TIME_TO_MINE);
     }
 
     public boolean isMining() {
@@ -96,8 +99,17 @@ public class Miner extends Worker {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 if (hasFood()) {
+
+                    /* Start mining when the rest is over and there is food available */
                     state = MINING;
                     countdown.countFrom(TIME_TO_MINE);
+
+                    /* Note that the next production cycle starts */
+                    productivityMeasurer.nextProductivityCycle();
+                } else {
+
+                    /* Report that the miner wasn't able to start mining because of missing food */
+                    productivityMeasurer.reportUnproductivity();
                 }
             } else {
                 countdown.step();
@@ -111,9 +123,13 @@ public class Miner extends Worker {
 
                     setCargo(cargo);
 
+                    /* Go out to delivery the cargo to the flag */
                     setTarget(getHome().getFlag().getPosition());
 
                     state = GOING_OUT_TO_FLAG;
+
+                    /* Report the production */
+                    productivityMeasurer.reportProductivity();
                 } else {
 
                     /* Report that there is no more ore available in the mine */
@@ -194,5 +210,14 @@ public class Miner extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }
