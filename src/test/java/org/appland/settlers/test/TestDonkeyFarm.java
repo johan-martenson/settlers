@@ -5,39 +5,41 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Donkey;
+import org.appland.settlers.model.DonkeyBreeder;
+import org.appland.settlers.model.DonkeyFarm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.DonkeyFarm;
-import org.appland.settlers.model.DonkeyBreeder;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1912,5 +1914,187 @@ public class TestDonkeyFarm {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testDonkeyFarmWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm, map);
+
+        /* Populate the donkey farm */
+        Worker donkeyBreeder0 = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm, map);
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm);
+        assertEquals(donkeyFarm.getWorker(), donkeyBreeder0);
+
+        /* Verify that the productivity is 0% when the donkey farm doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(donkeyFarm.getFlag().getStackedCargo().isEmpty());
+            assertNull(donkeyBreeder0.getCargo());
+            assertEquals(donkeyFarm.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testDonkeyFarmWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm, map);
+
+        /* Populate the donkey farm */
+        Worker donkeyBreeder0 = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm, map);
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm);
+        assertEquals(donkeyFarm.getWorker(), donkeyBreeder0);
+
+        /* Connect the donkey farm with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
+
+        /* Make the donkey farm create some donkeys with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
+                donkeyFarm.putCargo(new Cargo(WATER, map));
+            }
+
+            if (donkeyFarm.needsMaterial(WHEAT) && donkeyFarm.getAmount(WHEAT) < 2) {
+                donkeyFarm.putCargo(new Cargo(WHEAT, map));
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(donkeyFarm.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+
+            if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
+                donkeyFarm.putCargo(new Cargo(WATER, map));
+            }
+
+            if (donkeyFarm.needsMaterial(WHEAT) && donkeyFarm.getAmount(WHEAT) < 2) {
+                donkeyFarm.putCargo(new Cargo(WHEAT, map));
+            }
+
+            assertEquals(donkeyFarm.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testDonkeyFarmLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm, map);
+
+        /* Populate the donkey farm */
+        Worker donkeyBreeder0 = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm, map);
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm);
+        assertEquals(donkeyFarm.getWorker(), donkeyBreeder0);
+
+        /* Connect the donkey farm with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), donkeyFarm.getFlag());
+
+        /* Make the donkey farm create some donkeys with full resources available */
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            if (donkeyFarm.needsMaterial(WATER) && donkeyFarm.getAmount(WATER) < 2) {
+                donkeyFarm.putCargo(new Cargo(WATER, map));
+            }
+
+            if (donkeyFarm.needsMaterial(WHEAT) && donkeyFarm.getAmount(WHEAT) < 2) {
+                donkeyFarm.putCargo(new Cargo(WHEAT, map));
+            }
+        }
+
+        /* Verify that the productivity goes down when resources run out */
+        assertEquals(donkeyFarm.getProductivity(), 100);
+
+        for (int i = 0; i < 5000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(donkeyFarm.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedDonkeyFarmHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Finish construction of the donkey farm */
+        Utils.constructHouse(donkeyFarm, map);
+
+        /* Verify that the unoccupied donkey farm is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(donkeyFarm.getProductivity(), 0);
+
+            map.stepTime();
+        }
     }
 }

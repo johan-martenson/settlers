@@ -26,6 +26,7 @@ public class Fisherman extends Worker {
     private static final int TIME_TO_REST = 99;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     private State  state;
 
@@ -78,6 +79,8 @@ public class Fisherman extends Worker {
         state = WALKING_TO_TARGET;
 
         countdown = new Countdown();
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_FISH + TIME_TO_REST);
     }
 
     public boolean isFishing() {
@@ -97,25 +100,29 @@ public class Fisherman extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-        if (state == RESTING_IN_HOUSE       &&
-            getHome().isProductionEnabled() &&
-            !getHome().outOfNaturalResources()) {
-            if (countdown.reachedZero()) {
-                Point point = getFishingSpot();
+        if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
+            if (!getHome().outOfNaturalResources()) {
+                if (countdown.reachedZero()) {
+                    Point point = getFishingSpot();
 
-                if (point == null) {
+                    if (point == null) {
 
-                    /* Report that there's no more fish */
-                    getHome().reportNoMoreNaturalResources();
+                        /* Report that there's no more fish */
+                        getHome().reportNoMoreNaturalResources();
 
-                    return;
+                        return;
+                    }
+
+                    setOffroadTarget(point);
+
+                    state = GOING_OUT_TO_FISH;
+                } else {
+                    countdown.step();
                 }
-
-                setOffroadTarget(point);
-
-                state = GOING_OUT_TO_FISH;
             } else {
-                countdown.step();
+
+                /* Report that there was no fish available so the fisherman couldn't fish */
+                productivityMeasurer.reportUnproductivity();
             }
         } else if (state == FISHING) {
             if (countdown.reachedZero()) {
@@ -126,6 +133,10 @@ public class Fisherman extends Worker {
 
                 state = GOING_BACK_TO_HOUSE_WITH_FISH;
                 returnHomeOffroad();
+
+                /* Report that the fisherman produced a fish */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -205,5 +216,14 @@ public class Fisherman extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

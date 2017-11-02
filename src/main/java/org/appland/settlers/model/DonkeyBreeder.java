@@ -28,6 +28,7 @@ public class DonkeyBreeder extends Worker {
 
     private State state;
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -45,6 +46,8 @@ public class DonkeyBreeder extends Worker {
 
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_DONKEY);
     }
 
     public boolean isFeeding() {
@@ -74,6 +77,10 @@ public class DonkeyBreeder extends Worker {
                     state = GOING_OUT_TO_FEED;
 
                     setOffroadTarget(pointToFeedDonkeysAt);
+                } else {
+
+                    /* Report that the donkey breeder didn't have resources available to work */
+                    productivityMeasurer.reportUnproductivity();
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
@@ -106,6 +113,10 @@ public class DonkeyBreeder extends Worker {
                 map.placeWorkerFromStepTime(donkey, getHome());
 
                 donkey.returnToStorage();
+
+                /* Report that the worker was productive */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
 
                 /* Rest in the house before creating the next donkey */
                 state = RESTING_IN_HOUSE;
@@ -170,5 +181,14 @@ public class DonkeyBreeder extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

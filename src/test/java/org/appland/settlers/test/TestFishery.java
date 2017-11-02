@@ -6,36 +6,39 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.DeliveryNotPossibleException;
+import org.appland.settlers.model.Fisherman;
+import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
-import static org.appland.settlers.model.Material.FISH;
-import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Tile.Vegetation;
-import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import org.appland.settlers.model.Fishery;
-import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -43,7 +46,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -719,26 +721,26 @@ public class TestFishery {
         Point point0 = new Point(10, 4);
         Point point1 = new Point(8, 4);
         Point point2 = new Point(9, 5);
-        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point1, point2).setVegetationType(WATER);
 
         /* Place a fish tile */
         Point point3 = new Point(11, 5);
-        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point2, point3).setVegetationType(WATER);
 
         /* Place a fish tile */
         Point point4 = new Point(12, 4);
-        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point3, point4).setVegetationType(WATER);
 
         /* Place a fish tile */
         Point point5 = new Point(11, 3);
-        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point4, point5).setVegetationType(WATER);
 
         /* Place a fish tile */
         Point point6 = new Point(9, 3);
-        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point5, point6).setVegetationType(WATER);
 
         /* Place a fish tile */
-        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        map.getTerrain().getTile(point0, point6, point1).setVegetationType(WATER);
 
         /* Place a mountain tile */
         Point point7 = new Point(5, 13);
@@ -1904,5 +1906,172 @@ public class TestFishery {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testFisheryWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery, map);
+
+        /* Populate the fishery */
+        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery, map);
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery);
+        assertEquals(fishery.getWorker(), fisherman0);
+
+        /* Verify that the productivity is 0% when the fishery doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(fishery.getFlag().getStackedCargo().isEmpty());
+            assertNull(fisherman0.getCargo());
+            assertEquals(fishery.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFisheryWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a fish tile */
+        Point point2 = new Point(11, 9);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery, map);
+
+        /* Populate the fishery */
+        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery, map);
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery);
+        assertEquals(fishery.getWorker(), fisherman0);
+
+        /* Connect the fishery with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
+
+        /* Make the fishery catch some fish with full resources available */
+        for (int i = 0; i < 1000; i++) {
+            map.stepTime();
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(fishery.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            assertEquals(fishery.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testFisheryLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a fish tile */
+        Point point2 = new Point(11, 9);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery, map);
+
+        /* Populate the fishery */
+        Worker fisherman0 = Utils.occupyBuilding(new Fisherman(player0, map), fishery, map);
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery);
+        assertEquals(fishery.getWorker(), fisherman0);
+
+        /* Connect the fishery with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fishery.getFlag());
+
+        /* Make the fishery catch some fish with full resources available */
+        for (int i = 0; i < 1000; i++) {
+            map.stepTime();
+        }
+
+        /* Verify that the productivity goes down when resources run out */
+        assertEquals(fishery.getProductivity(), 100);
+
+        for (int i = 0; i < 10000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(fishery.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedFisheryHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a fish tile */
+        Point point2 = new Point(11, 9);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Finish construction of the fishery */
+        Utils.constructHouse(fishery, map);
+
+        /* Verify that the unoccupied fishery is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(fishery.getProductivity(), 0);
+
+            map.stepTime();
+        }
     }
 }
