@@ -38,6 +38,7 @@ public class Farmer extends Worker {
     private final static int TIME_TO_HARVEST = 19;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private State state;
 
     private Iterable<Point> getSurroundingSpotsForCrops() {
@@ -60,6 +61,8 @@ public class Farmer extends Worker {
         Point chosenPoint = null;
 
         for (Point point : getSurroundingSpotsForCrops()) {
+
+            /* Filter points that's not possible to plant on */
             if (map.isBuildingAtPoint(point) ||
                 map.isFlagAtPoint(point)     ||
                 map.isRoadAtPoint(point)     ||
@@ -67,12 +70,20 @@ public class Farmer extends Worker {
                 continue;
             }
 
+            /* Filter previous crops that aren't harvested yet. It is possible
+               to plant on harvested crops.
+               */
             if (map.isCropAtPoint(point)) {
                 Crop crop = map.getCropAtPoint(point);
 
                 if (crop.getGrowthState() != HARVESTED) {
                     continue;
                 }
+            }
+
+            /* Filter points the farmer can't walk to */
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+                continue;
             }
 
             chosenPoint = point;
@@ -87,9 +98,17 @@ public class Farmer extends Worker {
             if (map.isCropAtPoint(point)) {
                 Crop crop = map.getCropAtPoint(point);
 
-                if (crop.getGrowthState() == FULL_GROWN) {
-                    return crop;
+                /* Filter crops that aren't full grown */
+                if (crop.getGrowthState() != FULL_GROWN) {
+                    continue;
                 }
+
+                /* Filter crops that can't be reached */
+                if (map.findWayOffroad(crop.getPosition(), getPosition(), null) == null) {
+                    continue;
+                }
+
+                return crop;
             }
         }
 
@@ -115,6 +134,8 @@ public class Farmer extends Worker {
 
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_HARVEST + TIME_TO_PLANT);
     }
 
     public boolean isHarvesting() {
@@ -153,6 +174,10 @@ public class Farmer extends Worker {
                     Point point = getFreeSpotToPlant();
 
                     if (point == null) {
+
+                        /* Report that it's not possible to harvest or plant */
+                        productivityMeasurer.reportUnproductivity();
+
                         return;
                     }
 
@@ -162,6 +187,10 @@ public class Farmer extends Worker {
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
+            } else {
+
+                /* Report that the farmer isn't working (or resting) */
+                productivityMeasurer.reportUnproductivity();
             }
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
@@ -182,9 +211,15 @@ public class Farmer extends Worker {
                 /* Create a crop cargo to make sure the map is set correctly */
                 setCargo(new Cargo(WHEAT, map));
 
+                /* Go back to the farm with the wheat */
                 state = GOING_BACK_TO_HOUSE_WITH_CARGO;
 
                 returnHomeOffroad();
+
+                /* Report the productivity */
+                productivityMeasurer.reportProductivity();
+
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -285,5 +320,14 @@ public class Farmer extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }
