@@ -5,26 +5,28 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.StorageWorker;
+import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.StorageWorker;
-import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -144,5 +146,22 @@ public class TestHeadquarter {
 
         /* Verify that trying to tear it down causes an exception */
         hq.tearDown();
+    }
+
+    @Test
+    public void testHeadquarterCannotProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the headquarter can't produce */
+        assertFalse(headquarter0.canProduce());
     }
 }

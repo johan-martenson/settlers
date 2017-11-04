@@ -1912,4 +1912,34 @@ public class TestGraniteMine {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testGraniteMineCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+
+        /* Place granite mine */
+        Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Finish construction of the coal mine*/
+        Utils.constructHouse(graniteMine, map);
+
+        /* Populate the granite mine */
+        Worker miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine, map);
+
+        /* Verify that the granite mine can produce */
+        assertTrue(graniteMine.canProduce());
+    }
 }

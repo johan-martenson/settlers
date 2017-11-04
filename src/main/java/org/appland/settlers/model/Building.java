@@ -112,11 +112,7 @@ public class Building implements Actor, EndPoint, Piece {
     int getDefenceRadius() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (militaryBuilding == null) {
-            return 0;
-        } else {
-            return militaryBuilding.defenceRadius();
-        }
+        return militaryBuilding.defenceRadius();
     }
 
     Collection<Point> getDefendedLand() {
@@ -855,10 +851,6 @@ public class Building implements Actor, EndPoint, Piece {
         waitingAttackers.add(attacker);
     }
 
-    void removeWaitingAttacker(Military attacker) {
-        waitingAttackers.remove(attacker);
-    }
-
     void removeAttacker(Military attacker) {
         waitingAttackers.remove(attacker);
         attackers.remove(attacker);
@@ -1107,5 +1099,11 @@ public class Building implements Actor, EndPoint, Piece {
         }
 
         return worker.getProductivity();
+    }
+
+    public boolean canProduce() {
+        Production production = this.getClass().getAnnotation(Production.class);
+
+        return production != null;
     }
 }

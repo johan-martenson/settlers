@@ -1642,4 +1642,31 @@ public class TestHunterHut {
             assertEquals(hunter.getPosition(), hunterHut0.getPosition());
         }
     }
+
+    @Test
+    public void testHunterHutCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(10, 10);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Populate the hunter hut */
+        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Verify that the hunter hut can produce */
+        assertTrue(hunterHut0.canProduce());
+    }
 }

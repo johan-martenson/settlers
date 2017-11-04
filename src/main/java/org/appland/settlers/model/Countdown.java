@@ -35,14 +35,6 @@ public class Countdown {
         return count != -1;
     }
 
-    public boolean isInactive() {
-        return !isActive();
-    }
-
-    public void reset() {
-        count = -1;
-    }
-
     boolean isCounting() {
         return count > 0;
     }

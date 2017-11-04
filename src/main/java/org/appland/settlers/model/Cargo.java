@@ -38,16 +38,6 @@ public class Cargo implements Piece {
         path.remove(0);
     }
 
-    public boolean isAtTarget() {
-        log.log(Level.FINE, "Checking if target ({0}) equals position ({1})", new Object[]{target.getFlag(), position});
-
-        if (position.equals(target.getFlag().getPosition())) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public Building getTarget() {
         return target;
     }

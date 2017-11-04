@@ -5,31 +5,34 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Forester;
+import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.ForesterHut;
-import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,7 +40,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 public class TestForesterHut {
 
@@ -1728,5 +1730,32 @@ public class TestForesterHut {
         assertEquals(forester1.getTarget(), foresterHut1.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester0, foresterHut0.getPosition());
+    }
+
+    @Test
+    public void testForesterHutCannotProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(7, 9);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Finish construction of the forester hut */
+        Utils.constructHouse(foresterHut0, map);
+
+        /* Populate the forester hut */
+        Worker forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+
+        /* Verify that the forester hut can produce */
+        assertFalse(foresterHut0.canProduce());
     }
 }

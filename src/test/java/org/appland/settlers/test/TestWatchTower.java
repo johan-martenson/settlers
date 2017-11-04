@@ -6,30 +6,32 @@
 
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.WatchTower;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1061,5 +1063,67 @@ public class TestWatchTower {
 
         /* Verify that production cannot be resumed in watch tower */
         watchTower0.resumeProduction();
+    }
+
+    @Test
+    public void testCannotStopProductionInBarracks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing watch tower */
+        Point point22 = new Point(5, 23);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
+
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
+
+        /* Wait for the watch tower to finish construction */
+        Utils.fastForwardUntilBuildingIsConstructed(watchTower0, map);
+
+        /* Occupy the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+
+        /* Verify that it's not possible to stop production */
+        try {
+            watchTower0.stopProduction();
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testWatchTowerCannotProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(10, 10);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0, map);
+
+        /* Populate the watch tower */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+
+        /* Verify that the watch tower can produce */
+        assertFalse(watchTower0.canProduce());
     }
 }

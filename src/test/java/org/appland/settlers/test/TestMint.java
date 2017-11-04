@@ -1724,4 +1724,31 @@ public class TestMint {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testMintCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point1 = new Point(10, 10);
+        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint0, map);
+
+        /* Populate the mint */
+        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+
+        /* Verify that the mint can produce */
+        assertTrue(mint0.canProduce());
+    }
 }

@@ -1505,4 +1505,31 @@ public class TestWell {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testWellCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(10, 10);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Finish construction of the well */
+        Utils.constructHouse(well0, map);
+
+        /* Populate the well */
+        Worker wellWorker0 = Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
+
+        /* Verify that the well can produce */
+        assertTrue(well0.canProduce());
+    }
 }

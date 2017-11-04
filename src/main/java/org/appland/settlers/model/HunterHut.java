@@ -6,10 +6,12 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.HUNTER;
+import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANCK;
 
 @HouseSize(size = Size.SMALL, material = {PLANCK, PLANCK})
 @RequiresWorker(workerType = HUNTER)
+@Production(requiredGoods = {}, output = {MEAT})
 public class HunterHut extends Building {
 
     public HunterHut(Player player0) {

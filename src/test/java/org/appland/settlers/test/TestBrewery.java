@@ -1666,4 +1666,31 @@ public class TestBrewery {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testBreweryCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(7, 9);
+        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Finish construction of the brewery */
+        Utils.constructHouse(brewery, map);
+
+        /* Populate the brewery */
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+
+        /* Verify that the brewery can produce */
+        assertTrue(brewery.canProduce());
+    }
 }

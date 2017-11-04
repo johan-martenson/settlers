@@ -1688,4 +1688,31 @@ public class TestSlaughterHouse {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testSlaugherHouseCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point1 = new Point(10, 10);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Finish construction of the slaugher house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Populate the slaugher house */
+        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+
+        /* Verify that the slaugher house can produce */
+        assertTrue(slaughterHouse0.canProduce());
+    }
 }

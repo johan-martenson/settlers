@@ -1723,4 +1723,31 @@ public class TestArmory {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testArmoryCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory, map);
+
+        /* Populate the armory */
+        Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory, map);
+
+        /* Verify that the armory can produce */
+        assertTrue(armory.canProduce());
+    }
 }

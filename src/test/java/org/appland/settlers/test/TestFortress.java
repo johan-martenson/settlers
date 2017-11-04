@@ -6,32 +6,32 @@
 
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
-import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1086,5 +1086,67 @@ public class TestFortress {
 
         /* Verify that production cannot be resumed in fortress */
         fortress0.resumeProduction();
+    }
+
+    @Test
+    public void testCannotStopProductionInFortress() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing fortress */
+        Point point22 = new Point(5, 23);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
+
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
+
+        /* Wait for the fortress to finish construction */
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
+
+        /* Occupy the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+
+        /* Verify that it's not possible to stop production */
+        try {
+            fortress0.stopProduction();
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testFortressCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(7, 9);
+        Building fortress = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Finish construction of the fortress */
+        Utils.constructHouse(fortress, map);
+
+        /* Populate the fortress */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress, map);
+
+        /* Verify that the fortress can't produce */
+        assertFalse(fortress.canProduce());
     }
 }

@@ -21,10 +21,6 @@ public class Courier extends Worker {
     private Point findIdlePointAtRoad(Road road) {
         List<Point> wayPoints = road.getWayPoints();
 
-        if (wayPoints.size() < 3) {
-            return wayPoints.get(0);
-        }
-
         return wayPoints.get(wayPoints.size() / 2);
     }
 

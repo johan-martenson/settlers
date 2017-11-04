@@ -1638,4 +1638,31 @@ public class TestMill {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testMillCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(10, 10);
+        Building mill0 = map.placeBuilding(new Mill(player0), point1);
+
+        /* Finish construction of the mill */
+        Utils.constructHouse(mill0, map);
+
+        /* Populate the mill */
+        Worker miller0 = Utils.occupyBuilding(new Miller(player0, map), mill0, map);
+
+        /* Verify that the mill can produce */
+        assertTrue(mill0.canProduce());
+    }
 }

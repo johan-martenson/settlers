@@ -1614,4 +1614,30 @@ public class TestBakery {
             map.stepTime();
         }
     }
-}
+
+    @Test
+    public void testBakeryCanProduce() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery, map);
+
+        /* Populate the bakery */
+        Worker baker0 = Utils.occupyBuilding(new Baker(player0, map), bakery, map);
+
+        /* Verify that the bakery can produce */
+        assertTrue(bakery.canProduce());
+    }}
