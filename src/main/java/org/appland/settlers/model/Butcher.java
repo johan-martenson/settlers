@@ -22,6 +22,7 @@ import static org.appland.settlers.model.Material.PIG;
 @Walker(speed = 10)
 public class Butcher extends Worker {
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
@@ -41,6 +42,8 @@ public class Butcher extends Worker {
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     @Override
@@ -69,14 +72,24 @@ public class Butcher extends Worker {
 
                     setCargo(cargo);
 
+                    /* Consume the resource */
                     getHome().consumeOne(PIG);
 
+                    /* Go out to the flag to deliver the meat */
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
+
+                    /* Report that the butcher produced one piece of meat */
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
                 } else {
                     countdown.step();
                 }
+            } else {
+
+                /* Report that the butcher lacked resources and couldn't do his job */
+                productivityMeasurer.reportUnproductivity();
             }
         }
     }
@@ -150,5 +163,14 @@ public class Butcher extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

@@ -32,6 +32,7 @@ public class PigBreeder extends Worker {
 
     private State state;
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -50,6 +51,8 @@ public class PigBreeder extends Worker {
 
         state = WALKING_TO_TARGET;
         countdown = new Countdown();
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_FEED + TIME_TO_PREPARE_PIG);
     }
 
     public boolean isFeeding() {
@@ -79,6 +82,10 @@ public class PigBreeder extends Worker {
                     state = GOING_OUT_TO_FEED;
 
                     setOffroadTarget(pointToFeedPigsAt);
+                } else {
+
+                    /* Report that the pig breeder couldn't go out to feed because it's lacking resources */
+                    productivityMeasurer.reportUnproductivity();
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
@@ -86,9 +93,11 @@ public class PigBreeder extends Worker {
         } else if (state == FEEDING) {
             if (countdown.reachedZero()) {
 
+                /* Consume the resources */
                 getHome().consumeOne(WATER);
                 getHome().consumeOne(WHEAT);
 
+                /* Go back into the farm */
                 state = GOING_BACK_TO_HOUSE_AFTER_FEEDING;
 
                 returnHomeOffroad();
@@ -101,9 +110,14 @@ public class PigBreeder extends Worker {
 
                 setCargo(cargo);
 
+                /* Go out to the flag to deliver the pig */
                 state = GOING_OUT_TO_PUT_CARGO;
 
                 setTarget(getHome().getFlag().getPosition());
+
+                /* Report that the pig breeder produced a pig */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -181,5 +195,14 @@ public class PigBreeder extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

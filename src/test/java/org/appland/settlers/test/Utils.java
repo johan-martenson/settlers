@@ -1037,4 +1037,17 @@ public class Utils {
             } catch (Exception e) {}
         }
     }
+
+    public static void putStoneOnOnePoint(List<Point> points, GameMap map) {
+        for (Point point : points) {
+            if (map.isStoneAtPoint(point)) {
+                continue;
+            }
+
+            try {
+                map.placeStone(point);
+                break;
+            } catch (Exception e) {}
+        }
+    }
 }

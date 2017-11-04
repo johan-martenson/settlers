@@ -128,7 +128,7 @@ public class Terrain {
         return false;
     }
 
-    private boolean isSurroundedBy(Point point, Vegetation vegetation) {
+    boolean isSurroundedBy(Point point, Vegetation vegetation) {
         List<Tile> tiles = getSurroundingTiles(point);
 
         for (Tile tile : tiles) {

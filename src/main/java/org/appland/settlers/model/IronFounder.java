@@ -23,6 +23,7 @@ import static org.appland.settlers.model.Material.IRON_BAR;
 @Walker(speed = 10)
 public class IronFounder extends Worker {
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
@@ -42,6 +43,8 @@ public class IronFounder extends Worker {
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     @Override
@@ -70,15 +73,25 @@ public class IronFounder extends Worker {
 
                     setCargo(cargo);
 
+                    /* Consume the resources */
                     getHome().consumeOne(COAL);
                     getHome().consumeOne(IRON);
 
+                    /* Go out to the flag to deliver the iron bar */
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());
+
+                    /* Report that the iron founder produced */
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
                 } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
+            } else {
+
+                /* Report that the iron founder lacked resources and couldn't work */
+                productivityMeasurer.reportUnproductivity();
             }
         }
     }
@@ -153,5 +166,14 @@ public class IronFounder extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

@@ -7,6 +7,7 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Tile.Vegetation.BUILDABLE_MOUNTAIN;
 
 /**
  *
@@ -18,6 +19,7 @@ public class WellWorker extends Worker {
     private final static int RESTING_TIME    = 99;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     private State  state;
 
@@ -26,6 +28,8 @@ public class WellWorker extends Worker {
 
         countdown = new Countdown();
         state     = State.WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     private enum State {
@@ -51,12 +55,16 @@ public class WellWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.reachedZero() && getHome().isProductionEnabled() && isWaterInGround()) {
                 state = State.DRAWING_WATER;
 
                 countdown.countFrom(PRODUCTION_TIME);
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
+            } else {
+
+                /* Report that the well worker couldn't do his job */
+                productivityMeasurer.reportUnproductivity();
             }
         } else if (state == State.DRAWING_WATER) {
             if (countdown.reachedZero()) {
@@ -64,9 +72,14 @@ public class WellWorker extends Worker {
 
                 setCargo(cargo);
 
+                /* Go out to the flag to deliver the water */
                 setTarget(getHome().getFlag().getPosition());
 
                 state = State.GOING_TO_FLAG_WITH_CARGO;
+
+                /* Report that the well worker produced water */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
             } else {
                 countdown.step();
             }
@@ -135,5 +148,24 @@ public class WellWorker extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    private boolean isWaterInGround() {
+
+        /* The well worker can't produce water in a desert */
+        if (map.getTerrain().isSurroundedBy(getHome().getPosition(), BUILDABLE_MOUNTAIN)) {
+            return false;
+        }
+
+        return true;
     }
 }

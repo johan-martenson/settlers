@@ -6,12 +6,6 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -19,18 +13,28 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Quarry;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Stonemason;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tile;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Quarry;
-import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Worker;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -38,7 +42,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1723,5 +1726,234 @@ public class TestQuarry {
 
         assertTrue(stonemason0.isInsideBuilding());
         assertTrue(stonemason1.isInsideBuilding());
+    }
+
+    @Test
+    public void testQuarryWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Populate the quarry */
+        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), stonemason);
+
+        /* Verify that the productivity is 0% when the quarry doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(quarry0.getFlag().getStackedCargo().isEmpty());
+            assertNull(stonemason.getCargo());
+            assertEquals(quarry0.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testQuarryWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Populate the quarry */
+        Worker quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        assertTrue(quarry.isInsideBuilding());
+        assertEquals(quarry.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), quarry);
+
+        /* Connect the quarry with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+
+        /* Place a stone on the map */
+        Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
+
+        /* Make the quarry produce some stones available */
+        for (int i = 0; i < 1000; i++) {
+            map.stepTime();
+
+            /* Put a new stone if the current one is gone */
+            if (map.getStones().isEmpty()) {
+                Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(quarry0.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            map.stepTime();
+
+            assertEquals(quarry0.getProductivity(), 100);
+
+            /* Put a new stone if the current one is gone */
+            if (map.getStones().isEmpty()) {
+                Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
+            }
+        }
+    }
+
+    @Test
+    public void testQuarryLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Populate the quarry */
+        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        assertTrue(stonemason.isInsideBuilding());
+        assertEquals(stonemason.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), stonemason);
+
+        /* Connect the quarry with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
+
+        /* Put a new stone if the current one is gone */
+        if (map.getStones().isEmpty()) {
+            Utils.putStoneOnOnePoint(map.getPointsWithinRadius(quarry0.getPosition(), 4), map);
+        }
+
+        /* Make the quarry take down stones until the stones are gone */
+        for (int i = 0; i < 5000; i++) {
+
+            map.stepTime();
+
+            if (map.getStones().isEmpty()) {
+                break;
+            }
+        }
+
+        assertEquals(quarry0.getProductivity(), 100);
+
+        /* Verify that the productivity goes down when resources run out */
+        for (int i = 0; i < 2000; i++) {
+            map.stepTime();
+        }
+
+        assertEquals(quarry0.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedQuarryHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Finish construction of the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Verify that the unoccupied quarry is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(quarry0.getProductivity(), 0);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testStonemasonDoesNotGoToUnreachableStone() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place quarry */
+        Point point26 = new Point(15, 5);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
+
+        /* Surround the quarry with water the stonemason cannot cross */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
+
+        /* Construct the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Put a stone on the other side of the water */
+        Point point8 = new Point(15, 9);
+        map.placeStone(point8);
+
+        /* Occupy the quarry */
+        Stonemason stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+
+        /* Verify that the stonemason doesn't try to the stone */
+        for (int i = 0; i < 2000; i++) {
+
+            map.stepTime();
+
+            assertTrue(stonemason.isInsideBuilding());
+            assertEquals(stonemason.getPosition(), quarry0.getPosition());
+        }
     }
 }

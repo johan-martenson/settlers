@@ -18,6 +18,7 @@ public class Stonemason extends Worker {
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_GET_STONE = 49;
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private State state;
     private Point stoneTarget;
 
@@ -41,6 +42,8 @@ public class Stonemason extends Worker {
 
         countdown = new Countdown();
         stoneTarget = null;
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_GET_STONE);
     }
 
     public boolean isGettingStone() {
@@ -116,6 +119,9 @@ public class Stonemason extends Worker {
 
                 /* Report that there are no resources if no point is found */
                 if (accessPoint == null) {
+
+                    productivityMeasurer.reportUnproductivity();
+
                     getHome().reportNoMoreNaturalResources();
 
                     return;
@@ -147,9 +153,15 @@ public class Stonemason extends Worker {
                 countdown.step();
             }
         } else if (state == State.IN_HOUSE_WITH_CARGO) {
+
+            /* Go out to the flag to deliver the stone */
             setTarget(getHome().getFlag().getPosition());
 
             state = State.GOING_OUT_TO_PUT_CARGO;
+
+            /* Report that the stonemason produced a stone */
+            productivityMeasurer.reportProductivity();
+            productivityMeasurer.nextProductivityCycle();
         }
     }
 
@@ -223,5 +235,14 @@ public class Stonemason extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }

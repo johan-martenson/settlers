@@ -25,6 +25,7 @@ public class Miller extends Worker {
     private final static int RESTING_TIME = 99;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     private State state;
 
@@ -32,6 +33,8 @@ public class Miller extends Worker {
         super(player, m);
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
+
+        productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
     }
 
     protected enum State {
@@ -69,16 +72,26 @@ public class Miller extends Worker {
                 if (countdown.reachedZero()) {
                     Cargo cargo = new Cargo(FLOUR, map);
 
-                    getHome().consumeOne(WHEAT);
-
                     setCargo(cargo);
 
+                    /* Consume the wheat */
+                    getHome().consumeOne(WHEAT);
+
+                    /* Go out to the flag to deliver the flour */
                     setTarget(getHome().getFlag().getPosition());
 
                     state = GOING_TO_FLAG_WITH_CARGO;
+
+                    /* Report that the miller produced flour */
+                    productivityMeasurer.reportProductivity();
+                    productivityMeasurer.nextProductivityCycle();
                 } else if (getHome().isProductionEnabled()) {
                     countdown.step();
                 }
+            } else {
+
+                /* Report that the miller couldn't produce flour becuase it had no wheat */
+                productivityMeasurer.reportUnproductivity();
             }
         }
     }
@@ -146,5 +159,14 @@ public class Miller extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }
