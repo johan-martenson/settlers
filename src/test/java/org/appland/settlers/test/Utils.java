@@ -1050,4 +1050,13 @@ public class Utils {
             } catch (Exception e) {}
         }
     }
+
+    public static void putWildAnimalOnOnePoint(List<Point> points, GameMap map) {
+        for (Point point : points) {
+            try {
+                map.placeWildAnimal(point);
+                break;
+            } catch (Exception e) {}
+        }
+    }
 }

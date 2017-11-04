@@ -1,11 +1,5 @@
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -13,20 +7,30 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.HunterHut;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
-import static org.appland.settlers.model.Material.HUNTER;
-import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.HunterHut;
-import org.appland.settlers.model.Hunter;
+import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.HUNTER;
+import static org.appland.settlers.model.Material.MEAT;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -34,7 +38,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 public class TestHunterHut {
 
@@ -1375,5 +1378,268 @@ public class TestHunterHut {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+    }
+
+    @Test
+    public void testHunterHutWithoutResourcesHasZeroProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Populate the hunter hut */
+        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunter);
+
+        /* Verify that the productivity is 0% when the hunter hut doesn't produce anything */
+        for (int i = 0; i < 500; i++) {
+            assertTrue(hunterHut0.getFlag().getStackedCargo().isEmpty());
+            assertNull(hunter.getCargo());
+            assertEquals(hunterHut0.getProductivity(), 0);
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testHunterHutWithAbundantResourcesHasFullProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Populate the hunter hut */
+        Worker hunterHut = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        assertTrue(hunterHut.isInsideBuilding());
+        assertEquals(hunterHut.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunterHut);
+
+        /* Connect the hunter hut with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
+
+        /* Place a wild animal on the map */
+        Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
+
+        /* Make the hunter hut produce some wild animals available */
+        for (int i = 0; i < 2000; i++) {
+            map.stepTime();
+
+            /* Put a new wild animal if the current one is gone */
+            if (map.getWildAnimals().isEmpty()) {
+                Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
+            }
+
+            if (hunterHut0.getProductivity() == 100) {
+                break;
+            }
+        }
+
+        /* Verify that the productivity is 100% and stays there */
+        assertEquals(hunterHut0.getProductivity(), 100);
+
+        for (int i = 0; i < 1000; i++) {
+
+            /* Put a new wild animal if the current one is gone */
+            if (map.getWildAnimals().size() == 1) {
+                Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
+            }
+
+            map.stepTime();
+
+            assertEquals(hunterHut0.getProductivity(), 100);
+        }
+    }
+
+    @Test
+    public void testHunterHutLosesProductivityWhenResourcesRunOut() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Populate the hunter hut */
+        Worker hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        assertTrue(hunter.isInsideBuilding());
+        assertEquals(hunter.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunter);
+
+        /* Connect the hunter hut with the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), hunterHut0.getFlag());
+
+        /* Put a new wild animal if the current one is gone */
+        if (map.getWildAnimals().isEmpty()) {
+            Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
+        }
+
+        /* Make the hunter hut take down wild animals and reach full productivity */
+        for (int i = 0; i < 5000; i++) {
+
+            map.stepTime();
+
+            /* Put a new wild animal if the current one is gone */
+            if (map.getWildAnimals().size() == 1) {
+                Utils.putWildAnimalOnOnePoint(map.getPointsWithinRadius(hunterHut0.getPosition(), 4), map);
+            }
+
+            if (hunterHut0.getProductivity() == 100) {
+                break;
+            }
+        }
+
+        assertEquals(hunterHut0.getProductivity(), 100);
+
+        /* Wait for the hunter to rest in the house */
+        for (int i = 0; i < 1000; i++) {
+
+            if (hunter.getCargo() == null &&
+                hunter.getPosition().equals(hunterHut0.getFlag().getPosition()) &&
+                hunter.getTarget().equals(hunterHut0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNull(hunter.getCargo());
+        assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getPosition());
+
+        assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+
+        /* Verify that the productivity goes down when the hunter can't reach any wild animals */
+        for (int i = 0; i < 5000; i++) {
+
+            Utils.putStonesOnPoints(map.getPointsWithinRadius(hunterHut0.getPosition(), 5), map);
+
+            map.stepTime();
+
+            assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+        }
+
+        assertEquals(hunterHut0.getProductivity(), 0);
+    }
+
+    @Test
+    public void testUnoccupiedHunterHutHasNoProductivity() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Verify that the unoccupied hunter hut is unproductive */
+        for (int i = 0; i < 1000; i++) {
+            assertEquals(hunterHut0.getProductivity(), 0);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testHunterDoesNotGoToUnreachableWildAnimal() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point25 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Place hunter hut */
+        Point point26 = new Point(15, 5);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
+
+        /* Surround the hunter hut with water the hunter cannot cross */
+        Point point2 = new Point(15, 7);
+        Point point3 = new Point(18, 6);
+        Point point4 = new Point(18, 4);
+        Point point5 = new Point(15, 3);
+        Point point6 = new Point(12, 4);
+        Point point7 = new Point(12, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point3, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point4, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point5, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point6, Tile.Vegetation.WATER, map);
+        Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
+
+        /* Construct the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Put a wild animal on the other side of the water */
+        Point point8 = new Point(15, 9);
+        map.placeStone(point8);
+
+        /* Occupy the hunter hut */
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0, map);
+
+        /* Verify that the hunter doesn't try to the wild animal */
+        for (int i = 0; i < 2000; i++) {
+
+            map.stepTime();
+
+            assertTrue(hunter.isInsideBuilding());
+            assertEquals(hunter.getPosition(), hunterHut0.getPosition());
+        }
     }
 }

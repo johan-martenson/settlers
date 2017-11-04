@@ -15,6 +15,7 @@ public class Hunter extends Worker {
     private static final int DETECTION_RANGE = 20;
 
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     private State      state;
     private WildAnimal prey;
@@ -39,6 +40,8 @@ public class Hunter extends Worker {
         countdown = new Countdown();
 
         prey = null;
+
+        productivityMeasurer = new ProductivityMeasurer(TIME_TO_REST + TIME_TO_SHOOT);
     }
 
     @Override
@@ -81,6 +84,11 @@ public class Hunter extends Worker {
                     state = State.TRACKING;
 
                     break;
+                }
+
+                /* Report if the hunter couldn't find an animal to hunt */
+                if (state == State.RESTING_IN_HOUSE) {
+                    productivityMeasurer.reportUnproductivity();
                 }
             } else {
                 countdown.step();
@@ -139,8 +147,13 @@ public class Hunter extends Worker {
 
             setCargo(cargo);
 
+            /* Start going back to the hunter hut with the wild animal */
             state = State.GOING_BACK_TO_HOUSE_WITH_CARGO;
             setOffroadTarget(getHome().getPosition(), getHome().getFlag().getPosition());
+
+            /* Report that the hunter felled a wild animal */
+            productivityMeasurer.reportProductivity();
+            productivityMeasurer.nextProductivityCycle();
         } else if (state == State.GOING_TO_FLAG_TO_LEAVE_CARGO) {
             Cargo cargo = getCargo();
 
@@ -200,5 +213,14 @@ public class Hunter extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    int getProductivity() {
+
+        /* Measure productivity across the length of four rest-work periods */
+        return (int)
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 }
