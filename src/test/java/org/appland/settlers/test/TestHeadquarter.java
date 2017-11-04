@@ -164,4 +164,25 @@ public class TestHeadquarter {
         /* Verify that the headquarter can't produce */
         assertFalse(headquarter0.canProduce());
     }
+
+    @Test
+    public void testCannotPlaceTwoHeadquarters() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that it's not possible to place a second headquarter */
+        Point point1 = new Point(10, 10);
+        try {
+            Building headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
+            assertTrue(false);
+        } catch (Exception e) {}
+    }
 }
