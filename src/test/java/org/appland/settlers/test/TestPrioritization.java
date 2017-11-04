@@ -5,10 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.appland.settlers.model.Armorer;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Baker;
@@ -25,6 +21,26 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
+import org.appland.settlers.model.Mill;
+import org.appland.settlers.model.Miller;
+import org.appland.settlers.model.Miner;
+import org.appland.settlers.model.Mint;
+import org.appland.settlers.model.Minter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.SawmillWorker;
+import org.appland.settlers.model.Size;
+import org.appland.settlers.model.Well;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
@@ -40,25 +56,11 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
-import org.appland.settlers.model.Mill;
-import org.appland.settlers.model.Miller;
-import org.appland.settlers.model.Miner;
-import org.appland.settlers.model.Mint;
-import org.appland.settlers.model.Minter;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.SawmillWorker;
-import org.appland.settlers.model.Size;
-import org.appland.settlers.model.Well;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1158,10 +1160,6 @@ public class TestPrioritization {
             Utils.waitUntilAmountIs(map, target, BREAD, 0);
         }
 
-        /**
-         *  Reduce the food quota to below five and verify that food continues
-         *  to be delivered
-         */
         player0.setFoodQuota(GoldMine.class, 1);
 
         /* Place one bread in the headquarter */

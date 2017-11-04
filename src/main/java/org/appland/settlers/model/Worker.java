@@ -46,10 +46,10 @@ public abstract class Worker implements Actor, Piece {
     private Building    home;
 
     class ProductivityMeasurer {
-        private int   cycleLength;
+        private final int   cycleLength;
         private int   currentProductivityMeasurement;
         private int   productionCycle;
-        private int[] productiveTime;
+        private final int[] productiveTime;
         private int   currentUnproductivityMeasurement;
 
         ProductivityMeasurer(int cycleLength) {

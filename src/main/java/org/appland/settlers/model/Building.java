@@ -152,7 +152,7 @@ public class Building implements Actor, EndPoint, Piece {
         return militaryBuilding.maxCoins();
     }
 
-    protected void setMap(GameMap map) throws Exception {
+    void setMap(GameMap map) throws Exception {
         this.map = map;
     }
 
@@ -266,7 +266,7 @@ public class Building implements Actor, EndPoint, Piece {
         state = State.OCCUPIED;
     }
 
-    protected void deployMilitary(Military military) throws Exception {
+    void deployMilitary(Military military) throws Exception {
 
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
@@ -376,25 +376,25 @@ public class Building implements Actor, EndPoint, Piece {
         return getClass().getSimpleName() + buildingToString();
     }
 
-    public String buildingToString() {
-        String str = " at " + flag + " with ";
+    private String buildingToString() {
+        StringBuilder str = new StringBuilder(" at " + flag + " with ");
 
         boolean hasReceivedMaterial = false;
         for (Entry<Material, Integer> pair : receivedMaterial.entrySet()) {
             if (pair.getValue() != 0) {
-                str = str + pair.getKey() + ": " + pair.getValue();
+                str.append(pair.getKey()).append(": ").append(pair.getValue());
 
                 hasReceivedMaterial = true;
             }
         }
 
         if (hasReceivedMaterial) {
-            str += "in queue and ";
+            str.append("in queue and ");
         } else {
-            str += "nothing in queue and ";
+            str.append("nothing in queue and ");
         }
 
-        return str;
+        return str.toString();
     }
 
     public void promiseDelivery(Material material) {
@@ -674,7 +674,7 @@ public class Building implements Actor, EndPoint, Piece {
         return state == State.DESTROYED;
     }
 
-    protected void setConstructionReady() {
+    void setConstructionReady() {
         state = State.UNOCCUPIED;
     }
 
@@ -1027,7 +1027,7 @@ public class Building implements Actor, EndPoint, Piece {
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
     }
 
-    protected void doUpgradeBuilding() throws Exception {
+    void doUpgradeBuilding() throws Exception {
     }
 
     private boolean isMaterialForUpgradeAvailable() {

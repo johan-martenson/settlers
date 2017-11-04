@@ -1,6 +1,10 @@
 package org.appland.settlers.model;
 
-import java.awt.Color;
+import org.appland.settlers.model.GameUtils.ConnectionsProvider;
+import org.appland.settlers.model.Tile.Vegetation;
+import org.appland.settlers.policy.Constants;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,18 +19,15 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
-import org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
-import org.appland.settlers.model.Tile.Vegetation;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
-
-import org.appland.settlers.policy.Constants;
 
 public class GameMap {
 
@@ -294,13 +295,9 @@ public class GameMap {
 
         /* Update buildings list to handle upgraded buildings where the old
            building gets removed and a new building is added */
-        for (Building removedBuilding: buildingsToRemove) {
-            buildings.remove(removedBuilding);
-        }
+        buildings.removeAll(buildingsToRemove);
 
-        for (Building addedBuilding: buildingsToAdd) {
-            buildings.add(addedBuilding);
-        }
+        buildings.addAll(buildingsToAdd);
 
         /* Remove buildings that have been destroyed some time ago */
         buildings.removeAll(buildingsToRemove);
@@ -1910,7 +1907,7 @@ public class GameMap {
         signsToRemove.add(sign);
     }
 
-    void removeSign(Sign sign) {
+    private void removeSign(Sign sign) {
         MapPoint mp = getMapPoint(sign.getPosition());
 
         mp.setSign(null);

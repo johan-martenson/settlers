@@ -112,7 +112,7 @@ public class Cargo implements Piece {
         }
     }
 
-    void returnToClosestStorage() throws Exception {
+    private void returnToClosestStorage() throws Exception {
         Storage stg = GameUtils.getClosestStorage(getPosition(), map);
 
         if (stg != null) {
@@ -120,7 +120,7 @@ public class Cargo implements Piece {
         }
     }
 
-    void returnToStorage() throws Exception {
+    private void returnToStorage() throws Exception {
         Storage stg = GameUtils.getClosestStorage(getPosition(), map);
 
         if (stg != null) {

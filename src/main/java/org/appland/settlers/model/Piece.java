@@ -9,6 +9,6 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public interface Piece {
+interface Piece {
     Point getPosition();
 }

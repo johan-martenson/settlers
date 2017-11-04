@@ -5,10 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.ceil;
-import static java.lang.Math.floor;
-import static java.lang.Math.round;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
+import static java.lang.Math.round;
 
 /**
  *
@@ -34,12 +35,12 @@ public class GameUtils {
         return wayPoints.size() == pointsSet.size();
     }
 
-    protected interface ConnectionsProvider {
+    interface ConnectionsProvider {
         Iterable<Point> getPossibleConnections(Point start, Point goal);
 
-        public Double realDistance(Point currentPoint, Point neighbor);
+        Double realDistance(Point currentPoint, Point neighbor);
 
-        public Double estimateDistance(Point from, Point to);
+        Double estimateDistance(Point from, Point to);
     }
 
     static class SortPointsByPolarOrder implements Comparator<Point> {
@@ -54,13 +55,7 @@ public class GameUtils {
             double a = getAngle(t);
             double a1 = getAngle(t1);
 
-            if (a > a1) {
-                return 1;
-            } else if (a < a1) {
-                return -1;
-            } else {
-                return 0;
-            }
+            return Double.compare(a, a1);
         }
 
         private double getAngle(Point point) {
@@ -90,15 +85,8 @@ public class GameUtils {
                 return 1;
             }
 
-            if (t.x < t1.x) {
-                return -1;
-            }
+            return Integer.compare(t.x, t1.x);
 
-            if (t.x > t1.x) {
-                return 1;
-            }
-
-            return 0;
         }
 
         @Override
@@ -593,8 +581,8 @@ public class GameUtils {
      * Returns a detailed path including points between flags or buildings. Can
      * only be called with a building or flag as start and end point.
      *
-     * @param start Flag or building to start from
-     * @param goal Flag or building to reach
+     * @param startEndPoint Flag or building to start from
+     * @param goalEndPoint Flag or building to reach
      * @param mapPoints The map with information about each point on the game map
      * @return a detailed list with the steps required to travel from the start to the goal.
      */

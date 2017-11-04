@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,15 +59,15 @@ public class Flag implements EndPoint, Piece {
         if (stackedCargo.isEmpty()) {
             return "Flag at " + position;
         } else {
-            String s = "Flag at " + position + " (stacked cargo:";
+            StringBuilder s = new StringBuilder("Flag at " + position + " (stacked cargo:");
 
             for (Cargo cargo : stackedCargo) {
-                s += " " + cargo.getMaterial().name();
+                s.append(" ").append(cargo.getMaterial().name());
             }
 
-            s += ")";
+            s.append(")");
 
-            return s;
+            return s.toString();
         }
     }
 

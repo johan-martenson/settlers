@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public class Countdown {
+class Countdown {
 
     private int count = -1;
     private int startedAt;

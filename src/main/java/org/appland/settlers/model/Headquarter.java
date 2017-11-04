@@ -1,9 +1,42 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.policy.InitialState;
+
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.*;
-import org.appland.settlers.policy.InitialState;
+import static org.appland.settlers.model.Material.ARMORER;
+import static org.appland.settlers.model.Material.BAKER;
+import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.BUTCHER;
+import static org.appland.settlers.model.Material.DONKEY;
+import static org.appland.settlers.model.Material.DONKEY_BREEDER;
+import static org.appland.settlers.model.Material.FARMER;
+import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.GEOLOGIST;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.HUNTER;
+import static org.appland.settlers.model.Material.IRON_FOUNDER;
+import static org.appland.settlers.model.Material.MILLER;
+import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.MINTER;
+import static org.appland.settlers.model.Material.PIG_BREEDER;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SAWMILL_WORKER;
+import static org.appland.settlers.model.Material.SCOUT;
+import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.STONEMASON;
+import static org.appland.settlers.model.Material.STORAGE_WORKER;
+import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.WELL_WORKER;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 
 @HouseSize(size = Size.LARGE)
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 20, attackRadius = 20)
@@ -14,10 +47,6 @@ public class Headquarter extends Storage {
 
         setHeadquarterDefaultInventory(inventory);
         setConstructionReady();
-    }
-
-    public Headquarter() {
-        this(null);
     }
 
     @Override

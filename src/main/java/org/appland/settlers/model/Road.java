@@ -1,14 +1,13 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Road {
 
     private static final int MAIN_ROAD_THRESHOLD = 99;
 
-    public int          usage;
+    private int          usage;
     private EndPoint    start;
     private EndPoint    end;
     private Courier     courier;

@@ -1,17 +1,13 @@
-/**
- *
- */
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Military.State.ATTACKING;
-import static org.appland.settlers.model.Military.State.DEPLOYED;
 import static org.appland.settlers.model.Military.State.DEFENDING;
+import static org.appland.settlers.model.Military.State.DEPLOYED;
 import static org.appland.settlers.model.Military.State.IN_STORAGE;
 import static org.appland.settlers.model.Military.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Military.State.STANDBY_WAITING_DEFEND;
@@ -34,7 +30,7 @@ public class Military extends Worker {
     public enum Rank {
         PRIVATE_RANK,
         SERGEANT_RANK,
-        GENERAL_RANK;
+        GENERAL_RANK
     }
 
     protected enum State {

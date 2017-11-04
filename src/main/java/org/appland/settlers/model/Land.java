@@ -7,7 +7,6 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +18,8 @@ import java.util.Set;
  */
 public class Land {
 
-    private Set<Point>        points;
-    private List<List<Point>> border;
+    private final Set<Point>        points;
+    private final List<List<Point>> border;
 
     Land(Collection<Point> pointsInLand, Collection<Point> borderPoints) {
         points = new HashSet<>();
@@ -58,7 +57,7 @@ public class Land {
             Point closePoint;
             Point lessClosePoint;
 
-            List<Point> toRemoveFromBorder = new LinkedList<>();
+            List<Point> toRemoveFromBorder = new LinkedList<>(); //CHECK
 
             while (true) {
                 closePoint = null;

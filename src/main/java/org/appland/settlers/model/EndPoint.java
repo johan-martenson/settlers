@@ -12,15 +12,15 @@ package org.appland.settlers.model;
  */
 public interface EndPoint {
 
-    public Iterable<Cargo> getStackedCargo();
+    Iterable<Cargo> getStackedCargo();
 
-    public void putCargo(Cargo c) throws Exception;
+    void putCargo(Cargo c) throws Exception;
 
-    public boolean hasCargoWaitingForRoad(Road r);
+    boolean hasCargoWaitingForRoad(Road r);
 
-    public Cargo retrieveCargo(Cargo c);
+    Cargo retrieveCargo(Cargo c);
 
-    public Cargo getCargoWaitingForRoad(Road r);
+    Cargo getCargoWaitingForRoad(Road r);
 
-    public Point getPosition();
+    Point getPosition();
 }

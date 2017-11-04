@@ -6,11 +6,13 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.model.Tile.Vegetation;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.appland.settlers.model.Tile.Vegetation;
+
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
@@ -191,18 +193,6 @@ public class Terrain {
         return result;
     }
 
-    public boolean terrainMakesFlagPossible(Point point) throws Exception {
-        if (isInWater(point)) {
-            return false;
-        }
-
-        if (isInSwamp(point)) {
-            return false;
-        }
-
-        return true;
-    }
-
     boolean isNextToWater(Point point) {
         return isAnyAdjacentTile(point, WATER);
     }
@@ -226,7 +216,7 @@ public class Terrain {
         return matchFound && nonMatchFound;
     }
 
-    protected void placeMountainOnTile(Point point1, Point point2, Point point3) {
+    void placeMountainOnTile(Point point1, Point point2, Point point3) {
         Tile tile = getTile(point1, point2, point3);
 
         tile.setVegetationType(MOUNTAIN);
