@@ -1416,22 +1416,46 @@ public class GameMap {
         return resultList;
     }
 
+    /**
+     * Returns the building at the given point. If there is no building, null is returned
+     *
+     * @param point a point on the map
+     * @return the building at the given point
+     */
     public Building getBuildingAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
         return mp.getBuilding();
     }
 
+    /**
+     * Returns true if there is a building at the given point
+     *
+     * @param point a point on the map
+     * @return true if there is a building on the given point
+     */
     public boolean isBuildingAtPoint(Point point) {
         return getBuildingAtPoint(point) != null;
     }
 
+    /**
+     * Returns true if there is a road at the given point
+     *
+     * @param point a point on the map
+     * @return true if there is a road at the given point
+     */
     public boolean isRoadAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
         return !mp.getConnectedNeighbors().isEmpty();
     }
 
+    /**
+     * Returns true if there is a tree at the given point
+     *
+     * @param point a point on the map
+     * @return true if there is a tree at the point
+     */
     public boolean isTreeAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
@@ -2472,7 +2496,7 @@ public class GameMap {
      */
     boolean isValidRouteViaRoads(Point... points) {
 
-        Point previous = null; // CHECK
+        Point previous = null;
 
         for (Point point : points) {
 
