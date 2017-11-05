@@ -844,7 +844,7 @@ public class TestHunterHut {
     }
 
     @Test
-    public void testAssignedhunterHasCorrectlySetPlayer() throws Exception {
+    public void testAssignedHunterHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

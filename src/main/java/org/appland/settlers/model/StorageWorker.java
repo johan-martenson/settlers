@@ -307,7 +307,7 @@ public class StorageWorker extends Worker {
             return assignedCoal.get(buildingType) >= getPlayer().getCoalQuota(buildingType);
         }
 
-        /* All other buildlings have no quota */
+        /* All other buildings have no quota */
         return false;
     }
 

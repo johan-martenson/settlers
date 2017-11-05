@@ -384,7 +384,7 @@ public class Storage extends Building implements Actor {
     }
 
     public Worker retrieveWorker(Material material) throws Exception {
-        Worker worker = null;
+        Worker worker;
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("There are no " + material + " to retrieve");
@@ -469,7 +469,7 @@ public class Storage extends Building implements Actor {
     }
 
     public Military retrieveMilitary(Material material) throws Exception {
-        Military.Rank rank = Military.Rank.PRIVATE_RANK;
+        Military.Rank rank;
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve military " + material);
@@ -509,7 +509,7 @@ public class Storage extends Building implements Actor {
     }
 
     public Military retrieveAnyMilitary() throws Exception {
-        Military military = null;
+        Military military;
 
         if (hasAtLeastOne(PRIVATE)) {
             retrieveOneFromInventory(PRIVATE);

@@ -1690,7 +1690,7 @@ public class TestSlaughterHouse {
     }
 
     @Test
-    public void testSlaugherHouseCanProduce() throws Exception {
+    public void testSlaughterHouseCanProduce() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1706,13 +1706,13 @@ public class TestSlaughterHouse {
         Point point1 = new Point(10, 10);
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
-        /* Finish construction of the slaugher house */
+        /* Finish construction of the slaughter house */
         Utils.constructHouse(slaughterHouse0, map);
 
-        /* Populate the slaugher house */
+        /* Populate the slaughter house */
         Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
-        /* Verify that the slaugher house can produce */
+        /* Verify that the slaughter house can produce */
         assertTrue(slaughterHouse0.canProduce());
     }
 }

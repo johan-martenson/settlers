@@ -44,7 +44,7 @@ public class Terrain {
         int left = Math.min(Math.min(point1.x, point3.x), point2.x);
         int top  = Math.max(Math.max(point1.y, point3.y), point2.y);
 
-        Tile tile = null;
+        Tile tile;
 
         if ((point1.y + point3.y + point2.y) % 3 == 1) { // Tile with pointy end upwards
             tile = tileBelowMap.get(top * width + left + 1);

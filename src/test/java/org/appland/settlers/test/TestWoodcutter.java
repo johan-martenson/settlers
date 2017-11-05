@@ -1778,7 +1778,7 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testWoodcutterWorkerReturnsToStorageIfwoodcutterIsDestroyed() throws Exception {
+    public void testWoodcutterWorkerReturnsToStorageIfWoodcutterIsDestroyed() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

@@ -280,7 +280,7 @@ public class TestPigFarm {
 
         assertTrue(pigBreeder.isInsideBuilding());
 
-        /* Step once and make sure the pig breedre goes out of the pig farm */
+        /* Step once and make sure the pig breeder goes out of the pig farm */
         map.stepTime();
 
         assertFalse(pigBreeder.isInsideBuilding());

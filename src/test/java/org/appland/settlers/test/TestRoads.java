@@ -962,7 +962,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testCourierDeliveringToBuildingChosesClosestRoadWhenRoadIsSplit() throws Exception {
+    public void testCourierDeliveringToBuildingChoosesClosestRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1026,14 +1026,14 @@ public class TestRoads {
 
         assertFalse(courier.isExactlyAtPoint());
 
-        /* Verify that the courier choses the closest road when the road is split */
+        /* Verify that the courier chooses the closest road when the road is split */
         map.placeFlag(player0, middlePoint2);
 
         assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
     }
 
     @Test
-    public void testCourierJustAfterDeliveryToBuildingChosesClosestRoadWhenRoadIsSplit() throws Exception {
+    public void testCourierJustAfterDeliveryToBuildingChoosesClosestRoadWhenRoadIsSplit() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1097,7 +1097,7 @@ public class TestRoads {
 
         assertFalse(courier.isExactlyAtPoint());
 
-        /* Verify that the courier choses the closest road when the road is split */
+        /* Verify that the courier chooses the closest road when the road is split */
         map.placeFlag(player0, middlePoint2);
 
         assertEquals(courier.getAssignedRoad(), map.getRoad(woodcutter.getFlag().getPosition(), middlePoint2));
@@ -1179,7 +1179,7 @@ public class TestRoads {
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
 
-        /* Verify that the courier choses the road to the right after the split */
+        /* Verify that the courier chooses the road to the right after the split */
         map.placeFlag(player0, middlePoint2);
 
         assertEquals(courier.getAssignedRoad(), map.getRoad(middlePoint2, endPoint));
@@ -1377,7 +1377,7 @@ public class TestRoads {
         assertFalse(courier.isWalkingToRoad());
         assertEquals(courier.getCargo(), cargo);
 
-        /* Verify that the courier is sitll targeting the hq */
+        /* Verify that the courier is still targeting the hq */
         assertEquals(courier.getTarget(), hq.getPosition());
 
         /* Let the courier leave the cargo */

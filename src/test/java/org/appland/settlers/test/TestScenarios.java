@@ -5,19 +5,12 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -25,20 +18,27 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
-import static org.appland.settlers.model.Size.LARGE;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.test.Utils.fastForward;
+import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import static org.appland.settlers.test.Utils.fastForward;
-import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
 
 public class TestScenarios {
 
@@ -285,7 +285,7 @@ public class TestScenarios {
     }
 
     @Test
-    public void buildWoodcutterSawmillQuarrySequenciallyFromScratch() throws Exception {
+    public void buildWoodcutterSawmillQuarrySequentiallyFromScratch() throws Exception {
 
         /*   --   SETUP   --   */
 
@@ -405,7 +405,7 @@ public class TestScenarios {
 
         fastForward(100, map);
 
-        /*  - Build road carefully to samwill -  */
+        /*  - Build road carefully to sawmill -  */
         Flag startFlag = hq.getFlag();
 
         List<Point> chosenPointsForRoad = new ArrayList<>();

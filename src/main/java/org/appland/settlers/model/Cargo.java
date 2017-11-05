@@ -140,7 +140,7 @@ public class Cargo {
             returnToStorage();
         } else {
 
-            /* Re-evalute the route if the current one is not optimal or if it's
+            /* Re-evaluate the route if the current one is not optimal or if it's
              * no longer available
             */
             if (!optimalRoute(getPosition(), path)                    ||

@@ -5,15 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -22,25 +13,36 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.GENERAL;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1453,7 +1455,7 @@ public class TestAttack {
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, attacker.getTarget());
 
         /* Verify that the attacker goes back to its building if the defender
-         destroyes the attacked building */
+           destroys the attacked building */
         assertEquals(attacker.getTarget(), barracks1.getPosition());
 
         map.stepTime();
@@ -2142,7 +2144,7 @@ public class TestAttack {
         Military defender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         /* Get the waiting attacker */
-        Military waitingAttacker = null;
+        Military waitingAttacker;
         if (attackers.get(0).equals(firstAttacker)) {
             waitingAttacker = attackers.get(1);
         } else {
@@ -2279,7 +2281,7 @@ public class TestAttack {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, headquarter1.getPosition());
 
-        /* Give the attackers time to detect that the headquarter is detroyed */
+        /* Give the attackers time to detect that the headquarter is destroyed */
         map.stepTime();
         map.stepTime();
         map.stepTime();
@@ -3377,7 +3379,7 @@ public class TestAttack {
         assertTrue(map.getWorkers().contains(defender));
 
         /* Get the waiting attacker */
-        Military waitingAttacker = null;
+        Military waitingAttacker;
         if (attackers.get(0).equals(firstAttacker)) {
             waitingAttacker = attackers.get(1);
         } else {
@@ -3542,7 +3544,7 @@ public class TestAttack {
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
 
-        /* Verify that there are no hosted soliders in the headquarter */
+        /* Verify that there are no hosted soldiers in the headquarter */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
 
         /* Place fortress for player 0 */
@@ -3628,7 +3630,7 @@ public class TestAttack {
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
 
-        /* Verify that there are no hosted soliders in the headquarter */
+        /* Verify that there are no hosted soldiers in the headquarter */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
 
         /* Place fortress for player 0 */
@@ -3711,7 +3713,7 @@ public class TestAttack {
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
 
-        /* Verify that there are no hosted soliders in the headquarter */
+        /* Verify that there are no hosted soldiers in the headquarter */
         assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
 
         /* Place fortress for player 0 */

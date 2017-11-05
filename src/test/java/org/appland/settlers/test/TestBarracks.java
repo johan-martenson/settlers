@@ -470,7 +470,7 @@ public class TestBarracks {
         /* Disable promotion */
         barracks0.disablePromotions();
 
-        /* Verify that no more coin is deliverd */
+        /* Verify that no more coin is delivered */
         Courier courier = road0.getCourier();
         for (int i = 0; i < 1000; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial().equals(COIN)) {

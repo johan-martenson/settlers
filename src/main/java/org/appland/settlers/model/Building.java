@@ -167,12 +167,12 @@ public class Building implements Actor, EndPoint {
     }
 
     public int getMaxHostedMilitary() {
-        MilitaryBuilding militaryuilding = getClass().getAnnotation(MilitaryBuilding.class);
+        MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (militaryuilding == null) {
+        if (militaryBuilding == null) {
             return 0;
         } else {
-            return militaryuilding.maxHostedMilitary();
+            return militaryBuilding.maxHostedMilitary();
         }
     }
 

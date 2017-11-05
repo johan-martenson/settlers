@@ -167,7 +167,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testDepositRetriveMilitary() throws Exception {
+    public void testDepositRetrieveMilitary() throws Exception {
 
         assertNoMilitaryInInventory(storage);
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));

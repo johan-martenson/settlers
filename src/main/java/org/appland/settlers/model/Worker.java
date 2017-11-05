@@ -190,7 +190,7 @@ public abstract class Worker implements Actor {
     @Override
     public String toString() {
         if (isTraveling()) {
-            String str = "";
+            String str;
             if (isExactlyAtPoint()) {
                 str = "Courier at " + getPosition() + " traveling to " + target;
             } else {

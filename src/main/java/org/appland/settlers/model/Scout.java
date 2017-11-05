@@ -117,7 +117,7 @@ public class Scout extends Worker {
 
     private Point findNextPoint() {
         Point pos = getPosition();
-        Point next = null;
+        Point next;
 
         if (Math.abs(directionX) > Math.abs(directionY)) {
             if (directionX > 0) {

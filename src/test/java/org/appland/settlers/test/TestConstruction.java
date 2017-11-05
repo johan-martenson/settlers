@@ -1,7 +1,5 @@
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -11,20 +9,23 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Sawmill;
+import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
 import static org.appland.settlers.model.Material.WOOD;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Sawmill;
-import org.appland.settlers.model.Woodcutter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 public class TestConstruction {
 
@@ -129,7 +130,7 @@ public class TestConstruction {
 
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* The barracks needs a reference to the game map and this is set implicityly
+        /* The barracks needs a reference to the game map and this is set implicitly
            when it's placed on the map */
         GameMap map = new GameMap(players,30, 30);
         Point point0 = new Point(10, 10);

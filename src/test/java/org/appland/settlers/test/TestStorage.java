@@ -178,7 +178,7 @@ public class TestStorage {
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3);
 
-        /* Unfinished samwill doesn't need worker */
+        /* Unfinished sawmill doesn't need worker */
         assertFalse(storage.needsWorker());
     }
 

@@ -170,7 +170,7 @@ public class TestBrewery {
         Point point3 = new Point(7, 9);
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
-        /* Unfinished samwill doesn't need worker */
+        /* Unfinished sawmill doesn't need worker */
         assertFalse(brewery.needsWorker());
 
         /* Finish construction of the brewery */

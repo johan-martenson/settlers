@@ -1055,7 +1055,7 @@ public class TestForesterHut {
     }
 
     @Test
-    public void testAssignedforesterHasCorrectlySetPlayer() throws Exception {
+    public void testAssignedForesterHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

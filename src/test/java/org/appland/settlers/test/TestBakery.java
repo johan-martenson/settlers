@@ -178,7 +178,7 @@ public class TestBakery {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Unfinished samwill doesn't need worker */
+        /* Unfinished sawmill doesn't need worker */
         assertFalse(bakery.needsWorker());
 
         /* Finish construction of the bakery */

@@ -116,7 +116,7 @@ public class GameUtils {
         Map<Point, Double>  realCostToPoint   = new HashMap<>();
         Map<Point, Double>  estimatedFullCost = new HashMap<>();
         Map<Point, Point>   cameFrom          = new HashMap<>();
-        double              bestCaseCost      = 2;
+        double              bestCaseCost;
 
         /* Define starting parameters */
         bestCaseCost = start.distance(goal);
@@ -167,7 +167,7 @@ public class GameUtils {
                 return path;
             }
 
-            /* Do not re-evalute the same point */
+            /* Do not re-evaluate the same point */
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 
@@ -392,7 +392,7 @@ public class GameUtils {
         Map<Point, Double> realCostToPoint   = new HashMap<>();
         Map<Point, Double> estimatedFullCost = new HashMap<>();
         Map<Point, Point>  cameFrom          = new HashMap<>();
-        double             bestCaseCost      = 2;
+        double             bestCaseCost;
 
         /* Define starting parameters */
         bestCaseCost = start.distance(goal);
@@ -443,7 +443,7 @@ public class GameUtils {
                 return path;
             }
 
-            /* Do not re-evalute the same point */
+            /* Do not re-evaluate the same point */
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 
@@ -539,7 +539,7 @@ public class GameUtils {
                 return true;
             }
 
-            /* Do not re-evalute the same point */
+            /* Do not re-evaluate the same point */
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 
@@ -662,7 +662,7 @@ public class GameUtils {
                 return path;
             }
 
-            /* Do not re-evalute the same point */
+            /* Do not re-evaluate the same point */
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 
@@ -761,7 +761,7 @@ public class GameUtils {
                 return true;
             }
 
-            /* Do not re-evalute the same point */
+            /* Do not re-evaluate the same point */
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 

@@ -276,7 +276,7 @@ public class TestDonkeyFarm {
 
         assertTrue(donkeyBreeder.isInsideBuilding());
 
-        /* Step once and make sure the donkey breedre goes out of the donkey farm */
+        /* Step once and make sure the donkey breeder goes out of the donkey farm */
         map.stepTime();
 
         assertFalse(donkeyBreeder.isInsideBuilding());

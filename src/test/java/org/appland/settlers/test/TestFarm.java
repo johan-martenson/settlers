@@ -563,7 +563,7 @@ public class TestFarm {
 
         map.stepTime();
 
-        /* Verify that the farmer harvested successfuly */
+        /* Verify that the farmer harvested successfully */
         assertFalse(farmer.isHarvesting());
         assertEquals(crop.getGrowthState(), HARVESTED);
         assertNotNull(farmer.getCargo());

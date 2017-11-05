@@ -168,7 +168,7 @@ public class TestSawmill {
         Point point3 = new Point(7, 9);
         Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
-        /* Unfinished samwill doesn't need worker */
+        /* Unfinished sawmill doesn't need worker */
         assertFalse(sawmill.needsWorker());
 
         /* Finish construction of the sawmill */

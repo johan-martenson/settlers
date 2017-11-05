@@ -90,7 +90,7 @@ public class Miller extends Worker {
                 }
             } else {
 
-                /* Report that the miller couldn't produce flour becuase it had no wheat */
+                /* Report that the miller couldn't produce flour because it had no wheat */
                 productivityMeasurer.reportUnproductivity();
             }
         }

@@ -1,7 +1,5 @@
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -11,10 +9,6 @@ import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
-import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Material.STONE;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -22,14 +16,20 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 public class TestGameLogic {
 
@@ -228,7 +228,7 @@ public class TestGameLogic {
         Point point2 = new Point(5, 17);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
-        /* Assign new workers to unocupied places. Since there are no places
+        /* Assign new workers to unocuppied places. Since there are no places
          * that require workers this should not do anything */
         assertEquals(map.getWorkers().size(), 1);
 

@@ -851,7 +851,7 @@ public class GameMap {
 
             /* Re-assign the courier to one of the new roads */
             if (courier != null) {
-                Road roadToAssign = null;
+                Road roadToAssign;
 
                 /* Of the courier is idle, place it on the road it is on */
                 if (courier.isIdle()) {
@@ -2437,7 +2437,7 @@ public class GameMap {
 
     /**
      * Returns the winning player of the game if there is a winner. Otherwise null.
-     * @return Returns the winngin player of the game if there is a winner. Otherwise null.
+     * @return Returns the winning player of the game if there is a winner. Otherwise null.
      */
     public Player getWinner() {
         return winner;

@@ -99,7 +99,7 @@ public class Courier extends Worker {
     }
 
     private void pickUpCargoForRoad(EndPoint flag, Road r) throws Exception {
-        Cargo cargoToPickUp = null;
+        Cargo cargoToPickUp;
 
         if (!getPosition().equals(flag.getPosition())) {
             throw new Exception("Not at " + flag);
@@ -122,7 +122,7 @@ public class Courier extends Worker {
 
     public void assignToRoad(Road newRoad) throws Exception {
         if (getTargetBuilding() != null) {
-            throw new Exception("Can't set road as target while flag or building are already targetted");
+            throw new Exception("Can't set road as target while flag or building are already targeted");
         }
 
         Road currentAssignedRoad = assignedRoad;

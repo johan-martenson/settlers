@@ -1,7 +1,5 @@
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -17,11 +15,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
 import org.appland.settlers.model.Material;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Military;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
@@ -31,13 +25,20 @@ import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 public class TestTransportation {
 
@@ -314,7 +315,7 @@ public class TestTransportation {
         Point middle = new Point(3, 3);
         Road targetRoad = map.placeRoad(player0, start, middle, end.getPosition());
 
-        /* Place a coutier */
+        /* Place a courier */
         Courier worker = new Courier(player0, map);
 
         map.placeWorker(worker, flag);
@@ -341,9 +342,9 @@ public class TestTransportation {
         Quarry qry = map.placeBuilding(new Quarry(player0), new Point(4, 4));
 
         /* Place storage */
-        Storage stge = map.placeBuilding(new Storage(player0), new Point(8, 4));
+        Storage storage = map.placeBuilding(new Storage(player0), new Point(8, 4));
 
-        Flag target = stge.getFlag();
+        Flag target = storage.getFlag();
         Flag start = qry.getFlag();
 
         /* Connect the storage and the quarry */
@@ -357,7 +358,7 @@ public class TestTransportation {
         worker.setPosition(start.getPosition());
 
         Utils.constructHouse(qry, map);
-        Utils.constructHouse(stge, map);
+        Utils.constructHouse(storage, map);
 
         assertTrue(qry.ready());
 
@@ -386,9 +387,9 @@ public class TestTransportation {
 
         assertFalse(qry.getFlag().getStackedCargo().isEmpty());
 
-        Cargo c = qry.getFlag().getCargoWaitingForRoad(map.getRoad(stge.getFlag().getPosition(), qry.getFlag().getPosition()));
+        Cargo c = qry.getFlag().getCargoWaitingForRoad(map.getRoad(storage.getFlag().getPosition(), qry.getFlag().getPosition()));
         assertTrue(c.getPosition().equals(qry.getFlag().getPosition()));
-        assertEquals(c.getTarget(), stge);
+        assertEquals(c.getTarget(), storage);
         assertEquals(c.getMaterial(), STONE);
     }
 

@@ -1250,7 +1250,7 @@ public class TestPrioritization {
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
 
-            /* Keep track of where the coalss end up */
+            /* Keep track of where the coals end up */
             Building targetBuilding = carrier.getCargo().getTarget();
 
             if (!coalAllocation.containsKey(targetBuilding)) {
@@ -2136,7 +2136,7 @@ public class TestPrioritization {
         Point point3 = new Point(24, 10);
         Mill mill0 = map.placeBuilding(new Mill(player0), point3);
 
-        /* Plac well */
+        /* Place well */
         Point point4 = new Point(20, 10);
         Well well0 = map.placeBuilding(new Well(player0), point4);
 

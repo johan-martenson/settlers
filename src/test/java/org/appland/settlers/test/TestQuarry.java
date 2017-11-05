@@ -1223,7 +1223,7 @@ public class TestQuarry {
     // Add test for stones in/out of range
 
     @Test
-    public void teststoneMasonReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
+    public void testStoneMasonReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
