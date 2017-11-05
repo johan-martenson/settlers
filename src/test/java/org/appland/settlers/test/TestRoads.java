@@ -328,11 +328,6 @@ public class TestRoads {
         map.placeRoad(player0, wayPoints2);
     }
 
-    @Test
-    public void testWayPointsAreCorrectInSingleSegmentRoad() {
-        //TODO: IMPLEMENT!
-    }
-
     @Test(expected = Exception.class)
     public void testRoadsCanNotCross() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

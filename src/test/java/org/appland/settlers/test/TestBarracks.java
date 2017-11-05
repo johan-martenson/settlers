@@ -1003,6 +1003,7 @@ public class TestBarracks {
 
         int amount = headquarter0.getAmount(PRIVATE);
 
+        assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter0.getPosition());
@@ -1045,6 +1046,7 @@ public class TestBarracks {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
 
+        assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         /* Verify that the military plans to use the roads */

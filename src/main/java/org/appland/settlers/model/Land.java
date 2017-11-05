@@ -57,13 +57,9 @@ public class Land {
             Point closePoint;
             Point lessClosePoint;
 
-            List<Point> toRemoveFromBorder = new LinkedList<>(); //CHECK
-
             while (true) {
                 closePoint = null;
                 lessClosePoint = null;
-
-                toRemoveFromBorder.clear();
 
                 for (Point p : borderPoints) {
                     if (p.distance(collectingBorder.get(0)) < 1.5) {

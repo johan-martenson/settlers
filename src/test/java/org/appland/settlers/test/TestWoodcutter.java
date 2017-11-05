@@ -682,11 +682,6 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testWoodcutterStaysInHouseWhenNoTreeIsAvailable() {
-        // TODO
-    }
-
-    @Test
     public void testWoodcutterDoesNotCutSmallOrMediumTrees() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();

@@ -50,7 +50,6 @@ public class GameMap {
     private final List<Worker>         workersToRemove;
     private final List<Crop>           cropsToRemove;
     private final Terrain              terrain;
-    private final List<Point>          fullGrid;
     private final Map<Point, MapPoint> pointToGameObject;
     private final List<Tree>           trees;
     private final List<Stone>          stones;
@@ -175,8 +174,7 @@ public class GameMap {
         random              = new Random();
         startingPoints      = new ArrayList<>();
 
-        fullGrid            = buildFullGrid();
-        pointToGameObject   = populateMapPoints(fullGrid);
+        pointToGameObject   = populateMapPoints(buildFullGrid());
 
         pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
         connectedFlagsAndBuildingsProvider = new GameUtils.ConnectedFlagsAndBuildingsProvider(pointToGameObject);
@@ -2474,7 +2472,7 @@ public class GameMap {
      */
     boolean isValidRouteViaRoads(Point... points) {
 
-        Point previous = null;
+        Point previous = null; // CHECK
 
         for (Point point : points) {
 
@@ -2485,6 +2483,8 @@ public class GameMap {
                     return false;
                 }
             }
+
+            previous = point;
         }
 
         return true;

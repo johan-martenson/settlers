@@ -358,8 +358,6 @@ public class Storage extends Building implements Actor {
             storeOneInInventory(IRON_FOUNDER);
         } else if (worker instanceof Miner) {
             storeOneInInventory(MINER);
-        } else if (worker instanceof Forester) {
-            storeOneInInventory(FORESTER);
         } else if (worker instanceof Fisherman) {
             storeOneInInventory(FISHERMAN);
         } else if (worker instanceof Farmer) {

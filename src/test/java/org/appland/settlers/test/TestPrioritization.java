@@ -59,6 +59,7 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -2202,6 +2203,7 @@ public class TestPrioritization {
         /* Verify that the storage worker first delivers wheat */
         Cargo currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
+        assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), WHEAT);
 
         /* Wait for the worker to deliver the cargo */
@@ -2212,6 +2214,7 @@ public class TestPrioritization {
         /* Verify that the storage worker then delivers plancks */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
+        assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), PLANCK);
 
         /* Wait for the worker to deliver the cargo */
@@ -2224,6 +2227,7 @@ public class TestPrioritization {
            need them anymore */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
+        assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), PLANCK);
 
         /* Wait for the worker to deliver the cargo */
@@ -2237,6 +2241,7 @@ public class TestPrioritization {
 
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
+        assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), COAL);
 
         /* Wait for the worker to deliver the cargo */
@@ -2251,6 +2256,7 @@ public class TestPrioritization {
 
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
+        assertNotNull(currentCargo);
         assertEquals(currentCargo.getMaterial(), GOLD);
 
         /* Wait for the worker to deliver the cargo */

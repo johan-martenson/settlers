@@ -1,8 +1,5 @@
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -10,16 +7,20 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.PRIVATE;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TestMilitaryCreationAndPromotion {
 
@@ -215,6 +216,7 @@ public class TestMilitaryCreationAndPromotion {
         /* Wait for a military to start walking to the barracks */
         Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
 
+        assertNotNull(military);
         assertEquals(military.getPlayer(), player0);
     }
 }

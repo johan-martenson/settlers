@@ -545,7 +545,6 @@ public class TestTransportation {
         assertTrue(r.needsCourier());
     }
 
-
     @Test
     public void testMilitaryTransportation() throws Exception {
 
@@ -1005,7 +1004,7 @@ public class TestTransportation {
         Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
-        Point point0 = new Point(19, 5);
+        Point point0 = new Point(19, 15);
         Flag flag0 = map.placeFlag(player0, point0);
         Point point1 = new Point(4, 4);
         Flag flag1 = map.placeFlag(player0, point1);

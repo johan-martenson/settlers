@@ -1006,6 +1006,7 @@ public class TestFortress {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
 
+        assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(PRIVATE);
@@ -1050,6 +1051,7 @@ public class TestFortress {
         /* Verify that the worker leaves the building and goes back to the headquarter */
         Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
 
+        assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */

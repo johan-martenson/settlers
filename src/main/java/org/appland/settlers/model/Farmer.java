@@ -194,7 +194,7 @@ public class Farmer extends Worker {
             }
         } else if (state == PLANTING) {
             if (countdown.reachedZero()) {
-                Crop crop = map.placeCrop(getPosition());
+                map.placeCrop(getPosition());
 
                 state = GOING_BACK_TO_HOUSE;
 

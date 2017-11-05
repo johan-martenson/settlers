@@ -234,23 +234,22 @@ public class TestStorage {
         /* Run game logic once to let the headquarter assign a storage worker to the storage */
         map.stepTime();
 
-        Worker sw = null;
+        Worker storageWorker = null;
 
         for (Worker w : map.getWorkers()) {
             if (w instanceof StorageWorker) {
-                sw = w;
+                storageWorker = w;
             }
         }
 
-        assertNotNull(sw);
+        assertNotNull(storageWorker);
 
-        assertTrue(sw instanceof StorageWorker);
-        assertEquals(sw.getTarget(), storage.getPosition());
+        assertEquals(storageWorker.getTarget(), storage.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage.getPosition());
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(storage.getWorker(), sw);
+        assertTrue(storageWorker.isInsideBuilding());
+        assertEquals(storage.getWorker(), storageWorker);
     }
 
     @Test
