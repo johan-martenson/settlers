@@ -16,7 +16,7 @@ import static org.appland.settlers.model.Material.WHEAT;
  *
  * @author johan
  */
-public class Crop implements Actor, Piece {
+public class Crop implements Actor {
 
     public enum GrowthState {
         JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
@@ -60,7 +60,6 @@ public class Crop implements Actor, Piece {
         }
     }
 
-    @Override
     public Point getPosition() {
         return position;
     }

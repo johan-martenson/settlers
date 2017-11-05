@@ -15,7 +15,7 @@ import java.util.Set;
  *
  * @author johan
  */
-public class MapPoint {
+class MapPoint {
     private final Point      point;
     private final Set<Point> connectedNeighbors;
     private final Set<Road>  connectedRoads;

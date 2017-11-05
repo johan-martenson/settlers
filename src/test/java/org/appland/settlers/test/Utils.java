@@ -453,7 +453,7 @@ public class Utils {
         assertEquals(building.getNumberOfHostedMilitary(), nr);
     }
 
-    public static void verifyPointIsWithinBorder(GameMap map, Player player, Point position) {
+    public static void verifyPointIsWithinBorder(Player player, Point position) {
         boolean insideLand = false;
 
         for (Land land : player.getLands()) {
@@ -467,7 +467,7 @@ public class Utils {
         assertTrue(insideLand);
     }
 
-    public static void verifyPointIsNotWithinBorder(GameMap map, Player player, Point position) {
+    public static void verifyPointIsNotWithinBorder(Player player, Point position) {
         boolean insideLand = false;
 
         for (Land land : player.getLands()) {
@@ -481,7 +481,7 @@ public class Utils {
         assertFalse(insideLand);
     }
 
-    public static void verifyDeliveryOfMaterial(GameMap map, Road road, Material material) throws Exception {
+    public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws Exception {
         Courier courier = road.getCourier();
 
         boolean delivery = false;
@@ -499,7 +499,7 @@ public class Utils {
         assertTrue(delivery);
     }
 
-    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road, Material material) throws Exception {
+    public static void verifyNoDeliveryOfMaterial(GameMap map, Road road) throws Exception {
         Courier courier = road.getCourier();
 
         for (int i = 0; i < 500; i++) {
@@ -650,7 +650,7 @@ public class Utils {
         assertTrue(attacker.isFighting());
     }
 
-    static Military getMainAttacker(GameMap map, Player player, Building building, Collection<Military> attackers) throws Exception {
+    static Military getMainAttacker(GameMap map, Building building, Collection<Military> attackers) throws Exception {
         Military firstAttacker = null;
 
         for (Military military : attackers) {

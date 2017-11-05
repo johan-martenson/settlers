@@ -46,7 +46,7 @@ import org.appland.settlers.policy.ProductionDelays;
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Storage extends Building implements Actor {
 
-    protected final Map<Material, Integer> inventory;
+    final Map<Material, Integer> inventory;
 
     private final Countdown draftCountdown;
 
@@ -60,7 +60,7 @@ public class Storage extends Building implements Actor {
         draftCountdown = new Countdown();
     }
 
-    public Storage() {
+    Storage() {
         this(null);
     }
 
@@ -102,7 +102,7 @@ public class Storage extends Building implements Actor {
         assignNewWorkerToUnoccupiedPlaces();
     }
 
-    public void assignNewWorkerToUnoccupiedPlaces() throws Exception {
+    private void assignNewWorkerToUnoccupiedPlaces() throws Exception {
         if (assignCouriers()) {
             return;
         }
@@ -269,7 +269,7 @@ public class Storage extends Building implements Actor {
         return false;
     }
 
-    public boolean isDraftPossible(Map<Material, Integer> inventory) {
+    private boolean isDraftPossible(Map<Material, Integer> inventory) {
         return inventory.getOrDefault(BEER, 0) > 0
                 && inventory.getOrDefault(SWORD, 0) > 0
                 && inventory.getOrDefault(SHIELD, 0) > 0;
@@ -585,7 +585,7 @@ public class Storage extends Building implements Actor {
         }
     }
 
-    boolean hasMilitary() {
+    private boolean hasMilitary() {
         if (!hasAtLeastOne(PRIVATE) && !hasAtLeastOne(SERGEANT) && !hasAtLeastOne(GENERAL)) {
             return false;
         }

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Cargo implements Piece {
+public class Cargo {
 
     private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
@@ -85,7 +85,6 @@ public class Cargo implements Piece {
         return material.name() + " cargo to " + target;
     }
 
-    @Override
     public Point getPosition() {
         return position;
     }

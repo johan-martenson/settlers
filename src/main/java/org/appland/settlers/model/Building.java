@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
-public class Building implements Actor, EndPoint, Piece {
+public class Building implements Actor, EndPoint {
     private Military ownDefender;
     private Military primaryAttacker;
     private boolean  outOfResources;

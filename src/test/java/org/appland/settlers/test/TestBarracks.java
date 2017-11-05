@@ -703,7 +703,7 @@ public class TestBarracks {
         assertFalse(barracks0.isPromotionEnabled());
 
         /* Verify that no coins are delivered */
-        Utils.verifyNoDeliveryOfMaterial(map, road0, COIN);
+        Utils.verifyNoDeliveryOfMaterial(map, road0);
     }
 
     @Test
@@ -740,7 +740,7 @@ public class TestBarracks {
         assertFalse(barracks0.needsMaterial(COIN));
 
         /* Verify that no coins are delivered */
-        Utils.verifyNoDeliveryOfMaterial(map, road0, COIN);
+        Utils.verifyNoDeliveryOfMaterial(map, road0);
 
         /* Resume delivery of coins to the barracks */
         barracks0.enablePromotions();
@@ -752,7 +752,7 @@ public class TestBarracks {
         assertTrue(barracks0.isPromotionEnabled());
 
         /* Verify that a coin is delivered to the barracks */
-        Utils.verifyDeliveryOfMaterial(map, road0, COIN);
+        Utils.verifyDeliveryOfMaterial(map, road0);
     }
 
     @Test

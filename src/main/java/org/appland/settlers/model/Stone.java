@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public class Stone implements Piece {
+public class Stone {
 
     private int amount;
     private final Point position;
@@ -32,7 +32,6 @@ public class Stone implements Piece {
         return amount;
     }
 
-    @Override
     public Point getPosition() {
         return position;
     }

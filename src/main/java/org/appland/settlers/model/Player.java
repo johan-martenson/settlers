@@ -258,7 +258,7 @@ public class Player {
         return color;
     }
 
-    Building getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
+    Storage getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
         Storage storage = null;
         int distance = Integer.MAX_VALUE;
 
@@ -277,7 +277,7 @@ public class Player {
             }
 
             if (position.equals(building.getFlag().getPosition())) {
-                return building;
+                return (Storage)building;
             }
 
             List<Point> path = map.findWayWithExistingRoads(position, building.getFlag().getPosition());

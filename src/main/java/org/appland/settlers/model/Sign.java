@@ -10,7 +10,7 @@ package org.appland.settlers.model;
  *
  * @author johan
  */
-public class Sign implements Actor, Piece {
+public class Sign implements Actor {
 
     private final static int SIGN_EXPIRATION_TIME = 1999;
 
@@ -37,7 +37,6 @@ public class Sign implements Actor, Piece {
         return size;
     }
 
-    @Override
     public Point getPosition() {
         return position;
     }

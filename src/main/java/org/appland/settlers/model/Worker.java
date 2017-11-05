@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  *
  * @author johan
  */
-public abstract class Worker implements Actor, Piece {
+public abstract class Worker implements Actor {
     private final Player player;
 
     enum States {
@@ -260,7 +260,6 @@ public abstract class Worker implements Actor, Piece {
         position = point;
     }
 
-    @Override
     public Point getPosition() {
         return position;
     }
