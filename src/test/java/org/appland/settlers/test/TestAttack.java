@@ -19,6 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -79,6 +80,45 @@ public class TestAttack {
          attack the other */
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
         assertEquals(player1.getAvailableAttackersForBuilding(headquarter0), 0);
+    }
+
+    @Test
+    public void testNonMilitaryBuildingDoesNotContributeAvailableAttackers() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Building headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Building headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(29, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(13, 5);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Construct the woodcutter */
+        Utils.constructHouse(woodcutter0, map);
+
+        /* Occupy the woodcutter */
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+
+        /* Verify that there are no available attackers for each player 0 to attack player 1 */
+        assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
     }
 
     @Test(expected = Exception.class)
