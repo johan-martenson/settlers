@@ -678,7 +678,6 @@ public class Building implements Actor, EndPoint, Piece {
         state = State.UNOCCUPIED;
     }
 
-    @Override
     public List<Cargo> getStackedCargo() {
         return new ArrayList<>();
     }

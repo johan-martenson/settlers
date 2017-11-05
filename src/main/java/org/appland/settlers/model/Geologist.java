@@ -30,7 +30,6 @@ public class Geologist extends Worker {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_SITE,
         INVESTIGATING,
-        GOING_BACK_TO_FLAG,
         RETURNING_TO_FLAG,
         RETURNING_TO_STORAGE
     }
@@ -136,7 +135,7 @@ public class Geologist extends Worker {
         }
     }
 
-    private void placeSignWithResult(Point point) throws Exception {
+    private void placeSignWithResult(Point point) {
         Terrain terrain = map.getTerrain();
         boolean placedSign = false;
 

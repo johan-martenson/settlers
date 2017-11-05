@@ -24,7 +24,6 @@ public class Scout extends Worker {
     protected enum State {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_POINT,
-        GOING_BACK_TO_FLAG,
         RETURNING_TO_FLAG,
         RETURNING_TO_STORAGE
     }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -30,7 +29,7 @@ import org.junit.Test;
 public class TestConstruction {
 
     @Test
-    public void testCreateNewWoodcutter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testCreateNewWoodcutter() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -111,7 +110,7 @@ public class TestConstruction {
     }
 
     @Test
-    public void testCreateNewBarracks() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testCreateNewBarracks() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -151,7 +150,7 @@ public class TestConstruction {
     }
 
     @Test
-    public void testCreateNewSawmill() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testCreateNewSawmill() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -220,7 +219,7 @@ public class TestConstruction {
     }
 
     @Test
-    public void testCreateFarm() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testCreateFarm() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -287,7 +286,7 @@ public class TestConstruction {
     }
 
     @Test(expected = InvalidStateForProduction.class)
-    public void testDeliveryToBurningSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void testDeliveryToBurningSawmill() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -313,7 +312,7 @@ public class TestConstruction {
     }
 
     @Test(expected = InvalidStateForProduction.class)
-    public void testDeliveryToDestroyedSawmill() throws InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void testDeliveryToDestroyedSawmill() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

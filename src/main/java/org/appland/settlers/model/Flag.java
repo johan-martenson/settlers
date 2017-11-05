@@ -29,13 +29,12 @@ public class Flag implements EndPoint, Piece {
         this.player = player;
     }
 
-    @Override
     public List<Cargo> getStackedCargo() {
         return stackedCargo;
     }
 
     @Override
-    public void putCargo(Cargo c) throws InvalidRouteException, Exception {
+    public void putCargo(Cargo c) throws Exception {
         log.log(Level.FINE, "Putting {0} at {1}", new Object[]{c, this});
 
         c.setPosition(getPosition());

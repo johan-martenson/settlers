@@ -37,7 +37,6 @@ public class DonkeyBreeder extends Worker {
         FEEDING,
         GOING_BACK_TO_HOUSE_AFTER_FEEDING,
         PREPARING_DONKEY_FOR_DELIVERY,
-        GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE
     }
 

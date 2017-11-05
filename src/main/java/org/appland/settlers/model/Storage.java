@@ -99,10 +99,10 @@ public class Storage extends Building implements Actor {
         }
 
         /* Send out new workers */
-        assignNewWorkerToUnoccupiedPlaces(getMap());
+        assignNewWorkerToUnoccupiedPlaces();
     }
 
-    public void assignNewWorkerToUnoccupiedPlaces(GameMap map) throws Exception {
+    public void assignNewWorkerToUnoccupiedPlaces() throws Exception {
         if (assignCouriers()) {
             return;
         }

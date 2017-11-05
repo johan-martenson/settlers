@@ -70,7 +70,7 @@ public class WildAnimal extends Worker {
         }
     }
 
-    private boolean canGoTo(Point point) throws Exception {
+    private boolean canGoTo(Point point) {
 
         if (!map.isWithinMap(point)) {
             return false;
@@ -95,7 +95,7 @@ public class WildAnimal extends Worker {
         return true;
     }
 
-    private Point findNextPoint() throws Exception {
+    private Point findNextPoint() {
 
         /* Get surrounding points */
         List<Point> adjacentPoints = map.getPointsWithinRadius(getPosition(), RANGE);

@@ -54,7 +54,7 @@ public class Forester extends Worker {
 
         return true;
     }
-    private Point getTreeSpot() throws Exception {
+    private Point getTreeSpot() {
         Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), RANGE);
 
         for (Point point : adjacentPoints) {

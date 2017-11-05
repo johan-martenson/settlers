@@ -71,7 +71,7 @@ public class Utils {
         fastForward(time, Arrays.asList(b));
     }
 
-    public static void fastForward(int time, List<Actor> actors) throws Exception {
+    private static void fastForward(int time, List<Actor> actors) throws Exception {
         for (Actor a : actors) {
             fastForward(time, a);
         }
@@ -95,23 +95,6 @@ public class Utils {
         }
 
         return result;
-    }
-
-    public static boolean roadStartStopIsCorrect(Road r, Point p1, Point p2) {
-        if (r.getStart().equals(p1) && r.getEnd().equals(p2)) {
-            return true;
-        } else if (r.getStart().equals(p2) && r.getEnd().equals(p1)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void stepTime(List<Actor> actors) throws Exception {
-
-        for (Actor a : actors) {
-            a.stepTime();
-        }
     }
 
     public static void fillUpInventory(Storage storage, Material material, int amount) throws Exception {
@@ -245,25 +228,25 @@ public class Utils {
         assertTrue(found);
     }
 
-    public static void surroundPointWithWater(Point point0, GameMap map) throws Exception {
+    public static void surroundPointWithWater(Point point0, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
             tile.setVegetationType(WATER);
         }
     }
 
-    public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) throws Exception {
+    public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) {
         Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
 
         waterTile.setVegetationType(WATER);
     }
 
-    public static void surroundPointWithMountain(Point point0, GameMap map) throws Exception {
+    public static void surroundPointWithMountain(Point point0, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
             tile.setVegetationType(MOUNTAIN);
         }
     }
 
-    public static void surroundPointWithSwamp(Point point0, GameMap map) throws Exception {
+    public static void surroundPointWithSwamp(Point point0, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
             tile.setVegetationType(SWAMP);
         }
@@ -293,31 +276,31 @@ public class Utils {
         assertNotNull(building.getWorker());
     }
 
-    public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+    public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setAmountMineral(GOLD, size);
         }
     }
 
-    public static void putIronAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+    public static void putIronAtSurroundingTiles(Point point, Size size, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setAmountMineral(IRON, size);
         }
     }
 
-    public static void putCoalAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+    public static void putCoalAtSurroundingTiles(Point point, Size size, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setAmountMineral(COAL, size);
         }
     }
 
-    public static void putGraniteAtSurroundingTiles(Point point, Size size, GameMap map) throws Exception {
+    public static void putGraniteAtSurroundingTiles(Point point, Size size, GameMap map) {
         for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setAmountMineral(STONE, size);
         }
     }
 
-    public static void createMountainWithinRadius(Point point, int i, GameMap map) throws Exception {
+    public static void createMountainWithinRadius(Point point, int i, GameMap map) {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
 
@@ -330,7 +313,7 @@ public class Utils {
         }
     }
 
-    public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) throws Exception {
+    public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
 
@@ -602,7 +585,7 @@ public class Utils {
         return null;
     }
 
-    public static <T> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player, GameMap map) {
+    public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player, GameMap map) {
         List<T> workersFound = new LinkedList<>();
 
         for (Worker w : map.getWorkers()) {
@@ -614,7 +597,7 @@ public class Utils {
         return workersFound;
     }
 
-    public static <T> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player, GameMap map) throws Exception {
+    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player, GameMap map) throws Exception {
         List<T> workers = new LinkedList<>();
 
         for (int i = 0; i < 1000; i++) {

@@ -2,15 +2,12 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.HunterHut;
-import org.appland.settlers.model.InvalidMaterialException;
-import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -107,7 +104,7 @@ public class TestHunterHut {
     }
 
     @Test
-    public void testConstructHunter() throws InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testConstructHunter() throws Exception {
         HunterHut f = new HunterHut(null);
 
         assertTrue(f.underConstruction());

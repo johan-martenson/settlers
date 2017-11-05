@@ -5,27 +5,41 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.*;
 import org.appland.settlers.model.Military;
-import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Storage;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
@@ -33,7 +47,7 @@ import org.junit.Test;
  */
 public class TestInventory {
 
-    Storage storage;
+    private Storage storage;
 
     @Before
     public void initTests() throws Exception {

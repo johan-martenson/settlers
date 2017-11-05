@@ -5,16 +5,11 @@ import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidMaterialException;
-import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -155,7 +150,7 @@ public class TestGameLogic {
     }
 
     @Test
-    public void testDeliverForWorkersAtTarget() throws InvalidEndPointException, InvalidRouteException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testDeliverForWorkersAtTarget() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

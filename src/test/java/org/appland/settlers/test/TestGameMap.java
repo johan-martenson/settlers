@@ -6,35 +6,36 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import java.awt.geom.Path2D;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidRouteException;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.awt.geom.Path2D;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *
@@ -42,8 +43,8 @@ import org.junit.Test;
  */
 public class TestGameMap {
     private GameMap map;
-    Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-    List<Player> players = new ArrayList<>();
+    private final Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+    private final List<Player> players = new ArrayList<>();
 
     @Before
     public void setup() throws Exception {
@@ -167,7 +168,7 @@ public class TestGameMap {
     }
 
     @Test(expected=Exception.class)
-    public void testAddRoadWithIdenticalStartAndEnd() throws InvalidEndPointException, Exception {
+    public void testAddRoadWithIdenticalStartAndEnd() throws Exception {
         Point hqPoint = new Point(8, 8);
         Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -284,11 +285,6 @@ public class TestGameMap {
         Point point0 = new Point(4, 7);
 
         map.placeFlag(player0, point0);
-    }
-
-    @Test
-    public void testGetClosestStorage() {
-        // TODO: Write test
     }
 
     @Test

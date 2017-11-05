@@ -35,7 +35,7 @@ public abstract class Worker implements Actor, Piece {
     private final static Logger log = Logger.getLogger(Worker.class.getName());
     private final Countdown     walkCountdown;
 
-    protected GameMap     map;
+    GameMap     map;
 
     private List<Point> path;
     private States      state;
@@ -93,7 +93,7 @@ public abstract class Worker implements Actor, Piece {
             }
         }
 
-        public int getSumMeasured() {
+        int getSumMeasured() {
             int sum = 0;
 
             for (int measurement : productiveTime) {
@@ -103,12 +103,12 @@ public abstract class Worker implements Actor, Piece {
             return sum;
         }
 
-        public int getNumberOfCycles() {
+        int getNumberOfCycles() {
             return productiveTime.length;
         }
     }
 
-    public Worker(Player player, GameMap map) {
+    Worker(Player player, GameMap map) {
         this.player     = player;
         target          = null;
         position        = null;
@@ -211,15 +211,15 @@ public abstract class Worker implements Actor, Piece {
         return "Idle courier at " + getPosition();
     }
 
-    protected void onArrival() throws Exception {
+    void onArrival() throws Exception {
         log.log(Level.FINE, "On handle hook arrival with nothing to do");
     }
 
-    protected void onIdle() throws Exception {
+    void onIdle() throws Exception {
         log.log(Level.FINE, "On idle hook with nothing to do");
     }
 
-    protected void onEnterBuilding(Building b) throws Exception {
+    void onEnterBuilding(Building b) throws Exception {
         log.log(Level.FINE, "On enter building hook with nothing to do");
     }
 
@@ -353,11 +353,11 @@ public abstract class Worker implements Actor, Piece {
         return carriedCargo;
     }
 
-    protected void setOffroadTarget(Point point) throws Exception {
+    void setOffroadTarget(Point point) throws Exception {
         setOffroadTarget(point, null);
     }
 
-    protected void setOffroadTarget(Point point, Point via) throws Exception {
+    void setOffroadTarget(Point point, Point via) throws Exception {
         boolean wasInside = false;
 
         log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {point, via});
@@ -396,7 +396,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    protected void setTarget(Point point) throws Exception {
+    void setTarget(Point point) throws Exception {
         if (state == IDLE_INSIDE) {
             if (!point.equals(home.getFlag().getPosition())) {
                 setTarget(point, home.getFlag().getPosition());
@@ -408,7 +408,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    protected void setTarget(Point point, Point via) throws InvalidRouteException, Exception {
+    void setTarget(Point point, Point via) throws Exception {
         log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {point, via});
 
         target = point;
@@ -446,7 +446,7 @@ public abstract class Worker implements Actor, Piece {
         return home;
     }
 
-    protected void setCargo(Cargo cargo) throws Exception {
+    void setCargo(Cargo cargo) {
         carriedCargo = cargo;
 
         if (carriedCargo != null) {
@@ -454,7 +454,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    private void updateCargoPosition() throws Exception {
+    private void updateCargoPosition() {
         if (carriedCargo != null) {
             carriedCargo.setPosition(getPosition());
         }
@@ -464,11 +464,11 @@ public abstract class Worker implements Actor, Piece {
         return path;
     }
 
-    protected void returnHomeOffroad() throws Exception {
+    void returnHomeOffroad() throws Exception {
         setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
     }
 
-    protected void returnHome() throws Exception {
+    void returnHome() throws Exception {
         if (getPosition().equals(home.getFlag().getPosition())) {
             setTarget(home.getPosition());
         } else {
@@ -476,7 +476,7 @@ public abstract class Worker implements Actor, Piece {
         }
     }
 
-    protected void setHome(Building building) {
+    void setHome(Building building) {
         home = building;
     }
 
@@ -484,7 +484,7 @@ public abstract class Worker implements Actor, Piece {
         onReturnToStorage();
     }
 
-    protected void onReturnToStorage() throws Exception {
+    void onReturnToStorage() throws Exception {
 
     }
 
@@ -492,9 +492,9 @@ public abstract class Worker implements Actor, Piece {
         return player;
     }
 
-    protected void onWalkingAndAtFixedPoint() throws Exception {}
+    void onWalkingAndAtFixedPoint() throws Exception {}
 
-    protected void walkHalfWayOffroadTo(Point point) throws Exception {
+    void walkHalfWayOffroadTo(Point point) throws Exception {
 
         /* Walk half way to the given target */
         setOffroadTarget(point);
@@ -502,9 +502,9 @@ public abstract class Worker implements Actor, Piece {
         state = States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT;
     }
 
-    protected void onWalkedHalfWay() {}
+    void onWalkedHalfWay() {}
 
-    protected void returnToFixedPoint() {
+    void returnToFixedPoint() {
 
         Point previousTarget = target;
         Point previousLastPoint = getLastPoint();
@@ -523,15 +523,15 @@ public abstract class Worker implements Actor, Piece {
         state = States.WALKING_BETWEEN_POINTS;
     }
 
-    protected GameMap getMap() {
+    GameMap getMap() {
         return map;
     }
 
-    protected void cancelWalkingToTarget() {
+    void cancelWalkingToTarget() {
         state = States.IDLE_OUTSIDE;
     }
 
-    protected void clearTargetBuilding() {
+    void clearTargetBuilding() {
         this.buildingToEnter = null;
     }
 

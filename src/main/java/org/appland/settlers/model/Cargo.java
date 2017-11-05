@@ -28,7 +28,7 @@ public class Cargo implements Piece {
         return this.material;
     }
 
-    public void setTarget(Building target) throws InvalidRouteException, Exception {
+    public void setTarget(Building target) throws Exception {
         log.log(Level.FINE, "Setting target to {0}", target);
         this.target = target;
 
@@ -50,7 +50,7 @@ public class Cargo implements Piece {
         return path.get(0);
     }
 
-    public void setPosition(Point p) throws Exception {
+    public void setPosition(Point p) {
         log.log(Level.FINE, "Setting position to {0}", p);
 
         if (map.isFlagAtPoint(p) || map.isBuildingAtPoint(p)) {

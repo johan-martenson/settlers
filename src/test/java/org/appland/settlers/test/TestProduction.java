@@ -1,11 +1,5 @@
 package org.appland.settlers.test;
 
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.WOOD;
-
-import static org.junit.Assert.assertTrue;
-
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.DeliveryNotPossibleException;
@@ -14,15 +8,14 @@ import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Woodcutter;
-
-import org.junit.Before;
 import org.junit.Test;
 
-public class TestProduction {
+import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.junit.Assert.assertTrue;
 
-    @Before
-    public void setupTest() {
-    }
+public class TestProduction {
 
     @Test(expected = InvalidMaterialException.class)
     public void testWrongMaterialToSawmill() throws Exception {

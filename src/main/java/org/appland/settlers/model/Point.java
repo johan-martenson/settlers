@@ -7,9 +7,7 @@ package org.appland.settlers.model;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *

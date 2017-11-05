@@ -5,11 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -18,12 +13,6 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidRouteException;
-import static org.appland.settlers.model.Material.BEER;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
-import static org.appland.settlers.model.Material.WATER;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -34,15 +23,25 @@ import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 
 /**
  *
@@ -51,7 +50,7 @@ import org.junit.rules.ExpectedException;
 public class TestRoads {
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testGetNotExistingRoad() throws Exception {
@@ -64,7 +63,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testUnreachableRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
+    public void testUnreachableRoute() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -95,7 +94,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testFindRouteWithSingleRoad() throws InvalidEndPointException, InvalidRouteException, Exception {
+    public void testFindRouteWithSingleRoad() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -128,7 +127,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testFindRoute() throws InvalidEndPointException, InvalidRouteException, Exception {
+    public void testFindRoute() throws Exception {
         /*
          * F--F1--F2--F3--F4--F10----------------|
          *    |    |                             |
@@ -164,8 +163,8 @@ public class TestRoads {
             new Point(14, 6), // F9
             new Point(23, 3)};  // F10
 
-        for (int i = 0; i < points.length; i++) {
-            map.placeFlag(player0, points[i]);
+        for (Point point : points) {
+            map.placeFlag(player0, point);
         }
 
         Point target = new Point(18, 6);
@@ -215,7 +214,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testNeedsCourier() throws InvalidEndPointException, InvalidRouteException, Exception {
+    public void testNeedsCourier() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -626,7 +625,7 @@ public class TestRoads {
         map.placeFlag(player0, new Point(16, 12));
         map.placeFlag(player0, new Point(20, 12));
         map.placeFlag(player0, new Point(12, 12));
-        map.placeRoad(player0, Arrays.asList(new Point[]{new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)}));
+        map.placeRoad(player0, Arrays.asList(new Point(20, 12), new Point(18, 12), new Point(17, 13), new Point(18, 14), new Point(17, 15), new Point(16, 16), new Point(15, 15), new Point(14, 14), new Point(15, 13), new Point(14, 12), new Point(12, 12)));
 
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(16, 12));
 
@@ -635,7 +634,7 @@ public class TestRoads {
         map.placeFlag(player0, new Point(21, 25));
         map.placeFlag(player0, new Point(25, 25));
         map.placeFlag(player0, new Point(17, 25));
-        map.placeRoad(player0, Arrays.asList(new Point[]{new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)}));
+        map.placeRoad(player0, Arrays.asList(new Point(25, 25), new Point(23, 25), new Point(22, 24), new Point(23, 23), new Point(22, 22), new Point(21, 21), new Point(20, 22), new Point(19, 23), new Point(20, 24), new Point(19, 25), new Point(17, 25)));
 
         assertFalse(points.contains(new Point(21, 23)));
     }

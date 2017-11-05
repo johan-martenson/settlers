@@ -418,11 +418,11 @@ public class Player {
         return false;
     }
 
-    public Collection<Point> getAvailableFlagPoints() throws Exception {
+    public Collection<Point> getAvailableFlagPoints() {
         return map.getAvailableFlagPoints(this);
     }
 
-    public Map<Point, Size> getAvailableHousePoints() throws Exception {
+    public Map<Point, Size> getAvailableHousePoints() {
         return map.getAvailableHousePoints(this);
     }
 

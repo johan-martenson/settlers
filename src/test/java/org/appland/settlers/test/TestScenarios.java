@@ -11,14 +11,10 @@ import java.util.Map;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidMaterialException;
-import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidStateForProduction;
+
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -34,8 +30,7 @@ import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
-import static org.appland.settlers.test.Utils.fastForward;
-import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -48,7 +43,7 @@ import static org.appland.settlers.test.Utils.fastForwardUntilWorkersReachTarget
 public class TestScenarios {
 
     @Test
-    public void productionAndTransportForWoodcutterAndSawmill() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void productionAndTransportForWoodcutterAndSawmill() throws Exception {
 
         /*   --   SETUP   --   */
 
@@ -290,7 +285,7 @@ public class TestScenarios {
     }
 
     @Test
-    public void buildWoodcutterSawmillQuarrySequenciallyFromScratch() throws InvalidEndPointException, InvalidRouteException, InvalidStateForProduction, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void buildWoodcutterSawmillQuarrySequenciallyFromScratch() throws Exception {
 
         /*   --   SETUP   --   */
 

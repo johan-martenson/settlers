@@ -1,8 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public enum Material {
@@ -54,7 +52,7 @@ public enum Material {
     SCOUT,
     HUNTER;
 
-    private final static List<Material> minerals = Arrays.asList(new Material[] {GOLD, IRON, COAL, STONE});
+    private final static List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
 
     static Iterable<Material> getMinerals() {
         return minerals;

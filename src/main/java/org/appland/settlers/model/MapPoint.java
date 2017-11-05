@@ -65,7 +65,7 @@ public class MapPoint {
         return flag;
     }
 
-    void addConnectingRoad(Road r) throws Exception {
+    void addConnectingRoad(Road r) {
         Point previous = null;
 
         for (Point current : r.getWayPoints()) {
@@ -206,7 +206,7 @@ public class MapPoint {
         building = null;
     }
 
-    boolean isCrop(Point p) {
+    boolean isCrop() {
         return crop != null;
     }
 }

@@ -315,7 +315,6 @@ public class Courier extends Worker {
     private void pickUpCargo() throws Exception {
 
         EndPoint endPoint = getEndPointAtPoint(getPosition());
-        EndPoint otherEnd = assignedRoad.getOtherFlag(endPoint);
 
         /* Pick up the right cargo if we have promised to do so */
         if (intendedCargo != null) {

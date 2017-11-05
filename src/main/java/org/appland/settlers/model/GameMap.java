@@ -788,7 +788,7 @@ public class GameMap {
         return findShortestPath(start, end, null, pathOnExistingRoadsProvider);
     }
 
-    public Road getRoad(Point start, Point end) throws Exception {
+    public Road getRoad(Point start, Point end) {
         for (Road road : roads) {
             if ((road.getStart().equals(start) && road.getEnd().equals(end)) ||
                 (road.getEnd().equals(start) && road.getStart().equals(end))) {
@@ -937,7 +937,7 @@ public class GameMap {
         return workers;
     }
 
-    public Collection<Point> getAvailableFlagPoints(Player player) throws Exception {
+    public Collection<Point> getAvailableFlagPoints(Player player) {
         Set<Point> points = new HashSet<>();
 
         for (Land land : player.getLands()) {
@@ -1069,7 +1069,7 @@ public class GameMap {
         return result;
     }
 
-    public Map<Point, Size> getAvailableHousePoints(Player player) throws Exception {
+    public Map<Point, Size> getAvailableHousePoints(Player player) {
         Map<Point, Size> housePoints = new HashMap<>();
 
         for (Land land : player.getLands()) {
@@ -1085,7 +1085,7 @@ public class GameMap {
         return housePoints;
     }
 
-    public List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) throws Exception {
+    public List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
         Point[] adjacentPoints = new Point[] {
             new Point(start.x - 2, start.y),
             new Point(start.x + 2, start.y),
@@ -1108,7 +1108,7 @@ public class GameMap {
         return resultList;
     }
 
-    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) throws Exception {
+    private Iterable<Point> getPossibleAdjacentOffRoadConnections(Point from) {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
 
@@ -1277,7 +1277,7 @@ public class GameMap {
         return point.x > 0 && point.x < width && point.y > 0 && point.y < height;
     }
 
-    private void addRoadToMapPoints(Road road) throws Exception {
+    private void addRoadToMapPoints(Road road) {
         for (Point point : road.getWayPoints()) {
             MapPoint mapPoint = pointToGameObject.get(point);
 
@@ -1305,7 +1305,7 @@ public class GameMap {
         return mp.getFlag();
     }
 
-    private boolean isPossibleAsEndPointInRoad(Player player, Point point) throws Exception {
+    private boolean isPossibleAsEndPointInRoad(Player player, Point point) {
 
         if (!isWithinMap(point)) {
             return false;
@@ -1324,7 +1324,7 @@ public class GameMap {
         return false;
     }
 
-    private boolean isPossibleAsAnyPointInRoad(Player player, Point point) throws Exception {
+    private boolean isPossibleAsAnyPointInRoad(Player player, Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
         if (mp.isRoad()) {
@@ -1347,7 +1347,7 @@ public class GameMap {
             return false;
         }
 
-        if (mp.isCrop(point)) {
+        if (mp.isCrop()) {
             return false;
         }
 
@@ -1382,7 +1382,7 @@ public class GameMap {
         return true;
     }
 
-    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point from) throws Exception {
+    public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point from) {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
 
@@ -1399,7 +1399,7 @@ public class GameMap {
         return resultList;
     }
 
-    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) throws Exception {
+    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
 
@@ -2304,7 +2304,7 @@ public class GameMap {
         return animal;
     }
 
-    private void handleWildAnimalPopulation() throws Exception {
+    private void handleWildAnimalPopulation() {
 
         double density = (double)wildAnimals.size() / (double)(width * height);
 
@@ -2330,7 +2330,7 @@ public class GameMap {
         }
     }
 
-    private Point findRandomPossiblePointToPlaceFreeMovingActor() throws Exception {
+    private Point findRandomPossiblePointToPlaceFreeMovingActor() {
 
         /* Pick centered point randomly */
         double x = random.nextDouble() * getWidth();

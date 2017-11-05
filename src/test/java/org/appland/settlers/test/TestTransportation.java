@@ -8,7 +8,6 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.Courier;
-import org.appland.settlers.model.DeliveryNotPossibleException;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
@@ -16,9 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GameUtils;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
-import org.appland.settlers.model.InvalidMaterialException;
 import org.appland.settlers.model.InvalidRouteException;
-import org.appland.settlers.model.InvalidStateForProduction;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
@@ -56,7 +53,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCreateRoad() throws InvalidEndPointException, Exception {
+    public void testCreateRoad() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -84,7 +81,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidEndPointException.class)
-    public void testCreateRoadWithoutStartBuilding() throws InvalidEndPointException, Exception {
+    public void testCreateRoadWithoutStartBuilding() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -101,7 +98,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidEndPointException.class)
-    public void testCreateRoadWithoutEndBuilding() throws InvalidEndPointException, Exception {
+    public void testCreateRoadWithoutEndBuilding() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -123,7 +120,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidEndPointException.class)
-    public void testCreateRoadWithoutAnyValidEndpoints() throws InvalidEndPointException, Exception {
+    public void testCreateRoadWithoutAnyValidEndpoints() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -136,7 +133,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testCreateTwoChainedRoads() throws InvalidEndPointException, Exception {
+    public void testCreateTwoChainedRoads() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -170,7 +167,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidEndPointException.class)
-    public void testCreateRoadWithSameEndAndStart() throws InvalidEndPointException, Exception {
+    public void testCreateRoadWithSameEndAndStart() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -184,7 +181,7 @@ public class TestTransportation {
     }
 
     @Test(expected = InvalidRouteException.class)
-    public void testFindRouteWithSameStartAndEnd() throws InvalidRouteException, Exception {
+    public void testFindRouteWithSameStartAndEnd() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -194,7 +191,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testWorkerWalk() throws InvalidEndPointException, InvalidRouteException, Exception {
+    public void testWorkerWalk() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -292,7 +289,7 @@ public class TestTransportation {
     }
 
     @Test(expected = Exception.class)
-    public void testWorkerUnreachableTarget() throws InvalidRouteException, Exception {
+    public void testWorkerUnreachableTarget() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -326,7 +323,7 @@ public class TestTransportation {
     }
 
     @Test
-    public void testProduceThenDeliverToStorage() throws InvalidStateForProduction, InvalidRouteException, InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, Exception {
+    public void testProduceThenDeliverToStorage() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -549,7 +546,7 @@ public class TestTransportation {
 
 
     @Test
-    public void testMilitaryTransportation() throws InvalidEndPointException, InvalidMaterialException, DeliveryNotPossibleException, InvalidStateForProduction, Exception {
+    public void testMilitaryTransportation() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
