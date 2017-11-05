@@ -132,10 +132,6 @@ public class Building implements Actor, EndPoint {
     Collection<Point> getDiscoveredLand() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        if (militaryBuilding == null) {
-            return new LinkedList<>();
-        }
-
         return map.getPointsWithinRadius(getPosition(), militaryBuilding.defenceRadius() + 2);
     }
 
@@ -253,11 +249,6 @@ public class Building implements Actor, EndPoint {
             throw new Exception("Building " + this + " is already occupied.");
         }
 
-        /* Can't assign workers to military buildings */
-        if (isMilitaryBuilding() && ! (this instanceof Headquarter)) {
-            throw new Exception("Can't assign worker to military building");
-        }
-
         log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[]{worker, this});
 
         this.worker = worker;
@@ -270,10 +261,6 @@ public class Building implements Actor, EndPoint {
 
         if (!ready()) {
             throw new Exception("Cannot assign military when the building is not ready");
-        }
-
-        if (!isMilitaryBuilding()) {
-            throw new Exception("Cannot assign military to non-military building");
         }
 
         if (hostedMilitary.size() >= getMaxHostedMilitary()) {
@@ -514,9 +501,7 @@ public class Building implements Actor, EndPoint {
         /* Remove driveway */
         Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
 
-        if (driveway != null) {
-            map.removeRoad(driveway);
-        }
+        map.removeRoad(driveway);
     }
 
     public Size getSize() {
@@ -680,21 +665,6 @@ public class Building implements Actor, EndPoint {
 
     public List<Cargo> getStackedCargo() {
         return new ArrayList<>();
-    }
-
-    @Override
-    public boolean hasCargoWaitingForRoad(Road road) {
-        return false;
-    }
-
-    @Override
-    public Cargo retrieveCargo(Cargo cargo) {
-        return null;
-    }
-
-    @Override
-    public Cargo getCargoWaitingForRoad(Road road) {
-        return null;
     }
 
     private boolean unoccupied() {

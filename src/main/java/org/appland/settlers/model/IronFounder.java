@@ -85,7 +85,7 @@ public class IronFounder extends Worker {
                     /* Report that the iron founder produced */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
                 }
             } else {

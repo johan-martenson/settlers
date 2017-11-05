@@ -87,7 +87,7 @@ public class Baker extends Worker {
 
                     /* Report production of the bread */
                     productivityMeasurer.reportProductivity();
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
                 }
             } else {

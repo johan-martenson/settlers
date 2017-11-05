@@ -39,11 +39,9 @@ public class Courier extends Worker {
     private EndPoint getEndPointAtPoint(Point currentPosition) throws Exception {
         if (map.isFlagAtPoint(currentPosition)) {
             return map.getFlagAtPoint(currentPosition);
-        } else if (map.isBuildingAtPoint(currentPosition)) {
-            return map.getBuildingAtPoint(currentPosition);
         }
 
-        throw new Exception("No endpoint at " + currentPosition);
+        return map.getBuildingAtPoint(currentPosition);
     }
 
     protected enum States {
@@ -67,8 +65,8 @@ public class Courier extends Worker {
     protected void onIdle() throws Exception {
 
         if (state == IDLE_AT_ROAD) {
-            EndPoint start = assignedRoad.getStartFlag();
-            EndPoint end = assignedRoad.getEndFlag();
+            Flag start = map.getFlagAtPoint(assignedRoad.getStart());
+            Flag end   = map.getFlagAtPoint(assignedRoad.getEnd());
 
             if (start.hasCargoWaitingForRoad(assignedRoad)) {
                 Cargo cargo = start.getCargoWaitingForRoad(assignedRoad);
@@ -98,14 +96,14 @@ public class Courier extends Worker {
         return intendedCargo;
     }
 
-    private void pickUpCargoForRoad(EndPoint flag, Road r) throws Exception {
+    private void pickUpCargoForRoad(Flag flag, Road road) throws Exception {
         Cargo cargoToPickUp;
 
         if (!getPosition().equals(flag.getPosition())) {
             throw new Exception("Not at " + flag);
         }
 
-        cargoToPickUp = flag.getCargoWaitingForRoad(r);
+        cargoToPickUp = flag.getCargoWaitingForRoad(road);
 
         cargoToPickUp.promiseDelivery();
 
@@ -294,7 +292,7 @@ public class Courier extends Worker {
             flag = getEndPointAtPoint(currentPosition);
         }
 
-        EndPoint otherEnd = assignedRoad.getOtherFlag(flag);
+        Flag otherEnd = map.getFlagAtPoint(assignedRoad.getOtherPoint(flag.getPosition()));
 
         /* Plan to pick up cargo at other end if needed */
         if (otherEnd.hasCargoWaitingForRoad(assignedRoad)) {
@@ -314,7 +312,7 @@ public class Courier extends Worker {
 
     private void pickUpCargo() throws Exception {
 
-        EndPoint endPoint = getEndPointAtPoint(getPosition());
+        Flag endPoint = map.getFlagAtPoint(getPosition());
 
         /* Pick up the right cargo if we have promised to do so */
         if (intendedCargo != null) {

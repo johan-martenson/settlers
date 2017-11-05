@@ -14,11 +14,5 @@ public interface EndPoint {
 
     void putCargo(Cargo c) throws Exception;
 
-    boolean hasCargoWaitingForRoad(Road r);
-
-    Cargo retrieveCargo(Cargo c);
-
-    Cargo getCargoWaitingForRoad(Road r);
-
     Point getPosition();
 }

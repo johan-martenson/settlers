@@ -97,7 +97,7 @@ public class WoodcutterWorker extends Worker {
                 setOffroadTarget(p);
 
                 state = State.GOING_OUT_TO_CUT_TREE;
-            } else if (getHome().isProductionEnabled()) {
+            } else {
                 countdown.step();
             }
         } else if (state == State.CUTTING_TREE) {

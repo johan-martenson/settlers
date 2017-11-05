@@ -70,12 +70,10 @@ public class Flag implements EndPoint {
         }
     }
 
-    @Override
     public boolean hasCargoWaitingForRoad(Road road) {
         return getCargoWaitingForRoad(road) != null;
     }
 
-    @Override
     public Cargo retrieveCargo(Cargo cargo) {
 
         if (stackedCargo.contains(cargo)) {
@@ -88,7 +86,6 @@ public class Flag implements EndPoint {
         return null;
     }
 
-    @Override
     public Cargo getCargoWaitingForRoad(Road road) {
 
         Cargo waitingCargo = null;

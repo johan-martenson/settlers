@@ -85,7 +85,7 @@ public class Minter extends Worker {
                     /* Report that the minter produced a coin */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
                 }
             } else {

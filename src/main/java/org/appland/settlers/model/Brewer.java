@@ -86,7 +86,7 @@ public class Brewer extends Worker {
 
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
                 }
             } else {

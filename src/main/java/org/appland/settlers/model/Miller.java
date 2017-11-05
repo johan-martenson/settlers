@@ -85,7 +85,7 @@ public class Miller extends Worker {
                     /* Report that the miller produced flour */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
-                } else if (getHome().isProductionEnabled()) {
+                } else {
                     countdown.step();
                 }
             } else {

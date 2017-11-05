@@ -127,12 +127,14 @@ public abstract class Worker implements Actor {
 
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
 
-            /* Start the next part of the road if the worker is not at the target */
-            if (!position.equals(target)) {
-                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+            /* Arrival at target is already handled so in this branch the
+             * worker is at a fixed point but not the target point
+             * */
 
-                state = WALKING_BETWEEN_POINTS;
-            }
+            /* Start the next part of the road */
+            walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+
+            state = WALKING_BETWEEN_POINTS;
         } else if (state == WALKING_BETWEEN_POINTS) {
             walkCountdown.step();
 
@@ -162,12 +164,9 @@ public abstract class Worker implements Actor {
             }
         } else if (state == States.WALKING_HALFWAY_AND_EXACTLY_AT_POINT) {
 
-            /* Start the next part of the road if the worker is not at the target */
-            if (!position.equals(target)) {
-                walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
+            walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
-                state = States.WALKING_HALF_WAY;
-            }
+            state = States.WALKING_HALF_WAY;
         } else if (state == States.WALKING_HALF_WAY) {
 
             walkCountdown.step();
