@@ -1640,4 +1640,30 @@ public class TestBakery {
 
         /* Verify that the bakery can produce */
         assertTrue(bakery.canProduce());
-    }}
+    }
+
+    @Test
+    public void testBakeryReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(6, 22);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Construct the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(bakery0.getProducedMaterial().length, 1);
+        assertEquals(bakery0.getProducedMaterial()[0], BREAD);
+    }
+}

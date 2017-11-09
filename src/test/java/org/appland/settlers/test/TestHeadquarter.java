@@ -185,4 +185,21 @@ public class TestHeadquarter {
             assertTrue(false);
         } catch (Exception e) {}
     }
+
+    @Test
+    public void testHeadquarterReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the reported output is correct */
+        assertEquals(headquarter0.getProducedMaterial().length, 0);
+    }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANCK;
@@ -1665,5 +1666,30 @@ public class TestHunterHut {
 
         /* Verify that the hunter hut can produce */
         assertTrue(hunterHut0.canProduce());
+    }
+
+    @Test
+    public void testHunterHutReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(6, 22);
+        Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Construct the hunter hut */
+        Utils.constructHouse(hunterHut0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(hunterHut0.getProducedMaterial().length, 1);
+        assertEquals(hunterHut0.getProducedMaterial()[0], MEAT);
     }
 }

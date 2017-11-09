@@ -504,10 +504,10 @@ public class TestQuarry {
         assertTrue(mason.isInsideBuilding());
         assertNull(mason.getCargo());
 
-        /* Verify that no stone is available from the quarry or its flag */
+        /* Verify that no stone is available from the quarry's flag */
         for (int i = 0; i < 100; i++) {
             map.stepTime();
-            assertTrue(quarry.getStackedCargo().isEmpty());
+            assertTrue(quarry.getFlag().getStackedCargo().isEmpty());
             assertNull(mason.getCargo());
         }
     }
@@ -1982,5 +1982,30 @@ public class TestQuarry {
 
         /* Verify that the quarry can produce */
         assertTrue(quarry0.canProduce());
+    }
+
+    @Test
+    public void testQuarryReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(6, 22);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Construct the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(quarry0.getProducedMaterial().length, 1);
+        assertEquals(quarry0.getProducedMaterial()[0], STONE);
     }
 }

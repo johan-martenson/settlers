@@ -1934,4 +1934,32 @@ public class TestGoldMine {
         /* Verify that the gold mine can produce */
         assertTrue(goldMine.canProduce());
     }
+
+    @Test
+    public void testGoldMineReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a small mountain */
+        Point point1 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point1, map);
+
+        /* Place gold mine */
+        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
+
+        /* Construct the gold mine */
+        Utils.constructHouse(goldMine0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(goldMine0.getProducedMaterial().length, 1);
+        assertEquals(goldMine0.getProducedMaterial()[0], GOLD);
+    }
 }

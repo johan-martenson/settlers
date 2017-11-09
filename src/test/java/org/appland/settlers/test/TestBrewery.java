@@ -1693,4 +1693,29 @@ public class TestBrewery {
         /* Verify that the brewery can produce */
         assertTrue(brewery.canProduce());
     }
+
+    @Test
+    public void testBreweryReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(6, 22);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Construct the brewery */
+        Utils.constructHouse(brewery0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(brewery0.getProducedMaterial().length, 1);
+        assertEquals(brewery0.getProducedMaterial()[0], BEER);
+    }
 }

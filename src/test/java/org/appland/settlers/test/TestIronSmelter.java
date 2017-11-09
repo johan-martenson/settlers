@@ -1793,4 +1793,29 @@ public class TestIronSmelter {
         /* Verify that the iron smelter can produce */
         assertTrue(ironSmelter0.canProduce());
     }
+
+    @Test
+    public void testIronSmelterReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Construct the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(ironSmelter0.getProducedMaterial().length, 1);
+        assertEquals(ironSmelter0.getProducedMaterial()[0], IRON_BAR);
+    }
 }

@@ -1751,4 +1751,29 @@ public class TestMint {
         /* Verify that the mint can produce */
         assertTrue(mint0.canProduce());
     }
+
+    @Test
+    public void testMintReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point1 = new Point(6, 22);
+        Building mint0 = map.placeBuilding(new Mint(player0), point1);
+
+        /* Construct the mint */
+        Utils.constructHouse(mint0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(mint0.getProducedMaterial().length, 1);
+        assertEquals(mint0.getProducedMaterial()[0], COIN);
+    }
 }

@@ -2098,4 +2098,29 @@ public class TestFishery {
         /* Verify that the fishery can produce */
         assertTrue(fishery.canProduce());
     }
+
+    @Test
+    public void testFisheryReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(6, 22);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Construct the fishery */
+        Utils.constructHouse(fishery0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(fishery0.getProducedMaterial().length, 1);
+        assertEquals(fishery0.getProducedMaterial()[0], FISH);
+    }
 }

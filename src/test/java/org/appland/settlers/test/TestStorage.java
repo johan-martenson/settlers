@@ -1649,4 +1649,28 @@ public class TestStorage {
         /* Verify that the storage can produce */
         assertFalse(storage0.canProduce());
     }
+
+    @Test
+    public void testStorageReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage */
+        Point point1 = new Point(6, 22);
+        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+
+        /* Construct the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(storage0.getProducedMaterial().length, 0);
+    }
 }

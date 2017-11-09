@@ -1750,4 +1750,30 @@ public class TestArmory {
         /* Verify that the armory can produce */
         assertTrue(armory.canProduce());
     }
+
+    @Test
+    public void testArmoryReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Construct the armory */
+        Utils.constructHouse(armory0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(armory0.getProducedMaterial().length, 2);
+        assertTrue((armory0.getProducedMaterial()[0] == SWORD && armory0.getProducedMaterial()[1] == SHIELD) ||
+                   (armory0.getProducedMaterial()[1] == SWORD && armory0.getProducedMaterial()[0] == SHIELD));
+    }
 }

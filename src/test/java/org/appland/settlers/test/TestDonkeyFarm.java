@@ -28,6 +28,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.PLANCK;
 import static org.appland.settlers.model.Material.STONE;
@@ -2123,5 +2124,30 @@ public class TestDonkeyFarm {
 
         /* Verify that the donkey farm can produce */
         assertTrue(donkeyFarm0.canProduce());
+    }
+
+    @Test
+    public void testDonkeyFarmReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(6, 22);
+        Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Construct the donkey farm */
+        Utils.constructHouse(donkeyFarm0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(donkeyFarm0.getProducedMaterial().length, 1);
+        assertEquals(donkeyFarm0.getProducedMaterial()[0], DONKEY);
     }
 }

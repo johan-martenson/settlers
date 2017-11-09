@@ -1110,4 +1110,28 @@ public class TestGuardHouse {
         /* Verify that the guard house can produce */
         assertFalse(guardHouse0.canProduce());
     }
+
+    @Test
+    public void testGuardHouseReportsCorrectOutput() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(6, 22);
+        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct the guard house */
+        Utils.constructHouse(guardHouse0, map);
+
+        /* Verify that the reported output is correct */
+        assertEquals(guardHouse0.getProducedMaterial().length, 0);
+    }
 }

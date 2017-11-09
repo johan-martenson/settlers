@@ -663,10 +663,6 @@ public class Building implements Actor, EndPoint {
         state = State.UNOCCUPIED;
     }
 
-    public List<Cargo> getStackedCargo() {
-        return new ArrayList<>();
-    }
-
     private boolean unoccupied() {
         return state == State.UNOCCUPIED;
     }
@@ -1074,5 +1070,15 @@ public class Building implements Actor, EndPoint {
         Production production = this.getClass().getAnnotation(Production.class);
 
         return production != null;
+    }
+
+    public Material[] getProducedMaterial() {
+        Production production = this.getClass().getAnnotation(Production.class);
+
+        if (production == null) {
+            return new Material[] {};
+        }
+
+        return this.getClass().getAnnotation(Production.class).output();
     }
 }
