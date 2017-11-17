@@ -2068,4 +2068,31 @@ public class TestQuarry {
             assertEquals(quarry0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testTearingDownQuarryAndThenFlag() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(6, 22);
+        Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Construct the quarry */
+        Utils.constructHouse(quarry0, map);
+
+        /* Tear down the quarry */
+        quarry0.tearDown();
+
+        /* Verify that tearing down the flag doesn't cause any problem */
+        map.removeFlag(quarry0.getFlag());
+    }
 }

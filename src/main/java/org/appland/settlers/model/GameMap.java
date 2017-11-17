@@ -1755,7 +1755,9 @@ public class GameMap {
         if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
             Building attachedBuilding = mpUpLeft.getBuilding();
 
-            attachedBuilding.tearDown();
+            if (!attachedBuilding.burningDown() && !attachedBuilding.destroyed()) {
+                attachedBuilding.tearDown();
+            }
         }
 
         /* Remove the road if the flag is an endpoint to a road */
