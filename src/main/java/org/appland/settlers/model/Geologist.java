@@ -35,7 +35,7 @@ public class Geologist extends Worker {
     }
 
     private final static int TIME_TO_INVESTIGATE   = 19;
-    private final static int RADIUS_TO_INVESTIGATE = 5;
+    private final static int RADIUS_TO_INVESTIGATE = 7;
     private final static Random RANDOM = new Random(1);
 
     private final Countdown countdown;
@@ -66,7 +66,7 @@ public class Geologist extends Worker {
                 nrSitesInvestigated++;
 
                 /* Return after investigating five sites */
-                if (nrSitesInvestigated == 5) {
+                if (nrSitesInvestigated == 10) {
                     state = RETURNING_TO_FLAG;
 
                     setOffroadTarget(flagPoint);

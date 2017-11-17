@@ -6,34 +6,36 @@
 
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sign;
+import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Sign;
 import static org.appland.settlers.model.Size.LARGE;
-import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Worker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -314,7 +316,7 @@ public class TestGeologist {
     }
 
     @Test
-    public void testGeologistInvestigatesFiveSites() throws Exception {
+    public void testGeologistInvestigatesTenSites() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -353,7 +355,7 @@ public class TestGeologist {
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, flag.getPosition());
 
         /* Wait for the geologist to reach the first site to investigate */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -403,6 +405,58 @@ public class TestGeologist {
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
         /* Wait for the geologist to investigate the fifth site */
+        assertTrue(geologist.isInvestigating());
+
+        Utils.fastForward(20, map);
+
+        /* Wait for the geologist to reach the sixth site to investigate */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Wait for the geologist to investigate the sixth site */
+        assertTrue(geologist.isInvestigating());
+
+        Utils.fastForward(20, map);
+
+        assertFalse(geologist.isInvestigating());
+        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+
+        /* Let the geologist go to the seventh site */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Wait for the geologist to investigate the seventh site */
+        assertTrue(geologist.isInvestigating());
+
+        Utils.fastForward(20, map);
+
+        assertFalse(geologist.isInvestigating());
+        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+
+        /* Let the geologist go to the eighth site */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Wait for the geologist to investigate the eighth site */
+        assertTrue(geologist.isInvestigating());
+
+        Utils.fastForward(20, map);
+
+        assertFalse(geologist.isInvestigating());
+        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+
+        /* Let the geologist go to the ninth site */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Wait for the geologist to investigate the ninth site */
+        assertTrue(geologist.isInvestigating());
+
+        Utils.fastForward(20, map);
+
+        assertFalse(geologist.isInvestigating());
+        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+
+        /* Let the geologist go to the tenth site */
+        Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
+
+        /* Wait for the geologist to investigate the tenth site */
         assertTrue(geologist.isInvestigating());
 
         Utils.fastForward(20, map);
@@ -611,11 +665,11 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(15, 15);
+        Point point1 = new Point(17, 17);
         Flag flag = map.placeFlag(player0, point1);
 
-        /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 7, map);
+        /* Create a large mountain with gold */
+        Utils.createMountainWithinRadius(point1, 9, map);
         Utils.putMineralWithinRadius(IRON, point1, 7, map);
 
         /* Connect headquarter and flag */
@@ -765,8 +819,8 @@ public class TestGeologist {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
 
-        /* Wait for the geologist to investigate five sites */
-        for (int i = 0; i < 5; i++) {
+        /* Wait for the geologist to investigate ten sites */
+        for (int i = 0; i < 10; i++) {
 
             /* Break when the geologist goes back to its flag */
             if (geologist.getTarget().equals(flag.getPosition())) {
@@ -1068,11 +1122,11 @@ public class TestGeologist {
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
-        Point point1 = new Point(10, 10);
+        Point point1 = new Point(17, 17);
         Flag flag = map.placeFlag(player0, point1);
 
         /* Place mountain without ore */
-        Utils.createMountainWithinRadius(point1, 6, map);
+        Utils.createMountainWithinRadius(point1, 9, map);
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
