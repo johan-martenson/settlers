@@ -54,7 +54,7 @@ public class Projectile implements Actor {
 
         if (countdown.reachedZero()) {
 
-            /* Determine if the projectile hit the target - the hitrate is 75% */
+            /* Determine if the projectile hit the target - the hit rate is 75% */
             if (RANDOM.nextDouble() > FAIL_RATE) {
                 target.hitByCatapult();
             }

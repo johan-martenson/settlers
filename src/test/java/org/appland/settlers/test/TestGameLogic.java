@@ -228,7 +228,7 @@ public class TestGameLogic {
         Point point2 = new Point(5, 17);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
-        /* Assign new workers to unocuppied places. Since there are no places
+        /* Assign new workers to unoccupied places. Since there are no places
          * that require workers this should not do anything */
         assertEquals(map.getWorkers().size(), 1);
 

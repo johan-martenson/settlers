@@ -160,7 +160,7 @@ public class IronFounder extends Worker {
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the iron foundery upon arrival */
+            /* Don't try to enter the iron foundry upon arrival */
             clearTargetBuilding();
 
             /* Go back to the storage */

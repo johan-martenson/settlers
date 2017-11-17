@@ -1934,7 +1934,7 @@ public class TestGraniteMine {
         /* Place granite mine */
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
-        /* Finish construction of the coal mine*/
+        /* Finish construction of the coal mine */
         Utils.constructHouse(graniteMine, map);
 
         /* Populate the granite mine */

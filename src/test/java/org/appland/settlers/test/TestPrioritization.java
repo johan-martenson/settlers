@@ -141,7 +141,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -272,7 +272,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -400,7 +400,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -528,7 +528,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -656,7 +656,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -767,7 +767,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -901,7 +901,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1045,7 +1045,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that the mines get one bread each with the four first deliveries */
+        /* Verify that the mines get one bread each with the four first deliveries */
         Map<Building, Integer> breadAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1348,7 +1348,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that only the iron smelter gets any coal */
+        /* Verify that only the iron smelter gets any coal */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1468,7 +1468,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that only the iron smelter gets any coal */
+        /* Verify that only the iron smelter gets any coal */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1588,7 +1588,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that only the iron smelter gets any coal */
+        /* Verify that only the iron smelter gets any coal */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1696,7 +1696,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /*Verify that only the iron smelter gets any coal */
+        /* Verify that only the iron smelter gets any coal */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 

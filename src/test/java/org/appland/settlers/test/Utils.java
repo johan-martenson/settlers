@@ -120,15 +120,15 @@ public class Utils {
     public static void assertNoStepDirectlyUpwards(List<Point> route) {
         Point previous = null;
 
-        for (Point iter : route) {
+        for (Point iterator : route) {
             if (previous == null) {
-                previous = iter;
+                previous = iterator;
                 continue;
             }
 
-            assertFalse(iter.x == previous.x && abs(iter.y - previous.y) == 2);
+            assertFalse(iterator.x == previous.x && abs(iterator.y - previous.y) == 2);
 
-            previous = iter;
+            previous = iterator;
         }
     }
 

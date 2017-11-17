@@ -1718,7 +1718,7 @@ public class TestSlaughterHouse {
     }
 
     @Test
-    public void testSlaugherHouseReportsCorrectOutput() throws Exception {
+    public void testSlaughterHouseReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1755,23 +1755,23 @@ public class TestSlaughterHouse {
         Point point0 = new Point(5, 5);
         Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place slaugher house */
+        /* Place slaughter house */
         Point point1 = new Point(6, 22);
-        Building slaugherHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
-        assertEquals(slaugherHouse0.getMaterialNeeded().size(), 2);
-        assertTrue(slaugherHouse0.getMaterialNeeded().contains(PLANK));
-        assertTrue(slaugherHouse0.getMaterialNeeded().contains(STONE));
-        assertEquals(slaugherHouse0.getTotalAmountNeeded(PLANK), 2);
-        assertEquals(slaugherHouse0.getTotalAmountNeeded(STONE), 2);
+        assertEquals(slaughterHouse0.getMaterialNeeded().size(), 2);
+        assertTrue(slaughterHouse0.getMaterialNeeded().contains(PLANK));
+        assertTrue(slaughterHouse0.getMaterialNeeded().contains(STONE));
+        assertEquals(slaughterHouse0.getTotalAmountNeeded(PLANK), 2);
+        assertEquals(slaughterHouse0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
             if (material == PLANK || material == STONE) {
                 continue;
             }
 
-            assertEquals(slaugherHouse0.getTotalAmountNeeded(material), 0);
+            assertEquals(slaughterHouse0.getTotalAmountNeeded(material), 0);
         }
     }
 

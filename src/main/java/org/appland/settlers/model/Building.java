@@ -792,7 +792,7 @@ public class Building implements Actor, EndPoint {
         return enablePromotions;
     }
 
-    List<Military> getRemoteDefenders() {
+    private List<Military> getRemoteDefenders() {
         return defenders;
     }
 

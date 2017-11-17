@@ -73,7 +73,7 @@ public class TestPlacement {
         assertTrue(map.getTrees().isEmpty());
         assertTrue(map.getFlags().isEmpty());
 
-        // TODO: verify all placable objects in map
+        // TODO: verify all placeable objects in map
     }
 
     @Test

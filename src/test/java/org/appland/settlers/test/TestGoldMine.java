@@ -1926,7 +1926,7 @@ public class TestGoldMine {
         /* Place coal mine */
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Finish construction of the gold mine*/
+        /* Finish construction of the gold mine */
         Utils.constructHouse(goldMine, map);
 
         /* Populate the gold mine */

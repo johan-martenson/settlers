@@ -542,7 +542,7 @@ public class TestCatapult {
     }
 
     @Test
-    public void testCatapultHitrateBetweenSeventyAndEightyPercent() throws Exception {
+    public void testCatapultHitRateBetweenSeventyAndEightyPercent() throws Exception {
 
         /* Create new game map */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

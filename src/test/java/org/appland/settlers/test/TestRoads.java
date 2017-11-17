@@ -1823,7 +1823,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testSplitHorisontalRoadWithTooShortRemainingRoads() throws Exception {
+    public void testSplitHorizontalRoadWithTooShortRemainingRoads() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1860,7 +1860,7 @@ public class TestRoads {
     }
 
     @Test
-    public void testSplitHorisontalRoadInEndWithTooShortRemainingRoads() throws Exception {
+    public void testSplitHorizontalRoadInEndWithTooShortRemainingRoads() throws Exception {
 
         /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

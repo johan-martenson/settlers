@@ -1933,7 +1933,7 @@ public class TestCoalMine {
         /* Place coal mine */
         Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
-        /* Finish construction of the coal mine*/
+        /* Finish construction of the coal mine */
         Utils.constructHouse(coalMine, map);
 
         /* Populate the coal mine */

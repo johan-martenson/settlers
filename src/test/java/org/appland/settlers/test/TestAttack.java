@@ -3917,7 +3917,7 @@ public class TestAttack {
 
         assertEquals(barracks1.getPlayer(), player0);
 
-        /* Verify that the barracks gets re-inforced */
+        /* Verify that the barracks gets reinforced */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
 
         for (int i = 0; i < 1000; i++) {

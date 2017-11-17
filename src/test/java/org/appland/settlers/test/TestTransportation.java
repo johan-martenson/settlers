@@ -269,7 +269,7 @@ public class TestTransportation {
         map.placeWorker(forester, startFlag);
         forester.setTargetBuilding(hut);
 
-/*             [(2, 18), (4, 18), (6, 18), (8, 18), (10, 18), (11, 17), (12, 16), (13, 15), (14, 14), (12, 14), (11, 15), (10, 16)]*/
+/*             [(2, 18), (4, 18), (6, 18), (8, 18), (10, 18), (11, 17), (12, 16), (13, 15), (14, 14), (12, 14), (11, 15), (10, 16)] */
         assertTrue(forester.getPosition().equals(start));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, f1);

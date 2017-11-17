@@ -1102,7 +1102,7 @@ public class TestGuardHouse {
         Point point1 = new Point(10, 10);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
-        /* Finish construction of the guard house*/
+        /* Finish construction of the guard house */
         Utils.constructHouse(guardHouse0, map);
 
         /* Populate the guard house */

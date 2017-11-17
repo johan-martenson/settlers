@@ -73,7 +73,7 @@ public class TestPoint {
     @Test
     public void testPointIsAdjacent() {
 
-        /* Verify adjacent points*/
+        /* Verify adjacent points */
         Point point = new Point(10, 10);
         Point left = new Point(8, 10);
         Point right = new Point(12, 10);
@@ -97,7 +97,7 @@ public class TestPoint {
     @Test
     public void testNonAdjacentPoints() {
 
-        /* Verify non adjacent points*/
+        /* Verify non adjacent points */
         Point point = new Point(10, 10);
         Point left = new Point(6, 10);
         Point right = new Point(14, 10);
