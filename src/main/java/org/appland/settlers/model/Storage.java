@@ -24,7 +24,7 @@ import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.SCOUT;
@@ -42,7 +42,7 @@ import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Size.MEDIUM;
 import org.appland.settlers.policy.ProductionDelays;
 
-@HouseSize(size = MEDIUM, material = {PLANCK, PLANCK, PLANCK, PLANCK, STONE, STONE, STONE})
+@HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Storage extends Building implements Actor {
 

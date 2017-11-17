@@ -33,7 +33,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -52,7 +52,7 @@ import static org.junit.Assert.assertTrue;
 public class TestFishery {
 
     @Test
-    public void testFisheryOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testFisheryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -68,11 +68,11 @@ public class TestFishery {
         Point point22 = new Point(6, 22);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        fishery0.putCargo(planckCargo);
-        fishery0.putCargo(planckCargo);
+        fishery0.putCargo(plankCargo);
+        fishery0.putCargo(plankCargo);
 
         /* Verify that this is enough to construct the fishery */
         for (int i = 0; i < 100; i++) {
@@ -85,7 +85,7 @@ public class TestFishery {
     }
 
     @Test
-    public void testFisheryCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testFisheryCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -101,10 +101,10 @@ public class TestFishery {
         Point point22 = new Point(6, 22);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
 
-        /* Deliver one planck */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        fishery0.putCargo(planckCargo);
+        fishery0.putCargo(plankCargo);
 
         /* Verify that this is not enough to construct the fishery */
         for (int i = 0; i < 500; i++) {
@@ -2144,11 +2144,11 @@ public class TestFishery {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(fisher0.getMaterialNeeded().size(), 1);
-        assertTrue(fisher0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(fisher0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(fisher0.getMaterialNeeded().contains(PLANK));
+        assertEquals(fisher0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

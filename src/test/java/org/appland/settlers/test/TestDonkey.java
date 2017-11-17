@@ -19,7 +19,7 @@ import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -744,7 +744,7 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(wc);
 
@@ -782,7 +782,7 @@ public class TestDonkey {
         assertEquals(donkey.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(wc.getAmount(PLANK), 0);
 
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
 
@@ -792,14 +792,14 @@ public class TestDonkey {
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertNotNull(donkey.getCargo());
         assertEquals(donkey.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(wc.getAmount(PLANK), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getPosition());
 
         assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
         assertEquals(donkey.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 1);
+        assertEquals(wc.getAmount(PLANK), 1);
     }
 
     @Test
@@ -828,7 +828,7 @@ public class TestDonkey {
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(wc);
 
@@ -866,7 +866,7 @@ public class TestDonkey {
         assertEquals(donkey.getTarget(), wc.getPosition());
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(wc.getAmount(PLANK), 0);
 
         assertTrue(wc.getFlag().getStackedCargo().isEmpty());
 
@@ -927,7 +927,7 @@ public class TestDonkey {
         Building quarry = map.placeBuilding(new Quarry(player0), rightFlagPoint.upLeft());
 
         /* Place cargo at the woodcutter's flag */
-        Cargo cargoForQuarry = new Cargo(PLANCK, map);
+        Cargo cargoForQuarry = new Cargo(PLANK, map);
         wc.getFlag().putCargo(cargoForQuarry);
         cargoForQuarry.setTarget(quarry);
 
@@ -967,7 +967,7 @@ public class TestDonkey {
         assertFalse(donkey.isIdle());
 
         /* Put the other cargo at the middle flag with the woodcutter as its target */
-        Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForWoodcutter = new Cargo(PLANK, map);
         middleFlag.putCargo(cargoForWoodcutter);
         cargoForWoodcutter.setTarget(wc);
 
@@ -978,14 +978,14 @@ public class TestDonkey {
         assertFalse(middleFlag.getStackedCargo().isEmpty());
         assertEquals(donkey.getCargo(), cargoForWoodcutter);
         assertEquals(donkey.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 0);
+        assertEquals(wc.getAmount(PLANK), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getPosition());
 
         assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
         assertEquals(donkey.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANCK), 1);
+        assertEquals(wc.getAmount(PLANK), 1);
 
     }
 

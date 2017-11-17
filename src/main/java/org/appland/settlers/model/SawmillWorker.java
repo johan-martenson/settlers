@@ -6,7 +6,7 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.CUTTING_WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.GOING_BACK_TO_HOUSE;
@@ -70,14 +70,14 @@ public class SawmillWorker extends Worker {
         } else if (state == CUTTING_WOOD) {
             if (getHome().getAmount(WOOD) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(PLANCK, map);
+                    Cargo cargo = new Cargo(PLANK, map);
 
                     setCargo(cargo);
 
                     /* Consume the spent wood */
                     getHome().consumeOne(WOOD);
 
-                    /* Go out to delivery the planck to the flag */
+                    /* Go out to delivery the plank to the flag */
                     state = GOING_TO_FLAG_WITH_CARGO;
 
                     setTarget(getHome().getFlag().getPosition());

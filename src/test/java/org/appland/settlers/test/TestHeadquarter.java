@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +40,7 @@ public class TestHeadquarter {
         Headquarter hq = new Headquarter(null);
 
         assertEquals(hq.getAmount(WOOD),    4);
-        assertEquals(hq.getAmount(PLANCK), 15);
+        assertEquals(hq.getAmount(PLANK), 15);
         assertEquals(hq.getAmount(STONE),  10);
         assertEquals(hq.getAmount(DONKEY), 1);
 
@@ -111,10 +111,10 @@ public class TestHeadquarter {
         /* The storage worker rests */
         Utils.fastForward(19, map);
 
-        /* Verify that the hq has plancks */
-        assertTrue(hq.getAmount(PLANCK) > 0);
+        /* Verify that the hq has planks */
+        assertTrue(hq.getAmount(PLANK) > 0);
 
-        /* The storage worker delivers stone or plancks to the woodcutter */
+        /* The storage worker delivers stone or planks to the woodcutter */
         assertTrue(hq.getWorker() instanceof StorageWorker);
 
         StorageWorker sw = (StorageWorker)hq.getWorker();

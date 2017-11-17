@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -864,25 +864,25 @@ public class TestTransportation {
         map.placeWorker(courier2, flag0);
         courier2.assignToRoad(road1);
 
-        /* Empty the headquarter's store of plancks and stones */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        /* Empty the headquarter's store of planks and stones */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
         /* Let the couriers reach their target road and become idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, courier2);
 
         /* Place a cargo on the headquarter's flag */
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
 
         /* Target the cargo to the sawmill */
         cargo.setTarget(sm);
-        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANK);
 
-        /* Promise plancks to the sawmill until it doesn't need any new deliveries of plancks */
-        sm.promiseDelivery(PLANCK);
+        /* Promise planks to the sawmill until it doesn't need any new deliveries of planks */
+        sm.promiseDelivery(PLANK);
 
-        assertFalse(sm.needsMaterial(PLANCK));
+        assertFalse(sm.needsMaterial(PLANK));
 
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
@@ -903,7 +903,7 @@ public class TestTransportation {
         assertEquals(cargo.getTarget(), headquarter0);
 
         /* Verify that the cargo isn't promised to the sawmill any longer */
-        assertTrue(sm.needsMaterial(PLANCK));
+        assertTrue(sm.needsMaterial(PLANK));
     }
 
     @Test
@@ -940,8 +940,8 @@ public class TestTransportation {
         map.placeWorker(courier, headquarter0.getFlag());
         courier.assignToRoad(road0);
 
-        /* Empty the headquarter's store of plancks and stones */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        /* Empty the headquarter's store of planks and stones */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
         /* Let the courier reach its target road and become idle */
@@ -1033,8 +1033,8 @@ public class TestTransportation {
         map.placeWorker(courier4, flag1);
         courier4.assignToRoad(road3);
 
-        /* Remove all plancks, wood and stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        /* Remove all planks, wood and stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, WOOD, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
@@ -1042,12 +1042,12 @@ public class TestTransportation {
         Utils.fastForward(100, map);
 
         /* Place a cargo on the headquarter's flag */
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
 
         /* Target the cargo to the sawmill */
         cargo.setTarget(sm);
-        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANK);
 
         /* Verify that the cargo is planned to go via first flag */
         assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
@@ -1139,15 +1139,15 @@ public class TestTransportation {
         map.placeWorker(courier3, flag1);
         courier3.assignToRoad(road2);
 
-        /* Remove all plancks and stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        /* Remove all planks and stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
         /* Place a cargo on the headquarter's flag */
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
         cargo.setTarget(sm);
-        sm.promiseDelivery(PLANCK);
+        sm.promiseDelivery(PLANK);
 
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);

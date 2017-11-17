@@ -9,7 +9,7 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.MEDIUM;
 
@@ -17,7 +17,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  *
  * @author johan
  */
-@HouseSize(size = MEDIUM, material = {PLANCK, PLANCK, STONE, STONE})
+@HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
 @Production(requiredGoods = {PIG}, output = MEAT)
 @RequiresWorker(workerType = BUTCHER)
 public class SlaughterHouse extends Building {

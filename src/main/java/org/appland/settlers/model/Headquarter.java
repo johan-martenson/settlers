@@ -24,7 +24,7 @@ import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.SCOUT;
@@ -72,7 +72,7 @@ public class Headquarter extends Storage {
         inventory.put(GENERAL, InitialState.STORAGE_INITIAL_GENERAL);
 
         inventory.put(WOOD, InitialState.STORAGE_INITIAL_WOOD);
-        inventory.put(PLANCK, InitialState.STORAGE_INITIAL_PLANCKS);
+        inventory.put(PLANK, InitialState.STORAGE_INITIAL_PLANKS);
         inventory.put(STONE, InitialState.STORAGE_INITIAL_STONES);
         inventory.put(FISH, InitialState.STORAGE_INITIAL_FISH);
         inventory.put(DONKEY, InitialState.STORAGE_INITIAL_DONKEY);

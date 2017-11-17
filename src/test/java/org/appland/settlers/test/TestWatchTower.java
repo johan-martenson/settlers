@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 public class TestWatchTower {
 
     @Test
-    public void testWatchTowerNeedsThreePlancksAndFiveStonesForConstruction() throws Exception {
+    public void testWatchTowerNeedsThreePlanksAndFiveStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -57,8 +57,8 @@ public class TestWatchTower {
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Deliver two plancks and five stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and five stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
@@ -83,7 +83,7 @@ public class TestWatchTower {
     }
 
     @Test
-    public void testWatchTowerCannotBeConstructedWithOnePlanckTooLittle() throws Exception {
+    public void testWatchTowerCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -99,8 +99,8 @@ public class TestWatchTower {
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Deliver one planck and three stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and three stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
@@ -113,8 +113,8 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
 
-        /* Verify that the watch tower needs a planck */
-        assertTrue(watchTower0.needsMaterial(PLANCK));
+        /* Verify that the watch tower needs a plank */
+        assertTrue(watchTower0.needsMaterial(PLANK));
 
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {
@@ -143,8 +143,8 @@ public class TestWatchTower {
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Deliver one planck and three stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and three stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         watchTower0.putCargo(cargo);
         watchTower0.putCargo(cargo);
@@ -1176,13 +1176,13 @@ public class TestWatchTower {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(watchTower0.getMaterialNeeded().size(), 2);
-        assertTrue(watchTower0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(watchTower0.getMaterialNeeded().contains(PLANK));
         assertTrue(watchTower0.getMaterialNeeded().contains(STONE));
-        assertEquals(watchTower0.getTotalAmountNeeded(PLANCK), 3);
+        assertEquals(watchTower0.getTotalAmountNeeded(PLANK), 3);
         assertEquals(watchTower0.getTotalAmountNeeded(STONE), 5);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

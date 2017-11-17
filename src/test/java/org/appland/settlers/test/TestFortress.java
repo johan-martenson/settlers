@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -41,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 public class TestFortress {
 
     @Test
-    public void testFortressNeedsFourPlancksAndSevenStonesForConstruction() throws Exception {
+    public void testFortressNeedsFourPlanksAndSevenStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -57,8 +57,8 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Deliver two plancks and three stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and three stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
@@ -86,7 +86,7 @@ public class TestFortress {
     }
 
     @Test
-    public void testFortressCannotBeConstructedWithOnePlanckTooLittle() throws Exception {
+    public void testFortressCannotBeConstructedWithOnePlankTooLittle() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -102,8 +102,8 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Deliver one planck and three stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and three stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
@@ -119,8 +119,8 @@ public class TestFortress {
         fortress0.putCargo(stoneCargo);
         fortress0.putCargo(stoneCargo);
 
-        /* Verify that the fortress needs a planck */
-        assertTrue(fortress0.needsMaterial(PLANCK));
+        /* Verify that the fortress needs a plank */
+        assertTrue(fortress0.needsMaterial(PLANK));
 
         /* Verify that this is not enough to construct the fortress */
         for (int i = 0; i < 500; i++) {
@@ -149,8 +149,8 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Deliver four plancks and six stones */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver four planks and six stones */
+        Cargo cargo = new Cargo(PLANK, map);
 
         fortress0.putCargo(cargo);
         fortress0.putCargo(cargo);
@@ -1196,13 +1196,13 @@ public class TestFortress {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(fortress0.getMaterialNeeded().size(), 2);
-        assertTrue(fortress0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(fortress0.getMaterialNeeded().contains(PLANK));
         assertTrue(fortress0.getMaterialNeeded().contains(STONE));
-        assertEquals(fortress0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(fortress0.getTotalAmountNeeded(PLANK), 4);
         assertEquals(fortress0.getTotalAmountNeeded(STONE), 7);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

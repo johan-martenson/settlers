@@ -33,7 +33,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.CATAPULT_WORKER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class TestCatapult {
 
     @Test
-    public void testCatapultOnlyNeedsFourPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testCatapultOnlyNeedsFourPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -66,14 +66,14 @@ public class TestCatapult {
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
-        /* Deliver four plancks and two stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver four planks and two stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
@@ -88,7 +88,7 @@ public class TestCatapult {
     }
 
     @Test
-    public void testCatapultCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testCatapultCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -104,13 +104,13 @@ public class TestCatapult {
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
-        /* Deliver three planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
@@ -141,14 +141,14 @@ public class TestCatapult {
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
-        /* Deliver four plancks and one stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver four planks and one stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
-        catapult0.putCargo(planckCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
+        catapult0.putCargo(plankCargo);
         catapult0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the catapult */
@@ -1564,13 +1564,13 @@ public class TestCatapult {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(catapult0.getMaterialNeeded().size(), 2);
-        assertTrue(catapult0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(catapult0.getMaterialNeeded().contains(PLANK));
         assertTrue(catapult0.getMaterialNeeded().contains(STONE));
-        assertEquals(catapult0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(catapult0.getTotalAmountNeeded(PLANK), 4);
         assertEquals(catapult0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

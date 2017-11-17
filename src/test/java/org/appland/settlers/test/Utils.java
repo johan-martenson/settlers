@@ -44,7 +44,7 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
@@ -363,11 +363,11 @@ public class Utils {
         assertTrue(building.underConstruction());
 
         for (int i = 0; i < 20; i++) {
-            if (building.needsMaterial(PLANCK)) {
+            if (building.needsMaterial(PLANK)) {
                 try {
-                    Cargo cargo = new Cargo(PLANCK, map);
+                    Cargo cargo = new Cargo(PLANK, map);
 
-                    building.promiseDelivery(PLANCK);
+                    building.promiseDelivery(PLANK);
                     building.putCargo(cargo);
                 } catch (Exception ex) {
                     Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);

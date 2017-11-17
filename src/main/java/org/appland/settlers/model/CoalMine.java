@@ -11,14 +11,14 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Size.SMALL;
 
 /**
  *
  * @author johan
  */
-@HouseSize(size = SMALL, material = {PLANCK, PLANCK, PLANCK, PLANCK})
+@HouseSize(size = SMALL, material = {PLANK, PLANK, PLANK, PLANK})
 @RequiresWorker(workerType = MINER)
 @Production(output = COAL, requiredGoods = {BREAD, FISH, MEAT})
 public class CoalMine extends Building {

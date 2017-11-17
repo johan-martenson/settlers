@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.LARGE;
@@ -102,7 +102,7 @@ public class TestScenarios {
         assertTrue(sm.ready());
 
         assertEquals(hq.getAmount(WOOD), 4);
-        assertEquals(hq.getAmount(PLANCK), 15);
+        assertEquals(hq.getAmount(PLANK), 15);
         assertEquals(hq.getAmount(STONE), 10);
 
         Utils.occupyBuilding(wcr, wc, map);
@@ -219,9 +219,9 @@ public class TestScenarios {
         assertTrue(sm.getAmount(WOOD) > 0);
         int amountInQueue = sm.getAmount(WOOD);
 
-        /* Produce plancks in sawmill.
+        /* Produce planks in sawmill.
 
-        /* Make sure the sawmill worker is done with the previous planck */
+        /* Make sure the sawmill worker is done with the previous plank */
         for (int i = 0; i < 500; i++) {
             if (sm.getWorker().getCargo() == null) {
                 break;
@@ -268,13 +268,13 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getPromisedDelivery(), woodCargo);
         assertNull(courierSmToHq.getCargo());
 
-        /* Transport plancks and new wood to nearest storage */
+        /* Transport planks and new wood to nearest storage */
         assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getFlag().getPosition());
 
         assertNotNull(courierSmToHq.getCargo());
-        assertEquals(courierSmToHq.getCargo().getMaterial(), PLANCK);
+        assertEquals(courierSmToHq.getCargo().getMaterial(), PLANK);
         assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
         assertEquals(courierSmToHq.getTarget(), hq.getPosition());
         assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
@@ -324,7 +324,7 @@ public class TestScenarios {
 
         // TODO: assert that the road is occupied
 
-        /* The road is occupied so the delivery of plancks and stone to the wc can start  */
+        /* The road is occupied so the delivery of planks and stone to the wc can start  */
         // TODO: assert that the wc is under construction and has no material yet
 
         fastForward(100, map);

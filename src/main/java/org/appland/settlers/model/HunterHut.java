@@ -7,9 +7,9 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 
-@HouseSize(size = Size.SMALL, material = {PLANCK, PLANCK})
+@HouseSize(size = Size.SMALL, material = {PLANK, PLANK})
 @RequiresWorker(workerType = HUNTER)
 @Production(requiredGoods = {}, output = {MEAT})
 public class HunterHut extends Building {

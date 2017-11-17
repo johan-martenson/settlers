@@ -33,7 +33,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class TestSlaughterHouse {
 
     @Test
-    public void testSlaughterHouseOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testSlaughterHouseOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -66,12 +66,12 @@ public class TestSlaughterHouse {
         Point point22 = new Point(6, 22);
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        slaughterHouse0.putCargo(planckCargo);
-        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(plankCargo);
+        slaughterHouse0.putCargo(plankCargo);
         slaughterHouse0.putCargo(stoneCargo);
         slaughterHouse0.putCargo(stoneCargo);
 
@@ -86,7 +86,7 @@ public class TestSlaughterHouse {
     }
 
     @Test
-    public void testSlaughterHouseCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testSlaughterHouseCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -102,11 +102,11 @@ public class TestSlaughterHouse {
         Point point22 = new Point(6, 22);
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
 
-        /* Deliver one planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(plankCargo);
         slaughterHouse0.putCargo(stoneCargo);
         slaughterHouse0.putCargo(stoneCargo);
 
@@ -137,12 +137,12 @@ public class TestSlaughterHouse {
         Point point22 = new Point(6, 22);
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point22);
 
-        /* Deliver two plancks and one stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and one stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        slaughterHouse0.putCargo(planckCargo);
-        slaughterHouse0.putCargo(planckCargo);
+        slaughterHouse0.putCargo(plankCargo);
+        slaughterHouse0.putCargo(plankCargo);
         slaughterHouse0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the slaughter house */
@@ -1761,13 +1761,13 @@ public class TestSlaughterHouse {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(slaugherHouse0.getMaterialNeeded().size(), 2);
-        assertTrue(slaugherHouse0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(slaugherHouse0.getMaterialNeeded().contains(PLANK));
         assertTrue(slaugherHouse0.getMaterialNeeded().contains(STONE));
-        assertEquals(slaugherHouse0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(slaugherHouse0.getTotalAmountNeeded(PLANK), 2);
         assertEquals(slaugherHouse0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

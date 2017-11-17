@@ -31,7 +31,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class TestStorage {
 
     @Test
-    public void testStorageOnlyNeedsFourPlancksAndThreeStonesForConstruction() throws Exception {
+    public void testStorageOnlyNeedsFourPlanksAndThreeStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -66,14 +66,14 @@ public class TestStorage {
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
-        /* Deliver four planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver four plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
@@ -89,7 +89,7 @@ public class TestStorage {
     }
 
     @Test
-    public void testStorageCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testStorageCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -105,13 +105,13 @@ public class TestStorage {
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
-        /* Deliver three plancks and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three planks and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
@@ -143,14 +143,14 @@ public class TestStorage {
         Point point22 = new Point(6, 22);
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
-        /* Deliver four plancks and two stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver four planks and two stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
-        storage0.putCargo(planckCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
         storage0.putCargo(stoneCargo);
         storage0.putCargo(stoneCargo);
 
@@ -312,10 +312,10 @@ public class TestStorage {
         /* The storage worker rests */
         Utils.fastForward(19, map);
 
-        /* Put plancks in the storage */
-        storage.putCargo(new Cargo(PLANCK, map));
+        /* Put planks in the storage */
+        storage.putCargo(new Cargo(PLANK, map));
 
-        /* The storage worker delivers stone or plancks to the woodcutter */
+        /* The storage worker delivers stone or planks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
 
         map.stepTime();
@@ -362,10 +362,10 @@ public class TestStorage {
         /* The storage worker rests */
         Utils.fastForward(19, map);
 
-        /* Put plancks in the storage */
-        storage.putCargo(new Cargo(PLANCK, map));
+        /* Put planks in the storage */
+        storage.putCargo(new Cargo(PLANK, map));
 
-        /* The storage worker delivers stone or plancks to the woodcutter */
+        /* The storage worker delivers stone or planks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
 
         map.stepTime();
@@ -415,10 +415,10 @@ public class TestStorage {
         /* The storage worker rests */
         Utils.fastForward(19, map);
 
-        /* Put plancks in the storage */
-        storage.putCargo(new Cargo(PLANCK, map));
+        /* Put planks in the storage */
+        storage.putCargo(new Cargo(PLANK, map));
 
-        /* The storage worker delivers stone or plancks to the woodcutter */
+        /* The storage worker delivers stone or planks to the woodcutter */
         assertTrue(sw.isInsideBuilding());
 
         map.stepTime();
@@ -1694,13 +1694,13 @@ public class TestStorage {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(storage0.getMaterialNeeded().size(), 2);
-        assertTrue(storage0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(storage0.getMaterialNeeded().contains(PLANK));
         assertTrue(storage0.getMaterialNeeded().contains(STONE));
-        assertEquals(storage0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(storage0.getTotalAmountNeeded(PLANK), 4);
         assertEquals(storage0.getTotalAmountNeeded(STONE), 3);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

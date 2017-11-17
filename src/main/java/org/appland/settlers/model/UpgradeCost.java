@@ -14,6 +14,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UpgradeCost {
-    int plancks() default 0;
+    int planks() default 0;
     int stones() default 0;
 }

@@ -51,7 +51,7 @@ import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
@@ -887,9 +887,9 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
         Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
 
-        /* Make sure the headquarter has no plancks or stone so the coal mine
+        /* Make sure the headquarter has no planks or stone so the coal mine
            will not be constructed */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
         /* Attach the mines to the headquarter */
@@ -1791,7 +1791,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
 
         /* Make sure there is no construction material in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
 
         /* Set the quota for coal consumers to only give coal to the
@@ -2045,22 +2045,22 @@ public class TestPrioritization {
 
         flag0.putCargo(stoneCargo);
 
-        /* Place planck cargo to be delivered to the headquarter */
-        Cargo planckCargo = new Cargo(PLANCK, map);
-        planckCargo.setPosition(point0);
-        planckCargo.setTarget(headquarter0);
+        /* Place plank cargo to be delivered to the headquarter */
+        Cargo plankCargo = new Cargo(PLANK, map);
+        plankCargo.setPosition(point0);
+        plankCargo.setTarget(headquarter0);
 
-        flag0.putCargo(planckCargo);
+        flag0.putCargo(plankCargo);
 
         /* Set stone deliveries to highest priority */
         player0.setTransportPriority(0, STONE);
         player0.setTransportPriority(1, WOOD);
-        player0.setTransportPriority(2, PLANCK);
+        player0.setTransportPriority(2, PLANK);
 
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(flag0.getPosition().left()));
         assertNull(courier.getCargo());
-        assertFalse(planckCargo.isDeliveryPromised());
+        assertFalse(plankCargo.isDeliveryPromised());
 
         /* Verify that the courier picks up the stone cargo first */
         assertNull(courier.getCargo());
@@ -2094,13 +2094,13 @@ public class TestPrioritization {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
-        /* Verify that the courier picks up the planck cargo next */
+        /* Verify that the courier picks up the plank cargo next */
         assertNull(courier.getCargo());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
 
         assertTrue(courier.isAt(point0));
-        assertEquals(courier.getCargo(), planckCargo);
+        assertEquals(courier.getCargo(), plankCargo);
 
         /* Wait for the courier to deliver the cargo */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
@@ -2176,7 +2176,7 @@ public class TestPrioritization {
         assertTrue(bakery0.needsMaterial(FLOUR));
         assertTrue(sawmill0.needsMaterial(WOOD));
         assertTrue(mill0.needsMaterial(WHEAT));
-        assertTrue(well0.needsMaterial(PLANCK));
+        assertTrue(well0.needsMaterial(PLANK));
 
         Worker storageWorker = headquarter0.getWorker();
 
@@ -2184,7 +2184,7 @@ public class TestPrioritization {
 
         /* Set the transport priority for the materials */
         player0.setTransportPriority(0, WHEAT);
-        player0.setTransportPriority(1, PLANCK);
+        player0.setTransportPriority(1, PLANK);
         player0.setTransportPriority(2, COAL);
         player0.setTransportPriority(3, GOLD);
         player0.setTransportPriority(4, WATER);
@@ -2194,7 +2194,7 @@ public class TestPrioritization {
            tree conservation program
         */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 20, map);
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 20, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20, map);
         Utils.adjustInventoryTo(headquarter0, COAL, 20, map);
         Utils.adjustInventoryTo(headquarter0, GOLD, 20, map);
         Utils.adjustInventoryTo(headquarter0, WATER, 20, map);
@@ -2211,30 +2211,30 @@ public class TestPrioritization {
 
         assertFalse(mill0.needsMaterial(WHEAT));
 
-        /* Verify that the storage worker then delivers plancks */
+        /* Verify that the storage worker then delivers planks */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
         assertNotNull(currentCargo);
-        assertEquals(currentCargo.getMaterial(), PLANCK);
+        assertEquals(currentCargo.getMaterial(), PLANK);
 
         /* Wait for the worker to deliver the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
-        assertTrue(well0.needsMaterial(PLANCK));
+        assertTrue(well0.needsMaterial(PLANK));
 
-        /* Verify that the storage worker then plancks until the well doesn't
+        /* Verify that the storage worker then planks until the well doesn't
            need them anymore */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
         assertNotNull(currentCargo);
-        assertEquals(currentCargo.getMaterial(), PLANCK);
+        assertEquals(currentCargo.getMaterial(), PLANK);
 
         /* Wait for the worker to deliver the cargo */
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
-        assertFalse(well0.needsMaterial(PLANCK));
+        assertFalse(well0.needsMaterial(PLANK));
 
         /* Verify that the storage worker then delivers coal */
         assertTrue(mint0.needsMaterial(COAL));
@@ -2248,7 +2248,7 @@ public class TestPrioritization {
         Utils.fastForwardUntilWorkerCarriesNoCargo(map, storageWorker);
 
         assertFalse(mill0.needsMaterial(WHEAT));
-        assertFalse(well0.needsMaterial(PLANCK));
+        assertFalse(well0.needsMaterial(PLANK));
         assertFalse(mint0.needsMaterial(COAL));
 
         /* Verify that the storage worker then delivers gold */
@@ -2276,21 +2276,21 @@ public class TestPrioritization {
         Point hqPoint = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Count initial number of times plancks appear */
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
+        /* Count initial number of times planks appear */
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
 
-        /* Put plancks on top priority and verify that it appears only once */
-        player0.setTransportPriority(0, PLANCK);
+        /* Put planks on top priority and verify that it appears only once */
+        player0.setTransportPriority(0, PLANK);
 
-        assertEquals(player0.getTransportPriorityList().get(0), PLANCK);
-        assertNotEquals(player0.getTransportPriorityList().get(10), PLANCK);
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
+        assertEquals(player0.getTransportPriorityList().get(0), PLANK);
+        assertNotEquals(player0.getTransportPriorityList().get(10), PLANK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
 
-        /* Put plancks on medium priority and verify that it appears only once */
-        player0.setTransportPriority(10, PLANCK);
+        /* Put planks on medium priority and verify that it appears only once */
+        player0.setTransportPriority(10, PLANK);
 
-        assertNotEquals(player0.getTransportPriorityList().get(0), PLANCK);
-        assertEquals(player0.getTransportPriorityList().get(10), PLANCK);
-        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANCK), 1);
+        assertNotEquals(player0.getTransportPriorityList().get(0), PLANK);
+        assertEquals(player0.getTransportPriorityList().get(10), PLANK);
+        assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
     }
 }

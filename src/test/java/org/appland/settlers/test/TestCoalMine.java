@@ -35,7 +35,7 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.SMALL;
@@ -54,7 +54,7 @@ import static org.junit.Assert.assertTrue;
 public class TestCoalMine {
 
     @Test
-    public void testCoalMineOnlyNeedsFourPlancksForConstruction() throws Exception {
+    public void testCoalMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -73,13 +73,13 @@ public class TestCoalMine {
         /* Placing coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
-        /* Deliver four plancks */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver four planks */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        coalMine0.putCargo(planckCargo);
-        coalMine0.putCargo(planckCargo);
-        coalMine0.putCargo(planckCargo);
-        coalMine0.putCargo(planckCargo);
+        coalMine0.putCargo(plankCargo);
+        coalMine0.putCargo(plankCargo);
+        coalMine0.putCargo(plankCargo);
+        coalMine0.putCargo(plankCargo);
 
         /* Verify that this is enough to construct the coal mine */
         for (int i = 0; i < 100; i++) {
@@ -92,7 +92,7 @@ public class TestCoalMine {
     }
 
     @Test
-    public void testCoalMineCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testCoalMineCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -111,12 +111,12 @@ public class TestCoalMine {
         /* Placing coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point22);
 
-        /* Deliver two planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        coalMine0.putCargo(planckCargo);
-        coalMine0.putCargo(planckCargo);
-        coalMine0.putCargo(planckCargo);
+        coalMine0.putCargo(plankCargo);
+        coalMine0.putCargo(plankCargo);
+        coalMine0.putCargo(plankCargo);
 
         /* Verify that this is not enough to construct the coal mine */
         for (int i = 0; i < 500; i++) {
@@ -1993,11 +1993,11 @@ public class TestCoalMine {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(coalMine0.getMaterialNeeded().size(), 1);
-        assertTrue(coalMine0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(coalMine0.getTotalAmountNeeded(PLANCK), 4);
+        assertTrue(coalMine0.getMaterialNeeded().contains(PLANK));
+        assertEquals(coalMine0.getTotalAmountNeeded(PLANK), 4);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

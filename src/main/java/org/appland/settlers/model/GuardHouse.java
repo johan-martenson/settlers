@@ -5,11 +5,11 @@
  */
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.SMALL;
 
-@HouseSize(size = SMALL, material = {PLANCK, PLANCK, PLANCK, STONE, STONE})
+@HouseSize(size = SMALL, material = {PLANK, PLANK, PLANK, STONE, STONE})
 @MilitaryBuilding(maxHostedMilitary = 3, defenceRadius = 10, maxCoins = 2, attackRadius = 20)
 public class GuardHouse extends Building {
 

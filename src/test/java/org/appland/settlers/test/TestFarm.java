@@ -38,7 +38,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
 import static org.appland.settlers.model.Material.FARMER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -56,7 +56,7 @@ import static org.junit.Assert.assertTrue;
 public class TestFarm {
 
     @Test
-    public void testFarmOnlyNeedsThreePlancksAndThreeStonesForConstruction() throws Exception {
+    public void testFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -72,13 +72,13 @@ public class TestFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver three planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
@@ -94,7 +94,7 @@ public class TestFarm {
     }
 
     @Test
-    public void testFarmCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testFarmCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -110,12 +110,12 @@ public class TestFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver two planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
@@ -147,13 +147,13 @@ public class TestFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
-        /* Deliver three plancks and two stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three planks and two stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 

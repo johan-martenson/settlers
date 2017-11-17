@@ -31,7 +31,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class TestDonkeyFarm {
 
     @Test
-    public void testDonkeyFarmOnlyNeedsThreePlancksAndThreeStonesForConstruction() throws Exception {
+    public void testDonkeyFarmOnlyNeedsThreePlanksAndThreeStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -66,13 +66,13 @@ public class TestDonkeyFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
-        /* Deliver three planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
@@ -88,7 +88,7 @@ public class TestDonkeyFarm {
     }
 
     @Test
-    public void testDonkeyFarmCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testDonkeyFarmCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -104,12 +104,12 @@ public class TestDonkeyFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
-        /* Deliver two planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
@@ -141,13 +141,13 @@ public class TestDonkeyFarm {
         Point point22 = new Point(6, 22);
         Building farm0 = map.placeBuilding(new DonkeyFarm(player0), point22);
 
-        /* Deliver three plancks and two stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three planks and two stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
-        farm0.putCargo(planckCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
+        farm0.putCargo(plankCargo);
         farm0.putCargo(stoneCargo);
         farm0.putCargo(stoneCargo);
 
@@ -2171,13 +2171,13 @@ public class TestDonkeyFarm {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(donkeyFarm0.getMaterialNeeded().size(), 2);
-        assertTrue(donkeyFarm0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(donkeyFarm0.getMaterialNeeded().contains(PLANK));
         assertTrue(donkeyFarm0.getMaterialNeeded().contains(STONE));
-        assertEquals(donkeyFarm0.getTotalAmountNeeded(PLANCK), 3);
+        assertEquals(donkeyFarm0.getTotalAmountNeeded(PLANK), 3);
         assertEquals(donkeyFarm0.getTotalAmountNeeded(STONE), 3);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

@@ -23,7 +23,7 @@ import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Material;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -690,7 +690,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(woodcutter0);
 
@@ -728,7 +728,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertEquals(woodcutter0.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANK), 0);
 
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
@@ -738,14 +738,14 @@ public class TestCourier {
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertNotNull(courier.getCargo());
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
-        assertEquals(woodcutter0.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANK), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), woodcutter0.getPosition());
-        assertEquals(woodcutter0.getAmount(PLANCK), 1);
+        assertEquals(woodcutter0.getAmount(PLANK), 1);
     }
 
     @Test
@@ -775,7 +775,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANCK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(woodcutter0);
 
@@ -813,7 +813,7 @@ public class TestCourier {
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
-        assertEquals(woodcutter0.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANK), 0);
 
         assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
@@ -867,7 +867,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, wc.getFlag().getPosition(), point2, foresterHut0.getFlag().getPosition());
 
         /* Place cargo at the woodcutter's flag */
-        Cargo cargoForForesterHut = new Cargo(PLANCK, map);
+        Cargo cargoForForesterHut = new Cargo(PLANK, map);
         wc.getFlag().putCargo(cargoForForesterHut);
         cargoForForesterHut.setTarget(foresterHut0);
 
@@ -904,7 +904,7 @@ public class TestCourier {
         assertFalse(courier.isIdle());
 
         /* Place a cargo at the forester hut's flag */
-        Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForWoodcutter = new Cargo(PLANK, map);
         foresterHut0.getFlag().putCargo(cargoForWoodcutter);
         cargoForWoodcutter.setTarget(wc);
 
@@ -963,7 +963,7 @@ public class TestCourier {
         Building quarry = map.placeBuilding(new Quarry(player0), rightFlagPoint.upLeft());
 
         /* Place cargo at the woodcutter's flag */
-        Cargo cargoForQuarry = new Cargo(PLANCK, map);
+        Cargo cargoForQuarry = new Cargo(PLANK, map);
         woodcutter0.getFlag().putCargo(cargoForQuarry);
         cargoForQuarry.setTarget(quarry);
 
@@ -1003,7 +1003,7 @@ public class TestCourier {
         assertFalse(courier.isIdle());
 
         /* Put the other cargo at the middle flag with the woodcutter as its target */
-        Cargo cargoForWoodcutter = new Cargo(PLANCK, map);
+        Cargo cargoForWoodcutter = new Cargo(PLANK, map);
         middleFlag.putCargo(cargoForWoodcutter);
         cargoForWoodcutter.setTarget(woodcutter0);
 
@@ -1014,14 +1014,14 @@ public class TestCourier {
         assertFalse(middleFlag.getStackedCargo().isEmpty());
         assertEquals(courier.getCargo(), cargoForWoodcutter);
         assertEquals(courier.getTarget(), woodcutter0.getPosition());
-        assertEquals(woodcutter0.getAmount(PLANCK), 0);
+        assertEquals(woodcutter0.getAmount(PLANK), 0);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter0.getPosition());
 
         assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getPosition(), woodcutter0.getPosition());
-        assertEquals(woodcutter0.getAmount(PLANCK), 1);
+        assertEquals(woodcutter0.getAmount(PLANK), 1);
     }
 
     @Test

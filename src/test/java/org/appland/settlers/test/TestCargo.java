@@ -15,7 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -66,7 +66,7 @@ public class TestCargo {
         Road road0 = map.placeRoad(player0, point2, point3, wc.getFlag().getPosition());
 
         /* Create a cargo and put on the flag */
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo);
 
@@ -90,7 +90,7 @@ public class TestCargo {
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo);
 

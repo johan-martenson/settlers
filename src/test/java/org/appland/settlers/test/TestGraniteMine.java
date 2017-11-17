@@ -34,7 +34,7 @@ import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
@@ -54,7 +54,7 @@ import static org.junit.Assert.assertTrue;
 public class TestGraniteMine {
 
     @Test
-    public void testGraniteMineOnlyNeedsFourPlancksForConstruction() throws Exception {
+    public void testGraniteMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -73,8 +73,8 @@ public class TestGraniteMine {
         /* Placing granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
-        /* Deliver four plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver four planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         graniteMine0.putCargo(cargo);
         graniteMine0.putCargo(cargo);
@@ -92,7 +92,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGraniteMineCannotBeConstructedWithThreePlancks() throws Exception {
+    public void testGraniteMineCannotBeConstructedWithThreePlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -111,8 +111,8 @@ public class TestGraniteMine {
         /* Placing granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point22);
 
-        /* Deliver three plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver three planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         graniteMine0.putCargo(cargo);
         graniteMine0.putCargo(cargo);
@@ -1994,11 +1994,11 @@ public class TestGraniteMine {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(graniteMine0.getMaterialNeeded().size(), 1);
-        assertTrue(graniteMine0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(graniteMine0.getTotalAmountNeeded(PLANCK), 4);
+        assertTrue(graniteMine0.getMaterialNeeded().contains(PLANK));
+        assertEquals(graniteMine0.getTotalAmountNeeded(PLANK), 4);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

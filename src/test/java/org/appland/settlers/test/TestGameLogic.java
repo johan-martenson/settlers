@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertEquals;
@@ -81,7 +81,7 @@ public class TestGameLogic {
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), sawmill0.getFlag());
 
         /* Verify that a new delivery is initiated for the sawmill */
-        assertTrue(sawmill0.needsMaterial(PLANCK));
+        assertTrue(sawmill0.needsMaterial(PLANK));
         assertTrue(sawmill0.needsMaterial(STONE));
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
 
@@ -122,7 +122,7 @@ public class TestGameLogic {
         /* Fast forward so the courier can reach its road and be assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        Cargo cargo = new Cargo(PLANCK, map);
+        Cargo cargo = new Cargo(PLANK, map);
 
         cargo.setPosition(flag0.getPosition());
         cargo.setTarget(sawmill0);
@@ -180,7 +180,7 @@ public class TestGameLogic {
         /* Fast forward to let the courier reach its road and get assigned */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        Cargo cargo0 = new Cargo(PLANCK, map);
+        Cargo cargo0 = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo0);
         cargo0.setTarget(woodcutter0);
@@ -204,7 +204,7 @@ public class TestGameLogic {
         /* Verify the worker delivers the cargo when it has reached the target */
         assertNull(courier.getCargo());
         assertTrue(courier.isAt(woodcutter0.getPosition()));
-        assertEquals(woodcutter0.getAmount(PLANCK), 1);
+        assertEquals(woodcutter0.getAmount(PLANK), 1);
     }
 
     @Test

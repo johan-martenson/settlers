@@ -18,7 +18,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -51,20 +51,20 @@ public class TestConstruction {
 
         /* Verify that the sawmill needs the right amount of material for construction */
         assertEquals(sawmill0.getAmount(WOOD), 0);
-        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertEquals(sawmill0.getAmount(PLANK), 0);
         assertTrue(sawmill0.underConstruction());
 
-        assertTrue(sawmill0.needsMaterial(PLANCK));
+        assertTrue(sawmill0.needsMaterial(PLANK));
 
         assertFalse(sawmill0.needsMaterial(SERGEANT));
 
-        assertTrue(sawmill0.needsMaterial(PLANCK));
+        assertTrue(sawmill0.needsMaterial(PLANK));
 
-        sawmill0.promiseDelivery(PLANCK);
-        assertTrue(sawmill0.needsMaterial(PLANCK));
+        sawmill0.promiseDelivery(PLANK);
+        assertTrue(sawmill0.needsMaterial(PLANK));
 
-        sawmill0.promiseDelivery(PLANCK);
-        assertFalse(sawmill0.needsMaterial(PLANCK));
+        sawmill0.promiseDelivery(PLANK);
+        assertFalse(sawmill0.needsMaterial(PLANK));
 
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
@@ -72,9 +72,9 @@ public class TestConstruction {
             sawmill0.stepTime();
         }
 
-        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo plankCargo = new Cargo(PLANK, null);
 
-        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(plankCargo);
 
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.underConstruction());
@@ -82,7 +82,7 @@ public class TestConstruction {
         }
 
         /* Verify that construction can finish when all material is delivered */
-        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(plankCargo);
         sawmill0.stepTime();
 
         assertTrue(sawmill0.ready());
@@ -90,7 +90,7 @@ public class TestConstruction {
         assertFalse(sawmill0.isMilitaryBuilding());
 
         /* Verify that all material was consumed by the construction */
-        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertEquals(sawmill0.getAmount(PLANK), 0);
         assertEquals(sawmill0.getAmount(STONE), 0);
 
         /* Verify that the sawmill doesn't need any material when it's finished */
@@ -175,14 +175,14 @@ public class TestConstruction {
             sawmill0.stepTime();
         }
 
-        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo plankCargo = new Cargo(PLANK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
 
-        sawmill0.promiseDelivery(PLANCK);
-        sawmill0.putCargo(planckCargo);
+        sawmill0.promiseDelivery(PLANK);
+        sawmill0.putCargo(plankCargo);
 
-        sawmill0.promiseDelivery(PLANCK);
-        sawmill0.putCargo(planckCargo);
+        sawmill0.promiseDelivery(PLANK);
+        sawmill0.putCargo(plankCargo);
 
         sawmill0.promiseDelivery(STONE);
         sawmill0.putCargo(stoneCargo);
@@ -201,12 +201,12 @@ public class TestConstruction {
         assertTrue(sawmill0.ready());
 
         /* Verify that all material was consumed by the construction */
-        assertEquals(sawmill0.getAmount(PLANCK), 0);
+        assertEquals(sawmill0.getAmount(PLANK), 0);
         assertEquals(sawmill0.getAmount(STONE), 0);
 
         /* Verify that the sawmill needs only WOOD when it's finished */
         assertTrue(sawmill0.needsMaterial(WOOD));
-        assertFalse(sawmill0.needsMaterial(PLANCK));
+        assertFalse(sawmill0.needsMaterial(PLANK));
         assertFalse(sawmill0.needsMaterial(STONE));
 
         sawmill0.tearDown();
@@ -245,11 +245,11 @@ public class TestConstruction {
         }
 
 
-        Cargo planckCargo = new Cargo(PLANCK, null);
+        Cargo plankCargo = new Cargo(PLANK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
-        farm.putCargo(planckCargo);
-        farm.putCargo(planckCargo);
-        farm.putCargo(planckCargo);
+        farm.putCargo(plankCargo);
+        farm.putCargo(plankCargo);
+        farm.putCargo(plankCargo);
         farm.putCargo(stoneCargo);
         farm.putCargo(stoneCargo);
 
@@ -265,7 +265,7 @@ public class TestConstruction {
         assertTrue(farm.ready());
 
         /* Verify that all material was consumed by the construction */
-        assertEquals(farm.getAmount(PLANCK), 0);
+        assertEquals(farm.getAmount(PLANK), 0);
         assertEquals(farm.getAmount(STONE), 0);
 
         farm.tearDown();

@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
@@ -306,7 +306,7 @@ public class Building implements Actor, EndPoint {
 
         Material material = cargo.getMaterial();
 
-        /* Plancks and stone can be delivered during construction */
+        /* Planks and stone can be delivered during construction */
         if (underConstruction()) {
 
             Map<Material, Integer> materialsNeeded = getMaterialsToBuildHouse();
@@ -523,11 +523,11 @@ public class Building implements Actor, EndPoint {
 
             if (isUpgrading()) {
 
-                if (material == PLANCK) {
-                    int plancks = getTotalAmountNeededForUpgrade(PLANCK);
+                if (material == PLANK) {
+                    int planks = getTotalAmountNeededForUpgrade(PLANK);
 
-                    if (plancks > 0) {
-                        return plancks;
+                    if (planks > 0) {
+                        return planks;
                     }
                 }
 
@@ -633,7 +633,7 @@ public class Building implements Actor, EndPoint {
 
             if (isUpgrading()) {
 
-                if (getTotalAmountNeededForUpgrade(PLANCK) > getAmount(PLANCK)) {
+                if (getTotalAmountNeededForUpgrade(PLANK) > getAmount(PLANK)) {
                     return true;
                 }
 
@@ -1003,16 +1003,16 @@ public class Building implements Actor, EndPoint {
         /* Get the cost for upgrade */
         UpgradeCost upgradeCost = getClass().getAnnotation(UpgradeCost.class);
 
-        int plancksNeeded = upgradeCost.plancks();
+        int planksNeeded = upgradeCost.planks();
         int stoneNeeded   = upgradeCost.stones();
 
         /* Get available resources */
 
-        int planckAvailable = receivedMaterial.getOrDefault(PLANCK, 0);
+        int plankAvailable = receivedMaterial.getOrDefault(PLANK, 0);
         int stoneAvailable = receivedMaterial.getOrDefault(STONE, 0);
 
         /* Determine if an upgrade is possible */
-        if (plancksNeeded <= planckAvailable && stoneNeeded <= stoneAvailable) {
+        if (planksNeeded <= plankAvailable && stoneNeeded <= stoneAvailable) {
             return true;
         } else {
             return false;
@@ -1036,10 +1036,10 @@ public class Building implements Actor, EndPoint {
             return 0;
         }
 
-        /* Only plancks and stones are used for upgrades */
+        /* Only planks and stones are used for upgrades */
         switch (material) {
-            case PLANCK:
-                return upgrade.plancks();
+            case PLANK:
+                return upgrade.planks();
             case STONE:
                 return upgrade.stones();
             default:

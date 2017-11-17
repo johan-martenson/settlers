@@ -29,7 +29,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FORESTER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -43,7 +43,7 @@ public class TestForesterHut {
 
 
     @Test
-    public void testForesterHutOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testForesterHutOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -59,8 +59,8 @@ public class TestForesterHut {
         Point point22 = new Point(6, 22);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         foresterHut0.putCargo(cargo);
         foresterHut0.putCargo(cargo);
@@ -76,7 +76,7 @@ public class TestForesterHut {
     }
 
     @Test
-    public void testForesterHutCannotBeConstructedWithOnePlanck() throws Exception {
+    public void testForesterHutCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -92,8 +92,8 @@ public class TestForesterHut {
         Point point22 = new Point(6, 22);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         foresterHut0.putCargo(cargo);
 
@@ -1800,11 +1800,11 @@ public class TestForesterHut {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(foresterHut0.getMaterialNeeded().size(), 1);
-        assertTrue(foresterHut0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(foresterHut0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(foresterHut0.getMaterialNeeded().contains(PLANK));
+        assertEquals(foresterHut0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

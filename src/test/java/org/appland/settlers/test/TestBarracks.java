@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -46,7 +46,7 @@ import static org.junit.Assert.assertTrue;
 public class TestBarracks {
 
     @Test
-    public void testBarracksOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testBarracksOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -62,8 +62,8 @@ public class TestBarracks {
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         barracks0.putCargo(cargo);
         barracks0.putCargo(cargo);
@@ -79,7 +79,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testBarracksCannotBeConstructedWithOnePlanck() throws Exception {
+    public void testBarracksCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -95,8 +95,8 @@ public class TestBarracks {
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         barracks0.putCargo(cargo);
 
@@ -1368,7 +1368,7 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Make sure there is material for upgrading */
-        Utils.adjustInventoryTo(headquarter0, PLANCK, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10, map);
         Utils.adjustInventoryTo(headquarter0, STONE, 10, map);
 
         /* Placing barracks */
@@ -2642,11 +2642,11 @@ public class TestBarracks {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(barracks0.getMaterialNeeded().size(), 1);
-        assertTrue(barracks0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(barracks0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(barracks0.getMaterialNeeded().contains(PLANK));
+        assertEquals(barracks0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

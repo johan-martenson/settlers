@@ -12,7 +12,7 @@ public enum Material {
     IRON,
     COAL,
     WOOD,
-    PLANCK,
+    PLANK,
     STONE,
     WHEAT,
     WATER,

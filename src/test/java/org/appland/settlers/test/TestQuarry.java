@@ -32,7 +32,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -52,7 +52,7 @@ public class TestQuarry {
 
 
     @Test
-    public void testQuarryOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testQuarryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -68,8 +68,8 @@ public class TestQuarry {
         Point point22 = new Point(6, 22);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         quarry0.putCargo(cargo);
         quarry0.putCargo(cargo);
@@ -85,7 +85,7 @@ public class TestQuarry {
     }
 
     @Test
-    public void testQuarryCannotBeConstructedWithOnePlanck() throws Exception {
+    public void testQuarryCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -101,8 +101,8 @@ public class TestQuarry {
         Point point22 = new Point(6, 22);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         quarry0.putCargo(cargo);
 
@@ -2029,11 +2029,11 @@ public class TestQuarry {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(quarry0.getMaterialNeeded().size(), 1);
-        assertTrue(quarry0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(quarry0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(quarry0.getMaterialNeeded().contains(PLANK));
+        assertEquals(quarry0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

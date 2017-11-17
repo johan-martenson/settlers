@@ -34,7 +34,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -53,7 +53,7 @@ import static org.junit.Assert.assertTrue;
 public class TestArmory {
 
     @Test
-    public void testArmoryOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testArmoryOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -69,12 +69,12 @@ public class TestArmory {
         Point point1 = new Point(6, 22);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        armory0.putCargo(planckCargo);
-        armory0.putCargo(planckCargo);
+        armory0.putCargo(plankCargo);
+        armory0.putCargo(plankCargo);
         armory0.putCargo(stoneCargo);
         armory0.putCargo(stoneCargo);
 
@@ -89,7 +89,7 @@ public class TestArmory {
     }
 
     @Test
-    public void testArmoryCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testArmoryCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -105,11 +105,11 @@ public class TestArmory {
         Point point1 = new Point(6, 22);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Deliver one planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        armory0.putCargo(planckCargo);
+        armory0.putCargo(plankCargo);
         armory0.putCargo(stoneCargo);
         armory0.putCargo(stoneCargo);
 
@@ -140,12 +140,12 @@ public class TestArmory {
         Point point1 = new Point(6, 22);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
-        /* Deliver two plancks and one stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and one stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        armory0.putCargo(planckCargo);
-        armory0.putCargo(planckCargo);
+        armory0.putCargo(plankCargo);
+        armory0.putCargo(plankCargo);
         armory0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the armory */
@@ -504,7 +504,7 @@ public class TestArmory {
         armory0.putCargo(new Cargo(IRON_BAR, map));
         armory0.putCargo(new Cargo(COAL, map));
 
-        /* Verify that it takes 50 steps for the armory worker to produce the planck */
+        /* Verify that it takes 50 steps for the armory worker to produce the plank */
         for (int i = 0; i < 50; i++) {
             assertNull(armorer0.getCargo());
             map.stepTime();
@@ -1796,13 +1796,13 @@ public class TestArmory {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(armory0.getMaterialNeeded().size(), 2);
-        assertTrue(armory0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(armory0.getMaterialNeeded().contains(PLANK));
         assertTrue(armory0.getMaterialNeeded().contains(STONE));
-        assertEquals(armory0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(armory0.getTotalAmountNeeded(PLANK), 2);
         assertEquals(armory0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

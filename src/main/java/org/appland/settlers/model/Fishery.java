@@ -8,13 +8,13 @@ package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 
 /**
  *
  * @author johan
  */
-@HouseSize(size = Size.SMALL, material = {PLANCK, PLANCK})
+@HouseSize(size = Size.SMALL, material = {PLANK, PLANK})
 @RequiresWorker(workerType = FISHERMAN)
 @Production(requiredGoods = {}, output = {FISH})
 public class Fishery extends Building {

@@ -5,11 +5,11 @@
  */
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.MEDIUM;
 
-@HouseSize(size = MEDIUM, material = {PLANCK, PLANCK, PLANCK, STONE, STONE, STONE, STONE, STONE})
+@HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, STONE, STONE, STONE, STONE, STONE})
 @MilitaryBuilding(maxHostedMilitary = 6, defenceRadius = 16, maxCoins = 3, attackRadius = 32)
 public class WatchTower extends Building {
 

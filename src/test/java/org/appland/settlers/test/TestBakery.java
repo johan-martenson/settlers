@@ -33,7 +33,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -51,7 +51,7 @@ import static org.junit.Assert.assertTrue;
 public class TestBakery {
 
     @Test
-    public void testBakeryOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testBakeryOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -67,12 +67,12 @@ public class TestBakery {
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        bakery0.putCargo(planckCargo);
-        bakery0.putCargo(planckCargo);
+        bakery0.putCargo(plankCargo);
+        bakery0.putCargo(plankCargo);
         bakery0.putCargo(stoneCargo);
         bakery0.putCargo(stoneCargo);
 
@@ -87,7 +87,7 @@ public class TestBakery {
     }
 
     @Test
-    public void testBakeryCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testBakeryCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -103,11 +103,11 @@ public class TestBakery {
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
 
-        /* Deliver one planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        bakery0.putCargo(planckCargo);
+        bakery0.putCargo(plankCargo);
         bakery0.putCargo(stoneCargo);
         bakery0.putCargo(stoneCargo);
 
@@ -138,12 +138,12 @@ public class TestBakery {
         Point point22 = new Point(6, 22);
         Building bakery0 = map.placeBuilding(new Bakery(player0), point22);
 
-        /* Deliver two plancks and one stones */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and one stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        bakery0.putCargo(planckCargo);
-        bakery0.putCargo(planckCargo);
+        bakery0.putCargo(plankCargo);
+        bakery0.putCargo(plankCargo);
         bakery0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the bakery */
@@ -488,7 +488,7 @@ public class TestBakery {
         bakery.putCargo(new Cargo(WATER, map));
         bakery.putCargo(new Cargo(FLOUR, map));
 
-        /* Verify that it takes 50 steps for the bakery worker to produce the planck */
+        /* Verify that it takes 50 steps for the bakery worker to produce the plank */
         for (int i = 0; i < 50; i++) {
             assertNull(baker.getCargo());
             map.stepTime();
@@ -1687,13 +1687,13 @@ public class TestBakery {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(bakery0.getMaterialNeeded().size(), 2);
-        assertTrue(bakery0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(bakery0.getMaterialNeeded().contains(PLANK));
         assertTrue(bakery0.getMaterialNeeded().contains(STONE));
-        assertEquals(bakery0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(bakery0.getTotalAmountNeeded(PLANK), 2);
         assertEquals(bakery0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

@@ -27,7 +27,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 public class TestHunterHut {
 
     @Test
-    public void testHunterHutOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testHunterHutOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -56,8 +56,8 @@ public class TestHunterHut {
         Point point22 = new Point(6, 22);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         hunterHut0.putCargo(cargo);
         hunterHut0.putCargo(cargo);
@@ -73,7 +73,7 @@ public class TestHunterHut {
     }
 
     @Test
-    public void testHunterHutCannotBeConstructedWithOnePlanck() throws Exception {
+    public void testHunterHutCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -89,8 +89,8 @@ public class TestHunterHut {
         Point point22 = new Point(6, 22);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         hunterHut0.putCargo(cargo);
 
@@ -1712,11 +1712,11 @@ public class TestHunterHut {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(hunterHut0.getMaterialNeeded().size(), 1);
-        assertTrue(hunterHut0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(hunterHut0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(hunterHut0.getMaterialNeeded().contains(PLANK));
+        assertEquals(hunterHut0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

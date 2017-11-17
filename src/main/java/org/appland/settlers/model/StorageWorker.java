@@ -14,7 +14,7 @@ import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MEAT;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 
 /**
  *
@@ -93,10 +93,10 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                /* Make sure plancks are only used for planck production if
+                /* Make sure planks are only used for plank production if
                    the limit is critically low */
-                if (material == PLANCK &&
-                    ownStorage.getAmount(PLANCK) <= TREE_CONSERVATION_LIMIT &&
+                if (material == PLANK &&
+                    ownStorage.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT &&
                     !(building instanceof Sawmill)     &&
                     !(building instanceof ForesterHut) &&
                     !(building instanceof Woodcutter)) {

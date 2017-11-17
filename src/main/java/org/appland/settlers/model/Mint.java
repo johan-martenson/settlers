@@ -10,7 +10,7 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MINTER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.MEDIUM;
 
@@ -18,7 +18,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
  *
  * @author johan
  */
-@HouseSize(size = MEDIUM, material = {PLANCK, PLANCK, STONE, STONE})
+@HouseSize(size = MEDIUM, material = {PLANK, PLANK, STONE, STONE})
 @Production(requiredGoods = {GOLD, COAL}, output = COIN)
 @RequiresWorker(workerType = MINTER)
 public class Mint extends Building {

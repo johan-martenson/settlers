@@ -31,7 +31,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -49,7 +49,7 @@ import static org.junit.Assert.assertTrue;
 public class TestWell {
 
     @Test
-    public void testWellOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testWellOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -65,11 +65,11 @@ public class TestWell {
         Point point22 = new Point(6, 22);
         Building well0 = map.placeBuilding(new Well(player0), point22);
 
-        /* Deliver three planck and three stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver three plank and three stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        well0.putCargo(planckCargo);
-        well0.putCargo(planckCargo);
+        well0.putCargo(plankCargo);
+        well0.putCargo(plankCargo);
 
         /* Verify that this is enough to construct the well */
         for (int i = 0; i < 100; i++) {
@@ -82,7 +82,7 @@ public class TestWell {
     }
 
     @Test
-    public void testWellCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testWellCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -98,10 +98,10 @@ public class TestWell {
         Point point22 = new Point(6, 22);
         Building well0 = map.placeBuilding(new Well(player0), point22);
 
-        /* Deliver one planck */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank */
+        Cargo plankCargo = new Cargo(PLANK, map);
 
-        well0.putCargo(planckCargo);
+        well0.putCargo(plankCargo);
 
         /* Verify that this is not enough to construct the well */
         for (int i = 0; i < 500; i++) {
@@ -1578,11 +1578,11 @@ public class TestWell {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(well0.getMaterialNeeded().size(), 1);
-        assertTrue(well0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(well0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(well0.getMaterialNeeded().contains(PLANK));
+        assertEquals(well0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

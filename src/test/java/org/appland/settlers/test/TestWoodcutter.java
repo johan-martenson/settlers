@@ -34,7 +34,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -55,7 +55,7 @@ public class TestWoodcutter {
 
 
     @Test
-    public void testWoodcutterOnlyNeedsTwoPlancksForConstruction() throws Exception {
+    public void testWoodcutterOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -71,8 +71,8 @@ public class TestWoodcutter {
         Point point22 = new Point(6, 22);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         woodcutter0.putCargo(cargo);
         woodcutter0.putCargo(cargo);
@@ -88,7 +88,7 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testWoodcutterCannotBeConstructedWithOnePlanck() throws Exception {
+    public void testWoodcutterCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -104,8 +104,8 @@ public class TestWoodcutter {
         Point point22 = new Point(6, 22);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point22);
 
-        /* Deliver two plancks */
-        Cargo cargo = new Cargo(PLANCK, map);
+        /* Deliver two planks */
+        Cargo cargo = new Cargo(PLANK, map);
 
         woodcutter0.putCargo(cargo);
 
@@ -2411,11 +2411,11 @@ public class TestWoodcutter {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(woodcutter0.getMaterialNeeded().size(), 1);
-        assertTrue(woodcutter0.getMaterialNeeded().contains(PLANCK));
-        assertEquals(woodcutter0.getTotalAmountNeeded(PLANCK), 2);
+        assertTrue(woodcutter0.getMaterialNeeded().contains(PLANK));
+        assertEquals(woodcutter0.getTotalAmountNeeded(PLANK), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK) {
+            if (material == PLANK) {
                 continue;
             }
 

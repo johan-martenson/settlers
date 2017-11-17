@@ -25,7 +25,7 @@ import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
@@ -77,7 +77,7 @@ public class TestInventory {
         assertEquals(storage.getAmount(BEER), 0);
         assertEquals(storage.getAmount(GOLD), 0);
         assertEquals(storage.getAmount(WOOD), 0);
-        assertEquals(storage.getAmount(PLANCK), 0);
+        assertEquals(storage.getAmount(PLANK), 0);
         assertEquals(storage.getAmount(STONE), 0);
         assertEquals(storage.getAmount(WHEAT), 0);
         assertEquals(storage.getAmount(FORESTER), 0);
@@ -90,7 +90,7 @@ public class TestInventory {
         assertFalse(storage.isInStock(BEER));
         assertFalse(storage.isInStock(GOLD));
         assertFalse(storage.isInStock(WOOD));
-        assertFalse(storage.isInStock(PLANCK));
+        assertFalse(storage.isInStock(PLANK));
         assertFalse(storage.isInStock(STONE));
         assertFalse(storage.isInStock(WHEAT));
         assertFalse(storage.isInStock(FORESTER));
@@ -134,12 +134,12 @@ public class TestInventory {
         assertEquals(storage.getAmount(WOOD), 0);
         assertFalse(storage.isInStock(WOOD));
 
-        storage.putCargo(new Cargo(PLANCK, null));
-        assertEquals(storage.getAmount(PLANCK), 1);
-        assertTrue(storage.isInStock(PLANCK));
-        storage.retrieve(PLANCK);
-        assertEquals(storage.getAmount(PLANCK), 0);
-        assertFalse(storage.isInStock(PLANCK));
+        storage.putCargo(new Cargo(PLANK, null));
+        assertEquals(storage.getAmount(PLANK), 1);
+        assertTrue(storage.isInStock(PLANK));
+        storage.retrieve(PLANK);
+        assertEquals(storage.getAmount(PLANK), 0);
+        assertFalse(storage.isInStock(PLANK));
 
         storage.putCargo(new Cargo(STONE, null));
         assertEquals(storage.getAmount(STONE), 1);

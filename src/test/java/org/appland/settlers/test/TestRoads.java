@@ -35,7 +35,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -1006,12 +1006,12 @@ public class TestRoads {
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
 
-        /* Wait for the courier to start delivering planck cargo to the woodcutter */
-        assertTrue(woodcutter.needsMaterial(PLANCK));
-        assertTrue(hq.getAmount(PLANCK) > 0);
+        /* Wait for the courier to start delivering plank cargo to the woodcutter */
+        assertTrue(woodcutter.needsMaterial(PLANK));
+        assertTrue(hq.getAmount(PLANK) > 0);
         assertTrue(map.arePointsConnectedByRoads(hq.getPosition(), woodcutter.getPosition()));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANCK);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         /* Wait for the courier to reach the woodcutter's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getFlag().getPosition());
@@ -1077,12 +1077,12 @@ public class TestRoads {
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
 
-        /* Wait for the courier to start delivering planck cargo to the woodcutter */
-        assertTrue(woodcutter.needsMaterial(PLANCK));
-        assertTrue(hq.getAmount(PLANCK) > 0);
+        /* Wait for the courier to start delivering plank cargo to the woodcutter */
+        assertTrue(woodcutter.needsMaterial(PLANK));
+        assertTrue(hq.getAmount(PLANK) > 0);
         assertTrue(map.arePointsConnectedByRoads(hq.getPosition(), woodcutter.getPosition()));
 
-        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANCK);
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, PLANK);
 
         /* Wait for the courier to reach the woodcutter */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getPosition());

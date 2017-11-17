@@ -31,7 +31,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.MILLER;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -49,7 +49,7 @@ import static org.junit.Assert.assertTrue;
 public class TestMill {
 
     @Test
-    public void testMillOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testMillOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -65,12 +65,12 @@ public class TestMill {
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        mill0.putCargo(planckCargo);
-        mill0.putCargo(planckCargo);
+        mill0.putCargo(plankCargo);
+        mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
         mill0.putCargo(stoneCargo);
 
@@ -85,7 +85,7 @@ public class TestMill {
     }
 
     @Test
-    public void testMillCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testMillCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -101,11 +101,11 @@ public class TestMill {
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
 
-        /* Deliver one planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        mill0.putCargo(planckCargo);
+        mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
         mill0.putCargo(stoneCargo);
 
@@ -136,12 +136,12 @@ public class TestMill {
         Point point22 = new Point(6, 22);
         Building mill0 = map.placeBuilding(new Mill(player0), point22);
 
-        /* Deliver two plancks and one stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and one stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        mill0.putCargo(planckCargo);
-        mill0.putCargo(planckCargo);
+        mill0.putCargo(plankCargo);
+        mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the mill */
@@ -1711,13 +1711,13 @@ public class TestMill {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(mill0.getMaterialNeeded().size(), 2);
-        assertTrue(mill0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(mill0.getMaterialNeeded().contains(PLANK));
         assertTrue(mill0.getMaterialNeeded().contains(STONE));
-        assertEquals(mill0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(mill0.getTotalAmountNeeded(PLANK), 2);
         assertEquals(mill0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 

@@ -30,7 +30,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.PLANCK;
+import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
@@ -49,7 +49,7 @@ import static org.junit.Assert.assertTrue;
 public class TestSawmill {
 
     @Test
-    public void testSawmillOnlyNeedsTwoPlancksAndTwoStonesForConstruction() throws Exception {
+    public void testSawmillOnlyNeedsTwoPlanksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -65,12 +65,12 @@ public class TestSawmill {
         Point point22 = new Point(6, 22);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
-        /* Deliver two planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        sawmill0.putCargo(planckCargo);
-        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(plankCargo);
+        sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(stoneCargo);
         sawmill0.putCargo(stoneCargo);
 
@@ -85,7 +85,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testSawmillCannotBeConstructedWithTooFewPlancks() throws Exception {
+    public void testSawmillCannotBeConstructedWithTooFewPlanks() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -101,11 +101,11 @@ public class TestSawmill {
         Point point22 = new Point(6, 22);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
-        /* Deliver one planck and two stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver one plank and two stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(stoneCargo);
         sawmill0.putCargo(stoneCargo);
 
@@ -136,12 +136,12 @@ public class TestSawmill {
         Point point22 = new Point(6, 22);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point22);
 
-        /* Deliver two plancks and one stone */
-        Cargo planckCargo = new Cargo(PLANCK, map);
+        /* Deliver two planks and one stone */
+        Cargo plankCargo = new Cargo(PLANK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
-        sawmill0.putCargo(planckCargo);
-        sawmill0.putCargo(planckCargo);
+        sawmill0.putCargo(plankCargo);
+        sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the sawmill */
@@ -300,7 +300,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testOccupiedSawmillWithWoodProducesPlancks() throws Exception {
+    public void testOccupiedSawmillWithWoodProducesPlanks() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -328,7 +328,7 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
         sawmill.putCargo(new Cargo(WOOD, map));
 
-        /* Verify that the sawmill produces plancks */
+        /* Verify that the sawmill produces planks */
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
@@ -338,12 +338,12 @@ public class TestSawmill {
         map.stepTime();
 
         assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), PLANCK);
+        assertEquals(sw.getCargo().getMaterial(), PLANK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
     }
 
     @Test
-    public void testSawmillWorkerLeavesPlancksAtTheFlag() throws Exception {
+    public void testSawmillWorkerLeavesPlanksAtTheFlag() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -379,7 +379,7 @@ public class TestSawmill {
         sawmill.putCargo(new Cargo(WOOD, map));
         sawmill.putCargo(new Cargo(WOOD, map));
 
-        /* Verify that the sawmill produces plancks */
+        /* Verify that the sawmill produces planks */
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
@@ -389,7 +389,7 @@ public class TestSawmill {
         map.stepTime();
 
         assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), PLANCK);
+        assertEquals(sw.getCargo().getMaterial(), PLANK);
         assertTrue(sawmill.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the sawmill worker leaves the cargo at the flag */
@@ -407,7 +407,7 @@ public class TestSawmill {
     }
 
     @Test
-    public void testProductionOfOnePlanckConsumesOneWood() throws Exception {
+    public void testProductionOfOnePlankConsumesOneWood() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -430,7 +430,7 @@ public class TestSawmill {
         /* Deliver wood to the sawmill */
         sawmill.putCargo(new Cargo(WOOD, map));
 
-        /* Wait until the sawmill worker produces a planck */
+        /* Wait until the sawmill worker produces a plank */
         assertEquals(sawmill.getAmount(WOOD), 1);
 
         Utils.fastForward(150, map);
@@ -460,7 +460,7 @@ public class TestSawmill {
         /* Occupy the sawmill */
         Worker sw = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill, map);
 
-        /* Fast forward so that the sawmill worker would produced plancks
+        /* Fast forward so that the sawmill worker would produced planks
            if it had had any wood
         */
         Utils.fastForward(150, map);
@@ -470,7 +470,7 @@ public class TestSawmill {
         /* Deliver wood to the sawmill */
         sawmill.putCargo(new Cargo(WOOD, map));
 
-        /* Verify that it takes 50 steps for the sawmill worker to produce the planck */
+        /* Verify that it takes 50 steps for the sawmill worker to produce the plank */
         for (int i = 0; i < 50; i++) {
             assertNull(sw.getCargo());
             map.stepTime();
@@ -511,14 +511,14 @@ public class TestSawmill {
         /* Let the sawmill worker rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the sawmill worker to produce a new planck cargo */
+        /* Wait for the sawmill worker to produce a new plank cargo */
         Utils.fastForward(50, map);
 
         Worker sawmillWorker = sawmill0.getWorker();
 
         assertNotNull(sawmillWorker.getCargo());
 
-        /* Verify that the sawmill worker puts the planck cargo at the flag */
+        /* Verify that the sawmill worker puts the plank cargo at the flag */
         assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
@@ -581,14 +581,14 @@ public class TestSawmill {
         /* Let the sawmill worker rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the sawmill worker to produce a new planck cargo */
+        /* Wait for the sawmill worker to produce a new plank cargo */
         Utils.fastForward(50, map);
 
         Worker sawmillWorker = sawmill0.getWorker();
 
         assertNotNull(sawmillWorker.getCargo());
 
-        /* Verify that the sawmill worker puts the planck cargo at the flag */
+        /* Verify that the sawmill worker puts the plank cargo at the flag */
         assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
         assertTrue(sawmill0.getFlag().getStackedCargo().isEmpty());
 
@@ -640,13 +640,13 @@ public class TestSawmill {
         /* Verify that the courier delivers the cargo to the headquarter */
         assertEquals(courier.getTarget(), headquarter0.getPosition());
 
-        int amount = headquarter0.getAmount(PLANCK);
+        int amount = headquarter0.getAmount(PLANK);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
 
         /* Verify that the courier has delivered the cargo to the headquarter */
         assertNull(courier.getCargo());
-        assertEquals(headquarter0.getAmount(PLANCK), amount + 1);
+        assertEquals(headquarter0.getAmount(PLANK), amount + 1);
     }
 
     @Test
@@ -885,14 +885,14 @@ public class TestSawmill {
         /* Wait for the sawmill worker to produce cargo */
         Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
 
-        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANCK);
+        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANK);
 
         /* Wait for the worker to deliver the cargo */
         assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, sawmill0.getFlag().getPosition());
 
-        /* Stop production and verify that no planck is produced */
+        /* Stop production and verify that no plank is produced */
         sawmill0.stopProduction();
 
         assertFalse(sawmill0.isProductionEnabled());
@@ -943,10 +943,10 @@ public class TestSawmill {
         /* Let the worker rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the sawmill worker to produce planck */
+        /* Wait for the sawmill worker to produce plank */
         Utils.fastForwardUntilWorkerProducesCargo(map, sawmillWorker);
 
-        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANCK);
+        assertEquals(sawmillWorker.getCargo().getMaterial(), PLANK);
 
         /* Wait for the worker to deliver the cargo */
         assertEquals(sawmillWorker.getTarget(), sawmill0.getFlag().getPosition());
@@ -962,7 +962,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        /* Resume production and verify that the sawmill produces planck again */
+        /* Resume production and verify that the sawmill produces plank again */
         sawmill0.resumeProduction();
 
         assertTrue(sawmill0.isProductionEnabled());
@@ -1627,7 +1627,7 @@ public class TestSawmill {
         /* Connect the sawmill with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill.getFlag());
 
-        /* Make the sawmill create some plancks with full resources available */
+        /* Make the sawmill create some planks with full resources available */
         for (int i = 0; i < 1000; i++) {
 
             map.stepTime();
@@ -1724,7 +1724,7 @@ public class TestSawmill {
 
         /* Verify that the reported output is correct */
         assertEquals(sawmill0.getProducedMaterial().length, 1);
-        assertEquals(sawmill0.getProducedMaterial()[0], PLANCK);
+        assertEquals(sawmill0.getProducedMaterial()[0], PLANK);
     }
 
     @Test
@@ -1746,13 +1746,13 @@ public class TestSawmill {
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(sawmill0.getMaterialNeeded().size(), 2);
-        assertTrue(sawmill0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(sawmill0.getMaterialNeeded().contains(PLANK));
         assertTrue(sawmill0.getMaterialNeeded().contains(STONE));
-        assertEquals(sawmill0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(sawmill0.getTotalAmountNeeded(PLANK), 2);
         assertEquals(sawmill0.getTotalAmountNeeded(STONE), 2);
 
         for (Material material : Material.values()) {
-            if (material == PLANCK || material == STONE) {
+            if (material == PLANK || material == STONE) {
                 continue;
             }
 
