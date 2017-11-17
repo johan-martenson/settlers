@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1665,5 +1666,74 @@ public class TestBakery {
         /* Verify that the reported output is correct */
         assertEquals(bakery0.getProducedMaterial().length, 1);
         assertEquals(bakery0.getProducedMaterial()[0], BREAD);
+    }
+
+    @Test
+    public void testBakeryReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(6, 22);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(bakery0.getMaterialNeeded().size(), 2);
+        assertTrue(bakery0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(bakery0.getMaterialNeeded().contains(STONE));
+        assertEquals(bakery0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(bakery0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(bakery0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBakeryReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(6, 22);
+        Building bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Construct the bakery */
+        Utils.constructHouse(bakery0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(bakery0.getMaterialNeeded().size(), 2);
+        assertTrue(bakery0.getMaterialNeeded().contains(WATER));
+        assertTrue(bakery0.getMaterialNeeded().contains(FLOUR));
+        assertEquals(bakery0.getTotalAmountNeeded(WATER), 1);
+        assertEquals(bakery0.getTotalAmountNeeded(FLOUR), 1);
+
+        for (Material material : Material.values()) {
+            if (material == WATER || material == FLOUR) {
+                continue;
+            }
+
+            assertEquals(bakery0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

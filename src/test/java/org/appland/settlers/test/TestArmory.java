@@ -1776,4 +1776,73 @@ public class TestArmory {
         assertTrue((armory0.getProducedMaterial()[0] == SWORD && armory0.getProducedMaterial()[1] == SHIELD) ||
                    (armory0.getProducedMaterial()[1] == SWORD && armory0.getProducedMaterial()[0] == SHIELD));
     }
+
+    @Test
+    public void testArmoryReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(armory0.getMaterialNeeded().size(), 2);
+        assertTrue(armory0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(armory0.getMaterialNeeded().contains(STONE));
+        assertEquals(armory0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(armory0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(armory0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testArmoryReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Construct the armory */
+        Utils.constructHouse(armory0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(armory0.getMaterialNeeded().size(), 2);
+        assertTrue(armory0.getMaterialNeeded().contains(COAL));
+        assertTrue(armory0.getMaterialNeeded().contains(IRON_BAR));
+        assertEquals(armory0.getTotalAmountNeeded(COAL), 2);
+        assertEquals(armory0.getTotalAmountNeeded(IRON_BAR), 2);
+
+        for (Material material : Material.values()) {
+            if (material == COAL || material == IRON_BAR) {
+                continue;
+            }
+
+            assertEquals(armory0.getTotalAmountNeeded(material), 0);
+        }
+    }
 }

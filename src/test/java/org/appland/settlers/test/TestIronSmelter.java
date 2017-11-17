@@ -15,6 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronSmelter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1817,5 +1818,74 @@ public class TestIronSmelter {
         /* Verify that the reported output is correct */
         assertEquals(ironSmelter0.getProducedMaterial().length, 1);
         assertEquals(ironSmelter0.getProducedMaterial()[0], IRON_BAR);
+    }
+
+    @Test
+    public void testIronSmelterReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(ironSmelter0.getMaterialNeeded().size(), 2);
+        assertTrue(ironSmelter0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(ironSmelter0.getMaterialNeeded().contains(STONE));
+        assertEquals(ironSmelter0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(ironSmelter0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(ironSmelter0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testIronSmelterReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(6, 22);
+        Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Construct the iron smelter */
+        Utils.constructHouse(ironSmelter0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(ironSmelter0.getMaterialNeeded().size(), 2);
+        assertTrue(ironSmelter0.getMaterialNeeded().contains(COAL));
+        assertTrue(ironSmelter0.getMaterialNeeded().contains(IRON));
+        assertEquals(ironSmelter0.getTotalAmountNeeded(COAL), 1);
+        assertEquals(ironSmelter0.getTotalAmountNeeded(IRON), 1);
+
+        for (Material material : Material.values()) {
+            if (material == COAL || material == IRON) {
+                continue;
+            }
+
+            assertEquals(ironSmelter0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

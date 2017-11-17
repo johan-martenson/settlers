@@ -15,6 +15,7 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -2620,6 +2621,70 @@ public class TestBarracks {
 
         /* Verify that the reported output is correct */
         assertEquals(barracks0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testBarracksReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(barracks0.getMaterialNeeded().size(), 1);
+        assertTrue(barracks0.getMaterialNeeded().contains(PLANCK));
+        assertEquals(barracks0.getTotalAmountNeeded(PLANCK), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK) {
+                continue;
+            }
+
+            assertEquals(barracks0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBarracksReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(barracks0.getMaterialNeeded().size(), 1);
+        assertEquals(barracks0.getTotalAmountNeeded(COIN), 1);
+
+        for (Material material : Material.values()) {
+            if (material == COIN) {
+                continue;
+            }
+
+            assertEquals(barracks0.getTotalAmountNeeded(material), 0);
+        }
     }
     /*
 

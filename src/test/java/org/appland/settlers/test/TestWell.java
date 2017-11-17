@@ -13,6 +13,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1556,5 +1557,64 @@ public class TestWell {
         /* Verify that the reported output is correct */
         assertEquals(well0.getProducedMaterial().length, 1);
         assertEquals(well0.getProducedMaterial()[0], WATER);
+    }
+
+    @Test
+    public void testWellReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(6, 22);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(well0.getMaterialNeeded().size(), 1);
+        assertTrue(well0.getMaterialNeeded().contains(PLANCK));
+        assertEquals(well0.getTotalAmountNeeded(PLANCK), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK) {
+                continue;
+            }
+
+            assertEquals(well0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testWellReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place well */
+        Point point1 = new Point(6, 22);
+        Building well0 = map.placeBuilding(new Well(player0), point1);
+
+        /* Construct the well */
+        Utils.constructHouse(well0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(well0.getMaterialNeeded().size(), 0);
+
+        for (Material material : Material.values()) {
+            assertEquals(well0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

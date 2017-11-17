@@ -13,6 +13,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -619,7 +620,14 @@ public class TestSawmill {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
         /* Verify that the courier walks to pick up the cargo */
-        map.stepTime();
+        for (int i = 0; i < 1000; i++) {
+
+            if (courier.getTarget().equals(sawmill0.getFlag().getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
 
         assertEquals(courier.getTarget(), sawmill0.getFlag().getPosition());
 
@@ -1717,5 +1725,72 @@ public class TestSawmill {
         /* Verify that the reported output is correct */
         assertEquals(sawmill0.getProducedMaterial().length, 1);
         assertEquals(sawmill0.getProducedMaterial()[0], PLANCK);
+    }
+
+    @Test
+    public void testSawmillReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(6, 22);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(sawmill0.getMaterialNeeded().size(), 2);
+        assertTrue(sawmill0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(sawmill0.getMaterialNeeded().contains(STONE));
+        assertEquals(sawmill0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(sawmill0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(sawmill0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testSawmillReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(6, 22);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Construct the sawmill */
+        Utils.constructHouse(sawmill0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(sawmill0.getMaterialNeeded().size(), 1);
+        assertTrue(sawmill0.getMaterialNeeded().contains(WOOD));
+        assertEquals(sawmill0.getTotalAmountNeeded(WOOD), 6);
+
+        for (Material material : Material.values()) {
+            if (material == WOOD) {
+                continue;
+            }
+
+            assertEquals(sawmill0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

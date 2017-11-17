@@ -11,6 +11,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -1174,5 +1175,71 @@ public class TestFortress {
 
         /* Verify that the reported output is correct */
         assertEquals(fortress0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testFortressReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(fortress0.getMaterialNeeded().size(), 2);
+        assertTrue(fortress0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(fortress0.getMaterialNeeded().contains(STONE));
+        assertEquals(fortress0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(fortress0.getTotalAmountNeeded(STONE), 7);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(fortress0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testFortressReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fortress */
+        Point point1 = new Point(6, 22);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
+
+        /* Construct the fortress */
+        Utils.constructHouse(fortress0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(fortress0.getMaterialNeeded().size(), 1);
+        assertEquals(fortress0.getTotalAmountNeeded(COIN), 4);
+
+        for (Material material : Material.values()) {
+            if (material == COIN) {
+                continue;
+            }
+
+            assertEquals(fortress0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

@@ -2260,16 +2260,26 @@ public class TestFarm {
 
         /* Make the farm create some wheat with full space to plant on available */
         for (int i = 0; i < 3000; i++) {
+
             map.stepTime();
+
+            if (farm.getProductivity() == 100) {
+                break;
+            }
         }
 
         /* Verify that the productivity goes down when there is no space to plant on */
         assertEquals(farm.getProductivity(), 100);
 
         for (int i = 0; i < 5000; i++) {
+
             map.stepTime();
 
             Utils.putStonesOnPoints(map.getPointsWithinRadius(farm.getPosition(), 5), map);
+
+            if (farm.getProductivity() == 0) {
+                break;
+            }
         }
 
         assertEquals(farm.getProductivity(), 0);

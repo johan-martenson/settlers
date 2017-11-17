@@ -10,6 +10,7 @@ import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -40,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 public class TestWatchTower {
 
     @Test
-    public void testWatchTowerNeedsThreePlancksAndFourStonesForConstruction() throws Exception {
+    public void testWatchTowerNeedsThreePlancksAndFiveStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -56,7 +57,7 @@ public class TestWatchTower {
         Point point22 = new Point(6, 22);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Deliver two plancks and three stones */
+        /* Deliver two plancks and five stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
         watchTower0.putCargo(cargo);
@@ -65,6 +66,7 @@ public class TestWatchTower {
 
         Cargo stoneCargo = new Cargo(STONE, map);
 
+        watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
@@ -109,6 +111,7 @@ public class TestWatchTower {
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
+        watchTower0.putCargo(stoneCargo);
 
         /* Verify that the watch tower needs a planck */
         assertTrue(watchTower0.needsMaterial(PLANCK));
@@ -149,6 +152,7 @@ public class TestWatchTower {
 
         Cargo stoneCargo = new Cargo(STONE, map);
 
+        watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
         watchTower0.putCargo(stoneCargo);
@@ -1151,5 +1155,71 @@ public class TestWatchTower {
 
         /* Verify that the reported output is correct */
         assertEquals(watchTower0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testWatchTowerReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(6, 22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(watchTower0.getMaterialNeeded().size(), 2);
+        assertTrue(watchTower0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(watchTower0.getMaterialNeeded().contains(STONE));
+        assertEquals(watchTower0.getTotalAmountNeeded(PLANCK), 3);
+        assertEquals(watchTower0.getTotalAmountNeeded(STONE), 5);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(watchTower0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testWatchTowerReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place watch tower */
+        Point point1 = new Point(6, 22);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Construct the watch tower */
+        Utils.constructHouse(watchTower0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(watchTower0.getMaterialNeeded().size(), 1);
+        assertEquals(watchTower0.getTotalAmountNeeded(COIN), 3);
+
+        for (Material material : Material.values()) {
+            if (material == COIN) {
+                continue;
+            }
+
+            assertEquals(watchTower0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
@@ -49,7 +50,7 @@ import static org.junit.Assert.assertTrue;
 public class TestCatapult {
 
     @Test
-    public void testCatapultOnlyNeedsFourPlancksAndThreeStonesForConstruction() throws Exception {
+    public void testCatapultOnlyNeedsFourPlancksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -65,7 +66,7 @@ public class TestCatapult {
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
-        /* Deliver four plancks and three stones */
+        /* Deliver four plancks and two stones */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
@@ -73,7 +74,6 @@ public class TestCatapult {
         catapult0.putCargo(planckCargo);
         catapult0.putCargo(planckCargo);
         catapult0.putCargo(planckCargo);
-        catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
@@ -113,7 +113,6 @@ public class TestCatapult {
         catapult0.putCargo(planckCargo);
         catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
-        catapult0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the catapult */
         for (int i = 0; i < 500; i++) {
@@ -142,7 +141,7 @@ public class TestCatapult {
         Point point22 = new Point(6, 22);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
-        /* Deliver four plancks and two stone */
+        /* Deliver four plancks and one stone */
         Cargo planckCargo = new Cargo(PLANCK, map);
         Cargo stoneCargo  = new Cargo(STONE, map);
 
@@ -150,7 +149,6 @@ public class TestCatapult {
         catapult0.putCargo(planckCargo);
         catapult0.putCargo(planckCargo);
         catapult0.putCargo(planckCargo);
-        catapult0.putCargo(stoneCargo);
         catapult0.putCargo(stoneCargo);
 
         /* Verify that this is not enough to construct the catapult */
@@ -1545,5 +1543,72 @@ public class TestCatapult {
 
         /* Verify that the reported output is correct */
         assertEquals(catapult0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testCatapultReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place catapult */
+        Point point1 = new Point(6, 22);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(catapult0.getMaterialNeeded().size(), 2);
+        assertTrue(catapult0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(catapult0.getMaterialNeeded().contains(STONE));
+        assertEquals(catapult0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(catapult0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(catapult0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testCatapultReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place catapult */
+        Point point1 = new Point(6, 22);
+        Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
+
+        /* Construct the catapult */
+        Utils.constructHouse(catapult0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(catapult0.getMaterialNeeded().size(), 1);
+        assertTrue(catapult0.getMaterialNeeded().contains(STONE));
+        assertEquals(catapult0.getTotalAmountNeeded(STONE), 4);
+
+        for (Material material : Material.values()) {
+            if (material == STONE) {
+                continue;
+            }
+
+            assertEquals(catapult0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

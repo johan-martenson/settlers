@@ -14,6 +14,7 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.IronMine;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -1958,5 +1959,81 @@ public class TestIronMine {
         /* Verify that the reported output is correct */
         assertEquals(ironMine0.getProducedMaterial().length, 1);
         assertEquals(ironMine0.getProducedMaterial()[0], IRON);
+    }
+
+    @Test
+    public void testIronMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a small mountain */
+        Point point1 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point1, map);
+
+        /* Place iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(ironMine0.getMaterialNeeded().size(), 1);
+        assertTrue(ironMine0.getMaterialNeeded().contains(PLANCK));
+        assertEquals(ironMine0.getTotalAmountNeeded(PLANCK), 4);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK) {
+                continue;
+            }
+
+            assertEquals(ironMine0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testIronMineReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+
+        /* Place a small mountain */
+        Point point1 = new Point(6, 22);
+        Utils.surroundPointWithMountain(point1, map);
+
+        /* Place iron mine */
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+
+        /* Construct the iron mine */
+        Utils.constructHouse(ironMine0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(ironMine0.getMaterialNeeded().size(), 3);
+        assertTrue(ironMine0.getMaterialNeeded().contains(BREAD));
+        assertTrue(ironMine0.getMaterialNeeded().contains(MEAT));
+        assertTrue(ironMine0.getMaterialNeeded().contains(FISH));
+        assertEquals(ironMine0.getTotalAmountNeeded(BREAD), 1);
+        assertEquals(ironMine0.getTotalAmountNeeded(MEAT), 1);
+        assertEquals(ironMine0.getTotalAmountNeeded(FISH), 1);
+
+        for (Material material : Material.values()) {
+            if (material == BREAD || material == MEAT || material == FISH) {
+                continue;
+            }
+
+            assertEquals(ironMine0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

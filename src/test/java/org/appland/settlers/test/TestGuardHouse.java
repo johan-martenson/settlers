@@ -11,6 +11,7 @@ import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -40,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 public class TestGuardHouse {
 
     @Test
-    public void testGuardHouseNeedsTwoPlancksAndThreeStonesForConstruction() throws Exception {
+    public void testGuardHouseNeedsThreePlancksAndTwoStonesForConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -56,15 +57,15 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        /* Deliver two plancks and three stones */
+        /* Deliver three plancks and two stones */
         Cargo cargo = new Cargo(PLANCK, map);
 
+        guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
 
         Cargo stoneCargo = new Cargo(STONE, map);
 
-        guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
 
@@ -99,10 +100,10 @@ public class TestGuardHouse {
         Cargo cargo = new Cargo(PLANCK, map);
 
         guardHouse0.putCargo(cargo);
+        guardHouse0.putCargo(cargo);
 
         Cargo stoneCargo = new Cargo(STONE, map);
 
-        guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
 
@@ -138,10 +139,10 @@ public class TestGuardHouse {
 
         guardHouse0.putCargo(cargo);
         guardHouse0.putCargo(cargo);
+        guardHouse0.putCargo(cargo);
 
         Cargo stoneCargo = new Cargo(STONE, map);
 
-        guardHouse0.putCargo(stoneCargo);
         guardHouse0.putCargo(stoneCargo);
 
         /* Verify that this is enough to construct the guard house */
@@ -1133,5 +1134,71 @@ public class TestGuardHouse {
 
         /* Verify that the reported output is correct */
         assertEquals(guardHouse0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testGuardHouseReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(6, 22);
+        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(guardHouse0.getMaterialNeeded().size(), 2);
+        assertTrue(guardHouse0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(guardHouse0.getMaterialNeeded().contains(STONE));
+        assertEquals(guardHouse0.getTotalAmountNeeded(PLANCK), 3);
+        assertEquals(guardHouse0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(guardHouse0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBarracksReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place guard house */
+        Point point1 = new Point(6, 22);
+        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct the guard house */
+        Utils.constructHouse(guardHouse0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(guardHouse0.getMaterialNeeded().size(), 1);
+        assertEquals(guardHouse0.getTotalAmountNeeded(COIN), 2);
+
+        for (Material material : Material.values()) {
+            if (material == COIN) {
+                continue;
+            }
+
+            assertEquals(guardHouse0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

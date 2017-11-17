@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1717,5 +1718,74 @@ public class TestBrewery {
         /* Verify that the reported output is correct */
         assertEquals(brewery0.getProducedMaterial().length, 1);
         assertEquals(brewery0.getProducedMaterial()[0], BEER);
+    }
+
+    @Test
+    public void testBreweryReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(6, 22);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(brewery0.getMaterialNeeded().size(), 2);
+        assertTrue(brewery0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(brewery0.getMaterialNeeded().contains(STONE));
+        assertEquals(brewery0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(brewery0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(brewery0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBreweryReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(6, 22);
+        Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Construct the brewery */
+        Utils.constructHouse(brewery0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(brewery0.getMaterialNeeded().size(), 2);
+        assertTrue(brewery0.getMaterialNeeded().contains(WATER));
+        assertTrue(brewery0.getMaterialNeeded().contains(WHEAT));
+        assertEquals(brewery0.getTotalAmountNeeded(WATER), 1);
+        assertEquals(brewery0.getTotalAmountNeeded(WHEAT), 1);
+
+        for (Material material : Material.values()) {
+            if (material == WATER || material == WHEAT) {
+                continue;
+            }
+
+            assertEquals(brewery0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

@@ -6,17 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.awt.Color;
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Farm;
@@ -24,32 +13,43 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.GOLD;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Size;
-import static org.appland.settlers.model.Size.LARGE;
-import static org.appland.settlers.model.Size.MEDIUM;
-import static org.appland.settlers.model.Size.SMALL;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tile.Vegetation;
+import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
-import org.appland.settlers.model.Woodcutter;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
 
 /**
  *
@@ -1888,7 +1888,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testPlaceHouseOnEachAvailableSpotWithMountainInMap() throws Exception {
+    public void testPlaceHouseOnEachAvailableSpotWithSwampInMap() throws Exception {
 
         /* Starting new game */
 

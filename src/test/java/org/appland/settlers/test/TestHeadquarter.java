@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.StorageWorker;
@@ -201,5 +202,26 @@ public class TestHeadquarter {
 
         /* Verify that the reported output is correct */
         assertEquals(headquarter0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testHeadquarterReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the reported needed production material is correct */
+        assertEquals(headquarter0.getMaterialNeeded().size(), 0);
+
+        for (Material material : Material.values()) {
+            assertEquals(headquarter0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

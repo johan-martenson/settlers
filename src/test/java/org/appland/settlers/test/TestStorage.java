@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1672,5 +1673,66 @@ public class TestStorage {
 
         /* Verify that the reported output is correct */
         assertEquals(storage0.getProducedMaterial().length, 0);
+    }
+
+    @Test
+    public void testStorageReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage */
+        Point point1 = new Point(6, 22);
+        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(storage0.getMaterialNeeded().size(), 2);
+        assertTrue(storage0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(storage0.getMaterialNeeded().contains(STONE));
+        assertEquals(storage0.getTotalAmountNeeded(PLANCK), 4);
+        assertEquals(storage0.getTotalAmountNeeded(STONE), 3);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(storage0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testStorageReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storage */
+        Point point1 = new Point(6, 22);
+        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+
+        /* Construct the storage */
+        Utils.constructHouse(storage0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(storage0.getMaterialNeeded().size(), 0);
+
+        for (Material material : Material.values()) {
+            assertEquals(storage0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

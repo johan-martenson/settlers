@@ -14,6 +14,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -1739,5 +1740,72 @@ public class TestSlaughterHouse {
         /* Verify that the reported output is correct */
         assertEquals(slaughterHouse0.getProducedMaterial().length, 1);
         assertEquals(slaughterHouse0.getProducedMaterial()[0], MEAT);
+    }
+
+    @Test
+    public void testSlaughterHouseReportsCorrectMaterialsNeededForConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaugher house */
+        Point point1 = new Point(6, 22);
+        Building slaugherHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(slaugherHouse0.getMaterialNeeded().size(), 2);
+        assertTrue(slaugherHouse0.getMaterialNeeded().contains(PLANCK));
+        assertTrue(slaugherHouse0.getMaterialNeeded().contains(STONE));
+        assertEquals(slaugherHouse0.getTotalAmountNeeded(PLANCK), 2);
+        assertEquals(slaugherHouse0.getTotalAmountNeeded(STONE), 2);
+
+        for (Material material : Material.values()) {
+            if (material == PLANCK || material == STONE) {
+                continue;
+            }
+
+            assertEquals(slaugherHouse0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testSlaughterHouseReportsCorrectMaterialsNeededForProduction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point1 = new Point(6, 22);
+        Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Construct the slaughter house */
+        Utils.constructHouse(slaughterHouse0, map);
+
+        /* Verify that the reported needed construction material is correct */
+        assertEquals(slaughterHouse0.getMaterialNeeded().size(), 1);
+        assertTrue(slaughterHouse0.getMaterialNeeded().contains(PIG));
+        assertEquals(slaughterHouse0.getTotalAmountNeeded(PIG), 1);
+
+        for (Material material : Material.values()) {
+            if (material == PIG) {
+                continue;
+            }
+
+            assertEquals(slaughterHouse0.getTotalAmountNeeded(material), 0);
+        }
     }
 }

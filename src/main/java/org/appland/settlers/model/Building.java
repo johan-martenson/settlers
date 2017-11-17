@@ -3,12 +3,15 @@ package org.appland.settlers.model;
 import org.appland.settlers.model.Military.Rank;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -898,7 +901,7 @@ public class Building implements Actor, EndPoint {
         return promisedDeliveries.getOrDefault(material, 0) + getAmount(material);
     }
 
-    private int getTotalAmountNeeded(Material material) {
+    public int getTotalAmountNeeded(Material material) {
 
         if (state == State.UNDER_CONSTRUCTION) {
 
@@ -1080,5 +1083,28 @@ public class Building implements Actor, EndPoint {
         }
 
         return this.getClass().getAnnotation(Production.class).output();
+    }
+
+    public Collection<Material> getMaterialNeeded() {
+
+        Set<Material> result = new HashSet<>();
+
+        if (underConstruction()) {
+            HouseSize houseSize = this.getClass().getAnnotation(HouseSize.class);
+
+            result.addAll(Arrays.asList(houseSize.material()));
+        } else if (ready()) {
+            Production production = this.getClass().getAnnotation(Production.class);
+
+            if (production != null) {
+                result.addAll(Arrays.asList(production.requiredGoods()));
+            }
+
+            if (isMilitaryBuilding() && getAmount(COIN) < getMaxCoins() && isPromotionEnabled()) {
+                result.add(COIN);
+            }
+        }
+
+        return result;
     }
 }
