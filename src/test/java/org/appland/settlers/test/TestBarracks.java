@@ -2686,6 +2686,107 @@ public class TestBarracks {
             assertEquals(barracks0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testHostedMilitaryListIsEmptyForBarracksUnderConstruction() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Verify that the list of hosted militaries is empty */
+        assertTrue(barracks0.getHostedMilitary().size() == 0);
+    }
+
+    @Test
+    public void testHostedMilitaryListIsEmptyForEmptyBarracks() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Construct barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Verify that the list of hosted militaries is empty */
+        assertTrue(barracks0.getHostedMilitary().size() == 0);
+    }
+
+    @Test
+    public void testAddingMilitaryUpsHostedMilitaryList() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Construct barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Add one military */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+
+        /* Verify that the list of hosted militaries increased empty */
+        assertTrue(barracks0.getHostedMilitary().size() == 1);
+        assertEquals(barracks0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
+    }
+
+    @Test
+    public void testRankIsCorrectInHostedMilitaryList() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing barracks */
+        Point point22 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
+
+        /* Construct barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Add one military */
+        Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, barracks0, map);
+
+        /* Verify that the rank for the hosted military is correct */
+        assertEquals(barracks0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);
+    }
+
     /*
 
     add test for upgrade of non-occupied barracks!!
