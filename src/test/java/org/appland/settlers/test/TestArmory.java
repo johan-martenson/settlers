@@ -1845,4 +1845,55 @@ public class TestArmory {
             assertEquals(armory0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testUnoccupiedArmoryGetsMaximumMaterialButNotMore() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Remove all armorers from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, ARMORER, 0, map);
+
+        /* Add extra resources to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, COAL, 10, map);
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 10, map);
+
+        /* Construct the armory */
+        Utils.constructHouse(armory0, map);
+
+        /* Connect the armory to the headquarter */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
+
+        /* Wait for the maximum amount of resources to get delivered */
+        for (int i = 0; i < 2000; i++) {
+            if (armory0.getAmount(COAL) == 2 && armory0.getAmount(IRON_BAR) == 2) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(armory0.getAmount(COAL), 2);
+        assertEquals(armory0.getAmount(IRON_BAR), 2);
+
+        /* Verify that the armory gets the maximum amount of resources but not more */
+        for (int i = 0; i < 2000; i++) {
+            assertEquals(armory0.getAmount(COAL), 2);
+            assertEquals(armory0.getAmount(IRON_BAR), 2);
+
+            map.stepTime();
+        }
+    }
 }
