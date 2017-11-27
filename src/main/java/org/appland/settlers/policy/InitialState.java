@@ -6,7 +6,7 @@ public class InitialState {
 	public static final int STORAGE_INITIAL_SWORDS = 0;
 	public static final int STORAGE_INITIAL_BEER = 0;
 	public static final int STORAGE_INITIAL_GOLD = 0;
-	public static final int STORAGE_INITIAL_PRIVATE = 10;
+	public static final int STORAGE_INITIAL_PRIVATE = 51;
 	public static final int STORAGE_INITIAL_SERGEANT = 0;
 	public static final int STORAGE_INITIAL_GENERAL = 0;
 
@@ -15,7 +15,7 @@ public class InitialState {
     public static final int STORAGE_INITIAL_STONES = 68;
     public static final int STORAGE_INITIAL_WHEAT = 0;
     public static final int STORAGE_INITIAL_FISH = 4;
-    public static final int STORAGE_INITIAL_DONKEY = 1;
+    public static final int STORAGE_INITIAL_DONKEY = 8;
     public static final int STORAGE_INITIAL_PIG = 0;
     public static final int STORAGE_INITIAL_MEAT = 6;
     public static final int STORAGE_INITIAL_BREAD = 8;

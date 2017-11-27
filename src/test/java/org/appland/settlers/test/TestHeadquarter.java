@@ -24,11 +24,13 @@ import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON;
@@ -38,7 +40,9 @@ import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -100,6 +104,11 @@ public class TestHeadquarter {
         assertEquals(headquarter0.getAmount(HUNTER), 2);
         assertEquals(headquarter0.getAmount(SWORD), 0);
         assertEquals(headquarter0.getAmount(SHIELD), 0);
+
+        assertEquals(headquarter0.getAmount(DONKEY), 8);
+        assertEquals(headquarter0.getAmount(PRIVATE), 51);
+        assertEquals(headquarter0.getAmount(SERGEANT), 0);
+        assertEquals(headquarter0.getAmount(GENERAL), 0);
 
         // TODO: add all other material
     }
