@@ -179,10 +179,10 @@ public class TestSawmill {
     }
 
     @Test
-    public void testHeadquarterHasOneSawmillWorkerAtStart() {
+    public void testHeadquarterHasAtLeastOneSawmillWorkerAtStart() {
         Headquarter hq = new Headquarter(null);
 
-        assertEquals(hq.getAmount(SAWMILL_WORKER), 1);
+        assertTrue(hq.getAmount(SAWMILL_WORKER) >= 1);
     }
 
     @Test

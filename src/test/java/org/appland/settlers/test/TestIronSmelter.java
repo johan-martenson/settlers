@@ -181,10 +181,10 @@ public class TestIronSmelter {
     }
 
     @Test
-    public void testHeadquarterHasOneIronFounderAtStart() {
+    public void testHeadquarterHasAtLeastOneIronFounderAtStart() {
         Headquarter hq = new Headquarter(null);
 
-        assertEquals(hq.getAmount(IRON_FOUNDER), 1);
+        assertTrue(hq.getAmount(IRON_FOUNDER) >= 1);
     }
 
     @Test
@@ -630,7 +630,7 @@ public class TestIronSmelter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing iron smelter */
         Point point26 = new Point(8, 8);
@@ -678,6 +678,10 @@ public class TestIronSmelter {
 
         assertEquals(cargo.getPosition(), ironSmelter0.getFlag().getPosition());
 
+        /* Remove the items the iron smelter needs from the headquarter's inventory */
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, IRON, 0, map);
+
         /* Connect the iron smelter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironSmelter0.getFlag());
 
@@ -690,7 +694,6 @@ public class TestIronSmelter {
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(ironSmelter0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 

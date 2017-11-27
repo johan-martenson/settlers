@@ -53,60 +53,64 @@ public class TestScenarios {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
-        Storage hq = new Headquarter(player0);
+        Storage headquarter0 = new Headquarter(player0);
         Point startPosition = new Point(6, 6);
 
         /* Player creates woodcutter, sawmill and quarry */
-        Building wc = new Woodcutter(player0);
-        Sawmill sm = new Sawmill(player0);
-        Quarry qry = new Quarry(player0);
+        Building woodcutter0 = new Woodcutter(player0);
+        Sawmill sawmill0 = new Sawmill(player0);
+        Quarry quarry0 = new Quarry(player0);
 
         Point wcSpot = new Point(6, 12);
         Point smSpot = new Point(12, 6);
         Point qrySpot = new Point(20, 6);
 
-        map.placeBuilding(hq, startPosition);
-        map.placeBuilding(wc, wcSpot);
-        map.placeBuilding(sm, smSpot);
-        map.placeBuilding(qry, qrySpot);
+        map.placeBuilding(headquarter0, startPosition);
+        map.placeBuilding(woodcutter0, wcSpot);
+        map.placeBuilding(sawmill0, smSpot);
+        map.placeBuilding(quarry0, qrySpot);
 
         map.placeTree(wcSpot.downRight().right());
 
         /* Create roads */
-        Road wcToHqRoad = map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
-        Road smToHqRoad = map.placeAutoSelectedRoad(player0, hq.getFlag(), sm.getFlag());
-        Road qryToHqRoad = map.placeAutoSelectedRoad(player0, hq.getFlag(), qry.getFlag());
+        Road wcToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+        Road smToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), sawmill0.getFlag());
+        Road qryToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         /* Assign workers to the roads */
         Courier wr1 = new Courier(player0, map);
         Courier wr2 = new Courier(player0, map);
         Courier wr3 = new Courier(player0, map);
-        WoodcutterWorker wcr = new WoodcutterWorker(player0, map);
+        WoodcutterWorker woodcutterWorker0 = new WoodcutterWorker(player0, map);
 
-        map.placeWorker(wr1, wc.getFlag());
-        map.placeWorker(wr2, sm.getFlag());
-        map.placeWorker(wr3, qry.getFlag());
-        map.placeWorker(wcr, wc);
+        map.placeWorker(wr1, woodcutter0.getFlag());
+        map.placeWorker(wr2, sawmill0.getFlag());
+        map.placeWorker(wr3, quarry0.getFlag());
+        map.placeWorker(woodcutterWorker0, woodcutter0);
 
         wr1.assignToRoad(wcToHqRoad);
         wr2.assignToRoad(smToHqRoad);
         wr3.assignToRoad(qryToHqRoad);
 
         /* Move forward in time until the small buildings are done */
-        Utils.constructHouse(wc, map);
-        Utils.constructHouse(qry, map);
-        Utils.constructHouse(sm, map);
+        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(sawmill0, map);
 
-        assertTrue(wc.ready());
-        assertTrue(qry.ready());
-        assertTrue(sm.ready());
+        assertTrue(woodcutter0.ready());
+        assertTrue(quarry0.ready());
+        assertTrue(sawmill0.ready());
 
-        assertEquals(hq.getAmount(WOOD), 4);
-        assertEquals(hq.getAmount(PLANK), 15);
-        assertEquals(hq.getAmount(STONE), 10);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 4, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 15, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 10, map);
 
-        Utils.occupyBuilding(wcr, wc, map);
-        Utils.occupyBuilding(new SawmillWorker(player0, map), sm, map);
+        assertEquals(headquarter0.getAmount(WOOD), 4);
+        assertEquals(headquarter0.getAmount(PLANK), 15);
+        assertEquals(headquarter0.getAmount(STONE), 10);
+
+        Utils.occupyBuilding(woodcutterWorker0, woodcutter0, map);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
 
         /* Let the couriers reach their targeted roads */
         Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
@@ -114,17 +118,17 @@ public class TestScenarios {
         /*   --   START TEST   --   */
 
         /* Fast forward until the woodcutter has cut some wood */
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         for (int i = 0; i < 700; i++) {
-            if (!wc.getFlag().getStackedCargo().isEmpty()) {
+            if (!woodcutter0.getFlag().getStackedCargo().isEmpty()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertFalse(wc.getFlag().getStackedCargo().isEmpty());
+        assertFalse(woodcutter0.getFlag().getStackedCargo().isEmpty());
 
         /* Retrieve cargo from woodcutter and put it on the flag */
         Courier courierWcToHq = wcToHqRoad.getCourier();
@@ -133,63 +137,63 @@ public class TestScenarios {
         assertTrue(courierWcToHq.isArrived());
         assertFalse(courierWcToHq.isTraveling());
 
-        assertEquals(wc.getFlag().getStackedCargo().size(), 1);
-        assertTrue(wc.getFlag().hasCargoWaitingForRoad(wcToHqRoad));
+        assertEquals(woodcutter0.getFlag().getStackedCargo().size(), 1);
+        assertTrue(woodcutter0.getFlag().hasCargoWaitingForRoad(wcToHqRoad));
 
         /* Transport cargo one hop */
         map.stepTime();
 
-        assertEquals(courierWcToHq.getTarget(), wc.getFlag().getPosition());
+        assertEquals(courierWcToHq.getTarget(), woodcutter0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, wc.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierWcToHq, woodcutter0.getFlag().getPosition());
 
         assertNotNull(courierWcToHq.getCargo());
-        assertEquals(courierWcToHq.getTarget(), hq.getPosition());
+        assertEquals(courierWcToHq.getTarget(), headquarter0.getPosition());
         assertEquals(courierWcToHq.getCargo().getMaterial(), WOOD);
 
-        int amountWood = hq.getAmount(WOOD);
+        int amountWood = headquarter0.getAmount(WOOD);
 
         for (int i = 0; i < 500; i++) {
-            if (courierWcToHq.getPosition().equals(hq.getPosition())) {
+            if (courierWcToHq.getPosition().equals(headquarter0.getPosition())) {
                 break;
             }
 
-            amountWood = hq.getAmount(WOOD);
+            amountWood = headquarter0.getAmount(WOOD);
 
             map.stepTime();
         }
 
-        assertTrue(wcToHqRoad.getCourier().isAt(hq.getPosition()));
+        assertTrue(wcToHqRoad.getCourier().isAt(headquarter0.getPosition()));
 
         /* Cargo has arrived at the headquarter and stored */
         assertNull(wcToHqRoad.getCourier().getCargo());
-        assertEquals(hq.getAmount(WOOD), amountWood + 1);
+        assertEquals(headquarter0.getAmount(WOOD), amountWood + 1);
 
         /* Find out that the sawmill needs the wood */
-        Worker w = hq.getWorker();
+        Worker w = headquarter0.getWorker();
 
         for (int i = 0; i < 300; i++) {
 
-            if (w.getTarget().equals(hq.getFlag().getPosition()) && w.getCargo().getMaterial().equals(WOOD)) {
+            if (w.getTarget().equals(headquarter0.getFlag().getPosition()) && w.getCargo().getMaterial().equals(WOOD)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(w.getTarget(), hq.getFlag().getPosition());
+        assertEquals(w.getTarget(), headquarter0.getFlag().getPosition());
 
-        int amountInStack = hq.getFlag().getStackedCargo().size();
+        int amountInStack = headquarter0.getFlag().getStackedCargo().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, w, hq.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, w, headquarter0.getFlag().getPosition());
 
         Courier courierSmToHq = smToHqRoad.getCourier();
 
-        assertEquals(hq.getFlag().getStackedCargo().get(amountInStack).getMaterial(), WOOD);
+        assertEquals(headquarter0.getFlag().getStackedCargo().get(amountInStack).getMaterial(), WOOD);
 
-        Cargo cargo = hq.getFlag().getStackedCargo().get(amountInStack);
+        Cargo cargo = headquarter0.getFlag().getStackedCargo().get(amountInStack);
 
-        assertTrue(cargo.getTarget().equals(sm));
+        assertTrue(cargo.getTarget().equals(sawmill0));
 
         /* Wait for smToHqRoad's courier to pick up the cargo */
         for (int i = 0; i < 400; i++) {
@@ -208,29 +212,29 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getCargo(), cargo);
         assertTrue(courierSmToHq.isTraveling());
         assertEquals(courierSmToHq.getCargo().getMaterial(), WOOD);
-        assertEquals(courierSmToHq.getTarget(), sm.getPosition());
-        assertEquals(courierSmToHq.getPosition(), hq.getFlag().getPosition());
-        assertTrue(courierSmToHq.getCargo().getTarget().equals(sm));
+        assertEquals(courierSmToHq.getTarget(), sawmill0.getPosition());
+        assertEquals(courierSmToHq.getPosition(), headquarter0.getFlag().getPosition());
+        assertTrue(courierSmToHq.getCargo().getTarget().equals(sawmill0));
 
         /* Get the wood transported to the sawmill and deliver it */
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sawmill0.getPosition());
 
         /* Cargo has arrived at the sawmill and the courier has delivered it */
-        assertTrue(sm.getAmount(WOOD) > 0);
-        int amountInQueue = sm.getAmount(WOOD);
+        assertTrue(sawmill0.getAmount(WOOD) > 0);
+        int amountInQueue = sawmill0.getAmount(WOOD);
 
         /* Produce planks in sawmill.
 
         /* Make sure the sawmill worker is done with the previous plank */
         for (int i = 0; i < 500; i++) {
-            if (sm.getWorker().getCargo() == null) {
+            if (sawmill0.getWorker().getCargo() == null) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertNull(sm.getWorker().getCargo());
+        assertNull(sawmill0.getWorker().getCargo());
 
         /*
         Note! The sawmill worker is after the courier
@@ -238,23 +242,23 @@ public class TestScenarios {
               this section is reached
         */
         for (int i = 0; i < 500; i++) {
-            if (sm.getWorker().getCargo() != null) {
+            if (sawmill0.getWorker().getCargo() != null) {
                 break;
             }
 
-            assertNull(sm.getWorker().getCargo());
+            assertNull(sawmill0.getWorker().getCargo());
             map.stepTime();
         }
 
-        assertNotNull(sm.getWorker().getCargo());
-        assertEquals(sm.getAmount(WOOD), amountInQueue - 1);
+        assertNotNull(sawmill0.getWorker().getCargo());
+        assertEquals(sawmill0.getAmount(WOOD), amountInQueue - 1);
 
-        Cargo woodCargo = sm.getWorker().getCargo();
+        Cargo woodCargo = sawmill0.getWorker().getCargo();
 
         /* Let the sawmill worker leave the cargo at the flag */
-        assertEquals(sm.getWorker().getTarget(), sm.getFlag().getPosition());
+        assertEquals(sawmill0.getWorker().getTarget(), sawmill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sm.getWorker(), sm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmill0.getWorker(), sawmill0.getFlag().getPosition());
 
         /* Wait for the courier to pick up the wood cargo */
         for (int i = 0; i < 200; i++) {
@@ -269,15 +273,15 @@ public class TestScenarios {
         assertNull(courierSmToHq.getCargo());
 
         /* Transport planks and new wood to nearest storage */
-        assertEquals(courierSmToHq.getTarget(), sm.getFlag().getPosition());
+        assertEquals(courierSmToHq.getTarget(), sawmill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sm.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sawmill0.getFlag().getPosition());
 
         assertNotNull(courierSmToHq.getCargo());
         assertEquals(courierSmToHq.getCargo().getMaterial(), PLANK);
-        assertTrue(courierSmToHq.getCargo().getTarget().equals(hq));
-        assertEquals(courierSmToHq.getTarget(), hq.getPosition());
-        assertFalse(courierSmToHq.isAt(hq.getFlag().getPosition()));
+        assertTrue(courierSmToHq.getCargo().getTarget().equals(headquarter0));
+        assertEquals(courierSmToHq.getTarget(), headquarter0.getPosition());
+        assertFalse(courierSmToHq.isAt(headquarter0.getFlag().getPosition()));
 
         fastForwardUntilWorkersReachTarget(map, courierSmToHq);
 

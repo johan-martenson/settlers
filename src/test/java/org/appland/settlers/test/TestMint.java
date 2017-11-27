@@ -579,7 +579,7 @@ public class TestMint {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing mint */
         Point point26 = new Point(8, 8);
@@ -626,6 +626,10 @@ public class TestMint {
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), mint0.getFlag().getPosition());
+
+        /* Remove the resources needed for the mint in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, GOLD, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
 
         /* Connect the mint with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());

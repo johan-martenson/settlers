@@ -825,7 +825,7 @@ public class TestCoalMine {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point0);
@@ -838,7 +838,6 @@ public class TestCoalMine {
 
         coalMine0.putCargo(fishCargo);
         coalMine0.putCargo(fishCargo);
-
 
         /* Occupy the coal mine */
         Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
@@ -869,6 +868,11 @@ public class TestCoalMine {
 
         assertEquals(cargo.getPosition(), coalMine0.getFlag().getPosition());
 
+        /* Remove the resources the iron mine needs from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+
         /* Connect the coal mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), coalMine0.getFlag());
 
@@ -881,7 +885,6 @@ public class TestCoalMine {
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(coalMine0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 

@@ -817,7 +817,7 @@ public class TestIronMine {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
@@ -859,6 +859,11 @@ public class TestIronMine {
         Utils.fastForward(50, map);
 
         assertEquals(cargo.getPosition(), ironMine0.getFlag().getPosition());
+
+        /* Remove the resources the iron mine needs from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
 
         /* Connect the iron mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), ironMine0.getFlag());

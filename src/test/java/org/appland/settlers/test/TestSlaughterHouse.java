@@ -188,10 +188,10 @@ public class TestSlaughterHouse {
     }
 
     @Test
-    public void testHeadquarterHasOneButcherAtStart() {
+    public void testHeadquarterAtLeastHasOneButcherAtStart() {
         Headquarter hq = new Headquarter(null);
 
-        assertEquals(hq.getAmount(BUTCHER), 1);
+        assertTrue(hq.getAmount(BUTCHER) >= 1);
     }
 
     @Test

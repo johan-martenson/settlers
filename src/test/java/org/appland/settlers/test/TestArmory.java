@@ -658,7 +658,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 8);
@@ -706,6 +706,10 @@ public class TestArmory {
 
         assertEquals(cargo.getPosition(), armory0.getFlag().getPosition());
 
+        /* Remove material the armory needs from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+
         /* Connect the armory with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
 
@@ -718,7 +722,6 @@ public class TestArmory {
         assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
         assertFalse(courier.getTarget().equals(armory0.getFlag().getPosition()));
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
-
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
@@ -1653,7 +1656,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -1668,6 +1671,10 @@ public class TestArmory {
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), armory);
         assertEquals(armory.getWorker(), armorer0);
+
+        /* Remove the resources the armory needs from the headquarter */
+        Utils.adjustInventoryTo(headquarter0, IRON_BAR, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
 
         /* Connect the armory with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory.getFlag());

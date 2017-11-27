@@ -189,10 +189,10 @@ public class TestBakery {
     }
 
     @Test
-    public void testHeadquarterHasOneBakerAtStart() {
+    public void testHeadquarterHasAtLeastOneBakerAtStart() {
         Headquarter hq = new Headquarter(null);
 
-        assertEquals(hq.getAmount(BAKER), 1);
+        assertTrue(hq.getAmount(BAKER) >= 1);
     }
 
     @Test
