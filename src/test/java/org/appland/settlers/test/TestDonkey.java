@@ -53,7 +53,7 @@ public class TestDonkey {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point2 = new Point(5, 9);
@@ -1000,7 +1000,7 @@ public class TestDonkey {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* 133 ticks from start */
         Utils.fastForward(133, map);
@@ -1128,7 +1128,7 @@ public class TestDonkey {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1160,7 +1160,7 @@ public class TestDonkey {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);

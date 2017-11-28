@@ -119,7 +119,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
@@ -1141,7 +1141,7 @@ public class TestPlacement {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing flag */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1188,7 +1188,7 @@ public class TestPlacement {
 
         /* Placing headquarter */
         Point point21 = new Point(10, 10);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing flag */
         Flag flag0 = map.placeFlag(player0, point1);
@@ -1276,7 +1276,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(8, 6);
@@ -1325,7 +1325,7 @@ public class TestPlacement {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point0 = new Point(10, 10);
@@ -1368,7 +1368,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(8, 6);
@@ -1393,7 +1393,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(8, 6);
@@ -1854,7 +1854,7 @@ public class TestPlacement {
 
         /* Placing headquarter for player0 */
         Point point46 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
 
         /* Verify that it's possible to build on all available house sites */
         for (Entry<Point, Size> pair : map.getAvailableHousePoints(player0).entrySet()) {
@@ -1927,7 +1927,7 @@ public class TestPlacement {
 
         /* Placing headquarter for player0 */
         Point point46 = new Point(26, 6);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point46);
 
         /* Verify that it's possible to build on all available house sites */
         for (Entry<Point, Size> pair : map.getAvailableHousePoints(player0).entrySet()) {

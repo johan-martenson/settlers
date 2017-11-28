@@ -88,7 +88,7 @@ public class TestPlayer {
         Player p = new Player("Player one", BLUE);
 
         /* Create headquarter belonging to player one */
-        Building headquarter0 = new Headquarter(p);
+        Headquarter headquarter0 = new Headquarter(p);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -100,7 +100,7 @@ public class TestPlayer {
         map.placeBuilding(headquarter0, point0);
 
         /* Create second headquarter belonging to player one */
-        Building headquarter1 = new Headquarter(p);
+        Headquarter headquarter1 = new Headquarter(p);
 
         /* Place second headquarter */
         Point point1 = new Point(15, 15);
@@ -114,7 +114,7 @@ public class TestPlayer {
         Player player0 = new Player("Player one", BLUE);
 
         /* Create headquarter belonging to player one */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -142,7 +142,7 @@ public class TestPlayer {
         Player player0 = new Player("Player one", BLUE);
 
         /* Create headquarter belonging to player one */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
@@ -176,7 +176,7 @@ public class TestPlayer {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a building with an invalid player */
         Player invalidPlayer = new Player("", BLUE);
@@ -197,7 +197,7 @@ public class TestPlayer {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(8, 6);
@@ -224,7 +224,7 @@ public class TestPlayer {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a flag with an invalid player */
         Player invalidPlayer = new Player("", BLUE);

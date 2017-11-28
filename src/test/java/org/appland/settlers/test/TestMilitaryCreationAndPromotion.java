@@ -108,7 +108,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
         Point point1 = new Point(6, 22);
@@ -137,7 +137,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
         Point point1 = new Point(6, 22);
@@ -171,7 +171,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
         Point point1 = new Point(6, 22);
@@ -201,7 +201,7 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);

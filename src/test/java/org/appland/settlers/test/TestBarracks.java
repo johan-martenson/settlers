@@ -56,7 +56,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -89,7 +89,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -121,7 +121,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -170,7 +170,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(5, 23);
@@ -200,7 +200,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(5, 23);
@@ -249,7 +249,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -276,7 +276,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -303,7 +303,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -334,7 +334,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -362,7 +362,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -384,7 +384,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -404,7 +404,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -493,7 +493,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -529,7 +529,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -564,7 +564,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -604,7 +604,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -639,7 +639,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -675,7 +675,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Add coins to the headquarter */
         headquarter0.putCargo(new Cargo(COIN, map));
@@ -718,7 +718,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Add coins to the headquarter */
         headquarter0.putCargo(new Cargo(COIN, map));
@@ -767,7 +767,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -803,7 +803,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -849,7 +849,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -891,7 +891,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -930,7 +930,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -982,7 +982,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
@@ -1024,7 +1024,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
@@ -1073,7 +1073,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(8, 8);
@@ -1099,7 +1099,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1151,7 +1151,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1215,7 +1215,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1241,7 +1241,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1273,7 +1273,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1330,7 +1330,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1457,7 +1457,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1513,7 +1513,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1572,7 +1572,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1631,7 +1631,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1694,7 +1694,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1750,7 +1750,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1812,7 +1812,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1872,7 +1872,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -1924,7 +1924,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -1966,7 +1966,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -2199,7 +2199,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -2284,7 +2284,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
         Point point26 = new Point(21, 5);
@@ -2442,7 +2442,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -2549,7 +2549,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(5, 23);
@@ -2582,7 +2582,7 @@ public class TestBarracks {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point1 = new Point(7, 9);
@@ -2610,7 +2610,7 @@ public class TestBarracks {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point1 = new Point(6, 22);
@@ -2634,7 +2634,7 @@ public class TestBarracks {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point1 = new Point(6, 22);
@@ -2665,7 +2665,7 @@ public class TestBarracks {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point1 = new Point(6, 22);
@@ -2698,7 +2698,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -2719,7 +2719,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -2743,7 +2743,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);
@@ -2771,7 +2771,7 @@ public class TestBarracks {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
         Point point22 = new Point(6, 22);

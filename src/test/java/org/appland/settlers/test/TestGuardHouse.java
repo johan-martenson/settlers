@@ -51,7 +51,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -90,7 +90,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -128,7 +128,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -166,7 +166,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -215,7 +215,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(5, 23);
@@ -245,7 +245,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(5, 23);
@@ -294,7 +294,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -322,7 +322,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -349,7 +349,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -381,7 +381,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -409,7 +409,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -431,7 +431,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -451,7 +451,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -493,7 +493,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -529,7 +529,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -564,7 +564,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -604,7 +604,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -639,7 +639,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -676,7 +676,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -712,7 +712,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -740,7 +740,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -777,7 +777,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -822,7 +822,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -864,7 +864,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -897,7 +897,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);
@@ -946,7 +946,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing guard house */
         Point point26 = new Point(8, 8);
@@ -988,7 +988,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing guard house */
         Point point26 = new Point(8, 8);
@@ -1037,7 +1037,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing guard house */
         Point point26 = new Point(8, 8);
@@ -1063,7 +1063,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(5, 23);
@@ -1096,7 +1096,7 @@ public class TestGuardHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house mine */
         Point point1 = new Point(10, 10);
@@ -1123,7 +1123,7 @@ public class TestGuardHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
         Point point1 = new Point(6, 22);
@@ -1147,7 +1147,7 @@ public class TestGuardHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
         Point point1 = new Point(6, 22);
@@ -1180,7 +1180,7 @@ public class TestGuardHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place guard house */
         Point point1 = new Point(6, 22);
@@ -1213,7 +1213,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place guard house */
         Point point22 = new Point(6, 22);
@@ -1234,7 +1234,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place guard house */
         Point point22 = new Point(6, 22);
@@ -1258,7 +1258,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place guard house */
         Point point22 = new Point(6, 22);
@@ -1286,7 +1286,7 @@ public class TestGuardHouse {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
         Point point22 = new Point(6, 22);

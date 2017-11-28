@@ -40,7 +40,7 @@ public class TestConstruction {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(9, 9);
@@ -161,7 +161,7 @@ public class TestConstruction {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(9, 9);
@@ -230,7 +230,7 @@ public class TestConstruction {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm */
         Point point1 = new Point(9, 9);
@@ -297,7 +297,7 @@ public class TestConstruction {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(9, 9);

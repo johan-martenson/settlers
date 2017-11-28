@@ -65,7 +65,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing woodcutter */
         Point point22 = new Point(6, 22);
@@ -98,7 +98,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing woodcutter */
         Point point22 = new Point(6, 22);
@@ -163,7 +163,7 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
@@ -197,7 +197,7 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
@@ -440,7 +440,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
@@ -550,7 +550,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
@@ -758,7 +758,7 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point3 = new Point(6, 4);
-        Building hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Plant and grow trees */
         Point point2 = new Point(12, 4);
@@ -862,7 +862,7 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(8, 6);
         Building wc = map.placeBuilding(new Woodcutter(player0), point1);
@@ -905,7 +905,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Plant and grow trees */
         Point point2 = new Point(10, 8);
@@ -1000,7 +1000,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Plant and grow trees */
         Point point2 = new Point(10, 8);
@@ -1106,7 +1106,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(8, 8);
@@ -1149,7 +1149,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(8, 8);
@@ -1199,7 +1199,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(8, 8);
@@ -1244,7 +1244,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(8, 8);
@@ -1272,7 +1272,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(8, 8);
@@ -1300,7 +1300,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);
@@ -1371,7 +1371,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);
@@ -1454,7 +1454,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place woodcutter */
         Point point1 = new Point(20, 14);
@@ -1497,17 +1497,17 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Building headquarter2 = new Headquarter(player2);
+        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
         map.placeBuilding(headquarter2, point10);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1657,7 +1657,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1719,7 +1719,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1784,7 +1784,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1845,7 +1845,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(17, 17);
@@ -1895,7 +1895,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(17, 17);
@@ -1948,7 +1948,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(17, 17);
@@ -2004,7 +2004,7 @@ public class TestWoodcutter {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing woodcutter */
         Point point26 = new Point(17, 17);
@@ -2051,7 +2051,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place woodcutter */
         Point point26 = new Point(17, 17);
@@ -2173,7 +2173,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter hut */
         Point point1 = new Point(7, 9);
@@ -2209,7 +2209,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter hut */
         Point point1 = new Point(7, 9);
@@ -2267,7 +2267,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter hut */
         Point point1 = new Point(7, 9);
@@ -2323,7 +2323,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter hut */
         Point point1 = new Point(7, 9);
@@ -2351,7 +2351,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(10, 10);
@@ -2378,7 +2378,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(6, 22);
@@ -2403,7 +2403,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(6, 22);
@@ -2434,7 +2434,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(6, 22);

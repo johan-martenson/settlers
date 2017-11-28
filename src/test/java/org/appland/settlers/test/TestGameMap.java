@@ -110,7 +110,7 @@ public class TestGameMap {
     @Test
     public void testPlaceBuildingOnEmptyMap() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         assertTrue(hq.getPosition().equals(hqPoint));
     }
@@ -118,7 +118,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceSameBuildingTwice() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter wc    = new Woodcutter(player0);
         Point wcPoint    = new Point(2, 2);
@@ -131,7 +131,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceTwoBuildingsOnSameSpot() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter wc  = new Woodcutter(player0);
         Quarry     qry = new Quarry(player0);
@@ -144,7 +144,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceFlagsOnSamePlace() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point1 = new Point(1, 1);
         Point point2 = new Point(1, 1);
@@ -156,7 +156,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceSameFlagTwice() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point1 = new Point(1, 1);
 
@@ -170,7 +170,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testAddRoadWithIdenticalStartAndEnd() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point1 = new Point(1, 1);
         Point point2 = new Point(1, 1);
@@ -184,7 +184,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testAddRoadBetweenFlagsNotOnMap() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 2));
@@ -197,7 +197,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
         Point point1 = new Point(3, 3);
@@ -248,7 +248,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
         Point point1    = new Point(6, 6);
@@ -269,7 +269,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceBuildingOnInvalidPoint() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Farm    farm      = new Farm(player0);
         Point   farmPoint = new Point(3, 4);
@@ -280,7 +280,7 @@ public class TestGameMap {
     @Test(expected=Exception.class)
     public void testPlaceFlagOnInvalidPoint() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point0 = new Point(4, 7);
 
@@ -290,7 +290,7 @@ public class TestGameMap {
     @Test
     public void testPlaceBuildingSetsMap() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Farm    farm   = new Farm(player0);
         Point   point0 = new Point(5, 5);
@@ -305,7 +305,7 @@ public class TestGameMap {
     @Test
     public void testFindWayBetweenHouseAndItsFlag() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter wc     = new Woodcutter(player0);
         Point      point0 = new Point(5, 5);
@@ -328,7 +328,7 @@ public class TestGameMap {
     @Test
     public void testCreateHouseNextToExistingFlag() throws Exception {
         Point hqPoint = new Point(8, 8);
-        Building hq = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point      point0 = new Point(5, 5);
         Flag       flag0  = map.placeFlag(player0, point0);
@@ -515,7 +515,7 @@ public class TestGameMap {
         players.add(player0);
         GameMap map = new GameMap(players, 100, 100);
         Point point0 = new Point(50, 50);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point2 = new Point(57, 49);
         Flag flag0 = map.placeFlag(player0, point2);
@@ -735,7 +735,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point3 = new Point(5, 23);
@@ -787,7 +787,7 @@ public class TestGameMap {
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(1, 21);
         assertTrue(player0.getBorders().get(0).contains(point1));
@@ -805,7 +805,7 @@ public class TestGameMap {
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorders().get(0);
         List<Point> fieldOfView = player0.getFieldOfView();
@@ -835,7 +835,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
         Point point3 = new Point(5, 23);
@@ -868,7 +868,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Get the field of view before construction of barracks */
         Collection<Point> oldFieldOfView = player0.getFieldOfView();
@@ -926,7 +926,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that a point within the border is discovered */
         Point point1 = new Point(10, 12);
@@ -946,7 +946,7 @@ public class TestGameMap {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that a point far outside the border is not yet discovered */
         Point point1 = new Point(39, 39);
@@ -971,7 +971,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Placing barracks */
         Point point39 = new Point(4, 22);
@@ -1096,7 +1096,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Verify that it's not possible to get a non-existing flag */
         Point point1 = new Point(20, 20);
@@ -1118,7 +1118,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1149,7 +1149,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1178,7 +1178,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Verify that there is no road at the point */
         Point point1 = new Point(10, 12);
@@ -1200,7 +1200,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Verify that it's possible to place a tree */
         Point point1 = new Point(15, 15);
@@ -1222,7 +1222,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place tree */
         Point point1 = new Point(15, 15);
@@ -1247,7 +1247,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place tree */
         Point point1 = new Point(15, 15);
@@ -1273,7 +1273,7 @@ public class TestGameMap {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place trees */
         Point point1 = new Point(15, 15);

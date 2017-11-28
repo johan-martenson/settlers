@@ -59,7 +59,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing sawmill */
         Point point22 = new Point(6, 22);
@@ -95,7 +95,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing sawmill */
         Point point22 = new Point(6, 22);
@@ -130,7 +130,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing sawmill */
         Point point22 = new Point(6, 22);
@@ -163,7 +163,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -194,7 +194,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -250,7 +250,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -283,7 +283,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -308,7 +308,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -351,7 +351,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -415,7 +415,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -448,7 +448,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point3 = new Point(7, 9);
@@ -490,7 +490,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -557,7 +557,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -660,7 +660,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -703,7 +703,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -753,7 +753,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -798,7 +798,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -826,7 +826,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(8, 8);
@@ -854,7 +854,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(8, 6);
@@ -915,7 +915,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(8, 6);
@@ -985,7 +985,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sawmill */
         Point point1 = new Point(20, 14);
@@ -1027,7 +1027,7 @@ public class TestSawmill {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Building headquarter2 = new Headquarter(player2);
+        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
         map.placeBuilding(headquarter2, point10);
 
@@ -1036,7 +1036,7 @@ public class TestSawmill {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1079,7 +1079,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1141,7 +1141,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1206,7 +1206,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing first flag */
         Point point1 = new Point(10, 4);
@@ -1267,7 +1267,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(17, 17);
@@ -1317,7 +1317,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(17, 17);
@@ -1370,7 +1370,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(17, 17);
@@ -1426,7 +1426,7 @@ public class TestSawmill {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing sawmill */
         Point point26 = new Point(17, 17);
@@ -1473,7 +1473,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place sawmill */
         Point point26 = new Point(17, 17);
@@ -1517,7 +1517,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
@@ -1553,7 +1553,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
@@ -1608,7 +1608,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
@@ -1658,7 +1658,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(7, 9);
@@ -1686,7 +1686,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(10, 10);
@@ -1713,7 +1713,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(6, 22);
@@ -1738,7 +1738,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(6, 22);
@@ -1771,7 +1771,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(6, 22);

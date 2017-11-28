@@ -46,7 +46,7 @@ public class TestWorker {
 
         /* 0 ticks from start */
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* 52 ticks from start */
         Point point3 = new Point(7, 9);
@@ -74,7 +74,7 @@ public class TestWorker {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(13, 5);
@@ -226,12 +226,12 @@ public class TestWorker {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 

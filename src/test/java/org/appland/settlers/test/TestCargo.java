@@ -108,7 +108,7 @@ public class TestCargo {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Placing forester */
         Point point39 = new Point(10, 8);

@@ -46,7 +46,7 @@ public class TestWinning {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
@@ -75,7 +75,7 @@ public class TestWinning {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 

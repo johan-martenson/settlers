@@ -1035,7 +1035,7 @@ public class TestCourier {
 
         /* Place headquarter */
         Point point21 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* 133 ticks from start */
         Utils.fastForward(133, map);
@@ -1163,7 +1163,7 @@ public class TestCourier {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -1200,12 +1200,12 @@ public class TestCourier {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1259,7 +1259,7 @@ public class TestCourier {
 
         /* Place headquarter */
         Point hqPoint = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
         Point point1 = new Point(20, 14);

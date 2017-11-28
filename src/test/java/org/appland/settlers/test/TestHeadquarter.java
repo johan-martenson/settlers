@@ -176,7 +176,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(11, 9);
@@ -222,7 +222,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that trying to tear it down causes an exception */
         headquarter0.tearDown();
@@ -239,7 +239,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the headquarter can't produce */
         assertFalse(headquarter0.canProduce());
@@ -256,12 +256,12 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a second headquarter */
         Point point1 = new Point(10, 10);
         try {
-            Building headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
+            Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
             assertTrue(false);
         } catch (Exception e) {
         }
@@ -278,7 +278,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the reported output is correct */
         assertEquals(headquarter0.getProducedMaterial().length, 0);
@@ -295,7 +295,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the reported needed production material is correct */
         assertEquals(headquarter0.getMaterialNeeded().size(), 0);

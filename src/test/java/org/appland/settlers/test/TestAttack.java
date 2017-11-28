@@ -67,12 +67,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(90, 90);
         map.placeBuilding(headquarter1, point1);
 
@@ -98,12 +98,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(29, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -137,12 +137,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(90, 90);
         map.placeBuilding(headquarter1, point1);
 
@@ -172,12 +172,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(90, 90);
         map.placeBuilding(headquarter1, point1);
 
@@ -207,12 +207,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -255,12 +255,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -302,12 +302,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -349,12 +349,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -392,12 +392,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -435,12 +435,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -503,12 +503,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -564,12 +564,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -624,12 +624,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -695,12 +695,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -773,12 +773,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -932,12 +932,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1024,12 +1024,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1119,12 +1119,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1222,12 +1222,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1324,12 +1324,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1423,12 +1423,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1531,12 +1531,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1641,12 +1641,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -3498,12 +3498,12 @@ public class TestAttack {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
         /* Place player 2's headquarter */
-        Building headquarter2 = new Headquarter(player2);
+        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
         map.placeBuilding(headquarter2, point10);
 
@@ -3838,7 +3838,7 @@ public class TestAttack {
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -3954,7 +3954,7 @@ public class TestAttack {
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -4087,12 +4087,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -4321,12 +4321,12 @@ public class TestAttack {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Building headquarter0 = new Headquarter(player0);
+        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 

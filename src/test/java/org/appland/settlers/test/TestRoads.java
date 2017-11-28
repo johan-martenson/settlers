@@ -924,7 +924,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
@@ -966,7 +966,7 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         /* Place woodcutter at the end of the road */
         Point endPoint = new Point(14, 4);
@@ -1037,7 +1037,7 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         /* Place woodcutter at the end of the road */
         Point endPoint = new Point(14, 4);
@@ -1108,7 +1108,7 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         /* Place flag */
         Point endPoint = new Point(14, 4);
@@ -1150,7 +1150,7 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         /* Place flag */
         Point endPoint = new Point(14, 4);
@@ -1186,7 +1186,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
@@ -1403,7 +1403,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
@@ -1444,7 +1444,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Building hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Headquarter hq = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
@@ -1603,7 +1603,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(12, 6);
         Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(6, 4);
@@ -1652,7 +1652,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(13, 7);
         Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(10, 4);
@@ -1680,7 +1680,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(14, 10);
         Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
         Point point2 = new Point(13, 5);
@@ -1764,7 +1764,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
         Point point2 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point2);
 
@@ -1782,7 +1782,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point3 = new Point(6, 4);
 
@@ -1796,7 +1796,7 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Building building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point3 = new Point(6, 4);
 
@@ -1908,7 +1908,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing road */
         Point point26 = new Point(8, 8);
@@ -1945,7 +1945,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point25 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place road */
         Point point0 = new Point(8, 6);
@@ -1986,7 +1986,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* 93 ticks from start */
         Utils.fastForward(92, map);
@@ -2017,7 +2017,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point2 = new Point(5, 9);
@@ -2083,7 +2083,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place flag */
         Point point2 = new Point(5, 9);
@@ -2157,7 +2157,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place well */
         Point point2 = new Point(5, 9);
@@ -2217,7 +2217,7 @@ public class TestRoads {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Place well */
         Point point2 = new Point(5, 15);
@@ -2279,7 +2279,7 @@ public class TestRoads {
 
         /* Placing headquarter for player0 */
         Point point17 = new Point(8, 10);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point17);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point17);
 
         /* Place flags */
         Point point0 = new Point(12, 10);

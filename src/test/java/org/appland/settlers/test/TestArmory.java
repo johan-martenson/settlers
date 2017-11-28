@@ -63,7 +63,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
@@ -99,7 +99,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
@@ -134,7 +134,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
@@ -167,7 +167,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -208,7 +208,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -262,7 +262,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -297,7 +297,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point3 = new Point(7, 9);
@@ -377,7 +377,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -444,7 +444,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -481,7 +481,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -524,7 +524,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -587,7 +587,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 8);
@@ -761,7 +761,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 8);
@@ -804,7 +804,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 8);
@@ -854,7 +854,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 6);
@@ -920,7 +920,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(8, 6);
@@ -995,7 +995,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(20, 14);
@@ -1037,7 +1037,7 @@ public class TestArmory {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Building headquarter2 = new Headquarter(player2);
+        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
         map.placeBuilding(headquarter2, point10);
 
@@ -1046,7 +1046,7 @@ public class TestArmory {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Building headquarter1 = new Headquarter(player1);
+        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
         map.placeBuilding(headquarter1, point1);
 
@@ -1095,7 +1095,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(20, 14);
@@ -1119,7 +1119,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place first flag */
         Point point1 = new Point(10, 4);
@@ -1181,7 +1181,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place first flag */
         Point point1 = new Point(10, 4);
@@ -1246,7 +1246,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place first flag */
         Point point1 = new Point(10, 4);
@@ -1307,7 +1307,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(17, 17);
@@ -1357,7 +1357,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(17, 17);
@@ -1410,7 +1410,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(17, 17);
@@ -1466,7 +1466,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(17, 17);
@@ -1513,7 +1513,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point1 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place armory */
         Point point2 = new Point(17, 17);
@@ -1557,7 +1557,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -1593,7 +1593,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -1714,7 +1714,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -1742,7 +1742,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(7, 9);
@@ -1769,7 +1769,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
@@ -1795,7 +1795,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
@@ -1828,7 +1828,7 @@ public class TestArmory {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Building headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
         Point point1 = new Point(6, 22);
