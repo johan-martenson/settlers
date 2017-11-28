@@ -141,7 +141,7 @@ public class TestHeadquarter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);;
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the headquarter doesn't need a worker */
         assertFalse(headquarter0.needsWorker());
@@ -194,20 +194,20 @@ public class TestHeadquarter {
         /* Verify that the storage worker delivers stone or planks to the woodcutter */
         assertTrue(headquarter0.getWorker() instanceof StorageWorker);
 
-        StorageWorker sw = (StorageWorker) headquarter0.getWorker();
+        StorageWorker storageWorker0 = (StorageWorker) headquarter0.getWorker();
 
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(storageWorker0.isInsideBuilding());
 
         map.stepTime();
 
-        assertFalse(sw.isInsideBuilding());
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getTarget(), headquarter0.getFlag().getPosition());
+        assertFalse(storageWorker0.isInsideBuilding());
+        assertNotNull(storageWorker0.getCargo());
+        assertEquals(storageWorker0.getTarget(), headquarter0.getFlag().getPosition());
         assertTrue(headquarter0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker0, headquarter0.getFlag().getPosition());
 
-        assertNull(sw.getCargo());
+        assertNull(storageWorker0.getCargo());
         assertFalse(headquarter0.getFlag().getStackedCargo().isEmpty());
     }
 

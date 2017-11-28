@@ -225,22 +225,22 @@ public class TestIronSmelter {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
 
         /* Let the iron smelter worker reach the iron smelter */
-        IronFounder sw = null;
+        IronFounder ironFounder0 = null;
 
         for (Worker w : map.getWorkers()) {
             if (w instanceof IronFounder) {
-                sw = (IronFounder)w;
+                ironFounder0 = (IronFounder)w;
             }
         }
 
-        assertNotNull(sw);
-        assertEquals(sw.getTarget(), ironSmelter.getPosition());
+        assertNotNull(ironFounder0);
+        assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter);
+        assertEquals(ironSmelter.getWorker(), ironFounder0);
     }
 
     @Test
@@ -262,16 +262,16 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter);
+        assertEquals(ironSmelter.getWorker(), ironFounder0);
 
         /* Verify that the iron smelter doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
             map.stepTime();
         }
     }
@@ -320,11 +320,11 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter);
+        assertEquals(ironSmelter.getWorker(), ironFounder0);
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(COAL, map));
@@ -334,13 +334,13 @@ public class TestIronSmelter {
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), IRON_BAR);
+        assertNotNull(ironFounder0.getCargo());
+        assertEquals(ironFounder0.getCargo().getMaterial(), IRON_BAR);
         assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
     }
 
@@ -371,11 +371,11 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), ironSmelter);
-        assertEquals(ironSmelter.getWorker(), sw);
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter);
+        assertEquals(ironSmelter.getWorker(), ironFounder0);
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
@@ -385,27 +385,27 @@ public class TestIronSmelter {
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), IRON_BAR);
+        assertNotNull(ironFounder0.getCargo());
+        assertEquals(ironFounder0.getCargo().getMaterial(), IRON_BAR);
         assertTrue(ironSmelter.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the iron smelter worker leaves the cargo at the flag */
-        assertEquals(sw.getTarget(), ironSmelter.getFlag().getPosition());
+        assertEquals(ironFounder0.getTarget(), ironSmelter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, ironSmelter.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter.getFlag().getPosition());
 
         assertFalse(ironSmelter.getFlag().getStackedCargo().isEmpty());
-        assertNull(sw.getCargo());
-        assertEquals(sw.getTarget(), ironSmelter.getPosition());
+        assertNull(ironFounder0.getCargo());
+        assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
 
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(ironFounder0.isInsideBuilding());
     }
 
     @Test
@@ -427,7 +427,7 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
@@ -464,14 +464,14 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
         /* Fast forward so that the iron smelter worker would produced iron bars
            if it had had iron and coal
         */
         Utils.fastForward(150, map);
 
-        assertNull(sw.getCargo());
+        assertNull(ironFounder0.getCargo());
 
         /* Deliver iron and coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
@@ -479,11 +479,11 @@ public class TestIronSmelter {
 
         /* Verify that it takes 50 steps for the iron smelter worker to produce the iron bar */
         for (int i = 0; i < 50; i++) {
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
             map.stepTime();
         }
 
-        assertNotNull(sw.getCargo());
+        assertNotNull(ironFounder0.getCargo());
     }
 
     @Test
@@ -505,14 +505,14 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
         /* Deliver iron but not coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(IRON, map));
 
         /* Verify that the iron founder doesn't produce iron bars since it doesn't have any coal */
         for (int i = 0; i < 200; i++) {
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
             map.stepTime();
         }
     }
@@ -536,14 +536,14 @@ public class TestIronSmelter {
         Utils.constructHouse(ironSmelter, map);
 
         /* Occupy the iron smelter */
-        Worker sw = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
+        Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter, map);
 
         /* Deliver iron but not coal to the iron smelter */
         ironSmelter.putCargo(new Cargo(COAL, map));
 
         /* Verify that the iron founder doesn't produce iron bars since it doesn't have any coal */
         for (int i = 0; i < 200; i++) {
-            assertNull(sw.getCargo());
+            assertNull(ironFounder0.getCargo());
             map.stepTime();
         }
     }
