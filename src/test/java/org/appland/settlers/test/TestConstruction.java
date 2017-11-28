@@ -281,9 +281,9 @@ public class TestConstruction {
 
     @Test(expected = InvalidMaterialException.class)
     public void testInvalidDeliveryToUnfinishedSawmill() throws Exception {
-        Sawmill sw = new Sawmill(null);
+        Sawmill sawmill0 = new Sawmill(null);
 
-        sw.putCargo(new Cargo(SWORD, null));
+        sawmill0.putCargo(new Cargo(SWORD, null));
     }
 
     @Test(expected = InvalidStateForProduction.class)

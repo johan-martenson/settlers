@@ -376,11 +376,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -436,11 +436,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -518,11 +518,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -575,11 +575,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -649,11 +649,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -713,11 +713,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
@@ -774,11 +774,11 @@ public class TestCatapult {
         Utils.constructHouse(catapult, map);
 
         /* Occupy the catapult */
-        Worker sw = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), catapult);
-        assertEquals(catapult.getWorker(), sw);
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
         Utils.adjustInventoryTo(headquarter0, STONE, 0, map);

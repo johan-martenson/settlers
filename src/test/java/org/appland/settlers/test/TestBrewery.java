@@ -225,22 +225,22 @@ public class TestBrewery {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Brewer.class);
 
         /* Let the brewery worker reach the brewery */
-        Brewer sw = null;
+        Brewer brewer0 = null;
 
         for (Worker w : map.getWorkers()) {
             if (w instanceof Brewer) {
-                sw = (Brewer)w;
+                brewer0 = (Brewer)w;
             }
         }
 
-        assertNotNull(sw);
-        assertEquals(sw.getTarget(), brewery.getPosition());
+        assertNotNull(brewer0);
+        assertEquals(brewer0.getTarget(), brewery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, brewer0);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery);
+        assertEquals(brewery.getWorker(), brewer0);
     }
 
     @Test
@@ -262,16 +262,16 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery);
+        assertEquals(brewery.getWorker(), brewer0);
 
         /* Verify that the brewery doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
             map.stepTime();
         }
     }
@@ -320,11 +320,11 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery);
+        assertEquals(brewery.getWorker(), brewer0);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -334,13 +334,13 @@ public class TestBrewery {
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), BEER);
+        assertNotNull(brewer0.getCargo());
+        assertEquals(brewer0.getCargo().getMaterial(), BEER);
         assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
     }
 
@@ -371,11 +371,11 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
-        assertTrue(sw.isInsideBuilding());
-        assertEquals(sw.getHome(), brewery);
-        assertEquals(brewery.getWorker(), sw);
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery);
+        assertEquals(brewery.getWorker(), brewer0);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -385,27 +385,27 @@ public class TestBrewery {
         for (int i = 0; i < 149; i++) {
             map.stepTime();
             assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
         }
 
         map.stepTime();
 
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getCargo().getMaterial(), BEER);
+        assertNotNull(brewer0.getCargo());
+        assertEquals(brewer0.getCargo().getMaterial(), BEER);
         assertTrue(brewery.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the brewery worker leaves the cargo at the flag */
-        assertEquals(sw.getTarget(), brewery.getFlag().getPosition());
+        assertEquals(brewer0.getTarget(), brewery.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, brewery.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, brewery.getFlag().getPosition());
 
         assertFalse(brewery.getFlag().getStackedCargo().isEmpty());
-        assertNull(sw.getCargo());
-        assertEquals(sw.getTarget(), brewery.getPosition());
+        assertNull(brewer0.getCargo());
+        assertEquals(brewer0.getTarget(), brewery.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, brewer0);
 
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(brewer0.isInsideBuilding());
     }
 
     @Test
@@ -427,7 +427,7 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -464,14 +464,14 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
         /* Fast forward so that the brewer would produced beer
            if it had had wheat and water
         */
         Utils.fastForward(150, map);
 
-        assertNull(sw.getCargo());
+        assertNull(brewer0.getCargo());
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -479,11 +479,11 @@ public class TestBrewery {
 
         /* Verify that it takes 50 steps for the brewery worker to produce the wheat bar */
         for (int i = 0; i < 50; i++) {
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
             map.stepTime();
         }
 
-        assertNotNull(sw.getCargo());
+        assertNotNull(brewer0.getCargo());
     }
 
     @Test
@@ -505,14 +505,14 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
         /* Deliver wheat but not water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
 
         /* Verify that the wheat founder doesn't produce beer since it doesn't have any water */
         for (int i = 0; i < 200; i++) {
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
             map.stepTime();
         }
     }
@@ -536,14 +536,14 @@ public class TestBrewery {
         Utils.constructHouse(brewery, map);
 
         /* Occupy the brewery */
-        Worker sw = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
 
         /* Deliver wheat but not water to the brewery */
         brewery.putCargo(new Cargo(WATER, map));
 
         /* Verify that the wheat founder doesn't produce beer since it doesn't have any water */
         for (int i = 0; i < 200; i++) {
-            assertNull(sw.getCargo());
+            assertNull(brewer0.getCargo());
             map.stepTime();
         }
     }

@@ -270,13 +270,13 @@ public class TestStorage {
 
         Utils.constructHouse(storage, map);
 
-        StorageWorker sw = new StorageWorker(player0, map);
+        StorageWorker storageWorker0 = new StorageWorker(player0, map);
 
-        Utils.occupyBuilding(sw, storage, map);
+        Utils.occupyBuilding(storageWorker0, storage, map);
 
         /* Verify that the storage worker rests */
         for (int i = 0; i < 50; i++) {
-            assertTrue(sw.isInsideBuilding());
+            assertTrue(storageWorker0.isInsideBuilding());
             map.stepTime();
         }
     }
@@ -305,9 +305,9 @@ public class TestStorage {
 
         Utils.constructHouse(storage, map);
 
-        StorageWorker sw = new StorageWorker(player0, map);
+        StorageWorker storageWorker0 = new StorageWorker(player0, map);
 
-        Utils.occupyBuilding(sw, storage, map);
+        Utils.occupyBuilding(storageWorker0, storage, map);
 
         /* The storage worker rests */
         Utils.fastForward(19, map);
@@ -316,18 +316,18 @@ public class TestStorage {
         storage.putCargo(new Cargo(PLANK, map));
 
         /* The storage worker delivers stone or planks to the woodcutter */
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(storageWorker0.isInsideBuilding());
 
         map.stepTime();
 
-        assertFalse(sw.isInsideBuilding());
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getTarget(), storage.getFlag().getPosition());
+        assertFalse(storageWorker0.isInsideBuilding());
+        assertNotNull(storageWorker0.getCargo());
+        assertEquals(storageWorker0.getTarget(), storage.getFlag().getPosition());
         assertTrue(storage.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker0, storage.getFlag().getPosition());
 
-        assertNull(sw.getCargo());
+        assertNull(storageWorker0.getCargo());
         assertFalse(storage.getFlag().getStackedCargo().isEmpty());
     }
 
@@ -355,9 +355,9 @@ public class TestStorage {
 
         Utils.constructHouse(storage, map);
 
-        StorageWorker sw = new StorageWorker(player0, map);
+        StorageWorker storageWorker0 = new StorageWorker(player0, map);
 
-        Utils.occupyBuilding(sw, storage, map);
+        Utils.occupyBuilding(storageWorker0, storage, map);
 
         /* The storage worker rests */
         Utils.fastForward(19, map);
@@ -366,22 +366,22 @@ public class TestStorage {
         storage.putCargo(new Cargo(PLANK, map));
 
         /* The storage worker delivers stone or planks to the woodcutter */
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(storageWorker0.isInsideBuilding());
 
         map.stepTime();
 
-        assertFalse(sw.isInsideBuilding());
-        assertNotNull(sw.getCargo());
-        assertEquals(sw.getTarget(), storage.getFlag().getPosition());
+        assertFalse(storageWorker0.isInsideBuilding());
+        assertNotNull(storageWorker0.getCargo());
+        assertEquals(storageWorker0.getTarget(), storage.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker0, storage.getFlag().getPosition());
 
         /* Verify that the storage worker goes back to the storage */
-        assertEquals(sw.getTarget(), storage.getPosition());
+        assertEquals(storageWorker0.getTarget(), storage.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, storageWorker0);
 
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(storageWorker0.isInsideBuilding());
     }
 
     @Test
@@ -408,9 +408,9 @@ public class TestStorage {
 
         Utils.constructHouse(storage, map);
 
-        StorageWorker sw = new StorageWorker(player0, map);
+        StorageWorker storageWorker0 = new StorageWorker(player0, map);
 
-        Utils.occupyBuilding(sw, storage, map);
+        Utils.occupyBuilding(storageWorker0, storage, map);
 
         /* The storage worker rests */
         Utils.fastForward(19, map);
@@ -419,25 +419,25 @@ public class TestStorage {
         storage.putCargo(new Cargo(PLANK, map));
 
         /* The storage worker delivers stone or planks to the woodcutter */
-        assertTrue(sw.isInsideBuilding());
+        assertTrue(storageWorker0.isInsideBuilding());
 
         map.stepTime();
 
-        assertFalse(sw.isInsideBuilding());
-        assertEquals(sw.getTarget(), storage.getFlag().getPosition());
+        assertFalse(storageWorker0.isInsideBuilding());
+        assertEquals(storageWorker0.getTarget(), storage.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sw, storage.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker0, storage.getFlag().getPosition());
 
-        assertNull(sw.getCargo());
+        assertNull(storageWorker0.getCargo());
 
         /* Let the storage worker go back to the storage */
-        assertEquals(sw.getTarget(), storage.getPosition());
+        assertEquals(storageWorker0.getTarget(), storage.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, sw);
+        Utils.fastForwardUntilWorkersReachTarget(map, storageWorker0);
 
         /* Verify that the storage worker stays in the storage and rests */
         for (int i = 0; i < 20; i++) {
-            assertTrue(sw.isInsideBuilding());
+            assertTrue(storageWorker0.isInsideBuilding());
             map.stepTime();
         }
     }
