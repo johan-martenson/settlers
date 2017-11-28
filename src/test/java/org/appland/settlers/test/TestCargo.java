@@ -55,7 +55,7 @@ public class TestCargo {
 
         /* Place a woodcutter */
         Point point1 = new Point(8, 6);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Place a flag */
         Point point2 = new Point(6, 4);
@@ -63,7 +63,7 @@ public class TestCargo {
 
         /* Place a road from the flag to the woodcutter's flag */
         Point point3 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, wc.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, point2, point3, woodcutter.getFlag().getPosition());
 
         /* Create a cargo and put on the flag */
         Cargo cargo = new Cargo(PLANK, map);
@@ -71,10 +71,10 @@ public class TestCargo {
         flag0.putCargo(cargo);
 
         /* Set the woodcutter as target */
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Verify that the cargo will go via the woodcutter's flag */
-        assertEquals(cargo.getNextFlagOrBuilding(), wc.getFlag().getPosition());
+        assertEquals(cargo.getNextFlagOrBuilding(), woodcutter.getFlag().getPosition());
     }
 
     @Test

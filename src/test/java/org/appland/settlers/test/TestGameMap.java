@@ -120,12 +120,12 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc    = new Woodcutter(player0);
+        Woodcutter woodcutter    = new Woodcutter(player0);
         Point wcPoint    = new Point(2, 2);
         Point otherPoint = new Point(2, 8);
 
-        map.placeBuilding(wc, wcPoint);
-        map.placeBuilding(wc, otherPoint);
+        map.placeBuilding(woodcutter, wcPoint);
+        map.placeBuilding(woodcutter, otherPoint);
     }
 
     @Test(expected=Exception.class)
@@ -133,11 +133,11 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc  = new Woodcutter(player0);
+        Woodcutter woodcutter  = new Woodcutter(player0);
         Quarry     qry = new Quarry(player0);
         Point wcPoint  = new Point(1, 1);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(woodcutter, wcPoint);
         map.placeBuilding(qry, wcPoint);
     }
 
@@ -307,11 +307,11 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc     = new Woodcutter(player0);
+        Woodcutter woodcutter     = new Woodcutter(player0);
         Point      point0 = new Point(5, 5);
         Point      point1 = new Point(6, 4);
 
-        map.placeBuilding(wc, point0);
+        map.placeBuilding(woodcutter, point0);
 
         assertNotNull(map.getRoad(point0, point1));
 
@@ -333,10 +333,10 @@ public class TestGameMap {
         Point      point0 = new Point(5, 5);
         Flag       flag0  = map.placeFlag(player0, point0);
 
-        Building wc = map.placeBuilding(new Woodcutter(player0), point0.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point0.upLeft());
 
-        assertEquals(wc.getFlag(), flag0);
-        assertNotNull(map.getRoad(wc.getPosition(), point0));
+        assertEquals(woodcutter.getFlag(), flag0);
+        assertNotNull(map.getRoad(woodcutter.getPosition(), point0));
     }
 
     @Test
@@ -539,14 +539,14 @@ public class TestGameMap {
         map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(50, 68);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        map.removeFlag(wc.getFlag());
+        map.removeFlag(woodcutter.getFlag());
 
         assertEquals(map.getFlags().size(), 1);
         assertEquals(map.getRoads().size(), 1);
         assertEquals(map.getBuildings().size(), 2);
-        assertTrue(wc.burningDown());
+        assertTrue(woodcutter.burningDown());
     }
 
     @Test
@@ -641,18 +641,18 @@ public class TestGameMap {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
         Point point2 = new Point(50, 72);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point2);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
 
-        assertTrue(map.getBuildings().contains(wc));
-        assertTrue(wc.ready());
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(woodcutter.ready());
 
         barracks0.tearDown();
 
-        assertTrue(map.getBuildings().contains(wc));
-        assertTrue(wc.burningDown());
+        assertTrue(map.getBuildings().contains(woodcutter));
+        assertTrue(woodcutter.burningDown());
     }
 
     @Test

@@ -114,10 +114,10 @@ public class TestTransportation {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place woodcutter */
-        Woodcutter wc = map.placeBuilding(new Woodcutter(player0), new Point(4, 4));
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), new Point(4, 4));
 
         /* Verify that it' not possible to place a road without flags at both sides */
-        map.placeAutoSelectedRoad(player0, new Flag(new Point(8, 6)), wc.getFlag());
+        map.placeAutoSelectedRoad(player0, new Flag(new Point(8, 6)), woodcutter.getFlag());
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -150,14 +150,14 @@ public class TestTransportation {
 
         /* Place woodcutter */
         Point wcPoint = new Point(4, 4);
-        Woodcutter wc = map.placeBuilding(new Woodcutter(player0), wcPoint);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), wcPoint);
 
         /* Place middle flag */
         Point middleFlag = new Point(7, 7);
         map.placeFlag(player0, middleFlag);
 
         /* Place road from woodcutter to the middle flag */
-        map.placeAutoSelectedRoad(player0, wc.getFlag().getPosition(), middleFlag);
+        map.placeAutoSelectedRoad(player0, woodcutter.getFlag().getPosition(), middleFlag);
 
         /* Place end flag */
         Point endFlag = new Point(10, 10);
@@ -236,13 +236,13 @@ public class TestTransportation {
         map.placeRoad(player0, f2, f2.right(), f3);
         map.placeRoad(player0, f3, f3.right(), f4);
 
-        Building wc = map.placeBuilding(hut, wcPoint);
+        Building woodcutter = map.placeBuilding(hut, wcPoint);
 
         map.placeFlag(player0, f9);
 
         map.placeAutoSelectedRoad(player0, f2, f9);
 
-        map.placeAutoSelectedRoad(player0, f9, wc.getFlag().getPosition());
+        map.placeAutoSelectedRoad(player0, f9, woodcutter.getFlag().getPosition());
 
         map.placeFlag(player0, f5);
         map.placeAutoSelectedRoad(player0, f1, f5);
@@ -623,7 +623,7 @@ public class TestTransportation {
 
         /* Place sawmill at the other end of the road */
         Point end = new Point(7, 7);
-        Building sm = map.placeBuilding(new Sawmill(player0), end.upLeft());
+        Building sawmill = map.placeBuilding(new Sawmill(player0), end.upLeft());
 
         /* Place start flag */
         Point start = new Point(5, 5);
@@ -636,7 +636,7 @@ public class TestTransportation {
         /* Assign a courier to the road */
         Courier courier = new Courier(player0, map);
 
-        map.placeWorker(courier, sm.getFlag());
+        map.placeWorker(courier, sawmill.getFlag());
         courier.assignToRoad(road0);
 
         /* Wait for the courier to rest at the middle of the road */
@@ -645,7 +645,7 @@ public class TestTransportation {
         /* Place cargo to be delivered to the sawmill at the start flag */
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(start);
-        cargo.setTarget(sm);
+        cargo.setTarget(sawmill);
 
         flag0.putCargo(cargo);
 
@@ -688,7 +688,7 @@ public class TestTransportation {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place a sawmill */
-        Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
         Flag flag0 = map.placeFlag(player0, point0);
@@ -714,11 +714,11 @@ public class TestTransportation {
 
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
-        cargo.setTarget(sm);
+        cargo.setTarget(sawmill);
 
         flag0.putCargo(cargo);
 
-        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point0);
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(point1));
@@ -747,8 +747,8 @@ public class TestTransportation {
         assertTrue(courier.isAt(point2));
         assertNull(courier.getCargo());
 
-        assertEquals(cargo.getNextFlagOrBuilding(), sm.getFlag().getPosition());
-        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getNextFlagOrBuilding(), sawmill.getFlag().getPosition());
+        assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point2);
         assertEquals(flag1.getStackedCargo().get(0), cargo);
         assertFalse(flag1.getStackedCargo().isEmpty());
@@ -771,7 +771,7 @@ public class TestTransportation {
 
         /* Place sawmill */
         Point point4 = new Point(11, 7);
-        Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
         Point point0 = new Point(5, 5);
@@ -801,11 +801,11 @@ public class TestTransportation {
         /* Place a cargo on the first flag */
         Cargo cargo = new Cargo(WOOD, map);
         cargo.setPosition(point0);
-        cargo.setTarget(sm);
+        cargo.setTarget(sawmill);
 
         flag0.putCargo(cargo);
 
-        assertEquals(cargo.getTarget(), sm);
+        assertEquals(cargo.getTarget(), sawmill);
         assertEquals(cargo.getPosition(), point0);
         assertFalse(courier.isTraveling());
         assertTrue(courier.isAt(point1));
@@ -844,7 +844,7 @@ public class TestTransportation {
 
         /* Place sawmill */
         Point point4 = new Point(23, 15);
-        Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
         Point point0 = new Point(19, 5);
@@ -852,7 +852,7 @@ public class TestTransportation {
 
         /* Place roads */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sm.getFlag());
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         /* Populate the roads */
         Courier courier = new Courier(player0, map);
@@ -876,13 +876,13 @@ public class TestTransportation {
         headquarter0.getFlag().putCargo(cargo);
 
         /* Target the cargo to the sawmill */
-        cargo.setTarget(sm);
-        sm.promiseDelivery(PLANK);
+        cargo.setTarget(sawmill);
+        sawmill.promiseDelivery(PLANK);
 
         /* Promise planks to the sawmill until it doesn't need any new deliveries of planks */
-        sm.promiseDelivery(PLANK);
+        sawmill.promiseDelivery(PLANK);
 
-        assertFalse(sm.needsMaterial(PLANK));
+        assertFalse(sawmill.needsMaterial(PLANK));
 
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
@@ -892,7 +892,7 @@ public class TestTransportation {
 
         /* Remove the second road */
         map.removeRoad(road1);
-        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, sm));
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, sawmill));
 
         /* Verify that the cargo is placed at the flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
@@ -903,7 +903,7 @@ public class TestTransportation {
         assertEquals(cargo.getTarget(), headquarter0);
 
         /* Verify that the cargo isn't promised to the sawmill any longer */
-        assertTrue(sm.needsMaterial(PLANK));
+        assertTrue(sawmill.needsMaterial(PLANK));
     }
 
     @Test
@@ -1001,7 +1001,7 @@ public class TestTransportation {
 
         /* Place sawmill */
         Point point4 = new Point(23, 15);
-        Building sm = map.placeBuilding(new Sawmill(player0), point4.upLeft());
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
         Point point0 = new Point(19, 15);
@@ -1011,9 +1011,9 @@ public class TestTransportation {
 
         /* Place roads */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sm.getFlag());
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
         Road road2 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
-        Road road3 = map.placeAutoSelectedRoad(player0, flag1, sm.getFlag());
+        Road road3 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         /* Populate the roads */
         Courier courier = new Courier(player0, map);
@@ -1046,8 +1046,8 @@ public class TestTransportation {
         headquarter0.getFlag().putCargo(cargo);
 
         /* Target the cargo to the sawmill */
-        cargo.setTarget(sm);
-        sm.promiseDelivery(PLANK);
+        cargo.setTarget(sawmill);
+        sawmill.promiseDelivery(PLANK);
 
         /* Verify that the cargo is planned to go via first flag */
         assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
@@ -1088,9 +1088,9 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
 
         /* Verify that the fourth courier delivers the cargo to the sawmill */
-        assertEquals(courier4.getTarget(), sm.getPosition());
+        assertEquals(courier4.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sawmill.getPosition());
 
         assertNull(courier4.getCargo());
     }
@@ -1112,7 +1112,7 @@ public class TestTransportation {
 
         /* Place sawmill */
         Point point4 = new Point(20, 18);
-        Building sm = map.placeBuilding(new Sawmill(player0), point4);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point4);
 
         /* Place flags */
         Point point0 = new Point(19, 15);
@@ -1123,7 +1123,7 @@ public class TestTransportation {
         /* Place roads */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
-        Road road2 = map.placeAutoSelectedRoad(player0, flag1, sm.getFlag());
+        Road road2 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         /* Populate the roads */
         Courier courier = new Courier(player0, map);
@@ -1146,8 +1146,8 @@ public class TestTransportation {
         /* Place a cargo on the headquarter's flag */
         Cargo cargo = new Cargo(PLANK, map);
         headquarter0.getFlag().putCargo(cargo);
-        cargo.setTarget(sm);
-        sm.promiseDelivery(PLANK);
+        cargo.setTarget(sawmill);
+        sawmill.promiseDelivery(PLANK);
 
         /* Wait for the first courier to pick up the cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
@@ -1156,7 +1156,7 @@ public class TestTransportation {
         assertEquals(cargo.getNextFlagOrBuilding(), flag0.getPosition());
 
         /* Add a shortcut from the second flag to the sawmill */
-        Road road3 = map.placeAutoSelectedRoad(player0, flag0, sm.getFlag());
+        Road road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
 
         /* Populate the shortcut */
         Courier courier4 = new Courier(player0, map);
@@ -1170,14 +1170,14 @@ public class TestTransportation {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, flag0.getPosition());
 
         /* Verify that the cargo takes the new, shorter road instead of the old road */
-        assertEquals(cargo.getNextFlagOrBuilding(), sm.getFlag().getPosition());
+        assertEquals(cargo.getNextFlagOrBuilding(), sawmill.getFlag().getPosition());
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier4, cargo);
 
         /* Verify that the third courier delivers the cargo to the sawmill */
-        assertEquals(courier4.getTarget(), sm.getPosition());
+        assertEquals(courier4.getTarget(), sawmill.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sm.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier4, sawmill.getPosition());
 
         assertNull(courier4.getCargo());
     }

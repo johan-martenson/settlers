@@ -335,10 +335,10 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
 
         /* Place roads */
         Point middle = new Point(8, 4);
@@ -349,7 +349,7 @@ public class TestDonkey {
         /* Place a cargo for the woodcutter */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Place a donkey and assign it to road0 */
         Donkey donkey = new Donkey(player0, map);
@@ -396,10 +396,10 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
 
         /* Place roads */
         Point point3 = new Point(11, 5);
@@ -410,7 +410,7 @@ public class TestDonkey {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Place donkey at same flag as cargo */
         Donkey donkey = new Donkey(player0, map);
@@ -471,10 +471,10 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
 
         /* Place roads */
         Point point3 = new Point(12, 4);
@@ -485,7 +485,7 @@ public class TestDonkey {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Place donkey at same flag as cargo */
         Donkey donkey = new Donkey(player0, map);
@@ -737,7 +737,7 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point leftFlagPoint = new Point(6, 4);
-        Building wc = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
         /* Place road */
         Point middlePoint = new Point(8, 4);
@@ -746,11 +746,11 @@ public class TestDonkey {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc);
+        cargoForRightWoodcutter.setTarget(woodcutter);
 
         /* Place donkey at same flag as cargo */
         Donkey donkey = new Donkey(player0, map);
-        map.placeWorker(donkey, wc.getFlag());
+        map.placeWorker(donkey, woodcutter.getFlag());
 
         donkey.assignToRoad(road0);
 
@@ -779,27 +779,27 @@ public class TestDonkey {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(donkey.getCargo(), cargoForRightWoodcutter);
-        assertEquals(donkey.getTarget(), wc.getPosition());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertEquals(donkey.getTarget(), woodcutter.getPosition());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
-        assertEquals(wc.getAmount(PLANK), 0);
+        assertEquals(woodcutter.getAmount(PLANK), 0);
 
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, leftFlagPoint);
 
         /* Verify that donkey does not deliver the cargo to the flag */
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertNotNull(donkey.getCargo());
-        assertEquals(donkey.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANK), 0);
+        assertEquals(donkey.getTarget(), woodcutter.getPosition());
+        assertEquals(woodcutter.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, woodcutter.getPosition());
 
         assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
-        assertEquals(donkey.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANK), 1);
+        assertEquals(donkey.getPosition(), woodcutter.getPosition());
+        assertEquals(woodcutter.getAmount(PLANK), 1);
     }
 
     @Test
@@ -821,7 +821,7 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point leftFlagPoint = new Point(6, 4);
-        Building wc = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
         /* Place road */
         Point middlePoint = new Point(8, 4);
@@ -830,11 +830,11 @@ public class TestDonkey {
         /* Place cargo at flag0 */
         Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
-        cargoForRightWoodcutter.setTarget(wc);
+        cargoForRightWoodcutter.setTarget(woodcutter);
 
         /* Place donkey at same flag as cargo */
         Donkey donkey = new Donkey(player0, map);
-        map.placeWorker(donkey, wc.getFlag());
+        map.placeWorker(donkey, woodcutter.getFlag());
 
         donkey.assignToRoad(road0);
 
@@ -863,29 +863,29 @@ public class TestDonkey {
             - It walks to the other flag and delivers the cargo
         */
         assertEquals(donkey.getCargo(), cargoForRightWoodcutter);
-        assertEquals(donkey.getTarget(), wc.getPosition());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertEquals(donkey.getTarget(), woodcutter.getPosition());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
-        assertEquals(wc.getAmount(PLANK), 0);
+        assertEquals(woodcutter.getAmount(PLANK), 0);
 
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, leftFlagPoint);
 
         /* Verify that donkey does not deliver the cargo to the flag */
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertNotNull(donkey.getCargo());
-        assertEquals(donkey.getTarget(), wc.getPosition());
+        assertEquals(donkey.getTarget(), woodcutter.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, woodcutter.getPosition());
 
         assertFalse(donkey.isIdle());
-        assertEquals(donkey.getPosition(), wc.getPosition());
-        assertEquals(donkey.getTarget(), wc.getFlag().getPosition());
+        assertEquals(donkey.getPosition(), woodcutter.getPosition());
+        assertEquals(donkey.getTarget(), woodcutter.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, woodcutter.getFlag().getPosition());
 
-        assertEquals(donkey.getPosition(), wc.getFlag().getPosition());
+        assertEquals(donkey.getPosition(), woodcutter.getFlag().getPosition());
         assertFalse(donkey.isIdle());
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
@@ -917,7 +917,7 @@ public class TestDonkey {
 
         /* Place woodcutter */
         Point wcFlagPoint = new Point(6, 4);
-        Building wc = map.placeBuilding(new Woodcutter(player0), wcFlagPoint.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), wcFlagPoint.upLeft());
 
         /* Place roads */
         Point middlePoint = new Point(8, 4);
@@ -928,7 +928,7 @@ public class TestDonkey {
 
         /* Place cargo at the woodcutter's flag */
         Cargo cargoForQuarry = new Cargo(PLANK, map);
-        wc.getFlag().putCargo(cargoForQuarry);
+        woodcutter.getFlag().putCargo(cargoForQuarry);
         cargoForQuarry.setTarget(quarry);
 
         /* Place donkey at middle flag */
@@ -950,12 +950,12 @@ public class TestDonkey {
         /* Donkey detects the cargo at the woodcutter */
         map.stepTime();
 
-        assertEquals(donkey.getTarget(), wc.getFlag().getPosition());
+        assertEquals(donkey.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(donkey.isTraveling());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, donkey.getTarget());
 
-        assertTrue(donkey.isAt(wc.getFlag().getPosition()));
+        assertTrue(donkey.isAt(woodcutter.getFlag().getPosition()));
 
         /* When worker arrives at the flag it automatically picks up the cargo
             - It picks up the cargo directly and sets the other flag as target
@@ -963,13 +963,13 @@ public class TestDonkey {
         */
         assertEquals(donkey.getCargo(), cargoForQuarry);
         assertEquals(donkey.getTarget(), middleFlagPoint);
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(donkey.isIdle());
 
         /* Put the other cargo at the middle flag with the woodcutter as its target */
         Cargo cargoForWoodcutter = new Cargo(PLANK, map);
         middleFlag.putCargo(cargoForWoodcutter);
-        cargoForWoodcutter.setTarget(wc);
+        cargoForWoodcutter.setTarget(woodcutter);
 
         /* Let the donkey reach the middle flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, middleFlagPoint);
@@ -977,15 +977,15 @@ public class TestDonkey {
         /* Verify that donkey puts down the cargo and picks up the new cargo */
         assertFalse(middleFlag.getStackedCargo().isEmpty());
         assertEquals(donkey.getCargo(), cargoForWoodcutter);
-        assertEquals(donkey.getTarget(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANK), 0);
+        assertEquals(donkey.getTarget(), woodcutter.getPosition());
+        assertEquals(woodcutter.getAmount(PLANK), 0);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, woodcutter.getPosition());
 
         assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
-        assertEquals(donkey.getPosition(), wc.getPosition());
-        assertEquals(wc.getAmount(PLANK), 1);
+        assertEquals(donkey.getPosition(), woodcutter.getPosition());
+        assertEquals(woodcutter.getAmount(PLANK), 1);
 
     }
 

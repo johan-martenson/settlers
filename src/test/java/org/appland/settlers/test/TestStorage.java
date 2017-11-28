@@ -293,7 +293,7 @@ public class TestStorage {
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         Point point2 = new Point(9, 9);
 
@@ -343,7 +343,7 @@ public class TestStorage {
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         Point point2 = new Point(9, 9);
 
@@ -396,7 +396,7 @@ public class TestStorage {
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(11, 9);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         Point point2 = new Point(9, 9);
 

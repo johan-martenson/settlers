@@ -181,7 +181,7 @@ public class TestPlayer {
         /* Verify that it's not possible to place a building with an invalid player */
         Player invalidPlayer = new Player("", BLUE);
         Point point1 = new Point(8, 6);
-        Building wc = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
+        Building woodcutter = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
     }
 
     @Test (expected = Exception.class)

@@ -336,9 +336,9 @@ public class TestCourier {
         /* Place woodcutter hut */
         Point point3 = new Point(11, 5);
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
 
         /* Place road */
         Point middle = new Point(8, 4);
@@ -350,7 +350,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(player0, map);
@@ -412,9 +412,9 @@ public class TestCourier {
         /* Place woodcutter hut */
         Point point3 = new Point(12, 4);
         Point point4 = new Point(13, 5);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(wc, map);
+        Utils.constructHouse(woodcutter, map);
 
         /* Place road */
         Point middle = new Point(8, 4);
@@ -426,7 +426,7 @@ public class TestCourier {
         /* Place cargo at flag0 */
         Cargo cargo = new Cargo(WOOD, map);
         flag0.putCargo(cargo);
-        cargo.setTarget(wc);
+        cargo.setTarget(woodcutter);
 
         /* Place courier at same flag as cargo */
         Courier courier = new Courier(player0, map);
@@ -856,7 +856,7 @@ public class TestCourier {
 
         /* Place woodcutter */
         Point point0 = new Point(6, 6);
-        Building wc = map.placeBuilding(new Woodcutter(player0), point0);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point0);
 
         /* Place forester hut */
         Point point1 = new Point(10, 6);
@@ -864,16 +864,16 @@ public class TestCourier {
 
         /* Connect the woodcutter and the forester hut */
         Point point2 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, wc.getFlag().getPosition(), point2, foresterHut0.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, woodcutter.getFlag().getPosition(), point2, foresterHut0.getFlag().getPosition());
 
         /* Place cargo at the woodcutter's flag */
         Cargo cargoForForesterHut = new Cargo(PLANK, map);
-        wc.getFlag().putCargo(cargoForForesterHut);
+        woodcutter.getFlag().putCargo(cargoForForesterHut);
         cargoForForesterHut.setTarget(foresterHut0);
 
         /* Place courier at the woodcutter's flag */
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, wc.getFlag());
+        map.placeWorker(courier, woodcutter.getFlag());
 
         courier.assignToRoad(road0);
 
@@ -890,23 +890,23 @@ public class TestCourier {
         /* Courier detects the cargo at the woodcutter */
         map.stepTime();
 
-        assertEquals(courier.getTarget(), wc.getFlag().getPosition());
+        assertEquals(courier.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(courier.isTraveling());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
-        assertTrue(courier.isAt(wc.getFlag().getPosition()));
+        assertTrue(courier.isAt(woodcutter.getFlag().getPosition()));
 
         /* The courier picks up the cargo and starts walking to the other side */
         assertEquals(courier.getCargo(), cargoForForesterHut);
         assertEquals(courier.getTarget(), foresterHut0.getPosition());
-        assertTrue(wc.getFlag().getStackedCargo().isEmpty());
+        assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
         assertFalse(courier.isIdle());
 
         /* Place a cargo at the forester hut's flag */
         Cargo cargoForWoodcutter = new Cargo(PLANK, map);
         foresterHut0.getFlag().putCargo(cargoForWoodcutter);
-        cargoForWoodcutter.setTarget(wc);
+        cargoForWoodcutter.setTarget(woodcutter);
 
         /* The courier delivers the cargo at the forester hut */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, foresterHut0.getPosition());
@@ -920,9 +920,9 @@ public class TestCourier {
         assertEquals(courier.getCargo(), cargoForWoodcutter);
 
         /* Verify that the courier delivers the cargo to the woodcutter */
-        assertEquals(courier.getTarget(), wc.getPosition());
+        assertEquals(courier.getTarget(), woodcutter.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, wc.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, woodcutter.getPosition());
 
         assertNull(courier.getCargo());
     }

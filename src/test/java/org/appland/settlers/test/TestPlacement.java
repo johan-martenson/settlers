@@ -453,10 +453,10 @@ public class TestPlacement {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc = new Woodcutter(player0);
+        Woodcutter woodcutter = new Woodcutter(player0);
         Point wcPoint = new Point(6, 4);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(woodcutter, wcPoint);
 
         Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
@@ -706,10 +706,10 @@ public class TestPlacement {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc = new Woodcutter(player0);
+        Woodcutter woodcutter = new Woodcutter(player0);
         Point wcPoint = new Point(6, 4);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(woodcutter, wcPoint);
 
         Point point0 = new Point(6, 2);
 
@@ -749,13 +749,13 @@ public class TestPlacement {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc = new Woodcutter(player0);
+        Woodcutter woodcutter = new Woodcutter(player0);
         Point wcPoint = new Point(6, 4);
         Point point0  = new Point(6, 4);
 
         map.placeFlag(player0, point0);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(woodcutter, wcPoint);
     }
 
     @Test(expected=Exception.class)
@@ -768,12 +768,12 @@ public class TestPlacement {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Woodcutter wc  = new Woodcutter(player0);
+        Woodcutter woodcutter  = new Woodcutter(player0);
         Quarry     qry = new Quarry(player0);
         Point wcPoint  = new Point(6, 4);
         Point qryPoint = new Point(5, 5);
 
-        map.placeBuilding(wc, wcPoint);
+        map.placeBuilding(woodcutter, wcPoint);
         map.placeBuilding(qry, qryPoint);
     }
 
