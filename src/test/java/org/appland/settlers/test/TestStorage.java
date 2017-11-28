@@ -938,7 +938,7 @@ public class TestStorage {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
         Point point1 = new Point(8, 6);

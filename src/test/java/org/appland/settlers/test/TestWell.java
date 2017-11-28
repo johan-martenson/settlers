@@ -209,7 +209,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
@@ -222,7 +222,7 @@ public class TestWell {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the well */
@@ -259,7 +259,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
@@ -299,7 +299,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
@@ -345,7 +345,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
@@ -384,7 +384,7 @@ public class TestWell {
         assertFalse(well.getFlag().getStackedCargo().isEmpty());
 
         /* Verify that the water cargo has the right target */
-        assertEquals(well.getFlag().getStackedCargo().get(0).getTarget(), hq);
+        assertEquals(well.getFlag().getStackedCargo().get(0).getTarget(), headquarter);
 
         /* Let the worker walk back to the well */
         assertEquals(ww.getTarget(), well.getPosition());
@@ -748,7 +748,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);
@@ -806,7 +806,7 @@ public class TestWell {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(8, 6);

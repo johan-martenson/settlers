@@ -1028,7 +1028,7 @@ public class TestCoalMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
@@ -1097,7 +1097,7 @@ public class TestCoalMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);

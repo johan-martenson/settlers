@@ -401,7 +401,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 40, 40);
         Storage storage   = new Headquarter(player0);
         Point hqPoint     = new Point(6, 4);
-        Point middlePoint = new Point(10, 10); // hq to middle 6 steps
+        Point middlePoint = new Point(10, 10); // headquarter to middle 6 steps
         Point endPoint    = new Point(10, 14); // end to middle 4 steps
         map.placeBuilding(storage, hqPoint);
         Courier mdlToEndCr = new Courier(player0, map);
@@ -558,14 +558,14 @@ public class TestTransportation {
 
         /* Place headquarter */
         Point hqSpot = new Point(7, 7);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), hqSpot);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqSpot);
 
         /* Place barracks */
         Point bSpot = new Point(12, 12);
         Barracks b = map.placeBuilding(new Barracks(player0), bSpot);
 
         /* Place road */
-        Road r = map.placeAutoSelectedRoad(player0, hq.getFlag(), b.getFlag());
+        Road r = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), b.getFlag());
 
         /* Occupy the road */
         Courier w = Utils.occupyRoad(r, map);
@@ -573,9 +573,9 @@ public class TestTransportation {
         /* Construct barracks */
         Utils.constructHouse(b, map);
 
-        /* Add a private to the hq */
+        /* Add a private to the headquarter */
         Military m = new Military(player0, PRIVATE_RANK, map);
-        hq.depositWorker(m);
+        headquarter.depositWorker(m);
 
         /* Check that the barracks needs a military */
         assertTrue(b.isMilitaryBuilding());
@@ -589,7 +589,7 @@ public class TestTransportation {
         /* Get military from the headquarter
          * - retrieve should set location of the worker
          */
-        m = hq.retrieveAnyMilitary();
+        m = headquarter.retrieveAnyMilitary();
 
         /* Tell military to go to the barracks */
         map.placeWorker(m, b.getFlag());

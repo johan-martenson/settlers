@@ -190,9 +190,9 @@ public class TestMint {
 
     @Test
     public void testHeadquarterHasOneMinterAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertEquals(hq.getAmount(MINTER), 1);
+        assertEquals(headquarter.getAmount(MINTER), 1);
     }
 
     @Test
@@ -223,7 +223,7 @@ public class TestMint {
 
         assertTrue(mint.needsWorker());
 
-        /* Verify that a minter leaves the hq */
+        /* Verify that a minter leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
@@ -875,7 +875,7 @@ public class TestMint {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mint */
         Point point1 = new Point(8, 6);
@@ -943,7 +943,7 @@ public class TestMint {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mint */
         Point point1 = new Point(8, 6);

@@ -210,7 +210,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -242,7 +242,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -293,7 +293,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -367,7 +367,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -445,7 +445,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -528,7 +528,7 @@ public class TestDonkeyFarm {
 
         Donkey donkey = null;
         for (Worker w : map.getWorkers()) {
-            if (w instanceof Donkey && w.getTarget().equals(hq.getPosition())) {
+            if (w instanceof Donkey && w.getTarget().equals(headquarter.getPosition())) {
                 donkey = (Donkey)w;
 
                 break;
@@ -536,12 +536,12 @@ public class TestDonkeyFarm {
         }
 
         assertNotNull(donkey);
-        assertEquals(donkey.getTarget(), hq.getPosition());
+        assertEquals(donkey.getTarget(), headquarter.getPosition());
 
         /* Verify that the donkey walks to the headquarter */
-        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, hq.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkey, headquarter.getPosition());
 
-        assertEquals(donkey.getPosition(), hq.getPosition());
+        assertEquals(donkey.getPosition(), headquarter.getPosition());
     }
 
     @Test
@@ -553,7 +553,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -750,7 +750,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -787,7 +787,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -824,7 +824,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -992,7 +992,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point1 = new Point(8, 6);
@@ -1084,7 +1084,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point1 = new Point(8, 6);
@@ -1198,7 +1198,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -1244,7 +1244,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);
@@ -1324,7 +1324,7 @@ public class TestDonkeyFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place donkey farm */
         Point point3 = new Point(10, 6);

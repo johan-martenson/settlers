@@ -180,9 +180,9 @@ public class TestSawmill {
 
     @Test
     public void testHeadquarterHasAtLeastOneSawmillWorkerAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertTrue(hq.getAmount(SAWMILL_WORKER) >= 1);
+        assertTrue(headquarter.getAmount(SAWMILL_WORKER) >= 1);
     }
 
     @Test
@@ -213,7 +213,7 @@ public class TestSawmill {
 
         assertTrue(sawmill.needsWorker());
 
-        /* Verify that a sawmill worker leaves the hq */
+        /* Verify that a sawmill worker leaves the headquarter */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -854,7 +854,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(8, 6);
@@ -915,7 +915,7 @@ public class TestSawmill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Point point1 = new Point(8, 6);

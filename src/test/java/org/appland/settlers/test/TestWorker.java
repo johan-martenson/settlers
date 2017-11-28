@@ -74,7 +74,7 @@ public class TestWorker {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
         Point point1 = new Point(13, 5);
@@ -96,18 +96,18 @@ public class TestWorker {
         /* Place a courier at the headquarter */
         Courier courier = new Courier(player0, map);
 
-        map.placeWorker(courier, hq);
+        map.placeWorker(courier, headquarter);
 
         /* Assign the courier to the remote road */
         courier.assignToRoad(road1);
 
         /* Verify that the courier is correct when it starts walking */
-        assertEquals(courier.getPosition(), hq.getPosition());
-        assertEquals(courier.getNextPoint(), hq.getFlag().getPosition());
-        assertEquals(courier.getLastPoint(), hq.getPosition());
+        assertEquals(courier.getPosition(), headquarter.getPosition());
+        assertEquals(courier.getNextPoint(), headquarter.getFlag().getPosition());
+        assertEquals(courier.getLastPoint(), headquarter.getPosition());
         assertTrue(courier.isExactlyAtPoint());
         assertTrue(courier.isTraveling());
-        assertTrue(courier.isAt(hq.getPosition()));
+        assertTrue(courier.isAt(headquarter.getPosition()));
 
         /* Verify that the courier walks correctly to the the headquarter's flag */
         for (int i = 1; i < 10; i++) {
@@ -115,14 +115,14 @@ public class TestWorker {
             map.stepTime();
 
             /* Verify that these are unaffected */
-            assertEquals(courier.getNextPoint(), hq.getFlag().getPosition());
-            assertEquals(courier.getLastPoint(), hq.getPosition());
+            assertEquals(courier.getNextPoint(), headquarter.getFlag().getPosition());
+            assertEquals(courier.getLastPoint(), headquarter.getPosition());
             assertTrue(courier.isTraveling());
 
             /* Verify that the courier is not exactly at a point */
             assertFalse(courier.isExactlyAtPoint());
-            assertFalse(courier.isAt(hq.getPosition()));
-            assertFalse(courier.isAt(hq.getFlag().getPosition()));
+            assertFalse(courier.isAt(headquarter.getPosition()));
+            assertFalse(courier.isAt(headquarter.getFlag().getPosition()));
 
             /* Verify that the percentage increases correctly */
             assertEquals(courier.getPercentageOfDistanceTraveled(), i * 10);
@@ -131,13 +131,13 @@ public class TestWorker {
         map.stepTime();
 
         /* Verify that the courier reached the headquarter's flag correctly */
-        assertEquals(courier.getPosition(), hq.getFlag().getPosition());
+        assertEquals(courier.getPosition(), headquarter.getFlag().getPosition());
         assertEquals(courier.getNextPoint(), point3);
-        assertEquals(courier.getLastPoint(), hq.getFlag().getPosition());
+        assertEquals(courier.getLastPoint(), headquarter.getFlag().getPosition());
         assertEquals(courier.getPercentageOfDistanceTraveled(), 100);
         assertTrue(courier.isExactlyAtPoint());
         assertTrue(courier.isTraveling());
-        assertTrue(courier.isAt(hq.getFlag().getPosition()));
+        assertTrue(courier.isAt(headquarter.getFlag().getPosition()));
 
         /* Verify that the courier walks correctly to the middle of the first road */
         for (int i = 1; i < 10; i++) {
@@ -146,13 +146,13 @@ public class TestWorker {
 
             /* Verify that these are unaffected */
             assertEquals(courier.getNextPoint(), point3);
-            assertEquals(courier.getLastPoint(), hq.getFlag().getPosition());
+            assertEquals(courier.getLastPoint(), headquarter.getFlag().getPosition());
             assertTrue(courier.isTraveling());
 
             /* Verify that the courier is not exactly at a point */
             assertFalse(courier.isExactlyAtPoint());
             assertFalse(courier.isAt(point3));
-            assertFalse(courier.isAt(hq.getFlag().getPosition()));
+            assertFalse(courier.isAt(headquarter.getFlag().getPosition()));
 
             /* Verify that the percentage increases correctly */
             assertEquals(courier.getPercentageOfDistanceTraveled(), i * 10);

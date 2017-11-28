@@ -189,9 +189,9 @@ public class TestSlaughterHouse {
 
     @Test
     public void testHeadquarterAtLeastHasOneButcherAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertTrue(hq.getAmount(BUTCHER) >= 1);
+        assertTrue(headquarter.getAmount(BUTCHER) >= 1);
     }
 
     @Test
@@ -222,7 +222,7 @@ public class TestSlaughterHouse {
 
         assertTrue(slaughterHouse.needsWorker());
 
-        /* Verify that a slaughterHouse worker leaves the hq */
+        /* Verify that a slaughterHouse worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
@@ -855,7 +855,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point1 = new Point(8, 6);
@@ -918,7 +918,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point1 = new Point(8, 6);

@@ -68,7 +68,7 @@ public class TestGameLogic {
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
         assertNull(headquarter.getWorker().getCargo());
 
-        /* Fast forward so the worker in the hq is rested */
+        /* Fast forward so the worker in the headquarter is rested */
         Utils.fastForward(20, map);
 
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */

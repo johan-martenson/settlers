@@ -299,11 +299,11 @@ public class TestScenarios {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
-        Headquarter hq = new Headquarter(player0);
+        Headquarter headquarter = new Headquarter(player0);
 
         Point startPosition = new Point(6, 6);
 
-        map.placeBuilding(hq, startPosition);
+        map.placeBuilding(headquarter, startPosition);
 
 
         /*   --   START TEST   --   */
@@ -319,8 +319,8 @@ public class TestScenarios {
 
         fastForward(100, map);
 
-        /* Player creates road between hq and wc */
-        map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
+        /* Player creates road between headquarter and wc */
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), wc.getFlag());
 
         // TODO: assert that the road is unoccupied
 
@@ -358,11 +358,11 @@ public class TestScenarios {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
-        Headquarter hq = new Headquarter(player0);
+        Headquarter headquarter = new Headquarter(player0);
 
         Point startPosition = new Point(15, 15);
 
-        map.placeBuilding(hq, startPosition);
+        map.placeBuilding(headquarter, startPosition);
 
         /*   --   User    --   */
 
@@ -385,7 +385,7 @@ public class TestScenarios {
         fastForward(100, map);
 
         /*   --   Create road to woodcutter   --   */
-        map.placeAutoSelectedRoad(player0, hq.getFlag(), wc.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), wc.getFlag());
 
         fastForward(100, map);
 
@@ -410,7 +410,7 @@ public class TestScenarios {
         fastForward(100, map);
 
         /*  - Build road carefully to sawmill -  */
-        Flag startFlag = hq.getFlag();
+        Flag startFlag = headquarter.getFlag();
 
         List<Point> chosenPointsForRoad = new ArrayList<>();
 

@@ -1023,7 +1023,7 @@ public class TestGoldMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
@@ -1092,7 +1092,7 @@ public class TestGoldMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);

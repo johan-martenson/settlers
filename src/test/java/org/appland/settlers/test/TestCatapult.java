@@ -253,7 +253,7 @@ public class TestCatapult {
 
         assertTrue(catapult.needsWorker());
 
-        /* Verify that a catapult worker leaves the hq */
+        /* Verify that a catapult worker leaves the headquarter */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);

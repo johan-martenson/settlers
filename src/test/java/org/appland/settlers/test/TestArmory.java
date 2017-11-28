@@ -192,9 +192,9 @@ public class TestArmory {
 
     @Test
     public void testHeadquarterHasOneArmorerAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertEquals(hq.getAmount(ARMORER), 1);
+        assertEquals(headquarter.getAmount(ARMORER), 1);
     }
 
     @Test
@@ -227,7 +227,7 @@ public class TestArmory {
 
         assertTrue(armory0.needsWorker());
 
-        /* Verify that a armory worker leaves the hq */
+        /* Verify that a armory worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);

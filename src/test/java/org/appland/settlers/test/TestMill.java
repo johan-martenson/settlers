@@ -229,7 +229,7 @@ public class TestMill {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
@@ -238,7 +238,7 @@ public class TestMill {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the mill */
@@ -271,7 +271,7 @@ public class TestMill {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
@@ -280,7 +280,7 @@ public class TestMill {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the mill */
@@ -307,7 +307,7 @@ public class TestMill {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
@@ -316,7 +316,7 @@ public class TestMill {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the mill */
@@ -346,7 +346,7 @@ public class TestMill {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
@@ -355,7 +355,7 @@ public class TestMill {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the mill */
@@ -393,7 +393,7 @@ public class TestMill {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
         Point point2 = new Point(6, 4);
@@ -402,7 +402,7 @@ public class TestMill {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         Courier courier = new Courier(player0, map);
-        map.placeWorker(courier, hq.getFlag());
+        map.placeWorker(courier, headquarter.getFlag());
         courier.assignToRoad(road0);
 
         /* Finish the mill */
@@ -809,7 +809,7 @@ public class TestMill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mill */
         Point point1 = new Point(8, 6);
@@ -873,7 +873,7 @@ public class TestMill {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mill */
         Point point1 = new Point(8, 6);

@@ -190,9 +190,9 @@ public class TestBakery {
 
     @Test
     public void testHeadquarterHasAtLeastOneBakerAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertTrue(hq.getAmount(BAKER) >= 1);
+        assertTrue(headquarter.getAmount(BAKER) >= 1);
     }
 
     @Test
@@ -223,7 +223,7 @@ public class TestBakery {
 
         assertTrue(bakery.needsWorker());
 
-        /* Verify that a bakery worker leaves the hq */
+        /* Verify that a bakery worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
@@ -770,7 +770,7 @@ public class TestBakery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place bakery */
         Point point1 = new Point(8, 6);
@@ -838,7 +838,7 @@ public class TestBakery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place bakery */
         Point point1 = new Point(8, 6);

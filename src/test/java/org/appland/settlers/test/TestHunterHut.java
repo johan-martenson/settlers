@@ -722,7 +722,7 @@ public class TestHunterHut {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
@@ -772,7 +772,7 @@ public class TestHunterHut {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place hunter hut */
         Point point1 = new Point(8, 6);

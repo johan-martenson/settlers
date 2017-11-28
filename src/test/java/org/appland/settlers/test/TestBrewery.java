@@ -182,9 +182,9 @@ public class TestBrewery {
 
     @Test
     public void testHeadquarterHasOneBrewerAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertEquals(hq.getAmount(BREWER), 1);
+        assertEquals(headquarter.getAmount(BREWER), 1);
     }
 
     @Test
@@ -215,7 +215,7 @@ public class TestBrewery {
 
         assertTrue(brewery.needsWorker());
 
-        /* Verify that a brewery worker leaves the hq */
+        /* Verify that a brewery worker leaves the headquarter */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -821,7 +821,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point1 = new Point(8, 6);
@@ -889,7 +889,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point1 = new Point(8, 6);

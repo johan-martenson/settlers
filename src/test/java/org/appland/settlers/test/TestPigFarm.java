@@ -211,7 +211,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -245,7 +245,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -296,7 +296,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -370,7 +370,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -448,7 +448,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -554,7 +554,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -868,7 +868,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -905,7 +905,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -942,7 +942,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point3 = new Point(10, 6);
@@ -1110,7 +1110,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point1 = new Point(8, 6);
@@ -1175,7 +1175,7 @@ public class TestPigFarm {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point1 = new Point(8, 6);

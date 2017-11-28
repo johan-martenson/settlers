@@ -48,8 +48,8 @@ public class TestProduction {
 
     @Test(expected=Exception.class)
     public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        hq.getWorkerType();
+        headquarter.getWorkerType();
     }
 }

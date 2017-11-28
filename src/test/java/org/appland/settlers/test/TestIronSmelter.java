@@ -182,9 +182,9 @@ public class TestIronSmelter {
 
     @Test
     public void testHeadquarterHasAtLeastOneIronFounderAtStart() {
-        Headquarter hq = new Headquarter(null);
+        Headquarter headquarter = new Headquarter(null);
 
-        assertTrue(hq.getAmount(IRON_FOUNDER) >= 1);
+        assertTrue(headquarter.getAmount(IRON_FOUNDER) >= 1);
     }
 
     @Test
@@ -215,7 +215,7 @@ public class TestIronSmelter {
 
         assertTrue(ironSmelter.needsWorker());
 
-        /* Verify that a iron smelter worker leaves the hq */
+        /* Verify that a iron smelter worker leaves the headquarter */
         assertEquals(map.getWorkers().size(), 1);
 
         Utils.fastForward(3, map);
@@ -925,7 +925,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point1 = new Point(8, 6);
@@ -987,7 +987,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point1 = new Point(8, 6);

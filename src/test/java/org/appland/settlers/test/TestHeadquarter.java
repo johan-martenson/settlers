@@ -188,7 +188,7 @@ public class TestHeadquarter {
         /* The storage worker rests */
         Utils.fastForward(19, map);
 
-        /* Verify that the hq has planks */
+        /* Verify that the headquarter has planks */
         assertTrue(headquarter0.getAmount(PLANK) > 0);
 
         /* Verify that the storage worker delivers stone or planks to the woodcutter */

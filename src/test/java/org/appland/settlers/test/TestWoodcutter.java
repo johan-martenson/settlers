@@ -440,7 +440,7 @@ public class TestWoodcutter {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
         Point point3 = new Point(6, 4);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
@@ -453,7 +453,7 @@ public class TestWoodcutter {
 
         Point point4 = new Point(9, 3);
 
-        Road road0 = map.placeRoad(player0, hq.getFlag().getPosition(), point4, wc.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point4, wc.getFlag().getPosition());
 
         /* Construct the forester hut */
         constructHouse(wc, map);
@@ -522,7 +522,7 @@ public class TestWoodcutter {
 
         Cargo cargo = wc.getFlag().getStackedCargo().get(0);
 
-        assertEquals(cargo.getTarget(), hq);
+        assertEquals(cargo.getTarget(), headquarter);
 
         /* Let the woodcutter go back to the hut */
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
@@ -550,7 +550,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point3 = new Point(6, 4);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
@@ -572,9 +572,9 @@ public class TestWoodcutter {
         /* Place roads */
         Point point5 = new Point(9, 3);
 
-        Road road0 = map.placeRoad(player0, hq.getFlag().getPosition(), point5, wc.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point5, wc.getFlag().getPosition());
         Road road1 = map.placeAutoSelectedRoad(player0, hut.getFlag(), wc.getFlag());
-        Road road2 = map.placeAutoSelectedRoad(player0, hut2.getFlag(), hq.getFlag());
+        Road road2 = map.placeAutoSelectedRoad(player0, hut2.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
         constructHouse(wc, map);
@@ -647,8 +647,8 @@ public class TestWoodcutter {
 
         Cargo cargo = wc.getFlag().getStackedCargo().get(0);
 
-        assertEquals(cargo.getTarget(), hq);
-        assertEquals(cargo.getNextFlagOrBuilding(), hq.getFlag().getPosition());
+        assertEquals(cargo.getTarget(), headquarter);
+        assertEquals(cargo.getNextFlagOrBuilding(), headquarter.getFlag().getPosition());
     }
 
     @Test
@@ -758,7 +758,7 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point3 = new Point(6, 4);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point3);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Plant and grow trees */
         Point point2 = new Point(12, 4);
@@ -775,7 +775,7 @@ public class TestWoodcutter {
 
         Point point4 = new Point(9, 3);
 
-        Road road0 = map.placeRoad(player0, hq.getFlag().getPosition(), point4, wc.getFlag().getPosition());
+        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point4, wc.getFlag().getPosition());
 
 
         /* Construct the forester hut */
@@ -835,7 +835,7 @@ public class TestWoodcutter {
 
         Cargo cargo = wc.getFlag().getStackedCargo().get(0);
 
-        assertEquals(cargo.getTarget(), hq);
+        assertEquals(cargo.getTarget(), headquarter);
 
         /* Let the woodcutter go back to the hut */
         Utils.fastForwardUntilWorkersReachTarget(map, wcWorker);
@@ -1300,7 +1300,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);
@@ -1371,7 +1371,7 @@ public class TestWoodcutter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Plant and grow trees */
         Point point12 = new Point(10, 8);

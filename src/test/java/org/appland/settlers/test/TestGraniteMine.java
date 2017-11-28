@@ -1032,7 +1032,7 @@ public class TestGraniteMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
@@ -1099,7 +1099,7 @@ public class TestGraniteMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);

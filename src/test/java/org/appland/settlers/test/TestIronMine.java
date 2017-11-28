@@ -1020,7 +1020,7 @@ public class TestIronMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
@@ -1089,7 +1089,7 @@ public class TestIronMine {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron mine */
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);

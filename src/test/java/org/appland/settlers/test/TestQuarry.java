@@ -397,12 +397,12 @@ public class TestQuarry {
         GameMap map = new GameMap(players, 20, 20);
 
         Point point1 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         Point point2 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point2);
 
-        map.placeAutoSelectedRoad(player0, hq.getFlag(), quarry.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), quarry.getFlag());
 
         /* Place stone */
         Point point3 = new Point(13, 5);
@@ -991,7 +991,7 @@ public class TestQuarry {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place stone */
         Point point5 = new Point(10, 8);
@@ -1060,7 +1060,7 @@ public class TestQuarry {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter hq = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place stone */
         Point point5 = new Point(10, 8);
