@@ -1741,9 +1741,9 @@ public class TestFarm {
 
         Farmer farmer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Farmer) {
-                farmer = (Farmer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Farmer) {
+                farmer = (Farmer) worker;
             }
         }
 
@@ -1803,9 +1803,9 @@ public class TestFarm {
 
         Farmer farmer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Farmer) {
-                farmer = (Farmer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Farmer) {
+                farmer = (Farmer) worker;
             }
         }
 
@@ -1868,9 +1868,9 @@ public class TestFarm {
 
         Farmer farmer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Farmer) {
-                farmer = (Farmer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Farmer) {
+                farmer = (Farmer) worker;
             }
         }
 

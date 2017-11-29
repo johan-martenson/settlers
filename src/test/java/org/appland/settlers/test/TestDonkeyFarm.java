@@ -527,9 +527,9 @@ public class TestDonkeyFarm {
         assertNull(donkeyBreeder.getCargo());
 
         Donkey donkey = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Donkey && w.getTarget().equals(headquarter.getPosition())) {
-                donkey = (Donkey)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Donkey && worker.getTarget().equals(headquarter.getPosition())) {
+                donkey = (Donkey)worker;
 
                 break;
             }
@@ -572,8 +572,8 @@ public class TestDonkeyFarm {
         boolean newDonkeyFound = false;
 
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -629,8 +629,8 @@ public class TestDonkeyFarm {
         /* Wait for the donkey breeder to produce a new donkey */
         boolean newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1026,8 +1026,8 @@ public class TestDonkeyFarm {
 
         boolean newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1054,8 +1054,8 @@ public class TestDonkeyFarm {
 
         newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1122,8 +1122,8 @@ public class TestDonkeyFarm {
         /* Wait for the donkey breeder to produce donkey */
         boolean newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1147,8 +1147,8 @@ public class TestDonkeyFarm {
 
         newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1171,8 +1171,8 @@ public class TestDonkeyFarm {
 
         newDonkeyFound = false;
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
                     newDonkeyFound = true;
 
                     break;
@@ -1277,9 +1277,9 @@ public class TestDonkeyFarm {
         Donkey donkey = null;
 
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
-                    donkey = (Donkey)w;
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
+                    donkey = (Donkey)worker;
 
                     break;
                 }
@@ -1357,9 +1357,9 @@ public class TestDonkeyFarm {
         Donkey donkey = null;
 
         for (int i = 0; i < 500; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.getPosition().equals(donkeyFarm0.getPosition())) {
-                    donkey = (Donkey)w;
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.getPosition().equals(donkeyFarm0.getPosition())) {
+                    donkey = (Donkey)worker;
 
                     break;
                 }
@@ -1512,9 +1512,9 @@ public class TestDonkeyFarm {
 
         DonkeyBreeder donkeyBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof DonkeyBreeder) {
-                donkeyBreeder = (DonkeyBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) worker;
             }
         }
 
@@ -1574,9 +1574,9 @@ public class TestDonkeyFarm {
 
         DonkeyBreeder donkeyBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof DonkeyBreeder) {
-                donkeyBreeder = (DonkeyBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) worker;
             }
         }
 
@@ -1639,9 +1639,9 @@ public class TestDonkeyFarm {
 
         DonkeyBreeder donkeyBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof DonkeyBreeder) {
-                donkeyBreeder = (DonkeyBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof DonkeyBreeder) {
+                donkeyBreeder = (DonkeyBreeder) worker;
             }
         }
 

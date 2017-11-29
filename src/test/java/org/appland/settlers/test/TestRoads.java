@@ -1492,25 +1492,25 @@ public class TestRoads {
 
         assertEquals(map.getWorkers().size(), 3);
 
-        Worker w2 = null;
+        Worker worker2 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (!(w instanceof Courier)) {
+        for (Worker worker : map.getWorkers()) {
+            if (!(worker instanceof Courier)) {
                 continue;
             }
 
-            if (w.equals(courier)) {
+            if (worker.equals(courier)) {
                 continue;
             }
 
-            w2 = w;
+            worker2 = worker;
 
             break;
         }
 
-        assertTrue(w2 instanceof Courier);
+        assertTrue(worker2 instanceof Courier);
 
-        Courier secondCourier = (Courier) w2;
+        Courier secondCourier = (Courier) worker2;
 
         assertNotNull(secondCourier);
         assertNotNull(secondCourier.getAssignedRoad());
@@ -1630,18 +1630,18 @@ public class TestRoads {
         workersAfter.addAll(map.getWorkers());
         workersAfter.removeAll(workersBefore);
 
-        Worker w = workersAfter.get(0);
+        Worker worker = workersAfter.get(0);
 
-        Utils.fastForwardUntilWorkersReachTarget(map, w);
+        Utils.fastForwardUntilWorkersReachTarget(map, worker);
 
         assertFalse(road0.needsCourier());
-        assertEquals(road0.getCourier(), w);
+        assertEquals(road0.getCourier(), worker);
 
         Utils.fastForward(100, map);
 
         assertFalse(road0.needsCourier());
         assertEquals(map.getWorkers().size(), 2);
-        assertEquals(road0.getCourier(), w);
+        assertEquals(road0.getCourier(), worker);
     }
 
     @Test

@@ -129,14 +129,14 @@ public class TestWildAnimal {
         for (int i = 0; i < 5000; i++) {
 
             /* Find min and max of newly created animals */
-            for (WildAnimal w : map.getWildAnimals()) {
+            for (WildAnimal worker : map.getWildAnimals()) {
 
                 /* Filter already handled animals */
-                if (currentAnimals.contains(w)) {
+                if (currentAnimals.contains(worker)) {
                     continue;
                 }
 
-                Point p = w.getPosition();
+                Point p = worker.getPosition();
 
                 /* Update min and max */
                 if (p.x < minX) {
@@ -156,7 +156,7 @@ public class TestWildAnimal {
                 }
 
                 /* Remember that this animal has been handled */
-                currentAnimals.add(w);
+                currentAnimals.add(worker);
             }
 
             map.stepTime();

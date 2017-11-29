@@ -1367,9 +1367,9 @@ public class TestPigFarm {
 
         PigBreeder pigBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof PigBreeder) {
-                pigBreeder = (PigBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof PigBreeder) {
+                pigBreeder = (PigBreeder) worker;
             }
         }
 
@@ -1429,9 +1429,9 @@ public class TestPigFarm {
 
         PigBreeder pigBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof PigBreeder) {
-                pigBreeder = (PigBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof PigBreeder) {
+                pigBreeder = (PigBreeder) worker;
             }
         }
 
@@ -1494,9 +1494,9 @@ public class TestPigFarm {
 
         PigBreeder pigBreeder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof PigBreeder) {
-                pigBreeder = (PigBreeder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof PigBreeder) {
+                pigBreeder = (PigBreeder) worker;
             }
         }
 

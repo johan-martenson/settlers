@@ -227,9 +227,9 @@ public class TestIronSmelter {
         /* Let the iron smelter worker reach the iron smelter */
         IronFounder ironFounder0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof IronFounder) {
-                ironFounder0 = (IronFounder)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof IronFounder) {
+                ironFounder0 = (IronFounder)worker;
             }
         }
 
@@ -1176,9 +1176,9 @@ public class TestIronSmelter {
 
         IronFounder ironFounder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof IronFounder) {
-                ironFounder = (IronFounder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof IronFounder) {
+                ironFounder = (IronFounder) worker;
             }
         }
 
@@ -1238,9 +1238,9 @@ public class TestIronSmelter {
 
         IronFounder ironFounder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof IronFounder) {
-                ironFounder = (IronFounder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof IronFounder) {
+                ironFounder = (IronFounder) worker;
             }
         }
 
@@ -1303,9 +1303,9 @@ public class TestIronSmelter {
 
         IronFounder ironFounder = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof IronFounder) {
-                ironFounder = (IronFounder) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof IronFounder) {
+                ironFounder = (IronFounder) worker;
             }
         }
 

@@ -1094,8 +1094,8 @@ public class TestDonkey {
         for (int i = 0; i < 2000; i++) {
             boolean allIdle = true;
 
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Donkey && w.isTraveling()) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Donkey && worker.isTraveling()) {
                     allIdle = false;
                 }
             }
@@ -1107,9 +1107,9 @@ public class TestDonkey {
             map.stepTime();
         }
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Donkey) {
-                Donkey c = (Donkey)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Donkey) {
+                Donkey c = (Donkey)worker;
 
                 assertFalse(c.isTraveling());
                 assertFalse(c.isWalkingToRoad());

@@ -201,9 +201,9 @@ public class TestWatchTower {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
         Military m = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military) {
-                m = (Military)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                m = (Military)worker;
             }
         }
 
@@ -278,9 +278,9 @@ public class TestWatchTower {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
         Military m = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military) {
-                m = (Military)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                m = (Military)worker;
             }
         }
 

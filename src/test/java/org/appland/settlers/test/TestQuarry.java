@@ -1255,9 +1255,9 @@ public class TestQuarry {
 
         Stonemason stoneMason = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Stonemason) {
-                stoneMason = (Stonemason) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Stonemason) {
+                stoneMason = (Stonemason) worker;
             }
         }
 
@@ -1317,9 +1317,9 @@ public class TestQuarry {
 
         Stonemason stoneMason = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Stonemason) {
-                stoneMason = (Stonemason) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Stonemason) {
+                stoneMason = (Stonemason) worker;
             }
         }
 
@@ -1382,9 +1382,9 @@ public class TestQuarry {
 
         Stonemason stoneMason = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Stonemason) {
-                stoneMason = (Stonemason) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Stonemason) {
+                stoneMason = (Stonemason) worker;
             }
         }
 

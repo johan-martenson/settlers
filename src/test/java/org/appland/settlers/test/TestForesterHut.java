@@ -1261,9 +1261,9 @@ public class TestForesterHut {
 
         Forester forester = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Forester) {
-                forester = (Forester) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Forester) {
+                forester = (Forester) worker;
             }
         }
 
@@ -1323,9 +1323,9 @@ public class TestForesterHut {
 
         Forester forester = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Forester) {
-                forester = (Forester) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Forester) {
+                forester = (Forester) worker;
             }
         }
 
@@ -1388,9 +1388,9 @@ public class TestForesterHut {
 
         Forester forester = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Forester) {
-                forester = (Forester) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Forester) {
+                forester = (Forester) worker;
             }
         }
 

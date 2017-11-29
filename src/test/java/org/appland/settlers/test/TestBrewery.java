@@ -227,9 +227,9 @@ public class TestBrewery {
         /* Let the brewery worker reach the brewery */
         Brewer brewer0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Brewer) {
-                brewer0 = (Brewer)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Brewer) {
+                brewer0 = (Brewer)worker;
             }
         }
 
@@ -1081,9 +1081,9 @@ public class TestBrewery {
 
         Brewer brewer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Brewer) {
-                brewer = (Brewer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Brewer) {
+                brewer = (Brewer) worker;
             }
         }
 
@@ -1144,9 +1144,9 @@ public class TestBrewery {
 
         Brewer brewer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Brewer) {
-                brewer = (Brewer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Brewer) {
+                brewer = (Brewer) worker;
             }
         }
 
@@ -1209,9 +1209,9 @@ public class TestBrewery {
 
         Brewer brewer = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Brewer) {
-                brewer = (Brewer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Brewer) {
+                brewer = (Brewer) worker;
             }
         }
 

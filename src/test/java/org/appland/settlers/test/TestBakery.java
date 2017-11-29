@@ -231,9 +231,9 @@ public class TestBakery {
         /* Let the bakery worker reach the bakery */
         Baker baker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker)worker;
             }
         }
 
@@ -1030,9 +1030,9 @@ public class TestBakery {
 
         Baker baker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker) worker;
             }
         }
 
@@ -1092,9 +1092,9 @@ public class TestBakery {
 
         Baker baker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker) worker;
             }
         }
 
@@ -1157,9 +1157,9 @@ public class TestBakery {
 
         Baker baker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Baker) {
-                baker = (Baker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker) worker;
             }
         }
 

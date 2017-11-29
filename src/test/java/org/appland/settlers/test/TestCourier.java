@@ -1128,8 +1128,8 @@ public class TestCourier {
         for (int i = 0; i < 2000; i++) {
             boolean allIdle = true;
 
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Courier && w.isTraveling()) {
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Courier && worker.isTraveling()) {
                     allIdle = false;
                 }
             }
@@ -1141,9 +1141,9 @@ public class TestCourier {
             map.stepTime();
         }
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Courier) {
-                Courier c = (Courier)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Courier) {
+                Courier c = (Courier)worker;
 
                 assertFalse(c.isTraveling());
                 assertFalse(c.isWalkingToRoad());

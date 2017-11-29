@@ -504,9 +504,9 @@ public class TestTransportation {
 
         /* Courier needs to walk to road before it's assigned */
         Courier c = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Courier) {
-                c = (Courier)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Courier) {
+                c = (Courier)worker;
             }
         }
 
@@ -568,7 +568,7 @@ public class TestTransportation {
         Road r = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), b.getFlag());
 
         /* Occupy the road */
-        Courier w = Utils.occupyRoad(r, map);
+        Courier worker = Utils.occupyRoad(r, map);
 
         /* Construct barracks */
         Utils.constructHouse(b, map);

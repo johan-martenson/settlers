@@ -180,8 +180,8 @@ public class TestWoodcutter {
         Utils.fastForward(2, map);
 
         boolean foundWoodcutter = false;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WoodcutterWorker) {
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
             }
         }
@@ -880,9 +880,9 @@ public class TestWoodcutter {
 
         WoodcutterWorker wcWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WoodcutterWorker) {
-                wcWorker = (WoodcutterWorker)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WoodcutterWorker) {
+                wcWorker = (WoodcutterWorker)worker;
             }
         }
 
@@ -1678,9 +1678,9 @@ public class TestWoodcutter {
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WoodcutterWorker) {
-                woodcutterWorker = (WoodcutterWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WoodcutterWorker) {
+                woodcutterWorker = (WoodcutterWorker) worker;
             }
         }
 
@@ -1740,9 +1740,9 @@ public class TestWoodcutter {
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WoodcutterWorker) {
-                woodcutterWorker = (WoodcutterWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WoodcutterWorker) {
+                woodcutterWorker = (WoodcutterWorker) worker;
             }
         }
 
@@ -1805,9 +1805,9 @@ public class TestWoodcutter {
 
         WoodcutterWorker woodcutterWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WoodcutterWorker) {
-                woodcutterWorker = (WoodcutterWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WoodcutterWorker) {
+                woodcutterWorker = (WoodcutterWorker) worker;
             }
         }
 

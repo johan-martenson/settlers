@@ -225,9 +225,9 @@ public class TestSawmill {
         /* Let the sawmill worker reach the sawmill */
         SawmillWorker sawmillWorker0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof SawmillWorker) {
-                sawmillWorker0 = (SawmillWorker)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof SawmillWorker) {
+                sawmillWorker0 = (SawmillWorker)worker;
             }
         }
 
@@ -1100,9 +1100,9 @@ public class TestSawmill {
 
         SawmillWorker sawmillWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof SawmillWorker) {
-                sawmillWorker = (SawmillWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof SawmillWorker) {
+                sawmillWorker = (SawmillWorker) worker;
             }
         }
 
@@ -1162,9 +1162,9 @@ public class TestSawmill {
 
         SawmillWorker sawmillWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof SawmillWorker) {
-                sawmillWorker = (SawmillWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof SawmillWorker) {
+                sawmillWorker = (SawmillWorker) worker;
             }
         }
 
@@ -1227,9 +1227,9 @@ public class TestSawmill {
 
         SawmillWorker sawmillWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof SawmillWorker) {
-                sawmillWorker = (SawmillWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof SawmillWorker) {
+                sawmillWorker = (SawmillWorker) worker;
             }
         }
 

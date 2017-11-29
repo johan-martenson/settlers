@@ -1140,9 +1140,9 @@ public class TestArmory {
 
         Armorer armorer0 = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Armorer) {
-                armorer0 = (Armorer) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer) worker;
             }
         }
 

@@ -141,9 +141,9 @@ public class TestBarracks {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
         Military m = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military) {
-                m = (Military)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                m = (Military)worker;
             }
         }
 
@@ -220,9 +220,9 @@ public class TestBarracks {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
         Military m = null;
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military) {
-                m = (Military)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                m = (Military)worker;
             }
         }
 
@@ -2045,9 +2045,9 @@ public class TestBarracks {
         /* Wait for a military to start walking to the barracks */
         Military military = null;
         for (int i = 0; i < 1000; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Military && w.getTarget().equals(barracks0.getPosition())) {
-                    military = (Military)w;
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Military && worker.getTarget().equals(barracks0.getPosition())) {
+                    military = (Military)worker;
                     break;
                 }
             }
@@ -2126,9 +2126,9 @@ public class TestBarracks {
         /* Wait for a military to start walking to the barracks */
         Military military = null;
         for (int i = 0; i < 1000; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Military && w.getTarget().equals(barracks0.getPosition())) {
-                    military = (Military)w;
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Military && worker.getTarget().equals(barracks0.getPosition())) {
+                    military = (Military)worker;
                     break;
                 }
             }

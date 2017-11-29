@@ -263,22 +263,22 @@ public class TestCatapult {
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), CatapultWorker.class);
 
         /* Let the catapult worker reach the catapult */
-        CatapultWorker worker = null;
+        CatapultWorker catapultWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof CatapultWorker) {
-                worker = (CatapultWorker)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker)worker;
             }
         }
 
-        assertNotNull(worker);
-        assertEquals(worker.getTarget(), catapult.getPosition());
+        assertNotNull(catapultWorker);
+        assertEquals(catapultWorker.getTarget(), catapult.getPosition());
 
-        Utils.fastForwardUntilWorkersReachTarget(map, worker);
+        Utils.fastForwardUntilWorkersReachTarget(map, catapultWorker);
 
-        assertTrue(worker.isInsideBuilding());
-        assertEquals(worker.getHome(), catapult);
-        assertEquals(catapult.getWorker(), worker);
+        assertTrue(catapultWorker.isInsideBuilding());
+        assertEquals(catapultWorker.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker);
     }
 
     @Test
@@ -1127,9 +1127,9 @@ public class TestCatapult {
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof CatapultWorker) {
-                catapultWorker = (CatapultWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) worker;
             }
         }
 
@@ -1189,9 +1189,9 @@ public class TestCatapult {
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof CatapultWorker) {
-                catapultWorker = (CatapultWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) worker;
             }
         }
 
@@ -1254,9 +1254,9 @@ public class TestCatapult {
 
         CatapultWorker catapultWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof CatapultWorker) {
-                catapultWorker = (CatapultWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof CatapultWorker) {
+                catapultWorker = (CatapultWorker) worker;
             }
         }
 

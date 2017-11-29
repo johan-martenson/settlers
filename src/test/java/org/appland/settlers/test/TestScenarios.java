@@ -170,22 +170,22 @@ public class TestScenarios {
         assertEquals(headquarter0.getAmount(WOOD), amountWood + 1);
 
         /* Find out that the sawmill needs the wood */
-        Worker w = headquarter0.getWorker();
+        Worker worker = headquarter0.getWorker();
 
         for (int i = 0; i < 300; i++) {
 
-            if (w.getTarget().equals(headquarter0.getFlag().getPosition()) && w.getCargo().getMaterial().equals(WOOD)) {
+            if (worker.getTarget().equals(headquarter0.getFlag().getPosition()) && worker.getCargo().getMaterial().equals(WOOD)) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(w.getTarget(), headquarter0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
 
         int amountInStack = headquarter0.getFlag().getStackedCargo().size();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, w, headquarter0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
 
         Courier courierSmToHq = smToHqRoad.getCourier();
 

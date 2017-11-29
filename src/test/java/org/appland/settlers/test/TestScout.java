@@ -122,9 +122,9 @@ public class TestScout {
 
         Worker scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = worker;
             }
         }
 
@@ -170,9 +170,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -216,9 +216,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -267,9 +267,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -326,9 +326,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -381,9 +381,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -440,9 +440,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -567,9 +567,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -603,9 +603,9 @@ public class TestScout {
         scout = null;
 
         for (int i = 0; i < 100; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Scout && flag.getPosition().equals(w.getTarget())) {
-                    scout = (Scout)w;
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Scout && flag.getPosition().equals(worker.getTarget())) {
+                    scout = (Scout)worker;
 
                     break;
                 }
@@ -656,9 +656,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -803,9 +803,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -870,9 +870,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 
@@ -938,9 +938,9 @@ public class TestScout {
 
         Scout scout = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Scout) {
-                scout = (Scout) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                scout = (Scout) worker;
             }
         }
 

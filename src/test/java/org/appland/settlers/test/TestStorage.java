@@ -237,9 +237,9 @@ public class TestStorage {
 
         Worker storageWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof StorageWorker) {
-                storageWorker = w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof StorageWorker) {
+                storageWorker = worker;
             }
         }
 
@@ -1212,9 +1212,9 @@ public class TestStorage {
 
         StorageWorker storageWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
-                storageWorker = (StorageWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof StorageWorker && storage0.getPosition().equals(worker.getTarget())) {
+                storageWorker = (StorageWorker) worker;
             }
         }
 
@@ -1277,9 +1277,9 @@ public class TestStorage {
 
         StorageWorker storageWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
-                storageWorker = (StorageWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof StorageWorker && storage0.getPosition().equals(worker.getTarget())) {
+                storageWorker = (StorageWorker) worker;
             }
         }
 
@@ -1345,9 +1345,9 @@ public class TestStorage {
 
         StorageWorker storageWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof StorageWorker && storage0.getPosition().equals(w.getTarget())) {
-                storageWorker = (StorageWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof StorageWorker && storage0.getPosition().equals(worker.getTarget())) {
+                storageWorker = (StorageWorker) worker;
             }
         }
 

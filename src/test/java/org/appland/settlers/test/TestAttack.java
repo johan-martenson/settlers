@@ -465,9 +465,9 @@ public class TestAttack {
         /* Verify that no militaries leave the barracks before the attack is
          initiated */
         for (int i = 0; i < 100; i++) {
-            for (Worker w : map.getWorkers()) {
-                if (w instanceof Military) {
-                    assertTrue(w.isInsideBuilding());
+            for (Worker worker : map.getWorkers()) {
+                if (worker instanceof Military) {
+                    assertTrue(worker.isInsideBuilding());
                 }
             }
 
@@ -4263,20 +4263,20 @@ public class TestAttack {
         Set<Worker> militariesOutside = new HashSet<>();
         for (int i = 0; i < 1000; i++) {
 
-            for (Worker w : map.getWorkers()) {
-                if (!w.getPlayer().equals(player0)) {
+            for (Worker worker : map.getWorkers()) {
+                if (!worker.getPlayer().equals(player0)) {
                     continue;
                 }
 
-                if (! (w instanceof Military)) {
+                if (! (worker instanceof Military)) {
                     continue;
                 }
 
-                if (w.isInsideBuilding()) {
+                if (worker.isInsideBuilding()) {
                     continue;
                 }
 
-                militariesOutside.add(w);
+                militariesOutside.add(worker);
             }
 
             if (militariesOutside.size() == 16) {
@@ -4288,20 +4288,20 @@ public class TestAttack {
 
         assertEquals(militariesOutside.size(), 16);
 
-        for (Worker w : map.getWorkers()) {
-            if (!w.getPlayer().equals(player0)) {
+        for (Worker worker : map.getWorkers()) {
+            if (!worker.getPlayer().equals(player0)) {
                 continue;
             }
 
-            if (! (w instanceof Military)) {
+            if (! (worker instanceof Military)) {
                 continue;
             }
 
-            if (w.isInsideBuilding()) {
+            if (worker.isInsideBuilding()) {
                 continue;
             }
 
-            assertTrue(w.getTarget().distance(barracks1.getPosition()) < 10 );
+            assertTrue(worker.getTarget().distance(barracks1.getPosition()) < 10 );
         }
     }
 

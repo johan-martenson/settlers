@@ -972,9 +972,9 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Hunter) {
-                hunter = (Hunter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Hunter) {
+                hunter = (Hunter) worker;
             }
         }
 
@@ -1034,9 +1034,9 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Hunter) {
-                hunter = (Hunter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Hunter) {
+                hunter = (Hunter) worker;
             }
         }
 
@@ -1099,9 +1099,9 @@ public class TestHunterHut {
 
         Hunter hunter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Hunter) {
-                hunter = (Hunter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Hunter) {
+                hunter = (Hunter) worker;
             }
         }
 

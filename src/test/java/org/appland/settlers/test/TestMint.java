@@ -231,9 +231,9 @@ public class TestMint {
         /* Let the mint worker reach the mint */
         Minter minter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Minter) {
-                minter = (Minter)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Minter) {
+                minter = (Minter)worker;
             }
         }
 
@@ -1135,9 +1135,9 @@ public class TestMint {
 
         Minter minter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Minter) {
-                minter = (Minter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Minter) {
+                minter = (Minter) worker;
             }
         }
 
@@ -1197,9 +1197,9 @@ public class TestMint {
 
         Minter minter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Minter) {
-                minter = (Minter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Minter) {
+                minter = (Minter) worker;
             }
         }
 
@@ -1262,9 +1262,9 @@ public class TestMint {
 
         Minter minter = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Minter) {
-                minter = (Minter) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Minter) {
+                minter = (Minter) worker;
             }
         }
 

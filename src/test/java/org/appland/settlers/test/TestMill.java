@@ -250,9 +250,9 @@ public class TestMill {
         /* Get the miller */
         Miller miller = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miller) {
-                miller = (Miller) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miller) {
+                miller = (Miller) worker;
             }
         }
 
@@ -1061,9 +1061,9 @@ public class TestMill {
 
         Miller miller = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miller) {
-                miller = (Miller) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miller) {
+                miller = (Miller) worker;
             }
         }
 
@@ -1123,9 +1123,9 @@ public class TestMill {
 
         Miller miller = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miller) {
-                miller = (Miller) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miller) {
+                miller = (Miller) worker;
             }
         }
 
@@ -1188,9 +1188,9 @@ public class TestMill {
 
         Miller miller = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miller) {
-                miller = (Miller) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miller) {
+                miller = (Miller) worker;
             }
         }
 

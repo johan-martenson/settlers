@@ -1299,9 +1299,9 @@ public class TestGraniteMine {
 
         Miner miner = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miner) {
-                miner = (Miner) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miner) {
+                miner = (Miner) worker;
             }
         }
 
@@ -1365,9 +1365,9 @@ public class TestGraniteMine {
 
         Miner miner = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miner) {
-                miner = (Miner) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miner) {
+                miner = (Miner) worker;
             }
         }
 
@@ -1434,9 +1434,9 @@ public class TestGraniteMine {
 
         Miner miner = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Miner) {
-                miner = (Miner) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Miner) {
+                miner = (Miner) worker;
             }
         }
 

@@ -1500,9 +1500,9 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Fisherman) {
-                fisherman = (Fisherman) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Fisherman) {
+                fisherman = (Fisherman) worker;
             }
         }
 
@@ -1562,9 +1562,9 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Fisherman) {
-                fisherman = (Fisherman) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Fisherman) {
+                fisherman = (Fisherman) worker;
             }
         }
 
@@ -1627,9 +1627,9 @@ public class TestFishery {
 
         Fisherman fisherman = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Fisherman) {
-                fisherman = (Fisherman) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Fisherman) {
+                fisherman = (Fisherman) worker;
             }
         }
 

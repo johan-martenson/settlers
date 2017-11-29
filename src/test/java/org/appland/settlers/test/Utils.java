@@ -546,9 +546,9 @@ public class Utils {
     public static List<Military> findMilitariesOutsideBuilding(Player player, GameMap map) {
         List<Military> result = new LinkedList<>();
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Military && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
-                result.add((Military)w);
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                result.add((Military)worker);
             }
         }
 
@@ -588,9 +588,9 @@ public class Utils {
     public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player, GameMap map) {
         List<T> workersFound = new LinkedList<>();
 
-        for (Worker w : map.getWorkers()) {
-            if (w.getClass().equals(aClass) && !w.isInsideBuilding() && w.getPlayer().equals(player)) {
-                workersFound.add((T)w);
+        for (Worker worker : map.getWorkers()) {
+            if (worker.getClass().equals(aClass) && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
+                workersFound.add((T)worker);
             }
         }
 

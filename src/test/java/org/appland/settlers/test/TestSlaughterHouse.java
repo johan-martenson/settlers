@@ -230,9 +230,9 @@ public class TestSlaughterHouse {
         /* Let the slaughterHouse worker reach the slaughterHouse */
         Butcher butcher = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Butcher) {
-                butcher = (Butcher)w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Butcher) {
+                butcher = (Butcher)worker;
             }
         }
 
@@ -1111,9 +1111,9 @@ public class TestSlaughterHouse {
 
         Butcher butcher = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Butcher) {
-                butcher = (Butcher) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Butcher) {
+                butcher = (Butcher) worker;
             }
         }
 
@@ -1173,9 +1173,9 @@ public class TestSlaughterHouse {
 
         Butcher butcher = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Butcher) {
-                butcher = (Butcher) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Butcher) {
+                butcher = (Butcher) worker;
             }
         }
 
@@ -1238,9 +1238,9 @@ public class TestSlaughterHouse {
 
         Butcher butcher = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof Butcher) {
-                butcher = (Butcher) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Butcher) {
+                butcher = (Butcher) worker;
             }
         }
 

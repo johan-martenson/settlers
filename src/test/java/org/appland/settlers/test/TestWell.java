@@ -234,9 +234,9 @@ public class TestWell {
         /* Get the well worker */
         Worker ww = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WellWorker) {
-                ww = w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WellWorker) {
+                ww = worker;
             }
         }
 
@@ -988,9 +988,9 @@ public class TestWell {
 
         WellWorker wellWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WellWorker) {
-                wellWorker = (WellWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WellWorker) {
+                wellWorker = (WellWorker) worker;
             }
         }
 
@@ -1050,9 +1050,9 @@ public class TestWell {
 
         WellWorker wellWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WellWorker) {
-                wellWorker = (WellWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WellWorker) {
+                wellWorker = (WellWorker) worker;
             }
         }
 
@@ -1115,9 +1115,9 @@ public class TestWell {
 
         WellWorker wellWorker = null;
 
-        for (Worker w : map.getWorkers()) {
-            if (w instanceof WellWorker) {
-                wellWorker = (WellWorker) w;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof WellWorker) {
+                wellWorker = (WellWorker) worker;
             }
         }
 
