@@ -186,10 +186,10 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Flag f1 = new Flag(new Point(1, 1));
-        Flag f2 = new Flag(new Point(1, 2));
+        Flag flag0 = new Flag(new Point(1, 1));
+        Flag flag1 = new Flag(new Point(1, 2));
 
-        Road road = map.placeAutoSelectedRoad(player0, f1, f2);
+        Road road = map.placeAutoSelectedRoad(player0, flag0, flag1);
     }
 
     @Test(expected=InvalidRouteException.class)
@@ -813,12 +813,12 @@ public class TestGameMap {
         Path2D.Double path = new Path2D.Double();
         path.moveTo(fieldOfView.get(fieldOfView.size() - 1).x, fieldOfView.get(fieldOfView.size() - 1).y);
 
-        for (Point p : fieldOfView) {
-            path.lineTo(p.x, p.y);
+        for (Point point : fieldOfView) {
+            path.lineTo(point.x, point.y);
         }
 
-        for (Point p : border) {
-            assertTrue(path.contains(p));
+        for (Point point : border) {
+            assertTrue(path.contains(point));
         }
     }
 

@@ -264,11 +264,11 @@ public class TestRoads {
         Flag flag0 = map.placeFlag(player0, point1);
         map.placeFlag(player0, point2);
 
-        Courier c = new Courier(player0, map);
+        Courier courier = new Courier(player0, map);
 
         Road road = map.placeRoad(player0, point1, point2);
-        map.placeWorker(c, flag0);
-        c.assignToRoad(road);
+        map.placeWorker(courier, flag0);
+        courier.assignToRoad(road);
     }
 
     @Test(expected = Exception.class)
@@ -287,16 +287,16 @@ public class TestRoads {
         Flag flag0 = map.placeFlag(player0, point1);
         map.placeFlag(player0, point2);
 
-        Courier c = new Courier(player0, map);
-        Courier c2 = new Courier(player0, map);
+        Courier courier0 = new Courier(player0, map);
+        Courier courier1 = new Courier(player0, map);
 
         Road road = map.placeRoad(player0, point1, point2);
 
-        map.placeWorker(c, flag0);
-        map.placeWorker(c2, flag0);
-        c.assignToRoad(road);
+        map.placeWorker(courier0, flag0);
+        map.placeWorker(courier1, flag0);
+        courier0.assignToRoad(road);
 
-        c2.assignToRoad(road);
+        courier1.assignToRoad(road);
     }
 
     @Test(expected = Exception.class)
@@ -839,14 +839,14 @@ public class TestRoads {
 
         Point start = new Point(9, 5);
         Point end = new Point(13, 9);
-        Point m1 = new Point(10, 6);
-        Point m2 = new Point(11, 7);
-        Point m3 = new Point(12, 8);
-        map.placeRoad(player0, start, m1, m2, m3, end);
+        Point point1 = new Point(10, 6);
+        Point point2 = new Point(11, 7);
+        Point point3 = new Point(12, 8);
+        map.placeRoad(player0, start, point1, point2, point3, end);
 
         assertEquals(map.getRoads().size(), 2);
 
-        map.placeFlag(player0, m2);
+        map.placeFlag(player0, point2);
 
         assertEquals(map.getRoads().size(), 3);
         List<Road> roads = new ArrayList<>();
@@ -854,18 +854,18 @@ public class TestRoads {
 
         roads.remove(map.getRoad(point0, point0.downRight()));
 
-        Road r1 = roads.get(0);
-        Road r2 = roads.get(1);
+        Road road0 = roads.get(0);
+        Road road1 = roads.get(1);
 
-        assertTrue((r1.getStart().equals(start) && r1.getEnd().equals(m2))
-                || (r1.getStart().equals(m2) && r1.getEnd().equals(start))
-                || (r2.getStart().equals(start) && r2.getEnd().equals(m2))
-                || (r2.getStart().equals(m2) && r2.getEnd().equals(start)));
+        assertTrue((road0.getStart().equals(start) && road0.getEnd().equals(point2))
+                || (road0.getStart().equals(point2) && road0.getEnd().equals(start))
+                || (road1.getStart().equals(start) && road1.getEnd().equals(point2))
+                || (road1.getStart().equals(point2) && road1.getEnd().equals(start)));
 
-        assertTrue((r1.getStart().equals(m2) && r1.getEnd().equals(end))
-                || (r1.getStart().equals(end) && r1.getEnd().equals(m2))
-                || (r2.getStart().equals(m2) && r2.getEnd().equals(end))
-                || (r2.getStart().equals(end) && r2.getEnd().equals(m2)));
+        assertTrue((road0.getStart().equals(point2) && road0.getEnd().equals(end))
+                || (road0.getStart().equals(end) && road0.getEnd().equals(point2))
+                || (road1.getStart().equals(point2) && road1.getEnd().equals(end))
+                || (road1.getStart().equals(end) && road1.getEnd().equals(point2)));
     }
 
     @Test
@@ -888,15 +888,15 @@ public class TestRoads {
         map.placeFlag(player0, end);
 
         /* Place the reversed road */
-        Point m1 = new Point(10, 6);
-        Point m2 = new Point(11, 7);
-        Point m3 = new Point(12, 8);
-        map.placeRoad(player0, end, m3, m2, m1, start);
+        Point point1 = new Point(10, 6);
+        Point point2 = new Point(11, 7);
+        Point point3 = new Point(12, 8);
+        map.placeRoad(player0, end, point3, point2, point1, start);
 
         assertEquals(map.getRoads().size(), 2);
 
         /* Place a flag on the road to split it */
-        map.placeFlag(player0, m2);
+        map.placeFlag(player0, point2);
 
         assertEquals(map.getRoads().size(), 3);
         List<Road> roads = new ArrayList<>();
@@ -904,18 +904,18 @@ public class TestRoads {
 
         roads.remove(map.getRoad(point0, point0.downRight()));
 
-        Road r1 = roads.get(0);
-        Road r2 = roads.get(1);
+        Road road0 = roads.get(0);
+        Road road1 = roads.get(1);
 
-        assertTrue((r1.getStart().equals(start) && r1.getEnd().equals(m2))
-                || (r1.getStart().equals(m2) && r1.getEnd().equals(start))
-                || (r2.getStart().equals(start) && r2.getEnd().equals(m2))
-                || (r2.getStart().equals(m2) && r2.getEnd().equals(start)));
+        assertTrue((road0.getStart().equals(start) && road0.getEnd().equals(point2))
+                || (road0.getStart().equals(point2) && road0.getEnd().equals(start))
+                || (road1.getStart().equals(start) && road1.getEnd().equals(point2))
+                || (road1.getStart().equals(point2) && road1.getEnd().equals(start)));
 
-        assertTrue((r1.getStart().equals(m2) && r1.getEnd().equals(end))
-                || (r1.getStart().equals(end) && r1.getEnd().equals(m2))
-                || (r2.getStart().equals(m2) && r2.getEnd().equals(end))
-                || (r2.getStart().equals(end) && r2.getEnd().equals(m2)));
+        assertTrue((road0.getStart().equals(point2) && road0.getEnd().equals(end))
+                || (road0.getStart().equals(end) && road0.getEnd().equals(point2))
+                || (road1.getStart().equals(point2) && road1.getEnd().equals(end))
+                || (road1.getStart().equals(end) && road1.getEnd().equals(point2)));
     }
 
     @Test
@@ -1837,17 +1837,17 @@ public class TestRoads {
 
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
-        Point m1 = new Point(11, 5);
-        Point m2 = new Point(13, 5);
-        Point m3 = new Point(15, 5);
-        Road road0 = map.placeRoad(player0, start, m1, m2, m3, end);
+        Point point1 = new Point(11, 5);
+        Point point2 = new Point(13, 5);
+        Point point3 = new Point(15, 5);
+        Road road0 = map.placeRoad(player0, start, point1, point2, point3, end);
 
         assertEquals(map.getRoads().size(), 2);
 
         List<Point> wayPointsBefore = new ArrayList<>(road0.getWayPoints());
 
         try {
-            map.placeFlag(player0, m1);
+            map.placeFlag(player0, point1);
             assertFalse(true);
         } catch (Exception e) {
         }
@@ -1879,16 +1879,16 @@ public class TestRoads {
         map.placeFlag(player0, end);
 
         /* Create the road */
-        Point m1 = new Point(11, 5);
-        Point m2 = new Point(13, 5);
-        Point m3 = new Point(15, 5);
-        map.placeRoad(player0, start, m1, m2, m3, end);
+        Point point1 = new Point(11, 5);
+        Point point2 = new Point(13, 5);
+        Point point3 = new Point(15, 5);
+        map.placeRoad(player0, start, point1, point2, point3, end);
 
         assertEquals(map.getRoads().size(), 2);
 
         /* Verify that the road is too small to split and an exception is thrown */
         try {
-            map.placeFlag(player0, m3);
+            map.placeFlag(player0, point3);
             assertFalse(true);
         } catch (Exception e) {
         }
@@ -1919,19 +1919,19 @@ public class TestRoads {
         Utils.occupyRoad(road0, map);
 
         /* Remove the road */
-        Worker ww = road0.getCourier();
+        Worker worker = road0.getCourier();
 
-        assertTrue(road0.getWayPoints().contains(ww.getPosition()));
+        assertTrue(road0.getWayPoints().contains(worker.getPosition()));
 
         map.removeRoad(road0);
 
         /* Verify that the worker goes back to the headquarter */
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
         /* Verify that the worker is no longer on the map */
-        assertFalse(map.getWorkers().contains(ww));
+        assertFalse(map.getWorkers().contains(worker));
     }
 
     @Test
@@ -1961,18 +1961,18 @@ public class TestRoads {
         Utils.occupyRoad(road1, map);
 
         /* Remove the road */
-        Worker ww = road1.getCourier();
+        Worker courier = road1.getCourier();
 
-        assertTrue(road1.getWayPoints().contains(ww.getPosition()));
+        assertTrue(road1.getWayPoints().contains(courier.getPosition()));
 
         map.removeRoad(road1);
 
         /* Verify that the worker leaves goes back to the headquarter */
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
-        for (Point p : ww.getPlannedPath()) {
-            assertTrue(map.isRoadAtPoint(p));
+        for (Point point : courier.getPlannedPath()) {
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
