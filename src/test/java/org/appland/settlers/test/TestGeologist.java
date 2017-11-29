@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
@@ -236,9 +235,9 @@ public class TestGeologist {
         flag.callGeologist();
 
         /* Fill surrounding area with trees */
-        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 10)) {
+        for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeTree(p);
+                map.placeTree(point);
             } catch (Exception e) {}
         }
 
@@ -289,9 +288,9 @@ public class TestGeologist {
         flag.callGeologist();
 
         /* Fill surrounding area with stones */
-        for (Point p : map.getPointsWithinRadius(flag.getPosition(), 10)) {
+        for (Point point : map.getPointsWithinRadius(flag.getPosition(), 10)) {
             try {
-                map.placeStone(p);
+                map.placeStone(point);
             } catch (Exception e) {}
         }
 
@@ -875,9 +874,9 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Surround the flag with signs */
-        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+        for (Point point : map.getPointsWithinRadius(point1, 10)) {
             try {
-                map.placeSign(WATER, LARGE, p);
+                map.placeSign(WATER, LARGE, point);
             } catch (Exception e) {}
         }
 
@@ -933,15 +932,15 @@ public class TestGeologist {
         /* Surround the flag with trees except for one point */
         Point point2 = new Point(11, 11);
 
-        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+        for (Point point : map.getPointsWithinRadius(point1, 10)) {
 
             /* Leave one point free */
-            if (p.equals(point2)) {
+            if (point.equals(point2)) {
                 continue;
             }
 
             try {
-                map.placeTree(p);
+                map.placeTree(point);
             } catch (Exception e) {}
         }
 
@@ -999,15 +998,15 @@ public class TestGeologist {
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
 
         /* Surround the flag with trees except for the forester hut */
-        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+        for (Point point : map.getPointsWithinRadius(point1, 10)) {
 
             /* Leave one point free */
-            if (p.equals(point2)) {
+            if (point.equals(point2)) {
                 continue;
             }
 
             try {
-                map.placeTree(p);
+                map.placeTree(point);
             } catch (Exception e) {}
         }
 
@@ -1066,15 +1065,15 @@ public class TestGeologist {
         Flag flag0 = map.placeFlag(player0, point2);
 
         /* Surround the flag with trees except for the forester hut */
-        for (Point p : map.getPointsWithinRadius(point1, 10)) {
+        for (Point point : map.getPointsWithinRadius(point1, 10)) {
 
             /* Leave one point free */
-            if (p.equals(point2)) {
+            if (point.equals(point2)) {
                 continue;
             }
 
             try {
-                map.placeTree(p);
+                map.placeTree(point);
             } catch (Exception e) {}
         }
 
