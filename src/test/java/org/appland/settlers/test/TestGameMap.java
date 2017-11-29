@@ -178,7 +178,7 @@ public class TestGameMap {
         map.placeFlag(player0, point1);
         map.placeFlag(player0, point2);
 
-        Road r = map.placeAutoSelectedRoad(player0, point1, point2);
+        Road road = map.placeAutoSelectedRoad(player0, point1, point2);
     }
 
     @Test(expected=Exception.class)
@@ -189,7 +189,7 @@ public class TestGameMap {
         Flag f1 = new Flag(new Point(1, 1));
         Flag f2 = new Flag(new Point(1, 2));
 
-        Road r = map.placeAutoSelectedRoad(player0, f1, f2);
+        Road road = map.placeAutoSelectedRoad(player0, f1, f2);
     }
 
     @Test(expected=InvalidRouteException.class)

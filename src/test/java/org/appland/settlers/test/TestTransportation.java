@@ -72,13 +72,13 @@ public class TestTransportation {
 
         assertEquals(roads.size(), 2);
 
-        Road r = map.getRoad(new Point(6, 4), new Point(11, 5));
+        Road road = map.getRoad(new Point(6, 4), new Point(11, 5));
 
-        assertEquals(r.getStart().x, 6);
-        assertEquals(r.getStart().y, 4);
+        assertEquals(road.getStart().x, 6);
+        assertEquals(road.getStart().y, 4);
 
-        assertEquals(r.getEnd().x, 11);
-        assertEquals(r.getEnd().y, 5);
+        assertEquals(road.getEnd().x, 11);
+        assertEquals(road.getEnd().y, 5);
     }
 
     @Test(expected = InvalidEndPointException.class)
@@ -540,9 +540,9 @@ public class TestTransportation {
 
         /* Place road */
         Point middle = new Point(5, 3);
-        Road r = map.placeRoad(player0, point1, middle, point2);
+        Road road = map.placeRoad(player0, point1, middle, point2);
 
-        assertTrue(r.needsCourier());
+        assertTrue(road.needsCourier());
     }
 
     @Test
@@ -565,10 +565,10 @@ public class TestTransportation {
         Barracks b = map.placeBuilding(new Barracks(player0), bSpot);
 
         /* Place road */
-        Road r = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), b.getFlag());
+        Road road = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), b.getFlag());
 
         /* Occupy the road */
-        Courier worker = Utils.occupyRoad(r, map);
+        Courier worker = Utils.occupyRoad(road, map);
 
         /* Construct barracks */
         Utils.constructHouse(b, map);

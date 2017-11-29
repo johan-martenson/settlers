@@ -86,7 +86,7 @@ public class TestRoads {
 
         /* Place a road */
         Point point3 = new Point(5, 3);
-        Road r = map.placeRoad(player0, point1, point3, point2);
+        Road road = map.placeRoad(player0, point1, point3, point2);
 
         /* Verify that it's not possible to reach a point not on the road */
         Point point4 = new Point(9, 3);
@@ -236,16 +236,16 @@ public class TestRoads {
         map.placeFlag(player0, point2);
 
         /* Place a new road */
-        Road r = map.placeAutoSelectedRoad(player0, point1, point2);
+        Road road = map.placeAutoSelectedRoad(player0, point1, point2);
 
         /* Verify that the road needs a courier */
-        assertTrue(r.needsCourier());
+        assertTrue(road.needsCourier());
 
         /* Assign a courier to the road */
-        Utils.occupyRoad(r, map);
+        Utils.occupyRoad(road, map);
 
         /* Verify that the road doesn't need a courier */
-        assertFalse(r.needsCourier());
+        assertFalse(road.needsCourier());
     }
 
     @Test(expected = Exception.class)
@@ -266,9 +266,9 @@ public class TestRoads {
 
         Courier c = new Courier(player0, map);
 
-        Road r = map.placeRoad(player0, point1, point2);
+        Road road = map.placeRoad(player0, point1, point2);
         map.placeWorker(c, flag0);
-        c.assignToRoad(r);
+        c.assignToRoad(road);
     }
 
     @Test(expected = Exception.class)
@@ -290,13 +290,13 @@ public class TestRoads {
         Courier c = new Courier(player0, map);
         Courier c2 = new Courier(player0, map);
 
-        Road r = map.placeRoad(player0, point1, point2);
+        Road road = map.placeRoad(player0, point1, point2);
 
         map.placeWorker(c, flag0);
         map.placeWorker(c2, flag0);
-        c.assignToRoad(r);
+        c.assignToRoad(road);
 
-        c2.assignToRoad(r);
+        c2.assignToRoad(road);
     }
 
     @Test(expected = Exception.class)
@@ -396,9 +396,9 @@ public class TestRoads {
         map.placeRoad(player0, wayPoints);
 
         /* Verify that the way points are set correctly in the road */
-        Road r = map.getRoad(start, end);
+        Road road = map.getRoad(start, end);
 
-        wayPoints = r.getWayPoints();
+        wayPoints = road.getWayPoints();
 
         assertEquals(wayPoints.size(), 3);
         assertTrue(wayPoints.get(0).equals(start));
@@ -774,9 +774,9 @@ public class TestRoads {
         map.placeFlag(player0, point2);
 
         /* Verify that it's possible to place a road with var args */
-        Road r = map.placeRoad(player0, point1, new Point(5, 3), point2);
+        Road road = map.placeRoad(player0, point1, new Point(5, 3), point2);
 
-        assertNotNull(r);
+        assertNotNull(road);
     }
 
     @Test(expected = Exception.class)
@@ -1478,15 +1478,15 @@ public class TestRoads {
         assertEquals(map.getWorkers().size(), 2);
 
         /* Step time to let the headquarter assign a courier to the new road */
-        Road r = map.getRoad(middlePoint2, endPoint);
+        Road road1 = map.getRoad(middlePoint2, endPoint);
 
-        if (!r.needsCourier()) {
-            r = map.getRoad(headquarter.getFlag().getPosition(), middlePoint2);
+        if (!road1.needsCourier()) {
+            road1 = map.getRoad(headquarter.getFlag().getPosition(), middlePoint2);
         }
 
-        assertTrue(r.needsCourier());
+        assertTrue(road1.needsCourier());
 
-        assertEquals(GameUtils.getClosestStorage(r.getStart(), player0), headquarter);
+        assertEquals(GameUtils.getClosestStorage(road1.getStart(), player0), headquarter);
 
         map.stepTime();
 
