@@ -109,85 +109,85 @@ public class TestForesterHut {
 
     @Test
     public void testConstructForester() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(foresterHut.underConstruction());
 
-        assertFalse(f.needsWorker());
+        assertFalse(foresterHut.needsWorker());
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(foresterHut, null);
 
         /* Verify that the forester is unoccupied when it's newly constructed */
-        assertTrue(f.needsWorker());
+        assertTrue(foresterHut.needsWorker());
 
         /* Verify that the forester hut requires a worker */
-        assertTrue(f.needsWorker());
+        assertTrue(foresterHut.needsWorker());
 
         Forester forester = new Forester(null, null);
 
         /* Assign worker */
-        f.assignWorker(forester);
+        foresterHut.assignWorker(forester);
 
-        assertFalse(f.needsWorker());
-        assertTrue(f.getWorker().equals(forester));
+        assertFalse(foresterHut.needsWorker());
+        assertTrue(foresterHut.getWorker().equals(forester));
     }
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerToUnfinishedForester() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(foresterHut.underConstruction());
 
-        f.promiseWorker(new Forester(null, null));
+        foresterHut.promiseWorker(new Forester(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testAssignWorkerToUnfinishedForester() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(foresterHut.underConstruction());
 
-        f.assignWorker(new Forester(null, null));
+        foresterHut.assignWorker(new Forester(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testAssignWorkerTwice() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(foresterHut, null);
 
-        f.assignWorker(new Forester(null, null));
+        foresterHut.assignWorker(new Forester(null, null));
 
-        f.assignWorker(new Forester(null, null));
+        foresterHut.assignWorker(new Forester(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerTwice() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(foresterHut, null);
 
-        f.promiseWorker(new Forester(null, null));
+        foresterHut.promiseWorker(new Forester(null, null));
 
-        f.promiseWorker(new Forester(null, null));
+        foresterHut.promiseWorker(new Forester(null, null));
     }
 
     @Test
     public void testForesterHutIsNotMilitary() throws Exception {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(foresterHut, null);
 
-        assertFalse(f.isMilitaryBuilding());
-        assertEquals(f.getNumberOfHostedMilitary(), 0);
-        assertEquals(f.getMaxHostedMilitary(), 0);
+        assertFalse(foresterHut.isMilitaryBuilding());
+        assertEquals(foresterHut.getNumberOfHostedMilitary(), 0);
+        assertEquals(foresterHut.getMaxHostedMilitary(), 0);
     }
 
     @Test
     public void testForesterHutUnderConstructionNotNeedsWorker() {
-        ForesterHut f = new ForesterHut(null);
+        ForesterHut foresterHut = new ForesterHut(null);
 
-        assertFalse(f.needsWorker());
+        assertFalse(foresterHut.needsWorker());
     }
 
     @Test
@@ -563,20 +563,20 @@ public class TestForesterHut {
         constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
-        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 20)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 20)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) ||
-                map.isFlagAtPoint(p)     ||
-                map.isRoadAtPoint(p)     ||
-                map.isStoneAtPoint(p)    ||
-                !map.isWithinMap(p)) {
+            if (map.isBuildingAtPoint(point) ||
+                map.isFlagAtPoint(point)     ||
+                map.isRoadAtPoint(point)     ||
+                map.isStoneAtPoint(point)    ||
+                !map.isWithinMap(point)) {
                 continue;
             }
 
-            map.placeTree(p);
+            map.placeTree(point);
         }
 
         /* Manually place forester */
@@ -611,8 +611,8 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Create a lake with an island inside */
-        for (Point p : map.getPointsWithinRadius(point1, 4)) {
-            map.surroundPointWithWater(p);
+        for (Point point : map.getPointsWithinRadius(point1, 4)) {
+            map.surroundPointWithWater(point);
         }
 
         map.surroundPointWithGrass(point1);
@@ -621,20 +621,20 @@ public class TestForesterHut {
         constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
-        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p)  ||
-                    map.isFlagAtPoint(p)  ||
-                    map.isRoadAtPoint(p)  ||
-                    map.isStoneAtPoint(p) ||
-                    map.getTerrain().isInWater(p)) {
+            if (map.isBuildingAtPoint(point)  ||
+                    map.isFlagAtPoint(point)  ||
+                    map.isRoadAtPoint(point)  ||
+                    map.isStoneAtPoint(point) ||
+                    map.getTerrain().isInWater(point)) {
                 continue;
             }
 
-            map.placeTree(p);
+            map.placeTree(point);
         }
 
         /* Manually place forester */
@@ -667,8 +667,8 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Create a lake with an island inside */
-        for (Point p : map.getPointsWithinRadius(point1, 10)) {
-            map.surroundPointWithWater(p);
+        for (Point point : map.getPointsWithinRadius(point1, 10)) {
+            map.surroundPointWithWater(point);
         }
 
         map.surroundPointWithGrass(point1);
@@ -677,20 +677,20 @@ public class TestForesterHut {
         constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
-        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p)  ||
-                    map.isFlagAtPoint(p)  ||
-                    map.isRoadAtPoint(p)  ||
-                    map.isStoneAtPoint(p) ||
-                    map.getTerrain().isInWater(p)) {
+            if (map.isBuildingAtPoint(point)  ||
+                    map.isFlagAtPoint(point)  ||
+                    map.isRoadAtPoint(point)  ||
+                    map.isStoneAtPoint(point) ||
+                    map.getTerrain().isInWater(point)) {
                 continue;
             }
 
-            map.placeTree(p);
+            map.placeTree(point);
         }
 
         /* Manually place forester */
@@ -726,16 +726,16 @@ public class TestForesterHut {
         constructHouse(foresterHut, map);
 
         /* Put trees around the forester hut */
-        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point) || map.isStoneAtPoint(point)) {
                 continue;
             }
 
-            map.placeStone(p);
+            map.placeStone(point);
         }
 
         /* Manually place forester */
@@ -764,12 +764,12 @@ public class TestForesterHut {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Create a small mountain */
-        Point p4 = new Point(8, 16);
-        Point p5 = new Point(11, 17);
-        Point p6 = new Point(14, 16);
-        map.placeMountainHexagonOnMap(p4);
-        map.placeMountainHexagonOnMap(p5);
-        map.placeMountainHexagonOnMap(p6);
+        Point point4 = new Point(8, 16);
+        Point point5 = new Point(11, 17);
+        Point point6 = new Point(14, 16);
+        map.placeMountainHexagonOnMap(point4);
+        map.placeMountainHexagonOnMap(point5);
+        map.placeMountainHexagonOnMap(point6);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
@@ -783,20 +783,20 @@ public class TestForesterHut {
         constructHouse(foresterHut, map);
 
         /* Put stones around the forester hut but not on the mountain */
-        for (Point p : map.getPointsWithinRadius(foresterHut.getPosition(), 10)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 10)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) ||
-                map.isFlagAtPoint(p)     ||
-                map.isRoadAtPoint(p)     ||
-                map.isStoneAtPoint(p)    ||
-                map.getTerrain().isOnMountain(p)) {
+            if (map.isBuildingAtPoint(point) ||
+                map.isFlagAtPoint(point)     ||
+                map.isRoadAtPoint(point)     ||
+                map.isStoneAtPoint(point)    ||
+                map.getTerrain().isOnMountain(point)) {
                 continue;
             }
 
-            map.placeTree(p);
+            map.placeTree(point);
         }
 
         /* Manually place forester */
@@ -896,13 +896,13 @@ public class TestForesterHut {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : forester.getPlannedPath()) {
+        for (Point point : forester.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

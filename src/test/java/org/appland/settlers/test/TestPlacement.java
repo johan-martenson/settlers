@@ -888,10 +888,10 @@ public class TestPlacement {
         Point top1    = new Point(1, 3);
         Point top2    = new Point(3, 3);
 
-        Tile t1 = map.getTerrain().getTile(bottom1, bottom2, middle);
-        Tile t2 = map.getTerrain().getTile(top1, top2, middle);
+        Tile tile1 = map.getTerrain().getTile(bottom1, bottom2, middle);
+        Tile tile2 = map.getTerrain().getTile(top1, top2, middle);
 
-        assertFalse(t1.equals(t2));
+        assertFalse(tile1.equals(tile2));
     }
 
     @Test
@@ -904,13 +904,13 @@ public class TestPlacement {
         Point top   = new Point(2, 2);
         Point right = new Point(3, 1);
 
-        Tile t1 = map.getTerrain().getTile(left, right, top);
+        Tile tile1 = map.getTerrain().getTile(left, right, top);
 
-        t1.setVegetationType(MOUNTAIN);
+        tile1.setVegetationType(MOUNTAIN);
 
-        t1 = map.getTerrain().getTile(left, right, top);
+        tile1 = map.getTerrain().getTile(left, right, top);
 
-        assertEquals(t1.getVegetationType(), MOUNTAIN);
+        assertEquals(tile1.getVegetationType(), MOUNTAIN);
     }
 
     @Test
@@ -2192,21 +2192,21 @@ public class TestPlacement {
         edgePoints.add(point0.left());
         edgePoints.add(point0.upLeft());
 
-        for (Point p : edgePoints) {
-            assertTrue(map.isAvailableFlagPoint(player0, p));
-            assertTrue(map.getAvailableFlagPoints(player0).contains(p));
+        for (Point point : edgePoints) {
+            assertTrue(map.isAvailableFlagPoint(player0, point));
+            assertTrue(map.getAvailableFlagPoints(player0).contains(point));
         }
 
         /* Verify that there are no available mine points on the edge */
-        for (Point p : edgePoints) {
-            assertFalse(map.isAvailableMinePoint(player0, p));
-            assertFalse(map.getAvailableMinePoints(player0).contains(p));
+        for (Point point : edgePoints) {
+            assertFalse(map.isAvailableMinePoint(player0, point));
+            assertFalse(map.getAvailableMinePoints(player0).contains(point));
         }
 
         /* Verify that there are no available house points on the edge */
-        for (Point p : edgePoints) {
-            assertNull(map.isAvailableHousePoint(player0, p));
-            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(p));
+        for (Point point : edgePoints) {
+            assertNull(map.isAvailableHousePoint(player0, point));
+            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point));
         }
     }
 
@@ -2238,21 +2238,21 @@ public class TestPlacement {
         edgePoints.add(point0.left());
         edgePoints.add(point0.upLeft());
 
-        for (Point p : edgePoints) {
-            assertTrue(map.isAvailableFlagPoint(player0, p));
-            assertTrue(map.getAvailableFlagPoints(player0).contains(p));
+        for (Point point : edgePoints) {
+            assertTrue(map.isAvailableFlagPoint(player0, point));
+            assertTrue(map.getAvailableFlagPoints(player0).contains(point));
         }
 
         /* Verify that there are no available mine points on the edge */
-        for (Point p : edgePoints) {
-            assertFalse(map.isAvailableMinePoint(player0, p));
-            assertFalse(map.getAvailableMinePoints(player0).contains(p));
+        for (Point point : edgePoints) {
+            assertFalse(map.isAvailableMinePoint(player0, point));
+            assertFalse(map.getAvailableMinePoints(player0).contains(point));
         }
 
         /* Verify that there are no available house points on the edge */
-        for (Point p : edgePoints) {
-            assertNull(map.isAvailableHousePoint(player0, p));
-            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(p));
+        for (Point point : edgePoints) {
+            assertNull(map.isAvailableHousePoint(player0, point));
+            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point));
         }
     }
 
@@ -2269,30 +2269,30 @@ public class TestPlacement {
         /* Creating game map */
         GameMap map = new GameMap(players, 100, 100);
         /* Create a small mountain */
-        Point p = new Point(5, 13);
-        Point p2 = new Point(8, 14);
-        Point p3 = new Point(5, 15);
-        map.placeMountainHexagonOnMap(p);
-        map.placeMountainHexagonOnMap(p2);
-        map.placeMountainHexagonOnMap(p3);
+        Point point0 = new Point(5, 13);
+        Point point1 = new Point(8, 14);
+        Point point2 = new Point(5, 15);
+        map.placeMountainHexagonOnMap(point0);
+        map.placeMountainHexagonOnMap(point1);
+        map.placeMountainHexagonOnMap(point2);
 
         /* Put gold at mountain */
-        map.surroundPointWithMineral(p, GOLD);
-        map.surroundPointWithMineral(p2, GOLD);
-        map.surroundPointWithMineral(p3, GOLD);
+        map.surroundPointWithMineral(point0, GOLD);
+        map.surroundPointWithMineral(point1, GOLD);
+        map.surroundPointWithMineral(point2, GOLD);
 
         /* Create a small mountain */
-        Point p4 = new Point(8, 16);
-        Point p5 = new Point(11, 17);
-        Point p6 = new Point(8, 18);
-        map.placeMountainHexagonOnMap(p4);
-        map.placeMountainHexagonOnMap(p5);
-        map.placeMountainHexagonOnMap(p6);
+        Point point3 = new Point(8, 16);
+        Point point4 = new Point(11, 17);
+        Point point5 = new Point(8, 18);
+        map.placeMountainHexagonOnMap(point3);
+        map.placeMountainHexagonOnMap(point4);
+        map.placeMountainHexagonOnMap(point5);
 
         /* Put coal at mountain */
-        map.surroundPointWithMineral(p4, COAL);
-        map.surroundPointWithMineral(p5, COAL);
-        map.surroundPointWithMineral(p6, COAL);
+        map.surroundPointWithMineral(point3, COAL);
+        map.surroundPointWithMineral(point4, COAL);
+        map.surroundPointWithMineral(point5, COAL);
 
         /* Placing headquarter for player2 */
         Point point17 = new Point(8, 10);

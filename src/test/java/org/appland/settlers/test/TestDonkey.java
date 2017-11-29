@@ -5,8 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -17,24 +15,28 @@ import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.DONKEY;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Material.WOOD;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.DONKEY;
+import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -1109,10 +1111,10 @@ public class TestDonkey {
 
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Donkey) {
-                Donkey c = (Donkey)worker;
+                Donkey donkey = (Donkey)worker;
 
-                assertFalse(c.isTraveling());
-                assertFalse(c.isWalkingToRoad());
+                assertFalse(donkey.isTraveling());
+                assertFalse(donkey.isWalkingToRoad());
             }
         }
     }

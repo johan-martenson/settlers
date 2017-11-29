@@ -123,27 +123,27 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery f = new Fishery(player0);
+        Fishery fishery = new Fishery(player0);
 
-        assertTrue(f.underConstruction());
+        assertTrue(fishery.underConstruction());
 
-        assertFalse(f.needsWorker());
+        assertFalse(fishery.needsWorker());
 
-        Utils.constructHouse(f, map);
+        Utils.constructHouse(fishery, map);
 
         /* Verify that the fishery is unoccupied when it's newly constructed */
-        assertTrue(f.needsWorker());
+        assertTrue(fishery.needsWorker());
 
         /* Verify that the Fishery requires a worker */
-        assertTrue(f.needsWorker());
+        assertTrue(fishery.needsWorker());
 
         Fisherman fisherman = new Fisherman(player0, map);
 
         /* Assign worker */
-        f.assignWorker(fisherman);
+        fishery.assignWorker(fisherman);
 
-        assertFalse(f.needsWorker());
-        assertTrue(f.getWorker().equals(fisherman));
+        assertFalse(fishery.needsWorker());
+        assertTrue(fishery.getWorker().equals(fisherman));
     }
 
     @Test(expected = Exception.class)
@@ -153,11 +153,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery f = new Fishery(player0);
+        Fishery fishery = new Fishery(player0);
 
-        assertTrue(f.underConstruction());
+        assertTrue(fishery.underConstruction());
 
-        f.promiseWorker(new Fisherman(player0, map));
+        fishery.promiseWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -167,11 +167,11 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery f = new Fishery(player0);
+        Fishery fishery = new Fishery(player0);
 
-        assertTrue(f.underConstruction());
+        assertTrue(fishery.underConstruction());
 
-        f.assignWorker(new Fisherman(player0, map));
+        fishery.assignWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -181,13 +181,13 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery f = new Fishery(player0);
+        Fishery fishery = new Fishery(player0);
 
-        Utils.constructHouse(f, map);
+        Utils.constructHouse(fishery, map);
 
-        f.assignWorker(new Fisherman(player0, map));
+        fishery.assignWorker(new Fisherman(player0, map));
 
-        f.assignWorker(new Fisherman(player0, map));
+        fishery.assignWorker(new Fisherman(player0, map));
     }
 
     @Test(expected = Exception.class)
@@ -197,31 +197,31 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery f = new Fishery(player0);
+        Fishery fishery = new Fishery(player0);
 
-        Utils.constructHouse(f, map);
+        Utils.constructHouse(fishery, map);
 
-        f.promiseWorker(new Fisherman(player0, map));
+        fishery.promiseWorker(new Fisherman(player0, map));
 
-        f.promiseWorker(new Fisherman(player0, map));
+        fishery.promiseWorker(new Fisherman(player0, map));
     }
 
     @Test
     public void testFisheryIsNotMilitary() throws Exception {
-        Fishery f = new Fishery(null);
+        Fishery fishery = new Fishery(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(fishery, null);
 
-        assertFalse(f.isMilitaryBuilding());
-        assertEquals(f.getNumberOfHostedMilitary(), 0);
-        assertEquals(f.getMaxHostedMilitary(), 0);
+        assertFalse(fishery.isMilitaryBuilding());
+        assertEquals(fishery.getNumberOfHostedMilitary(), 0);
+        assertEquals(fishery.getMaxHostedMilitary(), 0);
     }
 
     @Test
     public void testFisheryUnderConstructionNotNeedsWorker() {
-        Fishery f = new Fishery(null);
+        Fishery fishery = new Fishery(null);
 
-        assertFalse(f.needsWorker());
+        assertFalse(fishery.needsWorker());
     }
 
     @Test
@@ -680,16 +680,16 @@ public class TestFishery {
         constructHouse(fishermanHut, map);
 
         /* Put trees around the fisherman hut */
-        for (Point p : map.getPointsWithinRadius(fishermanHut.getPosition(), 4)) {
-            if (p.equals(point1)) {
+        for (Point point : map.getPointsWithinRadius(fishermanHut.getPosition(), 4)) {
+            if (point.equals(point1)) {
                 continue;
             }
 
-            if (map.isBuildingAtPoint(p) || map.isFlagAtPoint(p) || map.isRoadAtPoint(p) || map.isStoneAtPoint(p)) {
+            if (map.isBuildingAtPoint(point) || map.isFlagAtPoint(point) || map.isRoadAtPoint(point) || map.isStoneAtPoint(point)) {
                 continue;
             }
 
-            map.placeTree(p);
+            map.placeTree(point);
         }
 
         /* Manually place fisherman */
@@ -1211,13 +1211,13 @@ public class TestFishery {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : fisherman.getPlannedPath()) {
+        for (Point point : fisherman.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

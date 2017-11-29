@@ -106,85 +106,85 @@ public class TestHunterHut {
 
     @Test
     public void testConstructHunter() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(hunterHut.underConstruction());
 
-        assertFalse(f.needsWorker());
+        assertFalse(hunterHut.needsWorker());
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(hunterHut, null);
 
         /* Verify that the forrester is unoccupied when it's newly constructed */
-        assertTrue(f.needsWorker());
+        assertTrue(hunterHut.needsWorker());
 
         /* Verify that the HunterHut requires a worker */
-        assertTrue(f.needsWorker());
+        assertTrue(hunterHut.needsWorker());
 
         Hunter hunter = new Hunter(null, null);
 
         /* Assign worker */
-        f.assignWorker(hunter);
+        hunterHut.assignWorker(hunter);
 
-        assertFalse(f.needsWorker());
-        assertTrue(f.getWorker().equals(hunter));
+        assertFalse(hunterHut.needsWorker());
+        assertTrue(hunterHut.getWorker().equals(hunter));
     }
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerToUnfinishedHunter() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(hunterHut.underConstruction());
 
-        f.promiseWorker(new Hunter(null, null));
+        hunterHut.promiseWorker(new Hunter(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testAssignWorkerToUnfinishedHunter() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        assertTrue(f.underConstruction());
+        assertTrue(hunterHut.underConstruction());
 
-        f.assignWorker(new Hunter(null, null));
+        hunterHut.assignWorker(new Hunter(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testAssignWorkerTwice() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(hunterHut, null);
 
-        f.assignWorker(new Hunter(null, null));
+        hunterHut.assignWorker(new Hunter(null, null));
 
-        f.assignWorker(new Hunter(null, null));
+        hunterHut.assignWorker(new Hunter(null, null));
     }
 
     @Test(expected = Exception.class)
     public void testPromiseWorkerTwice() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(hunterHut, null);
 
-        f.promiseWorker(new Hunter(null, null));
+        hunterHut.promiseWorker(new Hunter(null, null));
 
-        f.promiseWorker(new Hunter(null, null));
+        hunterHut.promiseWorker(new Hunter(null, null));
     }
 
     @Test
     public void testHunterHutIsNotMilitary() throws Exception {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        Utils.constructHouse(f, null);
+        Utils.constructHouse(hunterHut, null);
 
-        assertFalse(f.isMilitaryBuilding());
-        assertEquals(f.getNumberOfHostedMilitary(), 0);
-        assertEquals(f.getMaxHostedMilitary(), 0);
+        assertFalse(hunterHut.isMilitaryBuilding());
+        assertEquals(hunterHut.getNumberOfHostedMilitary(), 0);
+        assertEquals(hunterHut.getMaxHostedMilitary(), 0);
     }
 
     @Test
     public void testHunterHutUnderConstructionNotNeedsWorker() {
-        HunterHut f = new HunterHut(null);
+        HunterHut hunterHut = new HunterHut(null);
 
-        assertFalse(f.needsWorker());
+        assertFalse(hunterHut.needsWorker());
     }
 
     @Test
@@ -701,13 +701,13 @@ public class TestHunterHut {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : hunter.getPlannedPath()) {
+        for (Point point : hunter.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
