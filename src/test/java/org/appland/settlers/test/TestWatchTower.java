@@ -200,21 +200,21 @@ public class TestWatchTower {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
-        Military m = null;
+        Military military = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Military) {
-                m = (Military)worker;
+                military = (Military)worker;
             }
         }
 
-        assertNotNull(m);
+        assertNotNull(military);
 
         /* Wait for the military to reach the watch tower */
-        assertEquals(m.getTarget(), watchTower0.getPosition());
+        assertEquals(military.getTarget(), watchTower0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
 
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
     }
 
     @Test
@@ -277,20 +277,20 @@ public class TestWatchTower {
 
         Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
 
-        Military m = null;
+        Military military = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Military) {
-                m = (Military)worker;
+                military = (Military)worker;
             }
         }
 
-        assertNotNull(m);
+        assertNotNull(military);
 
         /* Verify that the border is extended when the military reaches the watch tower */
-        assertEquals(m.getTarget(), watchTower0.getPosition());
+        assertEquals(military.getTarget(), watchTower0.getPosition());
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, watchTower0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
 
         assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 39)));
@@ -774,16 +774,16 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
-        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         /* Evacuate the watch tower and verify that the military leaves the watch tower */
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
 
         watchTower0.evacuate();
 
         map.stepTime();
 
-        assertFalse(m.isInsideBuilding());
+        assertFalse(military.isInsideBuilding());
         assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
     }
 
@@ -811,24 +811,24 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
-        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         /* Evacuate the watch tower */
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
 
         watchTower0.evacuate();
 
         map.stepTime();
 
-        assertFalse(m.isInsideBuilding());
+        assertFalse(military.isInsideBuilding());
 
         /* Verify that the evacuated military returns to the storage */
-        assertEquals(m.getTarget(), headquarter0.getPosition());
+        assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
 
@@ -853,24 +853,24 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
-        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         /* Evacuate the watch tower */
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
 
         watchTower0.evacuate();
 
         map.stepTime();
 
-        assertFalse(m.isInsideBuilding());
+        assertFalse(military.isInsideBuilding());
 
         /* Verify that the evacuated military returns to the storage */
-        assertEquals(m.getTarget(), headquarter0.getPosition());
+        assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
     }
 
@@ -928,24 +928,24 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0, map);
 
         /* Occupy the watch tower */
-        Military m = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0, map);
 
         /* Evacuate the watch tower */
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
 
         watchTower0.evacuate();
 
         map.stepTime();
 
-        assertFalse(m.isInsideBuilding());
+        assertFalse(military.isInsideBuilding());
 
         /* Wait for the evacuated military to return to the storage */
-        assertEquals(m.getTarget(), headquarter0.getPosition());
+        assertEquals(military.getTarget(), headquarter0.getPosition());
         int amount = headquarter0.getAmount(PRIVATE);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, m.getTarget());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, military.getTarget());
 
-        assertTrue(m.isInsideBuilding());
+        assertTrue(military.isInsideBuilding());
         assertEquals(headquarter0.getAmount(PRIVATE), amount + 1);
 
         /* Cancel evacuation */

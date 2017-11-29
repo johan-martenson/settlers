@@ -44,12 +44,12 @@ public class TestTransportation {
 
     @Test
     public void testCreateCargo() {
-        for (Material m : Material.values()) {
-            Cargo c = new Cargo(m, null);
+        for (Material military : Material.values()) {
+            Cargo c = new Cargo(military, null);
 
             assertNotNull(c);
 
-            assertEquals(c.getMaterial(), m);
+            assertEquals(c.getMaterial(), military);
         }
     }
 
@@ -574,8 +574,8 @@ public class TestTransportation {
         Utils.constructHouse(b, map);
 
         /* Add a private to the headquarter */
-        Military m = new Military(player0, PRIVATE_RANK, map);
-        headquarter.depositWorker(m);
+        Military military = new Military(player0, PRIVATE_RANK, map);
+        headquarter.depositWorker(military);
 
         /* Check that the barracks needs a military */
         assertTrue(b.isMilitaryBuilding());
@@ -589,20 +589,20 @@ public class TestTransportation {
         /* Get military from the headquarter
          * - retrieve should set location of the worker
          */
-        m = headquarter.retrieveAnyMilitary();
+        military = headquarter.retrieveAnyMilitary();
 
         /* Tell military to go to the barracks */
-        map.placeWorker(m, b.getFlag());
-        m.setTargetBuilding(b);
+        map.placeWorker(military, b.getFlag());
+        military.setTargetBuilding(b);
 
-        assertEquals(m.getTargetBuilding(), b);
-        assertEquals(m.getTarget(), b.getPosition());
+        assertEquals(military.getTargetBuilding(), b);
+        assertEquals(military.getTarget(), b.getPosition());
 
         /* Verify that the military reaches the barracks */
-        Utils.fastForwardUntilWorkerReachesPoint(map, m, b.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, b.getPosition());
 
-        assertEquals(m.getPosition(), b.getPosition());
-        assertTrue(m.isArrived());
+        assertEquals(military.getPosition(), b.getPosition());
+        assertTrue(military.isArrived());
 
         /* Verify that the military entered the barracks */
         assertEquals(b.getNumberOfHostedMilitary(), 1);

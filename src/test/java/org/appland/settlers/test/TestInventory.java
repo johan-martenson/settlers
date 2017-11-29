@@ -218,20 +218,20 @@ public class TestInventory {
         storage.depositWorker(new Military(null, PRIVATE_RANK, null));
         assertTrue(storage.isInStock(PRIVATE));
 
-        Military m = storage.retrieveAnyMilitary();
-        assertNotNull(m);
+        Military military = storage.retrieveAnyMilitary();
+        assertNotNull(military);
 
         storage.depositWorker(new Military(null, SERGEANT_RANK, null));
         assertTrue(storage.isInStock(SERGEANT));
 
-        m = storage.retrieveAnyMilitary();
-        assertNotNull(m);
+        military = storage.retrieveAnyMilitary();
+        assertNotNull(military);
 
         storage.depositWorker(new Military(null, GENERAL_RANK, null));
         assertTrue(storage.isInStock(GENERAL));
 
-        m = storage.retrieveAnyMilitary();
-        assertNotNull(m);
+        military = storage.retrieveAnyMilitary();
+        assertNotNull(military);
     }
 
     @Test(expected=Exception.class)

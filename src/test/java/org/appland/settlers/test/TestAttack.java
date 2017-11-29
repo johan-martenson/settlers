@@ -2164,9 +2164,9 @@ public class TestAttack {
         /* Get the first attacker */
         Military firstAttacker = null;
 
-        for (Military m : attackers) {
-            if (m.getTarget().equals(barracks1.getFlag().getPosition())) {
-                firstAttacker = m;
+        for (Military military : attackers) {
+            if (military.getTarget().equals(barracks1.getFlag().getPosition())) {
+                firstAttacker = military;
 
                 break;
             }
@@ -2448,8 +2448,8 @@ public class TestAttack {
                 break;
             }
 
-            for (Worker m : attackers) {
-                assertFalse(m.getPosition().equals(barracks1.getPosition()));
+            for (Worker military : attackers) {
+                assertFalse(military.getPosition().equals(barracks1.getPosition()));
             }
 
             map.stepTime();
@@ -2590,8 +2590,8 @@ public class TestAttack {
                 break;
             }
 
-            for (Worker m : attackers) {
-                assertFalse(m.getPosition().equals(barracks1.getPosition()));
+            for (Worker military : attackers) {
+                assertFalse(military.getPosition().equals(barracks1.getPosition()));
             }
 
             map.stepTime();
@@ -3177,12 +3177,12 @@ public class TestAttack {
         /* Get the other attackers' positions */
         Map<Military, Point> positions = new HashMap<>();
 
-        for (Military m : attackers) {
-            if (m.equals(fightingAttacker)) {
+        for (Military military : attackers) {
+            if (military.equals(fightingAttacker)) {
                 continue;
             }
 
-            positions.put(m, m.getPosition());
+            positions.put(military, military.getPosition());
         }
 
         /* Wait for the fight to start */
@@ -3198,13 +3198,13 @@ public class TestAttack {
             assertTrue(fightingAttacker.isFighting());
 
             /* Verify that the other attackers are not fighting */
-            for (Military m : attackers) {
-                if (m.equals(fightingAttacker)) {
+            for (Military military : attackers) {
+                if (military.equals(fightingAttacker)) {
                     continue;
                 }
 
-                assertFalse(m.isFighting());
-                assertEquals(m.getPosition(), positions.get(m));
+                assertFalse(military.isFighting());
+                assertEquals(military.getPosition(), positions.get(military));
             }
 
             /* Verify that no more defenders leave the barracks */
