@@ -997,13 +997,13 @@ public class TestGoldMine {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : miner.getPlannedPath()) {
+        for (Point point : miner.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

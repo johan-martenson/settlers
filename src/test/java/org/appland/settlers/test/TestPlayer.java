@@ -5,10 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.RED;
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
@@ -17,9 +13,15 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.RED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
 
 /**
  *
@@ -55,44 +57,44 @@ public class TestPlayer {
     public void testCreatePlayer() {
 
         /* Create player 'player one' */
-        Player p = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE);
     }
 
     @Test
     public void testCreateHouseWithPlayer() {
 
         /* Create player 'player one' */
-        Player p = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE);
 
         /* Create house belonging to player one */
-        Woodcutter woodcutter0 = new Woodcutter(p);
+        Woodcutter woodcutter0 = new Woodcutter(player);
     }
 
     @Test
     public void testPlayerIsAlsoSetInBuildingsFlag() {
 
         /* Create player 'player one' */
-        Player p = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE);
 
         /* Create house belonging to player one */
-        Woodcutter woodcutter0 = new Woodcutter(p);
+        Woodcutter woodcutter0 = new Woodcutter(player);
 
         /* Verify that the building's flag has the player set correctly */
-        assertEquals(woodcutter0.getFlag().getPlayer(), p);
+        assertEquals(woodcutter0.getFlag().getPlayer(), player);
     }
 
     @Test (expected = Exception.class)
     public void testPlayerCanOnlyCreateOneHeadquarter() throws Exception {
 
         /* Create player 'player one' */
-        Player p = new Player("Player one", BLUE);
+        Player player = new Player("Player one", BLUE);
 
         /* Create headquarter belonging to player one */
-        Headquarter headquarter0 = new Headquarter(p);
+        Headquarter headquarter0 = new Headquarter(player);
 
         /* Create game map with one player */
         List<Player> players = new ArrayList<>();
-        players.add(p);
+        players.add(player);
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place first headquarter */
@@ -100,7 +102,7 @@ public class TestPlayer {
         map.placeBuilding(headquarter0, point0);
 
         /* Create second headquarter belonging to player one */
-        Headquarter headquarter1 = new Headquarter(p);
+        Headquarter headquarter1 = new Headquarter(player);
 
         /* Place second headquarter */
         Point point1 = new Point(15, 15);
