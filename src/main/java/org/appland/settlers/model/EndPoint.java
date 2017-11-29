@@ -12,7 +12,7 @@ package org.appland.settlers.model;
  */
 public interface EndPoint {
 
-    void putCargo(Cargo c) throws Exception;
+    void putCargo(Cargo cargo) throws Exception;
 
     Point getPosition();
 }

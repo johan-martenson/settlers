@@ -339,13 +339,13 @@ public class TestTransportation {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place quarry */
-        Quarry qry = map.placeBuilding(new Quarry(player0), new Point(4, 4));
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), new Point(4, 4));
 
         /* Place storage */
         Storage storage = map.placeBuilding(new Storage(player0), new Point(8, 4));
 
         Flag target = storage.getFlag();
-        Flag start = qry.getFlag();
+        Flag start = quarry0.getFlag();
 
         /* Connect the storage and the quarry */
         map.placeAutoSelectedRoad(player0, start, target);
@@ -353,16 +353,16 @@ public class TestTransportation {
         Courier worker = new Courier(player0, map);
         Stonemason mason = new Stonemason(player0, map);
 
-        map.placeStone(qry.getFlag().getPosition().up().up());
+        map.placeStone(quarry0.getFlag().getPosition().up().up());
 
         worker.setPosition(start.getPosition());
 
-        Utils.constructHouse(qry, map);
+        Utils.constructHouse(quarry0, map);
         Utils.constructHouse(storage, map);
 
-        assertTrue(qry.ready());
+        assertTrue(quarry0.ready());
 
-        Utils.occupyBuilding(mason, qry, map);
+        Utils.occupyBuilding(mason, quarry0, map);
 
         /* Production starts, wait for it to finish */
         Utils.fastForward(100, map);
@@ -375,20 +375,20 @@ public class TestTransportation {
 
         Utils.fastForward(50, map);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry0.getPosition());
 
         assertTrue(mason.isInsideBuilding());
 
         map.stepTime();
 
-        assertEquals(mason.getTarget(), qry.getFlag().getPosition());
+        assertEquals(mason.getTarget(), quarry0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, mason, qry.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, mason, quarry0.getFlag().getPosition());
 
-        assertFalse(qry.getFlag().getStackedCargo().isEmpty());
+        assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Cargo c = qry.getFlag().getCargoWaitingForRoad(map.getRoad(storage.getFlag().getPosition(), qry.getFlag().getPosition()));
-        assertTrue(c.getPosition().equals(qry.getFlag().getPosition()));
+        Cargo c = quarry0.getFlag().getCargoWaitingForRoad(map.getRoad(storage.getFlag().getPosition(), quarry0.getFlag().getPosition()));
+        assertTrue(c.getPosition().equals(quarry0.getFlag().getPosition()));
         assertEquals(c.getTarget(), storage);
         assertEquals(c.getMaterial(), STONE);
     }

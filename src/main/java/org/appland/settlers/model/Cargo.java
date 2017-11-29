@@ -102,28 +102,28 @@ public class Cargo {
     }
 
     void transportToStorage() throws Exception {
-        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
 
-        if (stg != null) {
-            setTarget(stg);
+        if (storage0 != null) {
+            setTarget(storage0);
         } else {
             target = null;
         }
     }
 
     private void returnToClosestStorage() throws Exception {
-        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
 
-        if (stg != null) {
-            setTarget(stg);
+        if (storage0 != null) {
+            setTarget(storage0);
         }
     }
 
     private void returnToStorage() throws Exception {
-        Storage stg = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
 
-        if (stg != null) {
-            setTarget(stg);
+        if (storage0 != null) {
+            setTarget(storage0);
         }
     }
 

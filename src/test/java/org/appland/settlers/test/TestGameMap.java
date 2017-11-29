@@ -134,11 +134,11 @@ public class TestGameMap {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter woodcutter  = new Woodcutter(player0);
-        Quarry     qry = new Quarry(player0);
+        Quarry     quarry0 = new Quarry(player0);
         Point wcPoint  = new Point(1, 1);
 
         map.placeBuilding(woodcutter, wcPoint);
-        map.placeBuilding(qry, wcPoint);
+        map.placeBuilding(quarry0, wcPoint);
     }
 
     @Test(expected=Exception.class)

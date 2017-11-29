@@ -769,12 +769,12 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter woodcutter  = new Woodcutter(player0);
-        Quarry     qry = new Quarry(player0);
+        Quarry     quarry0 = new Quarry(player0);
         Point wcPoint  = new Point(6, 4);
         Point qryPoint = new Point(5, 5);
 
         map.placeBuilding(woodcutter, wcPoint);
-        map.placeBuilding(qry, qryPoint);
+        map.placeBuilding(quarry0, qryPoint);
     }
 
     @Test

@@ -16,15 +16,15 @@ public class Flag implements EndPoint {
     private int    scoutsCalled;
     private Player player;
 
-    public Flag(Point p) {
-        position          = p;
+    public Flag(Point point) {
+        position          = point;
         stackedCargo      = new ArrayList<>();
         geologistsCalled  = 0;
         scoutsCalled      = 0;
     }
 
-    Flag(Player player, Point p) {
-        this(p);
+    Flag(Player player, Point point) {
+        this(point);
 
         this.player = player;
     }
@@ -34,14 +34,14 @@ public class Flag implements EndPoint {
     }
 
     @Override
-    public void putCargo(Cargo c) throws Exception {
-        log.log(Level.FINE, "Putting {0} at {1}", new Object[]{c, this});
+    public void putCargo(Cargo cargo) throws Exception {
+        log.log(Level.FINE, "Putting {0} at {1}", new Object[]{cargo, this});
 
-        c.setPosition(getPosition());
-        stackedCargo.add(c);
+        cargo.setPosition(getPosition());
+        stackedCargo.add(cargo);
 
         /* Give the cargo a chance to re-plan */
-        c.rerouteIfNeeded();
+        cargo.rerouteIfNeeded();
     }
 
     @Override

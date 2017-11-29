@@ -28,8 +28,8 @@ class MapPoint {
     private Crop     crop;
     private Sign     sign;
 
-    public MapPoint(Point p) {
-        point                      = p;
+    public MapPoint(Point point) {
+        this.point                 = point;
         building                   = null;
         flag                       = null;
         tree                       = null;
@@ -41,34 +41,34 @@ class MapPoint {
         connectedFlagsAndBuildings = new HashSet<>();
     }
 
-    void setBuilding(Building b) throws Exception {
+    void setBuilding(Building building) throws Exception {
         if (flag != null) {
             throw new Exception(this + " is already occupied by flag " + flag);
         }
 
-        if (building != null) {
-            throw new Exception(this + " is already occupied by building " + building);
+        if (this.building != null) {
+            throw new Exception(this + " is already occupied by building " + this.building);
         }
 
-        building = b;
+        this.building = building;
     }
 
-    void setFlag(Flag f) throws Exception {
+    void setFlag(Flag flag) throws Exception {
         if (isOccupied()) {
             throw new Exception(this + " is already occupied");
         }
 
-        flag = f;
+        this.flag = flag;
     }
 
     Flag getFlag() {
         return flag;
     }
 
-    void addConnectingRoad(Road r) {
+    void addConnectingRoad(Road road) {
         Point previous = null;
 
-        for (Point current : r.getWayPoints()) {
+        for (Point current : road.getWayPoints()) {
             if (current.equals(point) && previous != null) {
                 connectedNeighbors.add(previous);
             }
@@ -80,31 +80,31 @@ class MapPoint {
             previous = current;
         }
 
-        connectedRoads.add(r);
+        connectedRoads.add(road);
 
-        if (r.getEnd().equals(point)) {
-            connectedFlagsAndBuildings.add(r.getStart());
-        } else if (r.getStart().equals(point)) {
-            connectedFlagsAndBuildings.add(r.getEnd());
+        if (road.getEnd().equals(point)) {
+            connectedFlagsAndBuildings.add(road.getStart());
+        } else if (road.getStart().equals(point)) {
+            connectedFlagsAndBuildings.add(road.getEnd());
         }
     }
 
-    void removeConnectingRoad(Road r) throws Exception {
-        if (!connectedRoads.contains(r)) {
-            throw new Exception(r + " is not connected to " + this);
+    void removeConnectingRoad(Road road) throws Exception {
+        if (!connectedRoads.contains(road)) {
+            throw new Exception(road + " is not connected to " + this);
         }
 
-        connectedRoads.remove(r);
+        connectedRoads.remove(road);
 
-        if (r.getEnd().equals(point)) {
-            connectedFlagsAndBuildings.remove(r.getStart());
-        } else  if (r.getStart().equals(point)) {
-            connectedFlagsAndBuildings.remove(r.getEnd());
+        if (road.getEnd().equals(point)) {
+            connectedFlagsAndBuildings.remove(road.getStart());
+        } else  if (road.getStart().equals(point)) {
+            connectedFlagsAndBuildings.remove(road.getEnd());
         }
 
         Point previous = null;
 
-        for (Point current : r.getWayPoints()) {
+        for (Point current : road.getWayPoints()) {
             if (current.equals(point) && previous != null) {
                 connectedNeighbors.remove(previous);
             }
@@ -154,16 +154,16 @@ class MapPoint {
         return tree;
     }
 
-    void setTree(Tree t) {
-        tree = t;
+    void setTree(Tree tree) {
+        this.tree = tree;
     }
 
     void removeTree() {
         tree = null;
     }
 
-    void setStone(Stone s) {
-        stone = s;
+    void setStone(Stone stone) {
+        this.stone = stone;
     }
 
     Stone getStone() {
@@ -182,8 +182,8 @@ class MapPoint {
         return tree != null;
     }
 
-    void setCrop(Crop c) {
-        crop = c;
+    void setCrop(Crop crop) {
+        this.crop = crop;
     }
 
     Crop getCrop() {
@@ -198,8 +198,8 @@ class MapPoint {
         return sign;
     }
 
-    void setSign(Sign s) {
-        sign = s;
+    void setSign(Sign sign) {
+        this.sign = sign;
     }
 
     void removeBuilding() {
