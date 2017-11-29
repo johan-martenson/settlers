@@ -86,15 +86,15 @@ public class WoodcutterWorker extends Worker {
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.reachedZero()) {
-                Point p = getTreeToCutDown();
+                Point point = getTreeToCutDown();
 
-                if (p == null) {
+                if (point == null) {
                     productivityMeasurer.reportUnproductivity();
 
                     return;
                 }
 
-                setOffroadTarget(p);
+                setOffroadTarget(point);
 
                 state = State.GOING_OUT_TO_CUT_TREE;
             } else {

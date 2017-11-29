@@ -16,12 +16,12 @@ public class Cargo {
     private List<Point> path;
     private boolean     deliveryPromised;
 
-    public Cargo(Material materialToSet, GameMap mapToSet) {
-        log.log(Level.FINE, "Creating cargo of {0}", materialToSet);
+    public Cargo(Material material, GameMap map) {
+        log.log(Level.FINE, "Creating cargo of {0}", material);
 
-        material         = materialToSet;
+        this.material = material;
         deliveryPromised = false;
-        map              = mapToSet;
+        this.map = map;
     }
 
     public Material getMaterial() {
@@ -50,14 +50,14 @@ public class Cargo {
         return path.get(0);
     }
 
-    public void setPosition(Point p) {
-        log.log(Level.FINE, "Setting position to {0}", p);
+    public void setPosition(Point point) {
+        log.log(Level.FINE, "Setting position to {0}", point);
 
-        if (map.isFlagAtPoint(p) || map.isBuildingAtPoint(p)) {
-            if (position != null && position != p) {
+        if (map.isFlagAtPoint(point) || map.isBuildingAtPoint(point)) {
+            if (position != null && position != point) {
 
                 if (map.isFlagAtPoint(position) || map.isBuildingAtPoint(position)) {
-                    Road road = map.getRoad(p, position);
+                    Road road = map.getRoad(point, position);
 
                     if (road != null) {
                         road.registerUsage();
@@ -73,9 +73,9 @@ public class Cargo {
             }
         }
 
-        position = p;
+        position = point;
 
-        if (path != null && path.size() > 0 && path.get(0).equals(p)) {
+        if (path != null && path.size() > 0 && path.get(0).equals(point)) {
             path.remove(0);
         }
     }

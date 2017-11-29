@@ -132,8 +132,8 @@ public class Road {
         throw new Exception(flag + " is not an endpoint to this road (" + this + ")");
     }
 
-    void setNeedsCourier(boolean b) {
-        needsCourier = b;
+    void setNeedsCourier(boolean needsCourier) {
+        this.needsCourier = needsCourier;
     }
 
     public boolean isMainRoad() {
@@ -170,8 +170,8 @@ public class Road {
         return player;
     }
 
-    void setPlayer(Player p) {
-        player = p;
+    void setPlayer(Player player) {
+        this.player = player;
     }
 
 }

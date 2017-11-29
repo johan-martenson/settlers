@@ -29,8 +29,8 @@ public class Miller extends Worker {
 
     private State state;
 
-    public Miller(Player player, GameMap m) {
-        super(player, m);
+    public Miller(Player player, GameMap map) {
+        super(player, map);
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
 
@@ -47,9 +47,9 @@ public class Miller extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Mill) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Mill) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;
@@ -99,14 +99,14 @@ public class Miller extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag f = getHome().getFlag();
+            Flag flag = getHome().getFlag();
 
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
-            f.putCargo(getCargo());
+            flag.putCargo(getCargo());
 
             setCargo(null);
 

@@ -218,7 +218,7 @@ public abstract class Worker implements Actor {
         log.log(Level.FINE, "On idle hook with nothing to do");
     }
 
-    void onEnterBuilding(Building b) throws Exception {
+    void onEnterBuilding(Building building) throws Exception {
         log.log(Level.FINE, "On enter building hook with nothing to do");
     }
 
@@ -285,9 +285,9 @@ public abstract class Worker implements Actor {
     }
 
     private int getSpeed() {
-        Walker w = this.getClass().getAnnotation(Walker.class);
+        Walker walker = this.getClass().getAnnotation(Walker.class);
 
-        return w.speed();
+        return walker.speed();
     }
 
     public void setTargetBuilding(Building building) throws Exception {

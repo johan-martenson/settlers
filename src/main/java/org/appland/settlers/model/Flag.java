@@ -58,15 +58,15 @@ public class Flag implements EndPoint {
         if (stackedCargo.isEmpty()) {
             return "Flag at " + position;
         } else {
-            StringBuilder s = new StringBuilder("Flag at " + position + " (stacked cargo:");
+            StringBuilder stringBuilder = new StringBuilder("Flag at " + position + " (stacked cargo:");
 
             for (Cargo cargo : stackedCargo) {
-                s.append(" ").append(cargo.getMaterial().name());
+                stringBuilder.append(" ").append(cargo.getMaterial().name());
             }
 
-            s.append(")");
+            stringBuilder.append(")");
 
-            return s.toString();
+            return stringBuilder.toString();
         }
     }
 

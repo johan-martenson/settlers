@@ -60,11 +60,11 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Storage) {
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Storage) {
             return;
-        } else if (b instanceof PigFarm) {
-            setHome(b);
+        } else if (building instanceof PigFarm) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;

@@ -15,9 +15,9 @@ public class Stone {
     private int amount;
     private final Point position;
 
-    public Stone(Point p) {
+    public Stone(Point point) {
         amount = 10;
-        position = p;
+        position = point;
     }
 
     public void removeOnePart() {

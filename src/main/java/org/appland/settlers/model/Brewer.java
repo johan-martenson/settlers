@@ -38,8 +38,8 @@ public class Brewer extends Worker {
         RETURNING_TO_STORAGE
     }
 
-    public Brewer(Player player, GameMap m) {
-        super(player, m);
+    public Brewer(Player player, GameMap map) {
+        super(player, map);
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
@@ -48,9 +48,9 @@ public class Brewer extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Brewery) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Brewery) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;
@@ -100,14 +100,14 @@ public class Brewer extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag f = map.getFlagAtPoint(getPosition());
+            Flag flag = map.getFlagAtPoint(getPosition());
 
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
-            f.putCargo(getCargo());
+            flag.putCargo(getCargo());
 
             setCargo(null);
 

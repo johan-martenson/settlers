@@ -33,8 +33,8 @@ public class Land {
         for (Point borderPoint : borderPoints) {
             boolean keepPoint = false;
 
-            for (Point p : borderPoint.getAdjacentPoints()) {
-                if (pointsInLand.contains(p) && !borderPoints.contains(p)) {
+            for (Point point : borderPoint.getAdjacentPoints()) {
+                if (pointsInLand.contains(point) && !borderPoints.contains(point)) {
                     keepPoint = true;
                 }
             }

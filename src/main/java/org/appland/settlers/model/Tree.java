@@ -20,10 +20,10 @@ public class Tree implements Actor {
     private final Countdown countdown;
     private final Point position;
 
-    Tree(Point p) {
+    Tree(Point point) {
         size = SMALL;
 
-        position = p;
+        position = point;
 
         countdown = new Countdown();
 

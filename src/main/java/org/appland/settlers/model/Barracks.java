@@ -14,8 +14,8 @@ import static org.appland.settlers.model.Size.SMALL;
 @UpgradeCost(stones = 3)
 public class Barracks extends Building {
 
-    public Barracks(Player p) {
-        super(p);
+    public Barracks(Player player) {
+        super(player);
     }
 
     @Override

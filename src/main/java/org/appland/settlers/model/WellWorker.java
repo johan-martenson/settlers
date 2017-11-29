@@ -23,8 +23,8 @@ public class WellWorker extends Worker {
 
     private State  state;
 
-    public WellWorker(Player player, GameMap m) {
-        super(player, m);
+    public WellWorker(Player player, GameMap map) {
+        super(player, map);
 
         countdown = new Countdown();
         state     = State.WALKING_TO_TARGET;
@@ -42,9 +42,9 @@ public class WellWorker extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Well) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Well) {
+            setHome(building);
         }
 
         state = State.RESTING_IN_HOUSE;
@@ -89,13 +89,13 @@ public class WellWorker extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
-            Flag f = getHome().getFlag();
+            Flag flag = getHome().getFlag();
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
-            f.putCargo(getCargo());
+            flag.putCargo(getCargo());
 
             setCargo(null);
 

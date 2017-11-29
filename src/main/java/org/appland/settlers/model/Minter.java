@@ -38,8 +38,8 @@ public class Minter extends Worker {
 
     private State state;
 
-    public Minter(Player player, GameMap m) {
-        super(player, m);
+    public Minter(Player player, GameMap map) {
+        super(player, map);
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
@@ -48,9 +48,9 @@ public class Minter extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b instanceof Mint) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building instanceof Mint) {
+            setHome(building);
         }
 
         state = RESTING_IN_HOUSE;
@@ -99,14 +99,14 @@ public class Minter extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
-            Flag f = map.getFlagAtPoint(getPosition());
+            Flag flag = map.getFlagAtPoint(getPosition());
 
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());
             cargo.transportToStorage();
 
-            f.putCargo(getCargo());
+            flag.putCargo(getCargo());
 
             setCargo(null);
 

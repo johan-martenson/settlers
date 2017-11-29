@@ -51,23 +51,23 @@ import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 @MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 20, attackRadius = 20)
 public class Headquarter extends Storage {
 
-    public Headquarter(Player p) {
-        super(p);
+    public Headquarter(Player player) {
+        super(player);
 
         setHeadquarterDefaultInventory(inventory);
         setConstructionReady();
     }
 
     @Override
-    protected void setMap(GameMap m) throws Exception {
-        super.setMap(m);
+    protected void setMap(GameMap map) throws Exception {
+        super.setMap(map);
 
-        Worker w = new StorageWorker(getPlayer(), m);
-        getMap().placeWorker(w, this);
+        Worker storageWorker = new StorageWorker(getPlayer(), map);
+        getMap().placeWorker(storageWorker, this);
 
-        w.enterBuilding(this);
+        storageWorker.enterBuilding(this);
 
-        assignWorker(w);
+        assignWorker(storageWorker);
     }
 
     private void setHeadquarterDefaultInventory(Map<Material, Integer> inventory) {

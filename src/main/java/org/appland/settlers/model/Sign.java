@@ -21,12 +21,12 @@ public class Sign implements Actor {
 
     private int age;
 
-    Sign(Material m, Size s, Point p, GameMap mapToSet) {
-        position = p;
-        type     = m;
-        size     = s;
-        map      = mapToSet;
-        age      = 0;
+    Sign(Material material, Size size, Point point, GameMap map) {
+        position  = point;
+        type      = material;
+        this.size = size;
+        this.map  = map;
+        age       = 0;
     }
 
     public Material getType() {

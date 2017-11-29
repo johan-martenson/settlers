@@ -167,9 +167,9 @@ public class StorageWorker extends Worker {
     @Override
     protected void onArrival() throws Exception {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
-            Flag f = getHome().getFlag();
+            Flag flag = getHome().getFlag();
 
-            f.putCargo(getCargo());
+            flag.putCargo(getCargo());
 
             setCargo(null);
 

@@ -70,17 +70,17 @@ public class Stonemason extends Worker {
                 Point homePoint = getHome().getPosition();
 
                 /* Look for stones within range */
-                for (Point p : map.getPointsWithinRadius(homePoint, 8)) {
+                for (Point point : map.getPointsWithinRadius(homePoint, 8)) {
 
                     /* Filter points without stones */
-                    if (!map.isStoneAtPoint(p)) {
+                    if (!map.isStoneAtPoint(point)) {
                         continue;
                     }
 
                     /* Is the stone reachable? */
                     int distanceToAccessPoint = Integer.MAX_VALUE;
                     Point potentialAccessPoint = null;
-                    for (Point p2 : p.getAdjacentPoints()) {
+                    for (Point p2 : point.getAdjacentPoints()) {
 
                         /* Filter the quarry since the stone mason needs to go outside  */
                         if (p2.equals(getHome().getPosition())) {
@@ -113,7 +113,7 @@ public class Stonemason extends Worker {
 
                         accessPoint = potentialAccessPoint;
 
-                        stoneTarget = p;
+                        stoneTarget = point;
                     }
                 }
 

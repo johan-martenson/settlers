@@ -105,10 +105,10 @@ public class WildAnimal extends Worker {
 
             int index = random.nextInt(adjacentPoints.size());
 
-            Point p = adjacentPoints.get(index);
+            Point point = adjacentPoints.get(index);
 
-            if (canGoTo(p)) {
-                return p;
+            if (canGoTo(point)) {
+                return point;
             }
         }
 

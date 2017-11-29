@@ -21,13 +21,13 @@ public class Projectile implements Actor {
     private final Countdown countdown;
     private final GameMap   map;
 
-    Projectile(Point src, Building tgt, GameMap m) {
-        target = tgt;
-        source = src;
-        map    = m;
+    Projectile(Point src, Building targetBuilding, GameMap map) {
+        target   = targetBuilding;
+        source   = src;
+        this.map = map;
 
         countdown = new Countdown();
-        countdown.countFrom((int)(src.distance(tgt.getPosition()) * SPEED));
+        countdown.countFrom((int)(src.distance(targetBuilding.getPosition()) * SPEED));
     }
 
     public Point getTarget() {

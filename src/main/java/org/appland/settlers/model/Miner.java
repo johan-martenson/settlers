@@ -74,18 +74,18 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building b) {
-        if (b.isMine()) {
-            setHome(b);
+    protected void onEnterBuilding(Building building) {
+        if (building.isMine()) {
+            setHome(building);
         }
 
-        if (b instanceof GoldMine) {
+        if (building instanceof GoldMine) {
             mineral = GOLD;
-        } else if (b instanceof IronMine) {
+        } else if (building instanceof IronMine) {
             mineral = IRON;
-        } else if (b instanceof CoalMine) {
+        } else if (building instanceof CoalMine) {
             mineral = COAL;
-        } else if (b instanceof GraniteMine) {
+        } else if (building instanceof GraniteMine) {
             mineral = STONE;
         }
 
