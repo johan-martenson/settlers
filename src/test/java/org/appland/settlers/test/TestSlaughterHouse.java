@@ -525,35 +525,35 @@ public class TestSlaughterHouse {
         /* Wait for the butcher to produce a new meat cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = slaughterHouse0.getWorker();
+        Worker worker = slaughterHouse0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the butcher puts the meat cargo at the flag */
-        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getFlag().getPosition());
         assertTrue(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait for the worker to go back to the slaughter house */
-        assertEquals(ww.getTarget(), slaughterHouse0.getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertEquals(slaughterHouse0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -592,17 +592,17 @@ public class TestSlaughterHouse {
         /* Wait for the butcher to produce a new meat cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = slaughterHouse0.getWorker();
+        Worker worker = slaughterHouse0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the butcher puts the meat cargo at the flag */
-        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getFlag().getPosition());
         assertTrue(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(slaughterHouse0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -674,20 +674,20 @@ public class TestSlaughterHouse {
         Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
         /* Destroy the slaughter house */
-        Worker ww = slaughterHouse0.getWorker();
+        Worker worker = slaughterHouse0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), slaughterHouse0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), slaughterHouse0.getPosition());
 
         slaughterHouse0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(BUTCHER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
         /* Verify that the butcher is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(BUTCHER), amount + 1);
@@ -720,20 +720,20 @@ public class TestSlaughterHouse {
         Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
 
         /* Destroy the slaughter house */
-        Worker ww = slaughterHouse0.getWorker();
+        Worker worker = slaughterHouse0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), slaughterHouse0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), slaughterHouse0.getPosition());
 
         slaughterHouse0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point point : ww.getPlannedPath()) {
+        for (Point point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -871,11 +871,11 @@ public class TestSlaughterHouse {
         Utils.constructHouse(slaughterHouse0, map);
 
         /* Assign a worker to the slaughter house */
-        Butcher ww = new Butcher(player0, map);
+        Butcher worker = new Butcher(player0, map);
 
-        Utils.occupyBuilding(ww, slaughterHouse0, map);
+        Utils.occupyBuilding(worker, slaughterHouse0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -886,14 +886,14 @@ public class TestSlaughterHouse {
         Utils.fastForward(100, map);
 
         /* Wait for the butcher to produce cargo */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), MEAT);
+        assertEquals(worker.getCargo().getMaterial(), MEAT);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
 
         /* Stop production and verify that no meat is produced */
         slaughterHouse0.stopProduction();
@@ -901,7 +901,7 @@ public class TestSlaughterHouse {
         assertFalse(slaughterHouse0.isProductionEnabled());
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -939,11 +939,11 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(pigCargo);
 
         /* Assign a worker to the slaughter house */
-        Butcher ww = new Butcher(player0, map);
+        Butcher worker = new Butcher(player0, map);
 
-        Utils.occupyBuilding(ww, slaughterHouse0, map);
+        Utils.occupyBuilding(worker, slaughterHouse0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
@@ -952,20 +952,20 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(new Cargo(PIG, map));
 
         /* Wait for the butcher to produce meat */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), MEAT);
+        assertEquals(worker.getCargo().getMaterial(), MEAT);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), slaughterHouse0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), slaughterHouse0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, slaughterHouse0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
 
         /* Stop production */
         slaughterHouse0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -975,9 +975,9 @@ public class TestSlaughterHouse {
 
         assertTrue(slaughterHouse0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
     }
 
     @Test

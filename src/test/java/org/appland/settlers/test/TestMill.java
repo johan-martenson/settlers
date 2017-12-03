@@ -479,35 +479,35 @@ public class TestMill {
         /* Wait for the miller to produce a new flour cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = mill0.getWorker();
+        Worker worker = mill0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the miller puts the flour cargo at the flag */
-        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), mill0.getFlag().getPosition());
         assertTrue(mill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(mill0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait for the worker to go back to the mill */
-        assertEquals(ww.getTarget(), mill0.getPosition());
+        assertEquals(worker.getTarget(), mill0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), mill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertEquals(mill0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -546,17 +546,17 @@ public class TestMill {
         /* Wait for the miller to produce a new flour cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = mill0.getWorker();
+        Worker worker = mill0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the miller puts the flour cargo at the flag */
-        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), mill0.getFlag().getPosition());
         assertTrue(mill0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(mill0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -628,20 +628,20 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0, map);
 
         /* Destroy the mill */
-        Worker ww = mill0.getWorker();
+        Worker worker = mill0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), mill0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), mill0.getPosition());
 
         mill0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(MILLER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
         /* Verify that the miller is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(MILLER), amount + 1);
@@ -674,20 +674,20 @@ public class TestMill {
         Utils.occupyBuilding(new Miller(player0, map), mill0, map);
 
         /* Destroy the mill */
-        Worker ww = mill0.getWorker();
+        Worker worker = mill0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), mill0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), mill0.getPosition());
 
         mill0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point point : ww.getPlannedPath()) {
+        for (Point point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -831,24 +831,24 @@ public class TestMill {
         mill0.putCargo(wheatCargo);
 
         /* Assign a worker to the mill */
-        Miller ww = new Miller(player0, map);
+        Miller worker = new Miller(player0, map);
 
-        Utils.occupyBuilding(ww, mill0, map);
+        Utils.occupyBuilding(worker, mill0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
 
         /* Wait for the miller to produce cargo */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), FLOUR);
+        assertEquals(worker.getCargo().getMaterial(), FLOUR);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), mill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
 
         /* Stop production and verify that no flour is produced */
         mill0.stopProduction();
@@ -856,7 +856,7 @@ public class TestMill {
         assertFalse(mill0.isProductionEnabled());
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -889,11 +889,11 @@ public class TestMill {
         Utils.constructHouse(mill0, map);
 
         /* Assign a worker to the mill */
-        Miller ww = new Miller(player0, map);
+        Miller worker = new Miller(player0, map);
 
-        Utils.occupyBuilding(ww, mill0, map);
+        Utils.occupyBuilding(worker, mill0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Deliver material to the mill */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -905,20 +905,20 @@ public class TestMill {
         Utils.fastForward(100, map);
 
         /* Wait for the miller to produce flour */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), FLOUR);
+        assertEquals(worker.getCargo().getMaterial(), FLOUR);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), mill0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), mill0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, mill0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, mill0.getFlag().getPosition());
 
         /* Stop production */
         mill0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -928,9 +928,9 @@ public class TestMill {
 
         assertTrue(mill0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
     }
 
     @Test

@@ -672,20 +672,20 @@ public class TestDonkeyFarm {
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
 
         /* Destroy the donkey farm */
-        Worker ww = donkeyFarm0.getWorker();
+        Worker worker = donkeyFarm0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), donkeyFarm0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), donkeyFarm0.getPosition());
 
         donkeyFarm0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(DONKEY_BREEDER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
         /* Verify that the donkey breeder is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(DONKEY_BREEDER), amount + 1);
@@ -718,20 +718,20 @@ public class TestDonkeyFarm {
         Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0, map);
 
         /* Destroy the donkey farm */
-        Worker ww = donkeyFarm0.getWorker();
+        Worker worker = donkeyFarm0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), donkeyFarm0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), donkeyFarm0.getPosition());
 
         donkeyFarm0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point point : ww.getPlannedPath()) {
+        for (Point point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -1008,11 +1008,11 @@ public class TestDonkeyFarm {
         Utils.constructHouse(donkeyFarm0, map);
 
         /* Assign a worker to the donkey farm */
-        DonkeyBreeder ww = new DonkeyBreeder(player0, map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
 
-        Utils.occupyBuilding(ww, donkeyFarm0, map);
+        Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Deliver resources to the donkey farm */
         Cargo waterCargo = new Cargo(WATER, map);
@@ -1110,11 +1110,11 @@ public class TestDonkeyFarm {
         donkeyFarm0.putCargo(wheatCargo);
 
         /* Assign a worker to the donkey farm */
-        DonkeyBreeder ww = new DonkeyBreeder(player0, map);
+        DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
 
-        Utils.occupyBuilding(ww, donkeyFarm0, map);
+        Utils.occupyBuilding(donkeyBreeder, donkeyFarm0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(donkeyBreeder.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);

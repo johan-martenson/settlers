@@ -587,35 +587,35 @@ public class TestBrewery {
         /* Wait for the brewer to produce a new bread cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = brewery0.getWorker();
+        Worker worker = brewery0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the brewer puts the bread cargo at the flag */
-        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
         assertTrue(brewery0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(brewery0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait for the worker to go back to the brewery */
-        assertEquals(ww.getTarget(), brewery0.getPosition());
+        assertEquals(worker.getTarget(), brewery0.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getPosition());
 
         /* Wait for the worker to rest and produce another cargo */
         Utils.fastForward(150, map);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the second cargo is put at the flag */
-        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertEquals(brewery0.getFlag().getStackedCargo().size(), 2);
     }
 
@@ -658,17 +658,17 @@ public class TestBrewery {
         /* Wait for the brewer to produce a new bread cargo */
         Utils.fastForward(50, map);
 
-        Worker ww = brewery0.getWorker();
+        Worker worker = brewery0.getWorker();
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
 
         /* Verify that the brewer puts the bread cargo at the flag */
-        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
         assertTrue(brewery0.getFlag().getStackedCargo().isEmpty());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
 
-        assertNull(ww.getCargo());
+        assertNull(worker.getCargo());
         assertFalse(brewery0.getFlag().getStackedCargo().isEmpty());
 
         /* Wait to let the cargo remain at the flag without any connection to the storage */
@@ -741,20 +741,20 @@ public class TestBrewery {
         Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
 
         /* Destroy the brewery */
-        Worker ww = brewery0.getWorker();
+        Worker worker = brewery0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), brewery0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), brewery0.getPosition());
 
         brewery0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         int amount = headquarter0.getAmount(BREWER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, headquarter0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
 
         /* Verify that the brewer is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(BREWER), amount + 1);
@@ -787,20 +787,20 @@ public class TestBrewery {
         Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
 
         /* Destroy the brewery */
-        Worker ww = brewery0.getWorker();
+        Worker worker = brewery0.getWorker();
 
-        assertTrue(ww.isInsideBuilding());
-        assertEquals(ww.getPosition(), brewery0.getPosition());
+        assertTrue(worker.isInsideBuilding());
+        assertEquals(worker.getPosition(), brewery0.getPosition());
 
         brewery0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        assertFalse(ww.isInsideBuilding());
-        assertEquals(ww.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isInsideBuilding());
+        assertEquals(worker.getTarget(), headquarter0.getPosition());
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point point : ww.getPlannedPath()) {
+        for (Point point : worker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
@@ -847,24 +847,24 @@ public class TestBrewery {
         brewery0.putCargo(waterCargo);
 
         /* Assign a worker to the brewery */
-        Brewer ww = new Brewer(player0, map);
+        Brewer worker = new Brewer(player0, map);
 
-        Utils.occupyBuilding(ww, brewery0, map);
+        Utils.occupyBuilding(worker, brewery0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Let the worker rest */
         Utils.fastForward(100, map);
 
         /* Wait for the brewer to produce cargo */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), BEER);
+        assertEquals(worker.getCargo().getMaterial(), BEER);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
 
         /* Stop production and verify that no beer is produced */
         brewery0.stopProduction();
@@ -872,7 +872,7 @@ public class TestBrewery {
         assertFalse(brewery0.isProductionEnabled());
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -905,11 +905,11 @@ public class TestBrewery {
         Utils.constructHouse(brewery0, map);
 
         /* Assign a worker to the brewery */
-        Brewer ww = new Brewer(player0, map);
+        Brewer worker = new Brewer(player0, map);
 
-        Utils.occupyBuilding(ww, brewery0, map);
+        Utils.occupyBuilding(worker, brewery0, map);
 
-        assertTrue(ww.isInsideBuilding());
+        assertTrue(worker.isInsideBuilding());
 
         /* Deliver material to the brewery */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -925,20 +925,20 @@ public class TestBrewery {
         Utils.fastForward(100, map);
 
         /* Wait for the brewer to produce beer */
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertEquals(ww.getCargo().getMaterial(), BEER);
+        assertEquals(worker.getCargo().getMaterial(), BEER);
 
         /* Wait for the worker to deliver the cargo */
-        assertEquals(ww.getTarget(), brewery0.getFlag().getPosition());
+        assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, ww, brewery0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
 
         /* Stop production */
         brewery0.stopProduction();
 
         for (int i = 0; i < 300; i++) {
-            assertNull(ww.getCargo());
+            assertNull(worker.getCargo());
 
             map.stepTime();
         }
@@ -948,9 +948,9 @@ public class TestBrewery {
 
         assertTrue(brewery0.isProductionEnabled());
 
-        Utils.fastForwardUntilWorkerProducesCargo(map, ww);
+        Utils.fastForwardUntilWorkerProducesCargo(map, worker);
 
-        assertNotNull(ww.getCargo());
+        assertNotNull(worker.getCargo());
     }
 
     @Test
