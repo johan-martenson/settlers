@@ -869,13 +869,13 @@ public class TestQuarry {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : stonemason.getPlannedPath()) {
+        for (Point point : stonemason.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

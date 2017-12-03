@@ -6,13 +6,14 @@
 
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Tile;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,8 +28,8 @@ public class TestTerrain {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point p = new Point(5, 6);
+        Point point = new Point(5, 6);
 
-        Tile tile = map.getTerrain().getTile(p, p.upRight(), p.right());
+        Tile tile = map.getTerrain().getTile(point, point.upRight(), point.right());
     }
 }

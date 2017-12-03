@@ -5,19 +5,21 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.WildAnimal;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -136,23 +138,23 @@ public class TestWildAnimal {
                     continue;
                 }
 
-                Point p = worker.getPosition();
+                Point point = worker.getPosition();
 
                 /* Update min and max */
-                if (p.x < minX) {
-                    minX = p.x;
+                if (point.x < minX) {
+                    minX = point.x;
                 }
 
-                if (p.x > maxX) {
-                    maxX = p.x;
+                if (point.x > maxX) {
+                    maxX = point.x;
                 }
 
-                if (p.y < minY) {
-                    minY = p.y;
+                if (point.y < minY) {
+                    minY = point.y;
                 }
 
-                if (p.y > maxY) {
-                    maxY = p.y;
+                if (point.y > maxY) {
+                    maxY = point.y;
                 }
 
                 /* Remember that this animal has been handled */

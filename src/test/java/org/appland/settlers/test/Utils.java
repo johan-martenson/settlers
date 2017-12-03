@@ -60,20 +60,20 @@ import static org.junit.Assert.assertTrue;
 
 public class Utils {
 
-    public static void fastForward(int time, Actor b) throws Exception {
+    public static void fastForward(int time, Actor actor) throws Exception {
 
         for (int i = 0; i < time; i++) {
-            b.stepTime();
+            actor.stepTime();
         }
     }
 
-    public static void fastForward(int time, Actor... b) throws Exception {
-        fastForward(time, Arrays.asList(b));
+    public static void fastForward(int time, Actor... actors) throws Exception {
+        fastForward(time, Arrays.asList(actors));
     }
 
     private static void fastForward(int time, List<Actor> actors) throws Exception {
-        for (Actor a : actors) {
-            fastForward(time, a);
+        for (Actor actor : actors) {
+            fastForward(time, actor);
         }
     }
 
@@ -216,10 +216,10 @@ public class Utils {
         assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
-    public static void verifyListContainsWorkerOfType(List<Worker> allWorkers, Class<? extends Worker> workerClass) {
+    public static void verifyListContainsWorkerOfType(List<Worker> workers, Class<? extends Worker> workerClass) {
         boolean found = false;
 
-        for (Worker worker : allWorkers) {
+        for (Worker worker : workers) {
             if (worker.getClass().equals(workerClass)) {
                 found = true;
             }
@@ -228,26 +228,26 @@ public class Utils {
         assertTrue(found);
     }
 
-    public static void surroundPointWithWater(Point point0, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+    public static void surroundPointWithWater(Point point, GameMap map) {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setVegetationType(WATER);
         }
     }
 
-    public static void setTileToWater(Point p1, Point p2, Point p3, GameMap map) {
-        Tile waterTile = map.getTerrain().getTile(p1, p2, p3);
+    public static void setTileToWater(Point point1, Point point2, Point point3, GameMap map) {
+        Tile waterTile = map.getTerrain().getTile(point1, point2, point3);
 
         waterTile.setVegetationType(WATER);
     }
 
-    public static void surroundPointWithMountain(Point point0, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+    public static void surroundPointWithMountain(Point point, GameMap map) {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setVegetationType(MOUNTAIN);
         }
     }
 
-    public static void surroundPointWithSwamp(Point point0, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point0)) {
+    public static void surroundPointWithSwamp(Point point, GameMap map) {
+        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
             tile.setVegetationType(SWAMP);
         }
     }
@@ -300,11 +300,11 @@ public class Utils {
         }
     }
 
-    public static void createMountainWithinRadius(Point point, int i, GameMap map) {
+    public static void createMountainWithinRadius(Point point, int radius, GameMap map) {
         Set<Tile> tiles = new HashSet<>();
         Terrain terrain = map.getTerrain();
 
-        for (Point p : map.getPointsWithinRadius(point, i - 1)) {
+        for (Point p : map.getPointsWithinRadius(point, radius - 1)) {
             tiles.addAll(terrain.getSurroundingTiles(p));
         }
 

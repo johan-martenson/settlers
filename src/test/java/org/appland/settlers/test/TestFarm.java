@@ -730,8 +730,8 @@ public class TestFarm {
         List<Crop> crops = new ArrayList<>();
 
         /*      ... place crops  */
-        for (Point p : possibleSpotsToPlant) {
-            crops.add(map.placeCrop(p));
+        for (Point point : possibleSpotsToPlant) {
+            crops.add(map.placeCrop(point));
         }
 
         /*      ... harvest crops  */
@@ -1111,13 +1111,13 @@ public class TestFarm {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : farmer.getPlannedPath()) {
+        for (Point point : farmer.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
@@ -1520,8 +1520,8 @@ public class TestFarm {
 
             /* Look for a point where there is no flag too close */
             boolean noCloseFlag = true;
-            for (Point p : crop.getPosition().getAdjacentPoints()) {
-                if (map.isFlagAtPoint(p)) {
+            for (Point point : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
             }
@@ -1575,8 +1575,8 @@ public class TestFarm {
 
             /* Look for a point where there is no flag too close */
             boolean noCloseFlag = true;
-            for (Point p : crop.getPosition().getAdjacentPoints()) {
-                if (map.isFlagAtPoint(p)) {
+            for (Point point : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
             }
@@ -1626,8 +1626,8 @@ public class TestFarm {
 
             /* Look for a point where there is no flag too close */
             boolean noCloseFlag = true;
-            for (Point p : crop.getPosition().getAdjacentPoints()) {
-                if (map.isFlagAtPoint(p)) {
+            for (Point point : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
             }
@@ -1677,8 +1677,8 @@ public class TestFarm {
 
             /* Look for a point where there is no flag too close */
             boolean noCloseFlag = true;
-            for (Point p : crop.getPosition().getAdjacentPoints()) {
-                if (map.isFlagAtPoint(p)) {
+            for (Point point : crop.getPosition().getAdjacentPoints()) {
+                if (map.isFlagAtPoint(point)) {
                     noCloseFlag = false;
                 }
             }

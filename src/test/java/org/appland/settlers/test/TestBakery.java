@@ -749,13 +749,13 @@ public class TestBakery {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : baker.getPlannedPath()) {
+        for (Point point : baker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

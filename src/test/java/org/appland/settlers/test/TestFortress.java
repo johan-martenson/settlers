@@ -1057,13 +1057,13 @@ public class TestFortress {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : military.getPlannedPath()) {
+        for (Point point : military.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

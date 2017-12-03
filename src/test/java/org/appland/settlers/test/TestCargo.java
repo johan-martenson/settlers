@@ -6,8 +6,6 @@
 
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -15,16 +13,20 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.WOOD;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -135,9 +137,9 @@ public class TestCargo {
         /* Wait for a cargo with the forester hut as target to get picked up by the first courier */
         for (int i = 0; i < 2000; i++) {
 
-            Cargo c = road1.getCourier().getCargo();
+            Cargo cargo = road1.getCourier().getCargo();
 
-            if (c != null && c.getTarget().equals(foresterHut0)) {
+            if (cargo != null && cargo.getTarget().equals(foresterHut0)) {
                 break;
             }
 

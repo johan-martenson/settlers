@@ -687,13 +687,13 @@ public class TestMill {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point point : ww.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

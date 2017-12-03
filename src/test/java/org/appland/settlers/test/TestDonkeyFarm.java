@@ -731,13 +731,13 @@ public class TestDonkeyFarm {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ww.getPlannedPath()) {
+        for (Point point : ww.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
@@ -1298,20 +1298,20 @@ public class TestDonkeyFarm {
         /* Verify that the donkey walks to the storage on existing roads */
         Point previous = null;
 
-        for (Point p : donkey.getPlannedPath()) {
+        for (Point point : donkey.getPlannedPath()) {
             if (previous == null) {
-                previous = p;
+                previous = point;
 
                 continue;
             }
 
-            if (!map.isFlagAtPoint(p)) {
+            if (!map.isFlagAtPoint(point)) {
                 continue;
             }
 
-            assertNotNull(map.getRoad(previous, p));
+            assertNotNull(map.getRoad(previous, point));
 
-            previous = p;
+            previous = point;
         }
     }
 

@@ -803,13 +803,13 @@ public class TestIronSmelter {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : ironFounder.getPlannedPath()) {
+        for (Point point : ironFounder.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 

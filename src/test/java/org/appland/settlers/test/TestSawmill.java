@@ -732,13 +732,13 @@ public class TestSawmill {
 
         /* Verify that the worker plans to use the roads */
         boolean firstStep = true;
-        for (Point p : sawmillWorker.getPlannedPath()) {
+        for (Point point : sawmillWorker.getPlannedPath()) {
             if (firstStep) {
                 firstStep = false;
                 continue;
             }
 
-            assertTrue(map.isRoadAtPoint(p));
+            assertTrue(map.isRoadAtPoint(point));
         }
     }
 
