@@ -30,7 +30,9 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
@@ -515,7 +517,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        assertEquals(military.getRank(), SERGEANT_RANK);
+        assertEquals(military.getRank(), CORPORAL_RANK);
     }
 
     @Test
@@ -549,8 +551,8 @@ public class TestBarracks {
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
 
-        assertTrue((military1.getRank() == SERGEANT_RANK && military2.getRank() == PRIVATE_RANK) ||
-                   (military1.getRank() == PRIVATE_RANK  && military2.getRank() == SERGEANT_RANK));
+        assertTrue((military1.getRank() == CORPORAL_RANK && military2.getRank() == PRIVATE_RANK) ||
+                   (military1.getRank() == PRIVATE_RANK  && military2.getRank() == CORPORAL_RANK));
     }
 
     @Test
@@ -590,7 +592,7 @@ public class TestBarracks {
 
         map.stepTime();
 
-        assertEquals(military.getRank(), SERGEANT_RANK);
+        assertEquals(military.getRank(), CORPORAL_RANK);
     }
 
     @Test
@@ -2462,8 +2464,8 @@ public class TestBarracks {
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
 
-        assertTrue((military1.getRank() == GENERAL_RANK && military2.getRank() == SERGEANT_RANK) ||
-                   (military1.getRank() == SERGEANT_RANK  && military2.getRank() == GENERAL_RANK));
+        assertTrue((military1.getRank() == OFFICER_RANK && military2.getRank() == CORPORAL_RANK) ||
+                   (military1.getRank() == CORPORAL_RANK  && military2.getRank() == OFFICER_RANK));
     }
 
     @Test

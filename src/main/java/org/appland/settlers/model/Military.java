@@ -3,7 +3,9 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
+import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Military.State.ATTACKING;
 import static org.appland.settlers.model.Military.State.DEFENDING;
@@ -30,6 +32,8 @@ public class Military extends Worker {
     public enum Rank {
         PRIVATE_RANK,
         SERGEANT_RANK,
+        CORPORAL_RANK,
+        OFFICER_RANK,
         GENERAL_RANK
     }
 
@@ -85,9 +89,15 @@ public class Military extends Worker {
     void promote() {
         switch (rank) {
         case PRIVATE_RANK:
+            rank = CORPORAL_RANK;
+            break;
+        case CORPORAL_RANK:
             rank = SERGEANT_RANK;
             break;
         case SERGEANT_RANK:
+            rank = OFFICER_RANK;
+            break;
+        case OFFICER_RANK:
             rank = GENERAL_RANK;
             break;
         default:

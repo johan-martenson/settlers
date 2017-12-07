@@ -50,7 +50,9 @@ public enum Material {
     DONKEY_BREEDER,
     CATAPULT_WORKER,
     SCOUT,
-    HUNTER;
+    HUNTER,
+    OFFICER,
+    CORPORAL;
 
     private final static List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
 
