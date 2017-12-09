@@ -556,7 +556,7 @@ public class Utils {
     }
 
     public static void waitForWorkerToDisappear(Worker worker, GameMap map) throws Exception {
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 10000; i++) {
             if (!map.getWorkers().contains(worker)) {
                 break;
             }

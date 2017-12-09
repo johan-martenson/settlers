@@ -63,8 +63,10 @@ public class Military extends Worker {
     private static final int GENERAL_FIGHT_DURATION  = 300;
 
     private static final int PRIVATE_HEALTH  = 20;
-    private static final int SERGEANT_HEALTH = 70;
-    private static final int GENERAL_HEALTH  = 130;
+    private static final int CORPORAL_HEALTH = 70;
+    private static final int SERGEANT_HEALTH = 220;
+    private static final int OFFICER_HEALTH  = 670;
+    private static final int GENERAL_HEALTH  = 2020;
 
     private Building  buildingToAttack;
     private Military  opponent;
@@ -474,8 +476,12 @@ public class Military extends Worker {
         switch (rank) {
         case PRIVATE_RANK:
             return PRIVATE_HEALTH;
+        case CORPORAL_RANK:
+            return CORPORAL_HEALTH;
         case SERGEANT_RANK:
             return SERGEANT_HEALTH;
+        case OFFICER_RANK:
+            return OFFICER_HEALTH;
         case GENERAL_RANK:
             return GENERAL_HEALTH;
         default:

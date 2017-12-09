@@ -384,4 +384,39 @@ public class TestMilitaryCreationAndPromotion {
         assertEquals(barracks0.getHostedMilitary().size(), 1);
         assertEquals(barracks0.getHostedMilitary().get(0).getRank(), GENERAL_RANK);
     }
+
+    @Test
+    public void testGeneralCannotBePromoted() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(6, 22);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct the barracks */
+        Utils.constructHouse(barracks0, map);
+
+        /* Place a general in the barracks */
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0, map);
+
+        /* Add one coin */
+        Cargo coinCargo = new Cargo(COIN, map);
+        barracks0.promiseDelivery(COIN);
+        barracks0.putCargo(coinCargo);
+
+        /* Verify that no promotion happens */
+        Utils.fastForward(100, map);
+
+        assertEquals(barracks0.getHostedMilitary().size(), 1);
+        assertEquals(barracks0.getHostedMilitary().get(0).getRank(), GENERAL_RANK);
+    }
 }
