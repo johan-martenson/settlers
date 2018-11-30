@@ -88,25 +88,6 @@ public class GameUtils {
             return Integer.compare(t.x, t1.x);
 
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null) {
-                return false;
-            }
-
-            if (! (o instanceof Point)) {
-                return false;
-            }
-
-            return equals(o);
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            return hash;
-        }
     }
 
     public static List<Point> findShortestPath(Point start, Point goal,

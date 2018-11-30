@@ -1350,4 +1350,117 @@ public class TestTransportation {
         assertEquals(path.get(2), flag1.getPosition());
     }
 
+    @Test
+    public void testUtilBuildingsAreConnected() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(19, 15);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place second woodcutter */
+        Point point2 = new Point(23, 15);
+        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place road to connect the woodcutters */
+        map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), woodcutter1.getFlag());
+
+        /* Verify that the roads are connected according to the util function */
+        assertTrue(map.areFlagsOrBuildingsConnectedViaRoads(woodcutter0, woodcutter1));
+    }
+
+    @Test
+    public void testUtilBuildingsAreNotConnected() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(19, 15);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place second woodcutter */
+        Point point2 = new Point(23, 15);
+        Woodcutter woodcutter1 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Verify that the woodcutters are not connected according to the util function */
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(woodcutter0, woodcutter1));
+    }
+
+    @Test
+    public void testUtilFlagsAreNotConnected() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(19, 15);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place second flag */
+        Point point2 = new Point(23, 15);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Verify that the flags are not connected according to the util function */
+        assertFalse(map.areFlagsOrBuildingsConnectedViaRoads(flag0, flag1));
+    }
+
+    @Test
+    public void testUtilFlagsAreConnected() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point point0 = new Point(14, 16);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point point1 = new Point(19, 15);
+        Flag flag0 = map.placeFlag(player0, point1);
+
+        /* Place second flag */
+        Point point2 = new Point(23, 15);
+        Flag flag1 = map.placeFlag(player0, point2);
+
+        /* Place road to connect the flags */
+        map.placeAutoSelectedRoad(player0, flag0, flag1);
+
+        /* Verify that the flags are connected according to the util function */
+        assertTrue(map.areFlagsOrBuildingsConnectedViaRoads(flag0, flag1));
+    }
 }
