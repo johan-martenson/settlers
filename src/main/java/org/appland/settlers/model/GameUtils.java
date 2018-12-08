@@ -28,9 +28,8 @@ import static java.lang.Math.round;
 public class GameUtils {
 
     static boolean isUnique(List<Point> wayPoints) {
-        Set<Point> pointsSet = new HashSet<>();
 
-        pointsSet.addAll(wayPoints);
+        Set<Point> pointsSet = new HashSet<>(wayPoints);
 
         return wayPoints.size() == pointsSet.size();
     }
@@ -41,36 +40,6 @@ public class GameUtils {
         Double realDistance(Point currentPoint, Point neighbor);
 
         Double estimateDistance(Point from, Point to);
-    }
-
-    static class SortPointsByPolarOrder implements Comparator<Point> {
-        private final Point center;
-
-        public SortPointsByPolarOrder(Point point) {
-            center = point;
-        }
-
-        @Override
-        public int compare(Point t, Point t1) {
-            double a = getAngle(t);
-            double a1 = getAngle(t1);
-
-            return Double.compare(a, a1);
-        }
-
-        private double getAngle(Point point) {
-            double dy = point.y - center.y;
-            double dx = point.x - center.x;
-            double hy = Math.sqrt(dy*dy + dx*dx);
-
-            double angle = dy / hy;
-
-            if (angle < 0) {
-                angle = Math.PI - angle;
-            }
-
-            return angle;
-        }
     }
 
     static class SortPointsByY implements Comparator<Point> {
@@ -192,11 +161,10 @@ public class GameUtils {
     }
 
     public static List<Point> hullWanderer(Collection<Point> points) {
-        List<Point> sortedPoints = new ArrayList<>();
         List<Point> hull = new LinkedList<>();
 
         /* Sort the points bottom to top, and left to right */
-        sortedPoints.addAll(points);
+        List<Point> sortedPoints = new ArrayList<>(points);
 
         Collections.sort(sortedPoints, new SortPointsByY());
 
