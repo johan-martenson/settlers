@@ -515,25 +515,19 @@ public class GameMap {
 
                     /* Filter points outside the map */
                     if (!isWithinMap(p)) {
-                        if (!borders.contains(point)) {
-                            borders.add(point);
-                        }
+                        borders.add(point);
 
                         globalCleared.add(p);
 
                     /* Add points outside the claimed areas to the border */
                     } else if (!claims.containsKey(p)) {
-                        if (!borders.contains(point)) {
-                            borders.add(point);
-                        }
+                        borders.add(point);
 
                         globalCleared.add(p);
 
                     /* Add the point to the border if it belongs to another player */
                     } else if (!claims.get(p).getPlayer().equals(player)) {
-                        if (!borders.contains(point)) {
-                            borders.add(point);
-                        }
+                        borders.add(point);
                     }
                 }
 
