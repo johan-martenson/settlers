@@ -388,7 +388,7 @@ public class Player {
 
     Storage getClosestStorageOffroad(Point position) {
         Building storage = null;
-        Double distance = Double.MAX_VALUE;
+        double distance = Double.MAX_VALUE;
 
         for (Building building : buildings) {
 
