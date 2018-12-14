@@ -37,9 +37,11 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -428,7 +430,7 @@ public class TestBarracks {
 
         try {
             barracks0.putCargo(cargo);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(barracks0.getAmount(COIN), 1);
@@ -477,7 +479,7 @@ public class TestBarracks {
         Courier courier = road0.getCourier();
         for (int i = 0; i < 1000; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial().equals(COIN)) {
-                assertFalse(true);
+                fail();
             }
 
             map.stepTime();
@@ -1315,7 +1317,7 @@ public class TestBarracks {
         /* Step time once and verify that the barracks is upgraded */
         map.stepTime();
 
-        assertFalse(barracks0.equals(map.getBuildingAtPoint(barracks0.getPosition())));
+        assertNotEquals(barracks0, map.getBuildingAtPoint(barracks0.getPosition()));
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
     }
 
@@ -2569,7 +2571,7 @@ public class TestBarracks {
         /* Verify that it's not possible to stop production */
         try {
             barracks0.stopProduction();
-            assertTrue(false);
+            fail();
         } catch (Exception e) {}
     }
 
@@ -2707,7 +2709,7 @@ public class TestBarracks {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Verify that the list of hosted militaries is empty */
-        assertTrue(barracks0.getHostedMilitary().size() == 0);
+        assertEquals(0, barracks0.getHostedMilitary().size());
     }
 
     @Test
@@ -2731,7 +2733,7 @@ public class TestBarracks {
         Utils.constructHouse(barracks0, map);
 
         /* Verify that the list of hosted militaries is empty */
-        assertTrue(barracks0.getHostedMilitary().size() == 0);
+        assertEquals(0, barracks0.getHostedMilitary().size());
     }
 
     @Test
@@ -2758,7 +2760,7 @@ public class TestBarracks {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
 
         /* Verify that the list of hosted militaries increased empty */
-        assertTrue(barracks0.getHostedMilitary().size() == 1);
+        assertEquals(1, barracks0.getHostedMilitary().size());
         assertEquals(barracks0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
     }
 

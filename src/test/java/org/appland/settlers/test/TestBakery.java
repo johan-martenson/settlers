@@ -636,8 +636,8 @@ public class TestBakery {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(bakery0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 

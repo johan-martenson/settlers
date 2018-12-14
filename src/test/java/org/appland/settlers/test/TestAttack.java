@@ -46,6 +46,7 @@ import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -1729,7 +1730,7 @@ public class TestAttack {
         Military nextDefender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
-        assertFalse(attacker.equals(nextDefender));
+        assertNotEquals(attacker, nextDefender);
 
         /* Verify that the new defender starts fighting with the attacker */
         assertEquals(nextDefender.getTarget(), barracks1.getFlag().getPosition());
@@ -1815,7 +1816,7 @@ public class TestAttack {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that the attacking corporal beats three privates */
-        assertTrue(attacker.getRank().equals(CORPORAL_RANK));
+        assertEquals(attacker.getRank(), CORPORAL_RANK);
 
         for (int i = 0; i < 3; i++) {
 
@@ -1840,7 +1841,7 @@ public class TestAttack {
         Military nextDefender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
-        assertFalse(attacker.equals(nextDefender));
+        assertNotEquals(attacker, nextDefender);
 
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, attacker, nextDefender);
@@ -1929,7 +1930,7 @@ public class TestAttack {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that the attacking corporal beats three privates */
-        assertTrue(attacker.getRank().equals(SERGEANT_RANK));
+        assertEquals(attacker.getRank(), SERGEANT_RANK);
 
         for (int i = 0; i < 3; i++) {
 
@@ -1954,7 +1955,7 @@ public class TestAttack {
         Military nextDefender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
-        assertFalse(attacker.equals(nextDefender));
+        assertNotEquals(attacker, nextDefender);
 
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, attacker, nextDefender);
@@ -2043,7 +2044,7 @@ public class TestAttack {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that the attacking officer beats three sergeants */
-        assertTrue(attacker.getRank().equals(OFFICER_RANK));
+        assertEquals(attacker.getRank(), OFFICER_RANK);
 
         for (int i = 0; i < 3; i++) {
 
@@ -2068,7 +2069,7 @@ public class TestAttack {
         Military nextDefender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
-        assertFalse(attacker.equals(nextDefender));
+        assertNotEquals(attacker, nextDefender);
 
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, attacker, nextDefender);
@@ -2157,7 +2158,7 @@ public class TestAttack {
         assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
 
         /* Verify that the attacking general beats three officers */
-        assertTrue(attacker.getRank().equals(GENERAL_RANK));
+        assertEquals(attacker.getRank(), GENERAL_RANK);
 
         for (int i = 0; i < 3; i++) {
 
@@ -2182,7 +2183,7 @@ public class TestAttack {
         Military nextDefender = Utils.waitForMilitaryOutsideBuilding(player1, map);
 
         assertNotNull(nextDefender);
-        assertFalse(attacker.equals(nextDefender));
+        assertNotEquals(attacker, nextDefender);
 
         /* Wait for the fight to start */
         Utils.waitForFightToStart(map, attacker, nextDefender);
@@ -2334,7 +2335,7 @@ public class TestAttack {
 
         assertTrue(flagPoint.isAdjacent(attacker1.getTarget()) || flagPoint.equals(attacker1.getTarget()));
         assertTrue(flagPoint.isAdjacent(attacker2.getTarget()) || flagPoint.equals(attacker2.getTarget()));
-        assertFalse(attacker1.getTarget().equals(attacker2.getTarget()));
+        assertNotEquals(attacker1.getTarget(), attacker2.getTarget());
     }
 
     @Test
@@ -2464,12 +2465,12 @@ public class TestAttack {
                 break;
             }
 
-            assertTrue(waitingAttacker.getPosition().equals(waitingPosition));
+            assertEquals(waitingAttacker.getPosition(), waitingPosition);
 
             map.stepTime();
         }
 
-        assertTrue(firstAttacker.getPosition().equals(barracks1.getPosition()));
+        assertEquals(firstAttacker.getPosition(), barracks1.getPosition());
         assertTrue(firstAttacker.isInsideBuilding());
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
 
@@ -2688,7 +2689,7 @@ public class TestAttack {
             }
 
             for (Worker military : attackers) {
-                assertFalse(military.getPosition().equals(barracks1.getPosition()));
+                assertNotEquals(military.getPosition(), barracks1.getPosition());
             }
 
             map.stepTime();
@@ -2830,7 +2831,7 @@ public class TestAttack {
             }
 
             for (Worker military : attackers) {
-                assertFalse(military.getPosition().equals(barracks1.getPosition()));
+                assertNotEquals(military.getPosition(), barracks1.getPosition());
             }
 
             map.stepTime();
@@ -3318,7 +3319,7 @@ public class TestAttack {
             map.stepTime();
         }
 
-        assertTrue(reinforcement.getTarget().equals(barracks1.getFlag().getPosition()));
+        assertEquals(reinforcement.getTarget(), barracks1.getFlag().getPosition());
     }
 
     @Test
@@ -3556,7 +3557,7 @@ public class TestAttack {
         reinforcement.setTargetBuilding(barracks1);
 
         /* Wait for the attacker to reach the building */
-        assertFalse(attacker.getPosition().equals(barracks1.getPosition()));
+        assertNotEquals(attacker.getPosition(), barracks1.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
@@ -3565,7 +3566,7 @@ public class TestAttack {
         assertTrue(attacker.isInsideBuilding());
 
         /* Verify that reinforcement reaches the barracks and leaves */
-        assertFalse(reinforcement.getPosition().equals(barracks1.getPosition()));
+        assertNotEquals(reinforcement.getPosition(), barracks1.getPosition());
         assertEquals(reinforcement.getTarget(), barracks1.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, reinforcement, barracks1.getPosition());
@@ -3701,7 +3702,7 @@ public class TestAttack {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, firstAttacker, barracks1.getPosition());
 
-        assertTrue(firstAttacker.getPosition().equals(barracks1.getPosition()));
+        assertEquals(firstAttacker.getPosition(), barracks1.getPosition());
         assertTrue(firstAttacker.isInsideBuilding());
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
 

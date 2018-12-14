@@ -126,7 +126,7 @@ public class TestHunterHut {
         hunterHut.assignWorker(hunter);
 
         assertFalse(hunterHut.needsWorker());
-        assertTrue(hunterHut.getWorker().equals(hunter));
+        assertEquals(hunterHut.getWorker(), hunter);
     }
 
     @Test(expected = Exception.class)

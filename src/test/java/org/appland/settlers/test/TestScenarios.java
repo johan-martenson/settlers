@@ -193,7 +193,7 @@ public class TestScenarios {
 
         Cargo cargo = headquarter0.getFlag().getStackedCargo().get(amountInStack);
 
-        assertTrue(cargo.getTarget().equals(sawmill0));
+        assertEquals(cargo.getTarget(), sawmill0);
 
         /* Wait for smToHqRoad's courier to pick up the cargo */
         for (int i = 0; i < 400; i++) {
@@ -214,7 +214,7 @@ public class TestScenarios {
         assertEquals(courierSmToHq.getCargo().getMaterial(), WOOD);
         assertEquals(courierSmToHq.getTarget(), sawmill0.getPosition());
         assertEquals(courierSmToHq.getPosition(), headquarter0.getFlag().getPosition());
-        assertTrue(courierSmToHq.getCargo().getTarget().equals(sawmill0));
+        assertEquals(courierSmToHq.getCargo().getTarget(), sawmill0);
 
         /* Get the wood transported to the sawmill and deliver it */
         Utils.fastForwardUntilWorkerReachesPoint(map, courierSmToHq, sawmill0.getPosition());
@@ -279,7 +279,7 @@ public class TestScenarios {
 
         assertNotNull(courierSmToHq.getCargo());
         assertEquals(courierSmToHq.getCargo().getMaterial(), PLANK);
-        assertTrue(courierSmToHq.getCargo().getTarget().equals(headquarter0));
+        assertEquals(courierSmToHq.getCargo().getTarget(), headquarter0);
         assertEquals(courierSmToHq.getTarget(), headquarter0.getPosition());
         assertFalse(courierSmToHq.isAt(headquarter0.getFlag().getPosition()));
 

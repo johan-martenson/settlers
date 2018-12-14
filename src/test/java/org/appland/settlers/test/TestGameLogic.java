@@ -266,15 +266,15 @@ public class TestGameLogic {
         /* Fast forward to let the couriers reach their roads */
         Utils.fastForwardUntilWorkersReachTarget(map, courier0, courier1);
 
-        assertTrue(courier0.getAssignedRoad().equals(road0));
+        assertEquals(courier0.getAssignedRoad(), road0);
 
-        assertTrue(courier1.getAssignedRoad().equals(road1));
+        assertEquals(courier1.getAssignedRoad(), road1);
 
         assertEquals(map.getRoad(headquarter0.getFlag().getPosition(), flag0.getPosition()), road0);
         assertNotNull(road0.getCourier().getAssignedRoad());
 
-        assertTrue(road0.getCourier().equals(courier0));
-        assertTrue(road0.getCourier().getAssignedRoad().equals(road0));
+        assertEquals(road0.getCourier(), courier0);
+        assertEquals(road0.getCourier().getAssignedRoad(), road0);
 
         assertEquals(map.getWorkers().size(), 3);
 

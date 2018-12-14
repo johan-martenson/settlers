@@ -55,6 +55,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -262,7 +263,7 @@ public class TestHeadquarter {
         Point point1 = new Point(10, 10);
         try {
             Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point1);
-            assertTrue(false);
+            fail();
         } catch (Exception e) {
         }
     }

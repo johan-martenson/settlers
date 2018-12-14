@@ -998,8 +998,8 @@ public class TestFarm {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(farm0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), farm0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 
@@ -1411,7 +1411,7 @@ public class TestFarm {
         Crop crop = map.placeCrop(point1);
 
         /* Verify that there is no available building space on the growing crop */
-        assertEquals(map.isAvailableHousePoint(player0, point0), null);
+        assertNull(map.isAvailableHousePoint(player0, point0));
     }
 
     @Test (expected = InvalidUserActionException.class)
@@ -1485,7 +1485,7 @@ public class TestFarm {
         Utils.waitForCropToGetHarvested(map, crop);
 
         /* Verify that there is available building space on the growing crop */
-        assertEquals(map.isAvailableHousePoint(player0, crop.getPosition()), null);
+        assertNull(map.isAvailableHousePoint(player0, crop.getPosition()));
     }
 
     @Test

@@ -39,9 +39,11 @@ import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -122,8 +124,8 @@ public class TestRoads {
         List<Point> way = map.findWayWithExistingRoads(point1, point2);
 
         assertEquals(way.size(), 3);
-        assertTrue(way.get(0).equals(point1));
-        assertTrue(way.get(2).equals(point2));
+        assertEquals(way.get(0), point1);
+        assertEquals(way.get(2), point2);
     }
 
     @Test
@@ -401,9 +403,9 @@ public class TestRoads {
         wayPoints = road.getWayPoints();
 
         assertEquals(wayPoints.size(), 3);
-        assertTrue(wayPoints.get(0).equals(start));
-        assertTrue(wayPoints.get(1).equals(middlePoint));
-        assertTrue(wayPoints.get(2).equals(end));
+        assertEquals(wayPoints.get(0), start);
+        assertEquals(wayPoints.get(1), middlePoint);
+        assertEquals(wayPoints.get(2), end);
     }
 
     @Test(expected = Exception.class)
@@ -1514,7 +1516,7 @@ public class TestRoads {
 
         assertNotNull(secondCourier);
         assertNotNull(secondCourier.getAssignedRoad());
-        assertFalse(secondCourier.getAssignedRoad().equals(road));
+        assertNotEquals(secondCourier.getAssignedRoad(), road);
     }
 
     @Test
@@ -1848,7 +1850,7 @@ public class TestRoads {
 
         try {
             map.placeFlag(player0, point1);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {
         }
 
@@ -1889,7 +1891,7 @@ public class TestRoads {
         /* Verify that the road is too small to split and an exception is thrown */
         try {
             map.placeFlag(player0, point3);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {
         }
 
@@ -2294,6 +2296,6 @@ public class TestRoads {
         Road road1 = map.placeRoad(player0, point0, point2, point1);
         Road road2 = map.placeRoad(player0, point0, point3, point1);
 
-        assertFalse(road1.equals(road2));
+        assertNotEquals(road1, road2);
     }
 }

@@ -736,8 +736,8 @@ public class TestPigFarm {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(pigFarm0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), pigFarm0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 
@@ -890,7 +890,7 @@ public class TestPigFarm {
 
         /* Verify that the pig breeder doesn't produce anything */
         for (int i = 0; i < 300; i++) {
-            assertEquals(pigBreeder.getCargo(), null);
+            assertNull(pigBreeder.getCargo());
 
             map.stepTime();
         }

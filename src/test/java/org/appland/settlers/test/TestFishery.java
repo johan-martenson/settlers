@@ -143,7 +143,7 @@ public class TestFishery {
         fishery.assignWorker(fisherman);
 
         assertFalse(fishery.needsWorker());
-        assertTrue(fishery.getWorker().equals(fisherman));
+        assertEquals(fishery.getWorker(), fisherman);
     }
 
     @Test(expected = Exception.class)
@@ -1098,8 +1098,8 @@ public class TestFishery {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(fishery0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), fishery0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
 

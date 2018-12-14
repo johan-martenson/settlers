@@ -303,7 +303,7 @@ public class TestQuarry {
 
         Point point = mason.getTarget();
 
-        assertFalse(mason.getTarget().equals(point2));
+        assertNotEquals(mason.getTarget(), point2);
         assertTrue(mason.getTarget().isAdjacent(point2));
         assertTrue(mason.isTraveling());
 
@@ -757,8 +757,8 @@ public class TestQuarry {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(quarry0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), quarry0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());

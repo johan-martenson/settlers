@@ -772,7 +772,7 @@ public class TestDonkeyFarm {
 
         /* Verify that the donkey breeder doesn't produce anything */
         for (int i = 0; i < 300; i++) {
-            assertEquals(donkeyBreeder.getCargo(), null);
+            assertNull(donkeyBreeder.getCargo());
 
             map.stepTime();
         }

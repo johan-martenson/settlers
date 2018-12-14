@@ -54,9 +54,11 @@ import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class Utils {
 
@@ -504,7 +506,7 @@ public class Utils {
 
         for (int i = 0; i < 500; i++) {
             if (courier.getCargo() != null && courier.getCargo().getMaterial() == COIN) {
-                assertFalse(true);
+                fail();
             }
 
             map.stepTime();
@@ -580,7 +582,7 @@ public class Utils {
             map.stepTime();
         }
 
-        assertFalse(true);
+        fail();
 
         return null;
     }
@@ -820,7 +822,7 @@ public class Utils {
             map.stepTime();
         }
 
-        assertTrue(false);
+        fail();
 
         return null;
     }
@@ -931,7 +933,7 @@ public class Utils {
             map.stepTime();
         }
 
-        assertFalse(map.getBuildingAtPoint(building.getPosition()).equals(building));
+        assertNotEquals(map.getBuildingAtPoint(building.getPosition()), building);
 
         return map.getBuildingAtPoint(building.getPosition());
     }

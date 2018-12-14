@@ -46,6 +46,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -463,7 +464,7 @@ public class TestGraniteMine {
         Point point0 = new Point(2, 2);
         try {
             map.placeBuilding(new GraniteMine(player0), point0);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getBuildings().size(), 1);
@@ -886,8 +887,8 @@ public class TestGraniteMine {
         courier.assignToRoad(road0);
 
         /* Wait for the courier to reach the idle point of the road */
-        assertFalse(courier.getTarget().equals(headquarter0.getFlag().getPosition()));
-        assertFalse(courier.getTarget().equals(graniteMine0.getFlag().getPosition()));
+        assertNotEquals(courier.getTarget(), headquarter0.getFlag().getPosition());
+        assertNotEquals(courier.getTarget(), graniteMine0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());

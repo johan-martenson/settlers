@@ -34,6 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -518,7 +519,7 @@ public class TestFortress {
 
         try {
             fortress0.putCargo(cargo);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(fortress0.getAmount(COIN), 4);
@@ -1123,7 +1124,7 @@ public class TestFortress {
         /* Verify that it's not possible to stop production */
         try {
             fortress0.stopProduction();
-            assertTrue(false);
+            fail();
         } catch (Exception e) {}
     }
 
@@ -1262,7 +1263,7 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Verify that the list of hosted militaries is empty */
-        assertTrue(fortress0.getHostedMilitary().size() == 0);
+        assertEquals(0, fortress0.getHostedMilitary().size());
     }
 
     @Test
@@ -1286,7 +1287,7 @@ public class TestFortress {
         Utils.constructHouse(fortress0, map);
 
         /* Verify that the list of hosted militaries is empty */
-        assertTrue(fortress0.getHostedMilitary().size() == 0);
+        assertEquals(0, fortress0.getHostedMilitary().size());
     }
 
     @Test
@@ -1313,7 +1314,7 @@ public class TestFortress {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, fortress0, map);
 
         /* Verify that the list of hosted militaries increased empty */
-        assertTrue(fortress0.getHostedMilitary().size() == 1);
+        assertEquals(1, fortress0.getHostedMilitary().size());
         assertEquals(fortress0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
     }
 

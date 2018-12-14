@@ -7,7 +7,7 @@ package org.appland.settlers.test;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.appland.settlers.model.Building;
+
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Scout;
@@ -280,7 +280,7 @@ public class TestScout {
 
         /* Verify that the scout walks eight by three segments */
         for (int i = 0; i < 8; i++) {
-            assertFalse(scout.getTarget().equals(scout.getPosition()));
+            assertNotEquals(scout.getTarget(), scout.getPosition());
             assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
@@ -394,7 +394,7 @@ public class TestScout {
 
         /* Verify that the scout discovers new ground */
         for (int i = 0; i < 8; i++) {
-            assertFalse(scout.getTarget().equals(scout.getPosition()));
+            assertNotEquals(scout.getTarget(), scout.getPosition());
             assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
@@ -453,7 +453,7 @@ public class TestScout {
 
         /* Verify that the scout discovers new ground */
         for (int i = 0; i < 8; i++) {
-            assertFalse(scout.getTarget().equals(scout.getPosition()));
+            assertNotEquals(scout.getTarget(), scout.getPosition());
             assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());

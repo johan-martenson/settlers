@@ -365,7 +365,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the second site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -376,7 +376,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the third site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -387,7 +387,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the fourth site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -398,7 +398,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the fifth site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -417,7 +417,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the seventh site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -428,7 +428,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the eighth site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -439,7 +439,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the ninth site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());
@@ -450,7 +450,7 @@ public class TestGeologist {
         Utils.fastForward(20, map);
 
         assertFalse(geologist.isInvestigating());
-        assertFalse(geologist.getTarget().equals(flag.getPosition()));
+        assertNotEquals(geologist.getTarget(), flag.getPosition());
 
         /* Let the geologist go to the tenth site */
         Utils.fastForwardUntilWorkerReachesPoint(map, geologist, geologist.getTarget());

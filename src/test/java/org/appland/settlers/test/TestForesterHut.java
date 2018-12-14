@@ -129,7 +129,7 @@ public class TestForesterHut {
         foresterHut.assignWorker(forester);
 
         assertFalse(foresterHut.needsWorker());
-        assertTrue(foresterHut.getWorker().equals(forester));
+        assertEquals(foresterHut.getWorker(), forester);
     }
 
     @Test(expected = Exception.class)

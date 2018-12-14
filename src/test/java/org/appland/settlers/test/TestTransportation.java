@@ -307,7 +307,7 @@ public class TestTransportation {
 
         Flag target = foresterHut.getFlag();
 
-        assertTrue(target.getPosition().equals(new Point(13, 15)));
+        assertEquals(target.getPosition(), new Point(13, 15));
 
         /* Place a forester on the map and assign it to the forester hut */
         Forester forester = new Forester(player0, map);
@@ -318,23 +318,23 @@ public class TestTransportation {
         forester.setTargetBuilding(foresterHut);
 
 /*             [(2, 18), (4, 18), (6, 18), (8, 18), (10, 18), (11, 17), (12, 16), (13, 15), (14, 14), (12, 14), (11, 15), (10, 16)] */
-        assertTrue(forester.getPosition().equals(start));
+        assertEquals(forester.getPosition(), start);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, point1);
-        assertTrue(forester.getPosition().equals(point1));
+        assertEquals(forester.getPosition(), point1);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, point1.right());
-        assertTrue(forester.getPosition().equals(point1.right()));
+        assertEquals(forester.getPosition(), point1.right());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, point2);
-        assertTrue(forester.getPosition().equals(point2));
+        assertEquals(forester.getPosition(), point2);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, point9);
-        assertTrue(forester.getPosition().equals(point9));
+        assertEquals(forester.getPosition(), point9);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, forester, foresterHut.getPosition());
         assertTrue(forester.isExactlyAtPoint());
-        assertTrue(forester.getPosition().equals(foresterHut.getPosition()));
+        assertEquals(forester.getPosition(), foresterHut.getPosition());
     }
 
     @Test(expected = Exception.class)
@@ -441,7 +441,7 @@ public class TestTransportation {
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
         Cargo cargo = quarry0.getFlag().getCargoWaitingForRoad(map.getRoad(storage.getFlag().getPosition(), quarry0.getFlag().getPosition()));
-        assertTrue(cargo.getPosition().equals(quarry0.getFlag().getPosition()));
+        assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
         assertEquals(cargo.getTarget(), storage);
         assertEquals(cargo.getMaterial(), STONE);
     }
@@ -514,14 +514,14 @@ public class TestTransportation {
         /* Let the courier walk to  */
         Utils.fastForwardUntilWorkerReachesPoint(map, mdlToEndCr, point1);
 
-        assertTrue(mdlToEndCr.getPosition().equals(point1));
+        assertEquals(mdlToEndCr.getPosition(), point1);
 
         /* Courier at middle point */
         assertFalse(mdlToEndCr.isIdle());
         assertNull(mdlToEndCr.getCargo());
         assertTrue(middleFlag.getStackedCargo().contains(cargo));
         assertEquals(middleFlag.getStackedCargo().size(), 1);
-        assertTrue(middleFlag.getStackedCargo().get(0).equals(cargo));
+        assertEquals(middleFlag.getStackedCargo().get(0), cargo);
         assertNull(hqToMdlCr.getCargo());
         assertTrue(middleFlag.hasCargoWaitingForRoad(hqToMiddleRoad));
 
@@ -565,7 +565,7 @@ public class TestTransportation {
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertTrue(GameUtils.getClosestStorage(hqToMiddleRoad.getStart(), player0).equals(storage));
+        assertEquals(GameUtils.getClosestStorage(hqToMiddleRoad.getStart(), player0), storage);
 
         /* Step time to let the headquarter send new workers */
         map.stepTime();

@@ -39,6 +39,7 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -476,7 +477,7 @@ public class TestCourier {
 
         /* After delivering the cargo, the courier goes back to the idle spot */
         assertFalse(courier.isIdle());
-        assertFalse(courier.getTarget().equals(courier.getPosition()));
+        assertNotEquals(courier.getTarget(), courier.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
@@ -655,7 +656,7 @@ public class TestCourier {
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middleFlag.getPosition());
 
         assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
-        assertEquals(courier.getCargo(), null);
+        assertNull(courier.getCargo());
         assertFalse(courier.isIdle());
         assertEquals(courier.getTarget(), middlePoint);
 

@@ -47,9 +47,11 @@ import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -204,7 +206,7 @@ public class TestPlacement {
         Point point2 = new Point(12, 10);
         try {
             map.placeBuilding(woodcutter, point2);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {
         }
     }
@@ -891,7 +893,7 @@ public class TestPlacement {
         Tile tile1 = map.getTerrain().getTile(bottom1, bottom2, middle);
         Tile tile2 = map.getTerrain().getTile(top1, top2, middle);
 
-        assertFalse(tile1.equals(tile2));
+        assertNotEquals(tile1, tile2);
     }
 
     @Test
@@ -925,7 +927,7 @@ public class TestPlacement {
 
         try {
             map.placeTree(point0);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertTrue(map.getTrees().isEmpty());
@@ -976,7 +978,7 @@ public class TestPlacement {
         /* Verify that it's not possible to place a woodcutter on the mountain */
         try {
             map.placeBuilding(new Woodcutter(player0), point1);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertTrue(map.getTrees().isEmpty());
@@ -1005,7 +1007,7 @@ public class TestPlacement {
         /* Verify that it's not possible to place a woodcutter on the mountain */
         try {
             map.placeBuilding(new Woodcutter(player0), point1.downRight());
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertTrue(map.getTrees().isEmpty());
@@ -1034,7 +1036,7 @@ public class TestPlacement {
         try {
             Point point2 = new Point(10, 8);
             map.placeBuilding(new Woodcutter(player0), point2);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertTrue(map.getTrees().isEmpty());
@@ -1055,7 +1057,7 @@ public class TestPlacement {
 
         try {
             map.placeFlag(player0, point0);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getBuildings().size(), 1);
@@ -1076,7 +1078,7 @@ public class TestPlacement {
 
         try {
             map.placeFlag(player0, point0);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getBuildings().size(), 1);
@@ -1097,7 +1099,7 @@ public class TestPlacement {
 
         try {
             map.placeBuilding(new Woodcutter(player0), point0);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getBuildings().size(), 1);
@@ -1539,7 +1541,7 @@ public class TestPlacement {
         /* Verify that it's not possible to place a tree on the woodcutter */
         try {
             map.placeTree(point1);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
     }
 
@@ -1768,14 +1770,14 @@ public class TestPlacement {
                 try {
                     Flag flag0 = map.placeFlag(player0, borderPoint);
 
-                    assertFalse(true);
+                    fail();
                 } catch (Exception e) {}
 
                 assertFalse(map.isFlagAtPoint(borderPoint));
 
                 try {
                     map.getFlagAtPoint(borderPoint);
-                    assertFalse(true);
+                    fail();
                 } catch (Exception e) {}
             }
         }
@@ -1803,7 +1805,7 @@ public class TestPlacement {
                 try {
                     Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), borderPoint);
 
-                    assertFalse(true);
+                    fail();
                 } catch (Exception e) {}
 
                 assertFalse(map.isBuildingAtPoint(borderPoint));

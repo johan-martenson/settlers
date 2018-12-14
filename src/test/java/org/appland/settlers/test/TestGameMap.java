@@ -36,6 +36,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -112,7 +113,7 @@ public class TestGameMap {
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        assertTrue(headquarter.getPosition().equals(hqPoint));
+        assertEquals(headquarter.getPosition(), hqPoint);
     }
 
     @Test(expected=Exception.class)
@@ -447,7 +448,7 @@ public class TestGameMap {
 
         try {
             map.placeRoad(player0, point1, point2, point3, point4, point5, point6, point7, point8, point10, point9);
-            assertFalse(true);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getRoads().size(), 1);
@@ -484,7 +485,8 @@ public class TestGameMap {
         Point point10 = new Point(51, 67);
 
         try {
-            map.placeRoad(player0, point1, point2, point3, point6, point7, point8, point10, point9);            assertFalse(true);
+            map.placeRoad(player0, point1, point2, point3, point6, point7, point8, point10, point9);
+            fail();
         } catch (Exception e) {}
 
         assertEquals(map.getRoads().size(), 1);

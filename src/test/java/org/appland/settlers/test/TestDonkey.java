@@ -34,6 +34,7 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -535,7 +536,7 @@ public class TestDonkey {
 
         /* After delivering the cargo, the donkey goes back to the idle spot */
         assertFalse(donkey.isIdle());
-        assertFalse(donkey.getTarget().equals(donkey.getPosition()));
+        assertNotEquals(donkey.getTarget(), donkey.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, donkey.getTarget());
 
@@ -710,7 +711,7 @@ public class TestDonkey {
         Utils.fastForwardUntilWorkerReachesPoint(map, donkey, middleFlag.getPosition());
 
         assertEquals(middleFlag.getStackedCargo().get(0), cargoForRightWoodcutter);
-        assertEquals(donkey.getCargo(), null);
+        assertNull(donkey.getCargo());
         assertFalse(donkey.isIdle());
         assertEquals(donkey.getTarget(), middlePoint);
 
