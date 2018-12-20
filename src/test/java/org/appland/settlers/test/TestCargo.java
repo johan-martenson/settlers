@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 public class TestCargo {
 
     @Test
-    public void testNextStepIsNullForCargoWithoutTarget() throws Exception {
+    public void testNextStepIsNullForCargoWithoutTarget() {
         Cargo cargo = new Cargo(WOOD, null);
         assertNull(cargo.getNextFlagOrBuilding());
     }
