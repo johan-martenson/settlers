@@ -261,4 +261,14 @@ public class Terrain {
     public boolean isNextToMagenta(Point site) {
         return isAnyAdjacentTile(site, Vegetation.MAGENTA);
     }
+
+    public boolean isOnBuildable(Point point) {
+        for (Tile tile : getSurroundingTiles(point)) {
+            if (!tile.getVegetationType().isBuildable()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
