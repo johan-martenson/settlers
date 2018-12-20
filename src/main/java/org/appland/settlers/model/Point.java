@@ -20,6 +20,10 @@ public class Point extends java.awt.Point {
     //static Map<String, Integer> allocators = new HashMap<>();
     //static int printCount = 0;
 
+    public Point(java.awt.Point point) {
+        super(point.x, point.y);
+    }
+
     public Point(int x, int y) {
         super(x, y);
 
