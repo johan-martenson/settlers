@@ -151,11 +151,8 @@ public class Road {
     }
 
     public boolean needsDonkey() {
-        if (isMainRoad() && donkey == null && needsCourier) {
-            return true;
-        }
+        return isMainRoad() && donkey == null && needsCourier;
 
-        return false;
     }
 
     Point getOtherPoint(Point position) {
