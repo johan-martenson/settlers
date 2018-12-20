@@ -1247,14 +1247,14 @@ public class GameMap {
                 boolean wideAreaClear = true;
 
                 for (Point point : site.getAdjacentPoints()) {
-                    if (!terrain.isOnGrass(point)) {
+                    if (!terrain.isOnBuildable(point)) {
                         wideAreaClear = false;
 
                         break;
                     }
                 }
 
-                return terrain.isOnGrass(site) && wideAreaClear;
+                return terrain.isOnBuildable(site) && wideAreaClear;
             default:
                 throw new Exception("Can't handle house with unexpected size " + size);
             }

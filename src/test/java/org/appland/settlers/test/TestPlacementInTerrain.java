@@ -495,6 +495,32 @@ public class TestPlacementInTerrain {
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnDesert() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a desert on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, Tile.Vegetation.DESERT, map);
+        }
+
+        /* Verify that a headquarter cannot be placed in the desert */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
+
     // Snow
 // Also test: -build road next to snow. Is that OK?
 
@@ -875,6 +901,32 @@ public class TestPlacementInTerrain {
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnSnow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place snow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SNOW, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, Tile.Vegetation.SNOW, map);
+        }
+
+        /* Verify that a headquarter cannot be placed on the snow */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
+
     // Grass (meadow)
 
     @Test
@@ -1189,6 +1241,7 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
+
 
     // Savannah
 
@@ -1505,7 +1558,29 @@ public class TestPlacementInTerrain {
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
-// Shallow water (buildable water)
+    @Test
+    public void testCanPlaceHeadquarterOnSavannah() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place savannah on the map */
+        Point point2 = new Point(8, 8);
+        Utils.surroundPointWithVegetation(point2, SAVANNAH, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, SAVANNAH, map);
+        }
+
+        /* Verify that a headquarter can be placed on the savannah */
+        map.placeBuilding(new Headquarter(player0), point2);
+    }
+
+
+    // Shallow water (buildable water)
 
     @Test
     public void testAvailableFlagOnBuildableWater() throws Exception {
@@ -1819,6 +1894,28 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
+
+    @Test
+    public void testCanPlaceHeadquarterOnBuildableWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place buildable water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, SHALLOW_WATER, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, SHALLOW_WATER, map);
+        }
+
+        /* Verify that a headquarter can be placed on the buildable water */
+        map.placeBuilding(new Headquarter(player0), point2);
+    }
+
 
     // Steppe
 
@@ -2135,7 +2232,29 @@ public class TestPlacementInTerrain {
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
-// Mountain meadow
+    @Test
+    public void testCanPlaceHeadquarterOnSteppe() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place steppe on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, STEPPE, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, STEPPE, map);
+        }
+
+        /* Verify that a headquarter can be placed on the steppe */
+        map.placeBuilding(new Headquarter(player0), point2);
+    }
+
+
+    // Mountain meadow
 
     @Test
     public void testAvailableFlagOnMountainMeadow() throws Exception {
@@ -2448,6 +2567,27 @@ public class TestPlacementInTerrain {
         /* Verify that it's possible to place a flag on the border of mountain meadow and snow */
         Point point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
+    @Test
+    public void testCanPlaceHeadquarterOnMountainMeadow() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place mountain meadow on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, MOUNTAIN_MEADOW, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, MOUNTAIN_MEADOW, map);
+        }
+
+        /* Verify that a headquarter can be placed on the mountain meadow */
+        map.placeBuilding(new Headquarter(player0), point2);
     }
 
     // Buildable mountain
@@ -2764,6 +2904,28 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
+
+    @Test
+    public void testCanPlaceHeadquarterOnBuildableMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place buildable mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
+        }
+
+        /* Verify that a headquarter can be placed on the buildable mountain */
+        map.placeBuilding(new Headquarter(player0), point2);
+    }
+
 
     // Lava
 
@@ -3106,6 +3268,32 @@ public class TestPlacementInTerrain {
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place lava on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, LAVA, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, LAVA, map);
+        }
+
+        /* Verify that a headquarter can be placed on the lava */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
+
     // Deep water
 
     @Test
@@ -3447,6 +3635,32 @@ public class TestPlacementInTerrain {
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place deep water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+        }
+
+        /* Verify that a headquarter cannot be placed on the deep water */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
+
     // Regular water
 
     @Test
@@ -3787,6 +4001,32 @@ public class TestPlacementInTerrain {
         Point point5 = new Point(5, 7);
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
+
+    @Test
+    public void testCannotPlaceHeadquarterOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place water on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, WATER, map);
+        }
+
+        /* Verify that a headquarter cannot be placed on the water */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
 
     // Swamp
 
@@ -4168,6 +4408,33 @@ public class TestPlacementInTerrain {
         assertFalse(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place swamp on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, SWAMP, map);
+        }
+
+        /* Verify that a headquarter can be placed on the swamp */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+
+        }
+    }
+
+
     // Magenta
     @Test
     public void testAvailableFlagInMagenta() throws Exception {
@@ -4538,6 +4805,32 @@ public class TestPlacementInTerrain {
         assertTrue(map.isAvailableFlagPoint(player0, point5));
     }
 
+    @Test
+    public void testCannotPlaceHeadquarterOnMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place magenta on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, MAGENTA, map);
+        }
+
+        /* Verify that a headquarter cannot be placed on the magenta */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
+    }
+
+
     // Regular mountain (that can be mined)
     @Test
     public void testAvailableFlagInMountain() throws Exception {
@@ -4904,5 +5197,30 @@ public class TestPlacementInTerrain {
         /* Verify that it's possible to place a flag on the border of mountain and snow */
         Point point5 = new Point(5, 7);
         assertTrue(map.isAvailableFlagPoint(player0, point5));
+    }
+
+    @Test
+    public void testCannotPlaceHeadquarterOnMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place mountain on the map */
+        Point point2 = new Point(4, 6);
+        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, MOUNTAIN, map);
+        }
+
+        /* Verify that a headquarter cannot be placed on the mountain */
+        try {
+            map.placeBuilding(new Headquarter(player0), point2);
+            fail();
+        } catch (Exception e) {
+        }
     }
 }
