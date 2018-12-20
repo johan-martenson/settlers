@@ -851,8 +851,7 @@ public class TestRoads {
         map.placeFlag(player0, point2);
 
         assertEquals(map.getRoads().size(), 3);
-        List<Road> roads = new ArrayList<>();
-        roads.addAll(map.getRoads());
+        List<Road> roads = new ArrayList<>(map.getRoads());
 
         roads.remove(map.getRoad(point0, point0.downRight()));
 
@@ -901,8 +900,7 @@ public class TestRoads {
         map.placeFlag(player0, point2);
 
         assertEquals(map.getRoads().size(), 3);
-        List<Road> roads = new ArrayList<>();
-        roads.addAll(map.getRoads());
+        List<Road> roads = new ArrayList<>(map.getRoads());
 
         roads.remove(map.getRoad(point0, point0.downRight()));
 
@@ -1618,8 +1616,7 @@ public class TestRoads {
         assertTrue(road0.needsCourier());
         assertEquals(map.getWorkers().size(), 1);
 
-        List<Worker> workersBefore = new LinkedList<>();
-        workersBefore.addAll(map.getWorkers());
+        List<Worker> workersBefore = new LinkedList<>(map.getWorkers());
 
         /* Step time to let the headquarter send new workers */
         map.stepTime();
@@ -1628,8 +1625,7 @@ public class TestRoads {
         assertEquals(map.getWorkers().size(), 2);
 
         /* Find the added courier */
-        List<Worker> workersAfter = new LinkedList<>();
-        workersAfter.addAll(map.getWorkers());
+        List<Worker> workersAfter = new LinkedList<>(map.getWorkers());
         workersAfter.removeAll(workersBefore);
 
         Worker worker = workersAfter.get(0);
