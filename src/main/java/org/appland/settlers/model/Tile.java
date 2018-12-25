@@ -103,6 +103,10 @@ public class Tile {
         public boolean isBuildable() {
             return canBuild;
         }
+
+        public boolean canBuildFlags() {
+            return canPlaceFlag;
+        }
     }
 
     @Override
