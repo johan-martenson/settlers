@@ -16,6 +16,7 @@ import org.appland.settlers.model.HunterHut;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.WildAnimal;
@@ -2926,6 +2927,34 @@ public class TestPlacementInTerrain {
         map.placeBuilding(new Headquarter(player0), point2);
     }
 
+    @Test
+    public void testAvailableLargeHouseOnBuildableMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place a buildable mountain on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, BUILDABLE_MOUNTAIN, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, BUILDABLE_MOUNTAIN, map);
+        }
+
+        /* Verify that there is an available point for a large house on the buildable mountain */
+        try {
+            assertEquals(map.isAvailableHousePoint(player0, point2), Size.LARGE);
+        } catch (Exception e) {
+        }
+    }
+
 
     // Lava
 
@@ -3289,6 +3318,34 @@ public class TestPlacementInTerrain {
         try {
             map.placeBuilding(new Headquarter(player0), point2);
             fail();
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void testNoAvailableLargeHouseOnLava() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place lava on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, LAVA, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, LAVA, map);
+        }
+
+        /* Verify that there is no available point for a large house on the lava */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
         } catch (Exception e) {
         }
     }
@@ -3660,6 +3717,34 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testNoAvailableLargeHouseOnDeepWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place deep water on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, DEEP_WATER, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, DEEP_WATER, map);
+        }
+
+        /* Verify that there is no available point for a large house on the deep water */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
+        } catch (Exception e) {
+        }
+    }
+
 
     // Regular water
 
@@ -4023,6 +4108,34 @@ public class TestPlacementInTerrain {
         try {
             map.placeBuilding(new Headquarter(player0), point2);
             fail();
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void testNoAvailableLargeHouseOnWater() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place water on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, WATER, map);
+        }
+
+        /* Verify that there is no available point for a large house on the water */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
         } catch (Exception e) {
         }
     }
@@ -4434,6 +4547,34 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testNoAvailableLargeHouseOnSwamp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place swamp on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, SWAMP, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, SWAMP, map);
+        }
+
+        /* Verify that there is no available point for a large house on the swamp */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
+        } catch (Exception e) {
+        }
+    }
+
 
     // Magenta
     @Test
@@ -4830,6 +4971,34 @@ public class TestPlacementInTerrain {
         }
     }
 
+    @Test
+    public void testNoAvailableLargeHouseOnMagenta() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place magenta on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, MAGENTA, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, MAGENTA, map);
+        }
+
+        /* Verify that there is no available point for a large house on the magenta */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
+        } catch (Exception e) {
+        }
+    }
+
 
     // Regular mountain (that can be mined)
     @Test
@@ -5220,6 +5389,34 @@ public class TestPlacementInTerrain {
         try {
             map.placeBuilding(new Headquarter(player0), point2);
             fail();
+        } catch (Exception e) {
+        }
+    }
+
+    @Test
+    public void testNoAvailableLargeHouseOnMountain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point1 = new Point(13, 13);
+        map.placeBuilding(new Headquarter(player0), point1);
+
+        /* Place mountain on the map */
+        Point point2 = new Point(6, 6);
+        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
+
+        for (Point point : point2.getAdjacentPoints()) {
+            Utils.surroundPointWithVegetation(point, MOUNTAIN, map);
+        }
+
+        /* Verify that there is no available point for a large house on the mountain */
+        try {
+            assertNull(map.isAvailableHousePoint(player0, point2));
         } catch (Exception e) {
         }
     }

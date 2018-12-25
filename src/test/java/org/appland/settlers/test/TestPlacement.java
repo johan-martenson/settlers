@@ -22,6 +22,7 @@ import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tile.Vegetation;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
@@ -42,6 +43,7 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
+import static org.appland.settlers.model.Tile.Vegetation.DESERT;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -2353,5 +2355,94 @@ public class TestPlacement {
         assertFalse(Size.contains(null, LARGE));
         assertFalse(Size.contains(null, MEDIUM));
         assertFalse(Size.contains(null, SMALL));
+    }
+
+    @Test
+    public void testOnlyFlagsAvailableAroundStone() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", Color.RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place stone */
+        Point point1 = new Point(5, 5);
+        Stone stone0 = map.placeStone(point1);
+
+        /* Verify that there are only available flags around the stone */
+        assertTrue(map.isAvailableFlagPoint(player0, point1.left()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.upLeft()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.upRight()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.right()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.downRight()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.downLeft()));
+
+        assertNull(map.isAvailableHousePoint(player0, point1.left()));
+        assertNull(map.isAvailableHousePoint(player0, point1.upLeft()));
+        assertNull(map.isAvailableHousePoint(player0, point1.upRight()));
+        assertNull(map.isAvailableHousePoint(player0, point1.right()));
+        assertNull(map.isAvailableHousePoint(player0, point1.downRight()));
+        assertNull(map.isAvailableHousePoint(player0, point1.downLeft()));
+    }
+
+    @Test
+    public void testHousesInLineBetweenTrees() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", Color.RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place tree */
+        Point point1 = new Point(5, 5);
+        Tree tree0 = map.placeTree(point1);
+
+        /* Place tree */
+        Point point2 = new Point(13, 5);
+        Tree tree1 = map.placeTree(point2);
+
+        /* Verify that the available buildings between the trees are small house, castle, small house */
+        assertEquals(map.isAvailableHousePoint(player0, point1.right()), SMALL);
+        assertEquals(map.isAvailableHousePoint(player0, point1.right().right()), LARGE);
+        assertEquals(map.isAvailableHousePoint(player0, point1.right().right().right()), SMALL);
+    }
+
+    @Test
+    public void testLargeHouseAvailableUnderFlagAndRoadTerrain() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", Color.RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(20, 20);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place terrain that can only handle roads and flags - no buildings */
+        Point point1 = new Point(15, 15);
+        Utils.surroundPointWithVegetation(point1, DESERT, map);
+        Utils.surroundPointWithVegetation(point1.right(), DESERT, map);
+        Utils.surroundPointWithVegetation(point1.right().right(), DESERT, map);
+
+        /* Verify that it's possible to build a large house close to the vegetation */
+        assertEquals(map.isAvailableHousePoint(player0, point1.right().down()), LARGE);
     }
 }

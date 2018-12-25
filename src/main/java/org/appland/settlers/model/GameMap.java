@@ -1244,17 +1244,17 @@ public class GameMap {
 
                 return true;
             case LARGE:
-                boolean wideAreaClear = true;
-
-                for (Point point : site.getAdjacentPoints()) {
-                    if (!terrain.isOnBuildable(point)) {
-                        wideAreaClear = false;
-
-                        break;
-                    }
+                if (!terrain.getTileUpLeft(site.upLeft()).getVegetationType().canBuildFlags()   ||
+                    !terrain.getTileAbove(site.upLeft()).getVegetationType().canBuildFlags()    ||
+                    !terrain.getTileUpLeft(site.upRight()).getVegetationType().canBuildFlags()  ||
+                    !terrain.getTileAbove(site.upRight()).getVegetationType().canBuildFlags()   ||
+                    !terrain.getTileUpRight(site.upRight()).getVegetationType().canBuildFlags() ||
+                    !terrain.isOnBuildable(site.left())      || !terrain.isOnBuildable(site.right()) ||
+                    !terrain.isOnBuildable(site.downRight()) || !terrain.isOnBuildable(site.downLeft())) {
+                    return false;
                 }
 
-                return terrain.isOnBuildable(site) && wideAreaClear;
+                return terrain.isOnBuildable(site);
             default:
                 throw new Exception("Can't handle house with unexpected size " + size);
             }
@@ -2142,9 +2142,15 @@ public class GameMap {
 
         /* ADDITIONAL CONDITIONS FOR MEDIUM */
 
+        /* ADDITIONAL CONDITIONS FOR LARGE */
+        /* A large building can't have a tree directly left or right */
+        if ((isWithinMap(point.left())  && isTreeAtPoint(point.left())) ||
+            (isWithinMap(point.right()) && isTreeAtPoint(point.right()))) {
+            return result;
+        }
+
         result = MEDIUM;
 
-        /* ADDITIONAL CONDITIONS FOR LARGE */
         if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
             return result;
         }
@@ -2181,18 +2187,19 @@ public class GameMap {
             }
         }
 
-        /* A large building needs a larger free area on grass */
-        boolean wideAreaClear = true;
-
-        for (Point p : point.getAdjacentPoints()) {
-            if (!terrain.isOnGrass(p)) {
-                wideAreaClear = false;
-
-                break;
-            }
+        /* A large building needs a larger free area on buildable vegetation */
+        // TODO: check if it's possible to also build large house close to other sides where only flags&roads are possible
+        if (!terrain.getTileUpLeft(point.upLeft()).getVegetationType().canBuildFlags()   ||
+            !terrain.getTileAbove(point.upLeft()).getVegetationType().canBuildFlags()    ||
+            !terrain.getTileUpLeft(point.upRight()).getVegetationType().canBuildFlags()  ||
+            !terrain.getTileAbove(point.upRight()).getVegetationType().canBuildFlags()   ||
+            !terrain.getTileUpRight(point.upRight()).getVegetationType().canBuildFlags() ||
+            !terrain.isOnBuildable(point.left())      || !terrain.isOnBuildable(point.right()) ||
+            !terrain.isOnBuildable(point.downRight()) || !terrain.isOnBuildable(point.downLeft())) {
+            return result;
         }
 
-        if (!terrain.isOnGrass(point) || !wideAreaClear) {
+        if (!terrain.isOnBuildable(point)) {
             return result;
         }
 
