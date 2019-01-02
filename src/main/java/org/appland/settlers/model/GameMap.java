@@ -2149,6 +2149,14 @@ public class GameMap {
             return result;
         }
 
+        for (Point d : point.getDiagonalPoints()) {
+
+            /* It's not possible to build a house next to a tree */
+            if (isTreeAtPoint(d)) {
+                return SMALL;
+            }
+        }
+
         result = MEDIUM;
 
         if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {

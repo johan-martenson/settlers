@@ -2393,7 +2393,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testHousesInLineBetweenTrees() throws Exception {
+    public void testAvailableHousesInLineBetweenTrees() throws Exception {
 
         /* Creating new game map with size 100x100 */
         Player player0 = new Player("Player 0", Color.RED);
@@ -2419,6 +2419,37 @@ public class TestPlacement {
         assertEquals(map.isAvailableHousePoint(player0, point1.right()), SMALL);
         assertEquals(map.isAvailableHousePoint(player0, point1.right().right()), LARGE);
         assertEquals(map.isAvailableHousePoint(player0, point1.right().right().right()), SMALL);
+    }
+
+    @Test
+    public void testAvailableSmallHousesDiagonallyFromTree() throws Exception {
+
+        /* Creating new game map with size 100x100 */
+        Player player0 = new Player("Player 0", Color.RED);
+        List<Player> players = new LinkedList<>();
+        players.add(player0);
+
+        /* Creating game map */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place tree */
+        Point point1 = new Point(7, 15);
+        Tree tree0 = map.placeTree(point1);
+
+        /* Verify that only small houses are up right, down right, down left from the tree */
+        assertEquals(map.isAvailableHousePoint(player0, point1.downRight()), SMALL);
+        assertEquals(map.isAvailableHousePoint(player0, point1.upRight()),   SMALL);
+        assertEquals(map.isAvailableHousePoint(player0, point1.downLeft()),  SMALL);
+
+        /* Verify that only a flag is available up left from the tree - the tree occupies the point that would be
+         * required for the flag for a house
+         */
+        assertNull(map.isAvailableHousePoint(player0, point1.upLeft()));
+        assertTrue(map.isAvailableFlagPoint(player0, point1.upLeft()));
     }
 
     @Test
