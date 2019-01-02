@@ -13,4 +13,5 @@ public class Constants {
     public final static double WILD_ANIMAL_NATURAL_DENSITY = 0.001;
     public final static int WILD_ANIMAL_TIME_BETWEEN_REPOPULATION = 400;
 
+    public static final int DEFAULT_HEIGHT = 10;
 }

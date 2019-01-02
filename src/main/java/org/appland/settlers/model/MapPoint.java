@@ -6,6 +6,8 @@
 
 package org.appland.settlers.model;
 
+import org.appland.settlers.policy.Constants;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +29,7 @@ class MapPoint {
     private Stone    stone;
     private Crop     crop;
     private Sign     sign;
+    private int height;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -39,6 +42,9 @@ class MapPoint {
         connectedNeighbors         = new HashSet<>();
         connectedRoads             = new HashSet<>();
         connectedFlagsAndBuildings = new HashSet<>();
+
+        /* Set the default height */
+        height = Constants.DEFAULT_HEIGHT;
     }
 
     void setBuilding(Building building) throws Exception {
@@ -208,5 +214,13 @@ class MapPoint {
 
     boolean isCrop() {
         return crop != null;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

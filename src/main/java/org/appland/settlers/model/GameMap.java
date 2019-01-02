@@ -31,6 +31,7 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
 
 public class GameMap {
 
+    private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
     private final List<Worker>         workers;
     private final int                  height;
     private final int                  width;
@@ -1254,6 +1255,17 @@ public class GameMap {
                     return false;
                 }
 
+                /* Large buildings cannot be built if the height difference to close points is too large */
+                int heightAtPoint = getHeightAtPoint(site);
+                if (Math.abs(heightAtPoint - getHeightAtPoint(site.left()))      > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+                    Math.abs(heightAtPoint - getHeightAtPoint(site.upLeft()))    > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+                    Math.abs(heightAtPoint - getHeightAtPoint(site.upRight()))   > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+                    Math.abs(heightAtPoint - getHeightAtPoint(site.right()))     > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+                    Math.abs(heightAtPoint - getHeightAtPoint(site.downRight())) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+                    Math.abs(heightAtPoint - getHeightAtPoint(site.downLeft()))  > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE) {
+                    return false;
+                }
+
                 return terrain.isOnBuildable(site);
             default:
                 throw new Exception("Can't handle house with unexpected size " + size);
@@ -2211,6 +2223,17 @@ public class GameMap {
             return result;
         }
 
+        /* Large buildings cannot be built if the height difference to close points is too large */
+        int heightAtPoint = getHeightAtPoint(point);
+        if (Math.abs(heightAtPoint - getHeightAtPoint(point.left()))      > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - getHeightAtPoint(point.upLeft()))    > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - getHeightAtPoint(point.upRight()))   > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - getHeightAtPoint(point.right()))     > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - getHeightAtPoint(point.downRight())) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
+            Math.abs(heightAtPoint - getHeightAtPoint(point.downLeft()))  > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE) {
+            return MEDIUM;
+        }
+
         result = LARGE;
 
         return result;
@@ -2558,5 +2581,13 @@ public class GameMap {
      */
     public boolean areFlagsOrBuildingsConnectedViaRoads(EndPoint from, EndPoint to) {
         return GameUtils.areBuildingsOrFlagsConnected(from, to, pointToGameObject);
+    }
+
+    public int getHeightAtPoint(Point point) {
+        return getMapPoint(point).getHeight();
+    }
+
+    public void setHeightAtPoint(Point point, int height) {
+        getMapPoint(point).setHeight(height);
     }
 }
