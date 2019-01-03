@@ -6,7 +6,6 @@
 
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
@@ -17,11 +16,11 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -48,6 +47,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -1370,7 +1370,7 @@ public class TestFarm {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
 
-    @Test (expected = InvalidUserActionException.class)
+    @Test
     public void testCannotPlaceBuildingOnGrowingCrop() throws Exception {
 
         /* Create new game map with one player */
@@ -1389,7 +1389,12 @@ public class TestFarm {
         Crop crop = map.placeCrop(point1);
 
         /* Verify that it's not possible to place a building on the growing crop */
-        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+        try {
+            Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+            fail();
+        } catch (Exception e) {
+
+        }
     }
 
     @Test
@@ -1414,7 +1419,7 @@ public class TestFarm {
         assertNull(map.isAvailableHousePoint(player0, point0));
     }
 
-    @Test (expected = InvalidUserActionException.class)
+    @Test
     public void testCannotPlaceBuildingOnNewlyHarvestedCrop() throws Exception {
 
         /* Create new game map with one player */
@@ -1448,7 +1453,11 @@ public class TestFarm {
         Utils.waitForCropToGetHarvested(map, crop);
 
         /* Verify that it's possible to place a building on the growing crop */
-        Building armory0 = map.placeBuilding(new Armory(player0), crop.getPosition());
+        try {
+            Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), crop.getPosition());
+            fail();
+        } catch (Exception e) {
+        }
     }
 
     @Test

@@ -351,18 +351,24 @@ public class GameMap {
 
         /* Only one headquarter can be placed per player */
         if (house instanceof Headquarter) {
-            boolean headquarterPlaced = false;
-
             for (Building building : house.getPlayer().getBuildings()) {
                 if (building instanceof Headquarter) {
-                    headquarterPlaced = true;
-
-                    break;
+                    throw new Exception("Can only have one headquarter placed per player");
                 }
             }
+        }
 
-            if (headquarterPlaced) {
-                throw new Exception("Can only have one headquarter placed per player");
+        /* Verify that the point is available for the chosen building */
+        if (house.isMine()) {
+            if (!isAvailableMinePoint(house.getPlayer(), point)) {
+                throw new Exception("Cannot place " + house + " at non mining point.");
+
+            }
+        } else {
+
+            Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, firstHouse);
+            if (buildingAvailable == null || !buildingAvailable.contains(house.getSize())) {
+                throw new Exception("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
             }
         }
 
@@ -988,18 +994,10 @@ public class GameMap {
             return false;
         }
 
-        boolean diagonalFlagExists = false;
-
         for (Point d : point.getDiagonalPoints()) {
             if (player.isWithinBorder(d) && isFlagAtPoint(d)) {
-                diagonalFlagExists = true;
-
-                break;
+                return false;
             }
-        }
-
-        if (diagonalFlagExists) {
-            return false;
         }
 
         if (player.isWithinBorder(point.right()) && isFlagAtPoint(point.right())) {
@@ -2025,7 +2023,10 @@ public class GameMap {
      * @return The max size of the potential house, otherwise null.
      */
     public Size isAvailableHousePoint(Player player, Point point) {
+        return isAvailableHousePoint(player, point, false);
+    }
 
+    private Size isAvailableHousePoint(Player player, Point point, boolean isFirstHouse) {
         Point flagPoint = point.downRight();
 
         /* ALL CONDITIONS FOR SMALL */
@@ -2033,7 +2034,7 @@ public class GameMap {
             return null;
         }
 
-        if (!player.isWithinBorder(point)) {
+        if (!isFirstHouse && !player.isWithinBorder(point)) {
             return null;
         }
 
@@ -2098,7 +2099,7 @@ public class GameMap {
             return null;
         }
 
-        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint)) {
+        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint, !isFirstHouse)) {
             return null;
         }
 

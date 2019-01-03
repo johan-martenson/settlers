@@ -67,7 +67,7 @@ public class TestPlacementInTerrain {
         map.surroundPointWithWater(point4);
 
         /* Place headquarter */
-        Point point0 = new Point(6, 8);
+        Point point0 = new Point(6, 14);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fisheries like this:
@@ -78,8 +78,15 @@ public class TestPlacementInTerrain {
              W  W  W
 
         */
+
         Point point5 = new Point(4, 6);
         Point point6 = new Point(9, 5);
+
+        assertTrue(map.isAvailableFlagPoint(player0, point5.downRight()));
+        assertTrue(map.isAvailableFlagPoint(player0, point6.downRight()));
+        assertNotNull(map.isAvailableHousePoint(player0, point5));
+        assertNotNull(map.isAvailableHousePoint(player0, point6));
+
         Fishery fishery0 = map.placeBuilding(new Fishery(player0), point5);
         Fishery fishery1 = map.placeBuilding(new Fishery(player0), point6);
 

@@ -36,4 +36,29 @@ public enum Size {
 
         return true;
     }
+
+    public boolean contains(Size size) {
+
+        if (this == null) {
+            return false;
+        }
+
+        if (this == LARGE) {
+            return true;
+        }
+
+        if (this == MEDIUM) {
+            if (size == LARGE) {
+                return false;
+            }
+
+            return true;
+        }
+
+        if (this == SMALL && size != SMALL) {
+            return false;
+        }
+
+        return true;
+    }
 }

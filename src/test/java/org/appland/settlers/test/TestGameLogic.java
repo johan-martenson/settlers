@@ -19,6 +19,7 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.FORESTER;
@@ -225,7 +226,7 @@ public class TestGameLogic {
         Flag flag0 = map.placeFlag(player0, point1.downRight());
 
         /* Place the forester hut's flag */
-        Point point2 = new Point(5, 17);
+        Point point2 = new Point(8, 14);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
         /* Assign new workers to unoccupied places. Since there are no places
@@ -239,7 +240,7 @@ public class TestGameLogic {
 
         /* Construct a road without any courier assigned */
         Road road0  = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
-        Road road1 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         assertEquals(map.getWorkers().size(), 1);
 

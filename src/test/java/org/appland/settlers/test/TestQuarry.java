@@ -1671,11 +1671,11 @@ public class TestQuarry {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 25);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place stone */
-        Point point1 = new Point(8, 8);
+        Point point1 = new Point(8, 6);
         Stone stone = map.placeStone(point1);
 
         /* Place two quarries with the same distance to the stone */

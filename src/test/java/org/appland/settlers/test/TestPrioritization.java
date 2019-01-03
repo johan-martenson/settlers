@@ -986,15 +986,19 @@ public class TestPrioritization {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
+        assertTrue(map.isAvailableMinePoint(player0, point0));
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Place iron mine */
+        assertTrue(map.isAvailableMinePoint(player0, point1));
         Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
 
         /* Place coal mine */
+        assertTrue(map.isAvailableMinePoint(player0, point2));
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point2);
 
         /* Place granite mine */
+        assertTrue(map.isAvailableMinePoint(player0, point3));
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */

@@ -2094,18 +2094,20 @@ public class TestWoodcutter {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(7, 7);
+        Point point0 = new Point(9, 9);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place and grow the tree */
-        Point point1 = new Point(10, 4);
+        Point point1 = new Point(12, 6);
         Tree tree = map.placeTree(point1);
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutters */
         Point point2 = new Point(7, 5);
-        Point point3 = new Point(11, 5);
+        Point point3 = new Point(13, 5);
+        assertNotNull(map.isAvailableHousePoint(player0, point2));
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+        assertNotNull(map.isAvailableHousePoint(player0, point3));
         Building woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
 
         /* Construct the woodcutters */
@@ -2157,6 +2159,10 @@ public class TestWoodcutter {
         assertEquals(wcWorker1.getTarget(), woodcutter1.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker0, woodcutter0.getPosition());
+
+        if (!wcWorker1.getPosition().equals(woodcutter1.getPosition())) {
+            Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker1, woodcutter1.getPosition());
+        }
 
         assertTrue(wcWorker0.isInsideBuilding());
         assertTrue(wcWorker1.isInsideBuilding());
