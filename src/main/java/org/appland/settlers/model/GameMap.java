@@ -2151,7 +2151,6 @@ public class GameMap {
 
         /* ADDITIONAL CONDITIONS FOR MEDIUM */
 
-        /* ADDITIONAL CONDITIONS FOR LARGE */
         /* A large building can't have a tree directly left or right */
         if ((isWithinMap(point.left())  && isTreeAtPoint(point.left())) ||
             (isWithinMap(point.right()) && isTreeAtPoint(point.right()))) {
@@ -2165,6 +2164,8 @@ public class GameMap {
                 return SMALL;
             }
         }
+
+        /* ADDITIONAL CONDITIONS FOR LARGE */
 
         if (player.isWithinBorder(point.upLeft()) && isFlagAtPoint(point.upLeft())) {
             return MEDIUM;
