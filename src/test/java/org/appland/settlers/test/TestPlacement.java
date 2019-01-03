@@ -2355,6 +2355,18 @@ public class TestPlacement {
         assertFalse(Size.contains(null, LARGE));
         assertFalse(Size.contains(null, MEDIUM));
         assertFalse(Size.contains(null, SMALL));
+
+        assertTrue(LARGE.contains(LARGE));
+        assertTrue(LARGE.contains(MEDIUM));
+        assertTrue(LARGE.contains(SMALL));
+
+        assertFalse(MEDIUM.contains(LARGE));
+        assertTrue(MEDIUM.contains(MEDIUM));
+        assertTrue(MEDIUM.contains(SMALL));
+
+        assertFalse(SMALL.contains(LARGE));
+        assertFalse(SMALL.contains(MEDIUM));
+        assertTrue(SMALL.contains(SMALL));
     }
 
     @Test
