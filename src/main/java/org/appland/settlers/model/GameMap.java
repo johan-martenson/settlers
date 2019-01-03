@@ -331,6 +331,7 @@ public class GameMap {
 
         boolean firstHouse = false;
 
+        /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
             throw new Exception("Can't place " + house + " as it is already placed.");
         }
@@ -365,43 +366,27 @@ public class GameMap {
 
             }
         } else {
-
             Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, firstHouse);
+
             if (buildingAvailable == null || !buildingAvailable.contains(house.getSize())) {
                 throw new Exception("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
             }
         }
 
-        if (!firstHouse && !house.getPlayer().isWithinBorder(point)) {
-            throw new Exception("Can't place building on " + point + " because it's outside the border");
-        }
-
-        /* Verify that the building is not placed within another player's border */
-        for (Player player : players) {
-            if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
-                throw new Exception("Can't place building on " + point + " within another player's border");
+        /* In case of headquarter, verify that the building is not placed within another player's border -- normally
+        *  this is done by isAvailableHousePoint
+        */
+        if (house instanceof Headquarter) {
+            for (Player player : players) {
+                if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
+                    throw new Exception("Can't place building on " + point + " within another player's border");
+                }
             }
-        }
-
-        if (!isVegetationCorrect(house, point)) {
-            throw new Exception("Can't place building on " + point + ".");
-        }
-
-        /* Verify that the flag can be placed */
-        if (!isFlagAtPoint(point.downRight()) &&
-            !firstHouse &&
-            !isAvailableFlagPoint(house.getPlayer(), point.downRight())) {
-            throw new Exception("Can't place flag for building at " + point);
         }
 
         /* Handle the case where there is a sign at the site */
         if (isSignAtPoint(point)) {
             removeSign(getSignAtPoint(point));
-        }
-
-        /* Verify that there is no crop blocking the construction */
-        if (isCropAtPoint(point)) {
-            throw new InvalidUserActionException("Cannot place building on crop");
         }
 
         /* Use the existing flag if it exists, otherwise place a new flag */
@@ -419,6 +404,7 @@ public class GameMap {
             }
         }
 
+        /* Update the building with its position and a reference to the map */
         house.setPosition(point);
         house.setMap(this);
 
@@ -428,15 +414,15 @@ public class GameMap {
         /* Add building to the player's list of buildings */
         house.getPlayer().addBuilding(house);
 
-        /* Initialize the border if it's the first house and it's a headquarter
-           or if it's a military building
-        */
+        /* Initialize the border if it's the first house */
         if (firstHouse) {
             updateBorder();
         }
 
+        /* Store in the point that there is now a building there */
         getMapPoint(point).setBuilding(house);
 
+        /* Create a road between the flag and the building */
         placeDriveWay(house);
 
         return house;
@@ -1185,89 +1171,6 @@ public class GameMap {
                 return false;
             default:
                 return true;
-        }
-    }
-
-    private boolean isVegetationCorrect(Building house, Point site) throws Exception {
-        Size size = house.getSize();
-
-        if (house.isMine()) {
-            return terrain.isOnMountain(site);
-        } else {
-            switch (size) {
-            case SMALL:
-            case MEDIUM:
-
-                /* Cannot build houses on mining mountain */
-                if (terrain.isOnMountain(site)) {
-                    return false;
-                }
-
-                /* Cannot build next to deep water */
-                if (terrain.isNextToDeepWater(site)) {
-                    return false;
-                }
-
-                /* Cannot build next to magenta */
-                if (terrain.isNextToMagenta(site)) {
-                    return false;
-                }
-
-                /* Cannot build next to swamp */
-                if (terrain.isNextToSwamp(site)) {
-                    return false;
-                }
-
-                /* Cannot build houses in the desert */
-                if (terrain.isNextToDesert(site)) {
-                    return false;
-                }
-
-                /* Cannot build houses next to snow */
-                if (terrain.isNextToSnow(site)) {
-                    return false;
-                }
-
-                /* Cannot build houses next to lava */
-                if (terrain.isNextToLava(site)) {
-                    return false;
-                }
-
-                if (terrain.isNextToWater(site)) {
-                    return false;
-                }
-
-                if (terrain.isOnEdgeOf(site, MOUNTAIN)) {
-                    return false;
-                }
-
-                return true;
-            case LARGE:
-                if (!terrain.getTileUpLeft(site.upLeft()).getVegetationType().canBuildFlags()   ||
-                    !terrain.getTileAbove(site.upLeft()).getVegetationType().canBuildFlags()    ||
-                    !terrain.getTileUpLeft(site.upRight()).getVegetationType().canBuildFlags()  ||
-                    !terrain.getTileAbove(site.upRight()).getVegetationType().canBuildFlags()   ||
-                    !terrain.getTileUpRight(site.upRight()).getVegetationType().canBuildFlags() ||
-                    !terrain.isOnBuildable(site.left())      || !terrain.isOnBuildable(site.right()) ||
-                    !terrain.isOnBuildable(site.downRight()) || !terrain.isOnBuildable(site.downLeft())) {
-                    return false;
-                }
-
-                /* Large buildings cannot be built if the height difference to close points is too large */
-                int heightAtPoint = getHeightAtPoint(site);
-                if (Math.abs(heightAtPoint - getHeightAtPoint(site.left()))      > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-                    Math.abs(heightAtPoint - getHeightAtPoint(site.upLeft()))    > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-                    Math.abs(heightAtPoint - getHeightAtPoint(site.upRight()))   > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-                    Math.abs(heightAtPoint - getHeightAtPoint(site.right()))     > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-                    Math.abs(heightAtPoint - getHeightAtPoint(site.downRight())) > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE ||
-                    Math.abs(heightAtPoint - getHeightAtPoint(site.downLeft()))  > MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE) {
-                    return false;
-                }
-
-                return terrain.isOnBuildable(site);
-            default:
-                throw new Exception("Can't handle house with unexpected size " + size);
-            }
         }
     }
 
