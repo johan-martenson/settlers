@@ -98,11 +98,8 @@ public class TestPlacementInTerrain {
 
         Terrain terrain = map.getTerrain();
 
-        assertEquals(terrain.getTile(fishery0.getFlag().getPosition(),
-                fishery0.getFlag().getPosition().left(),
-                fishery0.getFlag().getPosition().downLeft()).getVegetationType(),
-                WATER);
-        assertEquals(terrain.getTile(fishery0.getFlag().getPosition(), fishery0.getFlag().getPosition().downRight(), fishery0.getFlag().getPosition().downLeft()).getVegetationType(), WATER);
+        assertEquals(terrain.getTileDownLeft(fishery0.getFlag().getPosition()).getVegetationType(), WATER);
+        assertEquals(terrain.getTileBelow(fishery0.getFlag().getPosition()).getVegetationType(), WATER);
 
         assertEquals(terrain.getTileDownLeft(point7).getVegetationType(), WATER);
         assertEquals(terrain.getTileBelow(point7).getVegetationType(), WATER);

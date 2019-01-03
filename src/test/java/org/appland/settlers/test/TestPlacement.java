@@ -810,8 +810,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create water and grass tiles */
-        Tile waterTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, waterPoint);
-        Tile grassTile = map.getTerrain().getTile(sharedPoint1, sharedPoint2, grassPoint);
+        Tile waterTile = map.getTerrain().getTileDownRight(waterPoint);
+        Tile grassTile = map.getTerrain().getTileUpLeft(grassPoint);
 
         waterTile.setVegetationType(WATER);
         grassTile.setVegetationType(GRASS);
@@ -824,109 +824,74 @@ public class TestPlacement {
     }
 
     @Test
-    public void testCanNotPlaceFlagInWater() throws Exception {
+    public void testCannotPlaceFlagInWater() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 6, 6);
-        Point borderPoint1 = new Point(1, 1);
-        Point borderPoint2 = new Point(2, 0);
-        Point borderPoint3 = new Point(4, 0);
-        Point borderPoint4 = new Point(5, 1);
-        Point borderPoint5 = new Point(4, 2);
-        Point borderPoint6 = new Point(2, 2);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place a lake */
         Point centerPoint  = new Point(3, 1);
+        Utils.surroundPointWithVegetation(centerPoint, WATER, map);
 
-        Tile waterTile1 = map.getTerrain().getTile(borderPoint1, borderPoint2, centerPoint);
-        Tile waterTile2 = map.getTerrain().getTile(borderPoint2, borderPoint3, centerPoint);
-        Tile waterTile3 = map.getTerrain().getTile(borderPoint3, borderPoint4, centerPoint);
-        Tile waterTile4 = map.getTerrain().getTile(borderPoint4, borderPoint5, centerPoint);
-        Tile waterTile5 = map.getTerrain().getTile(borderPoint5, borderPoint6, centerPoint);
-        Tile waterTile6 = map.getTerrain().getTile(borderPoint6, borderPoint1, centerPoint);
+        /* Verify that the center point is in the middle of the lake */
+        assertEquals(map.getTerrain().getTileUpLeft(centerPoint).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(centerPoint).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileUpRight(centerPoint).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownRight(centerPoint).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(centerPoint).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownLeft(centerPoint).getVegetationType(), WATER);
 
-        waterTile1.setVegetationType(WATER);
-        waterTile2.setVegetationType(WATER);
-        waterTile3.setVegetationType(WATER);
-        waterTile4.setVegetationType(WATER);
-        waterTile5.setVegetationType(WATER);
-        waterTile6.setVegetationType(WATER);
+        /* Place headquarter */
+        Point point0 = new Point(5, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Verify that it's not possible to place a flag in the lake */
         Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertFalse(possibleFlags.contains(centerPoint));
-    }
-
-    @Test
-    public void testDifferentPointOrderGivesSameTile() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point point1 = new Point(3, 1);
-        Point point2 = new Point(4, 2);
-        Point point3 = new Point(5, 1);
-
-        Tile tile1 = map.getTerrain().getTile(point1, point2, point3);
-        Tile tile2 = map.getTerrain().getTile(point1, point3, point2);
-        Tile tile3 = map.getTerrain().getTile(point2, point1, point3);
-        Tile tile4 = map.getTerrain().getTile(point2, point3, point1);
-        Tile tile5 = map.getTerrain().getTile(point3, point1, point2);
-        Tile tile6 = map.getTerrain().getTile(point3, point2, point1);
-
-        assertEquals(tile1, tile2);
-        assertEquals(tile2, tile3);
-        assertEquals(tile3, tile4);
-        assertEquals(tile4, tile5);
-        assertEquals(tile5, tile6);
-    }
-
-    @Test
-    public void testDifferentiateBetweenCloseTiles() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point bottom1 = new Point(1, 1);
-        Point bottom2 = new Point(3, 1);
-        Point middle  = new Point(2, 2);
-        Point top1    = new Point(1, 3);
-        Point top2    = new Point(3, 3);
-
-        Tile tile1 = map.getTerrain().getTile(bottom1, bottom2, middle);
-        Tile tile2 = map.getTerrain().getTile(top1, top2, middle);
-
-        assertNotEquals(tile1, tile2);
+        assertFalse(map.isAvailableFlagPoint(player0, centerPoint));
     }
 
     @Test
     public void testSetTileToMountainTerrain() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point left  = new Point(1, 1);
-        Point top   = new Point(2, 2);
-        Point right = new Point(3, 1);
 
-        Tile tile1 = map.getTerrain().getTile(left, right, top);
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Set a tile's vegetation to mountain */
+        Point top   = new Point(2, 2);
+
+        Tile tile1 = map.getTerrain().getTileBelow(top);
 
         tile1.setVegetationType(MOUNTAIN);
 
-        tile1 = map.getTerrain().getTile(left, right, top);
-
-        assertEquals(tile1.getVegetationType(), MOUNTAIN);
+        /* Verify that the tile's vegetation is set to mountain */
+        assertEquals(map.getTerrain().getTileBelow(top).getVegetationType(), MOUNTAIN);
     }
 
     @Test
     public void testTreeCannotBePlacedOnStone() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
 
+        GameMap map = new GameMap(players, 10, 10);
+
+        /* Place stone */
+        Point point0  = new Point(3, 3);
         map.placeStone(point0);
 
+        /* Verify that it's not possible to place a tree on the stone */
         try {
             map.placeTree(point0);
             fail();
@@ -1118,39 +1083,28 @@ public class TestPlacement {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place a water tile */
+        /* Place a lake */
         Point point0 = new Point(10, 4);
-        Point point1 = new Point(8, 4);
-        Point point2 = new Point(9, 5);
-        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
-        /* Place a water tile */
-        Point point3 = new Point(11, 5);
-        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point4 = new Point(12, 4);
-        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point5 = new Point(11, 3);
-        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point6 = new Point(9, 3);
-        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        /* Verify that the point is surrounded by water */
+        assertEquals(map.getTerrain().getTileUpLeft(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileUpRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownLeft(point0).getVegetationType(), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing flag */
+        Point point1 = new Point(8, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
         /* Placing flag */
+        Point point4 = new Point(12, 4);
         Flag flag1 = map.placeFlag(player0, point4);
 
         /* Placing road between (8, 4) and (12, 4) */
@@ -1159,6 +1113,7 @@ public class TestPlacement {
 
     @Test
     public void testRoadConnectionSuggestionsDoNotIncludePointsInWater() throws Exception {
+
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -1167,37 +1122,26 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Point point1 = new Point(8, 4);
-        Point point2 = new Point(9, 5);
-        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
-        /* Place a water tile */
-        Point point3 = new Point(11, 5);
-        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point4 = new Point(12, 4);
-        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point5 = new Point(11, 3);
-        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point6 = new Point(9, 3);
-        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        /* Verify that the point is surrounded by water */
+        assertEquals(map.getTerrain().getTileUpLeft(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileUpRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownLeft(point0).getVegetationType(), WATER);
 
         /* Placing headquarter */
         Point point21 = new Point(10, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing flag */
+        Point point1 = new Point(8, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
         /* Placing flag */
+        Point point4 = new Point(12, 4);
         Flag flag1 = map.placeFlag(player0, point4);
 
         /* Verify that suggested connections from flag0 don't include a point in the water */
@@ -1833,28 +1777,15 @@ public class TestPlacement {
 
         /* Place a water tile */
         Point point0 = new Point(10, 4);
-        Point point1 = new Point(8, 4);
-        Point point2 = new Point(9, 5);
-        map.getTerrain().getTile(point0, point1, point2).setVegetationType(Vegetation.WATER);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
-        /* Place a water tile */
-        Point point3 = new Point(11, 5);
-        map.getTerrain().getTile(point0, point2, point3).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point4 = new Point(12, 4);
-        map.getTerrain().getTile(point0, point3, point4).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point5 = new Point(11, 3);
-        map.getTerrain().getTile(point0, point4, point5).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        Point point6 = new Point(9, 3);
-        map.getTerrain().getTile(point0, point5, point6).setVegetationType(Vegetation.WATER);
-
-        /* Place a water tile */
-        map.getTerrain().getTile(point0, point6, point1).setVegetationType(Vegetation.WATER);
+        /* Verify that the point is surrounded by water */
+        assertEquals(map.getTerrain().getTileUpLeft(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileUpRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownLeft(point0).getVegetationType(), WATER);
 
         /* Placing headquarter for player0 */
         Point point46 = new Point(5, 5);

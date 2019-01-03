@@ -39,22 +39,6 @@ public class Terrain {
         constructDefaultTiles();
     }
 
-    public Tile getTile(Point point1, Point point2, Point point3) {
-
-        int left = Math.min(Math.min(point1.x, point3.x), point2.x);
-        int top  = Math.max(Math.max(point1.y, point3.y), point2.y);
-
-        Tile tile;
-
-        if ((point1.y + point3.y + point2.y) % 3 == 1) { // Tile with pointy end upwards
-            tile = tileBelowMap.get(top * width + left + 1);
-        } else {
-            tile = tileDownRightMap.get(top * width + left);
-        }
-
-        return tile;
-    }
-
     public Tile getTileAbove(Point point) {
         return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
     }
@@ -214,12 +198,6 @@ public class Terrain {
         }
 
         return matchFound && nonMatchFound;
-    }
-
-    void placeMountainOnTile(Point point1, Point point2, Point point3) {
-        Tile tile = getTile(point1, point2, point3);
-
-        tile.setVegetationType(MOUNTAIN);
     }
 
     public boolean isInDesert(Point point) {

@@ -293,18 +293,19 @@ public class TestFishery {
 
     @Test
     public void testArrivedFishermanRestsInFisheryAndThenLeaves() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point0 = new Point(4, 4);
-        Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -337,6 +338,8 @@ public class TestFishery {
 
     @Test
     public void testFishermanFindsSpotToFish() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -347,8 +350,9 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -375,6 +379,7 @@ public class TestFishery {
 
         assertFalse(fisherman.isInsideBuilding());
 
+        /* Verify that the fisherman is walking to the lake */
         Point point = fisherman.getTarget();
         assertTrue(point.equals(point2) || point.equals(point1) || point.equals(point0));
 
@@ -384,6 +389,8 @@ public class TestFishery {
 
     @Test
     public void testFishermanReachesPointToFish() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -394,8 +401,9 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -436,18 +444,19 @@ public class TestFishery {
 
     @Test
     public void testFishermanFishes() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point0 = new Point(4, 4);
-        Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -507,18 +516,19 @@ public class TestFishery {
 
     @Test
     public void testFishermanReturnsHomeAfterFishing() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point0 = new Point(4, 4);
-        Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -575,18 +585,19 @@ public class TestFishery {
 
     @Test
     public void testFishermanPlacesFishAtFlag() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point0 = new Point(4, 4);
-        Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -665,22 +676,26 @@ public class TestFishery {
 
     @Test
     public void testFishermanStaysInsideWhenThereIsNoWaterClose() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place fishery */
         Point point1 = new Point(10, 4);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point1);
+        Building fishery0 = map.placeBuilding(new Fishery(player0), point1);
 
         /* Construct the fisherman hut */
-        constructHouse(fishermanHut, map);
+        constructHouse(fishery0, map);
 
         /* Put trees around the fisherman hut */
-        for (Point point : map.getPointsWithinRadius(fishermanHut.getPosition(), 4)) {
+        for (Point point : map.getPointsWithinRadius(fishery0.getPosition(), 4)) {
             if (point.equals(point1)) {
                 continue;
             }
@@ -695,7 +710,7 @@ public class TestFishery {
         /* Manually place fisherman */
         Fisherman fisherman = new Fisherman(player0, map);
 
-        Utils.occupyBuilding(fisherman, fishermanHut, map);
+        Utils.occupyBuilding(fisherman, fishery0, map);
 
         assertTrue(fisherman.isInsideBuilding());
 
@@ -715,78 +730,39 @@ public class TestFishery {
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* Place a fish tile */
+        /* Place a lake on the map */
         Point point0 = new Point(10, 4);
-        Point point1 = new Point(8, 4);
-        Point point2 = new Point(9, 5);
-        map.getTerrain().getTile(point0, point1, point2).setVegetationType(WATER);
+        Utils.surroundPointWithVegetation(point0, WATER, map);
 
-        /* Place a fish tile */
-        Point point3 = new Point(11, 5);
-        map.getTerrain().getTile(point0, point2, point3).setVegetationType(WATER);
+        /* Verify that the point is surrounded by water */
+        assertEquals(map.getTerrain().getTileUpLeft(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileAbove(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileUpRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownRight(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileBelow(point0).getVegetationType(), WATER);
+        assertEquals(map.getTerrain().getTileDownLeft(point0).getVegetationType(), WATER);
 
-        /* Place a fish tile */
-        Point point4 = new Point(12, 4);
-        map.getTerrain().getTile(point0, point3, point4).setVegetationType(WATER);
-
-        /* Place a fish tile */
-        Point point5 = new Point(11, 3);
-        map.getTerrain().getTile(point0, point4, point5).setVegetationType(WATER);
-
-        /* Place a fish tile */
-        Point point6 = new Point(9, 3);
-        map.getTerrain().getTile(point0, point5, point6).setVegetationType(WATER);
-
-        /* Place a fish tile */
-        map.getTerrain().getTile(point0, point6, point1).setVegetationType(WATER);
-
-        /* Place a mountain tile */
+        /* Place a mountain */
         Point point7 = new Point(5, 13);
-        Point point8 = new Point(3, 13);
-        Point point9 = new Point(4, 14);
-        map.getTerrain().getTile(point7, point8, point9).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        Point point10 = new Point(6, 14);
-        map.getTerrain().getTile(point7, point9, point10).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        Point point11 = new Point(7, 13);
-        map.getTerrain().getTile(point7, point10, point11).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        Point point12 = new Point(6, 12);
-        map.getTerrain().getTile(point7, point11, point12).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        Point point13 = new Point(4, 12);
-        map.getTerrain().getTile(point7, point12, point13).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        map.getTerrain().getTile(point7, point13, point8).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
         Point point14 = new Point(8, 14);
-        Point point15 = new Point(7, 15);
-        map.getTerrain().getTile(point14, point10, point15).setVegetationType(MOUNTAIN);
 
-        /* Place a mountain tile */
-        Point point16 = new Point(9, 15);
-        map.getTerrain().getTile(point14, point15, point16).setVegetationType(MOUNTAIN);
+        Utils.surroundPointWithVegetation(point7, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point14, MOUNTAIN, map);
 
-        /* Place a mountain tile */
-        Point point17 = new Point(10, 14);
-        map.getTerrain().getTile(point14, point16, point17).setVegetationType(MOUNTAIN);
+        /* Verify that the points are surrounded by mountain */
+        assertEquals(map.getTerrain().getTileUpLeft(point7).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileAbove(point7).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileUpRight(point7).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileDownRight(point7).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileBelow(point7).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileDownLeft(point7).getVegetationType(), MOUNTAIN);
 
-        /* Place a mountain tile */
-        Point point18 = new Point(9, 13);
-        map.getTerrain().getTile(point14, point17, point18).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        map.getTerrain().getTile(point14, point18, point11).setVegetationType(MOUNTAIN);
-
-        /* Place a mountain tile */
-        map.getTerrain().getTile(point14, point11, point10).setVegetationType(MOUNTAIN);
+        assertEquals(map.getTerrain().getTileUpLeft(point14).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileAbove(point14).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileUpRight(point14).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileDownRight(point14).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileBelow(point14).getVegetationType(), MOUNTAIN);
+        assertEquals(map.getTerrain().getTileDownLeft(point14).getVegetationType(), MOUNTAIN);
 
         /* Placing stone */
         Point point19 = new Point(12, 12);
@@ -815,6 +791,7 @@ public class TestFishery {
         }
 
         /* Placing road between (11, 7) and (6, 4) */
+        Point point2 = new Point(9, 5);
         Point point23 = new Point(11, 7);
         Point point24 = new Point(10, 6);
         Point point25 = new Point(7, 5);
@@ -850,7 +827,7 @@ public class TestFishery {
         Point point1 = new Point(6, 4);
         Point point2 = new Point(5, 5);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Remove fishes until there is only one left */
         for (int i = 0; i < 1000; i++) {
@@ -955,11 +932,9 @@ public class TestFishery {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place fish on one tile */
-        Point point0 = new Point(8, 6);
-        Point point1 = new Point(10, 6);
         Point point2 = new Point(9, 7);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
@@ -1043,7 +1018,7 @@ public class TestFishery {
         Point point1 = new Point(10, 6);
         Point point2 = new Point(9, 7);
 
-        Utils.setTileToWater(point0, point1, point2, map);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Placing fishery */
         Point point26 = new Point(8, 8);
@@ -1235,7 +1210,7 @@ public class TestFishery {
         Point point11 = new Point(12, 6);
         Point point12 = new Point(11, 7);
 
-        Utils.setTileToWater(point10, point11, point12, map);
+        map.getTerrain().getTileBelow(point12).setVegetationType(WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
@@ -1303,11 +1278,9 @@ public class TestFishery {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point10 = new Point(10, 6);
-        Point point11 = new Point(12, 6);
         Point point12 = new Point(11, 7);
 
-        Utils.setTileToWater(point10, point11, point12, map);
+        map.getTerrain().getTileBelow(point12).setVegetationType(WATER);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);

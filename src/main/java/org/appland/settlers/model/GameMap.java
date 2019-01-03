@@ -2326,12 +2326,12 @@ public class GameMap {
      */
     public void placeMountainHexagonOnMap(Point point) {
 
-        terrain.placeMountainOnTile(point, point.left(), point.upLeft());
-        terrain.placeMountainOnTile(point, point.upLeft(), point.upRight());
-        terrain.placeMountainOnTile(point, point.upRight(), point.right());
-        terrain.placeMountainOnTile(point, point.right(), point.downRight());
-        terrain.placeMountainOnTile(point, point.downRight(), point.downLeft());
-        terrain.placeMountainOnTile(point, point.downLeft(), point.left());
+        terrain.getTileUpLeft(point).setVegetationType(MOUNTAIN);
+        terrain.getTileAbove(point).setVegetationType(MOUNTAIN);
+        terrain.getTileUpRight(point).setVegetationType(MOUNTAIN);
+        terrain.getTileDownRight(point).setVegetationType(MOUNTAIN);
+        terrain.getTileBelow(point).setVegetationType(MOUNTAIN);
+        terrain.getTileDownLeft(point).setVegetationType(MOUNTAIN);
     }
 
     /**

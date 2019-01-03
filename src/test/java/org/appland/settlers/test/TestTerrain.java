@@ -23,13 +23,15 @@ public class TestTerrain {
 
     @Test(expected = Exception.class)
     public void testGetInvalidTile() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Test getting a tile */
         Point point = new Point(5, 6);
-
-        Tile tile = map.getTerrain().getTile(point, point.upRight(), point.right());
+        Tile tile = map.getTerrain().getTileUpRight(point);
     }
 }
