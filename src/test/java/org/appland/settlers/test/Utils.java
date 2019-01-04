@@ -38,6 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
+import static java.lang.Math.min;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
@@ -231,21 +232,15 @@ public class Utils {
     }
 
     public static void surroundPointWithWater(Point point, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setVegetationType(WATER);
-        }
+        surroundPointWithVegetation(point, WATER, map);
     }
 
     public static void surroundPointWithMountain(Point point, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setVegetationType(MOUNTAIN);
-        }
+        surroundPointWithVegetation(point, MOUNTAIN, map);
     }
 
     public static void surroundPointWithSwamp(Point point, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setVegetationType(SWAMP);
-        }
+        surroundPointWithVegetation(point, SWAMP, map);
     }
 
     public static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) throws Exception {
@@ -273,52 +268,30 @@ public class Utils {
     }
 
     public static void putGoldAtSurroundingTiles(Point point, Size size, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setAmountMineral(GOLD, size);
-        }
+        map.getTerrain().surroundPointWithMineral(point, GOLD, size);
     }
 
     public static void putIronAtSurroundingTiles(Point point, Size size, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setAmountMineral(IRON, size);
-        }
+        map.getTerrain().surroundPointWithMineral(point, IRON, size);
     }
 
     public static void putCoalAtSurroundingTiles(Point point, Size size, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setAmountMineral(COAL, size);
-        }
+        map.getTerrain().surroundPointWithMineral(point, COAL, size);
     }
 
     public static void putGraniteAtSurroundingTiles(Point point, Size size, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setAmountMineral(STONE, size);
-        }
+        map.getTerrain().surroundPointWithMineral(point, STONE, size);
     }
 
     public static void createMountainWithinRadius(Point point, int radius, GameMap map) {
-        Set<Tile> tiles = new HashSet<>();
-        Terrain terrain = map.getTerrain();
-
         for (Point p : map.getPointsWithinRadius(point, radius - 1)) {
-            tiles.addAll(terrain.getSurroundingTiles(p));
-        }
-
-        for (Tile tile : tiles) {
-            tile.setVegetationType(MOUNTAIN);
+            surroundPointWithVegetation(p, MOUNTAIN, map);
         }
     }
 
     public static void putMineralWithinRadius(Material mineral, Point point1, int radius, GameMap map) {
-        Set<Tile> tiles = new HashSet<>();
-        Terrain terrain = map.getTerrain();
-
         for (Point p : map.getPointsWithinRadius(point1, radius - 1)) {
-            tiles.addAll(terrain.getSurroundingTiles(p));
-        }
-
-        for (Tile tile : tiles) {
-            tile.setAmountMineral(mineral, LARGE);
+            map.getTerrain().surroundPointWithMineral(p, mineral, LARGE);
         }
     }
 

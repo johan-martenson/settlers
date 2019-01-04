@@ -46,7 +46,7 @@ public class Fisherman extends Worker {
                 continue;
             }
 
-            if (!map.isNextToWater(point)) {
+            if (!map.getTerrain().isNextToWater(point)) {
                 continue;
             }
 

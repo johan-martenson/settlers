@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
@@ -390,5 +391,25 @@ public class Terrain {
                getTileDownRight(point).getVegetationType().isBuildable() &&
                getTileBelow(point).getVegetationType().isBuildable()     &&
                getTileDownLeft(point).getVegetationType().isBuildable();
+    }
+
+    /**
+     * Changes the tiles surrounding the given point to contain large amounts of
+     * the given mineral.
+     *
+     * @param point Point to surround with large quantities of mineral
+     * @param mineral The type of mineral
+     */
+    public void surroundPointWithMineral(Point point, Material mineral) {
+        surroundPointWithMineral(point, mineral, LARGE);
+    }
+
+    public void surroundPointWithMineral(Point point, Material mineral, Size amount) {
+        getTileUpLeft(point).setAmountMineral(mineral, amount);
+        getTileAbove(point).setAmountMineral(mineral, amount);
+        getTileUpRight(point).setAmountMineral(mineral, amount);
+        getTileDownRight(point).setAmountMineral(mineral, amount);
+        getTileBelow(point).setAmountMineral(mineral, amount);
+        getTileDownLeft(point).setAmountMineral(mineral, amount);
     }
 }

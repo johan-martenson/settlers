@@ -2212,9 +2212,9 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
 
         /* Put gold at mountain */
-        map.surroundPointWithMineral(point0, GOLD);
-        map.surroundPointWithMineral(point1, GOLD);
-        map.surroundPointWithMineral(point2, GOLD);
+        map.getTerrain().surroundPointWithMineral(point0, GOLD);
+        map.getTerrain().surroundPointWithMineral(point1, GOLD);
+        map.getTerrain().surroundPointWithMineral(point2, GOLD);
 
         /* Create a small mountain */
         Point point3 = new Point(8, 16);
@@ -2225,9 +2225,9 @@ public class TestPlacement {
         Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
 
         /* Put coal at mountain */
-        map.surroundPointWithMineral(point3, COAL);
-        map.surroundPointWithMineral(point4, COAL);
-        map.surroundPointWithMineral(point5, COAL);
+        map.getTerrain().surroundPointWithMineral(point3, COAL);
+        map.getTerrain().surroundPointWithMineral(point4, COAL);
+        map.getTerrain().surroundPointWithMineral(point5, COAL);
 
         /* Placing headquarter for player2 */
         Point point17 = new Point(8, 10);

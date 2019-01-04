@@ -1691,16 +1691,6 @@ public class GameMap {
         flags.remove(flag);
     }
 
-    boolean isNextToWater(Point point) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            if (tile.getVegetationType() == WATER) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /**
      * Returns the amount of the given mineral at the given point
      *
@@ -1709,13 +1699,13 @@ public class GameMap {
      * @return The amount of the given mineral at the given point
      */
     public int getAmountOfMineralAtPoint(Material mineral, Point point) {
-        int amount = 0;
 
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            amount += tile.getAmountOfMineral(mineral);
-        }
-
-        return amount;
+        return terrain.getTileUpLeft(point).getAmountOfMineral(mineral)    +
+               terrain.getTileAbove(point).getAmountOfMineral(mineral)     +
+               terrain.getTileUpRight(point).getAmountOfMineral(mineral)   +
+               terrain.getTileDownRight(point).getAmountOfMineral(mineral) +
+               terrain.getTileBelow(point).getAmountOfMineral(mineral)     +
+               terrain.getTileDownLeft(point).getAmountOfMineral(mineral);
     }
 
     /**
@@ -1725,13 +1715,13 @@ public class GameMap {
      * @return The amount of fish at the given point
      */
     public int getAmountFishAtPoint(Point point) {
-        int amount = 0;
 
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            amount += tile.getAmountFish();
-        }
-
-        return amount;
+        return terrain.getTileUpLeft(point).getAmountFish()   +
+               terrain.getTileAbove(point).getAmountFish()    +
+               terrain.getTileUpRight(point).getAmountFish()  +
+               terrain.getTileDownLeft(point).getAmountFish() +
+               terrain.getTileBelow(point).getAmountFish()    +
+               terrain.getTileDownLeft(point).getAmountFish();
     }
 
     /**
@@ -2318,38 +2308,6 @@ public class GameMap {
 
     void removeWildAnimalWithinStepTime(WildAnimal animal) {
         animalsToRemove.add(animal);
-    }
-
-    /**
-     * Changes the tiles surrounding the given point to contain large amounts of
-     * the given mineral.
-     * @param point Point to surround with large quantities of mineral
-     * @param material The type of mineral
-     */
-    public void surroundPointWithMineral(Point point, Material material) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            tile.setAmountMineral(material, LARGE);
-        }
-    }
-
-    /**
-     * Changes the vegetation of the tiles surrounding the given point to water.
-     * @param point Point to surround with water
-     */
-    public void surroundPointWithWater(Point point) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            tile.setVegetationType(WATER);
-        }
-    }
-
-    /**
-     * Changes the vegetation of the tiles surrounding the given point to grass.
-     * @param point Point to surround with grass
-     */
-    public void surroundPointWithGrass(Point point) {
-        for (Tile tile : terrain.getSurroundingTiles(point)) {
-            tile.setVegetationType(Vegetation.GRASS);
-        }
     }
 
     void removeCropWithinStepTime(Crop crop) {

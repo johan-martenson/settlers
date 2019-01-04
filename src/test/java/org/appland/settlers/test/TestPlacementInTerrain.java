@@ -60,17 +60,18 @@ public class TestPlacementInTerrain {
         Point point3 = new Point(9, 3);
         Point point4 = new Point(11, 3);
 
-        map.surroundPointWithWater(pointX);
-        map.surroundPointWithWater(point1);
-        map.surroundPointWithWater(point2);
-        map.surroundPointWithWater(point3);
-        map.surroundPointWithWater(point4);
+        Utils.surroundPointWithVegetation(pointX, WATER, map);
+        Utils.surroundPointWithVegetation(point1, WATER, map);
+        Utils.surroundPointWithVegetation(point2, WATER, map);
+        Utils.surroundPointWithVegetation(point3, WATER, map);
+        Utils.surroundPointWithVegetation(point4, WATER, map);
 
         /* Place headquarter */
         Point point0 = new Point(6, 14);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fisheries like this:
+
       Fishery
         \         Fishery
         Flag_       \

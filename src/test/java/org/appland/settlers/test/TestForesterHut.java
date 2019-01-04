@@ -18,6 +18,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -30,7 +31,9 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -613,10 +616,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 4)) {
-            map.surroundPointWithWater(point);
+            Utils.surroundPointWithVegetation(point, Tile.Vegetation.WATER, map);
         }
 
-        map.surroundPointWithGrass(point1);
+        Utils.surroundPointWithVegetation(point1, GRASS, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
@@ -669,10 +672,10 @@ public class TestForesterHut {
 
         /* Create a lake with an island inside */
         for (Point point : map.getPointsWithinRadius(point1, 10)) {
-            map.surroundPointWithWater(point);
+            Utils.surroundPointWithVegetation(point, Tile.Vegetation.WATER, map);
         }
 
-        map.surroundPointWithGrass(point1);
+        Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
 
         /* Construct the forester hut */
         constructHouse(foresterHut, map);
