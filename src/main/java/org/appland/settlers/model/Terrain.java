@@ -29,7 +29,7 @@ public class Terrain {
     private final int width;
     private final int height;
 
-    public Terrain(int width, int height) {
+    Terrain(int width, int height) {
         this.width   = width;
         this.height  = height;
 
@@ -39,26 +39,62 @@ public class Terrain {
         constructDefaultTiles();
     }
 
+    /**
+     * Returns the tile above the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileAbove(Point point) {
         return tileDownRightMap.get((point.y + 1) * width + point.x - 1);
     }
 
+    /**
+     * Returns the tile below the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileBelow(Point point) {
         return tileBelowMap.get(point.y * width + point.x);
     }
 
+    /**
+     * Returns the tile down to the right of the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileDownRight(Point point) {
         return tileDownRightMap.get(point.y * width + point.x);
     }
 
+    /**
+     * Returns the tile dow to the left of the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileDownLeft(Point point) {
         return tileDownRightMap.get(point.y * width + point.x - 2);
     }
 
+    /**
+     * Returns the tile up to the right of the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileUpRight(Point point) {
         return tileBelowMap.get((point.y + 1) * width + point.x + 1);
     }
 
+    /**
+     * Returns the tile up to the left of the given point
+     *
+     * @param point
+     * @return
+     */
     public Tile getTileUpLeft(Point point) {
         return tileBelowMap.get((point.y + 1) * width + point.x - 1);
     }
@@ -86,34 +122,62 @@ public class Terrain {
         }
     }
 
+    /**
+     * Returns true if the given point is surrounded by mountain tiles
+     *
+     * @param point
+     * @return
+     */
     public boolean isOnMountain(Point point) {
         return isSurroundedBy(point, MOUNTAIN);
     }
 
+    /**
+     * Returns true if the given point is surrounded by water tiles
+     *
+     * @param point
+     * @return
+     */
     public boolean isInWater(Point point) {
         return isSurroundedBy(point, WATER);
     }
 
+    /**
+     * Returns true if the given point is surrounded by swamp tiles
+     *
+     * @param point
+     * @return
+     */
     public boolean isInSwamp(Point point) {
         return isSurroundedBy(point, SWAMP);
     }
 
+    /**
+     * Returns true if the given point is surrounded by grass tiles
+     *
+     * @param point
+     * @return
+     */
     public boolean isOnGrass(Point point) {
         return isSurroundedBy(point, GRASS);
     }
 
     private boolean isAnyAdjacentTile(Point point, Vegetation vegetation) {
-        List<Tile> tiles = getSurroundingTiles(point);
 
-        for (Tile tile : tiles) {
-            if (tile.getVegetationType() == vegetation) {
-                return true;
-            }
-        }
-
-        return false;
+        return getTileUpLeft(point).getVegetationType()    == vegetation ||
+               getTileAbove(point).getVegetationType()     == vegetation ||
+               getTileUpRight(point).getVegetationType()   == vegetation ||
+               getTileDownRight(point).getVegetationType() == vegetation ||
+               getTileBelow(point).getVegetationType()     == vegetation ||
+               getTileDownLeft(point).getVegetationType()  == vegetation;
     }
 
+    /**
+     * Surrounds the given point with the chosen type of vegetation
+     *
+     * @param point
+     * @param vegetation
+     */
     public void surroundWithVegetation(Point point, Tile.Vegetation vegetation) {
         getTileUpLeft(point).setVegetationType(vegetation);
         getTileAbove(point).setVegetationType(vegetation);
@@ -124,17 +188,21 @@ public class Terrain {
     }
 
     boolean isSurroundedBy(Point point, Vegetation vegetation) {
-        List<Tile> tiles = getSurroundingTiles(point);
 
-        for (Tile tile : tiles) {
-            if (tile.getVegetationType() != vegetation) {
-                return false;
-            }
-        }
-
-        return true;
+        return getTileUpLeft(point).getVegetationType()    == vegetation &&
+               getTileAbove(point).getVegetationType()     == vegetation &&
+               getTileUpRight(point).getVegetationType()   == vegetation &&
+               getTileDownRight(point).getVegetationType() == vegetation &&
+               getTileBelow(point).getVegetationType()     == vegetation &&
+               getTileDownLeft(point).getVegetationType()  == vegetation;
     }
 
+    /**
+     * Returns a list of the tiles surrounding the given point
+     *
+     * @param center
+     * @return
+     */
     public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> result   = new LinkedList<>();
 
@@ -209,53 +277,118 @@ public class Terrain {
         return matchFound && nonMatchFound;
     }
 
+    /**
+     * Returns true if the given point is surrounded by desert tiles
+     *
+     * @param point
+     * @return
+     */
     public boolean isInDesert(Point point) {
         return isSurroundedBy(point, Vegetation.DESERT);
     }
 
+    /**
+     * Returns true if the given point is next to a desert tile
+     *
+     * @param point
+     * @return
+     */
     public boolean isNextToDesert(Point point) {
         return isAnyAdjacentTile(point, Vegetation.DESERT);
     }
 
+    /**
+     * Returns true if the given tile is surrounded by snow
+     *
+     * @param point
+     * @return
+     */
     public boolean isOnSnow(Point point) {
         return isSurroundedBy(point, Vegetation.SNOW);
     }
 
+    /**
+     * Returns true if the given point is next to a tile of snow
+     *
+     * @param point
+     * @return
+     */
     public boolean isNextToSnow(Point point) {
         return isAnyAdjacentTile(point, Vegetation.SNOW);
     }
 
+    /**
+     * Returns true if the given point is next to a lava tile
+     *
+     * @param site
+     * @return
+     */
     public boolean isNextToLava(Point site) {
         return isAnyAdjacentTile(site, Vegetation.LAVA);
     }
 
+    /**
+     * Returns true if the given point is surrounded by lava
+     *
+     * @param point
+     * @return
+     */
     public boolean isOnLava(Point point) {
         return isSurroundedBy(point, Vegetation.LAVA);
     }
 
+    /**
+     * Returns true if the given point is in deep water
+     *
+     * @param site
+     * @return
+     */
     public boolean isInDeepWater(Point site) {
         return isSurroundedBy(site, Vegetation.DEEP_WATER);
     }
 
+    /**
+     * Returns true if the given point is next to a tile of deep water
+     *
+     * @param site
+     * @return
+     */
     public boolean isNextToDeepWater(Point site) {
         return isAnyAdjacentTile(site, Vegetation.DEEP_WATER);
     }
 
+    /**
+     * Returns true if the given point is next to a tile of swamp
+     *
+     * @param site
+     * @return
+     */
     public boolean isNextToSwamp(Point site) {
         return isAnyAdjacentTile(site, Vegetation.SWAMP);
     }
 
+    /**
+     * Returns true if the given point is next to a tile of magenta
+     *
+     * @param site
+     * @return
+     */
     public boolean isNextToMagenta(Point site) {
         return isAnyAdjacentTile(site, Vegetation.MAGENTA);
     }
 
+    /**
+     * Returns true if the given point is on vegetation where houses can be built
+     *
+     * @param point
+     * @return
+     */
     public boolean isOnBuildable(Point point) {
-        for (Tile tile : getSurroundingTiles(point)) {
-            if (!tile.getVegetationType().isBuildable()) {
-                return false;
-            }
-        }
-
-        return true;
+        return getTileUpLeft(point).getVegetationType().isBuildable()    &&
+               getTileAbove(point).getVegetationType().isBuildable()     &&
+               getTileUpRight(point).getVegetationType().isBuildable()   &&
+               getTileDownRight(point).getVegetationType().isBuildable() &&
+               getTileBelow(point).getVegetationType().isBuildable()     &&
+               getTileDownLeft(point).getVegetationType().isBuildable();
     }
 }
