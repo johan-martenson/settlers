@@ -32,6 +32,8 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
 public class GameMap {
 
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
+    private static final Logger log = Logger.getLogger(GameMap.class.getName());
+
     private final List<Worker>         workers;
     private final int                  height;
     private final int                  width;
@@ -62,15 +64,21 @@ public class GameMap {
     private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
 
     private final String theLeader = "Mai Thi Van Anh";
-
-    private static final Logger log = Logger.getLogger(GameMap.class.getName());
-
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
     private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
 
     private Player winner;
 
+    /**
+     * Finds the shortest possible placement for a new road between the given points for the given player
+     *
+     * @param player
+     * @param start
+     * @param goal
+     * @param avoid
+     * @return
+     */
     public List<Point> findAutoSelectedRoad(final Player player, Point start,
             Point goal, Collection<Point> avoid) {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
@@ -102,22 +110,36 @@ public class GameMap {
         return getRoadAtPoint(point) != null;
     }
 
+    /**
+     * Returns a road that covers the given point but does not start and end at it
+     *
+     * @param point
+     * @return
+     */
     public Road getRoadAtPoint(Point point) {
-        MapPoint mp = pointToGameObject.get(point);
 
-        Iterable<Road> roadsFromPoint = mp.getConnectedRoads();
-
-        for (Road road : roadsFromPoint) {
-            if (!road.getFlags()[0].getPosition().equals(point) &&
-                !road.getFlags()[1].getPosition().equals(point)) {
-
-                return road;
-            }
+        /* Don't include start and end points of roads so ignore the point if there is a flag */
+        if (isFlagAtPoint(point)) {
+            return null;
         }
 
-        return null;
+        List<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
+
+        /* Return null if there is no connected road */
+        if (connectedRoads.isEmpty()) {
+            return null;
+        }
+
+        /* Return the first found connected road */
+        return connectedRoads.get(0);
     }
 
+    /**
+     * Removes the given road from the map
+     *
+     * @param road
+     * @throws Exception
+     */
     public void removeRoad(Road road) throws Exception {
 
         if (road.getCourier() != null) {
@@ -138,6 +160,14 @@ public class GameMap {
         }
     }
 
+    /**
+     * Creates a new game map
+     *
+     * @param players
+     * @param width
+     * @param height
+     * @throws Exception
+     */
     public GameMap(List<Player> players, int width, int height) throws Exception {
 
         if (players.isEmpty()) {
@@ -198,14 +228,29 @@ public class GameMap {
         winner = null;
     }
 
+    /**
+     * Sets the possible starting points of the map
+     *
+     * @param points
+     */
     public void setStartingPoints(List<Point> points) {
         startingPoints.addAll(points);
     }
 
+    /**
+     * Returns the possible starting points of the map. A starting point is where a headquarter can be placed
+     *
+     * @return
+     */
     public List<Point> getStartingPoints() {
         return startingPoints;
     }
 
+    /**
+     * Sets the players of the game
+     *
+     * @param newPlayers
+     */
     public void setPlayers(List<Player> newPlayers) {
         players.clear();
 
@@ -216,6 +261,11 @@ public class GameMap {
         }
     }
 
+    /**
+     * Moves time one step ahead for all parts of the game
+     *
+     * @throws Exception
+     */
     public void stepTime() throws Exception {
 
         projectilesToRemove.clear();
@@ -326,6 +376,15 @@ public class GameMap {
         }
     }
 
+    /**
+     * Places the given building on the given point
+     *
+     * @param house
+     * @param point
+     * @param <T>
+     * @return
+     * @throws Exception
+     */
     public <T extends Building> T placeBuilding(T house, Point point) throws Exception {
         log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, point});
 
@@ -656,6 +715,14 @@ public class GameMap {
         return road;
     }
 
+    /**
+     * Places a road according to the given points
+     *
+     * @param player
+     * @param points
+     * @return
+     * @throws Exception
+     */
     public Road placeRoad(Player player, Point... points) throws Exception {
         if (!players.contains(player)) {
             throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
@@ -664,6 +731,14 @@ public class GameMap {
         return placeRoad(player, Arrays.asList(points));
     }
 
+    /**
+     * Places a road according to  he given points
+     *
+     * @param player
+     * @param wayPoints
+     * @return
+     * @throws Exception
+     */
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
         log.log(Level.INFO, "Placing road through {0}", wayPoints);
 
@@ -730,10 +805,28 @@ public class GameMap {
         return road;
     }
 
+    /**
+     * Places the shortest possible new road between the given points
+     *
+     * @param player
+     * @param start
+     * @param end
+     * @return
+     * @throws Exception
+     */
     public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws Exception {
         return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
     }
 
+    /**
+     * Places the shortest possible new road between the given flags
+     *
+     * @param player
+     * @param start
+     * @param end
+     * @return
+     * @throws Exception
+     */
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
 
@@ -744,10 +837,25 @@ public class GameMap {
         return placeRoad(player, wayPoints);
     }
 
+    /**
+     * Returns all the roads on the map
+     *
+     * @return
+     */
     public List<Road> getRoads() {
         return roads;
     }
 
+    /**
+     * Finds the shortest way to walk between the given points without using the points to be avoided. Returns a list
+     * with each step
+     *
+     * @param start
+     * @param end
+     * @param via
+     * @return
+     * @throws InvalidRouteException
+     */
     public List<Point> findWayWithExistingRoads(Point start, Point end, Point via) throws InvalidRouteException {
         if (start.equals(via)) {
             return findWayWithExistingRoads(start, end);
@@ -765,6 +873,14 @@ public class GameMap {
         return path1;
     }
 
+    /**
+     * Finds the shortest way to walk between the given points and returns a list with each step
+     *
+     * @param start
+     * @param end
+     * @return
+     * @throws InvalidRouteException
+     */
     public List<Point> findWayWithExistingRoads(Point start, Point end) throws InvalidRouteException {
         if (start.equals(end)) {
             throw new InvalidRouteException("Start and end are the same.");
@@ -773,6 +889,14 @@ public class GameMap {
         return findShortestPath(start, end, null, pathOnExistingRoadsProvider);
     }
 
+    /**
+     * Returns the road between the given start and end points. If several roads exist the first found road will be
+     * returned
+     *
+     * @param start
+     * @param end
+     * @return
+     */
     public Road getRoad(Point start, Point end) {
         for (Road road : roads) {
             if ((road.getStart().equals(start) && road.getEnd().equals(end)) ||
@@ -784,6 +908,14 @@ public class GameMap {
         return null;
     }
 
+    /**
+     * Places a flag on the map
+     *
+     * @param player
+     * @param point
+     * @return
+     * @throws Exception
+     */
     public Flag placeFlag(Player player, Point point) throws Exception {
 
         /* Verify that the player is valid */
@@ -905,23 +1037,50 @@ public class GameMap {
         return flag;
     }
 
+    /**
+     * Returns a list of all the buildings on the map
+     *
+     * @return
+     */
     public List<Building> getBuildings() {
         return buildings;
     }
 
+    /**
+     * Returns a list of all the flags on the map
+     *
+     * @return
+     */
     public List<Flag> getFlags() {
         return flags;
     }
 
+    /**
+     * Places a worker on the map
+     *
+     * @param worker
+     * @param endPoint
+     */
     public void placeWorker(Worker worker, EndPoint endPoint) {
         worker.setPosition(endPoint.getPosition());
         workers.add(worker);
     }
 
+    /**
+     * Returns a list of all the workers on the map
+     *
+     * @return
+     */
     public List<Worker> getWorkers() {
         return workers;
     }
 
+    /**
+     * Returns the a list of the points where the given player can place a fla
+     *
+     * @param player
+     * @return
+     */
     public Collection<Point> getAvailableFlagPoints(Player player) {
         Set<Point> points = new HashSet<>();
 
@@ -940,6 +1099,13 @@ public class GameMap {
         return points;
     }
 
+    /**
+     * Returns true if it's possible for the given player to place a flag at the given point
+     *
+     * @param player
+     * @param point
+     * @return
+     */
     public boolean isAvailableFlagPoint(Player player, Point point) {
         return isAvailableFlagPoint(player, point, true);
     }
@@ -1019,6 +1185,11 @@ public class GameMap {
         return true;
     }
 
+    /**
+     * Returns the terrain instance that's used to read and modify the vegetation
+     *
+     * @return
+     */
     public Terrain getTerrain() {
         return terrain;
     }
@@ -1046,6 +1217,13 @@ public class GameMap {
         return result;
     }
 
+    /**
+     * Returns a map of the points within the given player's border and the corresponding available construction. If
+     * there is no possibility to build for a point its value will be null
+     *
+     * @param player
+     * @return
+     */
     public Map<Point, Size> getAvailableHousePoints(Player player) {
         Map<Point, Size> housePoints = new HashMap<>();
 
@@ -1062,7 +1240,8 @@ public class GameMap {
         return housePoints;
     }
 
-    public List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
+
+    private List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
         Point[] adjacentPoints = new Point[] {
             new Point(start.x - 2, start.y),
             new Point(start.x + 2, start.y),
@@ -1174,10 +1353,22 @@ public class GameMap {
         }
     }
 
+    /**
+     * Returns true if there is a flag at the given point
+     *
+     * @param point
+     * @return
+     */
     public boolean isFlagAtPoint(Point point) {
         return pointToGameObject.get(point).isFlag();
     }
 
+    /**
+     * Returns true if the given point is within the map
+     *
+     * @param point
+     * @return
+     */
     public boolean isWithinMap(Point point) {
         return point.x > 0 && point.x < width && point.y > 0 && point.y < height;
     }
@@ -1200,6 +1391,13 @@ public class GameMap {
         return resultMap;
     }
 
+    /**
+     * Returns the flag at the given point
+     *
+     * @param point
+     * @return
+     * @throws Exception
+     */
     public Flag getFlagAtPoint(Point point) throws Exception {
         MapPoint mp = pointToGameObject.get(point);
 
@@ -1287,6 +1485,14 @@ public class GameMap {
         return true;
     }
 
+    /**
+     * Returns the adjacent points of the given point that can be used to connect a road being placed. Flags that could
+     * be used as endpoints are not included.
+     *
+     * @param player
+     * @param from
+     * @return
+     */
     public List<Point> getPossibleRoadConnectionsExcludingEndpoints(Player player, Point from) {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
@@ -1304,6 +1510,14 @@ public class GameMap {
         return resultList;
     }
 
+    /**
+     * Returns the adjacent points of the given point that can be used to connect a road being placed. This method
+     * also includes flags that could be endpoints for the road.
+     *
+     * @param player
+     * @param from
+     * @return
+     */
     public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
@@ -2237,6 +2451,12 @@ public class GameMap {
         return wildAnimals;
     }
 
+    /**
+     * Places a wild animal at the given point
+     *
+     * @param point
+     * @return
+     */
     public WildAnimal placeWildAnimal(Point point) {
 
         /* Place the new wild animal */
@@ -2425,10 +2645,22 @@ public class GameMap {
         return GameUtils.areBuildingsOrFlagsConnected(from, to, pointToGameObject);
     }
 
+    /**
+     * Returns the height of the given point
+     *
+     * @param point
+     * @return
+     */
     public int getHeightAtPoint(Point point) {
         return getMapPoint(point).getHeight();
     }
 
+    /**
+     * Sets the height at the given point
+     *
+     * @param point
+     * @param height
+     */
     public void setHeightAtPoint(Point point, int height) {
         getMapPoint(point).setHeight(height);
     }

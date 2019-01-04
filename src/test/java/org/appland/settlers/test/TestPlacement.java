@@ -1145,10 +1145,7 @@ public class TestPlacement {
         Flag flag1 = map.placeFlag(player0, point4);
 
         /* Verify that suggested connections from flag0 don't include a point in the water */
-        assertFalse(map.getPossibleAdjacentRoadConnections(player0, point1, point4).contains(point1.right()));
-
         assertFalse(map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point1).contains(point1.right()));
-
         assertFalse(map.getPossibleRoadConnectionsExcludingEndpoints(player0, point1).contains(point1.right()));
     }
 
