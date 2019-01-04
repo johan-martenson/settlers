@@ -2207,9 +2207,9 @@ public class TestPlacement {
         Point point0 = new Point(5, 13);
         Point point1 = new Point(8, 14);
         Point point2 = new Point(5, 15);
-        map.placeMountainHexagonOnMap(point0);
-        map.placeMountainHexagonOnMap(point1);
-        map.placeMountainHexagonOnMap(point2);
+        Utils.surroundPointWithVegetation(point0, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point1, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point2, MOUNTAIN, map);
 
         /* Put gold at mountain */
         map.surroundPointWithMineral(point0, GOLD);
@@ -2220,9 +2220,9 @@ public class TestPlacement {
         Point point3 = new Point(8, 16);
         Point point4 = new Point(11, 17);
         Point point5 = new Point(8, 18);
-        map.placeMountainHexagonOnMap(point3);
-        map.placeMountainHexagonOnMap(point4);
-        map.placeMountainHexagonOnMap(point5);
+        Utils.surroundPointWithVegetation(point3, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point4, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
 
         /* Put coal at mountain */
         map.surroundPointWithMineral(point3, COAL);

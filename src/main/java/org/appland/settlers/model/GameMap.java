@@ -2321,20 +2321,6 @@ public class GameMap {
     }
 
     /**
-     * Places a hexagon-shaped mountain on the map with the given point in center.
-     * @param point The center for the hexagon-shaped mountain
-     */
-    public void placeMountainHexagonOnMap(Point point) {
-
-        terrain.getTileUpLeft(point).setVegetationType(MOUNTAIN);
-        terrain.getTileAbove(point).setVegetationType(MOUNTAIN);
-        terrain.getTileUpRight(point).setVegetationType(MOUNTAIN);
-        terrain.getTileDownRight(point).setVegetationType(MOUNTAIN);
-        terrain.getTileBelow(point).setVegetationType(MOUNTAIN);
-        terrain.getTileDownLeft(point).setVegetationType(MOUNTAIN);
-    }
-
-    /**
      * Changes the tiles surrounding the given point to contain large amounts of
      * the given mineral.
      * @param point Point to surround with large quantities of mineral

@@ -114,6 +114,15 @@ public class Terrain {
         return false;
     }
 
+    public void surroundWithVegetation(Point point, Tile.Vegetation vegetation) {
+        getTileUpLeft(point).setVegetationType(vegetation);
+        getTileAbove(point).setVegetationType(vegetation);
+        getTileUpRight(point).setVegetationType(vegetation);
+        getTileDownRight(point).setVegetationType(vegetation);
+        getTileBelow(point).setVegetationType(vegetation);
+        getTileDownLeft(point).setVegetationType(vegetation);
+    }
+
     boolean isSurroundedBy(Point point, Vegetation vegetation) {
         List<Tile> tiles = getSurroundingTiles(point);
 

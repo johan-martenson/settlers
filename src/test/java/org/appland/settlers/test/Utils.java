@@ -969,9 +969,14 @@ public class Utils {
     }
 
     static void surroundPointWithVegetation(Point point, Tile.Vegetation vegetation, GameMap map) {
-        for (Tile tile : map.getTerrain().getSurroundingTiles(point)) {
-            tile.setVegetationType(vegetation);
-        }
+        map.getTerrain().surroundWithVegetation(point, vegetation);
+
+        assertEquals(map.getTerrain().getTileUpLeft(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileAbove(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileUpRight(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileDownRight(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileBelow(point).getVegetationType(), vegetation);
+        assertEquals(map.getTerrain().getTileDownLeft(point).getVegetationType(), vegetation);
     }
 
     public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws Exception {

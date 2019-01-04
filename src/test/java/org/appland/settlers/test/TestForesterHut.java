@@ -31,6 +31,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -767,9 +768,9 @@ public class TestForesterHut {
         Point point4 = new Point(8, 16);
         Point point5 = new Point(11, 17);
         Point point6 = new Point(14, 16);
-        map.placeMountainHexagonOnMap(point4);
-        map.placeMountainHexagonOnMap(point5);
-        map.placeMountainHexagonOnMap(point6);
+        Utils.surroundPointWithVegetation(point4, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point5, MOUNTAIN, map);
+        Utils.surroundPointWithVegetation(point6, MOUNTAIN, map);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
