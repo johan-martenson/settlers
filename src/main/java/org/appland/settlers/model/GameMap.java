@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.GameUtils.findShortestPath;
+import static org.appland.settlers.model.GameUtils.getDistanceInGameSteps;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
@@ -84,9 +85,9 @@ public class GameMap {
         return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
 
             @Override
-            public Iterable<Point> getPossibleConnections(Point start, Point goal) {
+            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
                 try {
-                    return getPossibleAdjacentRoadConnections(player, start, goal);
+                    return getPossibleAdjacentRoadConnections(player, point, goal);
                 } catch (Exception ex) {
                     Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -101,7 +102,7 @@ public class GameMap {
 
             @Override
             public Double estimateDistance(Point from, Point to) {
-                return from.distance(to);
+                return (double)getDistanceInGameSteps(from, to);
             }
         });
     }
@@ -123,7 +124,7 @@ public class GameMap {
             return null;
         }
 
-        List<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
+        Set<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
 
         /* Return null if there is no connected road */
         if (connectedRoads.isEmpty()) {
@@ -131,7 +132,7 @@ public class GameMap {
         }
 
         /* Return the first found connected road */
-        return connectedRoads.get(0);
+        return connectedRoads.iterator().next();
     }
 
     /**
@@ -886,6 +887,7 @@ public class GameMap {
             throw new InvalidRouteException("Start and end are the same.");
         }
 
+        // TODO: change to using GameUtils::findShortestDetailedPathViaRoads which only looks at start&end of roads
         return findShortestPath(start, end, null, pathOnExistingRoadsProvider);
     }
 
@@ -2358,7 +2360,7 @@ public class GameMap {
      * @return List of roads that connect to the flag
      */
     public List<Road> getRoadsFromFlag(Flag flag) {
-        return getMapPoint(flag.getPosition()).getConnectedRoads();
+        return getMapPoint(flag.getPosition()).getConnectedRoadsAsList();
     }
 
     /**
@@ -2573,8 +2575,7 @@ public class GameMap {
     }
 
     /**
-     * Finds the shortest path following roads between any two points. The points
-     * don't need to be flags or buildings but can be any point on a road.
+     * Finds the shortest path following roads between two points. The points must be flags or houses.
      *
      * @param start The flag or building to start from
      * @param end The flag or building to reach

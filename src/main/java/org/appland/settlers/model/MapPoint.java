@@ -74,16 +74,17 @@ class MapPoint {
     void addConnectingRoad(Road road) {
         Point previous = null;
 
-        for (Point current : road.getWayPoints()) {
-            if (current.equals(point) && previous != null) {
+        /* Find connected neighbors */
+        for (Point point : road.getWayPoints()) {
+            if (point.equals(this.point) && previous != null) {
                 connectedNeighbors.add(previous);
             }
 
-            if (previous != null && previous.equals(point)) {
-                connectedNeighbors.add(current);
+            if (previous != null && previous.equals(this.point)) {
+                connectedNeighbors.add(point);
             }
 
-            previous = current;
+            previous = point;
         }
 
         connectedRoads.add(road);
@@ -140,7 +141,11 @@ class MapPoint {
         return !connectedNeighbors.isEmpty();
     }
 
-    List<Road> getConnectedRoads() {
+    Set<Road> getConnectedRoads() {
+        return connectedRoads;
+    }
+
+    List<Road> getConnectedRoadsAsList() {
         return new ArrayList<>(connectedRoads);
     }
 

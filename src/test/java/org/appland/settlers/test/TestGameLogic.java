@@ -226,7 +226,7 @@ public class TestGameLogic {
         Flag flag0 = map.placeFlag(player0, point1.downRight());
 
         /* Place the forester hut's flag */
-        Point point2 = new Point(8, 14);
+        Point point2 = new Point(10, 10);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
         /* Assign new workers to unoccupied places. Since there are no places

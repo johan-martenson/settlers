@@ -88,7 +88,7 @@ public class Road {
 
         for (Point current : wayPoints) {
             if (previous == null) {
-		previous = current;
+                previous = current;
                 continue;
             }
 

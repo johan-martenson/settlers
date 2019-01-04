@@ -59,8 +59,7 @@ public class GameUtils {
         }
     }
 
-    public static List<Point> findShortestPath(Point start, Point goal,
-            Collection<Point> avoid, ConnectionsProvider connectionProvider) {
+    static List<Point> findShortestPath(Point start, Point goal, Collection<Point> avoid, ConnectionsProvider connectionProvider) {
         Set<Point>          evaluated         = new HashSet<>();
         Set<Point>          toEvaluate        = new HashSet<>();
         Map<Point, Double>  realCostToPoint   = new HashMap<>();
@@ -69,10 +68,10 @@ public class GameUtils {
         double              bestCaseCost;
 
         /* Define starting parameters */
-        bestCaseCost = start.distance(goal);
+        bestCaseCost = getDistanceInGameSteps(start, goal);
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
-        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+        estimatedFullCost.put(start, bestCaseCost);
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point currentPoint;
@@ -135,8 +134,7 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = realCostToPoint.get(currentPoint) +
-                        connectionProvider.realDistance(currentPoint, neighbor);
+                tentativeCost = realCostToPoint.get(currentPoint) + connectionProvider.realDistance(currentPoint, neighbor);
 
                 /* Check if the neighbor hasn't been evaluated yet or if we
                    have found a cheaper way to reach it */
@@ -149,7 +147,7 @@ public class GameUtils {
                     realCostToPoint.put(neighbor, tentativeCost);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
 
                     /* Add the neighbor to the evaluation list */
                     toEvaluate.add(neighbor);
@@ -266,7 +264,7 @@ public class GameUtils {
 
         @Override
         public Double estimateDistance(Point from, Point to) {
-            return from.distance(to);
+            return (double)getDistanceInGameSteps(from, to);
         }
     }
 
@@ -302,7 +300,7 @@ public class GameUtils {
                     continue;
                 }
 
-                /* Count the number of segments to walk and don't include the starting point */
+                /* Count the number of segments to walk (don't include the starting point) */
                 int tmpDistance = road.getWayPoints().size() - 1;
 
                 if (tmpDistance < distance) {
@@ -319,23 +317,22 @@ public class GameUtils {
 
         @Override
         public Double estimateDistance(Point from, Point to) {
-            return from.distance(to);
+            return (double)getDistanceInGameSteps(from, to);
         }
     }
 
     /**
      * Finds the shortest path following roads between any two points. The points
-     * don't need to be flags or buildings but can be any point on a road.
+     * must  be flags or buildings.
      *
-     * Only points with flags or buildings are returned.
+     * The path returned will only contain points with flags or buildings.
      *
      * @param start The point to start from
      * @param goal The point to reach
      * @param mapPoints The map with information about each point on the map
-     * @return the detailed list of steps required to travel from start to goal
+     * @return the list of flag points to pass (included the starting point) required to travel from start to goal
      */
-    static List<Point> findShortestPathViaRoads(Point start, Point goal,
-            Map<Point, MapPoint> mapPoints) {
+    static List<Point> findShortestPathViaRoads(Point start, Point goal, Map<Point, MapPoint> mapPoints) {
         Set<Point>         evaluated         = new HashSet<>();
         Set<Point>         toEvaluate        = new HashSet<>();
         Map<Point, Double> realCostToPoint   = new HashMap<>();
@@ -344,10 +341,10 @@ public class GameUtils {
         double             bestCaseCost;
 
         /* Define starting parameters */
-        bestCaseCost = start.distance(goal);
+        bestCaseCost = (double)getDistanceInGameSteps(start, goal);
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
-        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+        estimatedFullCost.put(start, bestCaseCost);
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point currentPoint;
@@ -396,7 +393,7 @@ public class GameUtils {
             toEvaluate.remove(currentPoint);
             evaluated.add(currentPoint);
 
-            /* Evaluate each direct neighbor */
+            /* Evaluate each neighbor directly connected by a road */
             MapPoint mp = mapPoints.get(currentPoint);
             for (Road road : mp.getConnectedRoads()) {
 
@@ -408,8 +405,7 @@ public class GameUtils {
                 }
 
                 /* Calculate the real cost to reach the neighbor from the start */
-                tentativeCost = realCostToPoint.get(currentPoint) +
-                        road.getWayPoints().size() - 1;
+                tentativeCost = realCostToPoint.get(currentPoint) + road.getWayPoints().size() - 1;
 
                 /* Check if the neighbor hasn't been evaluated yet or if we
                    have found a cheaper way to reach it */
@@ -422,7 +418,7 @@ public class GameUtils {
                     realCostToPoint.put(neighbor, tentativeCost);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
 
                     /* Add the neighbor to the evaluation list */
                     toEvaluate.add(neighbor);
@@ -451,10 +447,10 @@ public class GameUtils {
         double             bestCaseCost;
 
         /* Define starting parameters */
-        bestCaseCost = start.distance(goal);
+        bestCaseCost = getDistanceInGameSteps(start, goal);
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
-        estimatedFullCost.put(start, realCostToPoint.get(start) + start.distance(goal));
+        estimatedFullCost.put(start, bestCaseCost);
 
         /* Declare variables outside of the loop to keep memory churn down */
         Point currentPoint;
@@ -515,7 +511,7 @@ public class GameUtils {
                     realCostToPoint.put(neighbor, tentativeCost);
 
                     /* Remember the estimated full cost to go via the neighbor */
-                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + neighbor.distance(goal));
+                    estimatedFullCost.put(neighbor, realCostToPoint.get(neighbor) + getDistanceInGameSteps(neighbor, goal));
 
                     /* Add the neighbor to the evaluation list */
                     toEvaluate.add(neighbor);
@@ -921,10 +917,10 @@ public class GameUtils {
         int distanceX = Math.abs(start.x - end.x);
         int distanceY = Math.abs(start.y - end.y);
 
-        if (distanceY > distanceX) {
-            return  distanceX + (distanceY - distanceX);
+        if (distanceX > distanceY) {
+            return distanceY + (distanceX - distanceY) / 2;
         } else {
-            return distanceX;
+            return distanceY;
         }
     }
 }
