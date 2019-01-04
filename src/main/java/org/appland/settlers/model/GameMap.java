@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import org.appland.settlers.model.GameUtils.ConnectionsProvider;
-import org.appland.settlers.model.Tile.Vegetation;
 import org.appland.settlers.policy.Constants;
 
 import java.awt.*;
@@ -28,7 +27,6 @@ import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
-import static org.appland.settlers.model.Tile.Vegetation.WATER;
 
 public class GameMap {
 
@@ -1086,16 +1084,13 @@ public class GameMap {
     public Collection<Point> getAvailableFlagPoints(Player player) {
         Set<Point> points = new HashSet<>();
 
-        for (Land land : player.getLands()) {
-
-            /* This iterates over a set and the order may be non-deterministic */
-            for (Point point : land.getPointsInLand()) {
-                if (!isAvailableFlagPoint(player, point)) {
+        /* This iterates over a set and the order may be non-deterministic */
+        for (Point point : player.getLandInPoints()) {
+            if (!isAvailableFlagPoint(player, point)) {
                     continue;
                 }
 
-                points.add(point);
-            }
+            points.add(point);
         }
 
         return points;
@@ -1229,19 +1224,17 @@ public class GameMap {
     public Map<Point, Size> getAvailableHousePoints(Player player) {
         Map<Point, Size> housePoints = new HashMap<>();
 
-        for (Land land : player.getLands()) {
-            for (Point point : land.getPointsInLand()) {
-                Size result = isAvailableHousePoint(player, point);
+        /* This iterates over a set and the order is non-deterministic */
+        for (Point point : player.getLandInPoints()) {
+            Size result = isAvailableHousePoint(player, point);
 
-                if (result != null) {
+            if (result != null) {
                     housePoints.put(point, result);
                 }
-            }
         }
 
         return housePoints;
     }
-
 
     private List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
         Point[] adjacentPoints = new Point[] {
@@ -2413,17 +2406,15 @@ public class GameMap {
         List<Point> availableMinePoints = new LinkedList<>();
 
         /* Find available points for mine in the owned land
-           This iterates over a collection and the order may be
-           non-deterministic
-        */
-        for (Land land : player.getLands()) {
-            for (Point point : land.getPointsInLand()) {
 
-                /* Add the point if it's possible to build a mine there */
-                if (isAvailableMinePoint(player, point)) {
+           This iterates over a collection and the order is non-deterministic
+        */
+        for (Point point : player.getLandInPoints()) {
+
+            /* Add the point if it's possible to build a mine there */
+            if (isAvailableMinePoint(player, point)) {
                     availableMinePoints.add(point);
                 }
-            }
         }
 
         return availableMinePoints;

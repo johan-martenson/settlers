@@ -20,7 +20,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Storage;
-import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WildAnimal;
@@ -29,11 +28,9 @@ import org.appland.settlers.model.Worker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -422,31 +419,33 @@ public class Utils {
         assertEquals(building.getNumberOfHostedMilitary(), nr);
     }
 
-    public static void verifyPointIsWithinBorder(Player player, Point position) {
+    public static void verifyPointIsWithinBorder(Player player, Point point) {
         boolean insideLand = false;
 
         for (Land land : player.getLands()) {
-            if (land.isWithinBorder(position)) {
+            if (land.isWithinBorder(point)) {
                 insideLand = true;
 
                 break;
             }
         }
 
+        assertTrue(player.getLandInPoints().contains(point));
         assertTrue(insideLand);
     }
 
-    public static void verifyPointIsNotWithinBorder(Player player, Point position) {
+    public static void verifyPointIsNotWithinBorder(Player player, Point point) {
         boolean insideLand = false;
 
         for (Land land : player.getLands()) {
-            if (land.isWithinBorder(position)) {
+            if (land.isWithinBorder(point)) {
                 insideLand = true;
 
                 break;
             }
         }
 
+        assertFalse(player.getLandInPoints().contains(point));
         assertFalse(insideLand);
     }
 
@@ -962,12 +961,10 @@ public class Utils {
 
     public static void plantTreesOnPlayersLand(Player player) {
 
-        for (Land land : player.getLands()) {
-            for (Point point : land.getPointsInLand()) {
-                try {
-                    player.getMap().placeTree(point);
-                } catch (Exception e) {}
-            }
+        for (Point point: player.getLandInPoints()) {
+            try {
+                player.getMap().placeTree(point);
+            } catch (Exception e) {}
         }
     }
 

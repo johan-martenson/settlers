@@ -3962,7 +3962,7 @@ public class TestAttack {
         assertTrue(player1.getBorders().isEmpty());
 
         /* Verify that player 1 has no land */
-        assertTrue(player1.getLands().isEmpty());
+        assertTrue(player1.getLandInPoints().isEmpty());
     }
 
     @Test

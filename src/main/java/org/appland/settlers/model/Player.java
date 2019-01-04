@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -94,6 +95,16 @@ public class Player {
 
     public Collection<Land> getLands() {
         return ownedLands;
+    }
+
+    public Collection<Point> getLandInPoints() {
+        List<Point> result = new ArrayList<>();
+
+        for (Land land : ownedLands) {
+            result.addAll(land.getPointsInLand());
+        }
+
+        return result;
     }
 
     public List<Point> getFieldOfView() {
