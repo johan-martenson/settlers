@@ -20,23 +20,26 @@ public class Player {
     private List<Point>          fieldOfView;
     private GameMap              map;
 
-    private final List<Land>     ownedLands;
-    private final String         name;
-    private final List<Building> buildings;
-    private final Set<Point>     discoveredLand;
-    private final Color          color;
-    private final List<Material> transportPriorities;
+    private final String                  name;
+    private final List<Building>          buildings;
+    private final Set<Point>              discoveredLand;
+    private final Color                   color;
+    private final List<Material>          transportPriorities;
+    private final Collection<Point>       ownedLand;
+    private final List<Collection<Point>> borders;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
+
 
     public Player(String name, Color color) {
         this.name           = name;
         this.color          = color;
         buildings           = new LinkedList<>();
-        ownedLands          = new LinkedList<>();
         fieldOfView         = new LinkedList<>();
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
+        ownedLand           = new ArrayList<>();
+        borders             = new ArrayList<>();
 
         /* Create the food quota and set it to equal distribution */
         foodQuota = new HashMap<>();
@@ -73,38 +76,16 @@ public class Player {
         return buildings;
     }
 
-    public boolean isWithinBorder(Point position) {
-        for (Land land : ownedLands) {
-            if (land.isWithinBorder(position)) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean isWithinBorder(Point point) {
+        return ownedLand.contains(point);
     }
 
     public List<Collection<Point>> getBorders() {
-        List<Collection<Point>> result = new LinkedList<>();
-
-        for (Land land : ownedLands) {
-            result.addAll(land.getBorders());
-        }
-
-        return result;
-    }
-
-    public Collection<Land> getLands() {
-        return ownedLands;
+        return borders;
     }
 
     public Collection<Point> getLandInPoints() {
-        List<Point> result = new ArrayList<>();
-
-        for (Land land : ownedLands) {
-            result.addAll(land.getPointsInLand());
-        }
-
-        return result;
+        return ownedLand;
     }
 
     public List<Point> getFieldOfView() {
@@ -245,19 +226,23 @@ public class Player {
         this.map = map;
     }
 
-    void setLands(List<Land> value) {
-        ownedLands.clear();
-        ownedLands.addAll(value);
+    void setLands(List<Land> updatedLands) {
 
-        /* Stop here if there is no owned land */
-        if (ownedLands.isEmpty()) {
-            return;
+        /* Update full list of owned land and the list of borders */
+        ownedLand.clear();
+        borders.clear();
+        for (Land land : updatedLands) {
+            ownedLand.addAll(land.getPointsInLand());
+            borders.addAll(land.getBorders());
         }
 
-        /* Update field of view */
-        updateDiscoveredLand();
+        if (!updatedLands.isEmpty()) {
 
-        fieldOfView = calculateFieldOfView(discoveredLand);
+            /* Update field of view */
+            updateDiscoveredLand();
+            
+            fieldOfView = calculateFieldOfView(discoveredLand);
+        }
     }
 
     @Override

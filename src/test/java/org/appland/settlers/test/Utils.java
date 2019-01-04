@@ -420,33 +420,11 @@ public class Utils {
     }
 
     public static void verifyPointIsWithinBorder(Player player, Point point) {
-        boolean insideLand = false;
-
-        for (Land land : player.getLands()) {
-            if (land.isWithinBorder(point)) {
-                insideLand = true;
-
-                break;
-            }
-        }
-
         assertTrue(player.getLandInPoints().contains(point));
-        assertTrue(insideLand);
     }
 
     public static void verifyPointIsNotWithinBorder(Player player, Point point) {
-        boolean insideLand = false;
-
-        for (Land land : player.getLands()) {
-            if (land.isWithinBorder(point)) {
-                insideLand = true;
-
-                break;
-            }
-        }
-
         assertFalse(player.getLandInPoints().contains(point));
-        assertFalse(insideLand);
     }
 
     public static void verifyDeliveryOfMaterial(GameMap map, Road road) throws Exception {
