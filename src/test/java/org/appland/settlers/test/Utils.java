@@ -74,7 +74,7 @@ public class Utils {
         fastForward(time, Arrays.asList(actors));
     }
 
-    private static void fastForward(int time, List<Actor> actors) throws Exception {
+    public static void fastForward(int time, List<Actor> actors) throws Exception {
         for (Actor actor : actors) {
             fastForward(time, actor);
         }

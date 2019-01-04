@@ -829,7 +829,6 @@ public class GameUtils {
         return storage;
     }
 
-
     public static Storage getClosestStorage(Point point, GameMap map) throws InvalidRouteException {
         return getClosestStorage(point, null, map);
     }
@@ -916,5 +915,16 @@ public class GameUtils {
         }
 
         return reachable;
+    }
+
+    static int getDistanceInGameSteps(Point start, Point end) {
+        int distanceX = Math.abs(start.x - end.x);
+        int distanceY = Math.abs(start.y - end.y);
+
+        if (distanceY > distanceX) {
+            return  distanceX + (distanceY - distanceX);
+        } else {
+            return distanceX;
+        }
     }
 }
