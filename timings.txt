@@ -1,0 +1,84 @@
+Source: https://www.reddit.com/r/Settlers/comments/b6j927/testing_settlers_2_gold_production_cycles/
+
+------------ 8< ------------------
+
+Testing method:
+
+Cycles were measured: from the moment the worker exits his building (to deliver a resource to the flag, or to go out there and fish/farm/hunt), to the next such moment.
+All values below are in 2x sped-up time.
+​
+
+Building                seconds to produce 1 unit of output
+
+Mine:                   48
+Iron Smelter:           48
+Armory:                 48
+Mint:                   54
+Metalworks:             54
+
+Well:                   25
+Farm:                   48 for the whole cycle (sowing + harvesting. See Appendix B below for more details.)
+Mill:                   25
+Bakery:                 25
+Pig Farm:               25
+Slaughterhouse:         25   
+Fishery:                57
+Hunter:                 48
+
+Brewery:                28
+Donkey Breeder:         35
+
+Forrester               25
+Woodcutter              48
+Carpenter               25
+Stonemason              48
+
+Training times (how long it takes to consume a gold coin):
+Fortress                19
+Watchtower              35
+Barracks, Guardhouse    66
+This data implies a following chain:
+
+2 farms -> 1 mill + 1 well -> 1 bakery -> 2 mines
+
+Asssuming we want:
+
+1 mint (You don't really need more if you use the Interior Academy Fortress trick to get a 1 to 1 ratio of gold spent to Generals trained, see Appendix A below)
+2 armories, 2 iron smelters (because an armory produces half a soldier's equipment in roughly the same time it takes the mint to create a gold coin for him)
+1 brewery (doesn't need to work at 100% production to keep up with shields/swords)
+1 donkey breeder
+This would require:
+
+8 mines (5 coal, 2 iron, 1 gold)
+4 bakeries/slaughterhouses
+4 mills/pigfarms
+5-6 wells
+10+ farms (you'll want more if they aren't 100% productive due to terrain limitations). Of course fisheries can also supplement this.
+Whether I just use bakeries, or also bother with pigs and/or fisheries, depends on available terrain, and on whether I'm able to place bakeries close to mines. Mines can become a bottleneck of the production chain because they can only store 2 of each type of food, which runs out fairly quickly. Having 2-3 types of food allows them to store 4-6 foodstuffs and therefore to better accomodate longer supply lines.
+
+I imagine this won't be mindblowingly new to veterans, but I was not able to find specific information about the building cycle times anywhere on the Internet, so I thought I'd share.
+
+Appendix A: Interior Academy-Fortress trick (1 General trained per 1 Gold coin)
+To maximise the efficiency of a gold coin, build a fortress near your HQ/storehouse. The Fortress should contain 1 soldier of rank 4, 1 of rank 3, 1 of rank 2, and the rest should be Privates. Stop gold flow to all buildings except that one fortress. Every gold coin sent to this fortress will cause 4 promotions, one of which will be a General. Every time you get a General, lower the interior setting by 1 to send him home, and increase it by 1 again to have a Private replace him. This way you can keep spending 1 gold coin to get 1 General, indefinitely.
+
+To avoid unnecessarily sending soldiers to other interior military buildigs, you can cut them all off from the road network. Alternatively, only build Barracks (2 soldiers max) and set the interior soldier count to 8 out of 9, so that all barracks only receive 1 of 2 soldiers but the Fortress gets 8 of 9.
+
+The Fortress is ideal as an academy because of its rapid training time and large soldier capacity. Rapid training lets you pause the training often to deal with other military matters, without falling behind. A soldier capacity of 9 means the 0-9 interior setting controls precisely how many soldiers are inside.
+
+Appendix B: Details of the test of the farm:
+Because times of farmer actions vary due to distances to fields and due to waiting for crop growth, I started with a fresh farm with no fields, and I measured the whole cycle involving planting 5 fields, waiting till they grow, and harvesting them.
+
+0s - farmer goes out to plant field 1
+19 - farmer goes out to plant field 2
+35 - farmer goes out to plant field 3
+51 - farmer goes out to plant field 4
+77 - farmer goes out to plant field 5
+140 - farmer has waited till fields grow (notice the pause), goes out to harvest a field
+160 - farmer goes out to harvest a field
+173 - farmer goes out to harvest a field
+192 - farmer goes out to harvest a field
+209 - farmer goes out to harvest a field
+238 - farmer goes out to plant field 1 (cycle end, new cycle start)
+It can get mixed up, and the farmer may end up alternating sowing and harvesting, but the overall growth time remains the same, so I expect the overall productivity remains the same or at least roughly the same.
+
+So, about 240 seconds to produce an output of 5, that's 48 seconds per bundle of grain.
