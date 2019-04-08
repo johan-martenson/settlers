@@ -538,6 +538,43 @@ public class TestRoads {
     }
 
     @Test
+    public void testAvailableFlagPointOnRoadIsPossibleDirectConnection() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place a road */
+
+        /* Place a flag */
+        Point point4 = new Point(14, 4);
+        Flag flag0 = map.placeFlag(player0, point4);
+
+        /* Place a road */
+        Point point1 = new Point(8, 4);
+        Point point2 = new Point(10, 4);
+        Point point3 = new Point(12, 4);
+        Road road0 = map.placeRoad(player0, headquarter0.getFlag().getPosition(), point1, point2, point3, point4);
+
+        /* Verify that the available flag point on the road is a possible road connection end point */
+        Point point5 = new Point(11, 5);
+
+        assertTrue(map.isAvailableFlagPoint(player0, point2));
+
+        List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point5);
+
+        assertTrue(points.contains(point2));
+    }
+
+    @Test
     public void testPossibleDirectConnectionsOnSides() throws Exception {
 
         /* Create players */

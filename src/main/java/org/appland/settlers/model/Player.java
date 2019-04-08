@@ -240,7 +240,7 @@ public class Player {
 
             /* Update field of view */
             updateDiscoveredLand();
-            
+
             fieldOfView = calculateFieldOfView(discoveredLand);
         }
     }

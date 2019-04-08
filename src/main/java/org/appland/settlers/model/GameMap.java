@@ -1415,6 +1415,10 @@ public class GameMap {
             return true;
         }
 
+        if (isRoadAtPoint(point) && isAvailableFlagPoint(player, point)) {
+            return true;
+        }
+
         if (isPossibleAsAnyPointInRoad(player, point)) {
             return true;
         }
