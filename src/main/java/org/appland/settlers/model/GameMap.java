@@ -935,7 +935,7 @@ public class GameMap {
     }
 
     private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
-        log.log(Level.INFO, "Placing {0}", new Object[]{flag});
+        //log.log(Level.INFO, "Placing {0}", new Object[]{flag});
 
         Point flagPoint = flag.getPosition();
 
@@ -2479,6 +2479,14 @@ public class GameMap {
                     return;
                 }
 
+                /* Make sure the animal isn't too close to the edge of the map */
+                for (Tile tile : getTerrain().getSurroundingTiles(point)) {
+
+                    if (tile == null) {
+                        continue;
+                    }
+                }
+
                 /* Place the new wild animal */
                 placeWildAnimal(point);
 
@@ -2512,8 +2520,8 @@ public class GameMap {
                 continue;
             }
 
-            /* Filter lakes */
-            if (getTerrain().isInWater(p)) {
+            /* Filter terrain the animal can't walk on */
+            if (WildAnimal.cannotWalkOn(getTerrain().getSurroundingTiles(p))) {
                 continue;
             }
 
