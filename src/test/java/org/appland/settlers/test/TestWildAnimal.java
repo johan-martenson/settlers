@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.appland.settlers.model.Tile.Vegetation.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -248,6 +249,291 @@ public class TestWildAnimal {
             assertEquals(wildAnimal0.getPosition(), point0);
 
             map.stepTime();
+        }
+    }
+
+    @Test
+    public void testCannotPlaceWildAnimalOnWater() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to water */
+        Utils.fillMapWithVegetation(map, WATER);
+
+        /* Verify that no wild animals appear */
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            assertTrue(map.getWildAnimals().isEmpty());
+        }
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnGrass() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to grass */
+        Utils.fillMapWithVegetation(map, GRASS);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnSwamp() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to swamp */
+        Utils.fillMapWithVegetation(map, SWAMP);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnMountain() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to mountain */
+        Utils.fillMapWithVegetation(map, MOUNTAIN);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnSavannah() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to savannah */
+        Utils.fillMapWithVegetation(map, SAVANNAH);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnSnow() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to snow */
+        Utils.fillMapWithVegetation(map, SNOW);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnDesert() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to desert */
+        Utils.fillMapWithVegetation(map, DESERT);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnSteppe() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to steppe */
+        Utils.fillMapWithVegetation(map, STEPPE);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnMountainMeadow() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to mountain meadow */
+        Utils.fillMapWithVegetation(map, MOUNTAIN_MEADOW);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCanPlaceWildAnimalOnBuildableMountain() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to buildable mountain */
+        Utils.fillMapWithVegetation(map, BUILDABLE_MOUNTAIN);
+
+        /* Verify that wild animals appear */
+        boolean sawWildAnimal = false;
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            if (!map.getWildAnimals().isEmpty()) {
+                sawWildAnimal = true;
+            }
+        }
+
+        assertTrue(sawWildAnimal);
+    }
+
+    @Test
+    public void testCannotPlaceWildAnimalOnDeepWater() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to deep water */
+        Utils.fillMapWithVegetation(map, DEEP_WATER);
+
+        /* Verify that no wild animals appear */
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            assertTrue(map.getWildAnimals().isEmpty());
+        }
+    }
+
+    @Test
+    public void testCannotPlaceWildAnimalOnLava() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Set the whole map to lava */
+        Utils.fillMapWithVegetation(map, LAVA);
+
+        /* Verify that no wild animals appear */
+        for (int i = 0; i < 3000; i++) {
+            map.stepTime();
+
+            assertTrue(map.getWildAnimals().isEmpty());
         }
     }
 }
