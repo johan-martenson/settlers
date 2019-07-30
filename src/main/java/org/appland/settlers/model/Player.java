@@ -19,11 +19,11 @@ public class Player {
 
     private List<Point>          fieldOfView;
     private GameMap              map;
+    private Color                color;
+    private String               name;
 
-    private final String                  name;
     private final List<Building>          buildings;
     private final Set<Point>              discoveredLand;
-    private final Color                   color;
     private final List<Material>          transportPriorities;
     private final Collection<Point>       ownedLand;
     private final List<Collection<Point>> borders;
@@ -424,5 +424,13 @@ public class Player {
 
     public Collection<Point> getAvailableMiningPoints() {
         return map.getAvailableMinePoints(this);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

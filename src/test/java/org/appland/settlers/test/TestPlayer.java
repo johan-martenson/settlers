@@ -15,6 +15,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -242,6 +243,32 @@ public class TestPlayer {
 
         /* Verify that the color is set correctly */
         assertEquals(player0.getColor(), RED);
+    }
+
+    @Test
+    public void testChangeColorInPlayer() {
+
+        /* Create player */
+        Player player0 = new Player("Player 0", RED);
+
+        /* Change the color */
+        player0.setColor(Color.BLUE);
+
+        /* Verify that the color is set correctly */
+        assertEquals(player0.getColor(), BLUE);
+    }
+
+    @Test
+    public void testChangeNameInPlayer() {
+
+        /* Create player */
+        Player player0 = new Player("Player 0", RED);
+
+        /* Change the name */
+        player0.setName("Another player");
+
+        /* Verify that the color is set correctly */
+        assertEquals(player0.getName(), "Another player");
     }
 
     @Test (expected = Exception.class)
