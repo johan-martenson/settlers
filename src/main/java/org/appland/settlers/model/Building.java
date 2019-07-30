@@ -252,7 +252,6 @@ public class Building implements Actor, EndPoint {
             throw new Exception("Building " + this + " is already occupied.");
         }
 
-        log.log(Level.INFO, "Assigning worker {0} to building {1}", new Object[]{worker, this});
 
         this.worker = worker;
         promisedWorker = null;
@@ -302,7 +301,6 @@ public class Building implements Actor, EndPoint {
 
     @Override
     public void putCargo(Cargo cargo) throws Exception {
-        log.log(Level.FINE, "Adding cargo {0} to queue ({1})", new Object[]{cargo, receivedMaterial});
 
         Material material = cargo.getMaterial();
 
@@ -356,7 +354,6 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsMaterial(Material material) {
-        log.log(Level.FINE, "Does {0} require {1}", new Object[]{this, material});
 
         return getLackingAmountWithProjected(material) > 0;
     }
@@ -395,7 +392,6 @@ public class Building implements Actor, EndPoint {
 
     @Override
     public void stepTime() throws Exception {
-        log.log(Level.FINE, "Stepping time in building");
 
         if (isUnderAttack()) {
 
@@ -418,7 +414,6 @@ public class Building implements Actor, EndPoint {
             if (countdown.reachedZero()) {
 
                 if (isMaterialForConstructionAvailable()) {
-                    log.log(Level.INFO, "Construction of {0} done", this);
 
                     consumeConstructionMaterial();
 

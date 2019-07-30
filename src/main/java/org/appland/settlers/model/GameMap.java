@@ -385,7 +385,6 @@ public class GameMap {
      * @throws Exception
      */
     public <T extends Building> T placeBuilding(T house, Point point) throws Exception {
-        log.log(Level.INFO, "Placing {0} at {1}", new Object[]{house, point});
 
         boolean firstHouse = false;
 
@@ -739,7 +738,6 @@ public class GameMap {
      * @throws Exception
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
-        log.log(Level.INFO, "Placing road through {0}", wayPoints);
 
         Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
@@ -935,7 +933,6 @@ public class GameMap {
     }
 
     private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
-        //log.log(Level.INFO, "Placing {0}", new Object[]{flag});
 
         Point flagPoint = flag.getPosition();
 

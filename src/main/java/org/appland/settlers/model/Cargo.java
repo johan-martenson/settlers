@@ -17,7 +17,6 @@ public class Cargo {
     private boolean     deliveryPromised;
 
     public Cargo(Material material, GameMap map) {
-        log.log(Level.FINE, "Creating cargo of {0}", material);
 
         this.material = material;
         deliveryPromised = false;
@@ -29,7 +28,6 @@ public class Cargo {
     }
 
     public void setTarget(Building target) throws Exception {
-        log.log(Level.FINE, "Setting target to {0}", target);
         this.target = target;
 
         Flag flag = map.getFlagAtPoint(getPosition());
@@ -51,7 +49,6 @@ public class Cargo {
     }
 
     public void setPosition(Point point) {
-        log.log(Level.FINE, "Setting position to {0}", point);
 
         if (map.isFlagAtPoint(point) || map.isBuildingAtPoint(point)) {
             if (position != null && position != point) {

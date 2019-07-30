@@ -211,19 +211,15 @@ public abstract class Worker implements Actor {
     }
 
     void onArrival() throws Exception {
-        log.log(Level.FINE, "On handle hook arrival with nothing to do");
     }
 
     void onIdle() throws Exception {
-        log.log(Level.FINE, "On idle hook with nothing to do");
     }
 
     void onEnterBuilding(Building building) throws Exception {
-        log.log(Level.FINE, "On enter building hook with nothing to do");
     }
 
     private void handleArrival() throws Exception {
-        log.log(Level.FINE, "Arrived at target: {0}", target);
 
         /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
@@ -264,19 +260,15 @@ public abstract class Worker implements Actor {
     }
 
     public boolean isArrived() {
-        log.log(Level.FINE, "Checking if worker has arrived");
-        log.log(Level.FINER, "Worker is at {0} and target is {1}", new Object[]{position, target});
 
         if (state == IDLE_INSIDE || state == IDLE_OUTSIDE) {
             return true;
         }
 
-        log.log(Level.FINER, "Worker has not arrived at target");
         return false;
     }
 
     public void setMap(GameMap map) {
-        log.log(Level.FINE, "Setting map to {0}", map);
         this.map = map;
     }
 
@@ -358,7 +350,6 @@ public abstract class Worker implements Actor {
     void setOffroadTarget(Point point, Point via) throws Exception {
         boolean wasInside = false;
 
-        log.log(Level.FINE, "Setting {0} as offroad target, via {1}", new Object[] {point, via});
 
         target = point;
 
@@ -389,7 +380,6 @@ public abstract class Worker implements Actor {
 
             path.remove(0);
 
-            log.log(Level.FINER, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
     }
@@ -407,7 +397,6 @@ public abstract class Worker implements Actor {
     }
 
     void setTarget(Point point, Point via) throws Exception {
-        log.log(Level.FINE, "Setting {0} as target, via {1}", new Object[] {point, via});
 
         target = point;
 
@@ -431,7 +420,6 @@ public abstract class Worker implements Actor {
             /* Remove the current point from the path */
             path.remove(0);
 
-            log.log(Level.FINE, "Way to target is {0}", path);
             state = WALKING_AND_EXACTLY_AT_POINT;
         }
     }

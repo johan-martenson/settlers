@@ -280,16 +280,13 @@ public class Storage extends Building implements Actor {
         if (!isWorking()) {
             super.putCargo(cargo);
         } else {
-            log.log(Level.FINE, "Depositing cargo {0}", cargo);
 
             storeOneInInventory(cargo.getMaterial());
 
-            log.log(Level.FINER, "Inventory is {0} after deposit", inventory);
         }
     }
 
     public Cargo retrieve(Material material) throws Exception {
-        log.log(Level.FINE, "Retrieving one piece of {0}", material);
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve " + material);
@@ -305,7 +302,6 @@ public class Storage extends Building implements Actor {
 
         cargo.setPosition(getFlag().getPosition());
 
-        log.log(Level.FINER, "Inventory is {0} after retrieval", inventory);
 
         return cargo;
     }

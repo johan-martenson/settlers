@@ -35,7 +35,6 @@ public class Flag implements EndPoint {
 
     @Override
     public void putCargo(Cargo cargo) throws Exception {
-        log.log(Level.FINE, "Putting {0} at {1}", new Object[]{cargo, this});
 
         cargo.setPosition(getPosition());
         stackedCargo.add(cargo);
