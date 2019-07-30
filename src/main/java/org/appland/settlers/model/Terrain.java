@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.model.Tile.Vegetation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -411,5 +412,13 @@ public class Terrain {
         getTileDownRight(point).setAmountMineral(mineral, amount);
         getTileBelow(point).setAmountMineral(mineral, amount);
         getTileDownLeft(point).setAmountMineral(mineral, amount);
+    }
+
+    public Collection<Tile> getTilesBelow() {
+        return tileBelowMap.values();
+    }
+
+    public Collection<Tile> getTilesDownRight() {
+        return tileDownRightMap.values();
     }
 }

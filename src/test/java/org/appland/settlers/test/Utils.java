@@ -991,4 +991,14 @@ public class Utils {
             } catch (Exception e) {}
         }
     }
+
+    public static void fillMapWithVegetation(GameMap map, Tile.Vegetation vegetation) {
+        for (Tile tile : map.getTerrain().getTilesBelow()) {
+            tile.setVegetationType(vegetation);
+        }
+
+        for (Tile tile : map.getTerrain().getTilesDownRight()) {
+            tile.setVegetationType(vegetation);
+        }
+    }
 }
