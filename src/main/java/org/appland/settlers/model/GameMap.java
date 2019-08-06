@@ -390,18 +390,18 @@ public class GameMap {
 
         /* Verify that the building is not already placed on the map */
         if (buildings.contains(house)) {
-            throw new Exception("Can't place " + house + " as it is already placed.");
+            throw new InvalidUserActionException("Can't place " + house + " as it is already placed.");
         }
 
         /* Verify that the house's player is valid */
         if (!players.contains(house.getPlayer())) {
-            throw new Exception("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
+            throw new InvalidGameLogicException("Can't place " + house + ", player " + house.getPlayer() + " is not valid.");
         }
 
         /* Handle the first building separately */
         if (house.getPlayer().getBuildings().isEmpty()) {
             if (! (house instanceof Headquarter)) {
-                throw new Exception("Can not place " + house + " as initial building");
+                throw new InvalidUserActionException("Can not place " + house + " as initial building");
             }
 
             firstHouse = true;
@@ -411,7 +411,7 @@ public class GameMap {
         if (house instanceof Headquarter) {
             for (Building building : house.getPlayer().getBuildings()) {
                 if (building instanceof Headquarter) {
-                    throw new Exception("Can only have one headquarter placed per player");
+                    throw new InvalidUserActionException("Can only have one headquarter placed per player");
                 }
             }
         }
@@ -419,14 +419,14 @@ public class GameMap {
         /* Verify that the point is available for the chosen building */
         if (house.isMine()) {
             if (!isAvailableMinePoint(house.getPlayer(), point)) {
-                throw new Exception("Cannot place " + house + " at non mining point.");
+                throw new InvalidUserActionException("Cannot place " + house + " at non mining point.");
 
             }
         } else {
             Size buildingAvailable = isAvailableHousePoint(house.getPlayer(), point, firstHouse);
 
             if (buildingAvailable == null || !buildingAvailable.contains(house.getSize())) {
-                throw new Exception("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
+                throw new InvalidUserActionException("Cannot place " + house.getSize() + " building, only " + buildingAvailable + ".");
             }
         }
 
@@ -436,7 +436,7 @@ public class GameMap {
         if (house instanceof Headquarter) {
             for (Player player : players) {
                 if (!player.equals(house.getPlayer()) && player.isWithinBorder(point)) {
-                    throw new Exception("Can't place building on " + point + " within another player's border");
+                    throw new InvalidUserActionException("Can't place building on " + point + " within another player's border");
                 }
             }
         }
