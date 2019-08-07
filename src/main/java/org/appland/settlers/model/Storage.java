@@ -640,7 +640,12 @@ public class Storage extends Building implements Actor {
     }
 
     @Override
-    public void stopProduction() throws Exception {
-        throw new Exception("Can't stop production in storage");
+    public void stopProduction() throws InvalidUserActionException {
+        throw new InvalidUserActionException("Can't stop production in storage");
+    }
+
+    @Override
+    public void resumeProduction() throws InvalidUserActionException {
+        throw new InvalidUserActionException("Can't resume production in storage");
     }
 }

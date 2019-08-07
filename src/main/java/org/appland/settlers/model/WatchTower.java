@@ -18,12 +18,12 @@ public class WatchTower extends Building {
     }
 
     @Override
-    public void stopProduction() throws Exception {
-        throw new Exception("Cannot stop production in barracks.");
+    public void stopProduction() throws InvalidUserActionException {
+        throw new InvalidUserActionException("Cannot stop production in watch tower.");
     }
 
     @Override
-    public void resumeProduction() throws Exception {
-        throw new Exception("Cannot resume production in barracks.");
+    public void resumeProduction() throws InvalidUserActionException {
+        throw new InvalidUserActionException("Cannot resume production in watch tower.");
     }
 }

@@ -20,12 +20,12 @@ public class Barracks extends Building {
 
     @Override
     public void stopProduction() throws Exception {
-        throw new Exception("Cannot stop production in barracks.");
+        throw new InvalidUserActionException("Cannot stop production in barracks.");
     }
 
     @Override
     public void resumeProduction() throws Exception {
-        throw new Exception("Cannot resume production in barracks.");
+        throw new InvalidUserActionException("Cannot resume production in barracks.");
     }
 
     @Override
