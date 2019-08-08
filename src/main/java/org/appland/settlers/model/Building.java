@@ -470,6 +470,11 @@ public class Building implements Actor, EndPoint {
 
     public void tearDown() throws Exception {
 
+        /* A building cannot be torn down if it's already burning or destroyed */
+        if (state == State.BURNING || state == State.DESTROYED) {
+            throw new InvalidUserActionException("The building has already been torn down.");
+        }
+
         /* Clear up after the attack */
         attackers.clear();
         defenders.clear();

@@ -15,6 +15,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidGameLogicException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -1294,6 +1295,41 @@ public class TestArmory {
 
         /* Verify that the armorer goes back to storage */
         assertEquals(armorer0.getTarget(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testCannotTearDownArmoryTwice() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point2 = new Point(14, 4);
+        Building armory0 = map.placeBuilding(new Armory(player0), point2.upLeft());
+
+        /* Connect armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), armory0.getFlag());
+
+        /* Wait for the armory to get constructed */
+        Utils.fastForwardUntilBuildingIsConstructed(armory0, map);
+
+        /* Tear down the armory */
+        armory0.tearDown();
+
+        /* Verify that it cannot be torn down twice */
+        try {
+            armory0.tearDown();
+            assertFalse(true);
+        } catch (Throwable t) {
+            assertEquals(t.getClass(), InvalidUserActionException.class);
+        }
     }
 
     @Test
