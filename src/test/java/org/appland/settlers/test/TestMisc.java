@@ -27,16 +27,18 @@ public class TestMisc {
         GameMap map = new GameMap(players, 500, 250);
 
         /* Placing headquarter */
-        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), new Point(429, 201));
+        Point point0 = new Point(429, 201);
+        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
         /* Place flag */
-        map.placeFlag(player, new Point(434, 200));
+        Point point1 = new Point(434, 200);
+        Flag flag0 = map.placeFlag(player, point1);
 
         /* Place automatic road between flag and headquarter's flag */
-        Road road0 = map.placeAutoSelectedRoad(player, new Point(430, 200), new Point(434, 200));
+        Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag().getPosition(), point1);
 
         /* Place woodcutter by the flag */
-        Woodcutter woodcutter0 = map.placeBuilding(new org.appland.settlers.model.Woodcutter(player), new Point(433, 201));
+        Woodcutter woodcutter0 = map.placeBuilding(new org.appland.settlers.model.Woodcutter(player), flag0.getPosition().upLeft());
 
         /* Wait for the road to get an assigned courier */
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
@@ -60,7 +62,7 @@ public class TestMisc {
         assertEquals(courier.getNextPoint(), woodcutter0.getPosition().downRight());
 
         /* Remove the flag and cause the woodcutter to get torn down */
-        map.removeFlag(map.getFlagAtPoint(new Point(434, 200)));
+        map.removeFlag(map.getFlagAtPoint(point1));
 
         assertEquals(map.getWorkers().size(), 2);
 
