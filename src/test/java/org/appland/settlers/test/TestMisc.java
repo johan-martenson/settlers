@@ -1,0 +1,75 @@
+package org.appland.settlers.test;
+
+import org.appland.settlers.model.Courier;
+import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Woodcutter;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class TestMisc {
+
+    @Test
+    public void testRemoveRoadWhenCourierGoesToBuildingToDeliverCargo() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 500, 250);
+
+        /* Placing headquarter */
+        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), new Point(429, 201));
+
+        /* Place flag */
+        map.placeFlag(player, new Point(434, 200));
+
+        /* Place automatic road between flag and headquarter's flag */
+        Road road0 = map.placeAutoSelectedRoad(player, new Point(430, 200), new Point(434, 200));
+
+        /* Place woodcutter by the flag */
+        Woodcutter woodcutter0 = map.placeBuilding(new org.appland.settlers.model.Woodcutter(player), new Point(433, 201));
+
+        /* Wait for the road to get an assigned courier */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road0);
+
+        /* Fast forward a bit until the courier is carrying a cargo to deliver to the woodcutter */
+        for (int i = 0; i < 2000; i++) {
+
+            if (courier.getCargo() != null &&
+                woodcutter0.getPosition().equals(courier.getTarget()) &&
+                courier.getNextPoint().equals(woodcutter0.getPosition().downRight())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(map.getWorkers().size(), 2);
+        assertNotNull(courier.getCargo());
+        assertEquals(courier.getTarget(), woodcutter0.getPosition());
+        assertEquals(courier.getLastPoint(), headquarter0.getFlag().getPosition().right());
+        assertEquals(courier.getNextPoint(), woodcutter0.getPosition().downRight());
+
+        /* Remove the flag and cause the woodcutter to get torn down */
+        map.removeFlag(map.getFlagAtPoint(new Point(434, 200)));
+
+        assertEquals(map.getWorkers().size(), 2);
+
+        /* Verify that the courier goes back to the headquarter */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+        assertEquals(courier.getPosition(), headquarter0.getPosition());
+        assertFalse(map.getWorkers().contains(courier));
+    }
+}

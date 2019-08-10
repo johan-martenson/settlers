@@ -187,6 +187,7 @@ public class Courier extends Worker {
 
     @Override
     protected void onArrival() throws Exception {
+
         if (state == WALKING_TO_ROAD) {
             state = IDLE_AT_ROAD;
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
@@ -223,11 +224,13 @@ public class Courier extends Worker {
 
     @Override
     protected void onWalkingAndAtFixedPoint() throws Exception {
+
         if (getCargo() != null) {
             getCargo().setPosition(getPosition());
 
             /* Return the cargo to storage if the building is torn down */
-            if (map.isFlagAtPoint(getPosition()) &&
+            if (state != RETURNING_TO_STORAGE &&
+                map.isFlagAtPoint(getPosition()) &&
                 (getCargo().getTarget().burningDown() || getCargo().getTarget().destroyed())) {
 
                 Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
