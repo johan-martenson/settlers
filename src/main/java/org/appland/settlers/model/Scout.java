@@ -95,7 +95,15 @@ public class Scout extends Worker {
         } else if (state == RETURNING_TO_FLAG) {
             state = RETURNING_TO_STORAGE;
 
-            setTarget(GameUtils.getClosestStorage(flagPoint, getPlayer()).getPosition());
+            Building storage = GameUtils.getClosestStorageConnectedByRoads(flagPoint, getPlayer());
+
+            if (storage != null) {
+                setTarget(storage.getPosition());
+            } else {
+                storage = GameUtils.getClosestStorageOffroad(getPlayer(), flagPoint);
+
+                setOffroadTarget(storage.getPosition(), storage.getFlag().getPosition());
+            }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
 

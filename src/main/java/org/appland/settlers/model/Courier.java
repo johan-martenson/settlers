@@ -233,7 +233,7 @@ public class Courier extends Worker {
                 map.isFlagAtPoint(getPosition()) &&
                 (getCargo().getTarget().burningDown() || getCargo().getTarget().destroyed())) {
 
-                Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
+                Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
                 Cargo cargo = getCargo();
 

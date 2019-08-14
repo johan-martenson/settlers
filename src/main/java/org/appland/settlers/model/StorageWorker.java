@@ -191,7 +191,7 @@ public class StorageWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorage(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;

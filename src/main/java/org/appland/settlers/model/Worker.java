@@ -320,7 +320,7 @@ public abstract class Worker implements Actor {
 
     public void enterBuilding(Building building) throws Exception {
         if (!getPosition().equals(building.getPosition())) {
-            throw new Exception("Can't enter " + building + " when worker is at " + getPosition());
+            throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
         }
 
         state = IDLE_INSIDE;

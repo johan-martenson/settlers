@@ -1523,7 +1523,7 @@ public class TestRoads {
 
         assertTrue(road1.needsCourier());
 
-        assertEquals(GameUtils.getClosestStorage(road1.getStart(), player0), headquarter);
+        assertEquals(GameUtils.getClosestStorageConnectedByRoads(road1.getStart(), player0), headquarter);
 
         map.stepTime();
 

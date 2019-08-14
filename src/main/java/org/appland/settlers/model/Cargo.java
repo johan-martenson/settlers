@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Cargo {
@@ -99,7 +98,7 @@ public class Cargo {
     }
 
     void transportToStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storage0 != null) {
             setTarget(storage0);
@@ -109,7 +108,7 @@ public class Cargo {
     }
 
     private void returnToClosestStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storage0 != null) {
             setTarget(storage0);
@@ -117,7 +116,7 @@ public class Cargo {
     }
 
     private void returnToStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorage(getPosition(), map);
+        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storage0 != null) {
             setTarget(storage0);

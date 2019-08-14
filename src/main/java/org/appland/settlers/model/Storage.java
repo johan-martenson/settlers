@@ -2,7 +2,6 @@ package org.appland.settlers.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.BAKER;
@@ -221,7 +220,7 @@ public class Storage extends Building implements Actor {
                         continue;
                     }
 
-                    Storage storage = GameUtils.getClosestStorage(building.getPosition(), building, getPlayer());
+                    Storage storage = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
 
                     if (!equals(storage)) {
                         continue;
@@ -252,7 +251,7 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage storage = GameUtils.getClosestStorage(road.getStart(), getPlayer());
+                Storage storage = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
 
                 if (!equals(storage)) {
                     continue;
@@ -592,7 +591,7 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isClosestStorage(Building building) throws InvalidRouteException {
-        Storage storage = GameUtils.getClosestStorage(building.getPosition(), getPlayer());
+        Storage storage = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
 
         return equals(storage);
     }
@@ -612,7 +611,7 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage storage = GameUtils.getClosestStorage(road.getStart(), getPlayer());
+                Storage storage = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
 
                 if (storage != null && !this.equals(storage)) {
                     continue;
