@@ -937,7 +937,7 @@ public class GameMap {
         Point flagPoint = flag.getPosition();
 
         if (!isAvailableFlagPoint(flag.getPlayer(), flagPoint, checkBorder)) {
-            throw new Exception("Can't place " + flag + " on occupied point");
+            throw new InvalidUserActionException("Can't place " + flag + " on occupied point");
         }
 
         /* Handle the case where the flag is placed on a sign */
