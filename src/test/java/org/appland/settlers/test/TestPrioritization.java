@@ -18,9 +18,11 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GoldMine;
 import org.appland.settlers.model.GraniteMine;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.IronFounder;
 import org.appland.settlers.model.IronMine;
 import org.appland.settlers.model.IronSmelter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Mill;
 import org.appland.settlers.model.Miller;
 import org.appland.settlers.model.Miner;
@@ -41,21 +43,47 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.appland.settlers.model.Material.ARMORER;
+import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
+import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.BUTCHER;
+import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.DONKEY;
+import static org.appland.settlers.model.Material.DONKEY_BREEDER;
+import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FLOUR;
+import static org.appland.settlers.model.Material.FORESTER;
+import static org.appland.settlers.model.Material.GENERAL;
+import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MEAT;
+import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.MINTER;
+import static org.appland.settlers.model.Material.OFFICER;
+import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SAWMILL_WORKER;
+import static org.appland.settlers.model.Material.SCOUT;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.STONEMASON;
+import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Material.WOOD;
+import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -2296,5 +2324,107 @@ public class TestPrioritization {
         assertNotEquals(player0.getTransportPriorityList().get(0), PLANK);
         assertEquals(player0.getTransportPriorityList().get(10), PLANK);
         assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
+    }
+
+    @Test
+    public void testCannotSetTransportPriorityForWorkers() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Verify that setting transport priority for a worker causes an invalid user action exception */
+        List<Material> workers = new ArrayList<>();
+
+        workers.add(DONKEY);
+        workers.add(PRIVATE);
+        workers.add(SERGEANT);
+        workers.add(GENERAL);
+        workers.add(COURIER);
+        workers.add(FORESTER);
+        workers.add(WOODCUTTER_WORKER);
+        workers.add(STONEMASON);
+        workers.add(FARMER);
+        workers.add(SAWMILL_WORKER);
+        workers.add(WELL_WORKER);
+        workers.add(MILLER);
+        workers.add(BAKER);
+        workers.add(STORAGE_WORKER);
+        workers.add(FISHERMAN);
+        workers.add(MINER);
+        workers.add(IRON_FOUNDER);
+        workers.add(BREWER);
+        workers.add(MINTER);
+        workers.add(ARMORER);
+        workers.add(PIG_BREEDER);
+        workers.add(BUTCHER);
+        workers.add(GEOLOGIST);
+        workers.add(DONKEY_BREEDER);
+        workers.add(CATAPULT_WORKER);
+        workers.add(SCOUT);
+        workers.add(HUNTER);
+        workers.add(OFFICER);
+                                                                                                                                                                                                            workers.add(CORPORAL);
+        for (Material worker : workers) {
+            try {
+                player0.setTransportPriority(3, worker);
+
+                assertTrue(false);
+            } catch (InvalidUserActionException e) {
+
+            }
+        }
+    }
+
+    @Test
+    public void testCannotSetTransportPriorityToNegativeNumber() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Verify that it's not possible to set transport priority for an item to a negative index */
+        try {
+            player0.setTransportPriority(-1, WOOD);
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {
+
+        }
+    }
+
+    @Test
+    public void testCannotSetTransportPriorityToTooLargeNumber() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 50, 50);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* There are 18 materials that the transport priority can be set for. Verify that it's not possible to set for an index higher than this */
+        try {
+            player0.setTransportPriority(18, WOOD); // Priority starts on 0
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {
+
+        }
     }
 }

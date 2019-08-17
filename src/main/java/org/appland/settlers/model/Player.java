@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -338,7 +338,20 @@ public class Player {
         return map;
     }
 
-    public void setTransportPriority(int priority, Material material) {
+    public void setTransportPriority(int priority, Material material) throws InvalidUserActionException {
+
+        /* Throw an exceptino if the material is a worker because worker transport priorities cannot be set */
+        if (material.isWorker()) {
+            throw new InvalidUserActionException("Cannot set priority for worker " + material);
+        }
+
+        /* Throw an exception if the priority is negative or too large */
+        if (priority < 0) {
+            throw new InvalidUserActionException("Cannot set a negative transport priority (" + priority + ") for " + material);
+        } else if (priority >= Material.getTransportableItems().size()) {
+            throw new InvalidUserActionException("Cannot set a higher transport priority (" + priority + ") than the amount of transportable items");
+        }
+
         transportPriorities.remove(material);
 
         transportPriorities.add(priority, material);
