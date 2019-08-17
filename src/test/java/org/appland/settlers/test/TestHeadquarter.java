@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -212,7 +213,7 @@ public class TestHeadquarter {
         assertFalse(headquarter0.getFlag().getStackedCargo().isEmpty());
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = InvalidUserActionException.class)
     public void testHeadquarterCannotBeTornDown() throws Exception {
 
         /* Start single player game */
@@ -227,6 +228,23 @@ public class TestHeadquarter {
 
         /* Verify that trying to tear it down causes an exception */
         headquarter0.tearDown();
+    }
+
+    @Test(expected = InvalidUserActionException.class)
+    public void testHeadquarterCannotBeTornDownByRemovingFlag() throws Exception {
+
+        /* Start single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that trying to tear it down by removing the flag causes an invalid user action exception */
+        map.removeFlag(headquarter0.getFlag());
     }
 
     @Test
