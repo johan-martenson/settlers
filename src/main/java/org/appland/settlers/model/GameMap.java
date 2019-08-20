@@ -739,6 +739,13 @@ public class GameMap {
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
 
+        /* Verify that all points of the road are within the border */
+        for (Point point : wayPoints) {
+            if (!player.isWithinBorder(point)) {
+                throw new InvalidUserActionException("Can't place road " + wayPoints + "with " + point + " outside the border");
+            }
+        }
+
         Point start = wayPoints.get(0);
         Point end   = wayPoints.get(wayPoints.size() - 1);
 
@@ -754,12 +761,6 @@ public class GameMap {
             throw new InvalidEndPointException();
         }
 
-        /* Verify that all points of the road are within the border */
-        for (Point point : wayPoints) {
-            if (!player.isWithinBorder(point)) {
-                throw new Exception("Can't place road " + wayPoints + "with " + point + " outside the border");
-            }
-        }
 
         /* Verify that the road does not overlap itself */
         if (!GameUtils.isUnique(wayPoints)) {
@@ -827,7 +828,7 @@ public class GameMap {
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
 
-	if (wayPoints == null) {
+    	if (wayPoints == null) {
             throw new InvalidEndPointException(end);
         }
 

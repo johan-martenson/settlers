@@ -4,6 +4,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -14,7 +15,11 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TestMisc {
 
@@ -48,8 +53,8 @@ public class TestMisc {
         for (int i = 0; i < 2000; i++) {
 
             if (courier.getCargo() != null &&
-                woodcutter0.getPosition().equals(courier.getTarget()) &&
-                courier.getNextPoint().equals(woodcutter0.getPosition().downRight())) {
+                    woodcutter0.getPosition().equals(courier.getTarget()) &&
+                    courier.getNextPoint().equals(woodcutter0.getPosition().downRight())) {
                 break;
             }
 
@@ -128,5 +133,29 @@ public class TestMisc {
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getPosition());
 
         assertEquals(scout.getPosition(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testPlaceRoadToSamePointOnEdgeOfScreen() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 500, 250);
+
+        /* Placing headquarter */
+        Point point0 = new Point(429, 201);
+        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+
+        /* Verify that placing a road to the same point on the edge of the screen causes an invalid endpoint exception */
+        Point point1 = new Point(0, 0);
+        try {
+            Road road0 = map.placeAutoSelectedRoad(player, point1, point1);
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {
+
+        }
     }
 }
