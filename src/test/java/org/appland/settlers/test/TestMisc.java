@@ -158,4 +158,25 @@ public class TestMisc {
 
         }
     }
+
+
+    @Test
+    public void testPlaceFirstBuildingOnEdgeOfScreen() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 500, 250);
+
+        /* Verify that it's not possible to place a headquarter on the edge of the screen */
+        Point point0 = new Point(0, 2);
+
+        try {
+            Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {
+        }
+    }
 }

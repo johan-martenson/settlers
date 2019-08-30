@@ -2134,6 +2134,10 @@ public class GameMap {
         Point flagPoint = point.downRight();
 
         /* ALL CONDITIONS FOR SMALL */
+        if (!isWithinMap(point)) {
+            return null;
+        }
+
         if (!isWithinMap(point.downRight())) {
             return null;
         }
