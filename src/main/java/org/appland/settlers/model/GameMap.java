@@ -1427,6 +1427,10 @@ public class GameMap {
     private boolean isPossibleAsAnyPointInRoad(Player player, Point point) {
         MapPoint mp = pointToGameObject.get(point);
 
+        if (!isWithinMap(point)) {
+            return false;
+        }
+
         if (mp.isRoad()) {
             return false;
         }
@@ -1515,9 +1519,13 @@ public class GameMap {
      * @param from
      * @return
      */
-    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) {
+    public List<Point> getPossibleAdjacentRoadConnectionsIncludingEndpoints(Player player, Point from) throws InvalidUserActionException {
         Point[] adjacentPoints  = from.getAdjacentPoints();
         List<Point>  resultList = new ArrayList<>();
+
+        if (!isWithinMap(from)) {
+            throw new InvalidUserActionException("Cannot get adjacent road connections from a point outside the map");
+        }
 
         for (Point point : adjacentPoints) {
             if (isPossibleAsEndPointInRoad(player, point)) {

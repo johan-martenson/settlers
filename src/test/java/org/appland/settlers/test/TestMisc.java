@@ -179,4 +179,25 @@ public class TestMisc {
         } catch (InvalidUserActionException e) {
         }
     }
+
+    @Test
+    public void testGetPossibleAdjacentRoadConnectionsIncludingEndpointsOutsideMap() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Verify that trying to get possible road connections from a point outside the map throws
+        * invalid user action exception
+        */
+        try {
+            map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, new Point(174, 132));
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {
+
+        }
+    }
 }
