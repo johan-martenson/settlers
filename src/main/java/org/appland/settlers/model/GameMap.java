@@ -739,6 +739,13 @@ public class GameMap {
      */
     public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
 
+        /* Only allow roads that are at least three points long
+        *   -- Driveways are shorter but they are created with a separate method
+        */
+        if (wayPoints.size() < 3) {
+            throw new InvalidUserActionException("Cannot place road with less than three points.");
+        }
+
         /* Verify that all points of the road are within the border */
         for (Point point : wayPoints) {
             if (!player.isWithinBorder(point)) {
@@ -826,6 +833,12 @@ public class GameMap {
      * @throws Exception
      */
     public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
+
+        /* Throw an exception if the start and end are the same */
+        if (start.equals(end)) {
+            throw new InvalidEndPointException("An automatically placed road must have different start and end points.");
+        }
+
         List<Point> wayPoints = findAutoSelectedRoad(player, start, end, null);
 
     	if (wayPoints == null) {

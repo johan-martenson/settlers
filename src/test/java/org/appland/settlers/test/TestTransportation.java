@@ -183,7 +183,7 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(player0, middleFlag, endFlag);
     }
 
-    @Test(expected = InvalidEndPointException.class)
+    @Test
     public void testCreateRoadWithSameEndAndStart() throws Exception {
 
         /* Create single player game */
@@ -197,10 +197,13 @@ public class TestTransportation {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        map.placeFlag(player0, new Point(3, 3));
+        Flag flag0 = map.placeFlag(player0, new Point(3, 3));
 
         /* Place road */
-        map.placeAutoSelectedRoad(player0, new Flag(new Point(3, 3)), new Flag(new Point(3, 3)));
+        try {
+            map.placeAutoSelectedRoad(player0, flag0, flag0);
+        } catch (InvalidEndPointException e) {
+        }
     }
 
     @Test(expected = InvalidRouteException.class)

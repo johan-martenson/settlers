@@ -4,6 +4,7 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -154,7 +155,7 @@ public class TestMisc {
             Road road0 = map.placeAutoSelectedRoad(player, point1, point1);
 
             assertTrue(false);
-        } catch (InvalidUserActionException e) {
+        } catch (InvalidEndPointException e) {
 
         }
     }
@@ -199,5 +200,26 @@ public class TestMisc {
         } catch (InvalidUserActionException e) {
 
         }
+    }
+
+    @Test
+    public void testPlaceRoadWithoutPoints() throws Exception {
+
+        /* Starting new game */
+        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player);
+        GameMap map = new GameMap(players, 500, 250);
+
+        /* Placing headquarter */
+        Point point0 = new Point(429, 201);
+        Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
+
+        /* Verify that placing a road without any points throws an invalid user action exception */
+        try {
+            map.placeRoad(player, new ArrayList<>());
+
+            assertTrue(false);
+        } catch (InvalidUserActionException e) {}
     }
 }
