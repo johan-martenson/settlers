@@ -13,4 +13,8 @@ public class InvalidEndPointException extends Exception {
     InvalidEndPointException(Point start) {
         super("Invalid endpoint: " + start);
     }
+
+    InvalidEndPointException(String msg) {
+        super(msg);
+    }
 }
