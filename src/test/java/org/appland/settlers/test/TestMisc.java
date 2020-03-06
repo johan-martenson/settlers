@@ -1,11 +1,14 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
+import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.InvalidEndPointException;
 import org.appland.settlers.model.InvalidUserActionException;
+import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -21,6 +24,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestMisc {
 
@@ -154,7 +158,7 @@ public class TestMisc {
         try {
             Road road0 = map.placeAutoSelectedRoad(player, point1, point1);
 
-            assertTrue(false);
+            fail();
         } catch (InvalidEndPointException e) {
 
         }
@@ -176,7 +180,7 @@ public class TestMisc {
         try {
             Headquarter headquarter0 = map.placeBuilding(new org.appland.settlers.model.Headquarter(player), point0);
 
-            assertTrue(false);
+            fail();
         } catch (InvalidUserActionException e) {
         }
     }
@@ -196,7 +200,7 @@ public class TestMisc {
         try {
             map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, new Point(174, 132));
 
-            assertTrue(false);
+            fail();
         } catch (InvalidUserActionException e) {
 
         }
@@ -219,7 +223,58 @@ public class TestMisc {
         try {
             map.placeRoad(player, new ArrayList<>());
 
-            assertTrue(false);
+            fail();
         } catch (InvalidUserActionException e) {}
+    }
+
+    @Test
+    public void testUnoccupiedMilitaryBuildingDoesNotIncreaseDiscoveredArea() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point01 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point01);
+
+        /* Place guard houses */
+        Point point02 = new Point(5, 23);
+        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point02);
+
+        Point point03 = new Point(21, 5);
+        Building guardHouse1 = map.placeBuilding(new GuardHouse(player0), point03);
+
+        /* Finish construction of both guard houses */
+        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse1, map);
+
+        /* Connect the first guard house to the headquarters */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
+
+        /* Verify that the discovered area is only extended around the guard house that gets occupied */
+        Point point04 = new Point(5, 29);
+        Point point05 = new Point(29, 5);
+
+        assertFalse(player0.getDiscoveredLand().contains(point04));
+        assertFalse(player0.getDiscoveredLand().contains(point05));
+
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+
+        assertNotNull(military);
+
+        /* Verify that the discovered area is only extended around the first guardhouse and not the second */
+        assertEquals(military.getTarget(), guardHouse0.getPosition());
+        assertFalse(player0.getDiscoveredLand().contains(point04));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, guardHouse0.getPosition());
+
+        assertTrue(player0.getDiscoveredLand().contains(point04));
+        assertFalse(player0.getDiscoveredLand().contains(point05));
     }
 }

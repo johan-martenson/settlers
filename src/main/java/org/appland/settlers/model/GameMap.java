@@ -3,7 +3,7 @@ package org.appland.settlers.model;
 import org.appland.settlers.model.GameUtils.ConnectionsProvider;
 import org.appland.settlers.policy.Constants;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -66,8 +66,11 @@ public class GameMap {
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
     private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
+    private final int statisticsCollectionPeriod;
 
     private Player winner;
+    private final StatisticsManager statisticsManager;
+    private long time;
 
     /**
      * Finds the shortest possible placement for a new road between the given points for the given player
@@ -204,10 +207,21 @@ public class GameMap {
         random              = new Random();
         startingPoints      = new ArrayList<>();
 
+        statisticsManager   = new StatisticsManager();
+
         pointToGameObject   = populateMapPoints(buildFullGrid());
 
         pathOnExistingRoadsProvider = new GameUtils.PathOnExistingRoadsProvider(pointToGameObject);
         connectedFlagsAndBuildingsProvider = new GameUtils.ConnectedFlagsAndBuildingsProvider(pointToGameObject);
+
+        /* Add initial measurement */
+        statisticsManager.addZeroInitialMeasurementForPlayers(players);
+
+        /* Set the time keeper to 1 */
+        time = 1;
+
+        /* Set the initial production statistics collection period */
+        statisticsCollectionPeriod = 1000;
 
         /* Give the players a reference to the map */
         for (Player player : players) {
@@ -373,6 +387,14 @@ public class GameMap {
         if (playersWithBuildings == 1 && players.size() > 1) {
             winner = playerWithBuildings;
         }
+
+        /* Collect statistics */
+        if (time % statisticsCollectionPeriod == 0) {
+            statisticsManager.collectFromPlayers(time, players);
+        }
+
+        /* Step the time keeper */
+        time = time + 1;
     }
 
     /**
@@ -600,7 +622,7 @@ public class GameMap {
 
             /* Save result as a land */
             if (!updatedLands.containsKey(player)) {
-                updatedLands.put(player, new ArrayList<Land>());
+                updatedLands.put(player, new ArrayList<>());
             }
 
             updatedLands.get(player).add(new Land(pointsInLand, borders));
@@ -618,7 +640,7 @@ public class GameMap {
 
         /* Clear the players that no longer have any land */
         for (Player player : playersToUpdate) {
-            player.setLands(new ArrayList<Land>());
+            player.setLands(new ArrayList<>());
         }
 
         /* Destroy buildings now outside of the borders */
@@ -694,6 +716,9 @@ public class GameMap {
         for (Road road : roadsToRemove) {
             removeRoad(road);
         }
+
+        /* Update statistics collection of land per player */
+        statisticsManager.collectLandStatisticsFromPlayers(time, players);
     }
 
     private Road placeDriveWay(Building building) throws Exception {
@@ -2153,6 +2178,8 @@ public class GameMap {
 
     private Size isAvailableHousePoint(Player player, Point point, boolean isFirstHouse) {
         Point flagPoint = point.downRight();
+        MapPoint houseMapPoint = getMapPoint(point);
+        MapPoint flagMapPoint = getMapPoint(point.downRight());
 
         /* ALL CONDITIONS FOR SMALL */
         if (!isWithinMap(point)) {
@@ -2167,19 +2194,19 @@ public class GameMap {
             return null;
         }
 
-        if (isBuildingAtPoint(point)) {
+        if (houseMapPoint.isBuilding()) {
             return null;
         }
 
-        if (isFlagAtPoint(point)) {
+        if (houseMapPoint.isFlag()) {
             return null;
         }
 
-        if (isStoneAtPoint(point)) {
+        if (houseMapPoint.isStone()) {
             return null;
         }
 
-        if (isTreeAtPoint(point)) {
+        if (houseMapPoint.isTree()) {
             return null;
         }
 
@@ -2224,15 +2251,15 @@ public class GameMap {
             return null;
         }
 
-        if (isRoadAtPoint(point)) {
+        if (houseMapPoint.isRoad()) {
             return null;
         }
 
-        if (!isFlagAtPoint(flagPoint) && !isAvailableFlagPoint(player, flagPoint, !isFirstHouse)) {
+        if (!flagMapPoint.isFlag() && !isAvailableFlagPoint(player, flagPoint, !isFirstHouse)) {
             return null;
         }
 
-        if (isCropAtPoint(point)) {
+        if (houseMapPoint.isCrop()) {
             return null;
         }
 
@@ -2241,12 +2268,14 @@ public class GameMap {
                 continue;
             }
 
-            if (isBuildingAtPoint(d)) {
+            MapPoint adjacentMapPoint = getMapPoint(d);
+
+            if (adjacentMapPoint.isBuilding()) {
                 return null;
             }
 
             /* It's not possible to build a house next to a stone */
-            if (isStoneAtPoint(d)) {
+            if (adjacentMapPoint.isStone()) {
                 return null;
             }
         }
@@ -2690,5 +2719,9 @@ public class GameMap {
      */
     public void setHeightAtPoint(Point point, int height) {
         getMapPoint(point).setHeight(height);
+    }
+
+    public StatisticsManager getStatisticsManager() {
+        return this.statisticsManager;
     }
 }

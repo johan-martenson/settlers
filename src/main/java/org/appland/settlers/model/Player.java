@@ -29,6 +29,7 @@ public class Player {
     private final List<Collection<Point>> borders;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
+    private final Map<Material, Integer>  producedMaterials;
 
 
     public Player(String name, Color color) {
@@ -40,6 +41,7 @@ public class Player {
         transportPriorities = new LinkedList<>();
         ownedLand           = new ArrayList<>();
         borders             = new ArrayList<>();
+        producedMaterials   = new HashMap<>();
 
         /* Create the food quota and set it to equal distribution */
         foodQuota = new HashMap<>();
@@ -98,7 +100,7 @@ public class Player {
 
     private void updateDiscoveredLand() {
         for (Building building : buildings) {
-            if (building.isMilitaryBuilding()) {
+            if (building.isMilitaryBuilding() && building.occupied()) {
                 discoveredLand.addAll(building.getDiscoveredLand());
             }
         }
@@ -445,5 +447,15 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getProducedMaterial(Material material) {
+        return producedMaterials.getOrDefault(material, 0);
+    }
+
+    public void reportProduction(Material material) {
+        int amount = producedMaterials.getOrDefault(material, 0);
+
+        producedMaterials.put(material, amount + 1);
     }
 }

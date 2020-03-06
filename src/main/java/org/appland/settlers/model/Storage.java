@@ -1,8 +1,11 @@
 package org.appland.settlers.model;
 
+import org.appland.settlers.policy.ProductionDelays;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
@@ -39,7 +42,6 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Size.MEDIUM;
-import org.appland.settlers.policy.ProductionDelays;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)
@@ -282,6 +284,7 @@ public class Storage extends Building implements Actor {
 
             storeOneInInventory(cargo.getMaterial());
 
+            getPlayer().reportProduction(cargo.getMaterial());
         }
     }
 

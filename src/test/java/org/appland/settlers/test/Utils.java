@@ -7,10 +7,10 @@ import org.appland.settlers.model.Catapult;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farmer;
+import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
-import org.appland.settlers.model.Land;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
@@ -35,7 +35,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.min;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
@@ -222,6 +221,8 @@ public class Utils {
         for (Worker worker : workers) {
             if (worker.getClass().equals(workerClass)) {
                 found = true;
+
+                break;
             }
         }
 
@@ -721,6 +722,10 @@ public class Utils {
 
     static void waitForCargoToReachTarget(GameMap map, Cargo cargo) throws Exception {
 
+        assertNotNull(cargo);
+        assertNotNull(cargo.getPosition());
+        assertNotNull(cargo.getTarget());
+
         for (int i = 0; i < 2000; i++) {
 
             if (cargo.getPosition().equals(cargo.getTarget().getPosition())) {
@@ -1019,5 +1024,44 @@ public class Utils {
         assertNotNull(courier);
 
         return courier;
+    }
+
+    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building, GameMap map) throws Exception {
+
+        Worker worker = null;
+
+        for (int i = 0; i < 1000; i++) {
+            worker = building.getWorker();
+
+            if (worker != null) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(worker);
+
+        return worker;
+    }
+
+    public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag) throws Exception {
+
+        Cargo cargo = null;
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (flag.getStackedCargo().size() > 0) {
+                cargo = flag.getStackedCargo().get(0);
+
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertNotNull(cargo);
+
+        return cargo;
     }
 }
