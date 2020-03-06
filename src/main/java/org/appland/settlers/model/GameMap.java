@@ -2639,13 +2639,11 @@ public class GameMap {
         return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject);
     }
 
-    /**
-     * Determines whether a list of points describes a valid path via roads.
-     *
-     * @param points List of each point in the planned path
-     * @return true if the list of points follows existing roads
-     */
-    boolean isValidRouteViaRoads(Point... points) {
+    boolean isValidRouteThroughFlagsAndBuildingsViaRoads(Point... points) {
+        return isValidRouteThroughFlagsAndBuildingsViaRoads(Arrays.asList(points));
+    }
+
+    boolean isValidRouteThroughFlagsAndBuildingsViaRoads(List<Point> points) {
 
         Point previous = null;
 
@@ -2654,36 +2652,12 @@ public class GameMap {
             if (previous != null) {
                 MapPoint mp = pointToGameObject.get(previous);
 
-                if (!mp.getConnectedNeighbors().contains(point)) {
+                if (!mp.getConnectedFlagsAndBuildings().contains(point)) {
                     return false;
                 }
             }
 
             previous = point;
-        }
-
-        return true;
-    }
-
-    /**
-     * Determines whether a list of points describes a valid path via roads.
-     *
-     * @param points List of each point in the planned path
-     * @return true if the list of points follows existing roads
-     */
-    public boolean isValidRouteViaRoads(List<Point> points) {
-
-        Point previous = null;
-
-        for (Point point : points) {
-
-            if (previous != null) {
-                MapPoint mp = pointToGameObject.get(previous);
-
-                if (!mp.getConnectedNeighbors().contains(point)) {
-                    return false;
-                }
-            }
         }
 
         return true;

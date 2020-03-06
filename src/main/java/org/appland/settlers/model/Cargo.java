@@ -1,7 +1,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Cargo {
 
@@ -136,10 +135,12 @@ public class Cargo {
 
             /* Re-evaluate the route if the current one is not optimal or if it's
              * no longer available
+             *
+             * Note: the path only contains flags and buildings. It does not contain each individual step
             */
-            if (!optimalRoute(getPosition(), path)                    ||
-                !map.isValidRouteViaRoads(getPosition(), path.get(0)) ||
-                !map.isValidRouteViaRoads(path)) {
+            if (!looksLikeOptimalRoute(getPosition(), path)                                   ||  // Is there theoretically a better way?
+                !map.isValidRouteThroughFlagsAndBuildingsViaRoads(getPosition(), path.get(0)) ||  // Is it still possible to go the next step?
+                !map.isValidRouteThroughFlagsAndBuildingsViaRoads(path)) {                        // Is the planned path still possible?
 
                 /* Find the best way from this flag */
                 Flag flag = map.getFlagAtPoint(getPosition());
@@ -164,15 +165,35 @@ public class Cargo {
         }
     }
 
-    private boolean optimalRoute(Point start, List<Point> path) {
+    /**
+     * Note: this is only definitely optimal if all points are included. If the path only consists of flags the result
+     * might not be too optimistic
+     * @param start
+     * @param path
+     * @return
+     */
+    private boolean looksLikeOptimalRoute(Point start, List<Point> path) {
 
-        /* The start is one point before the path */
+        Point target = path.get(path.size() - 1);
 
-        Point end = path.get(path.size() - 1);
+        Point previousPoint = start;
 
-        int deltaY = Math.abs(end.y - start.y);
-        int deltaX = Math.abs(end.x - start.x);
+        for (Point point : path) {
 
-        return deltaY + (deltaX - deltaY) / 2 == path.size();
+            if (previousPoint != null) {
+                int currentDistanceX = Math.abs(target.x - point.x);
+                int currentDistanceY = Math.abs(target.y - point.y);
+
+                int previousDistanceX = Math.abs(target.x - previousPoint.x);
+                int previousDistanceY = Math.abs(target.y - previousPoint.y);
+
+                if (currentDistanceX > previousDistanceX || currentDistanceY > previousDistanceY) {
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
     }
 }

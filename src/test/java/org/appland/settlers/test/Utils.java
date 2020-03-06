@@ -28,8 +28,10 @@ import org.appland.settlers.model.Worker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -1046,5 +1048,27 @@ public class Utils {
         assertNotNull(cargo);
 
         return cargo;
+    }
+
+    public static Set<Courier> waitForRoadsToGetAssignedCouriers(GameMap map, Road... roads) throws Exception {
+        Set<Courier> couriers = new HashSet<>();
+
+        for (int i = 0; i < 1000; i++) {
+            boolean allCouriersFound = true;
+
+            for (Road road : roads) {
+                couriers.add(road.getCourier());
+
+                if (couriers.size() == roads.length) {
+                    break;
+                }
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(couriers.size(), roads.length);
+
+        return couriers;
     }
 }

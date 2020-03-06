@@ -4,7 +4,6 @@ import org.appland.settlers.policy.ProductionDelays;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.BAKER;

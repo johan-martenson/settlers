@@ -341,7 +341,7 @@ public class GameUtils {
         double             bestCaseCost;
 
         /* Define starting parameters */
-        bestCaseCost = (double)getDistanceInGameSteps(start, goal);
+        bestCaseCost = getDistanceInGameSteps(start, goal);
         toEvaluate.add(start);
         realCostToPoint.put(start, (double)0);
         estimatedFullCost.put(start, bestCaseCost);

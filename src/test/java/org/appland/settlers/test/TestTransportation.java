@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
@@ -1465,5 +1466,133 @@ public class TestTransportation {
 
         /* Verify that the flags are connected according to the util function */
         assertTrue(map.areFlagsOrBuildingsConnectedViaRoads(flag0, flag1));
+    }
+
+
+    @Test
+    public void testCargoReroutingEvenIfRemovedRoadIsNotNextRoad() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create the game map */
+        GameMap map = new GameMap(players, 40, 40);
+        Point point0 = new Point(17, 5);
+        Point point1 = new Point(15, 7);
+        Point point2 = new Point(13, 9);
+        Point point3 = new Point(11, 11);
+
+        /* Place the headquarter */
+        Point point4 = new Point(15, 15);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point4);
+
+        /* Place a sawmill */
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3.upLeft());
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill, map);
+
+        /* Place flags */
+        Flag flag0 = map.placeFlag(player0, point0);
+        Flag flag1 = map.placeFlag(player0, point1);
+        Flag flag2 = map.placeFlag(player0, point2);
+
+        /* Place roads: flag0 - flag1, flag1 - flag2, flag2 - sawmill flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag1, flag2);
+        Road road2 = map.placeAutoSelectedRoad(player0, flag2, sawmill.getFlag());
+
+        /* Remove all the wood from the headquarter to avoid interference */
+        Utils.adjustInventoryTo(headquarter1, WOOD, 0, map);
+
+        /* Connect the first flag to the headquarter */
+        map.placeAutoSelectedRoad(player0, flag0, headquarter1.getFlag());
+
+        /* Wait for the roads to get assigned couriers */
+        Set<Courier> couriers = Utils.waitForRoadsToGetAssignedCouriers(map, road0, road1, road2);
+
+        /* Put a cargo at the first flag and target it to the sawmill */
+        Cargo cargo = new Cargo(WOOD, map);
+        cargo.setPosition(point0);
+        cargo.setTarget(sawmill);
+
+        flag0.putCargo(cargo);
+
+        assertEquals(cargo.getTarget(), sawmill);
+        assertEquals(cargo.getPosition(), point0);
+        assertFalse(cargo.isDeliveryPromised());
+
+        /* Make courier detect cargo */
+        map.stepTime();
+
+        assertNull(road0.getCourier().getCargo());
+        assertEquals(road0.getCourier().getTarget(), point0);
+        assertTrue(cargo.isDeliveryPromised());
+
+        /* Let the courier reach the cargo and pick it up */
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), point0);
+
+        assertEquals(road0.getCourier().getCargo(), cargo);
+        assertEquals(road0.getCourier().getTarget(), flag1.getPosition());
+        assertTrue(flag1.getStackedCargo().isEmpty());
+        assertFalse(cargo.isDeliveryPromised());
+
+        /* Let the courier start walking towards the next flag */
+        map.stepTime();
+        map.stepTime();
+
+        /* Build a second way that is longer */
+        Road road3 = map.placeAutoSelectedRoad(player0, flag0, sawmill.getFlag());
+
+        /* Occupy the new longer road */
+        Utils.occupyRoad(road3, map);
+
+        /* Remove the final part of the shortest way so the only option is the long way */
+        map.removeRoad(road2);
+
+        /* Let the courier get to the second flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag1.getPosition());
+
+        /* Verify that the cargo goes back the long way and does not continue the short but impossible way */
+        for (int i = 0; i < 1000; i++) {
+
+            /* Verify that the second courier does not pick up the cargo */
+            assertNull(road1.getCourier().getCargo());
+
+            /* Break when the first courier picks up the cargo again */
+            if (cargo.equals(road0.getCourier().getCargo())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(cargo, road0.getCourier().getCargo());
+        assertEquals(road0.getCourier().getTarget(), flag0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), flag0.getPosition());
+
+        assertTrue(flag0.getStackedCargo().contains(cargo));
+
+        for (int i = 0; i < 1000; i++) {
+
+            /* Verify that the first courier does not pick up the cargo */
+            assertNull(road0.getCourier().getCargo());
+
+            /* Break when the courier for the long road picks up the cargo again */
+            if (cargo.equals(road3.getCourier().getCargo())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(cargo, road3.getCourier().getCargo());
+        assertEquals(road3.getCourier().getTarget(), sawmill.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road3.getCourier(), sawmill.getFlag().getPosition());
     }
 }

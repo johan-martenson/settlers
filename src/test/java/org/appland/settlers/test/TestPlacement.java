@@ -25,7 +25,7 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -1387,7 +1387,7 @@ public class TestPlacement {
         Point point1 = new Point(5, 1);
 
         assertNull(map.isAvailableHousePoint(player0, point1));
-        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(point1));
     }
 
     @Test
@@ -1409,7 +1409,7 @@ public class TestPlacement {
         Point point1 = new Point(58, 58);
 
         assertNull(map.isAvailableHousePoint(player0, point1));
-        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(point1));
     }
 
     @Test
@@ -1433,7 +1433,7 @@ public class TestPlacement {
 
         /* Verify that there is no available space for a house on a tree */
         assertNull(map.isAvailableHousePoint(player0, point1));
-        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(point1));
     }
 
     @Test
@@ -1457,7 +1457,7 @@ public class TestPlacement {
 
         /* Verify that there is no available space for a house on a tree */
         assertNull(map.isAvailableHousePoint(player0, point1.upRight()));
-        assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point1.upRight()));
+        assertFalse(map.getAvailableHousePoints(player0).containsKey(point1.upRight()));
     }
 
     @Test
@@ -2136,7 +2136,7 @@ public class TestPlacement {
         /* Verify that there are no available house points on the edge */
         for (Point point : edgePoints) {
             assertNull(map.isAvailableHousePoint(player0, point));
-            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point));
+            assertFalse(map.getAvailableHousePoints(player0).containsKey(point));
         }
     }
 
@@ -2182,7 +2182,7 @@ public class TestPlacement {
         /* Verify that there are no available house points on the edge */
         for (Point point : edgePoints) {
             assertNull(map.isAvailableHousePoint(player0, point));
-            assertFalse(map.getAvailableHousePoints(player0).keySet().contains(point));
+            assertFalse(map.getAvailableHousePoints(player0).containsKey(point));
         }
     }
 
