@@ -89,7 +89,7 @@ public class SawmillWorker extends Worker {
                 }
             } else {
 
-                /* Report the unproductivity */
+                /* Report the that the sawmill worker was unproductive */
                 productivityMeasurer.reportUnproductivity();
             }
         }

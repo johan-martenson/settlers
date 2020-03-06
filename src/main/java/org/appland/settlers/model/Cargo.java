@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 
 public class Cargo {
 
-    private static final Logger log = Logger.getLogger(GameMap.class.getName());
-
     private final Material material;
     private final GameMap  map;
 

@@ -2485,7 +2485,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testAttackersGoHomeAfterVictoryIfTheyDontFitInAttackedBuilding() throws Exception {
+    public void testAttackersGoHomeAfterVictoryIfTheyDoNotFitInAttackedBuilding() throws Exception {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);

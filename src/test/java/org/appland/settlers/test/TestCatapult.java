@@ -1223,7 +1223,7 @@ public class TestCatapult {
     }
 
     @Test
-    public void testCatapulterReturnsToStorageIfCatapultIsDestroyed() throws Exception {
+    public void testCatapultWorkerReturnsToStorageIfCatapultIsDestroyed() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

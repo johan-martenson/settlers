@@ -15,7 +15,6 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.InvalidGameLogicException;
 import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
@@ -46,6 +45,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -649,7 +649,7 @@ public class TestArmory {
     }
 
     @Test
-    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+    public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1326,7 +1326,7 @@ public class TestArmory {
         /* Verify that it cannot be torn down twice */
         try {
             armory0.tearDown();
-            assertFalse(true);
+            fail();
         } catch (Throwable t) {
             assertEquals(t.getClass(), InvalidUserActionException.class);
         }

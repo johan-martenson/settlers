@@ -569,7 +569,7 @@ public class TestBakery {
     }
 
     @Test
-    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+    public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

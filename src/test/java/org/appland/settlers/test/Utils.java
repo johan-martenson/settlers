@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,10 +65,6 @@ public class Utils {
         }
     }
 
-    public static void fastForward(int time, Actor... actors) throws Exception {
-        fastForward(time, Arrays.asList(actors));
-    }
-
     public static void fastForward(int time, List<Actor> actors) throws Exception {
         for (Actor actor : actors) {
             fastForward(time, actor);
@@ -102,18 +97,6 @@ public class Utils {
         for (int i = 0; i < amount; i++) {
             storage.putCargo(cargo);
         }
-    }
-
-    public static boolean materialIntMapIsEmpty(Map<Material, Integer> map) {
-        boolean isEmpty = true;
-
-        for (Material material : Material.values()) {
-            if (map.get(material) != 0) {
-                isEmpty = false;
-            }
-        }
-
-        return isEmpty;
     }
 
     public static void assertNoStepDirectlyUpwards(List<Point> route) {

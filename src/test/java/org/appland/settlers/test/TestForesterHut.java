@@ -31,7 +31,6 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Tile.Vegetation.GRASS;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;

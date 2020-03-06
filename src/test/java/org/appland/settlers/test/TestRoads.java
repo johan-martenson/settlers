@@ -191,7 +191,7 @@ public class TestRoads {
         List<Point> route = map.findWayWithExistingRoads(points[0], target);
 
         assertNotNull(route);
-        assertTrue(!route.isEmpty());
+        assertFalse(route.isEmpty());
 
         assertTrue(route.size() < 11);
         assertEquals(route.get(0), points[0]);
@@ -2064,7 +2064,7 @@ public class TestRoads {
         /* Place a worker on the road */
         Courier courier = Utils.occupyRoad(road0, map);
 
-        /* Deliver 99 cargos and verify that the road does not become a main road */
+        /* Deliver 99 cargo and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
             Cargo cargo = new Cargo(COIN, map);
 
@@ -2138,7 +2138,7 @@ public class TestRoads {
         Courier courier0 = Utils.occupyRoad(road0, map);
         Courier courier1 = Utils.occupyRoad(road1, map);
 
-        /* Deliver 99 cargos and verify that the road does not become a main road */
+        /* Deliver 99 cargo and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
             Cargo cargo = new Cargo(COIN, map);
 
@@ -2210,7 +2210,7 @@ public class TestRoads {
         /* Place a worker on the road */
         Courier courier = Utils.occupyRoad(road0, map);
 
-        /* Wait for the courier to deliver 99 water cargos without turning the
+        /* Wait for the courier to deliver 99 water cargo without turning the
            driveways into main roads */
         Road driveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
 
@@ -2270,7 +2270,7 @@ public class TestRoads {
         /* Place a worker on the road */
         Utils.occupyRoad(road0, map);
 
-        /* Wait for the well worker to deliver 99 water cargos without turning the
+        /* Wait for the well worker to deliver 99 water cargo without turning the
            driveways into main roads */
         Road driveway = map.getRoad(well0.getPosition(), well0.getFlag().getPosition());
 

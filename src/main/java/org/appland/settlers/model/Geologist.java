@@ -120,7 +120,7 @@ public class Geologist extends Worker {
             if (storage != null) {
                 setTarget(storage.getPosition());
 
-            /* Go back offroad if the flag has been removed */
+            /* Go back off-road if the flag has been removed */
             } else {
                 storage = getPlayer().getClosestStorageOffroad(flagPoint);
 

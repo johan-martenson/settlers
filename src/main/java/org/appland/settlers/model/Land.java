@@ -36,6 +36,8 @@ public class Land {
             for (Point point : borderPoint.getAdjacentPoints()) {
                 if (pointsInLand.contains(point) && !borderPoints.contains(point)) {
                     keepPoint = true;
+
+                    break;
                 }
             }
 

@@ -2,12 +2,9 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Flag implements EndPoint {
-
-    private final static Logger log = Logger.getLogger(Flag.class.getName());
 
     private final List<Cargo> stackedCargo;
 

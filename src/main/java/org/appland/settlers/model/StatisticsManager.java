@@ -23,8 +23,8 @@ public class StatisticsManager {
         SHIELD
     );
 
-    private Map<Material, ProductionDataSeries> productionStatistics;
-    private LandStatistics landStatistics;
+    private final Map<Material, ProductionDataSeries> productionStatistics;
+    private final LandStatistics landStatistics;
 
     public StatisticsManager() {
         productionStatistics = new HashMap<>();

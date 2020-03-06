@@ -91,6 +91,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -2200,7 +2201,7 @@ public class TestPrioritization {
         Utils.occupyRoad(road3, map);
         Utils.occupyRoad(road4, map);
 
-        /* Verify that the storage worker in the headquarter delivers cargos
+        /* Verify that the storage worker in the headquarter delivers cargo
            in the right order
         */
         assertTrue(mint0.needsMaterial(COAL));
@@ -2377,7 +2378,7 @@ public class TestPrioritization {
             try {
                 player0.setTransportPriority(3, worker);
 
-                assertTrue(false);
+                fail();
             } catch (InvalidUserActionException e) {
 
             }
@@ -2401,7 +2402,7 @@ public class TestPrioritization {
         try {
             player0.setTransportPriority(-1, WOOD);
 
-            assertTrue(false);
+            fail();
         } catch (InvalidUserActionException e) {
 
         }
@@ -2424,7 +2425,7 @@ public class TestPrioritization {
         try {
             player0.setTransportPriority(18, WOOD); // Priority starts on 0
 
-            assertTrue(false);
+            fail();
         } catch (InvalidUserActionException e) {
 
         }

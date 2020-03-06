@@ -31,7 +31,6 @@ import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 public class GameMap {
 
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
-    private static final Logger log = Logger.getLogger(GameMap.class.getName());
 
     private final List<Worker>         workers;
     private final int                  height;
@@ -333,7 +332,7 @@ public class GameMap {
             removeStone(stone);
         }
 
-        /* Resume transport of stuck cargos */
+        /* Resume transport of stuck cargo */
         for (Flag flag : flags) {
             for (Cargo cargo : flag.getStackedCargo()) {
                 cargo.rerouteIfNeeded();
@@ -1164,7 +1163,7 @@ public class GameMap {
             return false;
         }
 
-        /* Cannot build flag if all adjacent tiles are unbuildable */
+        /* Cannot build flag if construction is not possible on all adjacent tiles */
         if (!canBuildFlagOn(terrain.getTileAbove(point)) &&
             !canBuildFlagOn(terrain.getTileUpRight(point)) &&
             !canBuildFlagOn(terrain.getTileDownRight(point)) &&
@@ -1306,7 +1305,7 @@ public class GameMap {
             return resultList;
         }
 
-        /* Find out which adjacent points are possible offroad connections */
+        /* Find out which adjacent points are possible off-road connections */
         for (Point point : adjacentPoints) {
 
             /* Filter points outside the map */
@@ -1627,7 +1626,7 @@ public class GameMap {
     }
 
     /**
-     * Finds an offroad way from the start to the goal via the given point and without
+     * Finds an off-road way from the start to the goal via the given point and without
      * reaching any points to avoid
      *
      * @param start The start of the trip
@@ -1664,7 +1663,7 @@ public class GameMap {
     }
 
     /**
-     * Finds an offroad way from the start to the goal without using any points to avoid
+     * Finds an off-road way from the start to the goal without using any points to avoid
      *
      * @param start The start of the trip
      * @param goal The end of the trip

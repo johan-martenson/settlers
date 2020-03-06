@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
@@ -59,8 +57,6 @@ public class Building implements Actor, EndPoint {
     private final List<Military>         hostedMilitary;
     private final List<Military>         promisedMilitary;
     private final Map<Material, Integer> receivedMaterial;
-
-    private static final Logger log = Logger.getLogger(Building.class.getName());
 
     public Building(Player player) {
         receivedMaterial      = new HashMap<>();

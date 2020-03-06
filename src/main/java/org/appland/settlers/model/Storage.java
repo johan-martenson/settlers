@@ -51,8 +51,6 @@ public class Storage extends Building implements Actor {
 
     private final Countdown draftCountdown;
 
-    private static final Logger log = Logger.getLogger(Storage.class.getName());
-
     public Storage(Player player) {
         super(player);
 

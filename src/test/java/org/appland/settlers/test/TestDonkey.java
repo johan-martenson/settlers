@@ -76,7 +76,7 @@ public class TestDonkey {
         Courier courier0 = Utils.occupyRoad(road0, map);
         Courier courier1 = Utils.occupyRoad(road1, map);
 
-        /* Deliver 99 cargos and verify that the road does not become a main road */
+        /* Deliver 99 cargo and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
             Cargo cargo = new Cargo(COIN, map);
 
@@ -361,7 +361,7 @@ public class TestDonkey {
         donkey.assignToRoad(road0);
 
         /* Verify that the donkey walks to the middle of the road even when
-           there are cargos available for pickup */
+           there are cargo available for pickup */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isWalkingToRoad());
 
@@ -1306,7 +1306,7 @@ public class TestDonkey {
         Courier courier0 = Utils.occupyRoad(road0, map);
         Courier courier1 = Utils.occupyRoad(road1, map);
 
-        /* Deliver 100 cargos to make the road a main road */
+        /* Deliver 100 cargo to make the road a main road */
         for (int i = 0; i < 100; i++) {
             Cargo cargo = new Cargo(COIN, map);
 

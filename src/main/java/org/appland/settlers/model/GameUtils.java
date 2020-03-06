@@ -757,14 +757,14 @@ public class GameUtils {
                 continue;
             }
 
-            /* Filter other buildings than storages */
+            /* Filter other buildings than storage buildings */
             if (! (building instanceof Storage)) {
                 continue;
             }
 
             List<Point> pathToStorage = map.findWayOffroad(point, building.getPosition(), null);
 
-            /* Filter storages that can't be reached */
+            /* Filter storage buildings that can't be reached */
             if (pathToStorage == null) {
                 continue;
             }

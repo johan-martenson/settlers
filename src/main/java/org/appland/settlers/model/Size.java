@@ -39,10 +39,6 @@ public enum Size {
 
     public boolean contains(Size size) {
 
-        if (this == null) {
-            return false;
-        }
-
         if (this == LARGE) {
             return true;
         }

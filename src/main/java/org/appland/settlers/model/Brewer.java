@@ -91,7 +91,7 @@ public class Brewer extends Worker {
                 }
             } else {
 
-                /* Report the unproductivity */
+                /* Report the that the brewer was unproductive */
                 productivityMeasurer.reportUnproductivity();
             }
         }

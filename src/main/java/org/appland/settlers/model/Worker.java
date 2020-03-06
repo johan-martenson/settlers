@@ -6,8 +6,6 @@
 package org.appland.settlers.model;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.appland.settlers.model.Worker.States.IDLE_INSIDE;
 import static org.appland.settlers.model.Worker.States.IDLE_OUTSIDE;
@@ -32,7 +30,6 @@ public abstract class Worker implements Actor {
     }
 
     private final static int SPEED_ADJUST = 1;
-    private final static Logger log = Logger.getLogger(Worker.class.getName());
     private final Countdown     walkCountdown;
 
     GameMap     map;
@@ -45,7 +42,7 @@ public abstract class Worker implements Actor {
     private Point       target;
     private Building    home;
 
-    class ProductivityMeasurer {
+    static class ProductivityMeasurer {
         private final int   cycleLength;
         private int   currentProductivityMeasurement;
         private int   productionCycle;

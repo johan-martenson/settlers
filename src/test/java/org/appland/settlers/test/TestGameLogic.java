@@ -19,7 +19,6 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.FORESTER;

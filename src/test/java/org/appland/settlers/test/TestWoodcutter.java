@@ -183,6 +183,8 @@ public class TestWoodcutter {
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof WoodcutterWorker) {
                 foundWoodcutter = true;
+
+                break;
             }
         }
 
@@ -215,7 +217,7 @@ public class TestWoodcutter {
 
         int nrWorkers = map.getWorkers().size();
 
-        /* Keep running the gameloop and make sure no more workers are allocated */
+        /* Keep running the game loop and make sure no more workers are allocated */
         for (int i = 0; i < 20; i++) {
             Utils.fastForward(10, map);
         }
@@ -513,7 +515,7 @@ public class TestWoodcutter {
         assertEquals(wcWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
-        /* Let the woodcuttter reach the flag */
+        /* Let the woodcutter reach the flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, woodcutter.getFlag().getPosition());
 
         assertFalse(woodcutter.getFlag().getStackedCargo().isEmpty());
@@ -637,7 +639,7 @@ public class TestWoodcutter {
         assertEquals(wcWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
-        /* Let the woodcuttter reach the flag */
+        /* Let the woodcutter reach the flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, woodcutter.getFlag().getPosition());
 
         /* Verify that the cargo is setup correctly */
@@ -826,7 +828,7 @@ public class TestWoodcutter {
         assertEquals(wcWorker.getTarget(), woodcutter.getFlag().getPosition());
         assertTrue(woodcutter.getFlag().getStackedCargo().isEmpty());
 
-        /* Let the woodcuttter reach the flag */
+        /* Let the woodcutter reach the flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, wcWorker, woodcutter.getFlag().getPosition());
 
         assertFalse(woodcutter.getFlag().getStackedCargo().isEmpty());
@@ -990,7 +992,7 @@ public class TestWoodcutter {
     }
 
     @Test
-    public void testCargosProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
+    public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

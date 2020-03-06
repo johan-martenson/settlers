@@ -92,7 +92,7 @@ public class Baker extends Worker {
                 }
             } else {
 
-                /* Report the unproductivity */
+                /* Report the that the baker was unproductive */
                 productivityMeasurer.reportUnproductivity();
             }
         }

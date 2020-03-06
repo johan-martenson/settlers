@@ -512,7 +512,7 @@ public class TestStorage {
         Point point2 = new Point(15, 15);
         Building storage1 = map.placeBuilding(new Storage(player0), point2);
 
-        /* Connect the storages */
+        /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
 
         /* Destroy the storage */
@@ -557,7 +557,7 @@ public class TestStorage {
         Point point2 = new Point(15, 15);
         Building storage1 = map.placeBuilding(new Storage(player0), point2);
 
-        /* Connect the storages */
+        /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
 
         /* Finish construction of the second storage */
@@ -608,7 +608,7 @@ public class TestStorage {
         Point point2 = new Point(15, 15);
         Building storage1 = map.placeBuilding(new Storage(player0), point2);
 
-        /* Connect the storages */
+        /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
 
         /* Finish construction of the second storage */

@@ -342,7 +342,7 @@ public class Player {
 
     public void setTransportPriority(int priority, Material material) throws InvalidUserActionException {
 
-        /* Throw an exceptino if the material is a worker because worker transport priorities cannot be set */
+        /* Throw an exception if the material is a worker because worker transport priorities cannot be set */
         if (material.isWorker()) {
             throw new InvalidUserActionException("Cannot set priority for worker " + material);
         }
