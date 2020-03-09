@@ -594,7 +594,7 @@ public class GameUtils {
 
                         currentPoint = road.getEnd();
                     } else {
-                        for (int i = road.getWayPoints().size() - 2; i >= 0; i++) {
+                        for (int i = road.getWayPoints().size() - 2; i >= 0; i--) {
                             path.add(0, road.getWayPoints().get(i));
                         }
 

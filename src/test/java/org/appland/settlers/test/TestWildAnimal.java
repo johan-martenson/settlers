@@ -16,7 +16,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.appland.settlers.model.Tile.Vegetation.*;
+import static org.appland.settlers.model.Tile.Vegetation.BUILDABLE_MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.DEEP_WATER;
+import static org.appland.settlers.model.Tile.Vegetation.DESERT;
+import static org.appland.settlers.model.Tile.Vegetation.GRASS;
+import static org.appland.settlers.model.Tile.Vegetation.LAVA;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
+import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN_MEADOW;
+import static org.appland.settlers.model.Tile.Vegetation.SAVANNAH;
+import static org.appland.settlers.model.Tile.Vegetation.SNOW;
+import static org.appland.settlers.model.Tile.Vegetation.STEPPE;
+import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
+import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -534,6 +545,54 @@ public class TestWildAnimal {
             map.stepTime();
 
             assertTrue(map.getWildAnimals().isEmpty());
+        }
+    }
+
+    /**
+     * This tests that wild animals are not placed on any points that are so close to the edge of the map that one of
+     * the tiles next to the point they are placed on is missing
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testWildAnimalsDoesNotAppearTooCloseToTheEdge() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Fill all points that are on the map and surrounded by valid tiles with stones */
+        for (int x = 1; x < 20; x++) {
+            for (int y = 1; y < 20; y++) {
+
+                /* Filter invalid points */
+                if ((x + y) % 2 != 0) {
+
+                    continue;
+                }
+
+                Point point = new Point(x, y);
+
+                /* Filter points that are next to at least one invalid/undefined tile */
+                if (map.getTerrain().getSurroundingTiles(point).size() != 6) {
+                    continue;
+                }
+
+                /* Place stone because this is a regular point */
+                map.placeStone(point);
+            }
+        }
+
+        /* Verify that no wild animals appear because there are no suitable points */
+        for (int i = 0; i < 1000; i++) {
+
+            assertEquals(map.getWildAnimals().size(), 0);
+
+            map.stepTime();
         }
     }
 }

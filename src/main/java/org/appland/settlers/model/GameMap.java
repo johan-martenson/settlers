@@ -2530,14 +2530,6 @@ public class GameMap {
                     return;
                 }
 
-                /* Make sure the animal isn't too close to the edge of the map */
-                for (Tile tile : getTerrain().getSurroundingTiles(point)) {
-
-                    if (tile == null) {
-                        continue;
-                    }
-                }
-
                 /* Place the new wild animal */
                 placeWildAnimal(point);
 
