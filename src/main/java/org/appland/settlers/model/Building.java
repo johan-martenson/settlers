@@ -1103,4 +1103,15 @@ public class Building implements Actor, EndPoint {
 
         return result;
     }
+
+    public int getConstructionProgress() {
+        int fullConstructionTime = getConstructionCountdown();
+        int currentConstructionTime = countdown.getCount();
+
+        if (currentConstructionTime == fullConstructionTime) {
+            return 0;
+        }
+
+        return (fullConstructionTime - countdown.getCount()) / fullConstructionTime * 100;
+    }
 }

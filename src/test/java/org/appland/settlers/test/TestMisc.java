@@ -1,5 +1,6 @@
 package org.appland.settlers.test;
 
+import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -276,5 +277,83 @@ public class TestMisc {
 
         assertTrue(player0.getDiscoveredLand().contains(point04));
         assertFalse(player0.getDiscoveredLand().contains(point05));
+    }
+
+    @Test
+    public void testBuildingWhereConstructionHasNotStartedIsAtZeroPercentProgress() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Verify that the construction is at zero progress */
+        assertEquals(armory0.getConstructionProgress(), 0);
+    }
+
+    @Test
+    public void testConstructionProgressNeverGoesBackwards() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Verify that the construction progress never goes backwards */
+        int previousProgress = armory0.getConstructionProgress();
+        for (int i = 0; i < 1000; i++) {
+
+            assertTrue(armory0.getConstructionProgress() >= previousProgress);
+
+            previousProgress = armory0.getConstructionProgress();
+
+            if (!armory0.underConstruction()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testFullyConstructedBuildingIsAtHundredPercentProgress() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(6, 22);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Construct the building */
+        Utils.constructHouse(armory0, map);
+
+        /* Verify that the construction is at hundred  progress */
+        assertEquals(armory0.getConstructionProgress(), 100);
     }
 }

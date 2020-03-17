@@ -220,7 +220,7 @@ public class GameMap {
         time = 1;
 
         /* Set the initial production statistics collection period */
-        statisticsCollectionPeriod = 1000;
+        statisticsCollectionPeriod = 500;
 
         /* Give the players a reference to the map */
         for (Player player : players) {
@@ -2688,5 +2688,9 @@ public class GameMap {
 
     public StatisticsManager getStatisticsManager() {
         return this.statisticsManager;
+    }
+
+    public long getCurrentTime() {
+        return time;
     }
 }

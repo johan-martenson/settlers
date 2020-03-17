@@ -52,6 +52,55 @@ public class TestLandStatistics {
     }
 
     @Test
+    public void testGetCurrentTimeForGame() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Verify that it's possible to get the current time for the game */
+        assertTrue(map.getCurrentTime() > -1);
+    }
+
+    @Test
+    public void testCurrentTimeFollowsMapStepTime() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Verify that the current time increases each time the game is stepped */
+        long currentTime = map.getCurrentTime();
+
+        for (int i = 0; i < 100; i++) {
+
+            map.stepTime();
+
+            long newCurrentTime = map.getCurrentTime();
+
+            assertEquals(newCurrentTime, currentTime + 1);
+
+            currentTime = newCurrentTime;
+        }
+    }
+
+    @Test
     public void testThereIsLandStatisticsAtStartForEachPlayer() throws Exception {
 
         /* Starting new game */

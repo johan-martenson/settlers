@@ -252,7 +252,7 @@ public class TestProductionStatistics {
 
         /* Verify that the collected wood production statistics contains the wood within 1000 game steps */
         boolean woodStatisticsReported = false;
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5000; i++) {
 
             nrDataPoints = statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().size();
 
@@ -310,8 +310,8 @@ public class TestProductionStatistics {
         assertEquals(dataPoints.size(), 1);
         assertEquals(dataPoints.get(0).getValues().length, 3);
 
-        /* Verify that no new values are collected for 999 game steps */
-        for (int i = 0; i < 999; i++) {
+        /* Verify that no new values are collected for 499 game steps */
+        for (int i = 0; i < 499; i++) {
             woodProductionDataSeries = statisticsManager.getProductionStatisticsForMaterial(WOOD);
 
             assertNotNull(woodProductionDataSeries);
