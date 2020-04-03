@@ -27,6 +27,46 @@ import static java.lang.Math.round;
  */
 public class GameUtils {
 
+    static class Line {
+        final double k;
+        final double m;
+
+        Line (java.awt.Point point1, java.awt.Point point2) {
+            double newK = (point1.y - point2.y) / (point1.x - point2.x);
+
+            // y = kx + m, m = y - kx
+            double newM = point1.y - newK * point1.x;
+
+            this.k = newK;
+            this.m = newM;
+        }
+
+        Line(double k, double m) {
+            this.k = k;
+            this.m = m;
+        }
+
+        public Line(java.awt.Point point, int directionX, int directionY) {
+            this.k = directionY / directionX;
+            this.m = point.y - point.x * this.k;
+        }
+
+        Line getOrthogonalLineThroughPoint(java.awt.Point point) {
+            double orthogonalK = 1/this.k;
+
+            // y = kx + m, m = y - kx
+            return new Line(orthogonalK, point.y - orthogonalK * point.x);
+        }
+
+        java.awt.Point getPointOnLineAtX(int x) {
+            return new java.awt.Point(x, (int)(this.k * x + this.m));
+        }
+
+        public double getYforX(int x) {
+            return this.k * x + this.m;
+        }
+    }
+
     static boolean isUnique(List<Point> wayPoints) {
 
         Set<Point> pointsSet = new HashSet<>(wayPoints);

@@ -5,25 +5,28 @@
  */
 package org.appland.settlers.test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Headquarter;
-import static org.appland.settlers.model.Material.SCOUT;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Terrain;
+import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Worker;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.appland.settlers.model.Material.SCOUT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -133,8 +136,8 @@ public class TestScout {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
-        /* Verify that the scout keeps going to a point within a radius of 3 */
-        assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
+        /* Verify that the scout keeps going */
+        assertNotEquals(scout.getPosition().distance(scout.getTarget()), scout.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
     }
@@ -281,7 +284,6 @@ public class TestScout {
         /* Verify that the scout walks eight by three segments */
         for (int i = 0; i < 8; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
-            assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
         }
@@ -395,7 +397,6 @@ public class TestScout {
         /* Verify that the scout discovers new ground */
         for (int i = 0; i < 8; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
-            assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
@@ -454,7 +455,6 @@ public class TestScout {
         /* Verify that the scout discovers new ground */
         for (int i = 0; i < 8; i++) {
             assertNotEquals(scout.getTarget(), scout.getPosition());
-            assertTrue(scout.getPosition().distance(scout.getTarget()) < 4);
 
             Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
 
@@ -968,4 +968,183 @@ public class TestScout {
 
         assertNotEquals(scout.getTarget(), headquarter0.getPosition());
     }
+
+    @Test
+    public void testScoutCanWalkAroundBlockingStones() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(23, 5);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Place stones that the scout needs to walk around */
+        Point point2 = new Point(25, 5);
+        Point point3 = new Point(24, 4);
+        Point point4 = new Point(24, 6);
+        Point point5 = new Point(23, 7);
+        Point point6 = new Point(23, 3);
+
+        map.placeStone(point2);
+        map.placeStone(point3);
+        map.placeStone(point4);
+        map.placeStone(point5);
+        map.placeStone(point6);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to come out */
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+
+        /* Ensure that the scout goes around the stones */
+        for (int i = 0; i < 1000; i++) {
+
+            if (scout.getPosition().x > 27) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(scout.getPosition().x > 27);
+    }
+
+    @Test
+    public void testScoutWalksOtherDirectionIfBlockedBySea() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(17, 23);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Place the sea that the scout should walk along side */
+        Terrain terrain = map.getTerrain();
+        for (int i = 0; i < 40; i += 2) {
+            terrain.surroundWithVegetation(new Point(i, 24), Tile.Vegetation.WATER);
+        }
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to come out */
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+
+        /* Wait for the scout to reach the flag */
+        assertEquals(scout.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+
+        /* Ensure that the scout walks and does not get stuck until it is back in the headquarter */
+        for (int i = 0; i < 100; i++) {
+
+            if (scout.getPosition().equals(headquarter0.getPosition())) {
+                break;
+            }
+
+            assertNotEquals(scout.getPosition(), scout.getTarget());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        }
+
+        assertEquals(scout.getPosition(), headquarter0.getPosition());
+    }
+
+    @Test
+    public void testScoutContinuouslyDiscoversWithSameRadius() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Placing headquarter */
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(17, 23);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Call scout from the flag */
+        flag.callScout();
+
+        /* Wait for the scout to come out */
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+
+        /* Wait for the scout to reach the flag */
+        assertEquals(scout.getTarget(), flag.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, flag.getPosition());
+
+        /* Verify that the scout discovers its surroundings with the same radius until it goes back to the headquarter */
+        for (int i = 0; i < 100; i++) {
+
+            if (scout.getPosition().equals(headquarter0.getPosition())) {
+                break;
+            }
+
+            if (scout.isExactlyAtPoint()) {
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().upLeft()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().upRight()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().downRight()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().downLeft()));
+
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().upLeft()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().up()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().upLeft().up()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().up().up()));
+
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().upRight()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().up()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().upRight().up()));
+
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().downLeft()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().left().down()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().downLeft().down()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().down().down()));
+
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().downRight()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().right().down()));
+                assertTrue(player0.getDiscoveredLand().contains(scout.getPosition().downRight().down()));
+            }
+
+            assertNotEquals(scout.getPosition(), scout.getTarget());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+        }
+
+        assertEquals(scout.getPosition(), headquarter0.getPosition());
+    }
+
+
 }

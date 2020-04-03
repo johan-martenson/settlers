@@ -5,9 +5,10 @@
  */
 package org.appland.settlers.model;
 
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.abs;
 
 /**
  *
@@ -53,6 +54,42 @@ public class Point extends java.awt.Point {
                 }
             }
         }*/
+    }
+
+    public static Point fitToGamePoint(double x, double y) {
+        int roundedGameX = (int)Math.round(x);
+        int roundedGameY = (int)Math.round(y);
+
+        double faultX = x - roundedGameX;
+        double faultY = y - roundedGameY;
+
+        /* Call the handler directly if both points are odd or even */
+        if ((roundedGameX + roundedGameY) % 2 != 0) {
+
+            /* Find the closest valid point (odd-odd, or even-even) */
+            if (Math.abs(faultX) > Math.abs(faultY)) {
+
+                if (faultX > 0) {
+                    roundedGameX++;
+                } else {
+                    roundedGameX--;
+                }
+            } else if (Math.abs(faultX) < Math.abs(faultY)) {
+                if (faultY > 0) {
+                    roundedGameY++;
+                } else {
+                    roundedGameY--;
+                }
+            } else {
+                roundedGameX++;
+            }
+        }
+
+        return new Point(roundedGameX, roundedGameY);
+    }
+
+    public static boolean isValid(int i, int j) {
+        return (i + j) % 2 == 0;
     }
 
     @Override

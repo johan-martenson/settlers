@@ -6,13 +6,16 @@
 
 package org.appland.settlers.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+
+import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Scout.State.GOING_TO_NEXT_POINT;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_FLAG;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Scout.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.SCOUT;
 
 /**
  *
@@ -29,6 +32,9 @@ public class Scout extends Worker {
     }
 
     private static final int DISCOVERY_RADIUS = 4;
+    private static final int LENGTH_TO_PLAN_HEAD = 4;
+
+    private final Random random;
 
     private State state;
     private Point flagPoint;
@@ -41,15 +47,18 @@ public class Scout extends Worker {
 
         state        = WALKING_TO_TARGET;
         segmentCount = 0;
+
+        random = new Random(4);
     }
 
     @Override
     protected void onArrival() throws Exception {
+
+        map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
+
         if (state == WALKING_TO_TARGET) {
 
             flagPoint = getPosition();
-
-            map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
             Point borderPoint = findDirectionToBorder();
 
@@ -69,7 +78,6 @@ public class Scout extends Worker {
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_NEXT_POINT) {
-            map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
             segmentCount++;
 
@@ -116,32 +124,70 @@ public class Scout extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
+        /* Discover each point the scout walks on */
+        map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
+
         /* Return to storage if the planned path no longer exists */
-        if (map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+        if (map.isFlagAtPoint(getPosition()) && !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
             returnToStorage();
         }
     }
 
     private Point findNextPoint() {
-        Point pos = getPosition();
-        Point next;
 
-        if (Math.abs(directionX) > Math.abs(directionY)) {
-            if (directionX > 0) {
-                next = pos.right();
-            } else {
-                next = pos.left();
-            }
+        Point position = getPosition();
+        Point targetPoint = null;
+
+        if (Math.abs(directionX) > 0.001) {
+
+            GameUtils.Line direction = new GameUtils.Line(position, directionX, directionY);
+
+            int targetX;
+            final double scale = Math.sqrt(LENGTH_TO_PLAN_HEAD * LENGTH_TO_PLAN_HEAD - directionX * directionX - directionY * directionY);
+            targetX = position.x + (int) (scale * directionX);
+
+            targetPoint = Point.fitToGamePoint(targetX, direction.getYforX(targetX));
         } else {
+
             if (directionY > 0) {
-                next = pos.up();
+                targetPoint = new Point(position.x, position.y + LENGTH_TO_PLAN_HEAD);
             } else {
-                next = pos.down();
+                targetPoint = new Point(position.x, position.y - LENGTH_TO_PLAN_HEAD);
             }
         }
 
-        return next;
+        /* Set a box around the target point and try to pick any point inside the box */
+        List<Point> possibleTargets = new ArrayList<>();
+        for (int i = targetPoint.x - 5; i < targetPoint.x + 5; i++) {
+            for (int j = targetPoint.y - 5; j < targetPoint.y + 5; j++) {
+
+                /* Filter not allowed points */
+                if (!Point.isValid(i, j)) {
+                    continue;
+                }
+
+                /* Filter points outside the map */
+                Point possibleTarget = new Point(i, j);
+                if (!map.isWithinMap(possibleTarget)) {
+                    continue;
+                }
+
+                /* Filter the current position */
+                if (position.equals(possibleTarget)) {
+                    continue;
+                }
+
+                /* Filter points the scout cannot reach */
+                if (map.findWayOffroad(position, possibleTarget, null) != null) {
+                    possibleTargets.add(possibleTarget);
+                }
+            }
+        }
+
+        /* Pick one of the possible targets */
+        Point target = possibleTargets.get((int)Math.floor(possibleTargets.size() * random.nextDouble()));
+
+        return target;
     }
 
     private Point findDirectionToBorder() {
