@@ -56,6 +56,8 @@ public class TestRoads {
 
     @Test
     public void testGetNotExistingRoad() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -2022,9 +2024,6 @@ public class TestRoads {
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
-
-        /* 93 ticks from start */
-        Utils.fastForward(92, map);
 
         /* Placing flag */
         Point point39 = new Point(10, 8);

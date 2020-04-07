@@ -6,11 +6,6 @@
 
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
@@ -18,20 +13,26 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Military;
-import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Well;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import org.junit.Test;
 
 /**
  *
@@ -41,22 +42,26 @@ public class TestWorker {
 
     @Test
     public void testWorkerCannotEnterBuildingWhenItsNotAtRightPosition() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place sawmill */
         Point point3 = new Point(7, 9);
-        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point3);
 
+        /* Occupy the sawmill */
         SawmillWorker worker = new SawmillWorker(player0, map);
         map.placeWorker(worker, sawmill.getFlag());
 
+        /* Verify that the worker cannot enter the sawmill when standing at the flag */
         try {
             worker.enterBuilding(sawmill);
             fail();

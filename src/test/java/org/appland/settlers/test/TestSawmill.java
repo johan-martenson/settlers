@@ -156,6 +156,8 @@ public class TestSawmill {
 
     @Test
     public void testSawmillNeedsWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -187,6 +189,8 @@ public class TestSawmill {
 
     @Test
     public void testSawmillGetsAssignedWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -243,6 +247,8 @@ public class TestSawmill {
 
     @Test
     public void testOccupiedSawmillWithoutWoodProducesNothing() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -276,6 +282,8 @@ public class TestSawmill {
 
     @Test
     public void testUnoccupiedSawmillProducesNothing() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -301,6 +309,8 @@ public class TestSawmill {
 
     @Test
     public void testOccupiedSawmillWithWoodProducesPlanks() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -344,6 +354,8 @@ public class TestSawmill {
 
     @Test
     public void testSawmillWorkerLeavesPlanksAtTheFlag() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -408,6 +420,8 @@ public class TestSawmill {
 
     @Test
     public void testProductionOfOnePlankConsumesOneWood() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -441,6 +455,8 @@ public class TestSawmill {
 
     @Test
     public void testProductionCountdownStartsWhenWoodIsAvailable() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);

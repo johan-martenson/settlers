@@ -158,20 +158,22 @@ public class TestMint {
 
     @Test
     public void testMintNeedsWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the mint with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -197,20 +199,22 @@ public class TestMint {
 
     @Test
     public void testMintGetsAssignedWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the mint with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -249,18 +253,20 @@ public class TestMint {
 
     @Test
     public void testOccupiedMintWithoutIngredientsProducesNothing() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -282,18 +288,20 @@ public class TestMint {
 
     @Test
     public void testUnoccupiedMintProducesNothing() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);
@@ -307,20 +315,22 @@ public class TestMint {
 
     @Test
     public void testOccupiedMintWithGoldAndCoalProducesCoins() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the mint with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -358,20 +368,22 @@ public class TestMint {
 
     @Test
     public void testMinterLeavesBreadAtTheFlag() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the mint with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -423,16 +435,18 @@ public class TestMint {
 
     @Test
     public void testProductionOfOneBreadConsumesOneWaterAndOneFlour() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
         Building mint = map.placeBuilding(new Mint(player0), point3);
 
@@ -458,18 +472,20 @@ public class TestMint {
 
     @Test
     public void testProductionCountdownStartsWhenIngredientsAreAvailable() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place mint */
         Point point3 = new Point(7, 9);
-        Building mint = map.placeBuilding(new Mint(player0), point3);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);

@@ -170,7 +170,7 @@ public class TestSlaughterHouse {
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the slaughter house with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -209,7 +209,7 @@ public class TestSlaughterHouse {
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the slaughter house with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -319,7 +319,7 @@ public class TestSlaughterHouse {
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the slaughter house with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -369,7 +369,7 @@ public class TestSlaughterHouse {
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the slaughter house with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);

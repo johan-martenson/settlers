@@ -782,14 +782,16 @@ public class TestGameMap {
 
     @Test
     public void testFieldOfViewIsOutsideBorder() throws Exception {
+
+        /* Create new single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(1, 21);
         assertTrue(player0.getBorders().get(0).contains(point1));
@@ -800,14 +802,16 @@ public class TestGameMap {
 
     @Test
     public void testFieldOfViewContainsAllOwnedLand() throws Exception {
+
+        /* Create new single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorders().get(0);
         List<Point> fieldOfView = player0.getFieldOfView();

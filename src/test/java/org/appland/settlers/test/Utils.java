@@ -1025,7 +1025,7 @@ public class Utils {
     public static Courier waitForRoadToGetAssignedCourier(GameMap map, Road road0) throws Exception {
         Courier courier = null;
 
-        for (int i = 0; i < 10000;i++) {
+        for (int i = 0; i < 10000; i++) {
 
             courier = road0.getCourier();
 

@@ -208,35 +208,39 @@ public class TestStorage {
 
     @Test
     public void testUnfinishedStorageNotNeedsWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3);
 
-        /* Unfinished sawmill doesn't need worker */
+        /* Verify that an unfinished storage doesn't need a worker */
         assertFalse(storage.needsWorker());
     }
 
     @Test
     public void testStorageNeedsWorker() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3);
 
@@ -245,25 +249,28 @@ public class TestStorage {
 
         assertTrue(storage.ready());
 
+        /* Verify that the finished storage needs a worker */
         assertTrue(storage.needsWorker());
     }
 
     @Test
     public void testStorageWorkerGetsAssignedToFinishedStorage() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3);
+        Storage storage = map.placeBuilding(new Storage(player0), point3);
 
-        /* 64 ticks from start */
+        /* Connect the storage with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -297,16 +304,18 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRests() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3);
 
@@ -325,30 +334,34 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRestsThenDeliversCargo() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(11, 9);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
-        Point point2 = new Point(9, 9);
-
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
+        /* Connect the storage with the woodcutter */
+        Point point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
+        /* Finish construction of the storage */
         Utils.constructHouse(storage);
 
+        /* Occupy the storage worker */
         StorageWorker storageWorker0 = new StorageWorker(player0, map);
-
         Utils.occupyBuilding(storageWorker0, storage);
 
         /* The storage worker rests */
@@ -375,24 +388,27 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerGoesBackToStorageAfterDelivery() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(11, 9);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
-        Point point2 = new Point(9, 9);
-
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
+        /* Connect the storage with woodcutter */
+        Point point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
         Utils.constructHouse(storage);
@@ -428,24 +444,27 @@ public class TestStorage {
 
     @Test
     public void testStorageWorkerRestsInStorageAfterDelivery() throws Exception {
+
+        /* Create a single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
 
-        /* 0 ticks from start */
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(11, 9);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
-        Point point2 = new Point(9, 9);
-
-        /* 52 ticks from start */
+        /* Place storage */
         Point point3 = new Point(7, 9);
         Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
 
+        /* Connect the storage with the woodcutter */
+        Point point2 = new Point(9, 9);
         map.placeRoad(player0, point1, point2, point3);
 
         Utils.constructHouse(storage);
