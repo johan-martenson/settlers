@@ -165,6 +165,48 @@ public class TestStorage {
     }
 
     @Test
+    public void testStorageIsConstructedWithRequiredResources() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Placing storage */
+        Point point22 = new Point(6, 22);
+        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+
+        /* Deliver four planks and two stones */
+        Cargo plankCargo = new Cargo(PLANK, map);
+        Cargo stoneCargo  = new Cargo(STONE, map);
+
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(plankCargo);
+        storage0.putCargo(stoneCargo);
+        storage0.putCargo(stoneCargo);
+        storage0.putCargo(stoneCargo);
+
+        /* Verify that this is not enough to construct the storage */
+        for (int i = 0; i < 1000; i++) {
+
+            if (storage0.ready()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(storage0.ready());
+    }
+
+    @Test
     public void testUnfinishedStorageNotNeedsWorker() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
@@ -618,7 +660,7 @@ public class TestStorage {
         storage1.tearDown();
 
         /* Wait for the second storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage1, map);
+        Utils.waitForBuildingToBurnDown(storage1);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -759,7 +801,7 @@ public class TestStorage {
         storage1.tearDown();
 
         /* Wait for the second storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage1, map);
+        Utils.waitForBuildingToBurnDown(storage1);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -1511,7 +1553,7 @@ public class TestStorage {
         storage1.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage1, map);
+        Utils.waitForBuildingToBurnDown(storage1);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();

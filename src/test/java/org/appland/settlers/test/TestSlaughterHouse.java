@@ -1404,7 +1404,7 @@ public class TestSlaughterHouse {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the slaughter house */
         Worker butcher = slaughterHouse0.getWorker();

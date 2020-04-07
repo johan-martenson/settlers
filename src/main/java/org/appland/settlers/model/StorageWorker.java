@@ -95,12 +95,25 @@ public class StorageWorker extends Worker {
 
                 /* Make sure planks are only used for plank production if
                    the limit is critically low */
-                if (material == PLANK &&
-                    ownStorage.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT &&
-                    !(building instanceof Sawmill)     &&
-                    !(building instanceof ForesterHut) &&
-                    !(building instanceof Woodcutter)) {
-                    continue;
+                if (material == PLANK) {
+
+                    if (!getPlayer().isTreeConservationProgramActive() && ownStorage.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT) {
+                        getPlayer().activateTreeConservationProgram(getHome());
+                    }
+
+                    if (getPlayer().isTreeConservationProgramActive() && ownStorage.getAmount(PLANK) > TREE_CONSERVATION_LIMIT) {
+                        getPlayer().deactivateTreeConservationProgram(getHome());
+                    }
+
+                    if (getPlayer().isTreeConservationProgramActive() &&
+                        !(building instanceof Sawmill)     &&
+                        !(building instanceof ForesterHut) &&
+                        !(building instanceof Woodcutter)) {
+                        getPlayer().activateTreeConservationProgram(getHome());
+
+                        continue;
+                    }
+
                 }
 
                 /* Check if the building needs the material */

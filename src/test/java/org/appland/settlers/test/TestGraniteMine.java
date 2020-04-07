@@ -505,9 +505,9 @@ public class TestGraniteMine {
         constructHouse(mine, map);
 
         /* Deliver food to the miner */
-        Utils.deliverCargo(mine, BREAD, map);
-        Utils.deliverCargo(mine, FISH, map);
-        Utils.deliverCargo(mine, MEAT, map);
+        Utils.deliverCargo(mine, BREAD);
+        Utils.deliverCargo(mine, FISH);
+        Utils.deliverCargo(mine, MEAT);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
@@ -1613,7 +1613,7 @@ public class TestGraniteMine {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();

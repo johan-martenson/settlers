@@ -1548,7 +1548,7 @@ public class TestQuarry {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();

@@ -1973,7 +1973,7 @@ public class TestWoodcutter {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the woodcutter */
         Worker woodcutterWorker = woodcutter0.getWorker();

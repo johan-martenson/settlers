@@ -271,6 +271,8 @@ public class Building implements Actor, EndPoint {
 
         if (previousState == State.UNOCCUPIED) {
             map.updateBorder();
+
+            getPlayer().reportMilitaryBuildingOccupied(this);
         }
 
         if (!isEvacuated()) {
@@ -414,6 +416,14 @@ public class Building implements Actor, EndPoint {
                     consumeConstructionMaterial();
 
                     state = State.UNOCCUPIED;
+
+                    /* For military buildings, report the construction */
+                    if (isMilitaryBuilding()) {
+                        getPlayer().reportMilitaryBuildingReady(this);
+                    }
+
+                    /* Give subclasses a chance to add behavior */
+                    onConstructionFinished();
                 }
             } else {
                 countdown.step();
@@ -1114,4 +1124,7 @@ public class Building implements Actor, EndPoint {
 
         return (fullConstructionTime - countdown.getCount()) / fullConstructionTime * 100;
     }
+
+    /* Intended to be overridden by subclasses if needed */
+    void onConstructionFinished() { }
 }

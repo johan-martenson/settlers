@@ -30,6 +30,8 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
     private final Map<Material, Integer>  producedMaterials;
+    private final List<Message> messages;
+    private boolean treeConservationProgramActive;
 
 
     public Player(String name, Color color) {
@@ -60,6 +62,12 @@ public class Player {
 
         /* Set the initial transport priority */
         transportPriorities.addAll(Arrays.asList(Material.values()));
+
+        /* There are no messages at start */
+        messages = new ArrayList<>();
+
+        /* The tree conservation program is not active at start */
+        treeConservationProgramActive = false;
     }
 
     public String getName() {
@@ -222,6 +230,8 @@ public class Player {
                 allocated++;
             }
         }
+
+        buildingToAttack.getPlayer().reportUnderAttack(buildingToAttack);
     }
 
     void setMap(GameMap map) {
@@ -384,9 +394,7 @@ public class Player {
             return null;
         }
 
-        /* Check each player if they own the point and return the player that
-           does
-        */
+        /* Check each player if they own the point and return the player that does */
         for (Player player : map.getPlayers()) {
             if (player.isWithinBorder(point)) {
                 return player;
@@ -457,5 +465,61 @@ public class Player {
         int amount = producedMaterials.getOrDefault(material, 0);
 
         producedMaterials.put(material, amount + 1);
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    void reportMilitaryBuildingReady(Building building) {
+        messages.add(new MilitaryBuildingReadyMessage(building));
+    }
+
+    void reportMilitaryBuildingOccupied(Building building) {
+        messages.add(new MilitaryBuildingOccupiedMessage(building));
+    }
+
+    void reportNoMoreResourcesForBuilding(Building building) {
+        messages.add(new NoMoreResourcesMessage(building));
+    }
+
+    void reportGeologicalFinding(Point point, Material foundMaterial) {
+        messages.add(new GeologistFindMessage(point, foundMaterial));
+    }
+
+    void reportBuildingLost(Building building) {
+        messages.add(new BuildingLostMessage(building));
+    }
+
+    void reportBuildingCaptured(Building building) {
+        messages.add(new BuildingCapturedMessage(building));
+    }
+
+    void reportUnderAttack(Building building) {
+        messages.add(new UnderAttackMessage(building));
+    }
+
+    void reportStorageReady(Storage storage) {
+        messages.add(new StoreHouseIsReadyMessage(storage));
+    }
+
+    public void activateTreeConservationProgram(Building building) {
+        if (!treeConservationProgramActive) {
+            messages.add(new TreeConservationProgramActivatedMessage(building));
+        }
+
+        treeConservationProgramActive = true;
+    }
+
+    public boolean isTreeConservationProgramActive() {
+        return treeConservationProgramActive;
+    }
+
+    public void deactivateTreeConservationProgram(Building building) {
+        if (treeConservationProgramActive) {
+            messages.add(new TreeConservationProgramDeactivatedMessage(building));
+        }
+
+        treeConservationProgramActive = false;
     }
 }

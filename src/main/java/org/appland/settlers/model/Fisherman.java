@@ -110,6 +110,8 @@ public class Fisherman extends Worker {
                         /* Report that there's no more fish */
                         getHome().reportNoMoreNaturalResources();
 
+                        getPlayer().reportNoMoreResourcesForBuilding(getHome());
+
                         return;
                     }
 

@@ -1281,7 +1281,7 @@ public class TestWell {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the well */
         Worker wellWorker = well0.getWorker();

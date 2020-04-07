@@ -723,21 +723,23 @@ public class Utils {
         assertEquals(cargo.getPosition(), cargo.getTarget().getPosition());
     }
 
-    static void waitUntilAmountIs(GameMap map, Building target, Material material, int amount) throws Exception {
+    static void waitUntilAmountIs(Building building, Material material, int amount) throws Exception {
+        GameMap map = building.getMap();
 
         for (int i = 0; i < 2000; i++) {
 
-            if (target.getAmount(material) == amount) {
+            if (building.getAmount(material) == amount) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(target.getAmount(material), amount);
+        assertEquals(building.getAmount(material), amount);
     }
 
-    static void deliverCargo(Building building, Material material, GameMap map) throws Exception {
+    static void deliverCargo(Building building, Material material) throws Exception {
+        GameMap map = building.getMap();
         Cargo cargo = new Cargo(material, map);
 
         building.promiseDelivery(material);
@@ -872,7 +874,10 @@ public class Utils {
         return map.getBuildingAtPoint(building.getPosition());
     }
 
-    static void waitForBuildingToBurnDown(Building building, GameMap map) throws Exception {
+    static void waitForBuildingToBurnDown(Building building) throws Exception {
+
+        GameMap map = building.getMap();
+
         for (int i = 0; i < 10000; i++) {
 
             if (building.destroyed()) {
@@ -920,6 +925,7 @@ public class Utils {
     }
 
     public static void verifyWorkerStaysAtHome(Worker worker, GameMap map) throws Exception {
+
         for (int i = 0; i < 1000; i++) {
             assertEquals(worker.getHome().getPosition(), worker.getPosition());
 
@@ -1011,8 +1017,9 @@ public class Utils {
         return courier;
     }
 
-    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building, GameMap map) throws Exception {
+    public static Worker waitForNonMilitaryBuildingToGetPopulated(Building building) throws Exception {
 
+        GameMap map = building.getMap();
         Worker worker = null;
 
         for (int i = 0; i < 1000; i++) {
@@ -1031,7 +1038,6 @@ public class Utils {
     }
 
     public static Cargo waitForFlagToHaveCargoWaiting(GameMap map, Flag flag) throws Exception {
-
         Cargo cargo = null;
 
         for (int i = 0; i < 1000; i++) {
@@ -1054,8 +1060,6 @@ public class Utils {
         Set<Courier> couriers = new HashSet<>();
 
         for (int i = 0; i < 1000; i++) {
-            boolean allCouriersFound = true;
-
             for (Road road : roads) {
                 couriers.add(road.getCourier());
 
@@ -1070,5 +1074,37 @@ public class Utils {
         assertEquals(couriers.size(), roads.length);
 
         return couriers;
+    }
+
+    public static void waitForNewMessage(Player player0) throws Exception {
+        GameMap map = player0.getMap();
+
+        int amountMessages = player0.getMessages().size();
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (player0.getMessages().size() > amountMessages) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(amountMessages < player0.getMessages().size());
+    }
+
+    public static void waitForBuildingToBeConstructed(Building building) throws Exception {
+        GameMap map = building.getMap();
+
+        for (int i = 0; i < 2000; i++) {
+
+            if (building.ready()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(building.ready());
     }
 }

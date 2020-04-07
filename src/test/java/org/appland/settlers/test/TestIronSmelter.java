@@ -1469,7 +1469,7 @@ public class TestIronSmelter {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the iron smelter */
         Worker ironFounder = ironSmelter0.getWorker();

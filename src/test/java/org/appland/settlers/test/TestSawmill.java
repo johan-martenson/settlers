@@ -1393,7 +1393,7 @@ public class TestSawmill {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();

@@ -143,7 +143,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(fortress0, map);
 
         /* Put gold in the fortress */
-        Utils.deliverCargo(fortress0, COIN, map);
+        Utils.deliverCargo(fortress0, COIN);
 
         /* Verify that no promotion happens when no military is present */
         Utils.fastForward(200, map);
@@ -172,7 +172,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(fortress0, map);
 
         /* Put gold in the fortress */
-        Utils.deliverCargo(fortress0, COIN, map);
+        Utils.deliverCargo(fortress0, COIN);
 
         /* Verify that no promotion happens when all occupants are generals */
         Military military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0, map);

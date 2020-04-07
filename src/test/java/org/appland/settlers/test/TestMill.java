@@ -1354,7 +1354,7 @@ public class TestMill {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the mill */
         Worker miller = mill0.getWorker();

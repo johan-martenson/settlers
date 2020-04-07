@@ -731,8 +731,8 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 7, map);
-        Utils.putMineralWithinRadius(STONE, point1, 7, map);
+        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.putMineralWithinRadius(STONE, point1, 9, map);
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
@@ -769,6 +769,7 @@ public class TestGeologist {
 
         assertTrue(map.isSignAtPoint(geologist.getPosition()));
         assertNotNull(map.getSignAtPoint(geologist.getPosition()));
+        assertFalse(geologist.isInvestigating());
 
         Sign sign = map.getSignAtPoint(geologist.getPosition());
 

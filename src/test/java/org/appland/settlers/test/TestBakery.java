@@ -1323,7 +1323,7 @@ public class TestBakery {
         storage0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0, map);
+        Utils.waitForBuildingToBurnDown(storage0);
 
         /* Destroy the bakery */
         Worker baker = bakery0.getWorker();

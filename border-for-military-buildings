@@ -1,0 +1,11 @@
+Barracks:
+ - Distance to side of hexagon: 8
+
+Headquarter:
+ - Distance to side of hexagon: 9
+
+ Guardhouse:
+  - Distance to side of hexagon: 9
+
+Fortress:
+  - Distance to side of hexagon: 11

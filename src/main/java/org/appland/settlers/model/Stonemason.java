@@ -124,6 +124,8 @@ public class Stonemason extends Worker {
 
                     getHome().reportNoMoreNaturalResources();
 
+                    getPlayer().reportNoMoreResourcesForBuilding(getHome());
+
                     return;
                 }
 

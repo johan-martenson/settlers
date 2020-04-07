@@ -270,8 +270,14 @@ public class Military extends Worker {
 
             if (buildingToAttack.ready()) {
 
+                Player previousOwner = buildingToAttack.getPlayer();
+
                 /* Capture the building */
                 buildingToAttack.capture(getPlayer());
+
+                /* Report the takeover */
+                previousOwner.reportBuildingLost(buildingToAttack);
+                getPlayer().reportBuildingCaptured(buildingToAttack);
 
                 /* Return home if it's a headquarter */
                 if (buildingToAttack instanceof Headquarter) {

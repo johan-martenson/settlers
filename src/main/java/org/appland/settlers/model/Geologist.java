@@ -61,9 +61,14 @@ public class Geologist extends Worker {
     protected void onIdle() throws Exception {
         if (state == INVESTIGATING) {
             if (countdown.reachedZero()) {
-                placeSignWithResult(getPosition());
+                Material foundMaterial = placeSignWithResult(getPosition());
 
                 nrSitesInvestigated++;
+
+                /* Report the find */
+                if (foundMaterial != null) {
+                    getPlayer().reportGeologicalFinding(getPosition(), foundMaterial);
+                }
 
                 /* Return after investigating five sites */
                 if (nrSitesInvestigated == 10) {
@@ -135,16 +140,23 @@ public class Geologist extends Worker {
         }
     }
 
-    private void placeSignWithResult(Point point) {
+    private Material placeSignWithResult(Point point) {
         Terrain terrain = map.getTerrain();
         boolean placedSign = false;
+        Material foundMaterial = null;
 
         if (terrain.isOnGrass(point)) {
             map.placeSign(WATER, LARGE, point);
             placedSign = true;
+
+            foundMaterial = WATER;
         } else if (terrain.isOnMountain(point)) {
             for (Material mineral: Material.getMinerals()) {
                 int amount = map.getAmountOfMineralAtPoint(mineral, point);
+
+                if (amount > 0) {
+                    foundMaterial = mineral;
+                }
 
                 if (amount > 10) {
                     map.placeSign(mineral, LARGE, point);
@@ -165,6 +177,8 @@ public class Geologist extends Worker {
         if (!placedSign) {
             map.placeEmptySign(point);
         }
+
+        return foundMaterial;
     }
 
     private Point findSiteToExamine() {

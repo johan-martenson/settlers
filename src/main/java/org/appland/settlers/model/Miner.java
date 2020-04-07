@@ -41,9 +41,9 @@ public class Miner extends Worker {
         MINING,
         GOING_OUT_TO_FLAG,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        RETURNING_TO_STORAGE,
+        NO_MORE_RESOURCES
     }
-
 
     public Miner(Player player, GameMap map) {
         super(player, map);
@@ -134,6 +134,10 @@ public class Miner extends Worker {
 
                     /* Report that there is no more ore available in the mine */
                     getHome().reportNoMoreNaturalResources();
+
+                    getPlayer().reportNoMoreResourcesForBuilding(getHome());
+
+                    state = State.NO_MORE_RESOURCES;
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();

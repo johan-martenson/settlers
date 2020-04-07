@@ -202,7 +202,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -333,7 +333,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -461,7 +461,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -589,7 +589,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -717,7 +717,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -828,7 +828,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
 
             /* Exit after four delivered breads */
             int sum = 0;
@@ -1058,9 +1058,9 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MINER, 0, map);
 
         /* Fill the stock in the coal mine so it doesn't need anything */
-        Utils.deliverCargo(coalMine0, FISH, map);
-        Utils.deliverCargo(coalMine0, BREAD, map);
-        Utils.deliverCargo(coalMine0, MEAT, map);
+        Utils.deliverCargo(coalMine0, FISH);
+        Utils.deliverCargo(coalMine0, BREAD);
+        Utils.deliverCargo(coalMine0, MEAT);
 
         assertEquals(coalMine0.getAmount(FISH), 1);
         assertEquals(coalMine0.getAmount(BREAD), 1);
@@ -1192,7 +1192,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(BREAD), 1);
 
             /* Wait for the mine to consume the bread */
-            Utils.waitUntilAmountIs(map, target, BREAD, 0);
+            Utils.waitUntilAmountIs(target, BREAD, 0);
         }
 
         player0.setFoodQuota(GoldMine.class, 1);
@@ -1304,7 +1304,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(COAL), 1);
 
             /* Wait for the consumer to consume the coal */
-            Utils.waitUntilAmountIs(map, target, COAL, 0);
+            Utils.waitUntilAmountIs(target, COAL, 0);
 
             /* Exit after four delivered coals */
             int sum = 0;
@@ -1426,7 +1426,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(COAL), 1);
 
             /* Wait for the consumer to consume the coal */
-            Utils.waitUntilAmountIs(map, target, COAL, 0);
+            Utils.waitUntilAmountIs(target, COAL, 0);
 
             /* Exit after four delivered coals */
             int sum = 0;
@@ -1546,7 +1546,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(COAL), 1);
 
             /* Wait for the consumer to consume the coal */
-            Utils.waitUntilAmountIs(map, target, COAL, 0);
+            Utils.waitUntilAmountIs(target, COAL, 0);
 
             /* Exit after four delivered coals */
             int sum = 0;
@@ -1666,7 +1666,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(COAL), 1);
 
             /* Wait for the consumer to consume the coal */
-            Utils.waitUntilAmountIs(map, target, COAL, 0);
+            Utils.waitUntilAmountIs(target, COAL, 0);
 
             /* Exit after four delivered coals */
             int sum = 0;
@@ -1770,7 +1770,7 @@ public class TestPrioritization {
             assertEquals(target.getAmount(COAL), 1);
 
             /* Wait for the consumer to consume the coal */
-            Utils.waitUntilAmountIs(map, target, COAL, 0);
+            Utils.waitUntilAmountIs(target, COAL, 0);
 
             /* Exit after four delivered coals */
             int sum = 0;
@@ -1955,8 +1955,8 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0, map);
 
         /* Fill the stock in the iron smelter so it doesn't need anything */
-        Utils.deliverCargo(ironSmelter0, IRON, map);
-        Utils.deliverCargo(ironSmelter0, COAL, map);
+        Utils.deliverCargo(ironSmelter0, IRON);
+        Utils.deliverCargo(ironSmelter0, COAL);
 
         assertEquals(ironSmelter0.getAmount(IRON), 1);
         assertEquals(ironSmelter0.getAmount(COAL), 1);

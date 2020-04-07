@@ -647,4 +647,9 @@ public class Storage extends Building implements Actor {
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Can't resume production in storage");
     }
+
+    @Override
+    void onConstructionFinished() {
+        getPlayer().reportStorageReady(this);
+    }
 }

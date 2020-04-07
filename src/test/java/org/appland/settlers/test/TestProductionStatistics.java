@@ -237,7 +237,7 @@ public class TestProductionStatistics {
         assertEquals(statisticsManager.getProductionStatisticsForMaterial(WOOD).getProductionDataPoints().get(nrDataPoints - 1).getValues()[0], 0);
 
         /* Wait for the woodcutter hut to get populated */
-        WoodcutterWorker woodcutterWorker01 = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0, map);
+        WoodcutterWorker woodcutterWorker01 = (WoodcutterWorker) Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
 
         /* Wait for the woodcutter to cut down the tree */
         Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutterWorker01);
