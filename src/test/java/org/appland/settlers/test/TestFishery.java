@@ -776,19 +776,9 @@ public class TestFishery {
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* 7 ticks from start */
-        for (int i = 0; i < 7; i++) {
-            map.stepTime();
-        }
-
         /* Placing fishery */
         Point point22 = new Point(10, 8);
         Building fishery0 = map.placeBuilding(new Fishery(player0), point22);
-
-        /* 20 ticks from start */
-        for (int i = 0; i < 13; i++) {
-            map.stepTime();
-        }
 
         /* Placing road between (11, 7) and (6, 4) */
         Point point2 = new Point(9, 5);

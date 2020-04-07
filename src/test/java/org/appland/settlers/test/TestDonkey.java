@@ -1005,38 +1005,23 @@ public class TestDonkey {
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* 133 ticks from start */
-        Utils.fastForward(133, map);
-
         /* Placing forester */
         Point point22 = new Point(22, 6);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
-
-        /* 147 ticks from start */
-        Utils.fastForward(14, map);
 
         /* Placing woodcutter */
         Point point23 = new Point(19, 7);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point23);
 
-        /* 185 ticks from start */
-        Utils.fastForward(38, map);
-
         /* Placing quarry */
         Point point24 = new Point(10, 12);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point24);
-
-        /* 206 ticks from start */
-        Utils.fastForward(21, map);
 
         /* Placing road between (23, 3) and (20, 4) */
         Point point25 = new Point(23, 5);
         Point point26 = new Point(21, 5);
         Point point27 = new Point(20, 6);
         Road road0 = map.placeRoad(player0, point25, point26, point27);
-
-        /* 227 ticks from start */
-        Utils.fastForward(21, map);
 
         /* Placing road between (20, 4) and (11, 11) */
         Point point50 = new Point(19, 5);
@@ -1050,9 +1035,6 @@ public class TestDonkey {
         Point point35 = new Point(11, 11);
         Road road1 = map.placeRoad(player0, point27, point50, point28, point29, point30, point31, point32, point33, point34, point35);
 
-        /* 254 ticks from start */
-        Utils.fastForward(27, map);
-
         /* Placing road between (11, 11) and (6, 4) */
         Point point36 = new Point(10, 10);
         Point point37 = new Point(9, 9);
@@ -1063,32 +1045,17 @@ public class TestDonkey {
         Point point42 = new Point(6, 4);
         Road road2 = map.placeRoad(player0, point35, point36, point37, point38, point39, point40, point41, point42);
 
-        /* 269 ticks from start */
-        Utils.fastForward(15, map);
-
         /* Placing flag */
         Flag flag0 = map.placeFlag(player0, point40);
-
-        /* 282 ticks from start */
-        Utils.fastForward(13, map);
 
         /* Placing flag */
         Flag flag1 = map.placeFlag(player0, point38);
 
-        /* 297 ticks from start */
-        Utils.fastForward(15, map);
-
         /* Placing flag */
         Flag flag2 = map.placeFlag(player0, point33);
 
-        /* 311 ticks from start */
-        Utils.fastForward(14, map);
-
         /* Placing flag */
         Flag flag3 = map.placeFlag(player0, point31);
-
-        /* 329 ticks from start */
-        Utils.fastForward(18, map);
 
         /* Placing flag */
         Flag flag4 = map.placeFlag(player0, point29);
