@@ -68,7 +68,7 @@ public class TestCourier {
         Storage storage = map.placeBuilding(new Storage(player0), point1);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage, map);
+        Utils.constructHouse(storage);
 
         assertTrue(storage.getAmount(COURIER) > 0);
     }
@@ -278,7 +278,7 @@ public class TestCourier {
         Point point4 = new Point(13, 5);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Place road */
         Point middle = new Point(8, 4);
@@ -341,7 +341,7 @@ public class TestCourier {
         Point point4 = new Point(13, 5);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Place road */
         Point middle = new Point(8, 4);
@@ -417,7 +417,7 @@ public class TestCourier {
         Point point4 = new Point(13, 5);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Place road */
         Point middle = new Point(8, 4);
@@ -511,7 +511,7 @@ public class TestCourier {
         /* Place woodcutter hut */
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(player0), leftFlagPoint.upLeft());
 
-        Utils.constructHouse(rightWoodcutter, map);
+        Utils.constructHouse(rightWoodcutter);
 
         /* Place road */
         Point middlePoint = new Point(8, 4);
@@ -604,7 +604,7 @@ public class TestCourier {
         /* Place woodcutter hut */
         Building leftWoodcutter = map.placeBuilding(new Woodcutter(player0), leftFlag.upLeft());
 
-        Utils.constructHouse(rightWoodcutter, map);
+        Utils.constructHouse(rightWoodcutter);
 
         /* Place road */
         Point middlePoint = new Point(8, 4);
@@ -1218,10 +1218,10 @@ public class TestCourier {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place flag */
         Point point3 = new Point(29, 19);
@@ -1272,7 +1272,7 @@ public class TestCourier {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag1);
 
         /* Wait for courier to get assigned and leave the headquarter */
-        List<Courier> couriers = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0, map);
+        List<Courier> couriers = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0);
 
         assertNotNull(couriers);
         assertEquals(couriers.size(), 1);
@@ -1300,27 +1300,27 @@ public class TestCourier {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Remove all donkeys from the inventory */
-        Utils.adjustInventoryTo(headquarter0, DONKEY, 0, map);
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 0);
 
         /* Extend the border */
         Point point0 = new Point(7, 29);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place a guardhouse */
         Point point1 = new Point(7, 15);
         GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guardhouse */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guardhouse */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Place flag */
         Point point2 = new Point(5, 9);

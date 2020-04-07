@@ -204,7 +204,7 @@ public class TestFortress {
         Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the fortress to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         /* Verify that a military is sent from the headquarter */
         map.stepTime();
@@ -253,7 +253,7 @@ public class TestFortress {
         /* Wait for the fortress to finish construction */
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
-        Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
@@ -281,7 +281,7 @@ public class TestFortress {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Wait for the fortress to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         /* Verify that a military is sent from the headquarter */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
@@ -327,18 +327,18 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress with nine militaries */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that the fortress does not need another military */
         assertFalse(fortress0.needsMilitaryManning());
@@ -388,18 +388,18 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress with nine militaries */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that the fortress does not need another military */
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -426,13 +426,13 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that the border is grown with the correct radius */
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
 
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 40)));
     }
@@ -454,7 +454,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         assertTrue(fortress0.needsMaterial(COIN));
     }
@@ -496,7 +496,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         assertTrue(fortress0.needsMaterial(COIN));
 
@@ -542,7 +542,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -550,7 +550,7 @@ public class TestFortress {
         fortress0.putCargo(cargo);
 
         /* Occupy the fortress with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that the private is promoted at the right time */
         for (int i = 0; i < 100; i++) {
@@ -578,7 +578,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -586,8 +586,8 @@ public class TestFortress {
         fortress0.putCargo(cargo);
 
         /* Occupy the fortress with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
@@ -613,7 +613,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -624,7 +624,7 @@ public class TestFortress {
         Utils.fastForward(200, map);
 
         /* Occupy the fortress with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that it still takes the same time for the private to get promoted */
         Utils.fastForward(99, map);
@@ -653,7 +653,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -661,7 +661,7 @@ public class TestFortress {
         fortress0.putCargo(cargo);
 
         /* Occupy the fortress with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(fortress0.getAmount(COIN), 1);
@@ -688,7 +688,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -697,8 +697,8 @@ public class TestFortress {
         fortress0.putCargo(cargo);
 
         /* Occupy the fortress with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
+        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, fortress0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(fortress0.getAmount(COIN), 2);
@@ -725,7 +725,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         Cargo cargo = new Cargo(COIN, map);
@@ -733,8 +733,8 @@ public class TestFortress {
         fortress0.putCargo(cargo);
 
         /* Occupy the fortress with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
 
         /* Verify that coin is not consumed */
         assertEquals(fortress0.getAmount(COIN), 1);
@@ -761,7 +761,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Deliver one coin to the fortress */
         assertTrue(fortress0.needsMaterial(COIN));
@@ -793,10 +793,10 @@ public class TestFortress {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Evacuate the fortress and verify that the military leaves the fortress */
         assertTrue(military.isInsideBuilding());
@@ -830,10 +830,10 @@ public class TestFortress {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Evacuate the fortress */
         assertTrue(military.isInsideBuilding());
@@ -872,10 +872,10 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Evacuate the fortress */
         assertTrue(military.isInsideBuilding());
@@ -917,7 +917,7 @@ public class TestFortress {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Evacuate the fortress */
         fortress0.evacuate();
@@ -947,10 +947,10 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Evacuate the fortress */
         assertTrue(military.isInsideBuilding());
@@ -996,10 +996,10 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Destroy the fortress */
         assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
@@ -1007,7 +1007,7 @@ public class TestFortress {
         fortress0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1041,10 +1041,10 @@ public class TestFortress {
         map.placeAutoSelectedRoad(player0, fortress0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Destroy the fortress */
         assertEquals(fortress0.getNumberOfHostedMilitary(), 1);
@@ -1052,7 +1052,7 @@ public class TestFortress {
         fortress0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1087,7 +1087,7 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point26);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that production cannot be resumed in fortress */
         fortress0.resumeProduction();
@@ -1116,10 +1116,10 @@ public class TestFortress {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Wait for the fortress to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(fortress0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Verify that it's not possible to stop production */
         try {
@@ -1146,10 +1146,10 @@ public class TestFortress {
         Building fortress = map.placeBuilding(new Fortress(player0), point1);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress, map);
+        Utils.constructHouse(fortress);
 
         /* Populate the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress);
 
         /* Verify that the fortress can't produce */
         assertFalse(fortress.canProduce());
@@ -1173,7 +1173,7 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that the reported output is correct */
         assertEquals(fortress0.getProducedMaterial().length, 0);
@@ -1230,7 +1230,7 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(fortress0.getMaterialNeeded().size(), 1);
@@ -1284,7 +1284,7 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Construct fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that the list of hosted militaries is empty */
         assertEquals(0, fortress0.getHostedMilitary().size());
@@ -1308,10 +1308,10 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Construct fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Add one military */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, fortress0);
 
         /* Verify that the list of hosted militaries increased empty */
         assertEquals(1, fortress0.getHostedMilitary().size());
@@ -1336,10 +1336,10 @@ public class TestFortress {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Construct fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Add one military */
-        Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, fortress0, map);
+        Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, fortress0);
 
         /* Verify that the rank for the hosted military is correct */
         assertEquals(fortress0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);

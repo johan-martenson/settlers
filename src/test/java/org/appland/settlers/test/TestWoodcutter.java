@@ -150,7 +150,7 @@ public class TestWoodcutter {
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         assertTrue(woodcutter.needsWorker());
     }
@@ -174,7 +174,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -210,7 +210,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -246,10 +246,10 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter, map);
+        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
         assertTrue(wcWorker.isInsideBuilding());
 
@@ -290,10 +290,10 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter, map);
+        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
         assertTrue(wcWorker.isInsideBuilding());
 
@@ -339,10 +339,10 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
-        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter, map);
+        Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
 
 
         /* Wait for woodcutter worker to rest */
@@ -388,11 +388,11 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
 
         /* Wait for the woodcutter to rest */
@@ -458,12 +458,12 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point4, woodcutter.getFlag().getPosition());
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
 
         /* Wait for the woodcutter to rest */
@@ -579,13 +579,13 @@ public class TestWoodcutter {
         Road road2 = map.placeAutoSelectedRoad(player0, hut2.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
-        constructHouse(hut, map);
-        constructHouse(hut2, map);
+        constructHouse(woodcutter);
+        constructHouse(hut);
+        constructHouse(hut2);
 
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
 
         /* Wait for the woodcutter to rest */
@@ -668,12 +668,12 @@ public class TestWoodcutter {
 
         /* Construct the forester hut */
 
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
         assertTrue(wcWorker.isInsideBuilding());
         assertNull(wcWorker.getCargo());
@@ -698,12 +698,12 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Place the woodcutter */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
         /* Run the game logic 99 times and make sure the forester stays in the hut */
 
@@ -781,12 +781,12 @@ public class TestWoodcutter {
 
 
         /* Construct the forester hut */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
         /* Wait for the woodcutter worker to leave the hut */
         Utils.fastForward(100, map);
@@ -875,7 +875,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -923,10 +923,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Let the woodcutter worker rest */
         Utils.fastForward(100, map);
@@ -1015,10 +1015,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Let the woodcutter worker rest */
         Utils.fastForward(100, map);
@@ -1115,10 +1115,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Destroy the woodcutter */
         Worker worker = woodcutter0.getWorker();
@@ -1161,10 +1161,10 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Destroy the woodcutter */
         Worker worker = woodcutter0.getWorker();
@@ -1211,7 +1211,7 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Destroy the woodcutter */
         woodcutter0.tearDown();
@@ -1253,7 +1253,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
@@ -1281,7 +1281,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
@@ -1321,12 +1321,12 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Assign a worker to the woodcutter */
         WoodcutterWorker worker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(worker, woodcutter, map);
+        Utils.occupyBuilding(worker, woodcutter);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -1395,12 +1395,12 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Assign a worker to the woodcutter */
         WoodcutterWorker worker = new WoodcutterWorker(player0, map);
 
-        Utils.occupyBuilding(worker, woodcutter, map);
+        Utils.occupyBuilding(worker, woodcutter);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -1463,13 +1463,13 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Connect the woodcutter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Wait for woodcutter worker to get assigned and leave the headquarter */
-        List<WoodcutterWorker> workers = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map);
+        List<WoodcutterWorker> workers = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1519,20 +1519,20 @@ public class TestWoodcutter {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place woodcutter close to the new border */
         Point point4 = new Point(28, 18);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1566,11 +1566,11 @@ public class TestWoodcutter {
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Construct the woodcutter */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place woodcutter worker */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
         /* Wait for the woodcutter to rest */
         Utils.fastForward(100, map);
@@ -1632,11 +1632,11 @@ public class TestWoodcutter {
         Stone stone0 = map.placeStone(point3);
 
         /* Construct the woodcutter */
-        constructHouse(woodcutter, map);
+        constructHouse(woodcutter);
 
         /* Manually place woodcutter worker */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
-        Utils.occupyBuilding(wcWorker, woodcutter, map);
+        Utils.occupyBuilding(wcWorker, woodcutter);
 
         /* Wait for the woodcutter to rest */
         Utils.fastForward(100, map);
@@ -1676,7 +1676,7 @@ public class TestWoodcutter {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         /* Wait for the woodcutter worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
@@ -1738,7 +1738,7 @@ public class TestWoodcutter {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         /* Wait for the woodcutter worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
@@ -1803,7 +1803,7 @@ public class TestWoodcutter {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, woodcutter0.getFlag());
 
         /* Wait for the woodcutter worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0);
 
         WoodcutterWorker woodcutterWorker = null;
 
@@ -1854,17 +1854,17 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Place a second storage closer to the woodcutter */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the woodcutter */
         Worker woodcutterWorker = woodcutter0.getWorker();
@@ -1904,17 +1904,17 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Place a second storage closer to the woodcutter */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1957,17 +1957,17 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Place a second storage closer to the woodcutter */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -2013,10 +2013,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Place a second storage closer to the woodcutter */
         Point point2 = new Point(13, 13);
@@ -2063,10 +2063,10 @@ public class TestWoodcutter {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getFlag().getPosition());
@@ -2113,15 +2113,15 @@ public class TestWoodcutter {
         Building woodcutter1 = map.placeBuilding(new Woodcutter(player0), point3);
 
         /* Construct the woodcutters */
-        constructHouse(woodcutter0, map);
-        constructHouse(woodcutter1, map);
+        constructHouse(woodcutter0);
+        constructHouse(woodcutter1);
 
         /* Manually place woodcutters */
-        WoodcutterWorker wcWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
-        WoodcutterWorker wcWorker1 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter1, map);
+        WoodcutterWorker wcWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
+        WoodcutterWorker wcWorker1 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter1);
 
         /* Wait for the woodcutters to leave the buildings and try to cut down the same tree */
-        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 2, player0, map);
+        Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 2, player0);
 
         assertEquals(wcWorker0.getTarget(), tree.getPosition());
         assertEquals(wcWorker1.getTarget(), tree.getPosition());
@@ -2188,10 +2188,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getHome(), woodcutter0);
@@ -2224,10 +2224,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
-        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker.isInsideBuilding());
         assertEquals(woodcutterWorker.getHome(), woodcutter0);
@@ -2282,10 +2282,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
-        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         assertTrue(woodcutterWorker0.isInsideBuilding());
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
@@ -2338,7 +2338,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Verify that the unoccupied woodcutter hut is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -2366,10 +2366,10 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Populate the woodcutter */
-        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Verify that the hunter hut can produce */
         assertTrue(woodcutter0.canProduce());
@@ -2393,7 +2393,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Verify that the reported output is correct */
         assertEquals(woodcutter0.getProducedMaterial().length, 1);
@@ -2449,7 +2449,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(woodcutter0.getMaterialNeeded().size(), 0);

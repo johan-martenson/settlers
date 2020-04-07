@@ -117,7 +117,7 @@ public class TestMessages {
         /* Verify that a message is sent when the barracks is finished */
         assertTrue(player0.getMessages().isEmpty());
 
-        Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
         assertEquals(player0.getMessages().size(), 1);
         assertEquals(player0.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_READY);
@@ -154,7 +154,7 @@ public class TestMessages {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the bakery */
-        Utils.constructHouse(bakery, map);
+        Utils.constructHouse(bakery);
 
         /* Verify that no message was sent */
         assertTrue(player0.getMessages().isEmpty());
@@ -183,7 +183,7 @@ public class TestMessages {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(barracks0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
         /* Wait for a soldier to walk to the barracks */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
@@ -234,10 +234,10 @@ public class TestMessages {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Populate the quarry */
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -312,12 +312,12 @@ public class TestMessages {
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
 
         /* Construct the fisherman hut */
-        constructHouse(fishery, map);
+        constructHouse(fishery);
 
         /* Manually place fisherman */
         Fisherman fisherman = new Fisherman(player0, map);
 
-        Utils.occupyBuilding(fisherman, fishery, map);
+        Utils.occupyBuilding(fisherman, fishery);
 
         /* Let the fisherman rest */
         Utils.fastForward(99, map);
@@ -400,7 +400,7 @@ public class TestMessages {
         assertFalse(sawmill.needsWorker());
 
         /* Finish construction of the sawmill */
-        Utils.constructHouse(sawmill, map);
+        Utils.constructHouse(sawmill);
 
         assertTrue(sawmill.needsWorker());
 
@@ -579,12 +579,12 @@ public class TestMessages {
         map.placeBuilding(barracks1, point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0, map);
-        Utils.constructHouse(barracks1, map);
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
 
         /* Populate player barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Verify that no militaries leave the barracks before the attack is
          initiated */
@@ -615,7 +615,7 @@ public class TestMessages {
          initiated */
         map.stepTime();
 
-        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0, map);
+        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
 
         assertEquals(militaryOutside.size(), 1);
         assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
@@ -657,15 +657,15 @@ public class TestMessages {
         map.placeBuilding(barracks1, point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0, map);
-        Utils.constructHouse(barracks1, map);
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
-        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
         player0.attack(barracks1, 1);
@@ -673,7 +673,7 @@ public class TestMessages {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -689,7 +689,7 @@ public class TestMessages {
         assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
 
         assertNotNull(defender);
         assertEquals(defender.getTarget(), attacker.getPosition());
@@ -766,7 +766,7 @@ public class TestMessages {
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the gold mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Utils.deliverCargo(mine, BREAD);
@@ -776,7 +776,7 @@ public class TestMessages {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -851,7 +851,7 @@ public class TestMessages {
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the gold mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Utils.deliverCargo(mine, BREAD);
@@ -861,7 +861,7 @@ public class TestMessages {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -977,7 +977,7 @@ public class TestMessages {
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
         /* Try to build a building that doesn't get resources */
         Point point2 = new Point(10, 6);
@@ -1018,7 +1018,7 @@ public class TestMessages {
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
         /* Build two buildings that doesn't get resources */
         Point point2 = new Point(10, 6);
@@ -1064,7 +1064,7 @@ public class TestMessages {
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
         /* Try to build a building that doesn't get resources */
         Point point2 = new Point(10, 6);
@@ -1082,7 +1082,7 @@ public class TestMessages {
         assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Put in more planks to the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 50, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 50);
 
         /* Wait for the tree conservation program deactivation message to be sent */
         Utils.waitForNewMessage(player0);
@@ -1115,7 +1115,7 @@ public class TestMessages {
         Building storage0 = map.placeBuilding(new Storage(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 10, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
         /* Build two buildings that doesn't get resources */
         Point point2 = new Point(10, 6);
@@ -1137,7 +1137,7 @@ public class TestMessages {
         assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
 
         /* Put in more planks to the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 50, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 50);
 
         /* Wait for the tree conservation program deactivation message to be sent */
         Utils.waitForNewMessage(player0);

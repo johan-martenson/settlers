@@ -248,15 +248,15 @@ public class TestWorker {
         map.placeBuilding(barracks1, point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0, map);
-        Utils.constructHouse(barracks1, map);
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
         /* Populate player 1's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         /* Order an attack */
         player0.attack(barracks1, 1);
@@ -264,7 +264,7 @@ public class TestWorker {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
@@ -281,7 +281,7 @@ public class TestWorker {
         assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
 
         /* Wait for the defender to go to the attacker */
-        Military defender = Utils.findMilitaryOutsideBuilding(player1, map);
+        Military defender = Utils.findMilitaryOutsideBuilding(player1);
 
         Point fightingPoint = attacker.getPosition();
 

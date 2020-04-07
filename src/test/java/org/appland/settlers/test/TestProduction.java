@@ -21,7 +21,7 @@ public class TestProduction {
     public void testWrongMaterialToSawmill() throws Exception {
         Sawmill sawmill = new Sawmill(null);
 
-        Utils.constructHouse(sawmill, null);
+        Utils.constructHouse(sawmill);
 
         assertTrue(sawmill.ready());
 
@@ -32,7 +32,7 @@ public class TestProduction {
     public void testDeliverMaterialToWoodcutter() throws Exception {
         Building woodcutter = new Woodcutter(null);
 
-        Utils.constructHouse(woodcutter, null);
+        Utils.constructHouse(woodcutter);
 
         woodcutter.putCargo(new Cargo(WOOD, null));
     }
@@ -41,7 +41,7 @@ public class TestProduction {
     public void testDeliveryMaterialToQuarry() throws Exception {
         Quarry quarry = new Quarry(null);
 
-        Utils.constructHouse(quarry, null);
+        Utils.constructHouse(quarry);
 
         quarry.putCargo(new Cargo(BEER, null));
     }

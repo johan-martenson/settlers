@@ -182,7 +182,7 @@ public class TestSlaughterHouse {
         assertFalse(slaughterHouse.needsWorker());
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         assertTrue(slaughterHouse.needsWorker());
     }
@@ -218,7 +218,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         assertTrue(slaughterHouse.needsWorker());
 
@@ -262,10 +262,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -295,7 +295,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Verify that the slaughterHouse doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -328,10 +328,10 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -378,10 +378,10 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         assertTrue(butcher.isInsideBuilding());
         assertEquals(butcher.getHome(), slaughterHouse);
@@ -434,10 +434,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         /* Deliver ingredients to the slaughterHouse */
         slaughterHouse.putCargo(new Cargo(PIG, map));
@@ -466,10 +466,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Finish construction of the slaughterHouse */
-        Utils.constructHouse(slaughterHouse, map);
+        Utils.constructHouse(slaughterHouse);
 
         /* Populate the slaughterHouse */
-        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse, map);
+        Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
         /* Fast forward so that the slaughterHouse worker would have produced meat
            if it had had a pig
@@ -508,10 +508,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -575,7 +575,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -584,7 +584,7 @@ public class TestSlaughterHouse {
         slaughterHouse0.putCargo(pigCargo);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Let the butcher rest */
         Utils.fastForward(100, map);
@@ -668,10 +668,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Destroy the slaughter house */
         Worker worker = slaughterHouse0.getWorker();
@@ -714,10 +714,10 @@ public class TestSlaughterHouse {
         map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Destroy the slaughter house */
         Worker worker = slaughterHouse0.getWorker();
@@ -764,7 +764,7 @@ public class TestSlaughterHouse {
         map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Destroy the slaughter house */
         slaughterHouse0.tearDown();
@@ -806,7 +806,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
@@ -834,7 +834,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(slaughterHouse0.getPosition(), slaughterHouse0.getFlag().getPosition()));
@@ -868,12 +868,12 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Assign a worker to the slaughter house */
         Butcher worker = new Butcher(player0, map);
 
-        Utils.occupyBuilding(worker, slaughterHouse0, map);
+        Utils.occupyBuilding(worker, slaughterHouse0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -931,7 +931,7 @@ public class TestSlaughterHouse {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Deliver material to the slaughter house */
         Cargo pigCargo = new Cargo(PIG, map);
@@ -941,7 +941,7 @@ public class TestSlaughterHouse {
         /* Assign a worker to the slaughter house */
         Butcher worker = new Butcher(player0, map);
 
-        Utils.occupyBuilding(worker, slaughterHouse0, map);
+        Utils.occupyBuilding(worker, slaughterHouse0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -1000,7 +1000,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Connect the slaughter house with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
@@ -1009,7 +1009,7 @@ public class TestSlaughterHouse {
         assertTrue(headquarter0.getAmount(BUTCHER) > 0);
 
         /* Wait for butcher to get assigned and leave the headquarter */
-        List<Butcher> workers = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map);
+        List<Butcher> workers = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1057,20 +1057,20 @@ public class TestSlaughterHouse {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place slaughter house close to the new border */
         Point point4 = new Point(28, 18);
         SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point4);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Butcher worker = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Butcher worker = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1107,7 +1107,7 @@ public class TestSlaughterHouse {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, slaughterHouse0.getFlag());
 
         /* Wait for the butcher to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
         Butcher butcher = null;
 
@@ -1169,7 +1169,7 @@ public class TestSlaughterHouse {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, slaughterHouse0.getFlag());
 
         /* Wait for the butcher to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
         Butcher butcher = null;
 
@@ -1234,7 +1234,7 @@ public class TestSlaughterHouse {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, slaughterHouse0.getFlag());
 
         /* Wait for the butcher to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0);
 
         Butcher butcher = null;
 
@@ -1285,17 +1285,17 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughterHouse */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Place a second storage closer to the slaughter house */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the slaughter house */
         Worker butcher = slaughterHouse0.getWorker();
@@ -1335,17 +1335,17 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Place a second storage closer to the slaughter house */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1388,17 +1388,17 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Place a second storage closer to the slaughter house */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1444,10 +1444,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Occupy the slaughter house */
-        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Place a second storage closer to the slaughter house */
         Point point2 = new Point(13, 13);
@@ -1491,13 +1491,13 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point26);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Place road to connect the headquarter and the slaughter house */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), slaughterHouse0.getFlag());
 
         /* Wait for a worker to start walking to the building */
-        Butcher worker = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0, map).get(0);
+        Butcher worker = Utils.waitForWorkersOutsideBuilding(Butcher.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
@@ -1535,10 +1535,10 @@ public class TestSlaughterHouse {
         Building butcher = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the butcher */
-        Utils.constructHouse(butcher, map);
+        Utils.constructHouse(butcher);
 
         /* Populate the butcher */
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher, map);
+        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher);
 
         assertTrue(butcher0.isInsideBuilding());
         assertEquals(butcher0.getHome(), butcher);
@@ -1571,10 +1571,10 @@ public class TestSlaughterHouse {
         Building butcher = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the butcher */
-        Utils.constructHouse(butcher, map);
+        Utils.constructHouse(butcher);
 
         /* Populate the butcher */
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher, map);
+        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher);
 
         assertTrue(butcher0.isInsideBuilding());
         assertEquals(butcher0.getHome(), butcher);
@@ -1626,10 +1626,10 @@ public class TestSlaughterHouse {
         Building butcher = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the butcher */
-        Utils.constructHouse(butcher, map);
+        Utils.constructHouse(butcher);
 
         /* Populate the butcher */
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher, map);
+        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), butcher);
 
         assertTrue(butcher0.isInsideBuilding());
         assertEquals(butcher0.getHome(), butcher);
@@ -1676,7 +1676,7 @@ public class TestSlaughterHouse {
         Building butcher = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the butcher */
-        Utils.constructHouse(butcher, map);
+        Utils.constructHouse(butcher);
 
         /* Verify that the unoccupied butcher is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1708,10 +1708,10 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Finish construction of the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Populate the slaughter house */
-        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0, map);
+        Worker butcher0 = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse0);
 
         /* Verify that the slaughter house can produce */
         assertTrue(slaughterHouse0.canProduce());
@@ -1735,7 +1735,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Construct the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Verify that the reported output is correct */
         assertEquals(slaughterHouse0.getProducedMaterial().length, 1);
@@ -1793,7 +1793,7 @@ public class TestSlaughterHouse {
         Building slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
 
         /* Construct the slaughter house */
-        Utils.constructHouse(slaughterHouse0, map);
+        Utils.constructHouse(slaughterHouse0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(slaughterHouse0.getMaterialNeeded().size(), 1);

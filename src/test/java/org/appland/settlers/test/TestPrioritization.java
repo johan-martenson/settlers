@@ -146,21 +146,21 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -178,7 +178,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -271,16 +271,16 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota for mines to only give food to the coal mine */
         player0.setFoodQuota(GoldMine.class, 1);
@@ -289,9 +289,9 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 0);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -309,7 +309,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -399,16 +399,16 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota for mines to only give food to the coal mine */
         player0.setFoodQuota(GoldMine.class, 0);
@@ -417,9 +417,9 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 0);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -437,7 +437,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -527,16 +527,16 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota for mines to only give food to the coal mine */
         player0.setFoodQuota(GoldMine.class, 0);
@@ -545,9 +545,9 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 0);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -565,7 +565,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -655,16 +655,16 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), coalMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), coalMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota for mines to only give food to the coal mine */
         player0.setFoodQuota(GoldMine.class, 0);
@@ -673,9 +673,9 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 1);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -693,7 +693,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -775,19 +775,19 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -804,7 +804,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -896,15 +896,15 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines except for the coal mine */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota to even distribution */
         player0.setFoodQuota(GoldMine.class, 1);
@@ -913,14 +913,14 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 1);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Make sure the headquarter has no planks or stone so the coal mine
            will not be constructed */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -938,7 +938,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -1032,15 +1032,15 @@ public class TestPrioritization {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point3);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
-        Utils.constructHouse(ironMine0, map);
-        Utils.constructHouse(coalMine0, map);
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(goldMine0);
+        Utils.constructHouse(ironMine0);
+        Utils.constructHouse(coalMine0);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the mines except for the coal mine */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), ironMine0, map);
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
+        Utils.occupyBuilding(new Miner(player0, map), ironMine0);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Set the quota to even distribution */
         player0.setFoodQuota(GoldMine.class, 1);
@@ -1049,13 +1049,13 @@ public class TestPrioritization {
         player0.setFoodQuota(GraniteMine.class, 1);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Make sure the headquarter has no miners so the coal mine will not be
            constructed */
-        Utils.adjustInventoryTo(headquarter0, MINER, 0, map);
+        Utils.adjustInventoryTo(headquarter0, MINER, 0);
 
         /* Fill the stock in the coal mine so it doesn't need anything */
         Utils.deliverCargo(coalMine0, FISH);
@@ -1086,7 +1086,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5000; i++) {
 
             /* Add one bread to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -1151,18 +1151,18 @@ public class TestPrioritization {
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Finish construction of the mines */
-        Utils.constructHouse(goldMine0, map);
+        Utils.constructHouse(goldMine0);
 
         /* Occupy the mines */
-        Utils.occupyBuilding(new Miner(player0, map), goldMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), goldMine0);
 
         /* Set the quota for mine to give maximum food to the gold mine */
         player0.setFoodQuota(GoldMine.class, 10);
 
         /* Make sure the headquarter has no food */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Attach the mines to the headquarter */
         map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter0.getFlag());
@@ -1176,7 +1176,7 @@ public class TestPrioritization {
         for (int i = 0; i < 5; i++) {
 
             /* Place one bread in the headquarter */
-            Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+            Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
             /* Wait for the storage worker to pick up a bread cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -1198,7 +1198,7 @@ public class TestPrioritization {
         player0.setFoodQuota(GoldMine.class, 1);
 
         /* Place one bread in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, BREAD, 1, map);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 1);
 
         /* Wait for the storage worker to pick up a bread cargo */
         Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, BREAD);
@@ -1240,17 +1240,17 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Attach the coal consumers to the headquarter */
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
@@ -1280,7 +1280,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1351,14 +1351,14 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Set the quota for coal consumers to only give coal to the
            iron smelter */
@@ -1367,7 +1367,7 @@ public class TestPrioritization {
         player0.setCoalQuota(Armory.class, 0);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Make sure the iron smelter has iron to smelt */
         ironSmelter0.putCargo(new Cargo(IRON, map));
@@ -1402,7 +1402,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1471,14 +1471,14 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Set the quota for coal consumers to only give coal to the
            iron smelter */
@@ -1487,7 +1487,7 @@ public class TestPrioritization {
         player0.setCoalQuota(Armory.class, 0);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Make sure the iron smelter has iron to smelt */
         ironSmelter0.putCargo(new Cargo(IRON, map));
@@ -1522,7 +1522,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1591,14 +1591,14 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Set the quota for coal consumers to only give coal to the
            iron smelter */
@@ -1607,7 +1607,7 @@ public class TestPrioritization {
         player0.setCoalQuota(Armory.class, 1);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Make sure the iron smelter has iron to smelt */
         ironSmelter0.putCargo(new Cargo(IRON, map));
@@ -1642,7 +1642,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1707,12 +1707,12 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Set the quota for coal consumers to only give coal to the
            iron smelter */
@@ -1721,7 +1721,7 @@ public class TestPrioritization {
         player0.setCoalQuota(Armory.class, 1);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Attach the coal consumers to the headquarter */
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
@@ -1746,7 +1746,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1816,17 +1816,17 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings except for the iron smelter */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Make sure there is no construction material in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Set the quota for coal consumers to only give coal to the
            iron smelter */
@@ -1835,7 +1835,7 @@ public class TestPrioritization {
         player0.setCoalQuota(Armory.class, 1);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Attach the coal consumers to the headquarter */
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
@@ -1866,7 +1866,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -1934,13 +1934,13 @@ public class TestPrioritization {
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(ironSmelter0, map);
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(ironSmelter0);
+        Utils.constructHouse(armory0);
 
         /* Occupy the buildings except for the iron smelter */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new Armorer(player0, map), armory0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
         /* Set the quota to even distribution */
         player0.setFoodQuota(IronSmelter.class, 1);
@@ -1948,11 +1948,11 @@ public class TestPrioritization {
         player0.setFoodQuota(Armory.class, 1);
 
         /* Make sure the headquarter has no coal */
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Make sure the headquarter has no iron founder so the coal mine will
            not be constructed */
-        Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0, map);
+        Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0);
 
         /* Fill the stock in the iron smelter so it doesn't need anything */
         Utils.deliverCargo(ironSmelter0, IRON);
@@ -1993,7 +1993,7 @@ public class TestPrioritization {
             }
 
             /* Add one coal to the headquarter */
-            Utils.adjustInventoryTo(headquarter0, COAL, 1, map);
+            Utils.adjustInventoryTo(headquarter0, COAL, 1);
 
             /* Wait for the storage worker to pick up a coal cargo */
             Utils.fastForwardUntilWorkerCarriesCargo(map, carrier, COAL);
@@ -2176,16 +2176,16 @@ public class TestPrioritization {
         Well well0 = map.placeBuilding(new Well(player0), point4);
 
         /* Construct all the buildings except the well */
-        Utils.constructHouse(mint0, map);
-        Utils.constructHouse(bakery0, map);
-        Utils.constructHouse(sawmill0, map);
-        Utils.constructHouse(mill0, map);
+        Utils.constructHouse(mint0);
+        Utils.constructHouse(bakery0);
+        Utils.constructHouse(sawmill0);
+        Utils.constructHouse(mill0);
 
         /* Utils occupy the constructed buildings */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
-        Utils.occupyBuilding(new Baker(player0, map), bakery0, map);
-        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
-        Utils.occupyBuilding(new Miller(player0, map), mill0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
+        Utils.occupyBuilding(new Baker(player0, map), bakery0);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
+        Utils.occupyBuilding(new Miller(player0, map), mill0);
 
         /* Connect the buildings with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
@@ -2227,12 +2227,12 @@ public class TestPrioritization {
         /* Ensure the headquarter has all the materials and enough to avoid the
            tree conservation program
         */
-        Utils.adjustInventoryTo(headquarter0, WHEAT, 20, map);
-        Utils.adjustInventoryTo(headquarter0, PLANK, 20, map);
-        Utils.adjustInventoryTo(headquarter0, COAL, 20, map);
-        Utils.adjustInventoryTo(headquarter0, GOLD, 20, map);
-        Utils.adjustInventoryTo(headquarter0, WATER, 20, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 20, map);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 20);
+        Utils.adjustInventoryTo(headquarter0, COAL, 20);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 20);
+        Utils.adjustInventoryTo(headquarter0, WATER, 20);
+        Utils.adjustInventoryTo(headquarter0, STONE, 20);
 
         /* Verify that the storage worker first delivers wheat */
         Cargo currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);

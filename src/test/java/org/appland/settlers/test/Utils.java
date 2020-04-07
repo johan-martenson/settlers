@@ -164,7 +164,9 @@ public class Utils {
         assertTrue(worker.isAt(target));
     }
 
-    public static <T extends Worker> T occupyBuilding(T worker, Building building, GameMap map) throws Exception {
+    public static <T extends Worker> T occupyBuilding(T worker, Building building) throws Exception {
+        GameMap map = building.getMap();
+
         map.placeWorker(worker, building);
         building.assignWorker(worker);
         worker.enterBuilding(building);
@@ -226,7 +228,9 @@ public class Utils {
         surroundPointWithVegetation(point, SWAMP, map);
     }
 
-    public static void fastForwardUntilBuildingIsConstructed(Building building, GameMap map) throws Exception {
+    public static void fastForwardUntilBuildingIsConstructed(Building building) throws Exception {
+        GameMap map = building.getMap();
+
         for (int i = 0; i < 10000; i++) {
             if (building.ready()) {
                 break;
@@ -238,7 +242,9 @@ public class Utils {
         assertTrue(building.ready());
     }
 
-    public static void fastForwardUntilBuildingIsOccupied(Building building, GameMap map) throws Exception {
+    public static void fastForwardUntilBuildingIsOccupied(Building building) throws Exception {
+        GameMap map = building.getMap();
+
         for (int i = 0; i < 1000; i++) {
             if (building.getWorker() != null) {
                 break;
@@ -289,7 +295,9 @@ public class Utils {
         return courier;
     }
 
-    public static void adjustInventoryTo(Storage storage, Material material, int amount, GameMap map) throws Exception {
+    public static void adjustInventoryTo(Storage storage, Material material, int amount) throws Exception {
+        GameMap map = storage.getMap();
+
         for (int i = 0; i < 1000; i++) {
 
             if (storage.getAmount(material) == amount) {
@@ -311,7 +319,9 @@ public class Utils {
         assertEquals(storage.getAmount(material), amount);
     }
 
-    public static void constructHouse(Building building, GameMap map) throws Exception {
+    public static void constructHouse(Building building) throws Exception {
+        GameMap map = building.getMap();
+
         assertTrue(building.underConstruction());
 
         for (int i = 0; i < 20; i++) {
@@ -387,7 +397,8 @@ public class Utils {
         assertNotNull(worker.getCargo());
     }
 
-    public static void waitForMilitaryBuildingToGetPopulated(GameMap map, Building building, int nr) throws Exception {
+    public static void waitForMilitaryBuildingToGetPopulated(Building building, int nr) throws Exception {
+        GameMap map = building.getMap();
 
         boolean populated = false;
 
@@ -443,14 +454,15 @@ public class Utils {
         }
     }
 
-    public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building, GameMap map) throws Exception {
+    public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building) throws Exception {
         assertTrue(building.ready());
         for (int i = 0; i < amount; i++) {
-            occupyMilitaryBuilding(rank, building, map);
+            occupyMilitaryBuilding(rank, building);
         }
     }
 
-    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building, GameMap map) throws Exception {
+    public static Military occupyMilitaryBuilding(Military.Rank rank, Building building) throws Exception {
+        GameMap map = building.getMap();
         Player player = building.getPlayer();
 
         Military military = new Military(player, rank, map);
@@ -464,7 +476,9 @@ public class Utils {
         return military;
     }
 
-    public static Military findMilitaryOutsideBuilding(Player player, GameMap map) {
+    public static Military findMilitaryOutsideBuilding(Player player) {
+        GameMap map = player.getMap();
+
         Military attacker = null;
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Military && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
@@ -475,7 +489,8 @@ public class Utils {
         return attacker;
     }
 
-    public static List<Military> findMilitariesOutsideBuilding(Player player, GameMap map) {
+    public static List<Military> findMilitariesOutsideBuilding(Player player) {
+        GameMap map = player.getMap();
         List<Military> result = new LinkedList<>();
 
         for (Worker worker : map.getWorkers()) {
@@ -499,9 +514,10 @@ public class Utils {
         assertFalse(map.getWorkers().contains(worker));
     }
 
-    public static Military waitForMilitaryOutsideBuilding(Player player, GameMap map) throws Exception {
+    public static Military waitForMilitaryOutsideBuilding(Player player) throws Exception {
+        GameMap map = player.getMap();
         for (int i = 0; i < 1000; i++) {
-            Military military = findMilitaryOutsideBuilding(player, map);
+            Military military = findMilitaryOutsideBuilding(player);
 
             if (military != null) {
                 assertEquals(military.getPlayer(), player);
@@ -517,7 +533,8 @@ public class Utils {
         return null;
     }
 
-    public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player, GameMap map) {
+    public static <T extends Worker> List<T> findWorkersOfTypeOutsideForPlayer(Class<T> aClass, Player player) {
+        GameMap map = player.getMap();
         List<T> workersFound = new LinkedList<>();
 
         for (Worker worker : map.getWorkers()) {
@@ -529,7 +546,8 @@ public class Utils {
         return workersFound;
     }
 
-    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player, GameMap map) throws Exception {
+    public static <T extends Worker> List<T> waitForWorkersOutsideBuilding(Class<T> type, int nr, Player player) throws Exception {
+        GameMap map = player.getMap();
         List<T> workers = new LinkedList<>();
 
         for (int i = 0; i < 1000; i++) {
@@ -554,7 +572,9 @@ public class Utils {
         return workers;
     }
 
-    public static <T extends Building> void waitForBuildingToDisappear(GameMap map, T building) throws Exception {
+    public static <T extends Building> void waitForBuildingToDisappear(T building) throws Exception {
+        GameMap map = building.getMap();
+
         assertTrue(building.burningDown() || building.destroyed());
 
         for (int i = 0; i < 1000; i++) {
@@ -582,7 +602,9 @@ public class Utils {
         assertTrue(attacker.isFighting());
     }
 
-    static Military getMainAttacker(GameMap map, Building building, Collection<Military> attackers) throws Exception {
+    static Military getMainAttacker(Building building, Collection<Military> attackers) throws Exception {
+
+        GameMap map = building.getMap();
         Military firstAttacker = null;
 
         for (Military military : attackers) {
@@ -600,7 +622,9 @@ public class Utils {
         return firstAttacker;
     }
 
-    static Projectile waitForCatapultToThrowProjectile(Catapult catapult, GameMap map) throws Exception {
+    static Projectile waitForCatapultToThrowProjectile(Catapult catapult) throws Exception {
+        GameMap map = catapult.getMap();
+
         Projectile projectile = null;
 
         assertTrue(map.getProjectiles().isEmpty());

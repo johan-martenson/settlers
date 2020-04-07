@@ -1226,7 +1226,7 @@ public class TestPlacement {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Destroy the house */
         woodcutter0.tearDown();
@@ -1588,7 +1588,7 @@ public class TestPlacement {
             woodcutter0.tearDown();
 
             /* Wait for the building to stop burning and disappear */
-            Utils.waitForBuildingToDisappear(map, woodcutter0);
+            Utils.waitForBuildingToDisappear(woodcutter0);
 
             /* Remove the flag */
             map.removeFlag(flag0);
@@ -1811,7 +1811,7 @@ public class TestPlacement {
             /* Tear down the house */
             map.removeFlag(building.getFlag());
 
-            Utils.waitForBuildingToDisappear(map, building);
+            Utils.waitForBuildingToDisappear(building);
 
             assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }
@@ -1884,7 +1884,7 @@ public class TestPlacement {
             /* Tear down the house */
             map.removeFlag(building.getFlag());
 
-            Utils.waitForBuildingToDisappear(map, building);
+            Utils.waitForBuildingToDisappear(building);
 
             assertFalse(map.isBuildingAtPoint(pair.getKey()));
         }

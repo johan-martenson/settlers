@@ -183,7 +183,7 @@ public class TestMint {
         assertFalse(mint.needsWorker());
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         assertTrue(mint.needsWorker());
     }
@@ -219,7 +219,7 @@ public class TestMint {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         assertTrue(mint.needsWorker());
 
@@ -263,10 +263,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
@@ -296,7 +296,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Verify that the mint doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -329,10 +329,10 @@ public class TestMint {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
@@ -380,10 +380,10 @@ public class TestMint {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter.isInsideBuilding());
         assertEquals(minter.getHome(), mint);
@@ -437,10 +437,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         /* Deliver ingredients to the mint */
         mint.putCargo(new Cargo(GOLD, map));
@@ -472,10 +472,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point3);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         /* Fast forward so that the mint worker would have produced bread
            if it had had the ingredients
@@ -515,10 +515,10 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Deliver material to the mint */
         Cargo coalCargo = new Cargo(COAL, map);
@@ -586,7 +586,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Deliver material to the mint */
         Cargo coalCargo = new Cargo(COAL, map);
@@ -599,7 +599,7 @@ public class TestMint {
         mint0.putCargo(goldCargo);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Let the minter rest */
         Utils.fastForward(100, map);
@@ -628,8 +628,8 @@ public class TestMint {
         assertEquals(cargo.getPosition(), mint0.getFlag().getPosition());
 
         /* Remove the resources needed for the mint in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, GOLD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, COAL, 0, map);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 0);
+        Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
         /* Connect the mint with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
@@ -688,10 +688,10 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Destroy the mint */
         Worker worker = mint0.getWorker();
@@ -734,10 +734,10 @@ public class TestMint {
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Destroy the mint */
         Worker worker = mint0.getWorker();
@@ -784,7 +784,7 @@ public class TestMint {
         map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Destroy the mint */
         mint0.tearDown();
@@ -826,7 +826,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
@@ -854,7 +854,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(mint0.getPosition(), mint0.getFlag().getPosition()));
@@ -888,7 +888,7 @@ public class TestMint {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Deliver material to the mint */
         Cargo coalCargo = new Cargo(COAL, map);
@@ -903,7 +903,7 @@ public class TestMint {
         /* Assign a worker to the mint */
         Minter worker = new Minter(player0, map);
 
-        Utils.occupyBuilding(worker, mint0, map);
+        Utils.occupyBuilding(worker, mint0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -956,12 +956,12 @@ public class TestMint {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Assign a worker to the mint */
         Minter worker = new Minter(player0, map);
 
-        Utils.occupyBuilding(worker, mint0, map);
+        Utils.occupyBuilding(worker, mint0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -1027,13 +1027,13 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Connect the mint with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
 
         /* Wait for minter to get assigned and leave the headquarter */
-        List<Minter> workers = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+        List<Minter> workers = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1081,20 +1081,20 @@ public class TestMint {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place mint close to the new border */
         Point point4 = new Point(28, 18);
         Mint mint0 = map.placeBuilding(new Mint(player0), point4);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Minter worker = Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Minter worker = Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1131,7 +1131,7 @@ public class TestMint {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
 
         /* Wait for the minter to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
         Minter minter = null;
 
@@ -1193,7 +1193,7 @@ public class TestMint {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
 
         /* Wait for the minter to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
         Minter minter = null;
 
@@ -1258,7 +1258,7 @@ public class TestMint {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, mint0.getFlag());
 
         /* Wait for the minter to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0);
 
         Minter minter = null;
 
@@ -1309,17 +1309,17 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the mint */
         Worker minter = mint0.getWorker();
@@ -1359,17 +1359,17 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1412,17 +1412,17 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1468,10 +1468,10 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point26);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Occupy the mint */
-        Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
@@ -1518,10 +1518,10 @@ public class TestMint {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), mint0.getFlag());
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Minter.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getFlag().getPosition());
@@ -1559,10 +1559,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter0.isInsideBuilding());
         assertEquals(minter0.getHome(), mint);
@@ -1595,10 +1595,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter0.isInsideBuilding());
         assertEquals(minter0.getHome(), mint);
@@ -1658,10 +1658,10 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Populate the mint */
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint, map);
+        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint);
 
         assertTrue(minter0.isInsideBuilding());
         assertEquals(minter0.getHome(), mint);
@@ -1712,7 +1712,7 @@ public class TestMint {
         Building mint = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint, map);
+        Utils.constructHouse(mint);
 
         /* Verify that the unoccupied mint is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1748,10 +1748,10 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Finish construction of the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Populate the mint */
-        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint0, map);
+        Worker minter0 = Utils.occupyBuilding(new Minter(player0, map), mint0);
 
         /* Verify that the mint can produce */
         assertTrue(mint0.canProduce());
@@ -1775,7 +1775,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Construct the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Verify that the reported output is correct */
         assertEquals(mint0.getProducedMaterial().length, 1);
@@ -1833,7 +1833,7 @@ public class TestMint {
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Construct the mint */
-        Utils.constructHouse(mint0, map);
+        Utils.constructHouse(mint0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(mint0.getMaterialNeeded().size(), 2);

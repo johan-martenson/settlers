@@ -93,24 +93,24 @@ public class TestScenarios {
         wr3.assignToRoad(qryToHqRoad);
 
         /* Move forward in time until the small buildings are done */
-        Utils.constructHouse(woodcutter0, map);
-        Utils.constructHouse(quarry0, map);
-        Utils.constructHouse(sawmill0, map);
+        Utils.constructHouse(woodcutter0);
+        Utils.constructHouse(quarry0);
+        Utils.constructHouse(sawmill0);
 
         assertTrue(woodcutter0.ready());
         assertTrue(quarry0.ready());
         assertTrue(sawmill0.ready());
 
-        Utils.adjustInventoryTo(headquarter0, WOOD, 4, map);
-        Utils.adjustInventoryTo(headquarter0, PLANK, 15, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 10, map);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 4);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 15);
+        Utils.adjustInventoryTo(headquarter0, STONE, 10);
 
         assertEquals(headquarter0.getAmount(WOOD), 4);
         assertEquals(headquarter0.getAmount(PLANK), 15);
         assertEquals(headquarter0.getAmount(STONE), 10);
 
-        Utils.occupyBuilding(woodcutterWorker0, woodcutter0, map);
-        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0, map);
+        Utils.occupyBuilding(woodcutterWorker0, woodcutter0);
+        Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
 
         /* Let the couriers reach their targeted roads */
         Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);

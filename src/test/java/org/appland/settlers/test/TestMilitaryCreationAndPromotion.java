@@ -45,7 +45,7 @@ public class TestMilitaryCreationAndPromotion {
         Point point1 = new Point(10, 10);
         Storage storage0 = map.placeBuilding(new Storage(player0), point1);
 
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         int numberOfPrivates = storage0.getAmount(Material.PRIVATE);
 
@@ -103,9 +103,9 @@ public class TestMilitaryCreationAndPromotion {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Utils.adjustInventoryTo(headquarter0, COIN, 10, map);
-        Utils.adjustInventoryTo(headquarter0, GOLD, 10, map);
-        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10, map);
+        Utils.adjustInventoryTo(headquarter0, COIN, 10);
+        Utils.adjustInventoryTo(headquarter0, GOLD, 10);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
         assertEquals(10, headquarter0.getAmount(Material.COIN));
         assertEquals(10, headquarter0.getAmount(Material.GOLD));
@@ -140,7 +140,7 @@ public class TestMilitaryCreationAndPromotion {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Put gold in the fortress */
         Utils.deliverCargo(fortress0, COIN);
@@ -169,14 +169,14 @@ public class TestMilitaryCreationAndPromotion {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Put gold in the fortress */
         Utils.deliverCargo(fortress0, COIN);
 
         /* Verify that no promotion happens when all occupants are generals */
-        Military military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0, map);
-        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
+        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, fortress0);
 
         Utils.fastForward(200, map);
 
@@ -203,11 +203,11 @@ public class TestMilitaryCreationAndPromotion {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Verify that no promotion happens without gold */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0, map);
-        Military military1 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0);
+        Military military1 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, fortress0);
 
         Utils.fastForward(100, map);
 
@@ -233,13 +233,13 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Finish construction of the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Connect the barracks to the headquarter */
         map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Wait for a military to start walking to the barracks */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getPlayer(), player0);
@@ -263,10 +263,10 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place a private in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -298,10 +298,10 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place a corporal in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.CORPORAL_RANK, barracks0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.CORPORAL_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -333,10 +333,10 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place a sergeant in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -368,10 +368,10 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place an officer in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -403,10 +403,10 @@ public class TestMilitaryCreationAndPromotion {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place a general in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0, map);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);

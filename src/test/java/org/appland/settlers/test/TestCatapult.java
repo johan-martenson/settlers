@@ -218,7 +218,7 @@ public class TestCatapult {
         assertFalse(catapult.needsWorker());
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         assertTrue(catapult.needsWorker());
     }
@@ -249,7 +249,7 @@ public class TestCatapult {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         assertTrue(catapult.needsWorker());
 
@@ -299,10 +299,10 @@ public class TestCatapult {
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(worker.isInsideBuilding());
         assertEquals(worker.getHome(), catapult);
@@ -340,7 +340,7 @@ public class TestCatapult {
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Deliver stones to the catapult */
         Cargo cargo = new Cargo(STONE, map);
@@ -373,17 +373,17 @@ public class TestCatapult {
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Deliver stones to the catapult */
         catapult.putCargo(new Cargo(STONE, map));
@@ -426,24 +426,24 @@ public class TestCatapult {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Deliver stones to the catapult */
         catapult.putCargo(new Cargo(STONE, map));
@@ -508,24 +508,24 @@ public class TestCatapult {
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Deliver stones to the catapult */
         catapult.putCargo(new Cargo(STONE, map));
@@ -565,24 +565,24 @@ public class TestCatapult {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Verify that the catapult has a hit rate higher than seventy percent */
         int hits = 0;
@@ -591,14 +591,14 @@ public class TestCatapult {
 
             /* Occupy the barracks if needed */
             if (barracks0.getNumberOfHostedMilitary() == 0) {
-                Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0, map);
+                Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
             }
 
             /* Deliver stone to the catapult */
             catapult.putCargo(new Cargo(STONE, map));
 
             /* Wait for the catapult to throw a projectile */
-            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult, map);
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
             int hostedBefore = barracks0.getNumberOfHostedMilitary();
 
@@ -639,24 +639,24 @@ public class TestCatapult {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Verify that the catapult destroys the barracks */
         for (int i = 0; i < 100; i++) {
@@ -665,7 +665,7 @@ public class TestCatapult {
             catapult.putCargo(new Cargo(STONE, map));
 
             /* Wait for the catapult to throw a projectile */
-            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult, map);
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
             /* Wait for the projectile to reach its target */
             Utils.waitForProjectileToReachTarget(projectile, map);
@@ -703,24 +703,24 @@ public class TestCatapult {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Make the catapult worker wait */
         Utils.fastForward(300, map);
@@ -764,24 +764,24 @@ public class TestCatapult {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Place catapult */
         Point point3 = new Point(21, 5);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         assertTrue(catapultWorker0.isInsideBuilding());
         assertEquals(catapultWorker0.getHome(), catapult);
         assertEquals(catapult.getWorker(), catapultWorker0);
 
         /* Remove all the stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Deliver stones to the catapult */
         catapult.putCargo(new Cargo(STONE, map));
@@ -820,10 +820,10 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Destroy the catapult */
         Worker catapultWorker = catapult0.getWorker();
@@ -864,10 +864,10 @@ public class TestCatapult {
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Destroy the catapult */
         Worker catapultWorker = catapult0.getWorker();
@@ -914,7 +914,7 @@ public class TestCatapult {
         map.placeAutoSelectedRoad(player0, catapult0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Destroy the catapult */
         catapult0.tearDown();
@@ -956,7 +956,7 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
@@ -984,7 +984,7 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(catapult0.getPosition(), catapult0.getFlag().getPosition()));
@@ -1019,13 +1019,13 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Connect the catapult with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
 
         /* Wait for catapult worker to get assigned and leave the headquarter */
-        List<CatapultWorker> workers = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+        List<CatapultWorker> workers = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1073,20 +1073,20 @@ public class TestCatapult {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place catapult close to the new border */
         Point point4 = new Point(28, 18);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point4);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        CatapultWorker worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        CatapultWorker worker = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1123,7 +1123,7 @@ public class TestCatapult {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         /* Wait for the catapult worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         CatapultWorker catapultWorker = null;
 
@@ -1185,7 +1185,7 @@ public class TestCatapult {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         /* Wait for the catapult worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         CatapultWorker catapultWorker = null;
 
@@ -1250,7 +1250,7 @@ public class TestCatapult {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, catapult0.getFlag());
 
         /* Wait for the catapult worker to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0);
 
         CatapultWorker catapultWorker = null;
 
@@ -1301,17 +1301,17 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Place a second storage closer to the catapult */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the catapult */
         Worker catapultWorker = catapult0.getWorker();
@@ -1348,17 +1348,17 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Place a second storage closer to the catapult */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1398,17 +1398,17 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Place a second storage closer to the catapult */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1451,10 +1451,10 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point26);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult0);
 
         /* Place a second storage closer to the catapult */
         Point point2 = new Point(13, 13);
@@ -1498,10 +1498,10 @@ public class TestCatapult {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult0.getFlag());
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(CatapultWorker.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, catapult0.getFlag().getPosition());
@@ -1539,7 +1539,7 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Construct the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Verify that the reported output is correct */
         assertEquals(catapult0.getProducedMaterial().length, 0);
@@ -1596,7 +1596,7 @@ public class TestCatapult {
         Building catapult0 = map.placeBuilding(new Catapult(player0), point1);
 
         /* Construct the catapult */
-        Utils.constructHouse(catapult0, map);
+        Utils.constructHouse(catapult0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(catapult0.getMaterialNeeded().size(), 1);

@@ -139,7 +139,7 @@ public class TestConstruction {
         Point point1 = new Point(13, 13);
         map.placeBuilding(barracks0, point1);
 
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.isMilitaryBuilding());
         assertTrue(barracks0.ready());
@@ -303,7 +303,7 @@ public class TestConstruction {
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        Utils.constructHouse(sawmill0, null);
+        Utils.constructHouse(sawmill0);
 
         assertTrue(sawmill0.ready());
 
@@ -328,7 +328,7 @@ public class TestConstruction {
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), new Point(4, 4));
 
         /* Finish construction of the sawmill */
-        Utils.constructHouse(sawmill0, map);
+        Utils.constructHouse(sawmill0);
 
         assertTrue(sawmill0.ready());
 

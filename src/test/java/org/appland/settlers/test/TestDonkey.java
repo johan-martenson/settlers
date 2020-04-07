@@ -341,7 +341,7 @@ public class TestDonkey {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Place roads */
         Point middle = new Point(8, 4);
@@ -402,7 +402,7 @@ public class TestDonkey {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Place roads */
         Point point3 = new Point(11, 5);
@@ -477,7 +477,7 @@ public class TestDonkey {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter, map);
+        Utils.constructHouse(woodcutter);
 
         /* Place roads */
         Point point3 = new Point(12, 4);
@@ -569,7 +569,7 @@ public class TestDonkey {
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(player0), rightFlagPoint.upLeft());
 
         /* Finish construction of the right woodcutter */
-        Utils.constructHouse(rightWoodcutter, map);
+        Utils.constructHouse(rightWoodcutter);
 
         /* Place roads */
         Point point3 = new Point(12, 4);
@@ -660,7 +660,7 @@ public class TestDonkey {
         Building rightWoodcutter = map.placeBuilding(new Woodcutter(player0), point4.upLeft());
 
         /* Finish construction of the right woodcutter */
-        Utils.constructHouse(rightWoodcutter, map);
+        Utils.constructHouse(rightWoodcutter);
 
         /* Place roads */
         Point point3 = new Point(12, 4);
@@ -1208,7 +1208,7 @@ public class TestDonkey {
         Courier courier0 = Utils.occupyRoad(road0, map);
 
         /* Make sure there are donkeys in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, DONKEY, 10, map);
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 10);
 
         /* Turn the roads into main roads */
         Road headquarterDriveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
@@ -1266,27 +1266,27 @@ public class TestDonkey {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Remove all donkeys from the inventory */
-        Utils.adjustInventoryTo(headquarter0, DONKEY, 0, map);
+        Utils.adjustInventoryTo(headquarter0, DONKEY, 0);
 
         /* Extend the border */
         Point point0 = new Point(7, 29);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
 
         /* Construct the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place a guardhouse */
         Point point1 = new Point(7, 15);
         GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guardhouse */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guardhouse */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Place flag */
         Point point2 = new Point(5, 9);
@@ -1339,7 +1339,7 @@ public class TestDonkey {
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
 
         /* Put donkeys in the opponent's inventory */
-        Utils.adjustInventoryTo(headquarter1, DONKEY, 10, map);
+        Utils.adjustInventoryTo(headquarter1, DONKEY, 10);
 
         /* Verify that the opponent's headquarter doesn't try to deliver
            donkeys

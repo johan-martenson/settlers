@@ -134,7 +134,7 @@ public class TestQuarry {
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Verify that a finished quarry needs a worker */
-        Utils.constructHouse(quarry, map);
+        Utils.constructHouse(quarry);
 
         assertTrue(quarry.ready());
         assertTrue(quarry.needsWorker());
@@ -163,7 +163,7 @@ public class TestQuarry {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(quarry, map);
+        Utils.constructHouse(quarry);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -197,12 +197,12 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         assertTrue(mason.isInsideBuilding());
 
@@ -237,12 +237,12 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         assertTrue(mason.isInsideBuilding());
 
@@ -283,12 +283,12 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
 
         /* Construct the forester hut */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
@@ -337,12 +337,12 @@ public class TestQuarry {
         Stone stone = map.placeStone(point2);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
@@ -409,12 +409,12 @@ public class TestQuarry {
         Stone stone = map.placeStone(point3);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         /* Wait for the stonemason to rest */
         Utils.fastForward(99, map);
@@ -495,12 +495,12 @@ public class TestQuarry {
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         assertTrue(mason.isInsideBuilding());
         assertNull(mason.getCargo());
@@ -531,12 +531,12 @@ public class TestQuarry {
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
-        constructHouse(quarry, map);
+        constructHouse(quarry);
 
         /* Assign a stonemason to the quarry */
         Stonemason mason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(mason, quarry, map);
+        Utils.occupyBuilding(mason, quarry);
 
         assertTrue(mason.isInsideBuilding());
 
@@ -612,10 +612,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Let the stone mason rest */
         Utils.fastForward(100, map);
@@ -705,10 +705,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Let the stone mason rest */
         Utils.fastForward(100, map);
@@ -804,10 +804,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -850,10 +850,10 @@ public class TestQuarry {
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -900,7 +900,7 @@ public class TestQuarry {
         map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Destroy the quarry */
         quarry0.tearDown();
@@ -942,7 +942,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
@@ -970,7 +970,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(quarry0.getPosition(), quarry0.getFlag().getPosition()));
@@ -1008,12 +1008,12 @@ public class TestQuarry {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Assign a worker to the quarry */
         Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(stonemason, quarry0, map);
+        Utils.occupyBuilding(stonemason, quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
 
@@ -1077,12 +1077,12 @@ public class TestQuarry {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Assign a worker to the quarry */
         Stonemason stonemason = new Stonemason(player0, map);
 
-        Utils.occupyBuilding(stonemason, quarry0, map);
+        Utils.occupyBuilding(stonemason, quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
 
@@ -1145,13 +1145,13 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Connect the quarry with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         /* Wait for stonemason to get assigned and leave the headquarter */
-        List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+        List<Stonemason> workers = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1199,20 +1199,20 @@ public class TestQuarry {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place quarry close to the new border */
         Point point4 = new Point(28, 18);
         Quarry quarry0 = map.placeBuilding(new Quarry(player0), point4);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1251,7 +1251,7 @@ public class TestQuarry {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
         /* Wait for the stone mason to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stoneMason = null;
 
@@ -1313,7 +1313,7 @@ public class TestQuarry {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
         /* Wait for the stone mason to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stoneMason = null;
 
@@ -1378,7 +1378,7 @@ public class TestQuarry {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
         /* Wait for the stoneMason to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
         Stonemason stoneMason = null;
 
@@ -1429,17 +1429,17 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -1479,17 +1479,17 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1532,17 +1532,17 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1588,10 +1588,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point26);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
@@ -1638,10 +1638,10 @@ public class TestQuarry {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());
@@ -1685,18 +1685,18 @@ public class TestQuarry {
         Quarry quarry1 = map.placeBuilding(new Quarry(player0), point3);
 
         /* Finish construction of the quarries */
-        Utils.constructHouse(quarry0, map);
-        Utils.constructHouse(quarry1, map);
+        Utils.constructHouse(quarry0);
+        Utils.constructHouse(quarry1);
 
         /* Occupy the quarries */
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
-        Utils.occupyBuilding(new Stonemason(player0, map), quarry1, map);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
+        Utils.occupyBuilding(new Stonemason(player0, map), quarry1);
 
         /* Remove almost all of the stone so there is only a single piece left */
         Utils.removePiecesFromStoneUntil(stone, 1);
 
         /* Wait for the stone masons to go out and try to get the same piece of stone */
-        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 2, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Stonemason.class, 2, player0);
 
         Worker stonemason0 = quarry0.getWorker();
         Worker stonemason1 = quarry1.getWorker();
@@ -1747,10 +1747,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Populate the quarry */
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -1783,10 +1783,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Populate the quarry */
-        Worker quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Worker quarry = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(quarry.isInsideBuilding());
         assertEquals(quarry.getHome(), quarry0);
@@ -1842,10 +1842,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Populate the quarry */
-        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         assertTrue(stonemason.isInsideBuilding());
         assertEquals(stonemason.getHome(), quarry0);
@@ -1897,7 +1897,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Verify that the unoccupied quarry is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1939,14 +1939,14 @@ public class TestQuarry {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
 
         /* Construct the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Put a stone on the other side of the water */
         Point point8 = new Point(15, 9);
         map.placeStone(point8);
 
         /* Occupy the quarry */
-        Stonemason stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Stonemason stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Verify that the stonemason doesn't try to the stone */
         for (int i = 0; i < 2000; i++) {
@@ -1976,10 +1976,10 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Populate the quarry */
-        Worker stonemason0 = Utils.occupyBuilding(new Stonemason(player0, map), quarry0, map);
+        Worker stonemason0 = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
         /* Verify that the quarry can produce */
         assertTrue(quarry0.canProduce());
@@ -2003,7 +2003,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Verify that the reported output is correct */
         assertEquals(quarry0.getProducedMaterial().length, 1);
@@ -2059,7 +2059,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(quarry0.getMaterialNeeded().size(), 0);
@@ -2087,7 +2087,7 @@ public class TestQuarry {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Construct the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Tear down the quarry */
         quarry0.tearDown();

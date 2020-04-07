@@ -1162,7 +1162,7 @@ public class TestRoads {
                 endPoint);
 
         /* Wait for a courier to reach the first half of the road */
-        Courier courier = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0, map).get(0);
+        Courier courier = Utils.waitForWorkersOutsideBuilding(Courier.class, 1, player0).get(0);
 
         assertEquals(courier.getTarget(), middlePoint2);
         assertEquals(courier.getAssignedRoad(), road);
@@ -2199,10 +2199,10 @@ public class TestRoads {
         Well well0 = map.placeBuilding(new Well(player0), point2);
 
         /* Construct the well */
-        Utils.constructHouse(well0, map);
+        Utils.constructHouse(well0);
 
         /* Occupy the well */
-        Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
+        Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place road between the headquarter and the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());
@@ -2259,10 +2259,10 @@ public class TestRoads {
         Well well0 = map.placeBuilding(new Well(player0), point2);
 
         /* Construct the well */
-        Utils.constructHouse(well0, map);
+        Utils.constructHouse(well0);
 
         /* Occupy the well */
-        WellWorker wellWorker = Utils.occupyBuilding(new WellWorker(player0, map), well0, map);
+        WellWorker wellWorker = Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place road between the headquarter and the flag */
         Road road0 = map.placeAutoSelectedRoad(player0, well0.getFlag(), headquarter0.getFlag());

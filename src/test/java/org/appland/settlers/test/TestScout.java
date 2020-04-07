@@ -557,7 +557,7 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one scout in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, SCOUT, 1, map);
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
 
         /* Call scout from the flag */
         flag.callScout();
@@ -646,7 +646,7 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one scout in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, SCOUT, 1, map);
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
 
         /* Call scout from the flag */
         flag.callScout();
@@ -718,13 +718,13 @@ public class TestScout {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one scout in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, SCOUT, 1, map);
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
 
         /* Call scout from the flag */
         flag.callScout();
 
         /* Wait for the scout to go to the flag */
-        List<Scout> scouts = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+        List<Scout> scouts = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         assertEquals(scouts.size(), 1);
 
@@ -758,7 +758,7 @@ public class TestScout {
         /* Verify that no scout leaves the headquarter */
         for (int i = 0; i < 100; i++) {
 
-            List<Scout> scouts = Utils.findWorkersOfTypeOutsideForPlayer(Scout.class, player0, map);
+            List<Scout> scouts = Utils.findWorkersOfTypeOutsideForPlayer(Scout.class, player0);
 
             assertEquals(scouts.size(), 0);
 
@@ -799,7 +799,7 @@ public class TestScout {
         flag1.callScout();
 
         /* Wait for the scout to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout scout = null;
 
@@ -866,7 +866,7 @@ public class TestScout {
         flag1.callScout();
 
         /* Wait for the scout to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout scout = null;
 
@@ -934,7 +934,7 @@ public class TestScout {
         flag1.callScout();
 
         /* Wait for the scout to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0);
 
         Scout scout = null;
 
@@ -1006,7 +1006,7 @@ public class TestScout {
         flag.callScout();
 
         /* Wait for the scout to come out */
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
 
         /* Ensure that the scout goes around the stones */
         for (int i = 0; i < 1000; i++) {
@@ -1051,7 +1051,7 @@ public class TestScout {
         flag.callScout();
 
         /* Wait for the scout to come out */
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
 
         /* Wait for the scout to reach the flag */
         assertEquals(scout.getTarget(), flag.getPosition());
@@ -1097,7 +1097,7 @@ public class TestScout {
         flag.callScout();
 
         /* Wait for the scout to come out */
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0, map).get(0);
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
 
         /* Wait for the scout to reach the flag */
         assertEquals(scout.getTarget(), flag.getPosition());

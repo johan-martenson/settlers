@@ -175,7 +175,7 @@ public class TestBrewery {
         assertFalse(brewery.needsWorker());
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         assertTrue(brewery.needsWorker());
     }
@@ -211,7 +211,7 @@ public class TestBrewery {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         assertTrue(brewery.needsWorker());
 
@@ -259,10 +259,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(brewer0.isInsideBuilding());
         assertEquals(brewer0.getHome(), brewery);
@@ -292,7 +292,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Verify that the brewery doesn't produce anything */
         for (int i = 0; i < 500; i++) {
@@ -317,10 +317,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(brewer0.isInsideBuilding());
         assertEquals(brewer0.getHome(), brewery);
@@ -368,10 +368,10 @@ public class TestBrewery {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(brewer0.isInsideBuilding());
         assertEquals(brewer0.getHome(), brewery);
@@ -424,10 +424,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         /* Deliver wheat and water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -461,10 +461,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         /* Fast forward so that the brewer would produced beer
            if it had had wheat and water
@@ -502,10 +502,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         /* Deliver wheat but not water to the brewery */
         brewery.putCargo(new Cargo(WHEAT, map));
@@ -533,10 +533,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Occupy the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         /* Deliver wheat but not water to the brewery */
         brewery.putCargo(new Cargo(WATER, map));
@@ -566,10 +566,10 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Deliver material to the brewery */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -637,7 +637,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Deliver material to the brewery */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -650,7 +650,7 @@ public class TestBrewery {
         brewery0.putCargo(waterCargo);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Let the brewer rest */
         Utils.fastForward(100, map);
@@ -735,10 +735,10 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Destroy the brewery */
         Worker worker = brewery0.getWorker();
@@ -781,10 +781,10 @@ public class TestBrewery {
         map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Destroy the brewery */
         Worker worker = brewery0.getWorker();
@@ -834,7 +834,7 @@ public class TestBrewery {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Deliver material to the brewery */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -849,7 +849,7 @@ public class TestBrewery {
         /* Assign a worker to the brewery */
         Brewer worker = new Brewer(player0, map);
 
-        Utils.occupyBuilding(worker, brewery0, map);
+        Utils.occupyBuilding(worker, brewery0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -902,12 +902,12 @@ public class TestBrewery {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Assign a worker to the brewery */
         Brewer worker = new Brewer(player0, map);
 
-        Utils.occupyBuilding(worker, brewery0, map);
+        Utils.occupyBuilding(worker, brewery0);
 
         assertTrue(worker.isInsideBuilding());
 
@@ -973,13 +973,13 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Connect the brewery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery0.getFlag());
 
         /* Wait for brewer to get assigned and leave the headquarter */
-        List<Brewer> workers = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+        List<Brewer> workers = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1027,20 +1027,20 @@ public class TestBrewery {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place brewery close to the new border */
         Point point4 = new Point(28, 18);
         Brewery brewery0 = map.placeBuilding(new Brewery(player0), point4);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Brewer worker = Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Brewer worker = Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1077,7 +1077,7 @@ public class TestBrewery {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery.getFlag());
 
         /* Wait for the brewer to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
         Brewer brewer = null;
 
@@ -1140,7 +1140,7 @@ public class TestBrewery {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery0.getFlag());
 
         /* Wait for the brewer to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
         Brewer brewer = null;
 
@@ -1205,7 +1205,7 @@ public class TestBrewery {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, brewery0.getFlag());
 
         /* Wait for the brewer to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0);
 
         Brewer brewer = null;
 
@@ -1256,17 +1256,17 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Place a second storage closer to the brewery */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the brewery */
         Worker brewer = brewery0.getWorker();
@@ -1306,17 +1306,17 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Place a second storage closer to the brewery */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1359,17 +1359,17 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Place a second storage closer to the brewery */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1415,10 +1415,10 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point26);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Occupy the brewery */
-        Utils.occupyBuilding(new Brewer(player0, map), brewery0, map);
+        Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
         /* Place a second storage closer to the brewery */
         Point point2 = new Point(13, 13);
@@ -1465,10 +1465,10 @@ public class TestBrewery {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery0.getFlag());
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Brewer.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
@@ -1505,10 +1505,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Populate the brewery */
-        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), brewery);
@@ -1541,10 +1541,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Populate the brewery */
-        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), brewery);
@@ -1604,10 +1604,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Populate the brewery */
-        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker armorer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         assertTrue(armorer0.isInsideBuilding());
         assertEquals(armorer0.getHome(), brewery);
@@ -1658,7 +1658,7 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Verify that the unoccupied brewery is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1686,10 +1686,10 @@ public class TestBrewery {
         Building brewery = map.placeBuilding(new Brewery(player0), point1);
 
         /* Finish construction of the brewery */
-        Utils.constructHouse(brewery, map);
+        Utils.constructHouse(brewery);
 
         /* Populate the brewery */
-        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery, map);
+        Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
         /* Verify that the brewery can produce */
         assertTrue(brewery.canProduce());
@@ -1713,7 +1713,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Construct the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Verify that the reported output is correct */
         assertEquals(brewery0.getProducedMaterial().length, 1);
@@ -1771,7 +1771,7 @@ public class TestBrewery {
         Building brewery0 = map.placeBuilding(new Brewery(player0), point1);
 
         /* Construct the brewery */
-        Utils.constructHouse(brewery0, map);
+        Utils.constructHouse(brewery0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(brewery0.getMaterialNeeded().size(), 2);

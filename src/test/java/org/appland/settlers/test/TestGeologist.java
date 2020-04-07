@@ -951,7 +951,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1017,7 +1017,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1084,7 +1084,7 @@ public class TestGeologist {
         /* Wait for the geologist to go to the flag */
         map.stepTime();
 
-        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map).get(0);
+        Geologist geologist = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0).get(0);
 
         assertNotNull(geologist);
         assertEquals(geologist.getTarget(), flag.getPosition());
@@ -1273,7 +1273,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1);
 
         /* Call geologist from the flag */
         flag.callGeologist();
@@ -1362,7 +1362,7 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1);
 
         /* Call geologist from the flag */
         flag.callGeologist();
@@ -1434,13 +1434,13 @@ public class TestGeologist {
         Utils.fastForward(30, map);
 
         /* Ensure there is exactly one geologist in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1, map);
+        Utils.adjustInventoryTo(headquarter0, GEOLOGIST, 1);
 
         /* Call geologist from the flag */
         flag.callGeologist();
 
         /* Wait for the geologist to go to the flag */
-        List<Geologist> geologists = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+        List<Geologist> geologists = Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
         assertEquals(geologists.size(), 1);
 
@@ -1474,7 +1474,7 @@ public class TestGeologist {
         /* Verify that no geologist is sent from the headquarter */
         for (int i = 0; i < 200; i++) {
 
-            assertTrue(Utils.findWorkersOfTypeOutsideForPlayer(Geologist.class, player0, map).isEmpty());
+            assertTrue(Utils.findWorkersOfTypeOutsideForPlayer(Geologist.class, player0).isEmpty());
 
             map.stepTime();
         }
@@ -1670,7 +1670,7 @@ public class TestGeologist {
         flag1.callGeologist();
 
         /* Wait for the geologist to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
         Geologist geologist = null;
 
@@ -1737,7 +1737,7 @@ public class TestGeologist {
         flag1.callGeologist();
 
         /* Wait for the geologist to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
         Geologist geologist = null;
 
@@ -1805,7 +1805,7 @@ public class TestGeologist {
         flag1.callGeologist();
 
         /* Wait for the geologist to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Geologist.class, 1, player0);
 
         Geologist geologist = null;
 

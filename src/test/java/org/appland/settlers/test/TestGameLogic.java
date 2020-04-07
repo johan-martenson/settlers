@@ -55,7 +55,7 @@ public class TestGameLogic {
         /* Place road to connect the woodcutter and the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter0.getFlag());
 
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Since the woodcutter is finished it does not need any deliveries
          * Verify that no new deliveries are initiated
@@ -287,7 +287,7 @@ public class TestGameLogic {
 
         int currentNumberOfMilitary = headquarter0.getAmount(PRIVATE);
 
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.needsMilitaryManning());
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
@@ -329,7 +329,7 @@ public class TestGameLogic {
          * forester worker to function
          */
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         assertTrue(foresterHut0.needsWorker());
 

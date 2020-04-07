@@ -384,10 +384,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.DESERT, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -423,10 +423,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -788,10 +788,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SNOW, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -834,10 +834,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can't reach the animal */
         for (int i = 0; i < 1000; i++) {
@@ -1131,10 +1131,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.GRASS, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -1170,10 +1170,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -1447,10 +1447,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SAVANNAH, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -1486,10 +1486,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -1784,10 +1784,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.SHALLOW_WATER, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -1823,10 +1823,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -2121,10 +2121,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.STEPPE, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -2160,10 +2160,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -2458,10 +2458,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MOUNTAIN_MEADOW, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -2497,10 +2497,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -2794,10 +2794,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -2833,10 +2833,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -3221,10 +3221,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, LAVA, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -3616,10 +3616,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, DEEP_WATER, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -4011,10 +4011,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.WATER, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -4406,10 +4406,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, SWAMP, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -4453,10 +4453,10 @@ public class TestPlacementInTerrain {
         Building woodcutter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), woodcutter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), woodcutter0);
 
         /* Verify that the worker can't reach the tree */
         for (int i = 0; i < 1000; i++) {
@@ -4834,10 +4834,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MAGENTA, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -4873,10 +4873,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -5256,10 +5256,10 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point7, Tile.Vegetation.MOUNTAIN, map);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0, map);
+        Utils.constructHouse(woodcutter0);
 
         /* Occupy the woodcutter hut */
-        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0, map);
+        WoodcutterWorker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
         /* Tear down the woodcutter hut */
         woodcutter0.tearDown();
@@ -5295,10 +5295,10 @@ public class TestPlacementInTerrain {
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */
-        Utils.constructHouse(hunter0, map);
+        Utils.constructHouse(hunter0);
 
         /* Occupy the hunter hut */
-        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0, map);
+        Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());

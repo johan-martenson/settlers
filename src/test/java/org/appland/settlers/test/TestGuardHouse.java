@@ -180,7 +180,7 @@ public class TestGuardHouse {
         Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
 
         /* Wait for the guard house to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
 
         /* Verify that a military is sent from the headquarter */
         map.stepTime();
@@ -229,7 +229,7 @@ public class TestGuardHouse {
         /* Wait for the guard house to finish construction */
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
 
-        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
 
         assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
     }
@@ -257,7 +257,7 @@ public class TestGuardHouse {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
 
         /* Verify that a military is sent from the headquarter */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
@@ -302,12 +302,12 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house with two militaries */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that the guard house does not need another military */
         assertFalse(guardHouse0.needsMilitaryManning());
@@ -357,12 +357,12 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house with two militaries */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that the guard house does not need another military */
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -389,13 +389,13 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Verify that the border is grown with the correct radius */
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
 
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         assertTrue(player0.getBorders().get(0).contains(new Point(6, 32)));
     }
@@ -417,7 +417,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         assertTrue(guardHouse0.needsMaterial(COIN));
     }
@@ -459,7 +459,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         assertTrue(guardHouse0.needsMaterial(COIN));
 
@@ -501,7 +501,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -509,7 +509,7 @@ public class TestGuardHouse {
         guardHouse0.putCargo(cargo);
 
         /* Occupy the guard house with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that the private is promoted at the right time */
         for (int i = 0; i < 100; i++) {
@@ -537,7 +537,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -545,8 +545,8 @@ public class TestGuardHouse {
         guardHouse0.putCargo(cargo);
 
         /* Occupy the guard house with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Military military2 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
@@ -572,7 +572,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -583,7 +583,7 @@ public class TestGuardHouse {
         Utils.fastForward(200, map);
 
         /* Occupy the guard house with one private */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that it still takes the same time for the private to get promoted */
         Utils.fastForward(99, map);
@@ -612,7 +612,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -620,7 +620,7 @@ public class TestGuardHouse {
         guardHouse0.putCargo(cargo);
 
         /* Occupy the guard house with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(guardHouse0.getAmount(COIN), 1);
@@ -647,7 +647,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -656,8 +656,8 @@ public class TestGuardHouse {
         guardHouse0.putCargo(cargo);
 
         /* Occupy the guard house with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, guardHouse0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Military military2 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, guardHouse0);
 
         /* Verify that the promotion consumes the coin */
         assertEquals(guardHouse0.getAmount(COIN), 2);
@@ -684,7 +684,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         Cargo cargo = new Cargo(COIN, map);
@@ -692,8 +692,8 @@ public class TestGuardHouse {
         guardHouse0.putCargo(cargo);
 
         /* Occupy the guard house with one private */
-        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0, map);
-        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0, map);
+        Military military1 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+        Military military2 = Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
 
         /* Verify that coin is not consumed */
         assertEquals(guardHouse0.getAmount(COIN), 1);
@@ -720,7 +720,7 @@ public class TestGuardHouse {
         Point point22 = new Point(6, 22);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Deliver one coin to the guard house */
         assertTrue(guardHouse0.needsMaterial(COIN));
@@ -752,10 +752,10 @@ public class TestGuardHouse {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Evacuate the guard house and verify that the military leaves the guard house */
         assertTrue(military.isInsideBuilding());
@@ -789,10 +789,10 @@ public class TestGuardHouse {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Evacuate the guard house */
         assertTrue(military.isInsideBuilding());
@@ -831,10 +831,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Evacuate the guard house */
         assertTrue(military.isInsideBuilding());
@@ -876,7 +876,7 @@ public class TestGuardHouse {
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Evacuate the guard house */
         guardHouse0.evacuate();
@@ -906,10 +906,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Military military = Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Evacuate the guard house */
         assertTrue(military.isInsideBuilding());
@@ -955,10 +955,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point26);
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Destroy the guard house */
         assertEquals(guardHouse0.getNumberOfHostedMilitary(), 1);
@@ -966,7 +966,7 @@ public class TestGuardHouse {
         guardHouse0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         int amount = headquarter0.getAmount(PRIVATE);
 
@@ -1000,10 +1000,10 @@ public class TestGuardHouse {
         map.placeAutoSelectedRoad(player0, guardHouse0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Occupy the guard house */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Destroy the guard house */
         assertEquals(guardHouse0.getNumberOfHostedMilitary(), 1);
@@ -1011,7 +1011,7 @@ public class TestGuardHouse {
         guardHouse0.tearDown();
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
         assertEquals(military.getTarget(), headquarter0.getPosition());
@@ -1046,7 +1046,7 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point26);
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Verify that production cannot be resumed in guard house */
         guardHouse0.resumeProduction();
@@ -1075,10 +1075,10 @@ public class TestGuardHouse {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Wait for the guard house to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0, map);
+        Utils.fastForwardUntilBuildingIsConstructed(guardHouse0);
 
         /* Occupy the guard house */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that it's not possible to stop production */
         try {
@@ -1105,10 +1105,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Finish construction of the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Populate the guard house */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
 
         /* Verify that the guard house can produce */
         assertFalse(guardHouse0.canProduce());
@@ -1132,7 +1132,7 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Verify that the reported output is correct */
         assertEquals(guardHouse0.getProducedMaterial().length, 0);
@@ -1189,7 +1189,7 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
 
         /* Construct the guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(guardHouse0.getMaterialNeeded().size(), 1);
@@ -1243,7 +1243,7 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Construct guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Verify that the list of hosted militaries is empty */
         assertEquals(0, guardHouse0.getHostedMilitary().size());
@@ -1267,10 +1267,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Construct guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Add one military */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, guardHouse0);
 
         /* Verify that the list of hosted militaries increased empty */
         assertEquals(1, guardHouse0.getHostedMilitary().size());
@@ -1295,10 +1295,10 @@ public class TestGuardHouse {
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Construct guard house */
-        Utils.constructHouse(guardHouse0, map);
+        Utils.constructHouse(guardHouse0);
 
         /* Add one military */
-        Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, guardHouse0, map);
+        Utils.occupyMilitaryBuilding(SERGEANT_RANK, 1, guardHouse0);
 
         /* Verify that the rank for the hosted military is correct */
         assertEquals(guardHouse0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);

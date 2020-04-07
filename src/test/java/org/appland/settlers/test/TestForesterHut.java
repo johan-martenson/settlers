@@ -118,7 +118,7 @@ public class TestForesterHut {
 
         assertFalse(foresterHut.needsWorker());
 
-        Utils.constructHouse(foresterHut, null);
+        Utils.constructHouse(foresterHut);
 
         /* Verify that the forester is unoccupied when it's newly constructed */
         assertTrue(foresterHut.needsWorker());
@@ -157,7 +157,7 @@ public class TestForesterHut {
     public void testAssignWorkerTwice() throws Exception {
         ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(foresterHut, null);
+        Utils.constructHouse(foresterHut);
 
         foresterHut.assignWorker(new Forester(null, null));
 
@@ -168,7 +168,7 @@ public class TestForesterHut {
     public void testPromiseWorkerTwice() throws Exception {
         ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(foresterHut, null);
+        Utils.constructHouse(foresterHut);
 
         foresterHut.promiseWorker(new Forester(null, null));
 
@@ -179,7 +179,7 @@ public class TestForesterHut {
     public void testForesterHutIsNotMilitary() throws Exception {
         ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(foresterHut, null);
+        Utils.constructHouse(foresterHut);
 
         assertFalse(foresterHut.isMilitaryBuilding());
         assertEquals(foresterHut.getNumberOfHostedMilitary(), 0);
@@ -216,7 +216,7 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut, map);
+        Utils.constructHouse(foresterHut);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -247,7 +247,7 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -278,10 +278,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -317,10 +317,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -362,10 +362,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -407,10 +407,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -465,10 +465,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Let the forester rest */
         Utils.fastForward(99, map);
@@ -529,10 +529,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
         assertNull(forester.getCargo());
@@ -563,7 +563,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 20)) {
@@ -585,7 +585,7 @@ public class TestForesterHut {
         /* Manually place forester */
         Forester forester = new Forester(player0, map);
 
-        Utils.occupyBuilding(forester, foresterHut, map);
+        Utils.occupyBuilding(forester, foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -621,7 +621,7 @@ public class TestForesterHut {
         Utils.surroundPointWithVegetation(point1, GRASS, map);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -641,7 +641,7 @@ public class TestForesterHut {
         }
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -677,7 +677,7 @@ public class TestForesterHut {
         Utils.surroundPointWithVegetation(point1, Tile.Vegetation.WATER, map);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -697,7 +697,7 @@ public class TestForesterHut {
         }
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -726,7 +726,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Put trees around the forester hut */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 4)) {
@@ -742,7 +742,7 @@ public class TestForesterHut {
         }
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -783,7 +783,7 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Put stones around the forester hut but not on the mountain */
         for (Point point : map.getPointsWithinRadius(foresterHut.getPosition(), 10)) {
@@ -803,7 +803,7 @@ public class TestForesterHut {
         }
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -836,10 +836,10 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Destroy the forester hut */
         Worker forester = foresterHut0.getWorker();
@@ -882,10 +882,10 @@ public class TestForesterHut {
         map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Worker forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Worker forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Destroy the forester hut */
         assertTrue(forester.isInsideBuilding());
@@ -933,10 +933,10 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Assign a worker to the forester hut */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1001,10 +1001,10 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Assign a worker to the forester hut */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         assertTrue(forester.isInsideBuilding());
 
@@ -1078,13 +1078,13 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Connect the forester hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
         /* Wait for forester to get assigned and leave the headquarter */
-        List<Forester> workers = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+        List<Forester> workers = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1132,20 +1132,20 @@ public class TestForesterHut {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place forester hut close to the new border */
         Point point4 = new Point(28, 18);
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Forester worker = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Forester worker = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1172,10 +1172,10 @@ public class TestForesterHut {
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        constructHouse(foresterHut, map);
+        constructHouse(foresterHut);
 
         /* Manually place forester */
-        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut, map);
+        Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
         /* Wait for the forester to pick a spot to plant a tree where a flag
            can be placed
@@ -1260,7 +1260,7 @@ public class TestForesterHut {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
 
         /* Wait for the forester to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
         Forester forester = null;
 
@@ -1322,7 +1322,7 @@ public class TestForesterHut {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
 
         /* Wait for the forester to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
         Forester forester = null;
 
@@ -1387,7 +1387,7 @@ public class TestForesterHut {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, foresterHut0.getFlag());
 
         /* Wait for the forester to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0);
 
         Forester forester = null;
 
@@ -1438,17 +1438,17 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the forester hut */
         Worker forester = foresterHut0.getWorker();
@@ -1488,17 +1488,17 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1541,17 +1541,17 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1597,10 +1597,10 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
-        Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Place a second storage closer to the forester hut */
         Point point2 = new Point(13, 13);
@@ -1647,10 +1647,10 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getFlag().getPosition());
@@ -1690,12 +1690,12 @@ public class TestForesterHut {
         Building foresterHut1 = map.placeBuilding(new ForesterHut(player0), point2);
 
         /* Construct the forester huts */
-        constructHouse(foresterHut0, map);
-        constructHouse(foresterHut1, map);
+        constructHouse(foresterHut0);
+        constructHouse(foresterHut1);
 
         /* Manually place foresters */
-        Forester forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
-        Forester forester1 = Utils.occupyBuilding(new Forester(player0, map), foresterHut1, map);
+        Forester forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
+        Forester forester1 = Utils.occupyBuilding(new Forester(player0, map), foresterHut1);
 
         /* Fill the whole map with trees but leave one free spot */
         Point point3 = new Point(12, 4);
@@ -1713,7 +1713,7 @@ public class TestForesterHut {
         }
 
         /* Wait for the foresters to get out of their huts */
-        Utils.waitForWorkersOutsideBuilding(Forester.class, 2, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Forester.class, 2, player0);
 
         /* Verify that both foresters go to the free point but only one plants */
         assertEquals(forester0.getTarget(), point3);
@@ -1751,10 +1751,10 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Populate the forester hut */
-        Worker forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0, map);
+        Worker forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
 
         /* Verify that the forester hut can produce */
         assertFalse(foresterHut0.canProduce());
@@ -1778,7 +1778,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Verify that the reported output is correct */
         assertEquals(foresterHut0.getProducedMaterial().length, 0);
@@ -1833,7 +1833,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        Utils.constructHouse(foresterHut0, map);
+        Utils.constructHouse(foresterHut0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(foresterHut0.getMaterialNeeded().size(), 0);

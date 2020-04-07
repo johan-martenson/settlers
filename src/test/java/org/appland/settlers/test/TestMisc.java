@@ -111,7 +111,7 @@ public class TestMisc {
         Road road0 = map.placeAutoSelectedRoad(player, new Point(430, 200), new Point(434, 200));
 
         /* Wait for a scout to appear */
-        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player, map).get(0);
+        Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).get(0);
 
         /* Wait the scout to get to the flag */
         assertEquals(scout.getTarget(), flag0.getPosition());
@@ -252,8 +252,8 @@ public class TestMisc {
         Building guardHouse1 = map.placeBuilding(new GuardHouse(player0), point03);
 
         /* Finish construction of both guard houses */
-        Utils.constructHouse(guardHouse0, map);
-        Utils.constructHouse(guardHouse1, map);
+        Utils.constructHouse(guardHouse0);
+        Utils.constructHouse(guardHouse1);
 
         /* Connect the first guard house to the headquarters */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
@@ -265,7 +265,7 @@ public class TestMisc {
         assertFalse(player0.getDiscoveredLand().contains(point04));
         assertFalse(player0.getDiscoveredLand().contains(point05));
 
-        Military military = Utils.waitForMilitaryOutsideBuilding(player0, map);
+        Military military = Utils.waitForMilitaryOutsideBuilding(player0);
 
         assertNotNull(military);
 
@@ -351,7 +351,7 @@ public class TestMisc {
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Construct the building */
-        Utils.constructHouse(armory0, map);
+        Utils.constructHouse(armory0);
 
         /* Verify that the construction is at hundred  progress */
         assertEquals(armory0.getConstructionProgress(), 100);

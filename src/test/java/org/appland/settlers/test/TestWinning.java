@@ -90,15 +90,15 @@ public class TestWinning {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
         /* Empty all militaries from the second player's headquarter */
-        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0, map);
-        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0, map);
-        Utils.adjustInventoryTo(headquarter1, GENERAL, 0, map);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
 
         /* Order an attack */
         assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
@@ -108,7 +108,7 @@ public class TestWinning {
         /* Find the military that was chosen to attack */
         map.stepTime();
 
-        Military attacker = Utils.findMilitaryOutsideBuilding(player0, map);
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
 
         assertNotNull(attacker);
 

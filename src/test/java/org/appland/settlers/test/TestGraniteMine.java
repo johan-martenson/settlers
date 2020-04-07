@@ -149,7 +149,7 @@ public class TestGraniteMine {
 
         assertTrue(mine.underConstruction());
 
-        Utils.constructHouse(mine, map);
+        Utils.constructHouse(mine);
 
         assertTrue(mine.ready());
     }
@@ -179,7 +179,7 @@ public class TestGraniteMine {
         /* Verify that the mine is not a military building */
         assertFalse(mine.isMilitaryBuilding());
 
-        Utils.constructHouse(mine, map);
+        Utils.constructHouse(mine);
 
         assertFalse(mine.isMilitaryBuilding());
     }
@@ -232,7 +232,7 @@ public class TestGraniteMine {
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
-        Utils.constructHouse(mine, map);
+        Utils.constructHouse(mine);
 
         /* Verify that the finished mine needs a worker */
         assertTrue(mine.needsWorker());
@@ -260,7 +260,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         assertTrue(mine.ready());
 
@@ -317,12 +317,12 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -359,7 +359,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -368,7 +368,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -414,7 +414,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -423,7 +423,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -502,7 +502,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Utils.deliverCargo(mine, BREAD);
@@ -512,7 +512,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -571,7 +571,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -580,7 +580,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -618,12 +618,12 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -660,7 +660,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -669,7 +669,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -707,7 +707,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Construct the granite mine */
-        constructHouse(mine, map);
+        constructHouse(mine);
 
         /* Deliver food of all types to the miner */
         assertTrue(mine.needsMaterial(FISH));
@@ -721,7 +721,7 @@ public class TestGraniteMine {
         /* Manually place miner */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, mine, map);
+        Utils.occupyBuilding(miner, mine);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -765,10 +765,10 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Deliver material to the granite mine */
         Cargo fishCargo = new Cargo(FISH, map);
@@ -836,7 +836,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Deliver material to the granite mine */
         Cargo fishCargo = new Cargo(FISH, map);
@@ -845,7 +845,7 @@ public class TestGraniteMine {
         graniteMine0.putCargo(fishCargo);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Let the miner rest */
         Utils.fastForward(100, map);
@@ -874,9 +874,9 @@ public class TestGraniteMine {
         assertEquals(cargo.getPosition(), graniteMine0.getFlag().getPosition());
 
         /* Remove the resources the iron mine needs from the headquarter */
-        Utils.adjustInventoryTo(headquarter0, MEAT, 0, map);
-        Utils.adjustInventoryTo(headquarter0, BREAD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, FISH, 0, map);
+        Utils.adjustInventoryTo(headquarter0, MEAT, 0);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 0);
+        Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
         /* Connect the granite mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
@@ -938,10 +938,10 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -988,10 +988,10 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -1046,7 +1046,7 @@ public class TestGraniteMine {
         Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
 
         /* Finish the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -1055,7 +1055,7 @@ public class TestGraniteMine {
         /* Assign a worker to the granite mine */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, graniteMine0, map);
+        Utils.occupyBuilding(miner, graniteMine0);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -1113,7 +1113,7 @@ public class TestGraniteMine {
         Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
 
         /* Finish the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -1124,7 +1124,7 @@ public class TestGraniteMine {
         /* Assign a worker to the granite mine */
         Miner miner = new Miner(player0, map);
 
-        Utils.occupyBuilding(miner, graniteMine0, map);
+        Utils.occupyBuilding(miner, graniteMine0);
 
         assertTrue(miner.isInsideBuilding());
 
@@ -1184,13 +1184,13 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Connect the granite mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         /* Wait for miner to get assigned and leave the headquarter */
-        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+        List<Miner> workers = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         assertNotNull(workers);
         assertEquals(workers.size(), 1);
@@ -1243,19 +1243,19 @@ public class TestGraniteMine {
         map.placeBuilding(fortress0, point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0, map);
+        Utils.constructHouse(fortress0);
 
         /* Occupy the fortress */
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0, map);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place granite mine close to the new border */
         GraniteMine graniteMine0 = map.placeBuilding(new GraniteMine(player0), point4);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1296,7 +1296,7 @@ public class TestGraniteMine {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         /* Wait for the miner to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
@@ -1362,7 +1362,7 @@ public class TestGraniteMine {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         /* Wait for the miner to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
@@ -1431,7 +1431,7 @@ public class TestGraniteMine {
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, graniteMine0.getFlag());
 
         /* Wait for the miner to be on the second road on its way to the flag */
-        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map);
+        Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0);
 
         Miner miner = null;
 
@@ -1486,17 +1486,17 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Place a second storage closer to the granite mine */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -1540,17 +1540,17 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Place a second storage closer to the granite mine */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1597,17 +1597,17 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Place a second storage closer to the granite mine */
         Point point2 = new Point(13, 13);
         Storage storage0 = map.placeBuilding(new Storage(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0, map);
+        Utils.constructHouse(storage0);
 
         /* Destroy the storage */
         storage0.tearDown();
@@ -1657,10 +1657,10 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
-        Utils.occupyBuilding(new Miner(player0, map), graniteMine0, map);
+        Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
 
         /* Place a second storage closer to the granite mine */
         Point point2 = new Point(13, 13);
@@ -1711,10 +1711,10 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Wait for a worker to start walking to the building */
-        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0, map).get(0);
+        Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).get(0);
 
         /* Wait for the worker to get to the building's flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getFlag().getPosition());
@@ -1756,10 +1756,10 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine, map);
+        Utils.constructHouse(graniteMine);
 
         /* Populate the granite mine */
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine, map);
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -1796,10 +1796,10 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine, map);
+        Utils.constructHouse(graniteMine);
 
         /* Populate the granite mine */
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine, map);
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -1855,10 +1855,10 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine, map);
+        Utils.constructHouse(graniteMine);
 
         /* Populate the granite mine */
-        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine, map);
+        Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         assertTrue(miner0.isInsideBuilding());
         assertEquals(miner0.getHome(), graniteMine);
@@ -1909,7 +1909,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine, map);
+        Utils.constructHouse(graniteMine);
 
         /* Verify that the unoccupied granite mine is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1940,10 +1940,10 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the coal mine */
-        Utils.constructHouse(graniteMine, map);
+        Utils.constructHouse(graniteMine);
 
         /* Populate the granite mine */
-        Worker miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine, map);
+        Worker miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
 
         /* Verify that the granite mine can produce */
         assertTrue(graniteMine.canProduce());
@@ -1970,7 +1970,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Construct the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Verify that the reported output is correct */
         assertEquals(graniteMine0.getProducedMaterial().length, 1);
@@ -2033,7 +2033,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Construct the granite mine */
-        Utils.constructHouse(graniteMine0, map);
+        Utils.constructHouse(graniteMine0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(graniteMine0.getMaterialNeeded().size(), 3);

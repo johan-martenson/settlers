@@ -307,7 +307,7 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(player0, point7, point8);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut, map);
+        Utils.constructHouse(foresterHut);
 
         Flag target = foresterHut.getFlag();
 
@@ -411,15 +411,15 @@ public class TestTransportation {
         worker.setPosition(start.getPosition());
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0, map);
+        Utils.constructHouse(quarry0);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage, map);
+        Utils.constructHouse(storage);
 
         assertTrue(quarry0.ready());
 
         /* Occupy the quarry */
-        Utils.occupyBuilding(mason, quarry0, map);
+        Utils.occupyBuilding(mason, quarry0);
 
         /* Production starts, wait for it to finish */
         Utils.fastForward(100, map);
@@ -646,7 +646,7 @@ public class TestTransportation {
         Courier courier = Utils.occupyRoad(road, map);
 
         /* Construct barracks */
-        Utils.constructHouse(barracks0, map);
+        Utils.constructHouse(barracks0);
 
         /* Add a private to the headquarter */
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -940,8 +940,8 @@ public class TestTransportation {
         courier2.assignToRoad(road1);
 
         /* Empty the headquarter's store of planks and stones */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Let the couriers reach their target road and become idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier, courier2);
@@ -1001,10 +1001,10 @@ public class TestTransportation {
         Building catapult = map.placeBuilding(new Catapult(player0), point1.upLeft());
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult, map);
+        Utils.constructHouse(catapult);
 
         /* Occupy the catapult */
-        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult, map);
+        Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
 
         /* Place road to connect the catapult with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), catapult.getFlag());
@@ -1016,8 +1016,8 @@ public class TestTransportation {
         courier.assignToRoad(road0);
 
         /* Empty the headquarter's store of planks and stones */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Let the courier reach its target road and become idle */
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
@@ -1109,9 +1109,9 @@ public class TestTransportation {
         courier4.assignToRoad(road3);
 
         /* Remove all planks, wood and stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, WOOD, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Give the couriers time to get to the middle of their roads */
         Utils.fastForward(100, map);
@@ -1215,8 +1215,8 @@ public class TestTransportation {
         courier3.assignToRoad(road2);
 
         /* Remove all planks and stones in the headquarter */
-        Utils.adjustInventoryTo(headquarter0, PLANK, 0, map);
-        Utils.adjustInventoryTo(headquarter0, STONE, 0, map);
+        Utils.adjustInventoryTo(headquarter0, PLANK, 0);
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
         /* Place a cargo on the headquarter's flag */
         Cargo cargo = new Cargo(PLANK, map);
@@ -1493,7 +1493,7 @@ public class TestTransportation {
         Building sawmill = map.placeBuilding(new Sawmill(player0), point3.upLeft());
 
         /* Finish construction of the sawmill */
-        Utils.constructHouse(sawmill, map);
+        Utils.constructHouse(sawmill);
 
         /* Place flags */
         Flag flag0 = map.placeFlag(player0, point0);
@@ -1506,7 +1506,7 @@ public class TestTransportation {
         Road road2 = map.placeAutoSelectedRoad(player0, flag2, sawmill.getFlag());
 
         /* Remove all the wood from the headquarter to avoid interference */
-        Utils.adjustInventoryTo(headquarter1, WOOD, 0, map);
+        Utils.adjustInventoryTo(headquarter1, WOOD, 0);
 
         /* Connect the first flag to the headquarter */
         map.placeAutoSelectedRoad(player0, flag0, headquarter1.getFlag());
