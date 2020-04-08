@@ -2631,11 +2631,11 @@ public class GameMap {
         return GameUtils.findShortestPathViaRoads(start.getPosition(), end.getPosition(), pointToGameObject);
     }
 
-    boolean isValidRouteThroughFlagsAndBuildingsViaRoads(Point... points) {
+    public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(Point... points) {
         return isValidRouteThroughFlagsAndBuildingsViaRoads(Arrays.asList(points));
     }
 
-    boolean isValidRouteThroughFlagsAndBuildingsViaRoads(List<Point> points) {
+    public boolean isValidRouteThroughFlagsAndBuildingsViaRoads(List<Point> points) {
 
         Point previous = null;
 

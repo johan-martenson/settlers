@@ -234,7 +234,7 @@ public class Player {
         buildingToAttack.getPlayer().reportUnderAttack(buildingToAttack);
     }
 
-    void setMap(GameMap map) {
+    public void setMap(GameMap map) {
         this.map = map;
     }
 
