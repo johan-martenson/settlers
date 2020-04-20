@@ -367,17 +367,22 @@ public class TestFarm {
 
     @Test
     public void testFarmerPlantsWhenThereAreFreeSpotsAndNothingToHarvest() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place farm */
         Point point3 = new Point(10, 6);
-        Building farm = map.placeBuilding(new Farm(player0), point3);
+        Farm farm = map.placeBuilding(new Farm(player0), point3);
 
+        /* Connect the farm with the headquarter */
         Point point4 = new Point(11, 5);
         Point point5 = new Point(10, 4);
         Point point6 = new Point(9, 3);
@@ -385,11 +390,11 @@ public class TestFarm {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
+        /* Finish construction of the farm */
         Utils.constructHouse(farm);
 
-        Farmer farmer = new Farmer(player0, map);
-
-        Utils.occupyBuilding(farmer, farm);
+        /* Occupy the farm */
+        Farmer farmer = Utils.occupyBuilding(new Farmer(player0, map), farm);
 
         assertTrue(farmer.isInsideBuilding());
 
@@ -1708,7 +1713,8 @@ public class TestFarm {
         /* Verify that there is available building space on the growing crop */
         assertTrue(map.isAvailableFlagPoint(player0, crop.getPosition()));
     }
-/*
+
+    /*
     Test building point available on crop
     crop blocking flag
     building point available with crop blocking flag

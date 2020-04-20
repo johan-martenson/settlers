@@ -21,6 +21,7 @@ public class Player {
     private GameMap              map;
     private Color                color;
     private String               name;
+    private boolean treeConservationProgramActive;
 
     private final List<Building>          buildings;
     private final Set<Point>              discoveredLand;
@@ -31,7 +32,27 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> coalQuota;
     private final Map<Material, Integer>  producedMaterials;
     private final List<Message> messages;
-    private boolean treeConservationProgramActive;
+    private final List<PlayerGameViewMonitor> gameViewMonitors;
+    private final List<Worker> workersWithNewTargets;
+    private final List<Building> changedBuildings;
+    private final List<Flag> newFlags;
+    private final List<Flag> removedFlags;
+    private final List<Building> newBuildings;
+    private final List<Building> removedBuildings;
+    private final List<Road> removedRoads;
+    private final List<Road> newRoads;
+    private final List<Worker> removedWorkers;
+    private final List<Tree> newTrees;
+    private final List<Tree> removedTrees;
+    private final List<Stone> removedStones;
+    private final List<Sign> newSigns;
+    private final List<Sign> removedSigns;
+    private final List<Crop> newCrops;
+    private final List<Crop> removedCrops;
+    private final Set<Point> newDiscoveredLand;
+    private final List<Point> newBorder;
+    private final List<Point> removedBorder;
+    private final List<Worker> workersEnteredBuildings;
 
 
     public Player(String name, Color color) {
@@ -68,6 +89,30 @@ public class Player {
 
         /* The tree conservation program is not active at start */
         treeConservationProgramActive = false;
+
+        /* Prepare for monitors of the game */
+        gameViewMonitors = new ArrayList<>();
+
+        workersWithNewTargets = new ArrayList<>();
+        changedBuildings = new ArrayList<>();
+        newFlags = new ArrayList<>();
+        removedFlags = new ArrayList<>();
+        newBuildings = new ArrayList<>();
+        removedBuildings = new ArrayList<>();
+        removedRoads = new ArrayList<>();
+        newRoads = new ArrayList<>();
+        removedWorkers = new ArrayList<>();
+        newTrees = new ArrayList<>();
+        removedTrees = new ArrayList<>();
+        removedStones = new ArrayList<>();
+        newSigns = new ArrayList<>();
+        removedSigns = new ArrayList<>();
+        newCrops = new ArrayList<>();
+        removedCrops = new ArrayList<>();
+        newDiscoveredLand = new HashSet<>();
+        newBorder = new ArrayList<>();
+        removedBorder = new ArrayList<>();
+        workersEnteredBuildings = new ArrayList<>();
     }
 
     public String getName() {
@@ -109,7 +154,19 @@ public class Player {
     private void updateDiscoveredLand() {
         for (Building building : buildings) {
             if (building.isMilitaryBuilding() && building.occupied()) {
-                discoveredLand.addAll(building.getDiscoveredLand());
+
+                Collection<Point> landDiscoveredByBuilding = building.getDiscoveredLand();
+
+                /* Remember the points that are newly discovered */
+                if (!gameViewMonitors.isEmpty()) {
+                    for (Point point : landDiscoveredByBuilding) {
+                        if (!discoveredLand.contains(point)) {
+                            newDiscoveredLand.add(point);
+                        }
+                    }
+                }
+
+                discoveredLand.addAll(landDiscoveredByBuilding);
             }
         }
     }
@@ -123,6 +180,11 @@ public class Player {
             discoveredLand.add(point);
 
             fieldOfView = calculateFieldOfView(discoveredLand);
+
+            /* Report that this is a newly discovered point */
+            if (hasMonitor()) {
+                newDiscoveredLand.add(point);
+            }
         }
     }
 
@@ -240,9 +302,37 @@ public class Player {
 
     void setLands(List<Land> updatedLands) {
 
+        /* Report the new border and the removed border */
+        if (hasMonitor()) {
+            Set<Point> fullNewBorderCalc = new HashSet<>();
+            Set<Point> fullOldBorderCalc = new HashSet<>();
+            Set<Point> newBorderCalc = new HashSet<>();
+            Set<Point> removedBorderCalc = new HashSet<>();
+
+            for (Land land : updatedLands) {
+                for (List<Point> border : land.getBorders()) {
+                    fullNewBorderCalc.addAll(border);
+                }
+            }
+
+            for (Collection<Point> oldBorder : borders) {
+                fullOldBorderCalc.addAll(oldBorder);
+            }
+
+            newBorderCalc.addAll(fullNewBorderCalc);
+            newBorderCalc.removeAll(fullOldBorderCalc);
+
+            removedBorderCalc.addAll(fullOldBorderCalc);
+            removedBorderCalc.removeAll(fullNewBorderCalc);
+
+            newBorder.addAll(newBorderCalc);
+            removedBorder.addAll(removedBorderCalc);
+        }
+
         /* Update full list of owned land and the list of borders */
         ownedLand.clear();
         borders.clear();
+
         for (Land land : updatedLands) {
             ownedLand.addAll(land.getPointsInLand());
             borders.addAll(land.getBorders());
@@ -521,5 +611,134 @@ public class Player {
         }
 
         treeConservationProgramActive = false;
+    }
+
+    public void monitorGameView(PlayerGameViewMonitor monitor) {
+        gameViewMonitors.add(monitor);
+    }
+
+    public boolean hasMonitor() {
+        return !gameViewMonitors.isEmpty();
+    }
+
+    public void reportWorkerWithNewTarget(Worker worker) {
+        workersWithNewTargets.add(worker);
+    }
+
+    public void sendMonitoringEvents(long time) {
+
+        if (newFlags.isEmpty() && removedFlags.isEmpty() && newBuildings.isEmpty() &&
+            newRoads.isEmpty() && removedRoads.isEmpty() && removedWorkers.isEmpty() &&
+            changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
+            removedTrees.isEmpty() && removedStones.isEmpty() && newSigns.isEmpty() &&
+            removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
+            newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty()) {
+            return;
+        }
+
+        GameChangesList gameChangesToReport = new GameChangesList(time,
+                new ArrayList<>(workersWithNewTargets),
+                new ArrayList<>(newFlags),
+                new ArrayList<>(removedFlags),
+                new ArrayList<>(newBuildings),
+                new ArrayList<>(changedBuildings),
+                new ArrayList<>(removedBuildings),
+                new ArrayList<>(newRoads),
+                new ArrayList<>(removedRoads),
+                new ArrayList<>(removedWorkers),
+                new ArrayList<>(newTrees),
+                new ArrayList<>(removedTrees),
+                new ArrayList<>(removedStones),
+                new ArrayList<>(newSigns),
+                new ArrayList<>(removedSigns),
+                new ArrayList<>(newCrops),
+                new ArrayList<>(removedCrops),
+                new ArrayList<>(newDiscoveredLand),
+                new ArrayList<>(newBorder),
+                new ArrayList<>(removedBorder));
+
+        for (PlayerGameViewMonitor monitor : gameViewMonitors) {
+            monitor.onViewChangesForPlayer(this, gameChangesToReport);
+        }
+
+        newFlags.clear();
+        removedFlags.clear();
+        newBuildings.clear();
+        removedBuildings.clear();
+        newRoads.clear();
+        removedRoads.clear();
+        workersWithNewTargets.clear();
+        removedWorkers.clear();
+        changedBuildings.clear();
+        newTrees.clear();
+        removedTrees.clear();
+        removedStones.clear();
+        newSigns.clear();
+        removedSigns.clear();
+        newCrops.clear();
+        removedCrops.clear();
+        newDiscoveredLand.clear();
+        newBorder.clear();
+        removedBorder.clear();
+    }
+
+    public void reportChangedBuilding(Building building) {
+        changedBuildings.add(building);
+    }
+
+    public void reportNewFlag(Flag flag) {
+        newFlags.add(flag);
+    }
+
+    public void reportRemovedFlag(Flag flag) {
+        removedFlags.add(flag);
+    }
+
+    public void reportNewBuilding(Building building) {
+        newBuildings.add(building);
+    }
+
+    public void reportNewRoad(Road road) {
+        newRoads.add(road);
+    }
+
+    public void reportRemovedRoad(Road road) {
+        removedRoads.add(road);
+    }
+
+    public void reportRemovedWorker(Worker worker) {
+        removedWorkers.add(worker);
+    }
+
+    public void reportRemovedBuilding(Building building) {
+        removedBuildings.add(building);
+    }
+
+    public void reportNewTree(Tree tree) {
+        newTrees.add(tree);
+    }
+
+    public void reportRemovedTree(Tree tree) {
+        removedTrees.add(tree);
+    }
+
+    public void reportRemovedStone(Stone stone) {
+        removedStones.add(stone);
+    }
+
+    public void reportNewSign(Sign sign) {
+        newSigns.add(sign);
+    }
+
+    public void reportRemovedSign(Sign sign) {
+        removedSigns.add(sign);
+    }
+
+    public void reportNewCrop(Crop crop) {
+        newCrops.add(crop);
+    }
+
+    public void reportRemovedCrop(Crop crop) {
+        removedCrops.add(crop);
     }
 }

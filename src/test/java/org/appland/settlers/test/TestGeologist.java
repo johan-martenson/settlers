@@ -542,8 +542,8 @@ public class TestGeologist {
         Flag flag = map.placeFlag(player0, point1);
 
         /* Create a mountain with gold */
-        Utils.createMountainWithinRadius(point1, 7, map);
-        Utils.putMineralWithinRadius(GOLD, point1, 7, map);
+        Utils.createMountainWithinRadius(point1, 9, map);
+        Utils.putMineralWithinRadius(GOLD, point1, 9, map);
 
         /* Connect headquarter and flag */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);

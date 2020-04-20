@@ -326,6 +326,9 @@ public abstract class Worker implements Actor {
 
         /* Allow subclasses to add logic */
         onEnterBuilding(building);
+
+        /* Report that the worker entered a building */
+        map.reportWorkerEnteredBuilding(this);
     }
 
     public boolean isInsideBuilding() {
@@ -378,6 +381,9 @@ public abstract class Worker implements Actor {
             path.remove(0);
 
             state = WALKING_AND_EXACTLY_AT_POINT;
+
+            /* Report the new target so it can be monitored */
+            getMap().reportWorkerWithNewTarget(this);
         }
     }
 
@@ -418,6 +424,9 @@ public abstract class Worker implements Actor {
             path.remove(0);
 
             state = WALKING_AND_EXACTLY_AT_POINT;
+
+            /* Report the new target so it can be monitored */
+            getMap().reportWorkerWithNewTarget(this);
         }
     }
 

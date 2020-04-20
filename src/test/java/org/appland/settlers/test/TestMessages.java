@@ -990,7 +990,7 @@ public class TestMessages {
         assertTrue(player0.getMessages().isEmpty());
 
         Utils.waitForNewMessage(player0);
-        System.out.println(player0.getMessages());
+
         assertEquals(player0.getMessages().size(), 1);
         assertEquals(player0.getMessages().get(0).getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
         assertTrue(player0.getMessages().get(0) instanceof TreeConservationProgramActivatedMessage);

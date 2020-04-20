@@ -27,6 +27,16 @@ import static java.lang.Math.round;
  */
 public class GameUtils {
 
+    public static boolean setContainsAny(Set<Point> discoveredLand, List<Point> wayPoints) {
+        for (Point point : wayPoints) {
+            if (discoveredLand.contains(point)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     static class Line {
         final double k;
         final double m;

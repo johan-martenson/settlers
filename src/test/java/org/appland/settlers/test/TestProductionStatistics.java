@@ -17,8 +17,16 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -358,5 +366,16 @@ public class TestProductionStatistics {
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(GOLD));
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(SWORD));
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(SHIELD));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(COIN));
+
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(COAL));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(GOLD));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(IRON));
+
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(PRIVATE));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(CORPORAL));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(SERGEANT));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(OFFICER));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(GENERAL));
     }
 }

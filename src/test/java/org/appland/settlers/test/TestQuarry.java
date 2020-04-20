@@ -322,17 +322,22 @@ public class TestQuarry {
 
     @Test
     public void testStonemasonGetsStone() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place quarry */
         Point point1 = new Point(10, 4);
         Building quarry = map.placeBuilding(new Quarry(player0), point1);
 
+        /* Place stone */
         Point point2 = new Point(11, 5);
         Stone stone = map.placeStone(point2);
 

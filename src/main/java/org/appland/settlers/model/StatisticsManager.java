@@ -5,8 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.SWORD;
@@ -20,7 +28,16 @@ public class StatisticsManager {
         PLANK,
         GOLD,
         SWORD,
-        SHIELD
+        SHIELD,
+        COIN,
+        PRIVATE,
+        CORPORAL,
+        SERGEANT,
+        OFFICER,
+        GENERAL,
+        COAL,
+        GOLD,
+        IRON
     );
 
     private final Map<Material, ProductionDataSeries> productionStatistics;

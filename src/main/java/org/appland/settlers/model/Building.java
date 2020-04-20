@@ -433,6 +433,9 @@ public class Building implements Actor, EndPoint {
                 state = State.DESTROYED;
 
                 countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
+
+                /* Report that the building has burned down */
+                map.reportBuildingBurnedDown(this);
             } else {
                 countdown.step();
             }
@@ -447,6 +450,9 @@ public class Building implements Actor, EndPoint {
         } else if (destroyed()) {
             if (countdown.reachedZero()) {
                 map.removeBuilding(this);
+
+                /* Report that the building is removed */
+                map.reportBuildingRemoved(this);
             } else {
                 countdown.step();
             }
@@ -511,6 +517,9 @@ public class Building implements Actor, EndPoint {
         Road driveway = map.getRoad(getPosition(), getFlag().getPosition());
 
         map.removeRoad(driveway);
+
+        /* Report that the building has been torn down */
+        map.reportTornDownBuilding(this);
     }
 
     public Size getSize() {

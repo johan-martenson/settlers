@@ -8,17 +8,21 @@ import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farmer;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Hunter;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
+import org.appland.settlers.model.PlayerGameViewMonitor;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
+import org.appland.settlers.model.Stonemason;
 import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tree;
@@ -28,6 +32,7 @@ import org.appland.settlers.model.Worker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +42,7 @@ import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
+import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GENERAL;
@@ -46,6 +52,7 @@ import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
@@ -414,6 +421,22 @@ public class Utils {
 
         assertTrue(populated);
         assertEquals(building.getNumberOfHostedMilitary(), nr);
+    }
+
+    public static void waitForMilitaryBuildingToGetPopulated(Building building) throws Exception {
+        GameMap map = building.getMap();
+
+        assertFalse(building.occupied());
+
+        for (int i = 0; i < 1000; i++) {
+            if (building.occupied()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(building.occupied());
     }
 
     public static void verifyPointIsWithinBorder(Player player, Point point) {
@@ -848,14 +871,14 @@ public class Utils {
 
         for (int i = 0; i < 1000; i++) {
 
-            if (crop.getGrowthState() == Crop.GrowthState.HARVESTED) {
+            if (crop.getGrowthState() == HARVESTED) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(crop.getGrowthState(), Crop.GrowthState.HARVESTED);
+        assertEquals(crop.getGrowthState(), HARVESTED);
     }
 
     static int getAmountMilitary(Headquarter headquarter0) {
@@ -1130,5 +1153,151 @@ public class Utils {
         }
 
         assertTrue(building.ready());
+    }
+
+    public static void waitForStonemasonToStartGettingStone(GameMap map, Stonemason stonemason) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+            if (stonemason.isGettingStone()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(stonemason.isGettingStone());
+    }
+
+    public static void waitForStonemasonToFinishGettingStone(GameMap map, Stonemason stonemason) throws Exception {
+        assertTrue(stonemason.isGettingStone());
+
+        for (int i = 0; i < 1000; i++) {
+            if (!stonemason.isGettingStone()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(stonemason.isGettingStone());
+    }
+
+    public static void waitForSignToDisappear(GameMap map, Sign sign0) throws Exception {
+        assertTrue(map.isSignAtPoint(sign0.getPosition()));
+
+        for (int i = 0; i < 5000; i++) {
+            if (!map.isSignAtPoint(sign0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.isSignAtPoint(sign0.getPosition()));
+    }
+
+    public static void waitForFarmerToHarvestCrop(GameMap map, Farmer farmer, Crop crop0) throws Exception {
+        assertTrue(farmer.isHarvesting());
+        assertEquals(farmer.getPosition(), crop0.getPosition());
+        assertTrue(map.isCropAtPoint(crop0.getPosition()));
+
+        for (int i = 0; i < 1000; i++) {
+            if (!farmer.isHarvesting()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(farmer.isHarvesting());
+        assertEquals(map.getCropAtPoint(crop0.getPosition()).getGrowthState(), HARVESTED);
+        assertEquals(farmer.getCargo().getMaterial(), WHEAT);
+    }
+
+    public static void waitForWorkerToGoToPoint(GameMap map, Worker worker, Point point) throws Exception {
+        for (int i = 0; i < 5000; i++) {
+            if (worker.isExactlyAtPoint() && worker.getPosition().equals(point)) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isExactlyAtPoint());
+        assertEquals(worker.getPosition(), point);
+    }
+
+    public static void waitForWorkerToSetTarget(GameMap map, Worker worke, Point point) throws Exception {
+        for (int i = 0; i < 5000; i++) {
+            if (point.equals(worke.getTarget())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(worke.getTarget(), point);
+    }
+
+    public static void waitForHarvestedCropToDisappear(GameMap map, Crop crop0) throws Exception {
+        assertTrue(map.isCropAtPoint(crop0.getPosition()));
+        assertEquals(crop0.getGrowthState(), HARVESTED);
+
+        for (int i = 0; i < 5000; i++) {
+            if (!map.isCropAtPoint(crop0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.isCropAtPoint(crop0.getPosition()));
+    }
+
+    public static void waitForTreeToGetCutDown(Tree tree0, GameMap map) throws Exception {
+        assertTrue(map.isTreeAtPoint(tree0.getPosition()));
+        assertEquals(map.getTreeAtPoint(tree0.getPosition()), tree0);
+
+        for (int i = 0; i < 1000; i++) {
+            if (!map.isTreeAtPoint(tree0.getPosition())) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(map.isTreeAtPoint(tree0.getPosition()));
+    }
+
+    public static class GameViewMonitor implements PlayerGameViewMonitor {
+
+        private List<GameChangesList> gameChanges;
+
+        public GameViewMonitor() {
+            gameChanges = new ArrayList<>();
+        }
+
+        @Override
+        public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
+            gameChanges.add(gameChangesList);
+        }
+
+        public List<GameChangesList> getEvents() {
+            return gameChanges;
+        }
+
+        public GameChangesList getLastEvent() {
+            return gameChanges.get(gameChanges.size() - 1);
+        }
+
+        public List<GameChangesList> getEventsAfterEvent(GameChangesList gameChangesEvent) {
+            if (gameChangesEvent.equals(getLastEvent())) {
+                return Collections.EMPTY_LIST;
+            }
+
+            int index = this.gameChanges.indexOf(gameChangesEvent);
+
+            return gameChanges.subList(index + 1, gameChanges.size() - 1);
+
+        }
     }
 }
