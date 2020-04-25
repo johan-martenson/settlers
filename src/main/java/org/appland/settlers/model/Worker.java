@@ -282,6 +282,12 @@ public abstract class Worker implements Actor {
     public void setTargetBuilding(Building building) throws Exception {
         buildingToEnter = building;
         setTarget(building.getPosition());
+
+        /* Let sub classes add logic */
+        onSetTargetBuilding(building);
+    }
+
+    void onSetTargetBuilding(Building building) {
     }
 
     public Building getTargetBuilding() {
@@ -349,7 +355,6 @@ public abstract class Worker implements Actor {
 
     void setOffroadTarget(Point point, Point via) throws Exception {
         boolean wasInside = false;
-
 
         target = point;
 
