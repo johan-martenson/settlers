@@ -1087,7 +1087,7 @@ public class TestGameMap {
                    player0.getBorders().get(1).contains(point86));
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotGetNonExistingFlagAtPoint() throws Exception {
 
         /* Creating new game map with size 100x100 */
@@ -1106,7 +1106,7 @@ public class TestGameMap {
 
         /* Verify that it's not possible to get a non-existing flag */
         Point point1 = new Point(20, 20);
-        Flag flag0 = map.getFlagAtPoint(point1);
+        assertNull(map.getFlagAtPoint(point1));
     }
 
     @Test

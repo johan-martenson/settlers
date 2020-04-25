@@ -655,9 +655,6 @@ public class Player {
         for (Point point : newDiscoveredLand) {
             GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
 
-            System.out.println("New point discovered: " + point);
-            System.out.println("Point is: " + pointInformation);
-
             if (pointInformation == GameMap.PointInformation.TREE) {
                 newTrees.add(map.getTreeAtPoint(point));
             }

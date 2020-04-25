@@ -1692,12 +1692,8 @@ public class GameMap {
      * @return
      * @throws Exception
      */
-    public Flag getFlagAtPoint(Point point) /*throws Exception*/ {
+    public Flag getFlagAtPoint(Point point) {
         MapPoint mp = pointToGameObject.get(point);
-
-/*        if (!mp.isFlag()) {
-            throw new Exception("There is no flag at " + point);
-        }*/
 
         return mp.getFlag();
     }

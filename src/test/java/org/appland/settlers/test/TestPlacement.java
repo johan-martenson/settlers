@@ -1717,8 +1717,7 @@ public class TestPlacement {
                 assertFalse(map.isFlagAtPoint(borderPoint));
 
                 try {
-                    map.getFlagAtPoint(borderPoint);
-                    fail();
+                    assertNull(map.getFlagAtPoint(borderPoint));
                 } catch (Exception e) {}
             }
         }
