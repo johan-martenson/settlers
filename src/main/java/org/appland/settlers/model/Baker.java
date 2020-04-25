@@ -7,11 +7,11 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Baker.State.BAKING_BREAD;
-import static org.appland.settlers.model.Baker.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Baker.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Baker.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Baker.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Baker.State.GOING_TO_FLAG_WITH_CARGO;
+import static org.appland.settlers.model.Baker.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Baker.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Baker.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WATER;
@@ -147,7 +147,6 @@ public class Baker extends Worker {
             }
         }
     }
-
 
     @Override
     public String toString() {

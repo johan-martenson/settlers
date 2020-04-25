@@ -161,6 +161,8 @@ public class TestArmory {
 
     @Test
     public void testArmoryNeedsWorker() throws Exception {
+
+        /* Create new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1023,7 +1025,7 @@ public class TestArmory {
     @Test
     public void testWorkerGoesBackToOwnStorageEvenWithoutRoadsAndEnemiesStorageIsCloser() throws Exception {
 
-        /* Create player list with two players */
+        /* Create player list with three players */
         Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", GREEN);
         Player player2 = new Player("Player 2", RED);

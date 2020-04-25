@@ -656,7 +656,6 @@ public class TestBakery {
         assertNotEquals(courier.getTarget(), bakery0.getFlag().getPosition());
         assertTrue(road0.getWayPoints().contains(courier.getTarget()));
 
-
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, courier.getTarget());
 
         /* Verify that the courier walks to pick up the cargo */

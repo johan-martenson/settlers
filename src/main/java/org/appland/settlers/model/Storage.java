@@ -205,6 +205,7 @@ public class Storage extends Building implements Actor {
                     }
 
                     Military military = retrieveAnyMilitary();
+
                     getMap().placeWorker(military, this);
                     military.setTargetBuilding(building);
                     building.promiseMilitary(military);
@@ -226,6 +227,7 @@ public class Storage extends Building implements Actor {
                     }
 
                     Worker worker = storage.retrieveWorker(material);
+
                     getMap().placeWorker(worker, storage.getFlag());
                     worker.setTargetBuilding(building);
                     building.promiseWorker(worker);
