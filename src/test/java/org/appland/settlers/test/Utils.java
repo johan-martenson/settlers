@@ -1268,6 +1268,21 @@ public class Utils {
         assertFalse(map.isTreeAtPoint(tree0.getPosition()));
     }
 
+    public static void waitForWorkerToBeOutside(Worker worker, GameMap map) throws Exception {
+        assertTrue(worker.isInsideBuilding());
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (!worker.isInsideBuilding()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertFalse(worker.isInsideBuilding());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private List<GameChangesList> gameChanges;
@@ -1286,6 +1301,10 @@ public class Utils {
         }
 
         public GameChangesList getLastEvent() {
+            if (gameChanges.isEmpty()) {
+                return null;
+            }
+
             return gameChanges.get(gameChanges.size() - 1);
         }
 
