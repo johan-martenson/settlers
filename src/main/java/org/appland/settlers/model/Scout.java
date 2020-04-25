@@ -15,7 +15,9 @@ import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Scout.State.GOING_TO_NEXT_POINT;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_FLAG;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Scout.State.WALKING_TO_ASSIGNED_LOOKOUT_TOWER;
 import static org.appland.settlers.model.Scout.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Scout.State.WORKING_IN_LOOKOUT_TOWER;
 
 /**
  *
@@ -24,11 +26,13 @@ import static org.appland.settlers.model.Scout.State.WALKING_TO_TARGET;
 @Walker(speed = 10)
 public class Scout extends Worker {
 
+    private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
+
     protected enum State {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_POINT,
         RETURNING_TO_FLAG,
-        RETURNING_TO_STORAGE
+        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, RETURNING_TO_STORAGE
     }
 
     private static final int DISCOVERY_RADIUS = 4;
@@ -56,7 +60,9 @@ public class Scout extends Worker {
 
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
-        if (state == WALKING_TO_TARGET) {
+        if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER) {
+            enterBuilding(getTargetBuilding());
+        } else if (state == WALKING_TO_TARGET) {
 
             flagPoint = getPosition();
 
@@ -122,6 +128,27 @@ public class Scout extends Worker {
     }
 
     @Override
+    public void onSetTargetBuilding(Building building) {
+
+        /* If this is called it means that the scout will be assigned to a lookout tower and will not walk around exploring */
+        state = WALKING_TO_ASSIGNED_LOOKOUT_TOWER;
+    }
+
+    @Override
+    void onEnterBuilding(Building building) throws Exception {
+
+        /* The scout has reached the lookout tower it's assigned to */
+        setHome(building);
+
+        /* Discover the area around the tower */
+        for (Point point : map.getPointsWithinRadius(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS)) {
+            getPlayer().discover(point);
+        }
+        
+        state = WORKING_IN_LOOKOUT_TOWER;
+    }
+
+    @Override
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Discover each point the scout walks on */
@@ -129,6 +156,18 @@ public class Scout extends Worker {
 
         /* Return to storage if the planned path no longer exists */
         if (map.isFlagAtPoint(getPosition()) && !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+            returnToStorage();
+        }
+
+        /* Return to storage if the planned path no longer exists */
+        if (state == WALKING_TO_ASSIGNED_LOOKOUT_TOWER &&
+                map.isFlagAtPoint(getPosition()) &&
+                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+
+            /* Don't try to enter upon arrival */
+            clearTargetBuilding();
+
+            /* Go back to the storage */
             returnToStorage();
         }
     }
@@ -213,13 +252,18 @@ public class Scout extends Worker {
 
         state = State.RETURNING_TO_STORAGE;
 
+        clearTargetBuilding();
+
         if (storage != null) {
+            state = RETURNING_TO_STORAGE;
+
             setTarget(storage.getPosition());
         } else {
             storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
 
+            state = RETURNING_TO_STORAGE;
+
             setOffroadTarget(storage.getPosition());
         }
-
     }
 }
