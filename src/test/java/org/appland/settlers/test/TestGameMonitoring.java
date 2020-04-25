@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
@@ -47,11 +48,13 @@ import static org.junit.Assert.assertTrue;
 public class TestGameMonitoring {
 
     /*TODO:
-       only right player get events, (checked some - continue after road)
        objects when new land discovered,
        catapulted stone,
-       test scout discovers land,
-       discovered land by building & scout before monitoring are not reported
+       available construction,
+       available road connections,
+       road that becomes main road,
+       military building that is upgraded
+       game events
     *  */
 
     @Test
@@ -83,7 +86,6 @@ public class TestGameMonitoring {
             }
 
             assertEquals(gameChangesList.getNewTrees().size(), 0);
-            assertEquals(gameChangesList.getNewBorder().size(), 0);
             assertEquals(gameChangesList.getNewDiscoveredLand().size(), 0);
             assertEquals(gameChangesList.getNewFlags().size(), 0);
             assertEquals(gameChangesList.getNewBuildings().size(), 0);
@@ -91,8 +93,9 @@ public class TestGameMonitoring {
             assertEquals(gameChangesList.getNewCrops().size(), 0);
             assertEquals(gameChangesList.getNewSigns().size(), 0);
 
+            assertEquals(gameChangesList.getChangedBorders().size(), 0);
+
             assertEquals(gameChangesList.getRemovedTrees().size(), 0);
-            assertEquals(gameChangesList.getRemovedBorder().size(), 0);
             assertEquals(gameChangesList.getRemovedFlags().size(), 0);
             assertEquals(gameChangesList.getRemovedBuildings().size(), 0);
             assertEquals(gameChangesList.getRemovedRoads().size(), 0);
@@ -3690,17 +3693,26 @@ public class TestGameMonitoring {
 
         GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
 
-        assertTrue(gameChanges.getNewBorder().size() > 1);
-        assertTrue(gameChanges.getRemovedBorder().size() > 1);
+        assertTrue(gameChanges.getChangedBorders().size() == 1);
+
+        List<BorderChange> borderChanges = gameChanges.getChangedBorders();
+
+        assertEquals(borderChanges.size(), 1);
+
+        BorderChange borderChange = borderChanges.get(0);
+
+        assertEquals(borderChange.getPlayer(), player0);
+        assertEquals(borderChange.getNewBorder().size(), newBorder.size());
+        assertEquals(borderChange.getRemovedBorder().size(), removedBorder.size());
 
         for (Point point : newBorder) {
-            assertTrue(gameChanges.getNewBorder().contains(point));
-            assertFalse(gameChanges.getRemovedBorder().contains(point));
+            assertTrue(borderChange.getNewBorder().contains(point));
+            assertFalse(borderChange.getRemovedBorder().contains(point));
         }
 
         for (Point point : removedBorder) {
-            assertFalse(gameChanges.getNewBorder().contains(point));
-            assertTrue(gameChanges.getRemovedBorder().contains(point));
+            assertFalse(borderChange.getNewBorder().contains(point));
+            assertTrue(borderChange.getRemovedBorder().contains(point));
         }
 
         /* Verify that no more events are sent for discovered land */
@@ -3711,8 +3723,7 @@ public class TestGameMonitoring {
 
             if (monitor.getEvents().size() > amountEvents) {
                 for (GameChangesList changes : monitor.getEvents().subList(amountEvents, monitor.getEvents().size() - 1)) {
-                    assertEquals(changes.getNewBorder().size(), 0);
-                    assertEquals(changes.getRemovedBorder().size(), 0);
+                    assertEquals(changes.getChangedBorders().size(), 0);
                 }
             }
         }
@@ -3829,8 +3840,7 @@ public class TestGameMonitoring {
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {
-            assertTrue(gameChangesList.getNewBorder().isEmpty());
-            assertTrue(gameChangesList.getRemovedBorder().isEmpty());
+            assertTrue(gameChangesList.getChangedBorders().isEmpty());
         }
     }
 

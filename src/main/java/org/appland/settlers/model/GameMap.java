@@ -87,6 +87,42 @@ public class GameMap {
     private final Set<Crop> newCrops;
     private final Set<Crop> removedCrops;
 
+    PointInformation whatIsAtPoint(Point point) {
+        MapPoint mp = getMapPoint(point);
+
+        if (mp.isTree()) {
+            return PointInformation.TREE;
+        }
+
+        if (mp.isStone()) {
+            return PointInformation.STONE;
+        }
+
+        if (mp.isFlag()) {
+
+            if (mp.isRoad()) {
+                return PointInformation.FLAG_AND_ROADS;
+            }
+
+            return PointInformation.FLAG;
+        }
+
+        if (mp.isBuilding()) {
+            return PointInformation.BUILDING;
+        }
+
+        if (mp.isRoad()) {
+            return PointInformation.ROAD;
+        }
+
+        return PointInformation.NONE;
+    }
+
+    enum PointInformation {
+        NONE,
+        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, TREE
+    }
+
     /**
      * Finds the shortest possible placement for a new road between the given points for the given player
      *
@@ -432,14 +468,20 @@ public class GameMap {
         }
 
         /* Add worker events to the players if any */
+        List<BorderChange> borderChanges = null;
         for (Player player : players) {
 
             if (!player.hasMonitor()) {
                 continue;
             }
 
-            for (Worker worker : workersWithNewTargets) {
+            if (borderChanges == null) {
+                borderChanges = collectBorderChangesFromEachPlayer();
+            }
 
+            player.reportChangedBorders(borderChanges);
+
+            for (Worker worker : workersWithNewTargets) {
                 if (!player.getDiscoveredLand().contains(worker.getPosition())) {
                     continue;
                 }
@@ -590,6 +632,20 @@ public class GameMap {
 
         /* Step the time keeper */
         time = time + 1;
+    }
+
+    private List<BorderChange> collectBorderChangesFromEachPlayer() {
+        List<BorderChange> borderChanges;
+        borderChanges = new ArrayList<>();
+
+        for (Player player1 : players) {
+            BorderChange borderChange = player1.getBorderChange();
+
+            if (borderChange != null) {
+                borderChanges.add(borderChange);
+            }
+        }
+        return borderChanges;
     }
 
     /**
@@ -1636,12 +1692,12 @@ public class GameMap {
      * @return
      * @throws Exception
      */
-    public Flag getFlagAtPoint(Point point) throws Exception {
+    public Flag getFlagAtPoint(Point point) /*throws Exception*/ {
         MapPoint mp = pointToGameObject.get(point);
 
-        if (!mp.isFlag()) {
+/*        if (!mp.isFlag()) {
             throw new Exception("There is no flag at " + point);
-        }
+        }*/
 
         return mp.getFlag();
     }
@@ -2936,6 +2992,10 @@ public class GameMap {
 
     public void reportWorkerWithNewTarget(Worker worker) {
         workersWithNewTargets.add(worker);
+
+        if (worker.getPlannedPath().size() == 0) {
+            System.out.println(Thread.currentThread().getStackTrace());
+        }
     }
 
     private <T extends Building> void reportPlacedBuilding(T house) {
@@ -2965,4 +3025,5 @@ public class GameMap {
     public void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
     }
+
 }

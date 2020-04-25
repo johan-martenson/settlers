@@ -53,7 +53,9 @@ public class Player {
     private final List<Point> newBorder;
     private final List<Point> removedBorder;
     private final List<Worker> workersEnteredBuildings;
+    private final List<Stone> newStones;
 
+    private List<BorderChange> changedBorders;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -113,6 +115,8 @@ public class Player {
         newBorder = new ArrayList<>();
         removedBorder = new ArrayList<>();
         workersEnteredBuildings = new ArrayList<>();
+        changedBorders = null;
+        newStones = new ArrayList<>();
     }
 
     public String getName() {
@@ -362,6 +366,11 @@ public class Player {
 
         for (Building building : getBuildings()) {
             if (building.equals(avoid)) {
+                continue;
+            }
+
+            /* Filter storage buildings that are not fully constructed */
+            if (!building.ready()) {
                 continue;
             }
 
@@ -622,20 +631,61 @@ public class Player {
     }
 
     public void reportWorkerWithNewTarget(Worker worker) {
+        if (worker.getPlannedPath().isEmpty() || worker.getPlannedPath().size() == 0) {
+            return;
+        }
+
         workersWithNewTargets.add(worker);
     }
 
     public void sendMonitoringEvents(long time) {
 
+        /* Don't send an event if there is no new information */
         if (newFlags.isEmpty() && removedFlags.isEmpty() && newBuildings.isEmpty() &&
             newRoads.isEmpty() && removedRoads.isEmpty() && removedWorkers.isEmpty() &&
             changedBuildings.isEmpty() && removedBuildings.isEmpty() && newTrees.isEmpty() &&
             removedTrees.isEmpty() && removedStones.isEmpty() && newSigns.isEmpty() &&
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
-            newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty()) {
+            newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
+            workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty()) {
             return;
         }
 
+        /* If the player has discovered new land - find out what is on that land */
+        for (Point point : newDiscoveredLand) {
+            GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
+
+            System.out.println("New point discovered: " + point);
+            System.out.println("Point is: " + pointInformation);
+
+            if (pointInformation == GameMap.PointInformation.TREE) {
+                newTrees.add(map.getTreeAtPoint(point));
+            }
+
+            if (pointInformation == GameMap.PointInformation.STONE) {
+                newStones.add(map.getStoneAtPoint(point));
+            }
+
+            if (pointInformation == GameMap.PointInformation.FLAG) {
+                newFlags.add(map.getFlagAtPoint(point));
+            }
+
+            if (pointInformation == GameMap.PointInformation.BUILDING) {
+                newBuildings.add(map.getBuildingAtPoint(point));
+            }
+
+            if (pointInformation == GameMap.PointInformation.ROAD) {
+                newRoads.add(map.getRoadAtPoint(point));
+            }
+
+            if (pointInformation == GameMap.PointInformation.FLAG_AND_ROADS) {
+                Flag flag = map.getFlagAtPoint(point);
+                newFlags.add(flag);
+                newRoads.addAll(map.getRoadsFromFlag(flag));
+            }
+        }
+
+        /* Create the event message */
         GameChangesList gameChangesToReport = new GameChangesList(time,
                 new ArrayList<>(workersWithNewTargets),
                 new ArrayList<>(newFlags),
@@ -654,8 +704,8 @@ public class Player {
                 new ArrayList<>(newCrops),
                 new ArrayList<>(removedCrops),
                 new ArrayList<>(newDiscoveredLand),
-                new ArrayList<>(newBorder),
-                new ArrayList<>(removedBorder));
+                new ArrayList<>(changedBorders),
+                new ArrayList<>(newStones));
 
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
             monitor.onViewChangesForPlayer(this, gameChangesToReport);
@@ -740,5 +790,17 @@ public class Player {
 
     public void reportRemovedCrop(Crop crop) {
         removedCrops.add(crop);
+    }
+
+    public void reportChangedBorders(List<BorderChange> borderChanges) {
+        changedBorders = borderChanges;
+    }
+
+    public BorderChange getBorderChange() {
+        if (newBorder.isEmpty() && removedBorder.isEmpty()) {
+            return null;
+        }
+
+        return new BorderChange(this, newBorder, removedBorder);
     }
 }

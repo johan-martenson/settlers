@@ -4,6 +4,7 @@ import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.GameChangesList;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
@@ -14,7 +15,9 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
+import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
+import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -355,5 +358,119 @@ public class TestMisc {
 
         /* Verify that the construction is at hundred  progress */
         assertEquals(armory0.getConstructionProgress(), 100);
+    }
+
+    @Test
+    public void testNoMonitoringEventWithEmptyPathForStorageWorker() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+
+        /* Place a woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+
+        /* Wait for the woodcutter to get constructed */
+        GameChangesList lastEvent = null;
+        for (int i = 0; i < 1000; i++) {
+
+            if (woodcutter0.ready()) {
+                break;
+            }
+
+            if (monitor.getLastEvent() != null) {
+
+                GameChangesList thisEvent = monitor.getLastEvent();
+
+                if (!thisEvent.equals(lastEvent)) {
+
+                    for (Worker worker : monitor.getLastEvent().getWorkersWithNewTargets()) {
+                        assertNotNull(worker.getPlannedPath());
+                        assertNotEquals(worker.getPlannedPath().size(), 0);
+                    }
+                }
+            }
+
+            map.stepTime();
+
+            lastEvent = monitor.getLastEvent();
+        }
+
+        assertTrue(woodcutter0.ready());
+    }
+
+    @Test
+    public void testMonitoringEventWhenWorkerLeavesBuilding() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        map.stepTime();
+
+        /* Place a woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
+
+        /* Wait for the woodcutter to get constructed and populated */
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
+
+        Worker woodcutterWorker = woodcutter0.getWorker();
+
+        map.stepTime();
+
+        /* Place a tree that the woodcutter can cut down */
+        Point point2 = new Point(14, 12);
+        Tree tree0 = map.placeTree(point2);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        assertEquals(monitor.getEvents().size(), 0);
+
+        /* Verify that an event is sent when the worker goes out to cut down the tree */
+        assertTrue(woodcutterWorker.isInsideBuilding());
+
+        int amountEvents = monitor.getEvents().size();
+
+        Utils.waitForWorkerToBeOutside(woodcutterWorker, map);
+
+        assertEquals(woodcutterWorker.getTarget(), tree0.getPosition());
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertTrue(monitor.getEvents().size() > amountEvents);
+
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertTrue(gameChangesList.getWorkersWithNewTargets().contains(woodcutterWorker));
     }
 }
