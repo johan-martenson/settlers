@@ -704,10 +704,12 @@ public class Player {
                 new ArrayList<>(changedBorders),
                 new ArrayList<>(newStones));
 
+        /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
             monitor.onViewChangesForPlayer(this, gameChangesToReport);
         }
 
+        /* Clear out the lists to not pollute the next event with old information */
         newFlags.clear();
         removedFlags.clear();
         newBuildings.clear();

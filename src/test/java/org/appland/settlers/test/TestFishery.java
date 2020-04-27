@@ -118,18 +118,29 @@ public class TestFishery {
 
     @Test
     public void testConstructFisherman() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery fishery = new Fishery(player0);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 10);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
         assertTrue(fishery.underConstruction());
-
         assertFalse(fishery.needsWorker());
 
-        Utils.constructHouse(fishery);
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
         /* Verify that the fishery is unoccupied when it's newly constructed */
         assertTrue(fishery.needsWorker());
@@ -208,9 +219,29 @@ public class TestFishery {
 
     @Test
     public void testFisheryIsNotMilitary() throws Exception {
-        Fishery fishery = new Fishery(null);
 
-        Utils.constructHouse(fishery);
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 10);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        assertTrue(fishery.underConstruction());
+        assertFalse(fishery.needsWorker());
+
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery);
 
         assertFalse(fishery.isMilitaryBuilding());
         assertEquals(fishery.getNumberOfHostedMilitary(), 0);

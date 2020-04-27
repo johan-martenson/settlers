@@ -118,6 +118,10 @@ public class GameMap {
         return PointInformation.NONE;
     }
 
+    public void reportBuildingConstructed(Building building) {
+        changedBuildings.add(building);
+    }
+
     enum PointInformation {
         NONE,
         STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, TREE

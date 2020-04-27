@@ -112,27 +112,43 @@ public class TestForesterHut {
 
     @Test
     public void testConstructForester() throws Exception {
-        ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(foresterHut.underConstruction());
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        assertFalse(foresterHut.needsWorker());
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        Utils.constructHouse(foresterHut);
+        /* Place forester hut */
+        Point point1 = new Point(7, 9);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+
+        assertTrue(foresterHut0.underConstruction());
+        assertFalse(foresterHut0.needsWorker());
+
+        /* Connect the forester with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
 
         /* Verify that the forester is unoccupied when it's newly constructed */
-        assertTrue(foresterHut.needsWorker());
+        assertTrue(foresterHut0.needsWorker());
 
         /* Verify that the forester hut requires a worker */
-        assertTrue(foresterHut.needsWorker());
+        assertTrue(foresterHut0.needsWorker());
 
         Forester forester = new Forester(null, null);
 
         /* Assign worker */
-        foresterHut.assignWorker(forester);
+        foresterHut0.assignWorker(forester);
 
-        assertFalse(foresterHut.needsWorker());
-        assertEquals(foresterHut.getWorker(), forester);
+        assertFalse(foresterHut0.needsWorker());
+        assertEquals(foresterHut0.getWorker(), forester);
     }
 
     @Test(expected = Exception.class)
@@ -177,13 +193,33 @@ public class TestForesterHut {
 
     @Test
     public void testForesterHutIsNotMilitary() throws Exception {
-        ForesterHut foresterHut = new ForesterHut(null);
 
-        Utils.constructHouse(foresterHut);
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
 
-        assertFalse(foresterHut.isMilitaryBuilding());
-        assertEquals(foresterHut.getNumberOfHostedMilitary(), 0);
-        assertEquals(foresterHut.getMaxHostedMilitary(), 0);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(7, 9);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+
+        assertTrue(foresterHut0.underConstruction());
+        assertFalse(foresterHut0.needsWorker());
+
+        /* Connect the forester with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(foresterHut0);
+
+        assertFalse(foresterHut0.isMilitaryBuilding());
+        assertEquals(foresterHut0.getNumberOfHostedMilitary(), 0);
+        assertEquals(foresterHut0.getMaxHostedMilitary(), 0);
     }
 
     @Test

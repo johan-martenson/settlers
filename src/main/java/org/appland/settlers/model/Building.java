@@ -424,6 +424,9 @@ public class Building implements Actor, EndPoint {
 
                     /* Give subclasses a chance to add behavior */
                     onConstructionFinished();
+
+                    /* Report that the construction is done */
+                    map.reportBuildingConstructed(this);
                 }
             } else {
                 countdown.step();

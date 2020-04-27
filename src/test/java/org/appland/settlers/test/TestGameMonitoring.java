@@ -55,6 +55,7 @@ public class TestGameMonitoring {
        road that becomes main road,
        military building that is upgraded
        game events
+       building becomes constructed
     *  */
 
     @Test
@@ -909,6 +910,125 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 1);
         assertTrue(woodcutter0.burningDown());
+    }
+
+    @Test
+    public void testMonitoringEventWhenHouseIsConstructed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the event is sent when the house is constructed */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 1);
+        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+    }
+
+    @Test
+    public void testMonitoringEventWhenHouseIsConstructedIsOnlySentOnce() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the event is sent when the house is constructed */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 1);
+        assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
+
+        /* Verify that the event is only sent once */
+        Utils.fastForward(10, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChanges)) {
+            assertEquals(newChanges.getChangedBuildings().size(), 0);
+        }
+    }
+
+    @Test
+    public void testNoMonitoringEventForOtherPlayerWhenHouseIsConstructed() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter for player 0 */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter for player 1 */
+        Point point1 = new Point(65, 65);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(10, 10);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Set up monitoring subscription for player 1 */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player1.monitorGameView(monitor);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that no event is sent to player 1 when the house is constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertEquals(gameChanges.getChangedBuildings().size(), 0);
     }
 
     @Test

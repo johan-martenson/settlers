@@ -106,13 +106,30 @@ public class TestHunterHut {
 
     @Test
     public void testConstructHunter() throws Exception {
-        HunterHut hunterHut = new HunterHut(null);
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(10, 10);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
         assertTrue(hunterHut.underConstruction());
 
         assertFalse(hunterHut.needsWorker());
 
-        Utils.constructHouse(hunterHut);
+        /* Connect the forester with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(hunterHut);
 
         /* Verify that the forrester is unoccupied when it's newly constructed */
         assertTrue(hunterHut.needsWorker());
@@ -171,9 +188,30 @@ public class TestHunterHut {
 
     @Test
     public void testHunterHutIsNotMilitary() throws Exception {
-        HunterHut hunterHut = new HunterHut(null);
 
-        Utils.constructHouse(hunterHut);
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(10, 10);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        assertTrue(hunterHut.underConstruction());
+
+        assertFalse(hunterHut.needsWorker());
+
+        /* Connect the forester with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the forester hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(hunterHut);
 
         assertFalse(hunterHut.isMilitaryBuilding());
         assertEquals(hunterHut.getNumberOfHostedMilitary(), 0);
