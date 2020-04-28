@@ -48,14 +48,13 @@ import static org.junit.Assert.assertTrue;
 public class TestGameMonitoring {
 
     /*TODO:
-       objects when new land discovered,
+       objects when new land discovered (separate file),
        catapulted stone,
-       available construction,
-       available road connections,
+       available construction (separate file),
+       available road connections (?),
        road that becomes main road,
        military building that is upgraded
        game events
-       building becomes constructed
     *  */
 
     @Test

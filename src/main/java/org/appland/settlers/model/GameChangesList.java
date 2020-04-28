@@ -26,6 +26,7 @@ public class GameChangesList {
     private final Collection<Point> newDiscoveredLand;
     private final List<BorderChange> borderChanges;
     private final List<Stone> newStones;
+    private final List<Worker> newWorkers;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -46,7 +47,7 @@ public class GameChangesList {
                            List<Crop> removedCrops,
                            Collection<Point> newDiscoveredLand,
                            List<BorderChange> borderChanges,
-                           List<Stone> newStones) {
+                           List<Stone> newStones, List<Worker> newWorkers) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -67,6 +68,7 @@ public class GameChangesList {
         this.newDiscoveredLand = newDiscoveredLand;
         this.borderChanges = borderChanges;
         this.newStones = newStones;
+        this.newWorkers = newWorkers;
     }
 
     public long getTime() {
@@ -172,5 +174,9 @@ public class GameChangesList {
 
     public List<Stone> getNewStones() {
         return newStones;
+    }
+
+    public List<Worker> getNewWorkers() {
+        return newWorkers;
     }
 }

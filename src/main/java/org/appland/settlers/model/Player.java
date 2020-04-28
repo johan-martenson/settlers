@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -56,6 +57,8 @@ public class Player {
     private final List<Stone> newStones;
 
     private List<BorderChange> changedBorders;
+    private final Set<Point> borderPoints;
+    private final List<Worker> newWorkers;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -117,6 +120,8 @@ public class Player {
         workersEnteredBuildings = new ArrayList<>();
         changedBorders = null;
         newStones = new ArrayList<>();
+        borderPoints = new HashSet<>();
+        newWorkers = new ArrayList<>();
     }
 
     public String getName() {
@@ -340,6 +345,10 @@ public class Player {
         for (Land land : updatedLands) {
             ownedLand.addAll(land.getPointsInLand());
             borders.addAll(land.getBorders());
+
+            for (Collection<Point> borderForLand : land.getBorders()) {
+                borderPoints.addAll(borderForLand);
+            }
         }
 
         if (!updatedLands.isEmpty()) {
@@ -680,6 +689,51 @@ public class Player {
                 newFlags.add(flag);
                 newRoads.addAll(map.getRoadsFromFlag(flag));
             }
+
+            if (pointInformation == GameMap.PointInformation.SIGN) {
+                Sign sign = map.getSignAtPoint(point);
+                newSigns.add(sign);
+            }
+
+            if (pointInformation == GameMap.PointInformation.CROP) {
+                Crop crop = map.getCropAtPoint(point);
+                newCrops.add(crop);
+            }
+        }
+
+        /* Find any discovered border for other players */
+        for (Player player : map.getPlayers()) {
+            if (player.equals(this)) {
+                continue;
+            }
+
+            Set<Point> borderForPlayer = player.getBorderPoints();
+            List<Point> discoveredBorder = new ArrayList<>();
+
+            for (Point point : newDiscoveredLand) {
+                if (borderForPlayer.contains(point)) {
+                    discoveredBorder.add(point);
+                }
+            }
+
+            if (discoveredBorder.isEmpty()) {
+                continue;
+            }
+
+            changedBorders.add(new BorderChange(player, newDiscoveredLand, Collections.EMPTY_LIST));
+        }
+
+        /* Find any discovered workers */
+        for (Worker worker : map.getWorkers()) {
+            if (worker.getPlayer().equals(this)) {
+                continue;
+            }
+
+            for (Point point : newDiscoveredLand) {
+                if (worker.getPosition().equals(point)) {
+                    newWorkers.add(worker);
+                }
+            }
         }
 
         /* Create the event message */
@@ -702,7 +756,7 @@ public class Player {
                 new ArrayList<>(removedCrops),
                 new ArrayList<>(newDiscoveredLand),
                 new ArrayList<>(changedBorders),
-                new ArrayList<>(newStones));
+                new ArrayList<>(newStones), newWorkers);
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -729,6 +783,10 @@ public class Player {
         newDiscoveredLand.clear();
         newBorder.clear();
         removedBorder.clear();
+    }
+
+    private Set<Point> getBorderPoints() {
+        return borderPoints;
     }
 
     public void reportChangedBuilding(Building building) {

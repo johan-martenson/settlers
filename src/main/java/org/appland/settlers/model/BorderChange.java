@@ -1,6 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class BorderChange {
@@ -8,7 +9,7 @@ public class BorderChange {
     private final List<Point> newBorder;
     private final List<Point> removedBorder;
 
-    public BorderChange(Player player, List<Point> newBorder, List<Point> removedBorder) {
+    public BorderChange(Player player, Collection<Point> newBorder, Collection<Point> removedBorder) {
         this.player = player;
         this.newBorder = new ArrayList<>(newBorder);
         this.removedBorder = new ArrayList<>(removedBorder);

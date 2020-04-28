@@ -228,4 +228,8 @@ class MapPoint {
     public int getHeight() {
         return height;
     }
+
+    boolean isSign() {
+        return sign != null;
+    }
 }

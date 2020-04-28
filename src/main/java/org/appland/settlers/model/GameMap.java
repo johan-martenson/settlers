@@ -115,6 +115,14 @@ public class GameMap {
             return PointInformation.ROAD;
         }
 
+        if (mp.isSign()) {
+            return PointInformation.SIGN;
+        }
+
+        if (mp.isCrop()) {
+            return PointInformation.CROP;
+        }
+
         return PointInformation.NONE;
     }
 
@@ -124,7 +132,7 @@ public class GameMap {
 
     enum PointInformation {
         NONE,
-        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, TREE
+        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE
     }
 
     /**
