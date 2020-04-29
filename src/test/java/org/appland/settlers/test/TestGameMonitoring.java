@@ -53,7 +53,6 @@ public class TestGameMonitoring {
        available construction (separate file),
        available road connections (?),
        road that becomes main road,
-       military building that is upgraded
        game events
     *  */
 
@@ -4551,5 +4550,58 @@ public class TestGameMonitoring {
         for (GameChangesList gameChangesList : monitor.getEvents()) {
             assertTrue(gameChangesList.getNewDiscoveredLand().isEmpty());
         }
+    }
+
+    @Test
+    public void testMonitoringEventWhenMilitaryBuildingIsUpgraded() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        map.stepTime();
+
+        /* Place barracks */
+        Point point1 = new Point(10, 10);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Connect the barracks to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the barracks to get constructed */
+        Utils.waitForBuildingToBeConstructed(barracks0);
+
+        map.stepTime();
+
+        /* Set up monitoring subscription for the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Verify that three events are sent when a house is placed - for the house, the road, and the flag */
+        assertEquals(monitor.getEvents().size(), 0);
+
+        /* Verify that an event is sent when the barracks is upgraded */
+        barracks0.upgrade();
+
+        Utils.waitForUpgradeToFinish(barracks0);
+
+        GameChangesList gameChanges = monitor.getLastEvent();
+
+        assertTrue(gameChanges.getTime() > 0);
+        assertEquals(gameChanges.getChangedBuildings().size(), 1);
+        assertEquals(gameChanges.getChangedBuildings().get(0), map.getBuildingAtPoint(point1));
+
+        assertEquals(gameChanges.getNewFlags().size(), 0);
+        assertEquals(gameChanges.getNewRoads().size(), 0);
+        assertEquals(gameChanges.getNewBuildings().size(), 0);
+        assertEquals(gameChanges.getRemovedFlags().size(), 0);
+        assertEquals(gameChanges.getRemovedBuildings().size(), 0);
+        assertEquals(gameChanges.getRemovedRoads().size(), 0);
     }
 }

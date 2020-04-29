@@ -33,7 +33,7 @@ public class TestGameMonitoringWhenDiscovering {
     TODO:
      - flag+road
      - available construction
-     - workers and wild animals
+     - wild animals
      */
 
     @Test

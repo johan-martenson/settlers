@@ -32,6 +32,12 @@ import static org.junit.Assert.fail;
 
 public class TestMisc {
 
+    /*
+    TODO:
+     - Coin delivery to upgraded building
+
+     */
+
     @Test
     public void testRemoveRoadWhenCourierGoesToBuildingToDeliverCargo() throws Exception {
 

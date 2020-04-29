@@ -1283,6 +1283,26 @@ public class Utils {
         assertFalse(worker.isInsideBuilding());
     }
 
+    public static void waitForUpgradeToFinish(Building building) throws Exception {
+        GameMap map = building.getMap();
+
+        assertTrue(building.isUpgrading());
+
+        for (int i = 0; i < 1000; i++) {
+            if (!map.getBuildingAtPoint(building.getPosition()).isUpgrading()) {
+                break;
+            }
+
+            assertEquals(map.getBuildingAtPoint(building.getPosition()), building);
+            assertTrue(building.isUpgrading());
+            assertTrue(map.getBuildingAtPoint(building.getPosition()).isUpgrading());
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getBuildingAtPoint(building.getPosition()).isUpgrading());
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private List<GameChangesList> gameChanges;

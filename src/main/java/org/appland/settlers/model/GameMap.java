@@ -2890,19 +2890,27 @@ public class GameMap {
 
     void replaceBuilding(Building upgradedBuilding, Point position) throws Exception {
 
+        /* Plan to remove the pre-upgrade building */
         Building oldBuilding = getBuildingAtPoint(position);
         buildingsToRemove.add(oldBuilding);
 
+        /* Put the upgraded building in place  */
         upgradedBuilding.setPosition(position);
         upgradedBuilding.setFlag(oldBuilding.getFlag());
 
+        /* Update the map point */
         getMapPoint(position).removeBuilding();
         getMapPoint(position).setBuilding(upgradedBuilding);
 
+        /* Update the player's list of buildings */
         upgradedBuilding.getPlayer().removeBuilding(oldBuilding);
         upgradedBuilding.getPlayer().addBuilding(upgradedBuilding);
 
+        /* Plan to add the upgraded building */
         buildingsToAdd.add(upgradedBuilding);
+
+        /* Report that the building has changed */
+        changedBuildings.add(upgradedBuilding);
     }
 
     /**
