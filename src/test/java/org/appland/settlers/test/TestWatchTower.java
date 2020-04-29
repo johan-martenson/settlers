@@ -242,11 +242,11 @@ public class TestWatchTower {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
         /* Wait for the watch tower to finish construction */
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
 
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
 
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
     }
 
     @Test
@@ -290,12 +290,12 @@ public class TestWatchTower {
 
         /* Verify that the border is extended when the military reaches the watch tower */
         assertEquals(military.getTarget(), watchTower0.getPosition());
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
 
-        assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 39)));
+        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 39)));
     }
 
     @Test
@@ -411,12 +411,12 @@ public class TestWatchTower {
         Utils.constructHouse(watchTower0);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
+        assertTrue(player0.getBorderPoints().contains(new Point(6, 24)));
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 38)));
+        assertTrue(player0.getBorderPoints().contains(new Point(6, 38)));
     }
 
     @Test

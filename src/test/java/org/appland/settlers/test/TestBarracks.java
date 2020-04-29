@@ -184,11 +184,11 @@ public class TestBarracks {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
 
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
     }
 
     @Test
@@ -234,12 +234,12 @@ public class TestBarracks {
 
         /* Verify that the border is extended when the military reaches the barracks */
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertFalse(player0.getBorders().get(0).contains(new Point(5, 25)));
-        assertTrue(player0.getBorders().get(0).contains(new Point(5, 31)));
+        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(new Point(5, 31)));
     }
 
     @Test
@@ -347,12 +347,12 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 24)));
+        assertTrue(player0.getBorderPoints().contains(new Point(6, 24)));
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        assertTrue(player0.getBorders().get(0).contains(new Point(6, 30)));
+        assertTrue(player0.getBorderPoints().contains(new Point(6, 30)));
     }
 
     @Test
@@ -1785,8 +1785,8 @@ public class TestBarracks {
         /* Verify the border before the upgrade */
         Point point27 = new Point(29, 5);
         Point point28 = new Point(31, 5);
-        assertTrue(player0.getBorders().get(0).contains(point27));
-        assertFalse(player0.getBorders().get(0).contains(point28));
+        assertTrue(player0.getBorderPoints().contains(point27));
+        assertFalse(player0.getBorderPoints().contains(point28));
         assertFalse(player0.isWithinBorder(point27));
 
         /* Wait for the upgrade */
@@ -1798,8 +1798,8 @@ public class TestBarracks {
         }
 
         /* Verify that the border is expanded after the upgrade */
-        assertFalse(player0.getBorders().get(0).contains(point27));
-        assertTrue(player0.getBorders().get(0).contains(point28));
+        assertFalse(player0.getBorderPoints().contains(point27));
+        assertTrue(player0.getBorderPoints().contains(point28));
         assertTrue(player0.isWithinBorder(point27));
     }
 
@@ -1845,7 +1845,7 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Verify the border before the upgrade */
-        assertTrue(player0.getBorders().get(0).contains(new Point(29, 5)));
+        assertTrue(player0.getBorderPoints().contains(new Point(29, 5)));
 
         /* Wait for the upgrade */
         for (int i = 0; i < 100; i++) {
@@ -2323,7 +2323,7 @@ public class TestBarracks {
 
             /* Verify that the barracks is still occupied */
             assertFalse(barracks0.occupied());
-            assertTrue(player0.getBorders().get(0).contains(point1));
+            assertTrue(player0.getBorderPoints().contains(point1));
             assertFalse(player0.isWithinBorder(point2));
 
             map.stepTime();
@@ -2331,7 +2331,7 @@ public class TestBarracks {
 
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
         assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).occupied());
-        assertTrue(player0.getBorders().get(0).contains(point1));
+        assertTrue(player0.getBorderPoints().contains(point1));
         assertFalse(player0.isWithinBorder(point2));
     }
 

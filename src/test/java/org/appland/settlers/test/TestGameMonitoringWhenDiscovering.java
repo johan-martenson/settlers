@@ -683,7 +683,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Pick a border point for player 0 to discover */
         Point point2 = new Point(28, 2);
 
-        assertTrue(player1.getBorders().get(0).contains(point2));
+        assertTrue(player1.getBorderPoints().contains(point2));
 
         /* Place lookout tower */
         Point point3 = new Point(21, 5);
@@ -752,7 +752,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Pick a border point for player 0 to discover */
         Point point2 = new Point(28, 2);
 
-        assertTrue(player1.getBorders().get(0).contains(point2));
+        assertTrue(player1.getBorderPoints().contains(point2));
 
         /* Place lookout tower */
         Point point3 = new Point(21, 5);

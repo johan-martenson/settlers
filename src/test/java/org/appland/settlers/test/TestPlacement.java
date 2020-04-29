@@ -88,7 +88,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 10, 10);
 
         /* Verify that the player has no borders yet */
-        assertEquals(player0.getBorders().size(), 0);
+        assertEquals(player0.getBorderPoints().size(), 0);
     }
 
     @Test
@@ -1657,10 +1657,8 @@ public class TestPlacement {
         /* Verify that there are no available flag spots on the border */
         Collection<Point> availableFlagPoints = map.getAvailableFlagPoints(player0);
 
-        for (Collection<Point> border : player0.getBorders()) {
-            for (Point borderPoint : border) {
-                assertFalse(availableFlagPoints.contains(borderPoint));
-            }
+        for (Point borderPoint : player0.getBorderPoints()) {
+            assertFalse(availableFlagPoints.contains(borderPoint));
         }
     }
 
@@ -1682,10 +1680,8 @@ public class TestPlacement {
         /* Verify that there are no available flag spots on the border */
         Set<Point> availableHousePoints = map.getAvailableHousePoints(player0).keySet();
 
-        for (Collection<Point> border : player0.getBorders()) {
-            for (Point borderPoint : border) {
-                assertFalse(availableHousePoints.contains(borderPoint));
-            }
+        for (Point borderPoint : player0.getBorderPoints()) {
+            assertFalse(availableHousePoints.contains(borderPoint));
         }
     }
 
@@ -1705,21 +1701,19 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a flag on any point of the border */
-        for (Collection<Point> border : player0.getBorders()) {
-            for (Point borderPoint : border) {
+        for (Point borderPoint : player0.getBorderPoints()) {
 
-                try {
-                    Flag flag0 = map.placeFlag(player0, borderPoint);
+            try {
+                Flag flag0 = map.placeFlag(player0, borderPoint);
 
-                    fail();
-                } catch (Exception e) {}
+                fail();
+            } catch (Exception e) {}
 
-                assertFalse(map.isFlagAtPoint(borderPoint));
+            assertFalse(map.isFlagAtPoint(borderPoint));
 
-                try {
-                    assertNull(map.getFlagAtPoint(borderPoint));
-                } catch (Exception e) {}
-            }
+            try {
+                assertNull(map.getFlagAtPoint(borderPoint));
+            } catch (Exception e) {}
         }
     }
 
@@ -1739,18 +1733,15 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a house on any point of the border */
-        for (Collection<Point> border : player0.getBorders()) {
-            for (Point borderPoint : border) {
+        for (Point borderPoint : player0.getBorderPoints()) {
+            try {
+                Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), borderPoint);
 
-                try {
-                    Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), borderPoint);
+                fail();
+            } catch (Exception e) {}
 
-                    fail();
-                } catch (Exception e) {}
-
-                assertFalse(map.isBuildingAtPoint(borderPoint));
-                assertNull(map.getBuildingAtPoint(borderPoint));
-            }
+            assertFalse(map.isBuildingAtPoint(borderPoint));
+            assertNull(map.getBuildingAtPoint(borderPoint));
         }
     }
 

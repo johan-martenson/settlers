@@ -349,9 +349,7 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(player0.getBorders().size(), 1);
-
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
         assertTrue(border.contains(new Point(50, 30)));
         assertTrue(border.contains(new Point(50, 70)));
 
@@ -560,8 +558,7 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(player0.getBorders().size(), 1);
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
 
         assertTrue(border.contains(new Point(50, 70)));
         assertFalse(border.contains(new Point(50, 74)));
@@ -572,8 +569,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        assertEquals(player0.getBorders().size(), 1);
-        border = player0.getBorders().get(0);
+        border = player0.getBorderPoints();
 
         assertFalse(border.contains(new Point(50, 70)));
         assertTrue(border.contains(new Point(50, 76)));
@@ -584,8 +580,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks1);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        assertEquals(player0.getBorders().size(), 1);
-        border = player0.getBorders().get(0);
+        border = player0.getBorderPoints();
 
         assertFalse(border.contains(new Point(50, 74)));
         assertTrue(border.contains(new Point(50, 80)));
@@ -596,8 +591,7 @@ public class TestGameMap {
         Utils.constructHouse(barracks2);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks2);
 
-        assertEquals(player0.getBorders().size(), 1);
-        border = player0.getBorders().get(0);
+        border = player0.getBorderPoints();
 
         assertFalse(border.contains(new Point(50, 80)));
         assertTrue(border.contains(new Point(50, 86)));
@@ -608,17 +602,10 @@ public class TestGameMap {
         Utils.constructHouse(barracks3);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks3);
 
-        assertEquals(player0.getBorders().size(), 1);
-        border = player0.getBorders().get(0);
+        border = player0.getBorderPoints();
 
         assertFalse(border.contains(new Point(50, 86)));
         assertTrue(border.contains(new Point(50, 92)));
-
-        barracks0.tearDown();
-        barracks1.tearDown();
-        barracks2.tearDown();
-
-        assertEquals(player0.getBorders().size(), 2);
     }
 
     @Test
@@ -630,8 +617,7 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(player0.getBorders().size(), 1);
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
 
         assertTrue(border.contains(new Point(50, 70)));
         assertFalse(border.contains(new Point(50, 74)));
@@ -666,8 +652,7 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(player0.getBorders().size(), 1);
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
 
         assertTrue(border.contains(new Point(50, 70)));
         assertFalse(border.contains(new Point(50, 74)));
@@ -697,8 +682,7 @@ public class TestGameMap {
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(player0.getBorders().size(), 1);
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
 
         assertTrue(border.contains(new Point(50, 70)));
         assertFalse(border.contains(new Point(50, 74)));
@@ -767,11 +751,8 @@ public class TestGameMap {
         Utils.constructHouse(building4);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, building4);
 
-        /* Verify that the owned land is not split in different parts */
-        assertEquals(player0.getBorders().size(), 1);
-
         /* Verify that the border is concave */
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
 
         assertTrue(border.contains(new Point(22, 36)));
         assertTrue(border.contains(new Point(5, 31)));
@@ -794,7 +775,7 @@ public class TestGameMap {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(1, 21);
-        assertTrue(player0.getBorders().get(0).contains(point1));
+        assertTrue(player0.getBorderPoints().contains(point1));
 
         Point point2 = new Point(1, 25);
         assertTrue(player0.getFieldOfView().contains(point2));
@@ -813,7 +794,7 @@ public class TestGameMap {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        Collection<Point> border = player0.getBorders().get(0);
+        Collection<Point> border = player0.getBorderPoints();
         List<Point> fieldOfView = player0.getFieldOfView();
 
         Path2D.Double path = new Path2D.Double();
@@ -1082,9 +1063,7 @@ public class TestGameMap {
         /* Verify that there is an internal border created for the space that
            the circle of barracks doesn't cover */
         Point point86 = new Point(14, 24);
-        assertEquals(player0.getBorders().size(), 2);
-        assertTrue(player0.getBorders().get(0).contains(point86) ||
-                   player0.getBorders().get(1).contains(point86));
+        assertTrue(player0.getBorderPoints().contains(point86));
     }
 
     @Test

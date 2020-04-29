@@ -3791,15 +3791,11 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         /* Verify that an event is sent when the barracks get populated and the player discovers new land */
-        assertEquals(player0.getBorders().size(), 1);
-
-        Set<Point> borderAtStart = new HashSet<>(player0.getBorders().get(0));
+        Set<Point> borderAtStart = new HashSet<>(player0.getBorderPoints());
 
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
-        assertEquals(player0.getBorders().size(), 1);
-
-        Set<Point> newBorder = new HashSet<>(player0.getBorders().get(0));
+        Set<Point> newBorder = new HashSet<>(player0.getBorderPoints());
         Set<Point> fullNewBorder = new HashSet<>(newBorder);
 
         newBorder.removeAll(borderAtStart);
@@ -3954,8 +3950,6 @@ public class TestGameMonitoring {
         player1.monitorGameView(monitor);
 
         /* Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land */
-        assertEquals(player0.getBorders().size(), 1);
-
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
 
         for (GameChangesList gameChangesList : monitor.getEvents()) {

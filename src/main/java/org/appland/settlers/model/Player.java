@@ -28,7 +28,6 @@ public class Player {
     private final Set<Point>              discoveredLand;
     private final List<Material>          transportPriorities;
     private final Collection<Point>       ownedLand;
-    private final List<Collection<Point>> borders;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
     private final Map<Material, Integer>  producedMaterials;
@@ -68,7 +67,6 @@ public class Player {
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
         ownedLand           = new ArrayList<>();
-        borders             = new ArrayList<>();
         producedMaterials   = new HashMap<>();
 
         /* Create the food quota and set it to equal distribution */
@@ -142,10 +140,6 @@ public class Player {
 
     public boolean isWithinBorder(Point point) {
         return ownedLand.contains(point);
-    }
-
-    public List<Collection<Point>> getBorders() {
-        return borders;
     }
 
     public Collection<Point> getLandInPoints() {
@@ -324,9 +318,7 @@ public class Player {
                 }
             }
 
-            for (Collection<Point> oldBorder : borders) {
-                fullOldBorderCalc.addAll(oldBorder);
-            }
+            fullOldBorderCalc.addAll(borderPoints);
 
             newBorderCalc.addAll(fullNewBorderCalc);
             newBorderCalc.removeAll(fullOldBorderCalc);
@@ -340,11 +332,10 @@ public class Player {
 
         /* Update full list of owned land and the list of borders */
         ownedLand.clear();
-        borders.clear();
+        borderPoints.clear();
 
         for (Land land : updatedLands) {
             ownedLand.addAll(land.getPointsInLand());
-            borders.addAll(land.getBorders());
 
             for (Collection<Point> borderForLand : land.getBorders()) {
                 borderPoints.addAll(borderForLand);
@@ -785,7 +776,7 @@ public class Player {
         removedBorder.clear();
     }
 
-    private Set<Point> getBorderPoints() {
+    public Set<Point> getBorderPoints() {
         return borderPoints;
     }
 

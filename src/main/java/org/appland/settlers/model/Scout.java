@@ -7,7 +7,6 @@
 package org.appland.settlers.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -230,16 +229,13 @@ public class Scout extends Worker {
     }
 
     private Point findDirectionToBorder() {
-        List<Collection<Point>> borders = getPlayer().getBorders();
         Point closestPointOnBorder      = null;
         double distanceToBorder         = Integer.MAX_VALUE;
 
-        for (Collection<Point> border : borders) {
-            for (Point point : border) {
-                if (getPosition().distance(point) < distanceToBorder) {
-                    distanceToBorder = getPosition().distance(point);
-                    closestPointOnBorder = point;
-                }
+        for (Point point : getPlayer().getBorderPoints()) {
+            if (getPosition().distance(point) < distanceToBorder) {
+                distanceToBorder = getPosition().distance(point);
+                closestPointOnBorder = point;
             }
         }
 
