@@ -1113,14 +1113,11 @@ public class TestPigFarm {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(12, 8);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Connect the pig farm and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter.getFlag());
 
         /* Finish the pig farm */
         Utils.constructHouse(pigFarm0);
@@ -1178,14 +1175,11 @@ public class TestPigFarm {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(12, 8);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Connect the pig farm and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter.getFlag());
 
         /* Finish the pig farm */
         Utils.constructHouse(pigFarm0);

@@ -928,14 +928,11 @@ public class TestIronSmelter {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(12, 8);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Connect the iron smelter and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter.getFlag());
 
         /* Finish the iron smelter */
         Utils.constructHouse(ironSmelter0);
@@ -990,14 +987,11 @@ public class TestIronSmelter {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(12, 8);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Connect the iron smelter and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter.getFlag());
 
         /* Finish the iron smelter */
         Utils.constructHouse(ironSmelter0);

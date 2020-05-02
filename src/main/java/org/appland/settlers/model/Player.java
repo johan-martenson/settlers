@@ -58,6 +58,9 @@ public class Player {
     private List<BorderChange> changedBorders;
     private final Set<Point> borderPoints;
     private final List<Worker> newWorkers;
+    private final Set<Point> changedAvailableConstruction;
+    private final List<Point> newOwnedLand;
+    private final List<Point> newLostLand;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -120,6 +123,9 @@ public class Player {
         newStones = new ArrayList<>();
         borderPoints = new HashSet<>();
         newWorkers = new ArrayList<>();
+        changedAvailableConstruction = new HashSet<>();
+        newOwnedLand = new ArrayList<>();
+        newLostLand = new ArrayList<>();
     }
 
     public String getName() {
@@ -331,11 +337,12 @@ public class Player {
         }
 
         /* Update full list of owned land and the list of borders */
-        ownedLand.clear();
+        List<Point> updatedOwnedLand = new ArrayList<>();
+
         borderPoints.clear();
 
         for (Land land : updatedLands) {
-            ownedLand.addAll(land.getPointsInLand());
+            updatedOwnedLand.addAll(land.getPointsInLand());
 
             for (Collection<Point> borderForLand : land.getBorders()) {
                 borderPoints.addAll(borderForLand);
@@ -349,6 +356,19 @@ public class Player {
 
             fieldOfView = calculateFieldOfView(discoveredLand);
         }
+
+        /* Calculate and remember the new owned land */
+        if (hasMonitor()) {
+            newOwnedLand.addAll(updatedOwnedLand);
+            newOwnedLand.removeAll(ownedLand);
+
+            newLostLand.addAll(ownedLand);
+            newLostLand.removeAll(updatedOwnedLand);
+        }
+
+        /* Make the updated land the current */
+        ownedLand.clear();
+        ownedLand.addAll(updatedOwnedLand);
     }
 
     @Override
@@ -652,79 +672,197 @@ public class Player {
         }
 
         /* If the player has discovered new land - find out what is on that land */
-        for (Point point : newDiscoveredLand) {
-            GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
-
-            if (pointInformation == GameMap.PointInformation.TREE) {
-                newTrees.add(map.getTreeAtPoint(point));
-            }
-
-            if (pointInformation == GameMap.PointInformation.STONE) {
-                newStones.add(map.getStoneAtPoint(point));
-            }
-
-            if (pointInformation == GameMap.PointInformation.FLAG) {
-                newFlags.add(map.getFlagAtPoint(point));
-            }
-
-            if (pointInformation == GameMap.PointInformation.BUILDING) {
-                newBuildings.add(map.getBuildingAtPoint(point));
-            }
-
-            if (pointInformation == GameMap.PointInformation.ROAD) {
-                newRoads.add(map.getRoadAtPoint(point));
-            }
-
-            if (pointInformation == GameMap.PointInformation.FLAG_AND_ROADS) {
-                Flag flag = map.getFlagAtPoint(point);
-                newFlags.add(flag);
-                newRoads.addAll(map.getRoadsFromFlag(flag));
-            }
-
-            if (pointInformation == GameMap.PointInformation.SIGN) {
-                Sign sign = map.getSignAtPoint(point);
-                newSigns.add(sign);
-            }
-
-            if (pointInformation == GameMap.PointInformation.CROP) {
-                Crop crop = map.getCropAtPoint(point);
-                newCrops.add(crop);
-            }
-        }
-
-        /* Find any discovered border for other players */
-        for (Player player : map.getPlayers()) {
-            if (player.equals(this)) {
-                continue;
-            }
-
-            Set<Point> borderForPlayer = player.getBorderPoints();
-            List<Point> discoveredBorder = new ArrayList<>();
-
+        if (!newDiscoveredLand.isEmpty()) {
             for (Point point : newDiscoveredLand) {
-                if (borderForPlayer.contains(point)) {
-                    discoveredBorder.add(point);
+                GameMap.PointInformation pointInformation = map.whatIsAtPoint(point);
+
+                if (pointInformation == GameMap.PointInformation.TREE) {
+                    newTrees.add(map.getTreeAtPoint(point));
+                }
+
+                if (pointInformation == GameMap.PointInformation.STONE) {
+                    newStones.add(map.getStoneAtPoint(point));
+                }
+
+                if (pointInformation == GameMap.PointInformation.FLAG) {
+                    newFlags.add(map.getFlagAtPoint(point));
+                }
+
+                if (pointInformation == GameMap.PointInformation.BUILDING) {
+                    newBuildings.add(map.getBuildingAtPoint(point));
+                }
+
+                if (pointInformation == GameMap.PointInformation.ROAD) {
+                    newRoads.add(map.getRoadAtPoint(point));
+                }
+
+                if (pointInformation == GameMap.PointInformation.FLAG_AND_ROADS) {
+                    Flag flag = map.getFlagAtPoint(point);
+                    newFlags.add(flag);
+                    newRoads.addAll(map.getRoadsFromFlag(flag));
+                }
+
+                if (pointInformation == GameMap.PointInformation.SIGN) {
+                    Sign sign = map.getSignAtPoint(point);
+                    newSigns.add(sign);
+                }
+
+                if (pointInformation == GameMap.PointInformation.CROP) {
+                    Crop crop = map.getCropAtPoint(point);
+                    newCrops.add(crop);
                 }
             }
 
-            if (discoveredBorder.isEmpty()) {
-                continue;
+            /* Find any discovered border for other players */
+            for (Player player : map.getPlayers()) {
+                if (player.equals(this)) {
+                    continue;
+                }
+
+                Set<Point> borderForPlayer = player.getBorderPoints();
+                List<Point> discoveredBorder = new ArrayList<>();
+
+                for (Point point : newDiscoveredLand) {
+                    if (borderForPlayer.contains(point)) {
+                        discoveredBorder.add(point);
+                    }
+                }
+
+                if (discoveredBorder.isEmpty()) {
+                    continue;
+                }
+
+                changedBorders.add(new BorderChange(player, newDiscoveredLand, Collections.EMPTY_LIST));
             }
 
-            changedBorders.add(new BorderChange(player, newDiscoveredLand, Collections.EMPTY_LIST));
-        }
+            /* Find any discovered workers */
+            for (Worker worker : map.getWorkers()) {
+                if (worker.getPlayer().equals(this)) {
+                    continue;
+                }
 
-        /* Find any discovered workers */
-        for (Worker worker : map.getWorkers()) {
-            if (worker.getPlayer().equals(this)) {
-                continue;
-            }
-
-            for (Point point : newDiscoveredLand) {
-                if (worker.getPosition().equals(point)) {
-                    newWorkers.add(worker);
+                for (Point point : newDiscoveredLand) {
+                    if (worker.getPosition().equals(point)) {
+                        newWorkers.add(worker);
+                    }
                 }
             }
+        }
+
+        /* Handle any changes in available construction */
+        for (Flag newFlag : newFlags) {
+            addChangedAvailableConstructionForFlag(newFlag);
+        }
+
+        for (Flag removedFlag : removedFlags) {
+            addChangedAvailableConstructionForFlag(removedFlag);
+        }
+
+        for (Tree newTree : newTrees) {
+            addChangedAvailableConstructionForTree(newTree);
+
+            // Unaffected:
+            // Left left: large building and flag ok
+            // Right right: large building and flag ok
+            // Down: large building and flag ok
+            // Up: large building and flag (?) still ok
+            // Up right, up right: large building and flag ok
+            // Down right, down right: large building still ok
+        }
+
+        for (Tree removedTree : removedTrees) {
+            addChangedAvailableConstructionForTree(removedTree);
+        }
+
+        for (Building newBuilding : newBuildings) {
+            Point point = newBuilding.getPosition();
+
+            addChangedAvailableConstructionForSmallBuilding(newBuilding);
+
+            /* Handle medium building */
+            if (newBuilding.getSize() == Size.MEDIUM) {
+                addChangedAvailableConstructionForMediumBuilding(newBuilding);
+            }
+
+            /* Handle large building
+            Ref: TestPlacement: testAvailableConstructionAroundLargeHouse
+             - left: none
+             - up-left: none
+             - up-right: none
+             - right: none
+             - down-right: none (is the flag)
+             - down-left: none
+
+             - left-down-left: medium building | flag
+             - left-left: medium building | flag
+             - left-up-left: flag
+             - up-left-up-left: flag
+             - up: flag
+             - up-right-up-right: flag
+             - up-right-right: small house | flag
+             - right-right: small house | flag
+             - right-down-right: ?
+            */
+            if (newBuilding.getSize() == Size.LARGE) {
+                addChangedAvailableConstructionForLargeBuilding(newBuilding);
+            }
+        }
+
+        for (Building changedBuilding : changedBuildings) {
+            addChangedAvailableConstructionForSmallBuilding(changedBuilding);
+        }
+
+        for (Building removedBuilding : removedBuildings) {
+            addChangedAvailableConstructionForSmallBuilding(removedBuilding);
+
+            if (removedBuilding.getSize() == Size.MEDIUM) {
+                addChangedAvailableConstructionForMediumBuilding(removedBuilding);
+            }
+
+            if (removedBuilding.getSize() == Size.LARGE) {
+                addChangedAvailableConstructionForLargeBuilding(removedBuilding);
+            }
+        }
+
+        for (Road road : newRoads) {
+
+            /*
+             - Each endpoint is now a flag
+             - Cannot place anything on the points on the road next to the flags
+             - All other points can have flags (if nothing else prevents it)
+
+            TODO: verify that no other possible construction is affected. What happens with these?
+
+             /       \       \      /            __
+            /         \      /      \     __/      \
+
+             */
+            changedAvailableConstruction.addAll(road.getWayPoints());
+        }
+
+        for (Road road : removedRoads) {
+            changedAvailableConstruction.addAll(road.getWayPoints());
+        }
+
+        /*
+        TODO: Check that it's really only the point of the crop that is affected
+         */
+        for (Crop crop : newCrops) {
+            addChangedAvailableConstructionForCrop(crop);
+        }
+
+        for (Crop crop : removedCrops) {
+            addChangedAvailableConstructionForCrop(crop);
+        }
+
+        for (Stone stone : removedStones) {
+            addChangedAvailableConstructionForStone(stone);
+        }
+
+        /* Add changed available construction if the border has been extended */
+        if (!newBorder.isEmpty()) {
+            changedAvailableConstruction.addAll(newOwnedLand);
+            changedAvailableConstruction.addAll(newLostLand);
         }
 
         /* Create the event message */
@@ -747,7 +885,8 @@ public class Player {
                 new ArrayList<>(removedCrops),
                 new ArrayList<>(newDiscoveredLand),
                 new ArrayList<>(changedBorders),
-                new ArrayList<>(newStones), newWorkers);
+                new ArrayList<>(newStones), newWorkers,
+                new ArrayList<>(changedAvailableConstruction));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -774,6 +913,88 @@ public class Player {
         newDiscoveredLand.clear();
         newBorder.clear();
         removedBorder.clear();
+        changedAvailableConstruction.clear();
+        newOwnedLand.clear();
+        newLostLand.clear();
+    }
+
+    private void addChangedAvailableConstructionForStone(Stone stone) {
+        changedAvailableConstruction.add(stone.getPosition());
+    }
+
+    private void addChangedAvailableConstructionForCrop(Crop crop) {
+        Point point = crop.getPosition();
+
+        changedAvailableConstruction.add(point); // Nothing can be constructed on the crop
+        changedAvailableConstruction.add(point.upLeft()); // Can't place a building up-left because the flag would be on the crop
+    }
+
+    private void addChangedAvailableConstructionForLargeBuilding(Building building) {
+        Point point = building.getPosition();
+
+        changedAvailableConstruction.add(point.left().downLeft()); // Only medium building or flag
+        changedAvailableConstruction.add(point.left().left()); // Only medium building or flag
+        changedAvailableConstruction.add(point.left().upLeft()); // Only flag
+        changedAvailableConstruction.add(point.upLeft().upLeft()); // Only flag
+        changedAvailableConstruction.add(point.up()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upRight().upRight()); // Only flag
+        changedAvailableConstruction.add(point.upRight().right()); // Only small building or flag
+        changedAvailableConstruction.add(point.right().right()); // Only small building or flag
+
+        // Not certain
+        changedAvailableConstruction.add(point.downLeft().downLeft()); // ?
+    }
+
+    private void addChangedAvailableConstructionForMediumBuilding(Building building) {
+        Point point = building.getPosition();
+
+        changedAvailableConstruction.add(point.left().downLeft()); // _SEEMS LIKE_ only medium building or flag
+        changedAvailableConstruction.add(point.downLeft().downLeft()); // _SEEMS LIKE_ only medium building or flag
+    }
+
+    private void addChangedAvailableConstructionForSmallBuilding(Building building) {
+        Point point = building.getPosition();
+
+        /* Handle small building first */
+        changedAvailableConstruction.add(point);
+        changedAvailableConstruction.add(point.left()); // Only flag
+        changedAvailableConstruction.add(point.upLeft()); // Only flag
+        changedAvailableConstruction.add(point.upRight()); // Only flag
+        changedAvailableConstruction.add(point.right()); // Nothing can be built
+        changedAvailableConstruction.add(point.down()); // Only medium building, not flag
+        changedAvailableConstruction.add(point.up()); // Medium building or flag (?)
+
+        // TODO: add tests for these!
+        changedAvailableConstruction.add(point.upLeft().upLeft()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upRight().upRight()); // Only medium building or flag
+        changedAvailableConstruction.add(point.upLeft().left()); // Only medium building or flag
+    }
+
+    private void addChangedAvailableConstructionForTree(Tree newTree) {
+        Point point = newTree.getPosition();
+
+        changedAvailableConstruction.add(point);
+        changedAvailableConstruction.add(point.upLeft()); // From building to only flag
+        changedAvailableConstruction.add(point.downRight()); // Building still ok. Flag?
+        changedAvailableConstruction.add(point.downLeft()); // Small building still ok. Medium and large?
+        changedAvailableConstruction.add(point.left()); // Small building or flag
+        changedAvailableConstruction.add(point.right()); // Small building or flag
+        changedAvailableConstruction.add(point.upRight()); // Small building or flag
+    }
+
+    private void addChangedAvailableConstructionForFlag(Flag flag) {
+        Point point = flag.getPosition();
+
+        changedAvailableConstruction.add(point);
+        changedAvailableConstruction.add(point.downRight()); // From flag to no flag, large building still ok
+        changedAvailableConstruction.add(point.up()); // From building to flag
+        changedAvailableConstruction.add(point.downLeft()); // Change to medium building, not flag
+        changedAvailableConstruction.add(point.right()); // Change to medium building, not flag
+        changedAvailableConstruction.add(point.left()); // Change to nothing allowed
+        changedAvailableConstruction.add(point.left().upLeft()); // Change from small building to flag
+        changedAvailableConstruction.add(point.upLeft()); // Change to only allow buildings (too close for flag)
+        changedAvailableConstruction.add(point.upRight()); // Change from mine to none
+        changedAvailableConstruction.add(point.upLeft().upLeft()); // Change to only flag
     }
 
     public Set<Point> getBorderPoints() {

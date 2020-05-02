@@ -33,14 +33,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.NO_BUILDING_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Material.COAL;
@@ -54,6 +63,8 @@ import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Size.LARGE;
+import static org.appland.settlers.model.Size.MEDIUM;
+import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -1306,14 +1317,60 @@ public class Utils {
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private List<GameChangesList> gameChanges;
+        private HashMap<Point, AvailableConstruction> availableConstruction;
 
         public GameViewMonitor() {
             gameChanges = new ArrayList<>();
+            availableConstruction = new HashMap<>();
         }
 
         @Override
         public void onViewChangesForPlayer(Player player, GameChangesList gameChangesList) {
             gameChanges.add(gameChangesList);
+
+            /* Update the monitoring of available construction */
+            GameMap map = player.getMap();
+            Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player);
+            Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player);
+            List<Point> availableMinesOnMap = map.getAvailableMinePoints(player);
+
+            for (Point point : gameChangesList.getChangedAvailableConstruction()) {
+
+                AvailableConstruction.PossibleBuildings possibleBuilding = NO_BUILDING_POSSIBLE;
+                AvailableConstruction.PossibleFlag possibleFlag = NO_FLAG_POSSIBLE;
+
+                if (!availableConstruction.containsKey(point)) {
+                    availableConstruction.put(point, new AvailableConstruction(NO_BUILDING_POSSIBLE, NO_FLAG_POSSIBLE, point));
+                }
+
+                if (availableBuildingsOnMap.containsKey(point)) {
+                    Size size = availableBuildingsOnMap.get(point);
+
+                    if (size == LARGE) {
+                        possibleBuilding = LARGE_POSSIBLE;
+                    } else if (size == MEDIUM) {
+                        possibleBuilding = MEDIUM_POSSIBLE;
+                    } else if (size == SMALL) {
+                        possibleBuilding = SMALL_POSSIBLE;
+                    }
+                }
+
+                if (availableFlagsOnMap.contains(point)) {
+                    possibleFlag = FLAG_POSSIBLE;
+                }
+
+                if (availableMinesOnMap.contains(point)) {
+                    possibleBuilding = MINE_POSSIBLE;
+                }
+
+                availableConstruction.get(point).setAvailableBuilding(possibleBuilding);
+
+                if (possibleFlag == FLAG_POSSIBLE) {
+                    availableConstruction.get(point).setFlagPossible();
+                } else {
+                    availableConstruction.get(point).setFlagNotPossible();
+                }
+            }
         }
 
         public List<GameChangesList> getEvents() {
@@ -1337,6 +1394,107 @@ public class Utils {
 
             return gameChanges.subList(index + 1, gameChanges.size() - 1);
 
+        }
+
+        public void setAvailableConstruction(Map<Point, Size> availableHousePoints, Collection<Point> availableFlagPoints, List<Point> availableMinePoints) {
+            availableConstruction.clear();
+
+            for (Map.Entry<Point, Size> entry : availableHousePoints.entrySet()) {
+                if (entry.getValue() == LARGE) {
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
+                } else if (entry.getValue() == MEDIUM) {
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
+                } else if (entry.getValue() == Size.SMALL) {
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
+                }
+            }
+
+            for (Point flagPoint : availableFlagPoints) {
+                AvailableConstruction availableConstructionAtPoint = availableConstruction.get(flagPoint);
+
+                if (availableConstructionAtPoint == null) {
+                    availableConstruction.put(flagPoint, new AvailableConstruction(NO_BUILDING_POSSIBLE, FLAG_POSSIBLE, flagPoint));
+                } else {
+                    availableConstruction.get(flagPoint).setFlagPossible();
+                }
+            }
+
+            for (Point minePoint : availableMinePoints) {
+                AvailableConstruction availableConstructionAtPoint = availableConstruction.get(minePoint);
+
+                if (availableConstructionAtPoint == null) {
+                    availableConstruction.put(minePoint, new AvailableConstruction(AvailableConstruction.PossibleBuildings.MINE_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, minePoint));
+                } else {
+                    availableConstruction.get(minePoint).setAvailableBuilding(AvailableConstruction.PossibleBuildings.MINE_POSSIBLE);
+                }
+            }
+        }
+
+        public void assertMonitoredAvailableConstructionMatchesWithMap(GameMap map, Player player0) {
+
+            Map<Point, Size> availableBuildingsOnMap = map.getAvailableHousePoints(player0);
+            Collection<Point> availableFlagsOnMap = map.getAvailableFlagPoints(player0);
+            List<Point> availableMinesOnMap = map.getAvailableMinePoints(player0);
+
+            /* Run monitored against real */
+            for (Map.Entry<Point, AvailableConstruction> entry : availableConstruction.entrySet()) {
+
+                if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
+                    assertFalse(availableBuildingsOnMap.containsKey(entry.getKey()));
+                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), Size.LARGE);
+                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), MEDIUM);
+                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), Size.SMALL);
+                }
+
+                if (entry.getValue().getAvailableFlag() == FLAG_POSSIBLE) {
+                    assertTrue(availableFlagsOnMap.contains(entry.getKey()));
+                } else {
+                    assertFalse(availableFlagsOnMap.contains(entry.getKey()));
+                }
+
+                if (entry.getValue().getAvailableBuilding() == MINE_POSSIBLE) {
+                    assertTrue(availableMinesOnMap.contains(entry.getKey()));
+                } else {
+                    assertFalse(availableMinesOnMap.contains(entry.getKey()));
+                }
+            }
+
+            /* Run real against monitored */
+            for (Map.Entry<Point, Size> entry : map.getAvailableHousePoints(player0).entrySet()) {
+                if (entry.getValue() == LARGE) {
+                    assertNotNull(availableConstruction.get(entry.getKey()));
+                    assertEquals(
+                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
+                            AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE
+                    );
+                } else if (entry.getValue() == MEDIUM) {
+                    assertEquals(
+                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
+                            AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE
+                    );
+                } else if (entry.getValue() == SMALL) {
+                    assertEquals(
+                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
+                            AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE
+                    );
+                } else {
+                    assertEquals(
+                            availableConstruction.get(entry.getKey()).getAvailableBuilding(),
+                            NO_BUILDING_POSSIBLE
+                    );
+                }
+            }
+
+            for (Point flagPoint : availableFlagsOnMap) {
+                assertEquals(availableConstruction.get(flagPoint).getAvailableFlag(), FLAG_POSSIBLE);
+            }
+
+            for (Point minePoint : availableMinesOnMap) {
+                assertEquals(availableConstruction.get(minePoint).getAvailableBuilding(), MINE_POSSIBLE);
+            }
         }
     }
 }

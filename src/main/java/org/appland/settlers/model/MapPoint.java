@@ -232,4 +232,8 @@ class MapPoint {
     boolean isSign() {
         return sign != null;
     }
+
+    public boolean isBuildingOfSize(Size size) {
+        return building != null && building.getSize() == size;
+    }
 }

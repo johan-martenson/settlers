@@ -894,14 +894,11 @@ public class TestMint {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mint */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(12, 8);
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Connect the mint and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter.getFlag());
 
         /* Finish the mint */
         Utils.constructHouse(mint0);
@@ -962,14 +959,11 @@ public class TestMint {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mint */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(10, 8);
         Building mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Connect the mint and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, mint0.getFlag(), headquarter.getFlag());
 
         /* Finish the mint */
         Utils.constructHouse(mint0);

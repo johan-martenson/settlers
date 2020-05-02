@@ -2480,16 +2480,26 @@ public class GameMap {
         Point flagPoint = point.downRight();
         MapPoint houseMapPoint = getMapPoint(point);
         MapPoint flagMapPoint = getMapPoint(point.downRight());
+        MapPoint mapPointDown = pointToGameObject.get(point.down());
+        MapPoint mapPointUpRight = pointToGameObject.get(point.upRight());
+        MapPoint mapPointUpRightUpRight = pointToGameObject.get(point.up().right());
+        MapPoint mapPointDownLeftDownLeft = getMapPoint(point.downLeft().downLeft());
+        MapPoint mapPointDownRightDownRight = getMapPoint(point.down().right());
+        MapPoint mapPointDownLeftLeft = pointToGameObject.get(point.downLeft().left());
 
         /* ALL CONDITIONS FOR SMALL */
-        if (!isWithinMap(point)) {
+
+        /* Can't build on a point outside the map */
+        if (houseMapPoint == null) {
             return null;
         }
 
-        if (!isWithinMap(point.downRight())) {
+        /* The flag point also needs to be on the map */
+        if (flagMapPoint == null) {
             return null;
         }
 
+        /* Make sure all houses except for the headquarter are placed within the player's border */
         if (!isFirstHouse && !player.isWithinBorder(point)) {
             return null;
         }
@@ -2570,6 +2580,7 @@ public class GameMap {
 
             MapPoint adjacentMapPoint = getMapPoint(d);
 
+            /* It's not possible to build a house next to another house */
             if (adjacentMapPoint.isBuilding()) {
                 return null;
             }
@@ -2580,20 +2591,16 @@ public class GameMap {
             }
         }
 
-        if (player.isWithinBorder(point.upRight()) && isFlagAtPoint(point.upRight())) {
+        if (player.isWithinBorder(point.upRight()) && mapPointUpRight.isFlag()) {
             return null;
         }
 
-        if (player.isWithinBorder(point.up().right()) && isBuildingAtPoint(point.up().right())) {
-            if (getBuildingAtPoint(point.up().right()).getSize() == LARGE) {
-                return null;
-            }
+        if (player.isWithinBorder(point.up().right()) && mapPointUpRightUpRight.isBuildingOfSize(LARGE)) {
+            return null;
         }
 
-        if (player.isWithinBorder(point.down()) && isBuildingAtPoint(point.down())) {
-            if (getBuildingAtPoint(point.down()).getSize() == LARGE) {
-                return null;
-            }
+        if (player.isWithinBorder(point.down()) && mapPointDown.isBuildingOfSize(LARGE)) {
+            return null;
         }
 
         if (player.isWithinBorder(point.downRight().right()) && isBuildingAtPoint(point.downRight().right())) {
@@ -2602,10 +2609,14 @@ public class GameMap {
             }
         }
 
-        if (player.isWithinBorder(point.down().right()) && isBuildingAtPoint(point.down().right())) {
-            if (getBuildingAtPoint(point.down().right()).getSize() == LARGE) {
-                return null;
-            }
+        /* Can't place a building up-left-up-left of a large building */
+        if (mapPointDownRightDownRight != null && mapPointDownRightDownRight.isBuildingOfSize(LARGE)) {
+            return null;
+        }
+
+        /* Can't place a building up-right-up-right of a large building */
+        if (mapPointDownLeftDownLeft != null && mapPointDownLeftDownLeft.isBuildingOfSize(LARGE)) {
+            return null;
         }
 
         /* ADDITIONAL CONDITIONS FOR MEDIUM */
@@ -2618,10 +2629,15 @@ public class GameMap {
 
         for (Point d : point.getDiagonalPoints()) {
 
-            /* It's not possible to build a house next to a tree */
+            /* It's not possible to build a medium house next to a tree */
             if (isTreeAtPoint(d)) {
                 return SMALL;
             }
+        }
+
+        /* Can only place small building up-right-right of large building */
+        if (mapPointDownLeftLeft != null && mapPointDownLeftLeft.isBuildingOfSize(LARGE)) {
+            return SMALL;
         }
 
         /* ADDITIONAL CONDITIONS FOR LARGE */
@@ -2652,12 +2668,6 @@ public class GameMap {
 
         if (player.isWithinBorder(point.right().right()) && isBuildingAtPoint(point.right().right())) {
             if (getBuildingAtPoint(point.right().right()).getSize() == LARGE) {
-                return MEDIUM;
-            }
-        }
-
-        if (player.isWithinBorder(point.downRight().down()) && isBuildingAtPoint(point.downRight().down())) {
-            if (getBuildingAtPoint(point.downRight().down()).getSize() == LARGE) {
                 return MEDIUM;
             }
         }

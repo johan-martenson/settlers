@@ -591,7 +591,7 @@ public class TestPlacement {
     }
 
     @Test
-    public void testAvailableHousesNextToLargeHouse() throws Exception {
+    public void testAvailableConstructionNextToLargeHouse() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -602,33 +602,140 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(16, 16);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place farm */
-        Point point0 = new Point(8, 8);
+        Point point0 = new Point(10, 8);
         Farm farm = map.placeBuilding(new Farm(player0), point0);
 
-        /* Verify that the available house points next to the farm are correct */
+        /*
+        left: none
+        up-left: none
+        up-right: none
+        right: none
+        down-right: none (is the flag)
+        down-left: none
+
+        left-down-left: medium building | flag
+        left-left: medium building | flag
+        left-up-left: flag
+        up-left-up-left: flag
+        up: flag
+        up-right-up-right: flag
+        up-right-right: small house | flag
+        right-right: small house | flag
+        right-down-right: ?
+
+        left-left-left: large building | flag
+        left-left-down-left: large building | flag
+        left-left-up-left: large building | flag
+        up-left-up-left-left: large building | flag
+        up-left-up-left-up-left: large building | flag
+        up-left-up-left-up-right: large building | flag
+        up-up-right: large building | flag
+        up-right-up-right-up-right: large building | flag
+        up-right-up-right-right: ?
+        up-right-right-right: ?
+        right-right-right: ?
+
+         */
+
+        /* Verify that the available construction around the farm is correct
+        *
+        * left: none
+        * up-left: none
+        * up-right: none
+        * right: none
+        * down-right: none (is the flag)
+        * down-left: none
+        *
+        * */
         Map<Point, Size> possibleHouses = map.getAvailableHousePoints(player0);
 
         /* The house's own point */
         assertFalse(possibleHouses.containsKey(point0));
 
         /* More space under the house */
-        assertFalse(possibleHouses.containsKey(point0.upLeft()));
-        assertFalse(possibleHouses.containsKey(point0.downLeft()));
         assertFalse(possibleHouses.containsKey(point0.left()));
+        assertFalse(possibleHouses.containsKey(point0.upLeft()));
+        assertFalse(possibleHouses.containsKey(point0.upRight()));
+        assertFalse(possibleHouses.containsKey(point0.right()));
+        assertFalse(possibleHouses.containsKey(point0.downLeft()));
 
         /* The house's flag */
         assertFalse(possibleHouses.containsKey(point0.downRight()));
 
-        /* Points in front, TBD sampled */
-        // assertFalse(possibleFlagPoints.contains(new Point(9, 1)));
-        // assertFalse(possibleFlagPoints.contains(new Point(10, 2)));
-        assertFalse(possibleHouses.containsKey(point0.down()));
-        assertFalse(possibleHouses.containsKey(point0.right()));
+        /* Surrounding points
+        *
+        * left-down-left: medium building | flag
+        * left-left: medium building | flag
+        * left-up-left: flag
+        * up-left-up-left: flag
+        * up: flag
+        * up-right-up-right: flag
+        * up-right-right: small house | flag
+        * right-right: ?
+        * right-down-right: ?
+        *
+        *  */
+        assertEquals(map.isAvailableHousePoint(player0, point0.left().downLeft()), MEDIUM);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.left().downLeft()));
 
+        assertEquals(map.isAvailableHousePoint(player0, point0.left().left()), MEDIUM);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.left().left()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upLeft().upLeft()), null);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upLeft().upLeft()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.up()), null);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.up()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upRight().upRight()), null);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upRight().upRight()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upRight().right()), SMALL);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upRight().right()));
+
+        /**
+         * Wider area:
+         *         left-left-left: large building | flag
+         *         left-left-down-left: large building | flag
+         *         left-left-up-left: large building | flag
+         *         up-left-up-left-left: large building | flag
+         *         up-left-up-left-up-left: large building | flag
+         *         up-left-up-left-up-right: large building | flag
+         *         up-up-right: large building | flag
+         *         up-right-up-right-up-right: large building | flag
+         *         up-right-up-right-right: ?
+         *         up-right-right-right: ?
+         *         right-right-right: ?
+         */
+        assertEquals(map.isAvailableHousePoint(player0, point0.left().left().left()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.left().left().left()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.left().left().downLeft()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.left().left().downLeft()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.left().left().upLeft()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.left().left().upLeft()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upLeft().upLeft().left()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upLeft().upLeft().left()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upLeft().upLeft().upLeft()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upLeft().upLeft().upLeft()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upLeft().upLeft().upRight()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upLeft().upLeft().upRight()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.up().up().right()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.up().up().right()));
+
+        assertEquals(map.isAvailableHousePoint(player0, point0.upRight().upRight().upRight()), LARGE);
+        assertTrue(map.isAvailableFlagPoint(player0, point0.upRight().upRight().upRight()));
+
+        /* -- PREVIOUS SAMPLED POINTS -- */
         /* Points on left, sampled */
         assertFalse(possibleHouses.containsKey(point0.left().down()));
         assertEquals(possibleHouses.get(point0.left().downLeft()), MEDIUM);
@@ -637,7 +744,6 @@ public class TestPlacement {
         /* Points on top, sampled */
         assertFalse(possibleHouses.containsKey(point0.left().upLeft()));
         assertFalse(possibleHouses.containsKey(point0.left().up()));
-        assertEquals(possibleHouses.get(point0.up().upLeft()), MEDIUM);
 
         /* Points on right, sampled */
         assertFalse(possibleHouses.containsKey(point0.up()));

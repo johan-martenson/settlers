@@ -32,7 +32,6 @@ public class TestGameMonitoringWhenDiscovering {
     /*
     TODO:
      - flag+road
-     - available construction
      - wild animals
      */
 
