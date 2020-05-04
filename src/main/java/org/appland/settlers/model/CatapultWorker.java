@@ -128,7 +128,7 @@ public class CatapultWorker extends Worker {
             }
 
             /* Filer buildings that are not ready */
-            if (!building.ready()) {
+            if (!building.isReady()) {
                 continue;
             }
 

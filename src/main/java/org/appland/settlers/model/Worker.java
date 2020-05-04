@@ -226,7 +226,7 @@ public abstract class Worker implements Actor {
             if ( !(this instanceof Military)) {
 
                 /* Go back to storage if the building is not ok to enter */
-                if (building.burningDown() || building.destroyed()) {
+                if (building.isBurningDown() || building.isDestroyed()) {
 
                     buildingToEnter = null;
 

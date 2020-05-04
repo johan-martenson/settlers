@@ -180,7 +180,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsWorker() {
-        if (!unoccupied()) {
+        if (!isUnoccupied()) {
             return false;
         }
 
@@ -202,7 +202,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public void promiseWorker(Worker worker) throws Exception {
-        if (!ready()) {
+        if (!isReady()) {
             throw new Exception("Can't promise worker to building in state " + state);
         }
 
@@ -221,7 +221,7 @@ public class Building implements Actor, EndPoint {
         }
 
         /* The building may need military manning if construction is finished */
-        if (ready()) {
+        if (isReady()) {
             int promised = promisedMilitary.size();
             int actual = hostedMilitary.size();
             int maxHost = getMaxHostedMilitary();
@@ -244,7 +244,7 @@ public class Building implements Actor, EndPoint {
         }
 
         /* A building can only have one worker */
-        if (occupied()) {
+        if (isOccupied()) {
             throw new Exception("Building " + this + " is already occupied.");
         }
 
@@ -257,7 +257,7 @@ public class Building implements Actor, EndPoint {
 
     void deployMilitary(Military military) throws Exception {
 
-        if (!ready()) {
+        if (!isReady()) {
             throw new Exception("Cannot assign military when the building is not ready");
         }
 
@@ -270,7 +270,7 @@ public class Building implements Actor, EndPoint {
         state = State.OCCUPIED;
 
         if (previousState == State.UNOCCUPIED) {
-            map.updateBorder();
+            map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
 
             getPlayer().reportMilitaryBuildingOccupied(this);
         }
@@ -319,11 +319,11 @@ public class Building implements Actor, EndPoint {
         }
 
         /* Can't accept delivery when building is burning or destroyed */
-        if (burningDown() || destroyed()) {
+        if (isBurningDown() || isDestroyed()) {
             throw new InvalidStateForProduction(this);
         }
 
-        if (ready()) {
+        if (isReady()) {
 
             if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
                 throw new Exception("This building doesn't need any more coins");
@@ -431,7 +431,7 @@ public class Building implements Actor, EndPoint {
             } else {
                 countdown.step();
             }
-        } else if (burningDown()) {
+        } else if (isBurningDown()) {
             if (countdown.reachedZero()) {
                 state = State.DESTROYED;
 
@@ -442,7 +442,7 @@ public class Building implements Actor, EndPoint {
             } else {
                 countdown.step();
             }
-        } else if (occupied()) {
+        } else if (isOccupied()) {
             if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableMilitaries()) {
                 if (countdown.reachedZero()) {
                     doPromotion();
@@ -450,7 +450,7 @@ public class Building implements Actor, EndPoint {
                     countdown.step();
                 }
             }
-        } else if (destroyed()) {
+        } else if (isDestroyed()) {
             if (countdown.reachedZero()) {
                 map.removeBuilding(this);
 
@@ -471,7 +471,7 @@ public class Building implements Actor, EndPoint {
                     doUpgradeBuilding();
 
                     /* Re-calculate the border after the upgrade */
-                    map.updateBorder();
+                    map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_UPGRADED);
                 }
             } else {
                 upgradeCountdown.step();
@@ -503,7 +503,7 @@ public class Building implements Actor, EndPoint {
 
         /* Update the border if this was a military building */
         if (isMilitaryBuilding()) {
-            map.updateBorder();
+            map.updateBorder(this, BorderChangeCause.MILITARY_BUILDING_TORN_DOWN);
         }
 
         /* Send home the worker */
@@ -668,15 +668,15 @@ public class Building implements Actor, EndPoint {
         return state == State.UNDER_CONSTRUCTION;
     }
 
-    public boolean ready() {
+    public boolean isReady() {
         return state == State.UNOCCUPIED || state == State.OCCUPIED;
     }
 
-    public boolean burningDown() {
+    public boolean isBurningDown() {
         return state == State.BURNING;
     }
 
-    public boolean destroyed() {
+    public boolean isDestroyed() {
         return state == State.DESTROYED;
     }
 
@@ -684,11 +684,11 @@ public class Building implements Actor, EndPoint {
         state = State.UNOCCUPIED;
     }
 
-    private boolean unoccupied() {
+    private boolean isUnoccupied() {
         return state == State.UNOCCUPIED;
     }
 
-    public boolean occupied() {
+    public boolean isOccupied() {
         return state == State.OCCUPIED;
     }
 
@@ -998,7 +998,7 @@ public class Building implements Actor, EndPoint {
         }
 
         /* Refuse to upgrade while being torn down */
-        if (burningDown()) {
+        if (isBurningDown()) {
             throw new InvalidUserActionException("Cannot upgrade while burning down.");
         }
 
@@ -1111,7 +1111,7 @@ public class Building implements Actor, EndPoint {
             HouseSize houseSize = this.getClass().getAnnotation(HouseSize.class);
 
             result.addAll(Arrays.asList(houseSize.material()));
-        } else if (ready()) {
+        } else if (isReady()) {
             Production production = this.getClass().getAnnotation(Production.class);
 
             if (production != null) {

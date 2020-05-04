@@ -83,7 +83,7 @@ public class TestIronSmelter {
             map.stepTime();
         }
 
-        assertTrue(ironSmelter0.ready());
+        assertTrue(ironSmelter0.isReady());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestIronSmelter {
             map.stepTime();
         }
 
-        assertFalse(ironSmelter0.ready());
+        assertFalse(ironSmelter0.isReady());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class TestIronSmelter {
             map.stepTime();
         }
 
-        assertFalse(ironSmelter0.ready());
+        assertFalse(ironSmelter0.isReady());
     }
 
     @Test
@@ -839,12 +839,12 @@ public class TestIronSmelter {
         /* Destroy the iron smelter */
         ironSmelter0.tearDown();
 
-        assertTrue(ironSmelter0.burningDown());
+        assertTrue(ironSmelter0.isBurningDown());
 
         /* Wait for the iron smelter to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(ironSmelter0.destroyed());
+        assertTrue(ironSmelter0.isDestroyed());
 
         /* Wait for the iron smelter to disappear */
         for (int i = 0; i < 100; i++) {

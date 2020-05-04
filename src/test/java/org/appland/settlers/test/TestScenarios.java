@@ -97,9 +97,9 @@ public class TestScenarios {
         Utils.constructHouse(quarry0);
         Utils.constructHouse(sawmill0);
 
-        assertTrue(woodcutter0.ready());
-        assertTrue(quarry0.ready());
-        assertTrue(sawmill0.ready());
+        assertTrue(woodcutter0.isReady());
+        assertTrue(quarry0.isReady());
+        assertTrue(sawmill0.isReady());
 
         Utils.adjustInventoryTo(headquarter0, WOOD, 4);
         Utils.adjustInventoryTo(headquarter0, PLANK, 15);

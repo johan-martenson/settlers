@@ -84,7 +84,7 @@ public class TestDonkeyFarm {
             map.stepTime();
         }
 
-        assertTrue(farm0.ready());
+        assertTrue(farm0.isReady());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class TestDonkeyFarm {
             map.stepTime();
         }
 
-        assertFalse(farm0.ready());
+        assertFalse(farm0.isReady());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class TestDonkeyFarm {
             map.stepTime();
         }
 
-        assertFalse(farm0.ready());
+        assertFalse(farm0.isReady());
     }
 
     @Test
@@ -197,7 +197,7 @@ public class TestDonkeyFarm {
 
         Utils.constructHouse(farm);
 
-        assertTrue(farm.ready());
+        assertTrue(farm.isReady());
         assertTrue(farm.needsWorker());
     }
 
@@ -906,12 +906,12 @@ public class TestDonkeyFarm {
         /* Destroy the donkey farm */
         donkeyFarm0.tearDown();
 
-        assertTrue(donkeyFarm0.burningDown());
+        assertTrue(donkeyFarm0.isBurningDown());
 
         /* Wait for the donkey farm to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(donkeyFarm0.destroyed());
+        assertTrue(donkeyFarm0.isDestroyed());
 
         /* Wait for the donkey farm to disappear */
         for (int i = 0; i < 100; i++) {

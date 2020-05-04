@@ -85,7 +85,7 @@ public class TestStorage {
             map.stepTime();
         }
 
-        assertTrue(storage0.ready());
+        assertTrue(storage0.isReady());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class TestStorage {
             map.stepTime();
         }
 
-        assertFalse(storage0.ready());
+        assertFalse(storage0.isReady());
     }
 
     @Test
@@ -161,7 +161,7 @@ public class TestStorage {
             map.stepTime();
         }
 
-        assertFalse(storage0.ready());
+        assertFalse(storage0.isReady());
     }
 
     @Test
@@ -196,14 +196,14 @@ public class TestStorage {
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 1000; i++) {
 
-            if (storage0.ready()) {
+            if (storage0.isReady()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(storage0.ready());
+        assertTrue(storage0.isReady());
     }
 
     @Test
@@ -247,7 +247,7 @@ public class TestStorage {
         /* Finish construction of the storage */
         Utils.constructHouse(storage);
 
-        assertTrue(storage.ready());
+        assertTrue(storage.isReady());
 
         /* Verify that the finished storage needs a worker */
         assertTrue(storage.needsWorker());
@@ -913,12 +913,12 @@ public class TestStorage {
         /* Destroy the storage */
         storage0.tearDown();
 
-        assertTrue(storage0.burningDown());
+        assertTrue(storage0.isBurningDown());
 
         /* Wait for the storage to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(storage0.destroyed());
+        assertTrue(storage0.isDestroyed());
 
         /* Wait for the storage to disappear */
         for (int i = 0; i < 100; i++) {

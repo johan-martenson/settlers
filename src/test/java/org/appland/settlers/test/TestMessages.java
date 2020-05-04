@@ -12,12 +12,14 @@ import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
+import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.GeologistFindMessage;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Message;
 import org.appland.settlers.model.Military;
+import org.appland.settlers.model.MilitaryBuildingCausedLostLandMessage;
 import org.appland.settlers.model.MilitaryBuildingOccupiedMessage;
 import org.appland.settlers.model.MilitaryBuildingReadyMessage;
 import org.appland.settlers.model.Miner;
@@ -37,6 +39,7 @@ import org.appland.settlers.model.UnderAttackMessage;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +57,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_CAPTURED;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_LOST;
 import static org.appland.settlers.model.Message.MessageType.GEOLOGIST_FIND;
+import static org.appland.settlers.model.Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND;
 import static org.appland.settlers.model.Message.MessageType.NO_MORE_RESOURCES;
 import static org.appland.settlers.model.Message.MessageType.STORE_HOUSE_IS_READY;
 import static org.appland.settlers.model.Message.MessageType.TREE_CONSERVATION_PROGRAM_ACTIVATED;
@@ -67,11 +71,18 @@ import static org.appland.settlers.model.Tile.Vegetation.WATER;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestMessages {
+
+    /**
+     * TODO:
+     *  - This building has caused you to lose land
+     *
+     */
 
     @Test
     public void testNoMessagesOnStart() throws Exception {
@@ -569,12 +580,12 @@ public class TestMessages {
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         Building barracks0 = new Barracks(player0);
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(29, 13);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -599,26 +610,17 @@ public class TestMessages {
         }
 
         /* Verify that a message is sent to player 1 when it's attacked */
-        assertEquals(player1.getMessages().size(), 2);
+        int amountMessagesBefore = player1.getMessages().size();
 
         player0.attack(barracks1, 1);
 
-        assertEquals(player1.getMessages().size(), 3);
-        assertEquals(player1.getMessages().get(2).getMessageType(), UNDER_ATTACK);
-        assertTrue(player1.getMessages().get(2) instanceof UnderAttackMessage);
+        assertEquals(player1.getMessages().size(), amountMessagesBefore + 1);
+        assertEquals(player1.getMessages().get(player1.getMessages().size() - 1).getMessageType(), UNDER_ATTACK);
+        assertTrue(player1.getMessages().get(player1.getMessages().size() - 1) instanceof UnderAttackMessage);
 
-        UnderAttackMessage message = (UnderAttackMessage) player1.getMessages().get(2);
+        UnderAttackMessage message = (UnderAttackMessage) player1.getMessages().get(player1.getMessages().size() - 1);
 
         assertEquals(message.getBuilding(), barracks1);
-
-        /* Verify that a military leaves the barracks before the attack when
-         initiated */
-        map.stepTime();
-
-        List<Military> militaryOutside = Utils.findWorkersOfTypeOutsideForPlayer(Military.class, player0);
-
-        assertEquals(militaryOutside.size(), 1);
-        assertEquals(barracks0.getNumberOfHostedMilitary(), 1);
     }
 
     @Test
@@ -710,28 +712,30 @@ public class TestMessages {
 
         /* Verify that the attacker takes over the building */
         assertEquals(attacker.getTarget(), barracks1.getPosition());
-        assertEquals(player0.getMessages().size(), 2);
-        assertEquals(player1.getMessages().size(), 3);
+        assertTrue(player0.getMessages().size() >=  2);
+        assertTrue(player1.getMessages().size() >= 3);
+
+        int amountMessagesForPlayer0Before = player0.getMessages().size();
+        int amountMessagesForPlayer1Before = player1.getMessages().size();
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
         assertEquals(barracks1.getPlayer(), player0);
-        assertEquals(player0.getMessages().size(), 3);
-        assertEquals(player0.getMessages().get(2).getMessageType(), BUILDING_CAPTURED);
-        assertTrue(player0.getMessages().get(2) instanceof BuildingCapturedMessage);
+        assertEquals(player0.getMessages().size(), amountMessagesForPlayer0Before + 1);
+        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), BUILDING_CAPTURED);
+        assertTrue(player0.getMessages().get(player0.getMessages().size() - 1) instanceof BuildingCapturedMessage);
 
-        BuildingCapturedMessage buildingCapturedMessage = (BuildingCapturedMessage) player0.getMessages().get(2);
+        BuildingCapturedMessage buildingCapturedMessage = (BuildingCapturedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
 
         assertEquals(buildingCapturedMessage.getBuilding(), barracks1);
 
-        assertEquals(player1.getMessages().size(), 4);
-        assertEquals(player1.getMessages().get(3).getMessageType(), BUILDING_LOST);
-        assertTrue(player1.getMessages().get(3) instanceof BuildingLostMessage);
+        assertTrue(player1.getMessages().size() >= amountMessagesForPlayer1Before);
+        assertEquals(player1.getMessages().get(player1.getMessages().size() - 1).getMessageType(), BUILDING_LOST);
+        assertTrue(player1.getMessages().get(player1.getMessages().size() - 1) instanceof BuildingLostMessage);
 
-        BuildingLostMessage buildingLostMessage = (BuildingLostMessage) player1.getMessages().get(3);
+        BuildingLostMessage buildingLostMessage = (BuildingLostMessage) player1.getMessages().get(player1.getMessages().size() - 1);
 
         assertEquals(buildingLostMessage.getBuilding(), barracks1);
-
     }
 
     @Test
@@ -940,14 +944,14 @@ public class TestMessages {
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 1000; i++) {
 
-            if (storage0.ready()) {
+            if (storage0.isReady()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(storage0.ready());
+        assertTrue(storage0.isReady());
 
         /* Verify that a message was sent */
         assertEquals(player0.getMessages().size(), 1);
@@ -1155,6 +1159,140 @@ public class TestMessages {
             map.stepTime();
 
             assertEquals(player0.getMessages().size(), 2);
+        }
+    }
+
+    @Test
+    public void testThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing headquarter */
+        Point point1 = new Point(25, 25);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Placing barracks */
+        Point point22 = new Point(5, 23);
+        Building barracks0 = map.placeBuilding(new Fortress(player0), point22);
+
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Wait for the barracks to finish construction */
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        /* Wait for a soldier to walk to the barracks */
+        assertTrue(headquarter0.getAmount(PRIVATE) > 0);
+
+        map.stepTime();
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+
+        Military military = null;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                military = (Military)worker;
+            }
+        }
+
+        assertNotNull(military);
+
+        /* Verify a message is sent when the barracks is populated so player 1 loses land */
+        Point point3 = new Point(13, 19);
+        assertTrue(player1.getBorderPoints().contains(point3));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+
+        assertFalse(player1.getBorderPoints().contains(point3));
+        assertEquals(player1.getMessages().size(), 1);
+        assertEquals(player1.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND);
+
+        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
+
+        assertEquals(message.getBuilding(), barracks0);
+    }
+
+    @Test
+    public void testOnlyOneMessageSentWhenThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing headquarter */
+        Point point1 = new Point(25, 25);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Placing barracks */
+        Point point22 = new Point(5, 23);
+        Building barracks0 = map.placeBuilding(new Fortress(player0), point22);
+
+        /* Placing road */
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+
+        /* Wait for the barracks to finish construction */
+        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+
+        /* Wait for a soldier to walk to the barracks */
+        assertTrue(headquarter0.getAmount(PRIVATE) > 0);
+
+        map.stepTime();
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Military.class);
+
+        Military military = null;
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Military) {
+                military = (Military)worker;
+            }
+        }
+
+        assertNotNull(military);
+
+        /* Verify a message is sent when the barracks is populated so player 1 loses land */
+        Point point3 = new Point(13, 19);
+        assertTrue(player1.getBorderPoints().contains(point3));
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+
+        assertFalse(player1.getBorderPoints().contains(point3));
+        assertEquals(player1.getMessages().size(), 1);
+        assertEquals(player1.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND);
+
+        MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
+
+        assertEquals(message.getBuilding(), barracks0);
+
+        /* Verify that only one message is sent */
+        Utils.fastForward(10, map);
+
+        if (player1.getMessages().size() > 1) {
+            for (Message newMessage : player1.getMessages()) {
+                assertFalse(newMessage instanceof MilitaryBuildingCausedLostLandMessage);
+                assertNotEquals(newMessage.getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
+            }
         }
     }
 }

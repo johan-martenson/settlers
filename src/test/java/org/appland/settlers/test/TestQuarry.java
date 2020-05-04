@@ -81,7 +81,7 @@ public class TestQuarry {
             map.stepTime();
         }
 
-        assertTrue(quarry0.ready());
+        assertTrue(quarry0.isReady());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class TestQuarry {
             map.stepTime();
         }
 
-        assertFalse(quarry0.ready());
+        assertFalse(quarry0.isReady());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class TestQuarry {
         /* Verify that a finished quarry needs a worker */
         Utils.constructHouse(quarry);
 
-        assertTrue(quarry.ready());
+        assertTrue(quarry.isReady());
         assertTrue(quarry.needsWorker());
     }
 
@@ -910,12 +910,12 @@ public class TestQuarry {
         /* Destroy the quarry */
         quarry0.tearDown();
 
-        assertTrue(quarry0.burningDown());
+        assertTrue(quarry0.isBurningDown());
 
         /* Wait for the quarry to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(quarry0.destroyed());
+        assertTrue(quarry0.isDestroyed());
 
         /* Wait for the quarry to disappear */
         for (int i = 0; i < 100; i++) {

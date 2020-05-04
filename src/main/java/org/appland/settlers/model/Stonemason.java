@@ -122,9 +122,11 @@ public class Stonemason extends Worker {
 
                     productivityMeasurer.reportUnproductivity();
 
-                    getHome().reportNoMoreNaturalResources();
-
-                    getPlayer().reportNoMoreResourcesForBuilding(getHome());
+                    /* Only report once */
+                    if (!getHome().outOfNaturalResources()) {
+                        getHome().reportNoMoreNaturalResources();
+                        getPlayer().reportNoMoreResourcesForBuilding(getHome());
+                    }
 
                     return;
                 }

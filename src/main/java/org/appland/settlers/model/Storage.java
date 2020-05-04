@@ -589,7 +589,7 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isWorking() {
-        return ready();
+        return isReady();
     }
 
     private boolean isClosestStorage(Building building) throws InvalidRouteException {

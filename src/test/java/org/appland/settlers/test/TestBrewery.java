@@ -83,7 +83,7 @@ public class TestBrewery {
             map.stepTime();
         }
 
-        assertTrue(brewery0.ready());
+        assertTrue(brewery0.isReady());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestBrewery {
             map.stepTime();
         }
 
-        assertFalse(brewery0.ready());
+        assertFalse(brewery0.isReady());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class TestBrewery {
             map.stepTime();
         }
 
-        assertFalse(brewery0.ready());
+        assertFalse(brewery0.isReady());
     }
 
     @Test

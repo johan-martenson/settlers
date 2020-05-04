@@ -81,7 +81,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        assertTrue(sawmill0.ready());
+        assertTrue(sawmill0.isReady());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        assertFalse(sawmill0.ready());
+        assertFalse(sawmill0.isReady());
     }
 
     @Test
@@ -151,7 +151,7 @@ public class TestSawmill {
             map.stepTime();
         }
 
-        assertFalse(sawmill0.ready());
+        assertFalse(sawmill0.isReady());
     }
 
     @Test
@@ -784,12 +784,12 @@ public class TestSawmill {
         /* Destroy the sawmill */
         sawmill0.tearDown();
 
-        assertTrue(sawmill0.burningDown());
+        assertTrue(sawmill0.isBurningDown());
 
         /* Wait for the sawmill to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(sawmill0.destroyed());
+        assertTrue(sawmill0.isDestroyed());
 
         /* Wait for the sawmill to disappear */
         for (int i = 0; i < 100; i++) {

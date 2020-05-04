@@ -758,7 +758,7 @@ public class GameMap {
 
         /* Initialize the border if it's the first house */
         if (firstHouse) {
-            updateBorder();
+            updateBorder(house, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
         }
 
         /* Store in the point that there is now a building there */
@@ -773,7 +773,7 @@ public class GameMap {
         return house;
     }
 
-    void updateBorder() throws Exception {
+    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) throws Exception {
 
         /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building>    claims       = new HashMap<>();
@@ -788,7 +788,7 @@ public class GameMap {
         for (Building building : allBuildings) {
 
             /* Filter non-military buildings and un-occupied military buildings */
-            if (!building.isMilitaryBuilding() || !building.ready() || !building.occupied()) {
+            if (!building.isMilitaryBuilding() || !building.isReady() || !building.isOccupied()) {
                 continue;
             }
 
@@ -899,19 +899,19 @@ public class GameMap {
 
         /* This iterates over a set and the order may be non-deterministic */
         for (Entry<Player, List<Land>> pair : updatedLands.entrySet()) {
-            pair.getKey().setLands(pair.getValue());
+            pair.getKey().setLands(pair.getValue(), buildingCausedUpdate, cause);
 
             playersToUpdate.remove(pair.getKey());
         }
 
         /* Clear the players that no longer have any land */
         for (Player player : playersToUpdate) {
-            player.setLands(new ArrayList<>());
+            player.setLands(new ArrayList<>(), buildingCausedUpdate, cause);
         }
 
         /* Destroy buildings now outside of the borders */
         for (Building building : buildings) {
-            if (building.burningDown()) {
+            if (building.isBurningDown()) {
                 continue;
             }
 
@@ -2202,7 +2202,7 @@ public class GameMap {
         if (mpUpLeft.isBuilding() && flag.equals(mpUpLeft.getBuilding().getFlag())) {
             Building attachedBuilding = mpUpLeft.getBuilding();
 
-            if (!attachedBuilding.burningDown() && !attachedBuilding.destroyed()) {
+            if (!attachedBuilding.isBurningDown() && !attachedBuilding.isDestroyed()) {
                 attachedBuilding.tearDown();
             }
         }
@@ -3018,10 +3018,6 @@ public class GameMap {
 
     public void reportWorkerWithNewTarget(Worker worker) {
         workersWithNewTargets.add(worker);
-
-        if (worker.getPlannedPath().size() == 0) {
-            System.out.println(Thread.currentThread().getStackTrace());
-        }
     }
 
     private <T extends Building> void reportPlacedBuilding(T house) {

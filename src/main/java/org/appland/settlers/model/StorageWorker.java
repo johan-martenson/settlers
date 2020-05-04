@@ -89,7 +89,7 @@ public class StorageWorker extends Worker {
                 }
 
                 /* Don't deliver to burning or destroyed buildings */
-                if (building.burningDown() || building.destroyed()) {
+                if (building.isBurningDown() || building.isDestroyed()) {
                     continue;
                 }
 
@@ -330,7 +330,7 @@ public class StorageWorker extends Worker {
 
         for (Building building : buildings) {
             if (building.getClass().equals(aClass) &&
-                building.ready()                   &&
+                building.isReady()                   &&
                 building.needsMaterial(material)) {
                 return true;
             }

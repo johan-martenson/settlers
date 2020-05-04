@@ -45,7 +45,7 @@ public class Barracks extends Building {
         getMap().replaceBuilding(upgraded, getPosition());
 
         /* Ensure that the new building is occupied */
-        if (occupied()) {
+        if (isOccupied()) {
             upgraded.setOccupied();
         }
 
@@ -63,7 +63,7 @@ public class Barracks extends Building {
 
         /* Make sure the border is updated only once */
         if (upgraded.getNumberOfHostedMilitary() == 0) {
-            getMap().updateBorder();
+            getMap().updateBorder(this, BorderChangeCause.MILITARY_BUILDING_OCCUPIED);
         }
 
         /* Move the coins to the new building */

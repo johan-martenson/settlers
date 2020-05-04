@@ -78,7 +78,7 @@ public class TestWell {
             map.stepTime();
         }
 
-        assertTrue(well0.ready());
+        assertTrue(well0.isReady());
     }
 
     @Test
@@ -110,7 +110,7 @@ public class TestWell {
             map.stepTime();
         }
 
-        assertFalse(well0.ready());
+        assertFalse(well0.isReady());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class TestWell {
         /* Finish construction of the well */
         Utils.constructHouse(well);
 
-        assertTrue(well.ready());
+        assertTrue(well.isReady());
         assertTrue(well.needsWorker());
     }
 
@@ -662,12 +662,12 @@ public class TestWell {
         /* Destroy the well */
         well0.tearDown();
 
-        assertTrue(well0.burningDown());
+        assertTrue(well0.isBurningDown());
 
         /* Wait for the well to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(well0.destroyed());
+        assertTrue(well0.isDestroyed());
 
         /* Wait for the well to disappear */
         for (int i = 0; i < 100; i++) {

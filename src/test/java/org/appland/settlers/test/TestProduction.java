@@ -51,7 +51,7 @@ public class TestProduction {
         /* Wait for the forester hut to get constructed */
         Utils.waitForBuildingToBeConstructed(sawmill);
 
-        assertTrue(sawmill.ready());
+        assertTrue(sawmill.isReady());
 
         sawmill.putCargo(new Cargo(GOLD, null));
     }

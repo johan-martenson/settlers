@@ -79,7 +79,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        assertTrue(barracks0.ready());
+        assertTrue(barracks0.isReady());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        assertFalse(barracks0.ready());
+        assertFalse(barracks0.isReady());
     }
 
     @Test
@@ -1473,7 +1473,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1500,7 +1500,7 @@ public class TestBarracks {
         /* Verify that the upgraded building is also occupied */
         Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
-        assertTrue(guardHouse0.occupied());
+        assertTrue(guardHouse0.isOccupied());
         assertEquals(guardHouse0.getNumberOfHostedMilitary(), 1);
     }
 
@@ -1588,7 +1588,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1615,7 +1615,7 @@ public class TestBarracks {
         /* Verify that the building can be destroyed */
         barracks0.tearDown();
 
-        assertTrue(barracks0.burningDown());
+        assertTrue(barracks0.isBurningDown());
     }
 
     @Test
@@ -1647,7 +1647,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1710,7 +1710,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1766,7 +1766,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1828,7 +1828,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
@@ -1888,13 +1888,13 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Upgrade the barracks */
         barracks0.upgrade();
 
         /* Verify that the barracks is still occupied */
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Add materials for the upgrade */
         Cargo stoneCargo = new Cargo(STONE, map);
@@ -1911,7 +1911,7 @@ public class TestBarracks {
         for (int i = 0; i < 100; i++) {
 
             /* Verify that the barracks is still occupied */
-            assertTrue(barracks0.occupied());
+            assertTrue(barracks0.isOccupied());
 
             map.stepTime();
         }
@@ -1982,7 +1982,7 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Disable promotions */
         barracks0.disablePromotions();
@@ -2072,11 +2072,11 @@ public class TestBarracks {
         /* Wait for the military to reach the barracks */
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
-        assertFalse(barracks0.occupied());
+        assertFalse(barracks0.isOccupied());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Verify that the military walks back and the barracks remains occupied */
         for (int i = 0; i < 1000; i++) {
@@ -2089,7 +2089,7 @@ public class TestBarracks {
 
         for (int i = 0; i < 100; i++) {
 
-            assertTrue(barracks0.occupied());
+            assertTrue(barracks0.isOccupied());
             assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
 
             map.stepTime();
@@ -2152,11 +2152,11 @@ public class TestBarracks {
         /* Wait for the military to reach the barracks */
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
-        assertFalse(barracks0.occupied());
+        assertFalse(barracks0.isOccupied());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertTrue(barracks0.occupied());
+        assertTrue(barracks0.isOccupied());
 
         /* Wait for the military to walk out */
         for (int i = 0; i < 1000; i++) {
@@ -2298,12 +2298,12 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         /* Upgrade the barracks */
-        assertFalse(barracks0.occupied());
+        assertFalse(barracks0.isOccupied());
 
         barracks0.upgrade();
 
         /* Verify that the barracks is still unoccupied */
-        assertFalse(barracks0.occupied());
+        assertFalse(barracks0.isOccupied());
 
         /* Add materials for the upgrade */
         Cargo stoneCargo = new Cargo(STONE, map);
@@ -2322,7 +2322,7 @@ public class TestBarracks {
         for (int i = 0; i < 100; i++) {
 
             /* Verify that the barracks is still occupied */
-            assertFalse(barracks0.occupied());
+            assertFalse(barracks0.isOccupied());
             assertTrue(player0.getBorderPoints().contains(point1));
             assertFalse(player0.isWithinBorder(point2));
 
@@ -2330,7 +2330,7 @@ public class TestBarracks {
         }
 
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
-        assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).occupied());
+        assertFalse(map.getBuildingAtPoint(barracks0.getPosition()).isOccupied());
         assertTrue(player0.getBorderPoints().contains(point1));
         assertFalse(player0.isWithinBorder(point2));
     }

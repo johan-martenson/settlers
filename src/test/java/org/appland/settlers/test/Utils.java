@@ -250,14 +250,14 @@ public class Utils {
         GameMap map = building.getMap();
 
         for (int i = 0; i < 10000; i++) {
-            if (building.ready()) {
+            if (building.isReady()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(building.ready());
+        assertTrue(building.isReady());
     }
 
     public static void fastForwardUntilBuildingIsOccupied(Building building) throws Exception {
@@ -367,14 +367,14 @@ public class Utils {
         }
 
         for (int i = 0; i < 500; i++) {
-            if (building.ready()) {
+            if (building.isReady()) {
                 break;
             }
 
             building.stepTime();
         }
 
-        assertTrue(building.ready());
+        assertTrue(building.isReady());
     }
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material material) throws Exception {
@@ -437,17 +437,17 @@ public class Utils {
     public static void waitForMilitaryBuildingToGetPopulated(Building building) throws Exception {
         GameMap map = building.getMap();
 
-        assertFalse(building.occupied());
+        assertFalse(building.isOccupied());
 
         for (int i = 0; i < 1000; i++) {
-            if (building.occupied()) {
+            if (building.isOccupied()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(building.occupied());
+        assertTrue(building.isOccupied());
     }
 
     public static void verifyPointIsWithinBorder(Player player, Point point) {
@@ -489,7 +489,7 @@ public class Utils {
     }
 
     public static void occupyMilitaryBuilding(Military.Rank rank, int amount, Building building) throws Exception {
-        assertTrue(building.ready());
+        assertTrue(building.isReady());
         for (int i = 0; i < amount; i++) {
             occupyMilitaryBuilding(rank, building);
         }
@@ -609,7 +609,7 @@ public class Utils {
     public static <T extends Building> void waitForBuildingToDisappear(T building) throws Exception {
         GameMap map = building.getMap();
 
-        assertTrue(building.burningDown() || building.destroyed());
+        assertTrue(building.isBurningDown() || building.isDestroyed());
 
         for (int i = 0; i < 1000; i++) {
             if (!map.getBuildings().contains(building)) {
@@ -938,14 +938,14 @@ public class Utils {
 
         for (int i = 0; i < 10000; i++) {
 
-            if (building.destroyed()) {
+            if (building.isDestroyed()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(building.destroyed());
+        assertTrue(building.isDestroyed());
     }
 
     static void removePiecesFromStoneUntil(Stone stone, int amountLeft) {
@@ -1156,14 +1156,14 @@ public class Utils {
 
         for (int i = 0; i < 2000; i++) {
 
-            if (building.ready()) {
+            if (building.isReady()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(building.ready());
+        assertTrue(building.isReady());
     }
 
     public static void waitForStonemasonToStartGettingStone(GameMap map, Stonemason stonemason) throws Exception {

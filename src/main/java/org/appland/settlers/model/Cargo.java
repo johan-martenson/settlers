@@ -127,9 +127,9 @@ public class Cargo {
             returnToClosestStorage();
         } else if (!target.equals(map.getBuildingAtPoint(target.getPosition()))) {
             returnToStorage();
-        } else if (target.burningDown()) {
+        } else if (target.isBurningDown()) {
             returnToStorage();
-        } else if (target.destroyed()) {
+        } else if (target.isDestroyed()) {
             returnToStorage();
         } else {
 

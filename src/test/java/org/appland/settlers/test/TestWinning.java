@@ -129,7 +129,7 @@ public class TestWinning {
 
         assertEquals(map.getWinner(), player0);
         assertEquals(player1.getBuildings().size(), 1);
-        assertTrue(player1.getBuildings().get(0).burningDown());
+        assertTrue(player1.getBuildings().get(0).isBurningDown());
     }
 
     /*

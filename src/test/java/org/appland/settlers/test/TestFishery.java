@@ -81,7 +81,7 @@ public class TestFishery {
             map.stepTime();
         }
 
-        assertTrue(fishery0.ready());
+        assertTrue(fishery0.isReady());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class TestFishery {
             map.stepTime();
         }
 
-        assertFalse(fishery0.ready());
+        assertFalse(fishery0.isReady());
     }
 
     @Test

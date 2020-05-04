@@ -231,7 +231,7 @@ public class Courier extends Worker {
             /* Return the cargo to storage if the building is torn down */
             if (state != RETURNING_TO_STORAGE &&
                 map.isFlagAtPoint(getPosition()) &&
-                (getCargo().getTarget().burningDown() || getCargo().getTarget().destroyed())) {
+                (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {
 
                 Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 

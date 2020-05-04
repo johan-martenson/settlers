@@ -69,7 +69,7 @@ public class TestHunterHut {
             map.stepTime();
         }
 
-        assertTrue(hunterHut0.ready());
+        assertTrue(hunterHut0.isReady());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class TestHunterHut {
             map.stepTime();
         }
 
-        assertFalse(hunterHut0.ready());
+        assertFalse(hunterHut0.isReady());
     }
 
     @Test

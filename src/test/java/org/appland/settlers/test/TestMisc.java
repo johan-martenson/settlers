@@ -398,7 +398,7 @@ public class TestMisc {
         GameChangesList lastEvent = null;
         for (int i = 0; i < 1000; i++) {
 
-            if (woodcutter0.ready()) {
+            if (woodcutter0.isReady()) {
                 break;
             }
 
@@ -420,7 +420,7 @@ public class TestMisc {
             lastEvent = monitor.getLastEvent();
         }
 
-        assertTrue(woodcutter0.ready());
+        assertTrue(woodcutter0.isReady());
     }
 
     @Test

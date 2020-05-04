@@ -85,7 +85,7 @@ public class TestPigFarm {
             map.stepTime();
         }
 
-        assertTrue(pigFarm0.ready());
+        assertTrue(pigFarm0.isReady());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class TestPigFarm {
             map.stepTime();
         }
 
-        assertFalse(pigFarm0.ready());
+        assertFalse(pigFarm0.isReady());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class TestPigFarm {
             map.stepTime();
         }
 
-        assertFalse(pigFarm0.ready());
+        assertFalse(pigFarm0.isReady());
     }
 
     @Test
@@ -198,7 +198,7 @@ public class TestPigFarm {
 
         Utils.constructHouse(farm);
 
-        assertTrue(farm.ready());
+        assertTrue(farm.isReady());
         assertTrue(farm.needsWorker());
     }
 
@@ -1024,12 +1024,12 @@ public class TestPigFarm {
         /* Destroy the pig farm */
         pigFarm0.tearDown();
 
-        assertTrue(pigFarm0.burningDown());
+        assertTrue(pigFarm0.isBurningDown());
 
         /* Wait for the pig farm to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(pigFarm0.destroyed());
+        assertTrue(pigFarm0.isDestroyed());
 
         /* Wait for the pig farm to disappear */
         for (int i = 0; i < 100; i++) {

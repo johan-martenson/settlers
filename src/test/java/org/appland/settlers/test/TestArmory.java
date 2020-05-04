@@ -86,7 +86,7 @@ public class TestArmory {
             map.stepTime();
         }
 
-        assertTrue(armory0.ready());
+        assertTrue(armory0.isReady());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class TestArmory {
             map.stepTime();
         }
 
-        assertFalse(armory0.ready());
+        assertFalse(armory0.isReady());
     }
 
     @Test
@@ -156,7 +156,7 @@ public class TestArmory {
             map.stepTime();
         }
 
-        assertFalse(armory0.ready());
+        assertFalse(armory0.isReady());
     }
 
     @Test

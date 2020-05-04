@@ -85,7 +85,7 @@ public class TestConstruction {
         sawmill0.putCargo(plankCargo);
         sawmill0.stepTime();
 
-        assertTrue(sawmill0.ready());
+        assertTrue(sawmill0.isReady());
 
         assertFalse(sawmill0.isMilitaryBuilding());
 
@@ -100,14 +100,14 @@ public class TestConstruction {
 
         sawmill0.tearDown();
 
-        assertTrue(sawmill0.burningDown());
+        assertTrue(sawmill0.isBurningDown());
 
         for (int i = 0; i < 50; i++) {
-            assertTrue(sawmill0.burningDown());
+            assertTrue(sawmill0.isBurningDown());
             sawmill0.stepTime();
         }
 
-        assertTrue(sawmill0.destroyed());
+        assertTrue(sawmill0.isDestroyed());
     }
 
     @Test
@@ -142,7 +142,7 @@ public class TestConstruction {
         Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.isMilitaryBuilding());
-        assertTrue(barracks0.ready());
+        assertTrue(barracks0.isReady());
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
         assertEquals(barracks0.getMaxHostedMilitary(), 2);
         assertTrue(barracks0.needsMilitaryManning());
@@ -198,7 +198,7 @@ public class TestConstruction {
 
         sawmill0.stepTime();
 
-        assertTrue(sawmill0.ready());
+        assertTrue(sawmill0.isReady());
 
         /* Verify that all material was consumed by the construction */
         assertEquals(sawmill0.getAmount(PLANK), 0);
@@ -212,11 +212,11 @@ public class TestConstruction {
         sawmill0.tearDown();
 
         for (int i = 0; i < 50; i++) {
-            assertTrue(sawmill0.burningDown());
+            assertTrue(sawmill0.isBurningDown());
             sawmill0.stepTime();
         }
 
-        assertTrue(sawmill0.destroyed());
+        assertTrue(sawmill0.isDestroyed());
     }
 
     @Test
@@ -262,7 +262,7 @@ public class TestConstruction {
         farm.putCargo(stoneCargo);
         farm.stepTime();
 
-        assertTrue(farm.ready());
+        assertTrue(farm.isReady());
 
         /* Verify that all material was consumed by the construction */
         assertEquals(farm.getAmount(PLANK), 0);
@@ -271,12 +271,12 @@ public class TestConstruction {
         farm.tearDown();
 
         for (int i = 0; i < 50; i++) {
-            assertTrue(farm.burningDown());
+            assertTrue(farm.isBurningDown());
             farm.stepTime();
         }
 
 
-        assertTrue(farm.destroyed());
+        assertTrue(farm.isDestroyed());
     }
 
     @Test(expected = InvalidMaterialException.class)
@@ -305,7 +305,7 @@ public class TestConstruction {
 
         Utils.constructHouse(sawmill0);
 
-        assertTrue(sawmill0.ready());
+        assertTrue(sawmill0.isReady());
 
         sawmill0.tearDown();
 
@@ -330,7 +330,7 @@ public class TestConstruction {
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);
 
-        assertTrue(sawmill0.ready());
+        assertTrue(sawmill0.isReady());
 
         /* Tear down the sawmill */
         sawmill0.tearDown();

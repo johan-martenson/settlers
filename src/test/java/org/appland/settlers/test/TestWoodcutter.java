@@ -84,7 +84,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        assertTrue(woodcutter0.ready());
+        assertTrue(woodcutter0.isReady());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TestWoodcutter {
             map.stepTime();
         }
 
-        assertFalse(woodcutter0.ready());
+        assertFalse(woodcutter0.isReady());
     }
 
     @Test
@@ -1216,12 +1216,12 @@ public class TestWoodcutter {
         /* Destroy the woodcutter */
         woodcutter0.tearDown();
 
-        assertTrue(woodcutter0.burningDown());
+        assertTrue(woodcutter0.isBurningDown());
 
         /* Wait for the woodcutter to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(woodcutter0.destroyed());
+        assertTrue(woodcutter0.isDestroyed());
 
         /* Wait for the woodcutter to disappear */
         for (int i = 0; i < 100; i++) {

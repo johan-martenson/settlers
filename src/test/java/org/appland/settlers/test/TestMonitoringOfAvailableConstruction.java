@@ -35,10 +35,9 @@ public class TestMonitoringOfAvailableConstruction {
 
     /*
      TODO:
-      - test removing things - stone
+      - test removing things - anything missing?
       - test not sent twice
       - test not sent to wrong player
-      - test available construction when expanding border and losing border
      */
 
     @Test

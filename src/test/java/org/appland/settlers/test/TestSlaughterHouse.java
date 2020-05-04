@@ -82,7 +82,7 @@ public class TestSlaughterHouse {
             map.stepTime();
         }
 
-        assertTrue(slaughterHouse0.ready());
+        assertTrue(slaughterHouse0.isReady());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TestSlaughterHouse {
             map.stepTime();
         }
 
-        assertFalse(slaughterHouse0.ready());
+        assertFalse(slaughterHouse0.isReady());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class TestSlaughterHouse {
             map.stepTime();
         }
 
-        assertFalse(slaughterHouse0.ready());
+        assertFalse(slaughterHouse0.isReady());
     }
 
     @Test
@@ -769,12 +769,12 @@ public class TestSlaughterHouse {
         /* Destroy the slaughter house */
         slaughterHouse0.tearDown();
 
-        assertTrue(slaughterHouse0.burningDown());
+        assertTrue(slaughterHouse0.isBurningDown());
 
         /* Wait for the slaughter house to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(slaughterHouse0.destroyed());
+        assertTrue(slaughterHouse0.isDestroyed());
 
         /* Wait for the slaughter house to disappear */
         for (int i = 0; i < 100; i++) {

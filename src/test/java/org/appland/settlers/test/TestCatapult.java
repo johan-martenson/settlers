@@ -84,7 +84,7 @@ public class TestCatapult {
             map.stepTime();
         }
 
-        assertTrue(catapult0.ready());
+        assertTrue(catapult0.isReady());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class TestCatapult {
             map.stepTime();
         }
 
-        assertFalse(catapult0.ready());
+        assertFalse(catapult0.isReady());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class TestCatapult {
             map.stepTime();
         }
 
-        assertFalse(catapult0.ready());
+        assertFalse(catapult0.isReady());
     }
 
     @Test (expected = Exception.class)
@@ -671,12 +671,12 @@ public class TestCatapult {
             Utils.waitForProjectileToReachTarget(projectile, map);
 
             /* Check if the projectile hit and destroyed the barracks */
-            if (barracks0.burningDown()) {
+            if (barracks0.isBurningDown()) {
                 break;
             }
         }
 
-        assertTrue(barracks0.burningDown());
+        assertTrue(barracks0.isBurningDown());
     }
 
     @Test
@@ -919,12 +919,12 @@ public class TestCatapult {
         /* Destroy the catapult */
         catapult0.tearDown();
 
-        assertTrue(catapult0.burningDown());
+        assertTrue(catapult0.isBurningDown());
 
         /* Wait for the catapult to stop burning */
         Utils.fastForward(100, map);
 
-        assertTrue(catapult0.destroyed());
+        assertTrue(catapult0.isDestroyed());
 
         /* Wait for the catapult to disappear */
         for (int i = 0; i < 50; i++) {

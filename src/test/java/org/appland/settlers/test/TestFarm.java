@@ -90,7 +90,7 @@ public class TestFarm {
             map.stepTime();
         }
 
-        assertTrue(farm0.ready());
+        assertTrue(farm0.isReady());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class TestFarm {
             map.stepTime();
         }
 
-        assertFalse(farm0.ready());
+        assertFalse(farm0.isReady());
     }
 
     @Test
@@ -164,7 +164,7 @@ public class TestFarm {
             map.stepTime();
         }
 
-        assertFalse(farm0.ready());
+        assertFalse(farm0.isReady());
     }
 
     @Test
@@ -242,7 +242,7 @@ public class TestFarm {
 
         Utils.constructHouse(farm);
 
-        assertTrue(farm.ready());
+        assertTrue(farm.isReady());
         assertTrue(farm.needsWorker());
     }
 

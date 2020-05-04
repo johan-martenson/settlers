@@ -83,7 +83,7 @@ public class TestLookoutTower {
             map.stepTime();
         }
 
-        assertTrue(lookoutTower0.ready());
+        assertTrue(lookoutTower0.isReady());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestLookoutTower {
             map.stepTime();
         }
 
-        assertFalse(lookoutTower0.ready());
+        assertFalse(lookoutTower0.isReady());
     }
 
     @Test

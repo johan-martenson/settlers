@@ -3862,19 +3862,19 @@ public class TestAttack {
                 break;
             }
 
-            assertTrue(headquarter0.ready());
+            assertTrue(headquarter0.isReady());
 
             map.stepTime();
         }
 
         assertEquals(firstAttacker.getPosition(), headquarter1.getPosition());
-        assertTrue(headquarter1.burningDown());
-        assertFalse(headquarter1.ready());
+        assertTrue(headquarter1.isBurningDown());
+        assertFalse(headquarter1.isReady());
 
         /* Verify that the headquarter eventually burns down */
         Utils.fastForward(50, map);
 
-        assertTrue(headquarter1.destroyed());
+        assertTrue(headquarter1.isDestroyed());
 
         /* Verify that the headquarter disappears from the map */
         Utils.fastForward(100, map);
@@ -3949,14 +3949,14 @@ public class TestAttack {
                 break;
             }
 
-            assertTrue(headquarter0.ready());
+            assertTrue(headquarter0.isReady());
 
             map.stepTime();
         }
 
         assertEquals(firstAttacker.getPosition(), headquarter1.getPosition());
-        assertTrue(headquarter1.burningDown());
-        assertFalse(headquarter1.ready());
+        assertTrue(headquarter1.isBurningDown());
+        assertFalse(headquarter1.isReady());
 
         /* Verify that the border is gone */
         assertTrue(player1.getBorderPoints().isEmpty());

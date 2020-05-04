@@ -61,6 +61,7 @@ public class Player {
     private final Set<Point> changedAvailableConstruction;
     private final List<Point> newOwnedLand;
     private final List<Point> newLostLand;
+    private final List<Message> newMessages;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -126,6 +127,7 @@ public class Player {
         changedAvailableConstruction = new HashSet<>();
         newOwnedLand = new ArrayList<>();
         newLostLand = new ArrayList<>();
+        newMessages = new ArrayList<>();
     }
 
     public String getName() {
@@ -162,7 +164,7 @@ public class Player {
 
     private void updateDiscoveredLand() {
         for (Building building : buildings) {
-            if (building.isMilitaryBuilding() && building.occupied()) {
+            if (building.isMilitaryBuilding() && building.isOccupied()) {
 
                 Collection<Point> landDiscoveredByBuilding = building.getDiscoveredLand();
 
@@ -309,7 +311,10 @@ public class Player {
         this.map = map;
     }
 
-    void setLands(List<Land> updatedLands) {
+    void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
+
+        List<Point> calcNewOwnedLand = new ArrayList<>();
+        List<Point> calcNewLostLand = new ArrayList<>();
 
         /* Report the new border and the removed border */
         if (hasMonitor()) {
@@ -358,17 +363,32 @@ public class Player {
         }
 
         /* Calculate and remember the new owned land */
-        if (hasMonitor()) {
-            newOwnedLand.addAll(updatedOwnedLand);
-            newOwnedLand.removeAll(ownedLand);
+        calcNewOwnedLand.addAll(updatedOwnedLand);
+        calcNewOwnedLand.removeAll(ownedLand);
 
-            newLostLand.addAll(ownedLand);
-            newLostLand.removeAll(updatedOwnedLand);
+        calcNewLostLand.addAll(ownedLand);
+        calcNewLostLand.removeAll(updatedOwnedLand);
+
+        /* Report lost land */
+        if (!calcNewLostLand.isEmpty() && cause == BorderChangeCause.MILITARY_BUILDING_OCCUPIED) {
+            reportThisBuildingHasCausedLostLand(building);
         }
 
         /* Make the updated land the current */
         ownedLand.clear();
         ownedLand.addAll(updatedOwnedLand);
+
+        if (hasMonitor()) {
+            newOwnedLand.clear();
+            newOwnedLand.addAll(calcNewOwnedLand);
+
+            newLostLand.clear();
+            newLostLand.addAll(calcNewLostLand);
+        }
+    }
+
+    private void reportThisBuildingHasCausedLostLand(Building building) {
+        messages.add(new MilitaryBuildingCausedLostLandMessage(building));
     }
 
     @Override
@@ -390,7 +410,7 @@ public class Player {
             }
 
             /* Filter storage buildings that are not fully constructed */
-            if (!building.ready()) {
+            if (!building.isReady()) {
                 continue;
             }
 
@@ -548,7 +568,7 @@ public class Player {
 
     boolean isAlive() {
         for (Building building : buildings) {
-            if (building.ready()) {
+            if (building.isReady()) {
                 return true;
             }
         }
@@ -591,40 +611,94 @@ public class Player {
     }
 
     void reportMilitaryBuildingReady(Building building) {
-        messages.add(new MilitaryBuildingReadyMessage(building));
+        MilitaryBuildingReadyMessage message = new MilitaryBuildingReadyMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportMilitaryBuildingOccupied(Building building) {
-        messages.add(new MilitaryBuildingOccupiedMessage(building));
+        MilitaryBuildingOccupiedMessage message = new MilitaryBuildingOccupiedMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportNoMoreResourcesForBuilding(Building building) {
-        messages.add(new NoMoreResourcesMessage(building));
+        NoMoreResourcesMessage message = new NoMoreResourcesMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportGeologicalFinding(Point point, Material foundMaterial) {
-        messages.add(new GeologistFindMessage(point, foundMaterial));
+        GeologistFindMessage message = new GeologistFindMessage(point, foundMaterial);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportBuildingLost(Building building) {
-        messages.add(new BuildingLostMessage(building));
+        BuildingLostMessage message = new BuildingLostMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportBuildingCaptured(Building building) {
-        messages.add(new BuildingCapturedMessage(building));
+        BuildingCapturedMessage message = new BuildingCapturedMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportUnderAttack(Building building) {
-        messages.add(new UnderAttackMessage(building));
+        UnderAttackMessage message = new UnderAttackMessage(building);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     void reportStorageReady(Storage storage) {
-        messages.add(new StoreHouseIsReadyMessage(storage));
+        StoreHouseIsReadyMessage message = new StoreHouseIsReadyMessage(storage);
+
+        messages.add(message);
+
+        if (hasMonitor()) {
+            newMessages.add(message);
+        }
     }
 
     public void activateTreeConservationProgram(Building building) {
         if (!treeConservationProgramActive) {
-            messages.add(new TreeConservationProgramActivatedMessage(building));
+            TreeConservationProgramActivatedMessage message = new TreeConservationProgramActivatedMessage(building);
+
+            messages.add(message);
+
+            if (hasMonitor()) {
+                newMessages.add(message);
+            }
         }
 
         treeConservationProgramActive = true;
@@ -636,7 +710,13 @@ public class Player {
 
     public void deactivateTreeConservationProgram(Building building) {
         if (treeConservationProgramActive) {
-            messages.add(new TreeConservationProgramDeactivatedMessage(building));
+            TreeConservationProgramDeactivatedMessage message = new TreeConservationProgramDeactivatedMessage(building);
+
+            messages.add(message);
+
+            if (hasMonitor()) {
+                newMessages.add(message);
+            }
         }
 
         treeConservationProgramActive = false;
@@ -667,7 +747,8 @@ public class Player {
             removedTrees.isEmpty() && removedStones.isEmpty() && newSigns.isEmpty() &&
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
-            workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty()) {
+            workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
+            newMessages.isEmpty()) {
             return;
         }
 
@@ -886,7 +967,8 @@ public class Player {
                 new ArrayList<>(newDiscoveredLand),
                 new ArrayList<>(changedBorders),
                 new ArrayList<>(newStones), newWorkers,
-                new ArrayList<>(changedAvailableConstruction));
+                new ArrayList<>(changedAvailableConstruction),
+                new ArrayList<>(newMessages));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -916,6 +998,7 @@ public class Player {
         changedAvailableConstruction.clear();
         newOwnedLand.clear();
         newLostLand.clear();
+        newMessages.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {

@@ -546,7 +546,7 @@ public class TestGameMap {
         assertEquals(map.getFlags().size(), 1);
         assertEquals(map.getRoads().size(), 1);
         assertEquals(map.getBuildings().size(), 2);
-        assertTrue(woodcutter.burningDown());
+        assertTrue(woodcutter.isBurningDown());
     }
 
     @Test
@@ -635,12 +635,12 @@ public class TestGameMap {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
         assertTrue(map.getBuildings().contains(woodcutter));
-        assertTrue(woodcutter.ready());
+        assertTrue(woodcutter.isReady());
 
         barracks0.tearDown();
 
         assertTrue(map.getBuildings().contains(woodcutter));
-        assertTrue(woodcutter.burningDown());
+        assertTrue(woodcutter.isBurningDown());
     }
 
     @Test

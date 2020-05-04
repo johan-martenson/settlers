@@ -83,7 +83,7 @@ public class TestMint {
             map.stepTime();
         }
 
-        assertTrue(mint0.ready());
+        assertTrue(mint0.isReady());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestMint {
             map.stepTime();
         }
 
-        assertFalse(mint0.ready());
+        assertFalse(mint0.isReady());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class TestMint {
             map.stepTime();
         }
 
-        assertFalse(mint0.ready());
+        assertFalse(mint0.isReady());
     }
 
     @Test
@@ -805,12 +805,12 @@ public class TestMint {
         /* Destroy the mint */
         mint0.tearDown();
 
-        assertTrue(mint0.burningDown());
+        assertTrue(mint0.isBurningDown());
 
         /* Wait for the mint to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(mint0.destroyed());
+        assertTrue(mint0.isDestroyed());
 
         /* Wait for the mint to disappear */
         for (int i = 0; i < 100; i++) {

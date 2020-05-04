@@ -89,7 +89,7 @@ public class TestCoalMine {
             map.stepTime();
         }
 
-        assertTrue(coalMine0.ready());
+        assertTrue(coalMine0.isReady());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class TestCoalMine {
             map.stepTime();
         }
 
-        assertFalse(coalMine0.ready());
+        assertFalse(coalMine0.isReady());
     }
 
     @Test
@@ -151,7 +151,7 @@ public class TestCoalMine {
 
         Utils.constructHouse(mine);
 
-        assertTrue(mine.ready());
+        assertTrue(mine.isReady());
     }
 
     @Test
@@ -250,7 +250,7 @@ public class TestCoalMine {
         /* Construct the mine */
         constructHouse(mine);
 
-        assertTrue(mine.ready());
+        assertTrue(mine.isReady());
 
         /* Run game logic twice, once to place courier and once to place miner */
         Utils.fastForward(2, map);

@@ -416,7 +416,7 @@ public class TestTransportation {
         /* Finish construction of the storage */
         Utils.constructHouse(storage);
 
-        assertTrue(quarry0.ready());
+        assertTrue(quarry0.isReady());
 
         /* Occupy the quarry */
         Utils.occupyBuilding(mason, quarry0);
@@ -1041,10 +1041,10 @@ public class TestTransportation {
         /* Tear down the catapult */
         catapult.tearDown();
 
-        assertTrue(catapult.burningDown());
-        assertFalse(catapult.ready());
+        assertTrue(catapult.isBurningDown());
+        assertFalse(catapult.isReady());
         assertEquals(courier.getCargo().getTarget(), catapult);
-        assertFalse(courier.getCargo().getTarget().ready());
+        assertFalse(courier.getCargo().getTarget().isReady());
 
         /* Verify that the courier walks to the catapult's flag and then returns with the cargo */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, catapult.getFlag().getPosition());

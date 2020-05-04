@@ -129,7 +129,7 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the headquarter is ready immediately */
-        assertTrue(headquarter0.ready());
+        assertTrue(headquarter0.isReady());
     }
 
     @Test

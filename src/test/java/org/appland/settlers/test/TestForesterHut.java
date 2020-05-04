@@ -75,7 +75,7 @@ public class TestForesterHut {
             map.stepTime();
         }
 
-        assertTrue(foresterHut0.ready());
+        assertTrue(foresterHut0.isReady());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class TestForesterHut {
             map.stepTime();
         }
 
-        assertFalse(foresterHut0.ready());
+        assertFalse(foresterHut0.isReady());
     }
 
     @Test

@@ -48,9 +48,7 @@ import static org.junit.Assert.assertTrue;
 public class TestGameMonitoring {
 
     /*TODO:
-       objects when new land discovered (separate file),
        catapulted stone,
-       available construction (separate file),
        available road connections (?),
        road that becomes main road,
        game events
@@ -907,7 +905,7 @@ public class TestGameMonitoring {
         Utils.fastForward(30, map);
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(woodcutter0.burningDown());
+        assertTrue(woodcutter0.isBurningDown());
     }
 
     @Test
@@ -1272,7 +1270,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
 
         /* Verify that an event is sent when the building disappears */
-        assertTrue(woodcutter0.destroyed());
+        assertTrue(woodcutter0.isDestroyed());
         assertEquals(monitor.getEvents().size(), 2);
 
         Utils.waitForBuildingToDisappear(woodcutter0);
@@ -1341,7 +1339,7 @@ public class TestGameMonitoring {
         assertEquals(gameChanges.getChangedBuildings().get(0), woodcutter0);
 
         /* Verify that an event is sent when the building disappears */
-        assertTrue(woodcutter0.destroyed());
+        assertTrue(woodcutter0.isDestroyed());
         assertEquals(monitor.getEvents().size(), 2);
 
         Utils.waitForBuildingToDisappear(woodcutter0);
@@ -1404,7 +1402,7 @@ public class TestGameMonitoring {
         map.stepTime();
 
         /* Verify that no event is sent when the building disappears */
-        assertTrue(woodcutter0.destroyed());
+        assertTrue(woodcutter0.isDestroyed());
 
         Utils.waitForBuildingToDisappear(woodcutter0);
 

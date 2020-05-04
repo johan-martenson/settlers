@@ -78,7 +78,7 @@ public class TestGuardHouse {
             map.stepTime();
         }
 
-        assertTrue(guardHouse0.ready());
+        assertTrue(guardHouse0.isReady());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TestGuardHouse {
             map.stepTime();
         }
 
-        assertFalse(guardHouse0.ready());
+        assertFalse(guardHouse0.isReady());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class TestGuardHouse {
             map.stepTime();
         }
 
-        assertFalse(guardHouse0.ready());
+        assertFalse(guardHouse0.isReady());
     }
 
     @Test

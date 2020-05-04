@@ -84,7 +84,7 @@ public class TestFortress {
             map.stepTime();
         }
 
-        assertTrue(fortress0.ready());
+        assertTrue(fortress0.isReady());
     }
 
     @Test
@@ -131,7 +131,7 @@ public class TestFortress {
             map.stepTime();
         }
 
-        assertFalse(fortress0.ready());
+        assertFalse(fortress0.isReady());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class TestFortress {
             map.stepTime();
         }
 
-        assertFalse(fortress0.ready());
+        assertFalse(fortress0.isReady());
     }
 
     @Test

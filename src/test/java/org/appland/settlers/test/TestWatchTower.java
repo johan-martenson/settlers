@@ -81,7 +81,7 @@ public class TestWatchTower {
             map.stepTime();
         }
 
-        assertTrue(watchTower0.ready());
+        assertTrue(watchTower0.isReady());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TestWatchTower {
             map.stepTime();
         }
 
-        assertFalse(watchTower0.ready());
+        assertFalse(watchTower0.isReady());
     }
 
     @Test
@@ -169,7 +169,7 @@ public class TestWatchTower {
             map.stepTime();
         }
 
-        assertFalse(watchTower0.ready());
+        assertFalse(watchTower0.isReady());
     }
 
     @Test

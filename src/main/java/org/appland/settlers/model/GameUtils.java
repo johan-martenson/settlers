@@ -803,7 +803,7 @@ public class GameUtils {
         for (Building building : player.getBuildings()) {
 
             /* Filter buildings that are not ready */
-            if (building.burningDown() || building.destroyed() || building.underConstruction()) {
+            if (building.isBurningDown() || building.isDestroyed() || building.underConstruction()) {
                 continue;
             }
 
@@ -847,8 +847,8 @@ public class GameUtils {
             }
 
             /* Filter buildings that are destroyed */
-            if (building.burningDown() ||
-                building.destroyed()   ||
+            if (building.isBurningDown() ||
+                building.isDestroyed()   ||
                 building.underConstruction()) {
                 continue;
             }
@@ -891,8 +891,8 @@ public class GameUtils {
             }
 
             /* Filter buildings that are destroyed */
-            if (building.burningDown() ||
-                building.destroyed()   ||
+            if (building.isBurningDown() ||
+                building.isDestroyed()   ||
                 building.underConstruction()) {
                 continue;
             }

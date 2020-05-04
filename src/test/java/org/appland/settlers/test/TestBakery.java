@@ -83,7 +83,7 @@ public class TestBakery {
             map.stepTime();
         }
 
-        assertTrue(bakery0.ready());
+        assertTrue(bakery0.isReady());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TestBakery {
             map.stepTime();
         }
 
-        assertFalse(bakery0.ready());
+        assertFalse(bakery0.isReady());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class TestBakery {
             map.stepTime();
         }
 
-        assertFalse(bakery0.ready());
+        assertFalse(bakery0.isReady());
     }
 
     @Test

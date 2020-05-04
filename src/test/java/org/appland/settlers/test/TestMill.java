@@ -81,7 +81,7 @@ public class TestMill {
             map.stepTime();
         }
 
-        assertTrue(mill0.ready());
+        assertTrue(mill0.isReady());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class TestMill {
             map.stepTime();
         }
 
-        assertFalse(mill0.ready());
+        assertFalse(mill0.isReady());
     }
 
     @Test
@@ -151,7 +151,7 @@ public class TestMill {
             map.stepTime();
         }
 
-        assertFalse(mill0.ready());
+        assertFalse(mill0.isReady());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class TestMill {
 
         Utils.constructHouse(mill);
 
-        assertTrue(mill.ready());
+        assertTrue(mill.isReady());
         assertTrue(mill.needsWorker());
     }
 
@@ -770,12 +770,12 @@ public class TestMill {
         /* Destroy the mill */
         mill0.tearDown();
 
-        assertTrue(mill0.burningDown());
+        assertTrue(mill0.isBurningDown());
 
         /* Wait for the mill to stop burning */
         Utils.fastForward(50, map);
 
-        assertTrue(mill0.destroyed());
+        assertTrue(mill0.isDestroyed());
 
         /* Wait for the mill to disappear */
         for (int i = 0; i < 100; i++) {

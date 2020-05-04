@@ -138,7 +138,7 @@ public class Military extends Worker {
                 }
 
             /* Leave if the building is destroyed */
-            } else if (!buildingToAttack.ready()) {
+            } else if (!buildingToAttack.isReady()) {
 
                 /* Return home or to storage */
                 returnAfterAttackIsOver();
@@ -268,7 +268,7 @@ public class Military extends Worker {
         /* Capture the building */
         } else if (state == WALKING_TO_TAKE_OVER_BUILDING) {
 
-            if (buildingToAttack.ready()) {
+            if (buildingToAttack.isReady()) {
 
                 Player previousOwner = buildingToAttack.getPlayer();
 
@@ -291,7 +291,7 @@ public class Military extends Worker {
                     enterBuilding(buildingToAttack);
 
                     /* Extend the border */
-                    map.updateBorder();
+                    map.updateBorder(buildingToAttack, BorderChangeCause.MILITARY_BUILDING_CAPTURED);
 
                     state = DEPLOYED;
                 }
@@ -319,7 +319,7 @@ public class Military extends Worker {
             state = DEPLOYED;
         } else if (state == State.WALKING_TO_FIXED_POINT_AFTER_ATTACK) {
 
-            if (buildingToAttack.ready()) {
+            if (buildingToAttack.isReady()) {
 
                 /* Take over the building if it's unprotected */
                 if (buildingToAttack.isDefenseLess()) {
@@ -561,7 +561,7 @@ public class Military extends Worker {
                 returnToStorage();
 
             /* Return to the storage if the target building is destroyed */
-            } else if (!getTargetBuilding().ready()) {
+            } else if (!getTargetBuilding().isReady()) {
 
                 /* Set state to returning to storage */
                 state = RETURNING_TO_STORAGE;
