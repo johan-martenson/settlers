@@ -174,7 +174,8 @@ public class GameChangesList {
                 ", borderChanges=" + borderChanges +
                 ", newStones=" + newStones +
                 ", newWorkers=" + newWorkers +
-                ", hangedAvailableConstruction=" + changedAvailableConstruction +
+                ", changedAvailableConstruction=" + changedAvailableConstruction +
+                ", newMessages=" + newMessages +
                 '}';
     }
 
