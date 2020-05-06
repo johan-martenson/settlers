@@ -144,7 +144,7 @@ public class TestIronMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a ironmine */
+        /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         assertTrue(mine.underConstruction());
@@ -155,7 +155,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineIsNotMilitary() throws Exception {
+    public void testIronMineIsNotMilitary() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -181,7 +181,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineUnderConstructionNotNeedsMiner() throws Exception {
+    public void testIronMineUnderConstructionNotNeedsMiner() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -203,7 +203,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testFinishedIronmineNeedsMiner() throws Exception {
+    public void testFinishedIronMineNeedsMiner() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -227,7 +227,9 @@ public class TestIronMine {
     }
 
     @Test
-    public void testMinerIsAssignedToFinishedIronmine() throws Exception {
+    public void testMinerIsAssignedToFinishedIronMine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -244,7 +246,7 @@ public class TestIronMine {
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        /* Place a road between the headquarter and the ironmine */
+        /* Place a road between the headquarter and the iron mine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
@@ -380,7 +382,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineGoesToFlagWithCargoAndBack() throws Exception {
+    public void testIronMineGoesToFlagWithCargoAndBack() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -459,7 +461,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineRunsOutOfIron() throws Exception {
+    public void testIronMineRunsOutOfIron() throws Exception {
 
         /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -538,7 +540,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineWithoutIronProducesNothing() throws Exception {
+    public void testIronMineWithoutIronProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -587,7 +589,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineWithoutFoodProducesNothing() throws Exception {
+    public void testIronMineWithoutFoodProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -674,7 +676,7 @@ public class TestIronMine {
     }
 
     @Test
-    public void testIronmineCanConsumeAllTypesOfFood() throws Exception {
+    public void testIronMineCanConsumeAllTypesOfFood() throws Exception {
 
         /* Start new game with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

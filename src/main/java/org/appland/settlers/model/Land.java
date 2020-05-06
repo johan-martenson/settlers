@@ -102,10 +102,6 @@ public class Land {
         return points;
     }
 
-    public boolean isWithinBorder(Point position) {
-        return points.contains(position);
-    }
-
     @Override
     public String toString() {
         return "Border: " + border + ", containing" + points;

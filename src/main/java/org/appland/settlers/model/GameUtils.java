@@ -7,7 +7,6 @@ package org.appland.settlers.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,7 +41,7 @@ public class GameUtils {
         final double m;
 
         Line (java.awt.Point point1, java.awt.Point point2) {
-            double newK = (point1.y - point2.y) / (point1.x - point2.x);
+            double newK = (double)(point1.y - point2.y) / (double)(point1.x - point2.x);
 
             // y = kx + m, m = y - kx
             double newM = point1.y - newK * point1.x;
@@ -57,7 +56,7 @@ public class GameUtils {
         }
 
         public Line(java.awt.Point point, int directionX, int directionY) {
-            this.k = directionY / directionX;
+            this.k = (double)directionY / (double)directionX;
             this.m = point.y - point.x * this.k;
         }
 
@@ -72,7 +71,7 @@ public class GameUtils {
             return new java.awt.Point(x, (int)(this.k * x + this.m));
         }
 
-        public double getYforX(int x) {
+        public double getYForX(int x) {
             return this.k * x + this.m;
         }
     }
@@ -214,7 +213,7 @@ public class GameUtils {
         /* Sort the points bottom to top, and left to right */
         List<Point> sortedPoints = new ArrayList<>(points);
 
-        Collections.sort(sortedPoints, new SortPointsByY());
+        sortedPoints.sort(new SortPointsByY());
 
         /* Start with the bottom left point */
         Point bottomLeft = sortedPoints.get(0);

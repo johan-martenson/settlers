@@ -144,7 +144,7 @@ public class TestGraniteMine {
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        /* Place a granitemine */
+        /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         assertTrue(mine.underConstruction());
@@ -155,7 +155,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineIsNotMilitary() throws Exception {
+    public void testGraniteMineIsNotMilitary() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -185,7 +185,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineUnderConstructionNotNeedsMiner() throws Exception {
+    public void testGraniteMineUnderConstructionNotNeedsMiner() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -211,7 +211,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testFinishedGranitemineNeedsMiner() throws Exception {
+    public void testFinishedGraniteMineNeedsMiner() throws Exception {
 
         /* Create players */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -239,7 +239,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testMinerIsAssignedToFinishedGranitemine() throws Exception {
+    public void testMinerIsAssignedToFinishedGraniteMine() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -256,7 +256,7 @@ public class TestGraniteMine {
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
-        /* Place a road between the headquarter and the granitemine */
+        /* Place a road between the headquarter and the granite mine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
 
         /* Construct the mine */
@@ -392,7 +392,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineGoesToFlagWithCargoAndBack() throws Exception {
+    public void testGraniteMineGoesToFlagWithCargoAndBack() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -471,7 +471,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineRunsOutOfGranite() throws Exception {
+    public void testGraniteMineRunsOutOfGranite() throws Exception {
 
         /* Create new game map with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -550,7 +550,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineWithoutGraniteProducesNothing() throws Exception {
+    public void testGraniteMineWithoutGraniteProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -599,7 +599,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testGranitemineWithoutFoodProducesNothing() throws Exception {
+    public void testGraniteMineWithoutFoodProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -686,7 +686,7 @@ public class TestGraniteMine {
     }
 
     @Test
-    public void testStonemineCanConsumeAllTypesOfFood() throws Exception {
+    public void testGraniteMineCanConsumeAllTypesOfFood() throws Exception {
 
         /* Start new game with one player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

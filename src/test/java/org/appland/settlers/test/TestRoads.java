@@ -23,9 +23,7 @@ import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,9 +48,6 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestRoads {
-
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void testGetNotExistingRoad() throws Exception {
@@ -1547,6 +1542,7 @@ public class TestRoads {
             break;
         }
 
+        assertNotNull(worker2);
         assertTrue(worker2 instanceof Courier);
 
         Courier secondCourier = (Courier) worker2;
@@ -1631,8 +1627,11 @@ public class TestRoads {
         map.placeFlag(player0, new Point(14, 4));
         map.placeFlag(player0, new Point(9, 7));
 
-        thrown.expect(Exception.class);
-        map.placeRoad(player0, new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
+        try {
+            map.placeRoad(player0, new Point(14, 4), new Point(12, 4), new Point(10, 4), new Point(9, 5), new Point(8, 6), new Point(9, 7));
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

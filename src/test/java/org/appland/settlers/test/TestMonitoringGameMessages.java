@@ -508,7 +508,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
 
         assertEquals(message.getBuilding(), quarry0);
     }
@@ -572,7 +571,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
 
         assertEquals(message.getBuilding(), quarry0);
 
@@ -753,7 +751,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
         assertEquals(message.getBuilding(), fishery);
     }
 
@@ -865,7 +862,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
         assertEquals(message.getBuilding(), fishery);
 
         /* Verify that the event is only sent once */
@@ -1301,7 +1297,6 @@ public class TestMonitoringGameMessages {
         UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
-        assertTrue(message instanceof UnderAttackMessage);
         assertEquals(message.getBuilding(), barracks1);
     }
 
@@ -1386,7 +1381,6 @@ public class TestMonitoringGameMessages {
         UnderAttackMessage message = (UnderAttackMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), UNDER_ATTACK);
-        assertTrue(message instanceof UnderAttackMessage);
         assertEquals(message.getBuilding(), barracks1);
 
         /* Verify that the event is only sent once */
@@ -1582,7 +1576,6 @@ public class TestMonitoringGameMessages {
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
-        assertTrue(messageForPlayer0 instanceof BuildingCapturedMessage);
 
         assertEquals(messageForPlayer1.getBuilding(), barracks1);
         assertEquals(messageForPlayer1.getMessageType(), BUILDING_LOST);
@@ -1700,7 +1693,6 @@ public class TestMonitoringGameMessages {
 
         assertEquals(barracks1.getPlayer(), player0);
         assertEquals(messageForPlayer0.getMessageType(), BUILDING_CAPTURED);
-        assertTrue(messageForPlayer0 instanceof BuildingCapturedMessage);
 
         assertEquals(messageForPlayer1.getBuilding(), barracks1);
         assertEquals(messageForPlayer1.getMessageType(), BUILDING_LOST);
@@ -1915,7 +1907,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
         assertEquals(message.getBuilding(), mine);
         assertTrue(mine.outOfNaturalResources());
     }
@@ -2004,7 +1995,6 @@ public class TestMonitoringGameMessages {
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), NO_MORE_RESOURCES);
-        assertTrue(message instanceof NoMoreResourcesMessage);
         assertEquals(message.getBuilding(), mine);
         assertTrue(mine.outOfNaturalResources());
 

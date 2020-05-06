@@ -131,7 +131,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -176,7 +175,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -261,7 +259,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 2);
-        assertTrue(monitor.getEvents().get(1) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(1);
 
@@ -398,7 +395,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -450,7 +446,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -706,7 +701,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -752,7 +746,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -843,7 +836,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -893,7 +885,6 @@ public class TestGameMonitoring {
         map.stepTime();
 
         assertEquals(monitor.getEvents().size(), 1);
-        assertTrue(monitor.getEvents().get(0) instanceof GameChangesList);
 
         GameChangesList gameChanges = monitor.getEvents().get(0);
 
@@ -3739,13 +3730,7 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         /* Verify that no event is sent to player 1 when the barracks get populated and the player discovers new land */
-        Set<Point> discoveredAtStart = new HashSet<>(player0.getDiscoveredLand());
-
         Utils.waitForMilitaryBuildingToGetPopulated(barracks0);
-
-        Set<Point> newlyDiscovered = new HashSet<>(player0.getDiscoveredLand());
-
-        newlyDiscovered.removeAll(discoveredAtStart);
 
         map.stepTime();
 
@@ -3805,7 +3790,7 @@ public class TestGameMonitoring {
 
         GameChangesList gameChanges = monitor.getEvents().get(monitor.getEvents().size() - 1);
 
-        assertTrue(gameChanges.getChangedBorders().size() == 1);
+        assertEquals(1, gameChanges.getChangedBorders().size());
 
         List<BorderChange> borderChanges = gameChanges.getChangedBorders();
 
@@ -4421,7 +4406,7 @@ public class TestGameMonitoring {
 
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
-        Point discoveredPoint = null;
+
         for (int i = 0; i < 8; i++) {
             Point target = scout.getTarget();
 
@@ -4438,7 +4423,6 @@ public class TestGameMonitoring {
 
             if (foundNewGround) {
                 wentToNewGround = true;
-                discoveredPoint = target;
 
                 break;
             }
@@ -4519,7 +4503,7 @@ public class TestGameMonitoring {
 
         boolean foundNewGround = false;
         boolean wentToNewGround = false;
-        Point discoveredPoint = null;
+
         for (int i = 0; i < 8; i++) {
             Point target = scout.getTarget();
 
@@ -4536,7 +4520,6 @@ public class TestGameMonitoring {
 
             if (foundNewGround) {
                 wentToNewGround = true;
-                discoveredPoint = target;
 
                 break;
             }

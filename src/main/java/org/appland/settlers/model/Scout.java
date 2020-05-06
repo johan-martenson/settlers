@@ -134,7 +134,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    void onEnterBuilding(Building building) throws Exception {
+    void onEnterBuilding(Building building) {
 
         /* The scout has reached the lookout tower it's assigned to */
         setHome(building);
@@ -174,7 +174,7 @@ public class Scout extends Worker {
     private Point findNextPoint() {
 
         Point position = getPosition();
-        Point targetPoint = null;
+        Point targetPoint;
 
         if (Math.abs(directionX) > 0.001) {
 
@@ -184,7 +184,7 @@ public class Scout extends Worker {
             final double scale = Math.sqrt(LENGTH_TO_PLAN_HEAD * LENGTH_TO_PLAN_HEAD - directionX * directionX - directionY * directionY);
             targetX = position.x + (int) (scale * directionX);
 
-            targetPoint = Point.fitToGamePoint(targetX, direction.getYforX(targetX));
+            targetPoint = Point.fitToGamePoint(targetX, direction.getYForX(targetX));
         } else {
 
             if (directionY > 0) {

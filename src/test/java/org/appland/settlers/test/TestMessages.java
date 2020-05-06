@@ -550,7 +550,7 @@ public class TestMessages {
 
         Sign sign = map.getSignAtPoint(geologist.getPosition());
 
-        assertEquals(sign.getType(), null);
+        assertNull(sign.getType());
         assertEquals(player0.getMessages().size(), 0);
     }
 

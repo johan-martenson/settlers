@@ -8,11 +8,11 @@ public class Road {
     private static final int MAIN_ROAD_THRESHOLD = 99;
 
     private int         usage;
-    private EndPoint    start;
-    private EndPoint    end;
+    private final EndPoint    start;
+    private final EndPoint    end;
     private Courier     courier;
     private Donkey      donkey;
-    private List<Point> steps;
+    private final List<Point> steps;
     private boolean     needsCourier;
     private Player      player;
 

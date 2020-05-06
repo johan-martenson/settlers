@@ -36,7 +36,7 @@ public class Courier extends Worker {
         return state == IDLE_AT_ROAD;
     }
 
-    private EndPoint getEndPointAtPoint(Point currentPosition) throws Exception {
+    private EndPoint getEndPointAtPoint(Point currentPosition) {
         if (map.isFlagAtPoint(currentPosition)) {
             return map.getFlagAtPoint(currentPosition);
         }

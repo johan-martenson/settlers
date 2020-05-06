@@ -23,7 +23,7 @@ public class Cargo {
         return this.material;
     }
 
-    public void setTarget(Building target) throws Exception {
+    public void setTarget(Building target) {
         this.target = target;
 
         Flag flag = map.getFlagAtPoint(getPosition());
@@ -168,9 +168,9 @@ public class Cargo {
     /**
      * Note: this is only definitely optimal if all points are included. If the path only consists of flags the result
      * might not be too optimistic
-     * @param start
-     * @param path
-     * @return
+     * @param start Start of the route
+     * @param path Path to take from the starting point
+     * @return Returns true if the route looks optimal
      */
     private boolean looksLikeOptimalRoute(Point start, List<Point> path) {
 

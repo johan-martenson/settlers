@@ -685,19 +685,19 @@ public class TestPlacement {
         assertEquals(map.isAvailableHousePoint(player0, point0.left().left()), MEDIUM);
         assertTrue(map.isAvailableFlagPoint(player0, point0.left().left()));
 
-        assertEquals(map.isAvailableHousePoint(player0, point0.upLeft().upLeft()), null);
+        assertNull(map.isAvailableHousePoint(player0, point0.upLeft().upLeft()));
         assertTrue(map.isAvailableFlagPoint(player0, point0.upLeft().upLeft()));
 
-        assertEquals(map.isAvailableHousePoint(player0, point0.up()), null);
+        assertNull(map.isAvailableHousePoint(player0, point0.up()));
         assertTrue(map.isAvailableFlagPoint(player0, point0.up()));
 
-        assertEquals(map.isAvailableHousePoint(player0, point0.upRight().upRight()), null);
+        assertNull(map.isAvailableHousePoint(player0, point0.upRight().upRight()));
         assertTrue(map.isAvailableFlagPoint(player0, point0.upRight().upRight()));
 
         assertEquals(map.isAvailableHousePoint(player0, point0.upRight().right()), SMALL);
         assertTrue(map.isAvailableFlagPoint(player0, point0.upRight().right()));
 
-        /**
+        /*
          * Wider area:
          *         left-left-left: large building | flag
          *         left-left-down-left: large building | flag

@@ -1237,16 +1237,16 @@ public class Utils {
         assertEquals(worker.getPosition(), point);
     }
 
-    public static void waitForWorkerToSetTarget(GameMap map, Worker worke, Point point) throws Exception {
+    public static void waitForWorkerToSetTarget(GameMap map, Worker worker, Point point) throws Exception {
         for (int i = 0; i < 5000; i++) {
-            if (point.equals(worke.getTarget())) {
+            if (point.equals(worker.getTarget())) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(worke.getTarget(), point);
+        assertEquals(worker.getTarget(), point);
     }
 
     public static void waitForHarvestedCropToDisappear(GameMap map, Crop crop0) throws Exception {
@@ -1316,8 +1316,8 @@ public class Utils {
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
-        private List<GameChangesList> gameChanges;
-        private HashMap<Point, AvailableConstruction> availableConstruction;
+        private final List<GameChangesList> gameChanges;
+        private final HashMap<Point, AvailableConstruction> availableConstruction;
 
         public GameViewMonitor() {
             gameChanges = new ArrayList<>();

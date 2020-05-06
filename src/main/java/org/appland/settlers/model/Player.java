@@ -52,7 +52,6 @@ public class Player {
     private final Set<Point> newDiscoveredLand;
     private final List<Point> newBorder;
     private final List<Point> removedBorder;
-    private final List<Worker> workersEnteredBuildings;
     private final List<Stone> newStones;
 
     private List<BorderChange> changedBorders;
@@ -119,7 +118,6 @@ public class Player {
         newDiscoveredLand = new HashSet<>();
         newBorder = new ArrayList<>();
         removedBorder = new ArrayList<>();
-        workersEnteredBuildings = new ArrayList<>();
         changedBorders = null;
         newStones = new ArrayList<>();
         borderPoints = new HashSet<>();
@@ -313,15 +311,10 @@ public class Player {
 
     void setLands(List<Land> updatedLands, Building building, BorderChangeCause cause) {
 
-        List<Point> calcNewOwnedLand = new ArrayList<>();
-        List<Point> calcNewLostLand = new ArrayList<>();
-
         /* Report the new border and the removed border */
         if (hasMonitor()) {
             Set<Point> fullNewBorderCalc = new HashSet<>();
-            Set<Point> fullOldBorderCalc = new HashSet<>();
-            Set<Point> newBorderCalc = new HashSet<>();
-            Set<Point> removedBorderCalc = new HashSet<>();
+            Set<Point> fullOldBorderCalc = new HashSet<>(borderPoints);
 
             for (Land land : updatedLands) {
                 for (List<Point> border : land.getBorders()) {
@@ -329,12 +322,12 @@ public class Player {
                 }
             }
 
-            fullOldBorderCalc.addAll(borderPoints);
+            Set<Point> newBorderCalc = new HashSet<>(fullNewBorderCalc);
 
-            newBorderCalc.addAll(fullNewBorderCalc);
             newBorderCalc.removeAll(fullOldBorderCalc);
 
-            removedBorderCalc.addAll(fullOldBorderCalc);
+            Set<Point> removedBorderCalc = new HashSet<>(fullOldBorderCalc);
+
             removedBorderCalc.removeAll(fullNewBorderCalc);
 
             newBorder.addAll(newBorderCalc);
@@ -363,10 +356,10 @@ public class Player {
         }
 
         /* Calculate and remember the new owned land */
-        calcNewOwnedLand.addAll(updatedOwnedLand);
+        List<Point> calcNewOwnedLand = new ArrayList<>(updatedOwnedLand);
         calcNewOwnedLand.removeAll(ownedLand);
 
-        calcNewLostLand.addAll(ownedLand);
+        List<Point> calcNewLostLand = new ArrayList<>(ownedLand);
         calcNewLostLand.removeAll(updatedOwnedLand);
 
         /* Report lost land */

@@ -548,11 +548,10 @@ public class TestWildAnimal {
         }
     }
 
-    /**
+    /*
      * This tests that wild animals are not placed on any points that are so close to the edge of the map that one of
      * the tiles next to the point they are placed on is missing
      *
-     * @throws Exception
      */
     @Test
     public void testWildAnimalsDoesNotAppearTooCloseToTheEdge() throws Exception {
