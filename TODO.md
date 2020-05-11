@@ -1,5 +1,35 @@
-REMOVE
-======
+LARGER CHANGES
+==============
+
+* Add the two missing states for house construction - digging planned, building planned
+
+* Add builders and diggers
+
+* Add limit to how many cargos can be placed on flag
+
+* Add ships, shipyard, harbour
+
+* Add ability to configure military parameters
+
+* Add tools and metalworks
+
+* Improve available construction compared to map information through analytical regression
+
+* Correct the production times for buildings
+
+* Add game message and monitoring for when a player wins or loses
+
+* Change so that military buildings cannot be placed too close together / only close to the border
+
+* Fix so headquarter can stop storage of material and force output
+
+* Make the tree conservation program configurable
+
+* Add small boats
+
+* Change occupied border to hexagons
+
+* Adjust occupied areas based on measurements
 
 
 RE-FACTOR
@@ -9,21 +39,14 @@ RE-FACTOR
 
 *  Clean up getAvailableHousePoints!
 
-*  canBuild(Small|Medium|Large)House() needed?
-
 *  add    Road::isEndpointPair(Flag, Flag) and remove ugly if (.. && ..)   
 
 *  Fix TestCourier and TestDonkey to use occupyRoad() instead of manually placing courier or donkey
 
 *  Rename Road::setCourier(Courier) to reflect that it's used both for couriers and donkeys
 
-*  Remove depositWorker and use putCargo instead
-
-*  Remove or rename state methods in Building
-
 *  Figure out how to make Size::contains(Size, Size) non-static
 
-*  Fix placeBuilding(...) to use isAvailableHousePoint(...) 
 
 
 
@@ -37,8 +60,6 @@ TEST
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers 
 
 *  Test expanding computer player that it recovers when a barracks under construction is destroyed
-
-*  Test GameMap::getRoadsFromFlag(Flag)
 
 *  Test Size::contains(Size, Size)
 
@@ -56,41 +77,23 @@ TEST
 
 *  Test that the closest building with available militaries is used in attacking
 
-*  Test players can not create roads on each other's land
-
-*  Player's discovered land is updated
-
 *  Test get attack radius for each military building
-
-*  Find a way to test the size of each building
-
-*  Test that a donkey can't be assigned to a non-main road
 
 *  Add Utils.ageRoad() and update tests in donkey to use it before assigning donkeys
 
 *  Test that the scout takes another route if it's called again to the same flag
 
-*  Test that workers are removed from the map when they are stored in storage
-
 *  Test that the radius of the land a scout discovers is correct
-
-*  Test that field of view is updated when scout discovers new land
 
 *  Test that roads cannot be built too close to buildings (farm is wrong)
 
-*  Test size of each building (mill is wrong)
-
 *  Test that production can|cannot be stopped for unoccupied building
-
-*  Test that production can't be stopped or resumed for non-productive building
 
 *  Test that production can't be stopped twice
 
 *  Test that production can't be resumed unless it's stopped
 
 *  Test that splitting a main road results in two main roads
-
-*  Test that it's not possible to assign a donkey to a small road
 
 *  Test signs can be placed outside border
 
@@ -102,8 +105,6 @@ TEST
 
 *  Test that the pig farmer goes to the right place when he feeds the pigs
 
-*  Exception caused by    org.appland.settlers.test.TestFarm.testFarmerReturnsAfterHarvesting(TestFarm.java:422)    
-
 *  farm puts crops on road
  
 *  farm seems to always place crop on its flag
@@ -113,8 +114,6 @@ TEST
 *  do storages get a worker traveling from the hq or is it magically available directly?
 
 *  Q: how often does the storages/headquarter assign new workers?
-
-*  Q: does tree conservation program also apply to stones?
 
 *  Test the initial amount of all materials
 
@@ -130,39 +129,18 @@ TEST
 TO IMPLEMENT
 ============
 
-*  Fix discovery so that military buildings only help if they are ready and occupied (this is not the case with fortress today)
-
-*  Add method to see whether a building can produce cargos
-
 *  Adjust attack radius in military buildings
-
-*  Implement limit so that buildings can not accept more resources than they can hold
 
 *  Make sure all tests for stopped production have more material than necessary
 
-*  Make it possible to stop storage of material in storage
-
 *  Add list of all possible building types to the model
 
-*  Draw cargo in front of the flagpole
-
-*  Verify limits next to small, medium and large houses
-
 *  Make measurement used for tree conservation program consider all storages
-
-*  Make tree conservation program optional
-
-*  Implement MetalWorks, Shipyard, Harbour, Ship
-
-*  Add messages
-
-*  fix building to use a single state variable
 
 *  adjust the defense radius of barracks and the headquarter
 
 *  worker setTarget and setTargetOffroad should share much more code
 
-*  limit number of cargos on a flag
 
 
 
