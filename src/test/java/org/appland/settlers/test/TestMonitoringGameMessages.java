@@ -79,6 +79,8 @@ public class TestMonitoringGameMessages {
      *  - To the right player
      *  - This building has caused you to lose land
      *  - Test all messages received before starting to monitor are not sent to the monitor
+     *  - Bombarded by catapult
+     *  - Game ended
      */
 
     @Test

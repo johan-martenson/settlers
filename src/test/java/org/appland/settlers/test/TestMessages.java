@@ -80,7 +80,8 @@ public class TestMessages {
 
     /**
      * TODO:
-     *  - This building has caused you to lose land
+     *  - We are being bombarded by a catapult
+     *  - Game ended, win/lose/draw
      *
      */
 
