@@ -2,8 +2,6 @@ package org.appland.settlers.model;
 
 public interface Message {
 
-    // Missing: this building has caused you to lose land, we're being bombarded by a catapult, emergency production program activated/deactivated
-
     enum MessageType {
         MILITARY_BUILDING_READY,
         MILITARY_BUILDING_OCCUPIED,
@@ -14,7 +12,9 @@ public interface Message {
         BUILDING_CAPTURED,
         STORE_HOUSE_IS_READY,
         TREE_CONSERVATION_PROGRAM_ACTIVATED,
-        MILITARY_BUILDING_CAUSED_LOST_LAND, TREE_CONSERVATION_PROGRAM_DEACTIVATED
+        MILITARY_BUILDING_CAUSED_LOST_LAND,
+        TREE_CONSERVATION_PROGRAM_DEACTIVATED,
+        BOMBARDED_BY_CATAPULT
     }
 
     MessageType getMessageType();
