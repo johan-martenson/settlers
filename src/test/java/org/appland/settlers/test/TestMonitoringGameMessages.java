@@ -28,8 +28,8 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.StoreHouseIsReadyMessage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.TreeConservationProgramActivatedMessage;
 import org.appland.settlers.model.TreeConservationProgramDeactivatedMessage;
 import org.appland.settlers.model.UnderAttackMessage;
@@ -2106,7 +2106,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -2162,7 +2162,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -2225,7 +2225,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -2277,7 +2277,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
@@ -2325,7 +2325,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
@@ -2380,7 +2380,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
@@ -2425,7 +2425,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
@@ -2480,7 +2480,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
@@ -2542,7 +2542,7 @@ public class TestMonitoringGameMessages {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);

@@ -19,7 +19,7 @@ import org.appland.settlers.model.Minter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -1326,10 +1326,10 @@ public class TestMint {
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the mint */
         Worker minter = mint0.getWorker();
@@ -1341,14 +1341,14 @@ public class TestMint {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(minter.isInsideBuilding());
-        assertEquals(minter.getTarget(), storage0.getPosition());
+        assertEquals(minter.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(MINTER);
+        int amount = storehouse0.getAmount(MINTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, minter, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, minter, storehouse0.getPosition());
 
         /* Verify that the minter is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(MINTER), amount + 1);
+        assertEquals(storehouse0.getAmount(MINTER), amount + 1);
     }
 
     @Test
@@ -1376,13 +1376,13 @@ public class TestMint {
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the mint */
         Worker minter = mint0.getWorker();
@@ -1429,16 +1429,16 @@ public class TestMint {
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the mint */
         Worker minter = mint0.getWorker();
@@ -1485,7 +1485,7 @@ public class TestMint {
 
         /* Place a second storage closer to the mint */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the mint */
         Worker minter = mint0.getWorker();

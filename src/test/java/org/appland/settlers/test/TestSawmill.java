@@ -19,7 +19,7 @@ import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -1291,10 +1291,10 @@ public class TestSawmill {
 
         /* Place a second storage closer to the sawmill */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();
@@ -1306,14 +1306,14 @@ public class TestSawmill {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(sawmillWorker.isInsideBuilding());
-        assertEquals(sawmillWorker.getTarget(), storage0.getPosition());
+        assertEquals(sawmillWorker.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(SAWMILL_WORKER);
+        int amount = storehouse0.getAmount(SAWMILL_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker, storehouse0.getPosition());
 
         /* Verify that the sawmill worker is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(SAWMILL_WORKER), amount + 1);
+        assertEquals(storehouse0.getAmount(SAWMILL_WORKER), amount + 1);
     }
 
     @Test
@@ -1341,13 +1341,13 @@ public class TestSawmill {
 
         /* Place a second storage closer to the sawmill */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();
@@ -1394,16 +1394,16 @@ public class TestSawmill {
 
         /* Place a second storage closer to the sawmill */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();
@@ -1450,7 +1450,7 @@ public class TestSawmill {
 
         /* Place a second storage closer to the sawmill */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the sawmill */
         Worker sawmillWorker = sawmill0.getWorker();

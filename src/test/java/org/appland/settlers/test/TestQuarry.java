@@ -20,7 +20,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -1441,10 +1441,10 @@ public class TestQuarry {
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -1456,14 +1456,14 @@ public class TestQuarry {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(stonemason.isInsideBuilding());
-        assertEquals(stonemason.getTarget(), storage0.getPosition());
+        assertEquals(stonemason.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(STONEMASON);
+        int amount = storehouse0.getAmount(STONEMASON);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, storehouse0.getPosition());
 
         /* Verify that the stonemason is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(STONEMASON), amount + 1);
+        assertEquals(storehouse0.getAmount(STONEMASON), amount + 1);
     }
 
     @Test
@@ -1491,13 +1491,13 @@ public class TestQuarry {
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -1544,16 +1544,16 @@ public class TestQuarry {
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();
@@ -1600,7 +1600,7 @@ public class TestQuarry {
 
         /* Place a second storage closer to the quarry */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the quarry */
         Worker stonemason = quarry0.getWorker();

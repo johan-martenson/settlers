@@ -18,8 +18,8 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
 import org.appland.settlers.model.StorageWorker;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -47,7 +47,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author johan
  */
-public class TestStorage {
+public class TestStorehouse {
 
     @Test
     public void testStorageOnlyNeedsFourPlanksAndThreeStonesForConstruction() throws Exception {
@@ -64,7 +64,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -103,7 +103,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver three planks and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -141,7 +141,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -179,7 +179,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point22 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point22);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -221,7 +221,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3);
+        Building storage = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Verify that an unfinished storage doesn't need a worker */
         assertFalse(storage.needsWorker());
@@ -242,7 +242,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3);
+        Building storage = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage);
@@ -268,7 +268,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Storage storage = map.placeBuilding(new Storage(player0), point3);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point3);
 
         /* Connect the storage with the headquarter */
         Point point4 = new Point(8, 8);
@@ -279,7 +279,7 @@ public class TestStorage {
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage);
+        Utils.constructHouse(storehouse);
 
         /* Run game logic once to let the headquarter assign a storage worker to the storage */
         map.stepTime();
@@ -294,12 +294,12 @@ public class TestStorage {
 
         assertNotNull(storageWorker);
 
-        assertEquals(storageWorker.getTarget(), storage.getPosition());
+        assertEquals(storageWorker.getTarget(), storehouse.getPosition());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storehouse.getPosition());
 
         assertTrue(storageWorker.isInsideBuilding());
-        assertEquals(storage.getWorker(), storageWorker);
+        assertEquals(storehouse.getWorker(), storageWorker);
     }
 
     @Test
@@ -317,7 +317,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3);
+        Building storage = map.placeBuilding(new Storehouse(player0), point3);
 
         Utils.constructHouse(storage);
 
@@ -351,7 +351,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
+        Building storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         /* Connect the storage with the woodcutter */
         Point point2 = new Point(9, 9);
@@ -405,7 +405,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
+        Building storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         /* Connect the storage with woodcutter */
         Point point2 = new Point(9, 9);
@@ -461,7 +461,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point3 = new Point(7, 9);
-        Building storage = map.placeBuilding(new Storage(player0), point3.upLeft());
+        Building storage = map.placeBuilding(new Storehouse(player0), point3.upLeft());
 
         /* Connect the storage with the woodcutter */
         Point point2 = new Point(9, 9);
@@ -518,7 +518,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -561,7 +561,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -571,7 +571,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
@@ -606,7 +606,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -616,7 +616,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
@@ -657,7 +657,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -667,7 +667,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Connect the storage buildings */
         Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), storage1.getFlag());
@@ -711,7 +711,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -721,7 +721,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -753,7 +753,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -763,7 +763,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the second storage */
         Utils.constructHouse(storage1);
@@ -801,7 +801,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -811,7 +811,7 @@ public class TestStorage {
 
         /* Place second storage */
         Point point2 = new Point(15, 15);
-        Building storage1 = map.placeBuilding(new Storage(player0), point2);
+        Building storage1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the second storage */
         Utils.constructHouse(storage1);
@@ -852,7 +852,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Connect the storage with the headquarter */
         map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
@@ -902,7 +902,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Connect the storage with the headquarter */
         map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter0.getFlag());
@@ -947,7 +947,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -975,7 +975,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(8, 8);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1003,7 +1003,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(8, 6);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Connect the storage and the headquarter */
         Point point2 = new Point(6, 4);
@@ -1040,7 +1040,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(20, 14);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1104,13 +1104,13 @@ public class TestStorage {
 
         /* Place storage close to the new border */
         Point point4 = new Point(28, 18);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point4);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point4);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Occupy the storage */
-        StorageWorker worker = Utils.occupyBuilding(new StorageWorker(player0, map), storage0);
+        StorageWorker worker = Utils.occupyBuilding(new StorageWorker(player0, map), storehouse0);
 
         /* Verify that the worker goes back to its own storage when the fortress
            is torn down */
@@ -1257,7 +1257,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point2 = new Point(14, 4);
-        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1322,7 +1322,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point2 = new Point(14, 4);
-        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1390,7 +1390,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point2 = new Point(14, 4);
-        Building storage0 = map.placeBuilding(new Storage(player0), point2.upLeft());
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point2.upLeft());
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1450,7 +1450,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1460,10 +1460,10 @@ public class TestStorage {
 
         /* Place a second storage closer to the storage */
         Point point2 = new Point(13, 13);
-        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage1);
+        Utils.constructHouse(storehouse1);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -1475,14 +1475,14 @@ public class TestStorage {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(storageWorker.isInsideBuilding());
-        assertEquals(storageWorker.getTarget(), storage1.getPosition());
+        assertEquals(storageWorker.getTarget(), storehouse1.getPosition());
 
-        int amount = storage1.getAmount(STORAGE_WORKER);
+        int amount = storehouse1.getAmount(STORAGE_WORKER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storage1.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, storehouse1.getPosition());
 
         /* Verify that the storage worker is stored correctly in the headquarter */
-        assertEquals(storage1.getAmount(STORAGE_WORKER), amount + 1);
+        assertEquals(storehouse1.getAmount(STORAGE_WORKER), amount + 1);
     }
 
     @Test
@@ -1500,7 +1500,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1510,13 +1510,13 @@ public class TestStorage {
 
         /* Place a second storage closer to the storage */
         Point point2 = new Point(13, 13);
-        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage1);
+        Utils.constructHouse(storehouse1);
 
         /* Destroy the storage */
-        storage1.tearDown();
+        storehouse1.tearDown();
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -1553,7 +1553,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1563,16 +1563,16 @@ public class TestStorage {
 
         /* Place a second storage closer to the storage */
         Point point2 = new Point(13, 13);
-        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage1);
+        Utils.constructHouse(storehouse1);
 
         /* Destroy the storage */
-        storage1.tearDown();
+        storehouse1.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage1);
+        Utils.waitForBuildingToBurnDown(storehouse1);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -1609,7 +1609,7 @@ public class TestStorage {
 
         /* Placing storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1619,7 +1619,7 @@ public class TestStorage {
 
         /* Place a second storage closer to the storage */
         Point point2 = new Point(13, 13);
-        Storage storage1 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse1 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the storage */
         Worker storageWorker = storage0.getWorker();
@@ -1656,7 +1656,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point26 = new Point(17, 17);
-        Building storage0 = map.placeBuilding(new Storage(player0), point26);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point26);
 
         /* Place road to connect the headquarter and the storage */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), storage0.getFlag());
@@ -1700,7 +1700,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(10, 10);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storage0);
@@ -1727,7 +1727,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Construct the storage */
         Utils.constructHouse(storage0);
@@ -1751,7 +1751,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(storage0.getMaterialNeeded().size(), 2);
@@ -1784,7 +1784,7 @@ public class TestStorage {
 
         /* Place storage */
         Point point1 = new Point(6, 22);
-        Building storage0 = map.placeBuilding(new Storage(player0), point1);
+        Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Construct the storage */
         Utils.constructHouse(storage0);

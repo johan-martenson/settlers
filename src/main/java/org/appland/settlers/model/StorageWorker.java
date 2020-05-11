@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
@@ -31,7 +32,7 @@ public class StorageWorker extends Worker {
     private final Map<Class<? extends Building>, Integer> assignedCoal;
 
     private State state;
-    private Storage ownStorage;
+    private Storehouse ownStorehouse;
 
     private enum State {
         WALKING_TO_TARGET,
@@ -71,7 +72,7 @@ public class StorageWorker extends Worker {
         for (Material material : getPlayer().getTransportPriorityList()) {
 
             /* Don't try to deliver materials that are not in stock */
-            if (!ownStorage.isInStock(material)) {
+            if (!ownStorehouse.isInStock(material)) {
                 continue;
             }
 
@@ -84,7 +85,7 @@ public class StorageWorker extends Worker {
             for (Building building : getPlayer().getBuildings()) {
 
                 /* Don't deliver to itself */
-                if (ownStorage.equals(building)) {
+                if (ownStorehouse.equals(building)) {
                     continue;
                 }
 
@@ -97,11 +98,11 @@ public class StorageWorker extends Worker {
                    the limit is critically low */
                 if (material == PLANK) {
 
-                    if (!getPlayer().isTreeConservationProgramActive() && ownStorage.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT) {
+                    if (!getPlayer().isTreeConservationProgramActive() && ownStorehouse.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT) {
                         getPlayer().activateTreeConservationProgram(getHome());
                     }
 
-                    if (getPlayer().isTreeConservationProgramActive() && ownStorage.getAmount(PLANK) > TREE_CONSERVATION_LIMIT) {
+                    if (getPlayer().isTreeConservationProgramActive() && ownStorehouse.getAmount(PLANK) > TREE_CONSERVATION_LIMIT) {
                         getPlayer().deactivateTreeConservationProgram(getHome());
                     }
 
@@ -134,7 +135,7 @@ public class StorageWorker extends Worker {
                 /* Deliver to the building */
                 building.promiseDelivery(material);
 
-                Cargo cargo = ownStorage.retrieve(material);
+                Cargo cargo = ownStorehouse.retrieve(material);
                 cargo.setTarget(building);
 
                 /* Track allocation */
@@ -149,10 +150,10 @@ public class StorageWorker extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storage) {
+        if (building instanceof Storehouse) {
             setHome(building);
 
-            ownStorage = (Storage)building;
+            ownStorehouse = (Storehouse)building;
         }
 
         state = State.RESTING_IN_HOUSE;
@@ -196,9 +197,9 @@ public class StorageWorker extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

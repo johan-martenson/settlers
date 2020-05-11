@@ -17,7 +17,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Stone;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Well;
 import org.appland.settlers.model.WellWorker;
@@ -1279,7 +1279,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Storage headquarter = new Headquarter(player0);
+        Storehouse headquarter = new Headquarter(player0);
         map.placeBuilding(headquarter, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
@@ -1353,7 +1353,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Storage headquarter = new Headquarter(player0);
+        Storehouse headquarter = new Headquarter(player0);
         map.placeBuilding(headquarter, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
@@ -1558,7 +1558,7 @@ public class TestRoads {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
-        Storage headquarter = new Headquarter(player0);
+        Storehouse headquarter = new Headquarter(player0);
         map.placeBuilding(headquarter, new Point(5, 5));
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);

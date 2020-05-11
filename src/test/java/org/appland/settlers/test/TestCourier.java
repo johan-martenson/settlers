@@ -20,7 +20,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -65,12 +65,12 @@ public class TestCourier {
 
         /* Place storage */
         Point point1 = new Point(10, 10);
-        Storage storage = map.placeBuilding(new Storage(player0), point1);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage);
+        Utils.constructHouse(storehouse);
 
-        assertTrue(storage.getAmount(COURIER) > 0);
+        assertTrue(storehouse.getAmount(COURIER) > 0);
     }
 
     @Test

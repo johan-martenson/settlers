@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE;
@@ -148,7 +149,7 @@ public class Farmer extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storage) {
+        if (building instanceof Storehouse) {
             return;
         } else if (building instanceof Farm) {
             setHome(building);
@@ -280,9 +281,9 @@ public class Farmer extends Worker {
 
             state = IN_HOUSE_WITH_CARGO;
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

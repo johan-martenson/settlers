@@ -12,7 +12,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.WildAnimal;
 import org.appland.settlers.model.Worker;
@@ -1191,10 +1191,10 @@ public class TestHunterHut {
 
         /* Place a second storage closer to the hunterHut */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the hunterHut */
         Worker hunter = hunterHut0.getWorker();
@@ -1206,14 +1206,14 @@ public class TestHunterHut {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(hunter.isInsideBuilding());
-        assertEquals(hunter.getTarget(), storage0.getPosition());
+        assertEquals(hunter.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(HUNTER);
+        int amount = storehouse0.getAmount(HUNTER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, storehouse0.getPosition());
 
         /* Verify that the hunter is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(HUNTER), amount + 1);
+        assertEquals(storehouse0.getAmount(HUNTER), amount + 1);
     }
 
     @Test
@@ -1241,13 +1241,13 @@ public class TestHunterHut {
 
         /* Place a second storage closer to the hunter hut */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();
@@ -1294,16 +1294,16 @@ public class TestHunterHut {
 
         /* Place a second storage closer to the hunter hut */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();
@@ -1350,7 +1350,7 @@ public class TestHunterHut {
 
         /* Place a second storage closer to the hunter hut */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();

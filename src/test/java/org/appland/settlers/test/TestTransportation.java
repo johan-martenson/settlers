@@ -22,7 +22,7 @@ import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -104,8 +104,8 @@ public class TestTransportation {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Storage storage0 = new Storage(player0);
-        map.placeBuilding(storage0, new Point(4, 6));
+        Storehouse storehouse0 = new Storehouse(player0);
+        map.placeBuilding(storehouse0, new Point(4, 6));
 
         /* Place road */
         map.placeAutoSelectedRoad(player0, new Flag(new Point(5, 7)), new Flag(new Point(4, 6)));
@@ -394,9 +394,9 @@ public class TestTransportation {
         Quarry quarry0 = map.placeBuilding(new Quarry(player0), new Point(4, 4));
 
         /* Place storage */
-        Storage storage = map.placeBuilding(new Storage(player0), new Point(8, 4));
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), new Point(8, 4));
 
-        Flag target = storage.getFlag();
+        Flag target = storehouse.getFlag();
         Flag start = quarry0.getFlag();
 
         /* Connect the storage and the quarry */
@@ -414,7 +414,7 @@ public class TestTransportation {
         Utils.constructHouse(quarry0);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage);
+        Utils.constructHouse(storehouse);
 
         assertTrue(quarry0.isReady());
 
@@ -444,9 +444,9 @@ public class TestTransportation {
 
         assertFalse(quarry0.getFlag().getStackedCargo().isEmpty());
 
-        Cargo cargo = quarry0.getFlag().getCargoWaitingForRoad(map.getRoad(storage.getFlag().getPosition(), quarry0.getFlag().getPosition()));
+        Cargo cargo = quarry0.getFlag().getCargoWaitingForRoad(map.getRoad(storehouse.getFlag().getPosition(), quarry0.getFlag().getPosition()));
         assertEquals(cargo.getPosition(), quarry0.getFlag().getPosition());
-        assertEquals(cargo.getTarget(), storage);
+        assertEquals(cargo.getTarget(), storehouse);
         assertEquals(cargo.getMaterial(), STONE);
     }
 
@@ -461,8 +461,8 @@ public class TestTransportation {
 
         /* Place headquarter */
         Point point0 = new Point(6, 4);
-        Storage storage = new Headquarter(player0);
-        map.placeBuilding(storage, point0);
+        Storehouse storehouse = new Headquarter(player0);
+        map.placeBuilding(storehouse, point0);
 
         /* Place flag */
         Point point1 = new Point(10, 10); // headquarter to middle 6 steps
@@ -473,7 +473,7 @@ public class TestTransportation {
         Flag endFlag = map.placeFlag(player0, point2);
 
         /* Place road */
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storage.getFlag().getPosition(), point1);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
 
         /* Place road */
         Road middleToEndRoad = map.placeRoad(player0, point1, point1.upRight(), point1.upRight().upLeft(), point2.downLeft(), point2);
@@ -502,7 +502,7 @@ public class TestTransportation {
 
         Cargo cargo = new Cargo(WOOD, map);
         endFlag.putCargo(cargo);
-        cargo.setTarget(storage);
+        cargo.setTarget(storehouse);
 
         /* The courier detects the cargo on next tick */
         map.stepTime();
@@ -541,9 +541,9 @@ public class TestTransportation {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hqToMdlCr, point0);
 
-        assertTrue(hqToMdlCr.isAt(storage.getPosition()));
+        assertTrue(hqToMdlCr.isAt(storehouse.getPosition()));
         assertNull(hqToMdlCr.getCargo());
-        assertTrue(storage.isInStock(WOOD));
+        assertTrue(storehouse.isInStock(WOOD));
     }
 
     @Test
@@ -557,19 +557,19 @@ public class TestTransportation {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Storage storage = new Headquarter(player0);
-        map.placeBuilding(storage, point0);
+        Storehouse storehouse = new Headquarter(player0);
+        map.placeBuilding(storehouse, point0);
 
         /* Place flag */
         Point point1 = new Point(11, 5);
         map.placeFlag(player0, point1);
 
         /* Place road */
-        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storage.getFlag().getPosition(), point1);
+        Road hqToMiddleRoad = map.placeAutoSelectedRoad(player0, storehouse.getFlag().getPosition(), point1);
 
         assertTrue(hqToMiddleRoad.needsCourier());
         assertNull(hqToMiddleRoad.getCourier());
-        assertEquals(GameUtils.getClosestStorageConnectedByRoads(hqToMiddleRoad.getStart(), player0), storage);
+        assertEquals(GameUtils.getClosestStorageConnectedByRoads(hqToMiddleRoad.getStart(), player0), storehouse);
 
         /* Step time to let the headquarter send new workers */
         map.stepTime();

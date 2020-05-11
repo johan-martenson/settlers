@@ -108,9 +108,9 @@ public class WellWorker extends Worker {
             state = State.RESTING_IN_HOUSE;
             countdown.countFrom(RESTING_TIME);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

@@ -10,7 +10,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -43,30 +43,30 @@ public class TestMilitaryCreationAndPromotion {
 
         /* Place storage */
         Point point1 = new Point(10, 10);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point1);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
-        int numberOfPrivates = storage0.getAmount(Material.PRIVATE);
+        int numberOfPrivates = storehouse0.getAmount(Material.PRIVATE);
 
-        storage0.putCargo(new Cargo(Material.BEER, null));
-        storage0.putCargo(new Cargo(Material.SWORD, null));
-        storage0.putCargo(new Cargo(Material.SWORD, null));
-        storage0.putCargo(new Cargo(Material.SHIELD, null));
-        storage0.putCargo(new Cargo(Material.SHIELD, null));
-        storage0.putCargo(new Cargo(Material.SHIELD, null));
+        storehouse0.putCargo(new Cargo(Material.BEER, null));
+        storehouse0.putCargo(new Cargo(Material.SWORD, null));
+        storehouse0.putCargo(new Cargo(Material.SWORD, null));
+        storehouse0.putCargo(new Cargo(Material.SHIELD, null));
+        storehouse0.putCargo(new Cargo(Material.SHIELD, null));
+        storehouse0.putCargo(new Cargo(Material.SHIELD, null));
 
-        assertEquals(storage0.getAmount(Material.PRIVATE), numberOfPrivates);
-        assertEquals(storage0.getAmount(Material.BEER), 1);
-        assertEquals(storage0.getAmount(Material.SWORD), 2);
-        assertEquals(storage0.getAmount(Material.SHIELD), 3);
+        assertEquals(storehouse0.getAmount(Material.PRIVATE), numberOfPrivates);
+        assertEquals(storehouse0.getAmount(Material.BEER), 1);
+        assertEquals(storehouse0.getAmount(Material.SWORD), 2);
+        assertEquals(storehouse0.getAmount(Material.SHIELD), 3);
 
-        Utils.fastForward(110, storage0);
+        Utils.fastForward(110, storehouse0);
 
-        assertEquals(storage0.getAmount(Material.PRIVATE), numberOfPrivates + 1);
-        assertEquals(storage0.getAmount(Material.BEER), 0);
-        assertEquals(storage0.getAmount(Material.SWORD), 1);
-        assertEquals(storage0.getAmount(Material.SHIELD), 2);
+        assertEquals(storehouse0.getAmount(Material.PRIVATE), numberOfPrivates + 1);
+        assertEquals(storehouse0.getAmount(Material.BEER), 0);
+        assertEquals(storehouse0.getAmount(Material.SWORD), 1);
+        assertEquals(storehouse0.getAmount(Material.SHIELD), 2);
     }
 
     @Test

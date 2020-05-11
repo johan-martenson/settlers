@@ -139,9 +139,9 @@ public class Hunter extends Worker {
 
             setTarget(getHome().getFlag().getPosition());
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         } else if (state == State.GOING_TO_PICK_UP_MEAT) {
             Cargo cargo = prey.pickUpCargo();
 

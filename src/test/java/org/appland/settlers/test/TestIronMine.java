@@ -19,7 +19,7 @@ import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -1485,10 +1485,10 @@ public class TestIronMine {
 
         /* Place a second storage closer to the iron Mine */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the iron Mine */
         Worker miner = ironMine0.getWorker();
@@ -1500,14 +1500,14 @@ public class TestIronMine {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(miner.isInsideBuilding());
-        assertEquals(miner.getTarget(), storage0.getPosition());
+        assertEquals(miner.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(MINER);
+        int amount = storehouse0.getAmount(MINER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, miner, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, storehouse0.getPosition());
 
         /* Verify that the miner is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(MINER), amount + 1);
+        assertEquals(storehouse0.getAmount(MINER), amount + 1);
     }
 
     @Test
@@ -1539,13 +1539,13 @@ public class TestIronMine {
 
         /* Place a second storage closer to the iron mine */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the iron mine */
         Worker miner = ironMine0.getWorker();
@@ -1596,16 +1596,16 @@ public class TestIronMine {
 
         /* Place a second storage closer to the iron mine */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the iron mine */
         Worker miner = ironMine0.getWorker();
@@ -1656,7 +1656,7 @@ public class TestIronMine {
 
         /* Place a second storage closer to the iron mine */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the iron mine */
         Worker miner = ironMine0.getWorker();

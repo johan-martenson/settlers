@@ -393,8 +393,8 @@ public class Player {
         return color;
     }
 
-    Storage getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
-        Storage storage = null;
+    Storehouse getClosestStorage(Point position, Building avoid) throws InvalidRouteException {
+        Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 
         for (Building building : getBuildings()) {
@@ -407,17 +407,17 @@ public class Player {
                 continue;
             }
 
-            if (! (building instanceof Storage)) {
+            if (! (building instanceof Storehouse)) {
                 continue;
             }
 
             if (building.getFlag().getPosition().equals(position)) {
-                storage = (Storage)building;
+                storehouse = (Storehouse)building;
                 break;
             }
 
             if (position.equals(building.getFlag().getPosition())) {
-                return (Storage)building;
+                return (Storehouse)building;
             }
 
             List<Point> path = map.findWayWithExistingRoads(position, building.getFlag().getPosition());
@@ -428,11 +428,11 @@ public class Player {
 
             if (path.size() < distance) {
                 distance = path.size();
-                storage = (Storage) building;
+                storehouse = (Storehouse) building;
             }
         }
 
-        return storage;
+        return storehouse;
     }
 
     public Map<Material, Integer> getInventory() {
@@ -442,7 +442,7 @@ public class Player {
 
         for (Building building : getBuildings()) {
 
-            if ( !( building instanceof Storage)) {
+            if ( !( building instanceof Storehouse)) {
                 continue;
             }
 
@@ -537,14 +537,14 @@ public class Player {
         return null;
     }
 
-    Storage getClosestStorageOffroad(Point position) {
+    Storehouse getClosestStorageOffroad(Point position) {
         Building storage = null;
         double distance = Double.MAX_VALUE;
 
         for (Building building : buildings) {
 
             /* Filter non-storage buildings */
-            if (! (building instanceof Storage)) {
+            if (! (building instanceof Storehouse)) {
                 continue;
             }
 
@@ -556,7 +556,7 @@ public class Player {
             }
         }
 
-        return (Storage)storage;
+        return (Storehouse)storage;
     }
 
     boolean isAlive() {
@@ -673,8 +673,8 @@ public class Player {
         }
     }
 
-    void reportStorageReady(Storage storage) {
-        StoreHouseIsReadyMessage message = new StoreHouseIsReadyMessage(storage);
+    void reportStorageReady(Storehouse storehouse) {
+        StoreHouseIsReadyMessage message = new StoreHouseIsReadyMessage(storehouse);
 
         messages.add(message);
 

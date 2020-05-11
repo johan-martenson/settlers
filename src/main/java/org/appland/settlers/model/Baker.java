@@ -122,9 +122,9 @@ public class Baker extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

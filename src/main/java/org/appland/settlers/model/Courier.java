@@ -1,14 +1,15 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
 import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
-import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 
 @Walker(speed = 10)
 public class Courier extends Worker {
@@ -216,9 +217,9 @@ public class Courier extends Worker {
         } else if (state == RETURNING_TO_IDLE_SPOT) {
             state = IDLE_AT_ROAD;
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage) map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 
@@ -255,7 +256,7 @@ public class Courier extends Worker {
             setTarget(storage.getPosition());
         } else {
             for (Building building : getPlayer().getBuildings()) {
-                if (building instanceof Storage) {
+                if (building instanceof Storehouse) {
                     state = RETURNING_TO_STORAGE;
 
                     setOffroadTarget(building.getPosition());

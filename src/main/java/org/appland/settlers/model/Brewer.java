@@ -6,9 +6,9 @@
 
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Brewer.State.BREWING_BEER;
 import static org.appland.settlers.model.Brewer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Brewer.State.BREWING_BEER;
 import static org.appland.settlers.model.Brewer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Brewer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Brewer.State.WALKING_TO_TARGET;
@@ -121,9 +121,9 @@ public class Brewer extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

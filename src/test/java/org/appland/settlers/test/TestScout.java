@@ -12,7 +12,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Scout;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Terrain;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Worker;
@@ -479,7 +479,7 @@ public class TestScout {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Add a scout to the headquarter and verify that the amount goes up */
         int amount = headquarter0.getAmount(SCOUT);
@@ -500,7 +500,7 @@ public class TestScout {
 
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
-        Storage headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+        Storehouse headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);

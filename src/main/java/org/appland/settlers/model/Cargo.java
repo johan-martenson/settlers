@@ -95,28 +95,28 @@ public class Cargo {
     }
 
     void transportToStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
-        if (storage0 != null) {
-            setTarget(storage0);
+        if (storehouse0 != null) {
+            setTarget(storehouse0);
         } else {
             target = null;
         }
     }
 
     private void returnToClosestStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
-        if (storage0 != null) {
-            setTarget(storage0);
+        if (storehouse0 != null) {
+            setTarget(storehouse0);
         }
     }
 
     private void returnToStorage() throws Exception {
-        Storage storage0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
-        if (storage0 != null) {
-            setTarget(storage0);
+        if (storehouse0 != null) {
+            setTarget(storehouse0);
         }
     }
 

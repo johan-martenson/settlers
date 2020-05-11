@@ -16,8 +16,8 @@ import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_FEED;
 import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_PUT_CARGO;
 import static org.appland.settlers.model.PigBreeder.State.PREPARING_PIG_FOR_DELIVERY;
 import static org.appland.settlers.model.PigBreeder.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.PigBreeder.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.PigBreeder.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.PigBreeder.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -61,7 +61,7 @@ public class PigBreeder extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storage) {
+        if (building instanceof Storehouse) {
             return;
         } else if (building instanceof PigFarm) {
             setHome(building);
@@ -155,9 +155,9 @@ public class PigBreeder extends Worker {
 
             state = FEEDING;
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

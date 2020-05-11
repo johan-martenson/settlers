@@ -23,7 +23,7 @@ import org.appland.settlers.model.Sign;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Stone;
 import org.appland.settlers.model.Stonemason;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Tile;
 import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.WildAnimal;
@@ -43,13 +43,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.NO_BUILDING_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
-import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
 import static org.appland.settlers.model.Material.COAL;
@@ -68,6 +61,13 @@ import static org.appland.settlers.model.Size.SMALL;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.SWAMP;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.MINE_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.NO_BUILDING_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.FLAG_POSSIBLE;
+import static org.appland.settlers.test.AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -111,11 +111,11 @@ public class Utils {
         return result;
     }
 
-    public static void fillUpInventory(Storage storage, Material material, int amount) throws Exception {
+    public static void fillUpInventory(Storehouse storehouse, Material material, int amount) throws Exception {
         Cargo cargo = new Cargo(material, null);
 
         for (int i = 0; i < amount; i++) {
-            storage.putCargo(cargo);
+            storehouse.putCargo(cargo);
         }
     }
 
@@ -313,28 +313,28 @@ public class Utils {
         return courier;
     }
 
-    public static void adjustInventoryTo(Storage storage, Material material, int amount) throws Exception {
-        GameMap map = storage.getMap();
+    public static void adjustInventoryTo(Storehouse storehouse, Material material, int amount) throws Exception {
+        GameMap map = storehouse.getMap();
 
         for (int i = 0; i < 1000; i++) {
 
-            if (storage.getAmount(material) == amount) {
+            if (storehouse.getAmount(material) == amount) {
                 break;
             }
 
-            if (storage.getAmount(material) > amount) {
+            if (storehouse.getAmount(material) > amount) {
 
                 if (material == PRIVATE || material == SERGEANT || material == GENERAL) {
-                    storage.retrieveMilitary(material);
+                    storehouse.retrieveMilitary(material);
                 } else {
-                    storage.retrieve(material);
+                    storehouse.retrieve(material);
                 }
-            } else if (storage.getAmount(material) < amount) {
-                storage.putCargo(new Cargo(material, map));
+            } else if (storehouse.getAmount(material) < amount) {
+                storehouse.putCargo(new Cargo(material, map));
             }
         }
 
-        assertEquals(storage.getAmount(material), amount);
+        assertEquals(storehouse.getAmount(material), amount);
     }
 
     public static void constructHouse(Building building) throws Exception {

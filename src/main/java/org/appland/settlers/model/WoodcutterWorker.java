@@ -158,9 +158,9 @@ public class WoodcutterWorker extends Worker {
 
             state = State.IN_HOUSE_WITH_CARGO;
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

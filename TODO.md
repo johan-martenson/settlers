@@ -21,7 +21,7 @@ LARGER CHANGES
 
 * Change so that military buildings cannot be placed too close together / only close to the border
 
-* Fix so headquarter can stop storage of material and force output
+* Fix so headquarter can stop storehouse of material and force output
 
 * Make the tree conservation program configurable
 
@@ -63,11 +63,11 @@ TEST
 
 *  Test Size::contains(Size, Size)
 
-*  Test that all deployed militaries in a military building return to the storage if it's torn down
+*  Test that all deployed militaries in a military building return to the storehouse if it's torn down
 
 *  Add tests for available buildings close to the border
 
-*  Test that when a barracks is destroyed, the worker on roads that get removed return to their storage
+*  Test that when a barracks is destroyed, the worker on roads that get removed return to their storehouse
 
 *  Test who wins according to rank and experience and health
 
@@ -99,7 +99,7 @@ TEST
 
 *  Test geologist has an ok movement pattern
 
-*  Test geologist does not go directly back to storage if flag is removed
+*  Test geologist does not go directly back to storehouse if flag is removed
 
 *  Test geologist doesn't investigate points with house, tree, stone, flag, water
 
@@ -119,7 +119,7 @@ TEST
 
 *  It should not be possible to place building that overlaps the border - verify occupied points in game
 
-*  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storage
+*  Verify that a cargo being delivered to a building that is completely gone is re-routed to the closest storehouse
 
 *  Geologist gets stuck when its flag is removed
 
@@ -248,7 +248,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  make sure quarry and others produce the right type of cargo
 
-*  add storage worker - DONE
+*  add storehouse worker - DONE
 
 *  make it possible to remove flags and roads in the app - DONE
 
@@ -258,7 +258,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  change miner and terrain tiles to make the amount of gold go down when the miner mines - DONE
 
-*  change storage countdowns to use the proper Countdown - DONE
+*  change storehouse countdowns to use the proper Countdown - DONE
 
 *  record removal of roads, flags and houses - DONE
 
@@ -306,7 +306,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Test evacuating barracks without connected roads works - DONE
 
-*  Test that evacuated soldier returns to storage - DONE
+*  Test that evacuated soldier returns to storehouse - DONE
 
 *  Change findWayWithExistingRoads to use a* (if appropriate) - DONE
 
@@ -314,7 +314,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add that military buildings can be emptied - DONE
 
-*  Test geologist that returns to storage is stored properly - DONE
+*  Test geologist that returns to storehouse is stored properly - DONE
 
 *  Connect goldmine button to actual action in app - DONE
 
@@ -334,11 +334,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  remove new Flag(int, int) - DONE
 
-*  Test for all workers except well worker that it will produce cargos with no storage attached and that the cargos will get delivered once the building is connected - DONE
+*  Test for all workers except well worker that it will produce cargos with no storehouse attached and that the cargos will get delivered once the building is connected - DONE
 
 *  workers produce cargos and place on flag even if there is no road connected to it - DONE
 
-*  cargos produced when no storage is available should resume delivery when a storage can be reached - DONE
+*  cargos produced when no storehouse is available should resume delivery when a storehouse can be reached - DONE
 
 *  Better indicators of possible road points in the app - DONE
 
@@ -350,7 +350,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  it should not be possible to create a courier without a position and a map reference - DONE
 
-*  Test courier goes back to storage when its road is destroyed - DONE
+*  Test courier goes back to storehouse when its road is destroyed - DONE
 
 *  Fix road building in the app so that connecting with a new flag in an existing road works - DONE
 
@@ -364,7 +364,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Fix so that the headquarter cannot be torn down - DONE
 
-*  Make sure courier enters the storage instead of standing on top - DONE
+*  Make sure courier enters the storehouse instead of standing on top - DONE
 
 *  Add "unoccupied" label to app drawing - DONE
 
@@ -574,7 +574,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Test GameMap::isAvailableHouseSpot(...) - DONE
 
-*  Test that new roads are not populated with couriers from an opponent's storage if it happens to be the closest - DONE
+*  Test that new roads are not populated with couriers from an opponent's storehouse if it happens to be the closest - DONE
 
 *  Test that headquarter is destroyed when it's taken by an opponent - DONE
 
@@ -584,7 +584,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Test that cargo on the way to be delivered is re-routed if the planned way breaks - DONE
 
-*  Test that all workers return to their own storage when their house is torn down - DONE
+*  Test that all workers return to their own storehouse when their house is torn down - DONE
 
 *  Test geologist does not place signs on flags (and on roads???) - DONE
 
@@ -612,7 +612,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  test re-routing of cargos when a road is added - DONE
 
-*  Test that player is set correctly in workers retrieved from storage - DONE
+*  Test that player is set correctly in workers retrieved from storehouse - DONE
 
 *  Test that storages only deliver on existing roads - DONE
 
@@ -630,7 +630,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Implement option to set delivery priority for materials - DONE 
 
-*  Fix so workers go back to _closest_ storage when their building is destroyed - DONE
+*  Fix so workers go back to _closest_ storehouse when their building is destroyed - DONE
 
 *  extract app's canvas to its own class - DONE
 

@@ -794,9 +794,9 @@ public class GameUtils {
         return false;
     }
 
-    static Storage getClosestStorageOffroad(Player player, Point point) {
+    static Storehouse getClosestStorageOffroad(Player player, Point point) {
         int distance = Integer.MAX_VALUE;
-        Storage storage = null;
+        Storehouse storehouse = null;
         GameMap map = player.getMap();
 
         for (Building building : player.getBuildings()) {
@@ -807,7 +807,7 @@ public class GameUtils {
             }
 
             /* Filter other buildings than storage buildings */
-            if (! (building instanceof Storage)) {
+            if (! (building instanceof Storehouse)) {
                 continue;
             }
 
@@ -821,20 +821,20 @@ public class GameUtils {
             int currentDistance = pathToStorage.size();
 
             if (currentDistance < distance) {
-                storage = (Storage)building;
+                storehouse = (Storehouse)building;
                 distance = currentDistance;
             }
         }
 
-        return storage;
+        return storehouse;
     }
 
-    public static Storage getClosestStorageConnectedByRoads(Point point, Player player) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Player player) throws InvalidRouteException {
         return getClosestStorageConnectedByRoads(point, null, player);
     }
 
-    public static Storage getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) throws InvalidRouteException {
-        Storage storage = null;
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, Player player) throws InvalidRouteException {
+        Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
         GameMap map = player.getMap();
 
@@ -852,9 +852,9 @@ public class GameUtils {
                 continue;
             }
 
-            if (building instanceof Storage) {
+            if (building instanceof Storehouse) {
                 if (building.getFlag().getPosition().equals(point)) {
-                    storage = (Storage)building;
+                    storehouse = (Storehouse)building;
                     break;
                 }
 
@@ -866,20 +866,20 @@ public class GameUtils {
 
                 if (path.size() < distance) {
                     distance = path.size();
-                    storage = (Storage) building;
+                    storehouse = (Storehouse) building;
                 }
             }
         }
 
-        return storage;
+        return storehouse;
     }
 
-    public static Storage getClosestStorageConnectedByRoads(Point point, GameMap map) throws InvalidRouteException {
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, GameMap map) throws InvalidRouteException {
         return getClosestStorageConnectedByRoads(point, null, map);
     }
 
-    public static Storage getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) throws InvalidRouteException {
-        Storage storage = null;
+    public static Storehouse getClosestStorageConnectedByRoads(Point point, Building avoid, GameMap map) throws InvalidRouteException {
+        Storehouse storehouse = null;
         int distance = Integer.MAX_VALUE;
 
         for (Building building : map.getBuildings()) {
@@ -896,9 +896,9 @@ public class GameUtils {
                 continue;
             }
 
-            if (building instanceof Storage) {
+            if (building instanceof Storehouse) {
                 if (building.getFlag().getPosition().equals(point)) {
-                    storage = (Storage)building;
+                    storehouse = (Storehouse)building;
                     break;
                 }
 
@@ -910,12 +910,12 @@ public class GameUtils {
 
                 if (path.size() < distance) {
                     distance = path.size();
-                    storage = (Storage) building;
+                    storehouse = (Storehouse) building;
                 }
             }
         }
 
-        return storage;
+        return storehouse;
     }
 
     static public Set<Building> getBuildingsWithinReach(Flag startFlag) {

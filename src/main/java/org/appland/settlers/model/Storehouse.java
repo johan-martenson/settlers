@@ -44,13 +44,13 @@ import static org.appland.settlers.model.Size.MEDIUM;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)
-public class Storage extends Building implements Actor {
+public class Storehouse extends Building implements Actor {
 
     final Map<Material, Integer> inventory;
 
     private final Countdown draftCountdown;
 
-    public Storage(Player player) {
+    public Storehouse(Player player) {
         super(player);
 
         inventory = new HashMap<>();
@@ -58,7 +58,7 @@ public class Storage extends Building implements Actor {
         draftCountdown = new Countdown();
     }
 
-    Storage() {
+    Storehouse() {
         this(null);
     }
 
@@ -220,15 +220,15 @@ public class Storage extends Building implements Actor {
                         continue;
                     }
 
-                    Storage storage = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
+                    Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), building, getPlayer());
 
-                    if (!equals(storage)) {
+                    if (!equals(storehouse)) {
                         continue;
                     }
 
-                    Worker worker = storage.retrieveWorker(material);
+                    Worker worker = storehouse.retrieveWorker(material);
 
-                    getMap().placeWorker(worker, storage.getFlag());
+                    getMap().placeWorker(worker, storehouse.getFlag());
                     worker.setTargetBuilding(building);
                     building.promiseWorker(worker);
 
@@ -252,14 +252,14 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage storage = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
 
-                if (!equals(storage)) {
+                if (!equals(storehouse)) {
                     continue;
                 }
 
-                Courier courier = storage.retrieveCourier();
-                getMap().placeWorker(courier, storage.getFlag());
+                Courier courier = storehouse.retrieveCourier();
+                getMap().placeWorker(courier, storehouse.getFlag());
                 courier.assignToRoad(road);
 
                 return true;
@@ -593,9 +593,9 @@ public class Storage extends Building implements Actor {
     }
 
     private boolean isClosestStorage(Building building) throws InvalidRouteException {
-        Storage storage = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
+        Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(building.getPosition(), getPlayer());
 
-        return equals(storage);
+        return equals(storehouse);
     }
 
     private boolean assignDonkeys() throws Exception {
@@ -613,9 +613,9 @@ public class Storage extends Building implements Actor {
                     continue;
                 }
 
-                Storage storage = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
 
-                if (storage != null && !this.equals(storage)) {
+                if (storehouse != null && !this.equals(storehouse)) {
                     continue;
                 }
 

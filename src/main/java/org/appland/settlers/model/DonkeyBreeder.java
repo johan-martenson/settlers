@@ -55,7 +55,7 @@ public class DonkeyBreeder extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Storage) {
+        if (building instanceof Storehouse) {
             return;
         } else if (building instanceof DonkeyFarm) {
             setHome(building);
@@ -100,9 +100,9 @@ public class DonkeyBreeder extends Worker {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
 
                 /* Don't create a donkey if there is no road to a storage */
-                Storage storage = GameUtils.getClosestStorageConnectedByRoads(getHome().getPosition(), getPlayer());
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(getHome().getPosition(), getPlayer());
 
-                if (storage == null) {
+                if (storehouse == null) {
                     return;
                 }
 
@@ -140,9 +140,9 @@ public class DonkeyBreeder extends Worker {
 
             state = FEEDING;
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
     }
 

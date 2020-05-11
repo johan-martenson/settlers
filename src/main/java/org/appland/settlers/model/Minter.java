@@ -6,15 +6,15 @@
 
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Minter.State.MAKING_COIN;
-import static org.appland.settlers.model.Minter.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Minter.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Minter.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GOLD;
+import static org.appland.settlers.model.Minter.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Minter.State.GOING_TO_FLAG_WITH_CARGO;
+import static org.appland.settlers.model.Minter.State.MAKING_COIN;
+import static org.appland.settlers.model.Minter.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Minter.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;
 
 /**
  *
@@ -120,9 +120,9 @@ public class Minter extends Worker {
 
             countdown.countFrom(RESTING_TIME);
         } else if (state == RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
 
     }

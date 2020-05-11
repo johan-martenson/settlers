@@ -149,9 +149,9 @@ public class Forester extends Worker {
 
             countdown.countFrom(TIME_TO_REST);
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage)map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
 
     }

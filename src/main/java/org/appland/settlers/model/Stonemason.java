@@ -6,6 +6,7 @@
 package org.appland.settlers.model;
 
 import java.util.List;
+
 import static org.appland.settlers.model.Material.STONE;
 
 /**
@@ -198,9 +199,9 @@ public class Stonemason extends Worker {
 
             state = State.IN_HOUSE_WITH_CARGO;
         } else if (state == State.RETURNING_TO_STORAGE) {
-            Storage storage = (Storage) map.getBuildingAtPoint(getPosition());
+            Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
-            storage.depositWorker(this);
+            storehouse.depositWorker(this);
         }
 
     }

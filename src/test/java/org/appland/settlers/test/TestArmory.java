@@ -20,7 +20,7 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -1353,10 +1353,10 @@ public class TestArmory {
 
         /* Place a second storage closer to the armory */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the armory */
         Worker armorer0 = armory0.getWorker();
@@ -1368,14 +1368,14 @@ public class TestArmory {
 
         /* Verify that the worker leaves the building and goes back to the headquarter */
         assertFalse(armorer0.isInsideBuilding());
-        assertEquals(armorer0.getTarget(), storage0.getPosition());
+        assertEquals(armorer0.getTarget(), storehouse0.getPosition());
 
-        int amount = storage0.getAmount(ARMORER);
+        int amount = storehouse0.getAmount(ARMORER);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storage0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, armorer0, storehouse0.getPosition());
 
         /* Verify that the armorer is stored correctly in the headquarter */
-        assertEquals(storage0.getAmount(ARMORER), amount + 1);
+        assertEquals(storehouse0.getAmount(ARMORER), amount + 1);
     }
 
     @Test
@@ -1403,13 +1403,13 @@ public class TestArmory {
 
         /* Place a second storage closer to the armory */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Destroy the armory */
         Worker armorer0 = armory0.getWorker();
@@ -1456,16 +1456,16 @@ public class TestArmory {
 
         /* Place a second storage closer to the armory */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storage0);
+        Utils.constructHouse(storehouse0);
 
         /* Destroy the storage */
-        storage0.tearDown();
+        storehouse0.tearDown();
 
         /* Wait for the storage to burn down */
-        Utils.waitForBuildingToBurnDown(storage0);
+        Utils.waitForBuildingToBurnDown(storehouse0);
 
         /* Destroy the armory */
         Worker armorer0 = armory0.getWorker();
@@ -1512,7 +1512,7 @@ public class TestArmory {
 
         /* Place a second storage closer to the armory */
         Point point2 = new Point(13, 13);
-        Storage storage0 = map.placeBuilding(new Storage(player0), point2);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the armory */
         Worker armorer0 = armory0.getWorker();

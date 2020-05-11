@@ -18,7 +18,7 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.Storage;
+import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
@@ -53,7 +53,7 @@ public class TestScenarios {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
-        Storage headquarter0 = new Headquarter(player0);
+        Storehouse headquarter0 = new Headquarter(player0);
         Point startPosition = new Point(6, 6);
 
         /* Player creates woodcutter, sawmill and quarry */
