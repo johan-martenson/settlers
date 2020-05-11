@@ -35,4 +35,8 @@ public class Stone {
     public Point getPosition() {
         return position;
     }
+
+    public String toString() {
+        return "Stone (" + position.x + ", " + position.y + ")";
+    }
 }

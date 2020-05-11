@@ -58,4 +58,8 @@ public class Tree implements Actor {
     public Size getSize() {
         return size;
     }
+
+    public String toString() {
+        return "Tree (" + position.x + ", " + position.y + ")";
+    }
 }
