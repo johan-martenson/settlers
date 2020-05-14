@@ -23,12 +23,11 @@ public class WildAnimal extends Worker {
     private final static int MAX_TRIES = 5;
     private final static int RANGE = 10;
     private final Random random;
-
     private final Countdown countdown;
+
     private State state;
 
     private enum State {
-
         ALIVE,
         DEAD
     }
@@ -39,11 +38,9 @@ public class WildAnimal extends Worker {
         state = State.ALIVE;
 
         countdown = new Countdown();
-
         countdown.countFrom(TIME_TO_STAND);
 
         random = new Random();
-
         random.setSeed(1);
     }
 

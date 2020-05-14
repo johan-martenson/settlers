@@ -12,12 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.appland.settlers.model.Material.PLANK;
+
 /**
  * @author johan
  *
  */
 public class Player {
 
+    private static final int PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM = 10;
     private List<Point>          fieldOfView;
     private GameMap              map;
     private Color                color;
@@ -32,7 +35,7 @@ public class Player {
     private final Map<Class<? extends Building>, Integer> coalQuota;
     private final Map<Material, Integer>  producedMaterials;
     private final List<Message> messages;
-    private final List<PlayerGameViewMonitor> gameViewMonitors;
+    private final Set<PlayerGameViewMonitor> gameViewMonitors;
     private final List<Worker> workersWithNewTargets;
     private final List<Building> changedBuildings;
     private final List<Flag> newFlags;
@@ -97,7 +100,7 @@ public class Player {
         treeConservationProgramActive = false;
 
         /* Prepare for monitors of the game */
-        gameViewMonitors = new ArrayList<>();
+        gameViewMonitors = new HashSet<>();
 
         workersWithNewTargets = new ArrayList<>();
         changedBuildings = new ArrayList<>();
@@ -683,9 +686,9 @@ public class Player {
         }
     }
 
-    public void activateTreeConservationProgram(Building building) {
+    public void activateTreeConservationProgram() {
         if (!treeConservationProgramActive) {
-            TreeConservationProgramActivatedMessage message = new TreeConservationProgramActivatedMessage(building);
+            TreeConservationProgramActivatedMessage message = new TreeConservationProgramActivatedMessage();
 
             messages.add(message);
 
@@ -701,9 +704,9 @@ public class Player {
         return treeConservationProgramActive;
     }
 
-    public void deactivateTreeConservationProgram(Building building) {
+    public void deactivateTreeConservationProgram() {
         if (treeConservationProgramActive) {
-            TreeConservationProgramDeactivatedMessage message = new TreeConservationProgramDeactivatedMessage(building);
+            TreeConservationProgramDeactivatedMessage message = new TreeConservationProgramDeactivatedMessage();
 
             messages.add(message);
 
@@ -834,14 +837,6 @@ public class Player {
 
         for (Tree newTree : newTrees) {
             addChangedAvailableConstructionForTree(newTree);
-
-            // Unaffected:
-            // Left left: large building and flag ok
-            // Right right: large building and flag ok
-            // Down: large building and flag ok
-            // Up: large building and flag (?) still ok
-            // Up right, up right: large building and flag ok
-            // Down right, down right: large building still ok
         }
 
         for (Tree removedTree : removedTrees) {
@@ -992,10 +987,19 @@ public class Player {
         newOwnedLand.clear();
         newLostLand.clear();
         newMessages.clear();
+        newStones.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
-        changedAvailableConstruction.add(stone.getPosition());
+        Point point = stone.getPosition();
+
+        changedAvailableConstruction.add(point);
+        changedAvailableConstruction.add(point.upLeft()); // Is only flag when stone exists
+        changedAvailableConstruction.add(point.upRight()); // Is only flag when stone exists
+        changedAvailableConstruction.add(point.downLeft()); // Is only flag when stone exists
+        changedAvailableConstruction.add(point.downRight()); // Is only flag when stone exists
+        changedAvailableConstruction.add(point.left()); // Is only flag when stone exists
+        changedAvailableConstruction.add(point.right()); // Is only flag when stone exists
     }
 
     private void addChangedAvailableConstructionForCrop(Crop crop) {
@@ -1056,6 +1060,14 @@ public class Player {
         changedAvailableConstruction.add(point.left()); // Small building or flag
         changedAvailableConstruction.add(point.right()); // Small building or flag
         changedAvailableConstruction.add(point.upRight()); // Small building or flag
+
+        // Unaffected:
+        // Left left: large building and flag ok
+        // Right right: large building and flag ok
+        // Down: large building and flag ok
+        // Up: large building and flag (?) still ok
+        // Up right, up right: large building and flag ok
+        // Down right, down right: large building still ok
     }
 
     private void addChangedAvailableConstructionForFlag(Flag flag) {
@@ -1147,5 +1159,46 @@ public class Player {
         }
 
         return new BorderChange(this, newBorder, removedBorder);
+    }
+
+    void manageTreeConservationProgram() {
+
+        /* Enable/disable the tree conservation program if needed */
+        if (shouldConserveTrees()) {
+
+            if (!treeConservationProgramActive) {
+                activateTreeConservationProgram();
+            }
+        } else {
+            if (treeConservationProgramActive) {
+                deactivateTreeConservationProgram();
+            }
+        }
+    }
+
+    private boolean shouldConserveTrees() {
+        int amountPlanks = 0;
+
+        /* Go through each Storehouse and count the amount of planks */
+        for (Building building : buildings) {
+
+            /* Filter other houses */
+            if (! (building instanceof Storehouse)) {
+                continue;
+            }
+
+            /* Filter non-ready store houses */
+            if (!building.isReady()) {
+                continue;
+            }
+
+            amountPlanks = amountPlanks + building.getAmount(PLANK);
+
+            if (amountPlanks > PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -25,7 +25,6 @@ import static org.appland.settlers.model.Material.PLANK;
 public class StorageWorker extends Worker {
 
     private final static int RESTING_TIME = 19;
-    private final static int TREE_CONSERVATION_LIMIT = 10;
 
     private final Countdown countdown;
     private final Map<Class<? extends Building>, Integer> assignedFood;
@@ -98,19 +97,10 @@ public class StorageWorker extends Worker {
                    the limit is critically low */
                 if (material == PLANK) {
 
-                    if (!getPlayer().isTreeConservationProgramActive() && ownStorehouse.getAmount(PLANK) <= TREE_CONSERVATION_LIMIT) {
-                        getPlayer().activateTreeConservationProgram(getHome());
-                    }
-
-                    if (getPlayer().isTreeConservationProgramActive() && ownStorehouse.getAmount(PLANK) > TREE_CONSERVATION_LIMIT) {
-                        getPlayer().deactivateTreeConservationProgram(getHome());
-                    }
-
                     if (getPlayer().isTreeConservationProgramActive() &&
                         !(building instanceof Sawmill)     &&
                         !(building instanceof ForesterHut) &&
                         !(building instanceof Woodcutter)) {
-                        getPlayer().activateTreeConservationProgram(getHome());
 
                         continue;
                     }

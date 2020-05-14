@@ -1314,6 +1314,46 @@ public class Utils {
         assertFalse(map.getBuildingAtPoint(building.getPosition()).isUpgrading());
     }
 
+    public static void waitForTreeConservationProgramToActivate(Player player0) throws Exception {
+        GameMap map = player0.getMap();
+
+        for (int i = 0; i < 1000; i++) {
+
+            if (player0.isTreeConservationProgramActive()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(player0.isTreeConservationProgramActive());
+    }
+
+    public static void waitForStonesToDisappear(GameMap map, Stone... stones) throws Exception {
+
+        for (int i = 0; i < 10000; i++) {
+            boolean allStonesGone = true;
+
+            for (Stone stone : stones) {
+                if (map.isStoneAtPoint(stone.getPosition())) {
+                    allStonesGone = false;
+
+                    break;
+                }
+            }
+
+            if (allStonesGone) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Stone stone : stones) {
+            assertFalse(map.isStoneAtPoint(stone.getPosition()));
+        }
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

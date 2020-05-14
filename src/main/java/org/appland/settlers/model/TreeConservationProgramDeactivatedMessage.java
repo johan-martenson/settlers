@@ -1,14 +1,7 @@
 package org.appland.settlers.model;
 
 public class TreeConservationProgramDeactivatedMessage implements Message {
-    private final Building building;
-
-    public TreeConservationProgramDeactivatedMessage(Building building) {
-        this.building = building;
-    }
-
-    public Building getBuilding() {
-        return building;
+    public TreeConservationProgramDeactivatedMessage() {
     }
 
     @Override

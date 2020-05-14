@@ -232,6 +232,8 @@ public class TestGameMonitoringWhenDiscovering {
         assertEquals(gameChangesList.getNewStones().get(0), stone0);
 
         /* Verify that the event is not sent again */
+        Utils.fastForward(200, map);
+
         for (GameChangesList changes : monitor.getEventsAfterEvent(gameChangesList)) {
             assertEquals(changes.getNewStones().size(), 0);
         }

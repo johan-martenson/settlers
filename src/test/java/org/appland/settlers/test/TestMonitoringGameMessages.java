@@ -81,6 +81,7 @@ public class TestMonitoringGameMessages {
      *  - Test all messages received before starting to monitor are not sent to the monitor
      *  - Bombarded by catapult
      *  - Game ended
+     *  - no more resources for mine
      */
 
     @Test
@@ -2307,7 +2308,6 @@ public class TestMonitoringGameMessages {
         TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
-        assertEquals(message.getBuilding(), headquarter0);
     }
 
     @Test
@@ -2355,7 +2355,6 @@ public class TestMonitoringGameMessages {
         TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_ACTIVATED);
-        assertEquals(message.getBuilding(), headquarter0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);
@@ -2457,12 +2456,13 @@ public class TestMonitoringGameMessages {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
+        assertNotNull(gameChangesList);
+        assertNotNull(gameChangesList.getNewGameMessages());
         assertEquals(gameChangesList.getNewGameMessages().size(), 1);
 
         TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_DEACTIVATED);
-        assertEquals(message.getBuilding(), headquarter0);
     }
 
     @Test
@@ -2517,7 +2517,6 @@ public class TestMonitoringGameMessages {
         TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) gameChangesList.getNewGameMessages().get(0);
 
         assertEquals(message.getMessageType(), TREE_CONSERVATION_PROGRAM_DEACTIVATED);
-        assertEquals(message.getBuilding(), headquarter0);
 
         /* Verify that the event is only sent once */
         Utils.fastForward(200, map);

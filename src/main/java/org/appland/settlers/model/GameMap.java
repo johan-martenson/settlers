@@ -479,6 +479,11 @@ public class GameMap {
             statisticsManager.collectFromPlayers(time, players);
         }
 
+        /* Notify the players that one more step has been done */
+        for (Player player : players) {
+            player.manageTreeConservationProgram();
+        }
+
         /* Add worker events to the players if any */
         List<BorderChange> borderChanges = null;
         for (Player player : players) {
@@ -2573,6 +2578,7 @@ public class GameMap {
             return null;
         }
 
+        /* It's not possible to build a house left/right or diagonally of a stone or building */
         for (Point d : point.getDiagonalPointsAndSides()) {
             if (!player.isWithinBorder(d)) {
                 continue;

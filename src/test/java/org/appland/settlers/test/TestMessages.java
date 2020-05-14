@@ -1001,8 +1001,6 @@ public class TestMessages {
         assertTrue(player0.getMessages().get(0) instanceof TreeConservationProgramActivatedMessage);
 
         TreeConservationProgramActivatedMessage message = (TreeConservationProgramActivatedMessage) player0.getMessages().get(0);
-
-        assertEquals(message.getBuilding(), headquarter0);
     }
 
     @Test
@@ -1097,9 +1095,6 @@ public class TestMessages {
         assertTrue(player0.getMessages().get(1) instanceof TreeConservationProgramDeactivatedMessage);
 
         TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) player0.getMessages().get(1);
-
-        assertEquals(message.getBuilding(), headquarter0);
-
     }
 
     @Test
@@ -1152,8 +1147,6 @@ public class TestMessages {
         assertTrue(player0.getMessages().get(1) instanceof TreeConservationProgramDeactivatedMessage);
 
         TreeConservationProgramDeactivatedMessage message = (TreeConservationProgramDeactivatedMessage) player0.getMessages().get(1);
-
-        assertEquals(message.getBuilding(), headquarter0);
 
         /* Verify that only one message is sent */
         for (int i = 0; i < 200; i++) {
