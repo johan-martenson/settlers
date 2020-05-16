@@ -80,10 +80,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -126,10 +126,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -169,10 +169,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -211,10 +211,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -259,10 +259,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -322,10 +322,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -398,10 +398,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -491,10 +491,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -584,10 +584,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -673,10 +673,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -758,10 +758,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -851,10 +851,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place woodcutter */
@@ -937,10 +937,10 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(19, 5);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -1037,7 +1037,7 @@ public class TestCourier {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing forester */
@@ -1045,20 +1045,21 @@ public class TestCourier {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point22);
 
         /* Place woodcutter hut */
-        Point point23 = new Point(19, 5);
+        Point point23 = new Point(19, 7);
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point23);
 
         /* Placing quarry */
         Point point24 = new Point(10, 12);
         Building quarry0 = map.placeBuilding(new Quarry(player0), point24);
 
-        /* Placing road between (23, 3) and (20, 4) */
+        /* Placing road between the forester and the woodcutter */
         Point point25 = new Point(23, 5);
         Point point26 = new Point(21, 5);
-        Point point27 = new Point(20, 4);
+        Point point27 = new Point(20, 6);
         Road road0 = map.placeRoad(player0, point25, point26, point27);
 
-        /* Placing road between (20, 4) and (11, 11) */
+        /* Placing road between the woodcutter and the quarry */
+        Point point50 = new Point(19, 5);
         Point point28 = new Point(18, 4);
         Point point29 = new Point(17, 5);
         Point point30 = new Point(16, 6);
@@ -1067,16 +1068,16 @@ public class TestCourier {
         Point point33 = new Point(13, 9);
         Point point34 = new Point(12, 10);
         Point point35 = new Point(11, 11);
-        Road road1 = map.placeRoad(player0, point27, point28, point29, point30, point31, point32, point33, point34, point35);
+        Road road1 = map.placeRoad(player0, point27, point50, point28, point29, point30, point31, point32, point33, point34, point35);
 
-        /* Placing road between (11, 11) and (6, 4) */
+        /* Placing road between the headquarter and the quarry */
         Point point36 = new Point(10, 10);
-        Point point37 = new Point(9, 9);
-        Point point38 = new Point(8, 8);
-        Point point39 = new Point(7, 7);
-        Point point40 = new Point(8, 6);
-        Point point41 = new Point(7, 5);
-        Point point42 = new Point(6, 4);
+        Point point37 = new Point(11, 9);
+        Point point38 = new Point(10, 8);
+        Point point39 = new Point(9, 7);
+        Point point40 = new Point(10, 6);
+        Point point41 = new Point(9, 5);
+        Point point42 = new Point(8, 4);
         Road road2 = map.placeRoad(player0, point35, point36, point37, point38, point39, point40, point41, point42);
 
         /* Place flag */
@@ -1129,7 +1130,7 @@ public class TestCourier {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
+        GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
@@ -1171,7 +1172,7 @@ public class TestCourier {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
@@ -1263,7 +1264,7 @@ public class TestCourier {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point point38 = new Point(5, 45);
+        Point point38 = new Point(5, 35);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Remove all donkeys from the inventory */

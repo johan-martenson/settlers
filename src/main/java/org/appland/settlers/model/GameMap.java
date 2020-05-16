@@ -90,6 +90,10 @@ public class GameMap {
     PointInformation whatIsAtPoint(Point point) {
         MapPoint mp = getMapPoint(point);
 
+        if (mp == null) {
+            return PointInformation.OUTSIDE_MAP;
+        }
+
         if (mp.isTree()) {
             return PointInformation.TREE;
         }
@@ -132,7 +136,7 @@ public class GameMap {
 
     enum PointInformation {
         NONE,
-        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE
+        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP;
     }
 
     /**
@@ -797,9 +801,9 @@ public class GameMap {
                 continue;
             }
 
-            /* Store the claim for each military building
-               This iterates over a collection and the order may be
-               non-deterministic
+            /* Store the claim for each military building.
+
+               This iterates over a collection and the order may be non-deterministic
             */
             for (Point point : building.getDefendedLand()) {
                 if (!claims.containsKey(point)) {
@@ -812,10 +816,10 @@ public class GameMap {
 
         /* Assign points to players */
         List<Point> toInvestigate = new ArrayList<>();
-        Set<Point> localCleared = new HashSet<>();
-        Set<Point> globalCleared = new HashSet<>();
-        Set<Point> pointsInLand = new HashSet<>();
-        Set<Point> borders = new LinkedHashSet<>();
+        Set<Point>  localCleared  = new HashSet<>();
+        Set<Point>  globalCleared = new HashSet<>();
+        Set<Point>  pointsInLand  = new HashSet<>();
+        Set<Point>  borders       = new LinkedHashSet<>();
 
         /* This iterates over a set and the order may be non-deterministic */
         for (Entry<Point, Building> pair : claims.entrySet()) {
@@ -847,7 +851,7 @@ public class GameMap {
                 Point point = toInvestigate.get(0);
 
                 /* Go through the adjacent points */
-                for (Point p : point.getAdjacentPoints()) {
+                for (Point p : point.getAdjacentPointsExceptAboveAndBelow()) {
                     if (!globalCleared.contains(p) &&
                         !localCleared.contains(p)  &&
                         !toInvestigate.contains(p) &&
@@ -864,13 +868,13 @@ public class GameMap {
 
                     /* Add points outside the claimed areas to the border */
                     } else if (!claims.containsKey(p)) {
-                        borders.add(point);
+                        borders.add(p);
 
                         globalCleared.add(p);
 
                     /* Add the point to the border if it belongs to another player */
                     } else if (!claims.get(p).getPlayer().equals(player)) {
-                        borders.add(point);
+                        borders.add(p);
                     }
                 }
 

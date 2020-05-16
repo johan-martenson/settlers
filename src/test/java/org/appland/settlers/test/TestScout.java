@@ -152,7 +152,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -198,7 +198,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 17);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -249,7 +249,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 18);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -362,7 +362,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(13, 13);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -420,7 +420,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 18);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -543,7 +543,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(13, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -632,7 +632,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(14, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -704,7 +704,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(13, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -979,7 +979,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -1083,7 +1083,7 @@ public class TestScout {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Placing headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(9, 23);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */

@@ -2,6 +2,7 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.policy.InitialState;
 
+import java.util.Collection;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.ARMORER;
@@ -48,7 +49,7 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 
 @HouseSize(size = Size.LARGE)
-@MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 20, attackRadius = 20)
+@MilitaryBuilding(maxHostedMilitary = 0, defenceRadius = 9, attackRadius = 20, discoveryRadius = 13)
 public class Headquarter extends Storehouse {
 
     public Headquarter(Player player) {
@@ -133,5 +134,10 @@ public class Headquarter extends Storehouse {
 
         /* Destroy the headquarter if it's captured */
         super.tearDown();
+    }
+
+    @Override
+    public Collection<Point> getDefendedLand() {
+        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), 8);
     }
 }

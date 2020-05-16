@@ -64,7 +64,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing pig farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
 
         /* Deliver three plank and three stone */
@@ -102,7 +102,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing pig farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
 
         /* Deliver two plank and three stone */
@@ -139,7 +139,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing pig farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point22);
 
         /* Deliver three planks and two stones */
@@ -170,7 +170,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(15, 11);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place pig farm */
@@ -189,7 +189,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(15, 9);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place pig farm */
@@ -1293,7 +1293,7 @@ public class TestPigFarm {
         map.placeBuilding(headquarter2, point10);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
@@ -1527,7 +1527,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
@@ -1577,7 +1577,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
@@ -1630,7 +1630,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
@@ -1686,7 +1686,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing pig farm */
@@ -1733,7 +1733,7 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place pigFarm */
@@ -1997,7 +1997,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Construct the pig farm */
@@ -2022,7 +2022,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
@@ -2055,7 +2055,7 @@ public class TestPigFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
 
         /* Construct the pig farm */

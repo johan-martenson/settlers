@@ -136,7 +136,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
@@ -165,7 +165,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
@@ -199,7 +199,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing fortress */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point1);
 
         /* Construct the fortress */
@@ -229,7 +229,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Finish construction of the barracks */
@@ -259,7 +259,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
@@ -294,7 +294,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
@@ -329,7 +329,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
@@ -364,7 +364,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */
@@ -399,7 +399,7 @@ public class TestMilitaryCreationAndPromotion {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         /* Construct the barracks */

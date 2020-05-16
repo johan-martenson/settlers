@@ -62,7 +62,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing well */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building well0 = map.placeBuilding(new Well(player0), point22);
 
         /* Deliver three plank and three stone */
@@ -95,7 +95,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing well */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building well0 = map.placeBuilding(new Well(player0), point22);
 
         /* Deliver one plank */
@@ -924,12 +924,12 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = new Headquarter(player1);
         map.placeBuilding(headquarter1, point1);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(17, 5);
         Building fortress0 = new Fortress(player0);
         map.placeBuilding(fortress0, point2);
 
@@ -1158,7 +1158,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
-        Point point26 = new Point(17, 17);
+        Point point26 = new Point(13, 13);
         Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
@@ -1168,7 +1168,7 @@ public class TestWell {
         Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place a second storage closer to the well */
-        Point point2 = new Point(13, 13);
+        Point point2 = new Point(7, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
@@ -1208,7 +1208,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
-        Point point26 = new Point(17, 17);
+        Point point26 = new Point(13, 13);
         Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
@@ -1218,7 +1218,7 @@ public class TestWell {
         Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place a second storage closer to the well */
-        Point point2 = new Point(13, 13);
+        Point point2 = new Point(7, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
@@ -1261,7 +1261,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
-        Point point26 = new Point(17, 17);
+        Point point26 = new Point(13, 13);
         Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
@@ -1271,7 +1271,7 @@ public class TestWell {
         Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place a second storage closer to the well */
-        Point point2 = new Point(13, 13);
+        Point point2 = new Point(7, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
@@ -1317,7 +1317,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing well */
-        Point point26 = new Point(17, 17);
+        Point point26 = new Point(13, 13);
         Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Finish construction of the well */
@@ -1327,7 +1327,7 @@ public class TestWell {
         Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
         /* Place a second storage closer to the well */
-        Point point2 = new Point(13, 13);
+        Point point2 = new Point(7, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Destroy the well */
@@ -1364,7 +1364,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place well */
-        Point point26 = new Point(17, 17);
+        Point point26 = new Point(13, 13);
         Building well0 = map.placeBuilding(new Well(player0), point26);
 
         /* Place road to connect the headquarter and the well */
@@ -1548,7 +1548,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Construct the well */
@@ -1573,7 +1573,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
@@ -1604,7 +1604,7 @@ public class TestWell {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place well */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building well0 = map.placeBuilding(new Well(player0), point1);
 
         /* Construct the well */

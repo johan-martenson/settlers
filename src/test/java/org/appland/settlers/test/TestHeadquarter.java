@@ -17,7 +17,10 @@ import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
@@ -63,6 +66,10 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestHeadquarter {
+
+    /*
+    TODO: test discovered area
+     */
 
     @Test
     public void testInitialInventory() throws Exception {
@@ -321,6 +328,131 @@ public class TestHeadquarter {
 
         for (Material material : Material.values()) {
             assertEquals(headquarter0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBorderForHeadquarterIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the border around the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        Border:
+
+                -9, +9  -------  +9, +9
+                  /                  \
+            -18, 0        H          18, 0
+                  \                  /
+                -9, -9  -------  +9, +9
+
+         */
+
+        Set<Point> hexagonBorder = new HashSet<>();
+
+        int upperY = point0.y;
+        int lowerY = point0.y;
+        for (int x = point0.x - 18; x < point0.x - 9; x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY++;
+            lowerY--;
+        }
+
+        upperY = point0.y + 9;
+        lowerY = point0.y - 9;
+        for (int x = point0.x + 9; x <= point0.x + 18; x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY--;
+            lowerY++;
+        }
+
+        for (int x = point0.x - 9; x < point0.x + 9; x += 2) {
+            hexagonBorder.add(new Point(x, point0.y + 9));
+            hexagonBorder.add(new Point(x, point0.y - 9));
+        }
+
+        /* Verify that all points in the hexagon are part of the actual border */
+        Set<Point> border = player0.getBorderPoints();
+        for (Point point : hexagonBorder) {
+            assertTrue(border.contains(point));
+        }
+
+        /* Verify that all points in the actual border are part of the hexagon border */
+        for (Point point : border) {
+            assertTrue(hexagonBorder.contains(point));
+        }
+    }
+
+    @Test
+    public void testLandForHeadquarterIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the land of the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        Point position = headquarter0.getPosition();
+        Set<Point> area = new HashSet<>();
+
+        int xStart = position.x - 8;
+        int xEnd = position.x + 8;
+
+        for (int y = position.y - 8; y < position.y; y++) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+
+        xStart = position.x - 8;
+        xEnd = position.x + 8;
+
+        for (int y = position.y + 8; y >= position.y; y--) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> land = headquarter0.getDefendedLand();
+        for (Point point : land) {
+            assertTrue(area.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : area) {
+            assertTrue(land.contains(point));
         }
     }
 }

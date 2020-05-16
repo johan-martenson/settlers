@@ -65,7 +65,7 @@ public class TestTreeConservationProgram {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
@@ -107,7 +107,7 @@ public class TestTreeConservationProgram {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Storehouse storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Finish construction of the storehouse */

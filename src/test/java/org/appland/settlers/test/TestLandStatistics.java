@@ -148,12 +148,12 @@ public class TestLandStatistics {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(13, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(41, 5);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */

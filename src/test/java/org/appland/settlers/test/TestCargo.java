@@ -52,7 +52,7 @@ public class TestCargo {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place the headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place a woodcutter */
@@ -86,7 +86,7 @@ public class TestCargo {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Point point1 = new Point(8, 6);

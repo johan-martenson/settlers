@@ -534,7 +534,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -597,7 +597,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -660,7 +660,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -723,7 +723,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -1118,7 +1118,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -1259,7 +1259,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(6, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -1348,7 +1348,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -1420,7 +1420,7 @@ public class TestGeologist {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 8);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */

@@ -22,4 +22,6 @@ public @interface MilitaryBuilding {
     int attackRadius();
 
     int maxCoins() default 0;
+
+    int discoveryRadius();
 }

@@ -101,7 +101,7 @@ public class TestGameLogic {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(15, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
@@ -160,7 +160,7 @@ public class TestGameLogic {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(17, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */

@@ -114,23 +114,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(20, 10);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -239,23 +239,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(20, 10);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -367,23 +367,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(20, 10);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -495,23 +495,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(20, 10);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -618,28 +618,28 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Put small mountains with ore on the map */
-        Point point0 = new Point(6, 10);
+        Point point0 = new Point(5, 9);
         Utils.surroundPointWithMountain(point0, map);
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(9, 15);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(9, 5);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(25, 11);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(20, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -751,18 +751,18 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(10, 6);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -864,23 +864,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(20, 10);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -996,23 +996,23 @@ public class TestPrioritization {
 
         Utils.putGoldAtSurroundingTiles(point0, Size.SMALL, map);
 
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Utils.surroundPointWithMountain(point1, map);
 
         Utils.putIronAtSurroundingTiles(point1, Size.SMALL, map);
 
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Utils.surroundPointWithMountain(point2, map);
 
         Utils.putCoalAtSurroundingTiles(point2, Size.SMALL, map);
 
-        Point point3 = new Point(6, 22);
+        Point point3 = new Point(16, 14);
         Utils.surroundPointWithMountain(point3, map);
 
         Utils.putGraniteAtSurroundingTiles(point3, Size.SMALL, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place gold mine */
@@ -1224,7 +1224,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1232,11 +1232,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1335,7 +1335,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1343,11 +1343,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1455,7 +1455,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1463,11 +1463,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1575,7 +1575,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1583,11 +1583,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1695,7 +1695,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1703,7 +1703,7 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 14);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1800,7 +1800,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1808,11 +1808,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 10);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(20, 10);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */
@@ -1918,7 +1918,7 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place mint */
@@ -1926,11 +1926,11 @@ public class TestPrioritization {
         Building mint0 = map.placeBuilding(new Mint(player0), point0);
 
         /* Place iron smelter */
-        Point point1 = new Point(6, 14);
+        Point point1 = new Point(10, 14);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 
         /* Place armory */
-        Point point2 = new Point(6, 18);
+        Point point2 = new Point(10, 6);
         Building armory0 = map.placeBuilding(new Armory(player0), point2);
 
         /* Finish construction of the coal consumers */

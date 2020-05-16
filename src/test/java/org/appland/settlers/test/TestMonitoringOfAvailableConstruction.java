@@ -1509,7 +1509,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1556,7 +1556,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1610,7 +1610,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place road */
@@ -1660,7 +1660,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(22, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place road */
@@ -1717,7 +1717,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1764,7 +1764,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1818,7 +1818,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1865,7 +1865,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(20, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         map.stepTime();
@@ -1919,7 +1919,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(16, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place road */
@@ -1969,7 +1969,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(22, 12);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place road */
@@ -2046,14 +2046,16 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        Point point1 = new Point(14, 14);
+        Point point1 = new Point(14, 10);
 
         Crop crop = map.placeCrop(point1);
+
+        assertTrue(player0.getDiscoveredLand().contains(point1));
 
         map.stepTime();
 
         GameChangesList gameChanges = monitor.getLastEvent();
-
+        System.out.println(gameChanges);
         assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2089,7 +2091,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
 
-        Point point1 = new Point(14, 14);
+        Point point1 = new Point(14, 10);
 
         Crop crop = map.placeCrop(point1);
 
@@ -2119,7 +2121,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm near the crop */
@@ -2169,7 +2171,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm near the crop */
@@ -2226,7 +2228,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm near the crop */
@@ -2280,7 +2282,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(10, 16);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm near the crop */
@@ -2343,7 +2345,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -2366,8 +2368,11 @@ public class TestMonitoringOfAvailableConstruction {
         assertNotNull(military);
 
         /* Verify that an event is sent when the military reaches the barracks and the border is extended */
+        Point point3 = new Point(6, 24);
+        Point point4 = new Point(6, 32);
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point4));
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2381,8 +2386,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 31)));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
@@ -2403,7 +2408,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -2426,8 +2431,12 @@ public class TestMonitoringOfAvailableConstruction {
         assertNotNull(military);
 
         /* Verify that an event is sent when the military reaches the barracks and the border is extended */
+        Point point3 = new Point(6, 24);
+        Point point4 = new Point(6, 32);
+
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point4));
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2441,8 +2450,8 @@ public class TestMonitoringOfAvailableConstruction {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 31)));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
@@ -2470,7 +2479,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -2493,13 +2502,17 @@ public class TestMonitoringOfAvailableConstruction {
         assertNotNull(military);
 
         /* Wait for the barracks to get occupied so the border extends */
+        Point point3 = new Point(6, 24);
+        Point point4 = new Point(6, 32);
+
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point4));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 31)));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2538,7 +2551,7 @@ public class TestMonitoringOfAvailableConstruction {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -2561,13 +2574,17 @@ public class TestMonitoringOfAvailableConstruction {
         assertNotNull(military);
 
         /* Wait for the barracks to get occupied so the border extends */
+        Point point3 = new Point(6, 24);
+        Point point4 = new Point(6, 32);
+
         assertEquals(military.getTarget(), barracks0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point4));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 31)));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
 
         /* Set up monitoring subscription for the player */
         Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
@@ -2795,8 +2812,6 @@ public class TestMonitoringOfAvailableConstruction {
             if (gameChanges.getChangedAvailableConstruction().isEmpty()) {
                 continue;
             }
-
-            System.out.println(gameChanges.getRemovedStones());
 
             availableConstructionChanges = availableConstructionChanges + 1;
         }

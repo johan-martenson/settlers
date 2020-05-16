@@ -116,7 +116,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -184,7 +184,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
@@ -313,7 +313,7 @@ public class TestMessages {
         }
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(15, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place fishery */
@@ -430,7 +430,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -502,7 +502,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing flag */
@@ -577,7 +577,7 @@ public class TestMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(45, 13);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -641,7 +641,7 @@ public class TestMessages {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
@@ -927,7 +927,7 @@ public class TestMessages {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
@@ -978,7 +978,7 @@ public class TestMessages {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
@@ -1013,18 +1013,18 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
-        /* Build two buildings that doesn't get resources */
-        Point point2 = new Point(10, 6);
+        /* Build two buildings that don't get resources */
+        Point point2 = new Point(10, 10);
         Armory armory0 = map.placeBuilding(new Armory(player0), point2);
 
         Point point3 = new Point(10, 16);
@@ -1063,7 +1063,7 @@ public class TestMessages {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Set the amount of planks to the limit for the tree conservation program */
@@ -1107,7 +1107,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
@@ -1118,10 +1118,10 @@ public class TestMessages {
         Utils.adjustInventoryTo(headquarter0, PLANK, 10);
 
         /* Build two buildings that doesn't get resources */
-        Point point2 = new Point(10, 6);
+        Point point2 = new Point(10, 10);
         Armory armory0 = map.placeBuilding(new Armory(player0), point2);
 
-        Point point3 = new Point(10, 16);
+        Point point3 = new Point(10, 18);
         Brewery brewery0 = map.placeBuilding(new Brewery(player0), point3);
 
         /* Connect the buildings to the headquarter */
@@ -1170,11 +1170,11 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing headquarter */
-        Point point1 = new Point(25, 25);
+        Point point1 = new Point(21, 23);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Placing barracks */
@@ -1232,7 +1232,7 @@ public class TestMessages {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing headquarter */
@@ -1266,7 +1266,7 @@ public class TestMessages {
         assertNotNull(military);
 
         /* Verify a message is sent when the barracks is populated so player 1 loses land */
-        Point point3 = new Point(13, 19);
+        Point point3 = new Point(15, 19);
         assertTrue(player1.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());

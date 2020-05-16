@@ -1354,6 +1354,66 @@ public class Utils {
         }
     }
 
+    public static Point getPointAtMaxX(Collection<Point> points) {
+        Point pointAtMaxX = new Point(0, 0);
+
+        for (Point point : points) {
+            if (point.x > pointAtMaxX.x) {
+                pointAtMaxX = point;
+            }
+        }
+
+        return pointAtMaxX;
+    }
+
+    public static Point getPointAtMaxY(Collection<Point> points) {
+        Point pointAtMaxY = new Point(0, 0);
+
+        for (Point point : points) {
+            if (point.y > pointAtMaxY.y) {
+                pointAtMaxY = point;
+            }
+        }
+
+        return pointAtMaxY;
+    }
+
+    public static Collection<Point> getPointsForX(Collection<Point> fieldOfView, int i) {
+        List<Point> points = new ArrayList<>();
+
+        for (Point point : fieldOfView) {
+            if (point.x == i) {
+                points.add(point);
+            }
+        }
+
+        return points;
+    }
+
+    public static Point getPointAtMinX(Collection<Point> points) {
+        Point pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for (Point point : points) {
+            if (point.x < pointAtMinX.x) {
+                pointAtMinX = point;
+            }
+        }
+
+        return pointAtMinX;
+    }
+
+    public static Point getPointAtMinY(Collection<Point> points) {
+        Point pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for (Point point : points) {
+            if (point.y < pointAtMinY.y) {
+                pointAtMinY = point;
+            }
+        }
+
+        return pointAtMinY;
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;

@@ -63,7 +63,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four plank and three stone */
@@ -102,7 +102,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver three planks and three stone */
@@ -140,7 +140,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
@@ -178,7 +178,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing storage */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point22);
 
         /* Deliver four planks and two stones */
@@ -556,7 +556,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -601,7 +601,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -652,7 +652,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -706,7 +706,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -748,7 +748,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -796,7 +796,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -1078,7 +1078,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(7, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 2's headquarter */
@@ -1088,7 +1088,7 @@ public class TestStorehouse {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 5);
         map.placeBuilding(headquarter1, point1);
 
         /* Place fortress for player 0 */
@@ -1137,12 +1137,12 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(13, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(45, 17);
         map.placeBuilding(headquarter1, point1);
 
         /* Place player 2's headquarter */
@@ -1445,7 +1445,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -1495,7 +1495,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -1548,7 +1548,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -1604,7 +1604,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(15, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing storage */
@@ -1651,7 +1651,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place storage */
@@ -1726,7 +1726,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Construct the storage */
@@ -1750,7 +1750,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
@@ -1783,7 +1783,7 @@ public class TestStorehouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Construct the storage */

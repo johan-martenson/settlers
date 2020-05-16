@@ -254,10 +254,10 @@ public class TestMisc {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point01);
 
         /* Place guard houses */
-        Point point02 = new Point(5, 23);
+        Point point02 = new Point(5, 13);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point02);
 
-        Point point03 = new Point(21, 5);
+        Point point03 = new Point(19, 5);
         Building guardHouse1 = map.placeBuilding(new GuardHouse(player0), point03);
 
         /* Finish construction of both guard houses */
@@ -268,8 +268,8 @@ public class TestMisc {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), guardHouse0.getFlag());
 
         /* Verify that the discovered area is only extended around the guard house that gets occupied */
-        Point point04 = new Point(5, 29);
-        Point point05 = new Point(29, 5);
+        Point point04 = new Point(5, 23);
+        Point point05 = new Point(33, 5);
 
         assertFalse(player0.getDiscoveredLand().contains(point04));
         assertFalse(player0.getDiscoveredLand().contains(point05));
@@ -302,7 +302,7 @@ public class TestMisc {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Verify that the construction is at zero progress */
@@ -323,7 +323,7 @@ public class TestMisc {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Verify that the construction progress never goes backwards */
@@ -356,7 +356,7 @@ public class TestMisc {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place armory */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Construct the building */

@@ -149,7 +149,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
@@ -195,7 +195,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(13, 7);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
@@ -406,7 +406,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(12, 10);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
@@ -452,7 +452,7 @@ public class TestPlacement {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(15, 15);
+        Point hqPoint = new Point(12, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         Woodcutter woodcutter = new Woodcutter(player0);
@@ -498,7 +498,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 17);
+        Point hqPoint = new Point(13, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sawmill */
@@ -547,7 +547,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sawmill */
@@ -602,7 +602,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(16, 16);
+        Point hqPoint = new Point(18, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place farm */
@@ -762,7 +762,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place farm */
@@ -910,7 +910,7 @@ public class TestPlacement {
         Point waterPoint   = new Point(6, 6);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(13, 5);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create water and grass tiles */
@@ -1292,7 +1292,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -1998,7 +1998,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -2091,7 +2091,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 12);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -2118,7 +2118,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -2145,7 +2145,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -2202,7 +2202,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
@@ -2248,7 +2248,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(14, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place a stone */

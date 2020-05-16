@@ -5,9 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.GREEN;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
@@ -15,6 +12,11 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.GREEN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -144,7 +146,7 @@ public class TestSeveralPlayers {
 
         /* Place player 1's headquarter far away from player 0 */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(90, 90);
+        Point point1 = new Point(90, 84);
         map.placeBuilding(headquarter1, point1);
 
         /* Place woodcutter for player 0 */

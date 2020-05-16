@@ -69,7 +69,7 @@ public class TestFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
         /* Deliver three plank and three stone */
@@ -107,7 +107,7 @@ public class TestFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
         /* Deliver two plank and three stone */
@@ -144,7 +144,7 @@ public class TestFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing farm */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point22);
 
         /* Deliver three planks and two stones */
@@ -220,7 +220,7 @@ public class TestFarm {
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(10, 6);
+        Point point0 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point0);
 
         assertTrue(farm.underConstruction());
@@ -229,15 +229,20 @@ public class TestFarm {
 
     @Test
     public void testFinishedFarmNeedsFarmer() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(10, 6);
+        /* Place farm */
+        Point point0 = new Point(10, 10);
         Building farm = map.placeBuilding(new Farm(player0), point0);
 
         Utils.constructHouse(farm);
@@ -1333,7 +1338,7 @@ public class TestFarm {
         map.placeBuilding(headquarter2, point10);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
@@ -1427,7 +1432,7 @@ public class TestFarm {
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 9);
 
         /* Placing headquarter */
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
@@ -1468,7 +1473,7 @@ public class TestFarm {
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 9);
 
         /* Placing headquarter */
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
@@ -1505,9 +1510,9 @@ public class TestFarm {
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
 
         /* Placing headquarter */
+        Point point0 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a farm */
@@ -1611,7 +1616,7 @@ public class TestFarm {
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 9);
 
         /* Placing headquarter */
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
@@ -1662,7 +1667,7 @@ public class TestFarm {
         players.add(player0);
 
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 9);
 
         /* Placing headquarter */
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
@@ -1916,7 +1921,7 @@ public class TestFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing farm */
@@ -1966,7 +1971,7 @@ public class TestFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing farm */
@@ -2019,7 +2024,7 @@ public class TestFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing farm */
@@ -2075,7 +2080,7 @@ public class TestFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing farm */
@@ -2122,7 +2127,7 @@ public class TestFarm {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point25 = new Point(5, 5);
+        Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Place fam */
@@ -2363,7 +2368,7 @@ public class TestFarm {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building farm0 = map.placeBuilding(new Farm(player0), point1);
 
         /* Construct the farm */

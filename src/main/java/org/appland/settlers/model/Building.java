@@ -131,7 +131,7 @@ public class Building implements Actor, EndPoint {
     Collection<Point> getDiscoveredLand() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        return map.getPointsWithinRadius(getPosition(), militaryBuilding.defenceRadius() + 2);
+        return GameUtils.getHexagonAreaAroundPoint(getPosition(), militaryBuilding.discoveryRadius());
     }
 
     boolean isMine() {

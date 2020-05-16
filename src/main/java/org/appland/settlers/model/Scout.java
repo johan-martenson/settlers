@@ -96,7 +96,7 @@ public class Scout extends Worker {
 
             Point point = findNextPoint();
 
-            if (!map.isWithinMap(point)) {
+            if (point == null) {
                 state = RETURNING_TO_FLAG;
 
                 setOffroadTarget(flagPoint);
@@ -140,7 +140,7 @@ public class Scout extends Worker {
         setHome(building);
 
         /* Discover the area around the tower */
-        for (Point point : map.getPointsWithinRadius(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS)) {
+        for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS)) {
             getPlayer().discover(point);
         }
         
@@ -220,6 +220,10 @@ public class Scout extends Worker {
                     possibleTargets.add(possibleTarget);
                 }
             }
+        }
+
+        if (possibleTargets.isEmpty()) {
+            return null;
         }
 
         /* Pick one of the possible targets */

@@ -64,7 +64,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
@@ -100,12 +100,12 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Storehouse storehouse0 = new Storehouse(player0);
-        map.placeBuilding(storehouse0, new Point(4, 6));
+        Point point1 =new Point(4, 6);
+        Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Place road */
         map.placeAutoSelectedRoad(player0, new Flag(new Point(5, 7)), new Flag(new Point(4, 6)));
@@ -123,7 +123,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
@@ -162,7 +162,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(5, 11);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
@@ -194,7 +194,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
@@ -252,7 +252,7 @@ public class TestTransportation {
         Point point9 = new Point(16, 14);
 
         /* Place headquarter */
-        map.placeBuilding(new Headquarter(player0), new Point(7, 5));
+        map.placeBuilding(new Headquarter(player0), new Point(13, 13));
 
         /* Place start flag */
         Flag startFlag = map.placeFlag(player0, start);
@@ -287,9 +287,6 @@ public class TestTransportation {
 
         /* Place road */
         map.placeAutoSelectedRoad(player0, point1, point5);
-
-        /* Place flag */
-        map.placeFlag(player0, point6);
 
         /* Place road */
         map.placeAutoSelectedRoad(player0, point5, point6);
@@ -387,7 +384,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place quarry */
@@ -460,7 +457,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(6, 4);
+        Point point0 = new Point(10, 6);
         Storehouse storehouse = new Headquarter(player0);
         map.placeBuilding(storehouse, point0);
 
@@ -602,7 +599,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
@@ -693,7 +690,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill at the other end of the road */
@@ -752,28 +749,27 @@ public class TestTransportation {
 
         /* Create the game map */
         GameMap map = new GameMap(players, 20, 20);
-        Point point0 = new Point(5, 5);
         Point point1 = new Point(6, 6);
-        Point point2 = new Point(7, 7);
-        Point point3 = new Point(9, 7);
         Point point4 = new Point(11, 7);
 
         /* Place the headquarter */
-        Point point5 = new Point(15, 15);
+        Point point5 = new Point(11, 11);
         map.placeBuilding(new Headquarter(player0), point5);
 
         /* Place a sawmill */
         Building sawmill = map.placeBuilding(new Sawmill(player0), point4.upLeft());
 
         /* Place flags */
+        Point point0 = new Point(5, 5);
+        Point point2 = new Point(7, 7);
         Flag flag0 = map.placeFlag(player0, point0);
         Flag flag1 = map.placeFlag(player0, point2);
 
         /* Place road from the first flag to the second flag */
-        Road road0 = map.placeRoad(player0, point0, point1, point2);
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         /* Place road from the second flag to the sawmill's flag */
-        Road road1 = map.placeRoad(player0, point2, point3, point4);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         Courier courier = new Courier(player0, map);
         Courier secondCourier = new Courier(player0, map);
@@ -841,7 +837,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(11, 11);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
@@ -856,9 +852,8 @@ public class TestTransportation {
 
         /* Place roads */
         Point point4 = new Point(6, 6);
-        Point point5 = new Point(9, 7);
-        Road road0 = map.placeRoad(player0, point2, point4, point3);
-        Road road1 = map.placeRoad(player0, point3, point5, point1);
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, flag1);
+        Road road1 = map.placeAutoSelectedRoad(player0, flag1, sawmill.getFlag());
 
         /* Populate the roads */
         Courier courier = new Courier(player0, map);
@@ -914,7 +909,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point point0 = new Point(14, 16);
+        Point point0 = new Point(20, 10);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
@@ -1081,7 +1076,7 @@ public class TestTransportation {
         /* Place flags */
         Point point2 = new Point(19, 15);
         Flag flag0 = map.placeFlag(player0, point2);
-        Point point3 = new Point(4, 4);
+        Point point3 = new Point(10, 10);
         Flag flag1 = map.placeFlag(player0, point3);
 
         /* Place roads */
@@ -1486,7 +1481,7 @@ public class TestTransportation {
         Point point3 = new Point(11, 11);
 
         /* Place the headquarter */
-        Point point4 = new Point(15, 15);
+        Point point4 = new Point(15, 11);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player0), point4);
 
         /* Place a sawmill */

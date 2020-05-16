@@ -51,11 +51,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a tree to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Tree tree0 = map.placeTree(point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -99,11 +99,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a tree to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Tree tree0 = map.placeTree(point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -152,11 +152,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a stone to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Stone stone0 = map.placeStone(point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -200,11 +200,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a stone to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Stone stone0 = map.placeStone(point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -261,11 +261,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a flag for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Flag flag0 = map.placeFlag(player1, point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -315,11 +315,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a flag for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Flag flag0 = map.placeFlag(player1, point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -376,11 +376,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a house for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -430,11 +430,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a house for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player1), point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -485,14 +485,14 @@ public class TestGameMonitoringWhenDiscovering {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place headquarter for player 1 */
-        Point point1 = new Point(43, 5);
+        Point point1 = new Point(49, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
         /* Place a road for player 0 to discover */
-        Point point2 = new Point(27, 5);
-        Point point3 = new Point(31, 5);
+        Point point2 = new Point(33, 5);
+        Point point3 = new Point(37, 5);
 
         Flag flag0 = map.placeFlag(player1, point2);
         Flag flag1 = map.placeFlag(player1, point3);
@@ -500,7 +500,7 @@ public class TestGameMonitoringWhenDiscovering {
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
         /* Place lookout tower */
-        Point point4 = new Point(21, 5);
+        Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
         /* Connect the lookout tower with the headquarter */
@@ -514,7 +514,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
         /* Wait for the lookout tower to get occupied */
-        Point point5 = new Point(29, 5);
+        Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
@@ -525,8 +525,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewRoads().size(), 1);
-        assertEquals(gameChangesList.getNewRoads().get(0), road0);
+        assertTrue(gameChangesList.getNewRoads().size() >= 1);
+        assertTrue(gameChangesList.getNewRoads().contains(road0));
     }
 
     @Test
@@ -551,8 +551,8 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a road for player 0 to discover */
-        Point point2 = new Point(27, 5);
-        Point point3 = new Point(31, 5);
+        Point point2 = new Point(33, 5);
+        Point point3 = new Point(37, 5);
 
         Flag flag0 = map.placeFlag(player1, point2);
         Flag flag1 = map.placeFlag(player1, point3);
@@ -560,7 +560,7 @@ public class TestGameMonitoringWhenDiscovering {
         Road road0 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
         /* Place lookout tower */
-        Point point4 = new Point(21, 5);
+        Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
         /* Connect the lookout tower with the headquarter */
@@ -574,7 +574,7 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
         /* Wait for the lookout tower to get occupied */
-        Point point5 = new Point(29, 5);
+        Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
@@ -585,8 +585,8 @@ public class TestGameMonitoringWhenDiscovering {
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewRoads().size(), 1);
-        assertEquals(gameChangesList.getNewRoads().get(0), road0);
+        assertTrue(gameChangesList.getNewRoads().size() >= 1);
+        assertTrue(gameChangesList.getNewRoads().contains(road0));
 
         /* Verify that the event is only sent once */
         Utils.fastForward(10, map);
@@ -618,8 +618,8 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a road for player 0 to discover */
-        Point point2 = new Point(29, 5);
-        Point point3 = new Point(33, 5);
+        Point point2 = new Point(33, 5);
+        Point point3 = new Point(37, 5);
 
         Flag flag0 = map.placeFlag(player1, point2);
         Flag flag1 = map.placeFlag(player1, point3);
@@ -628,7 +628,7 @@ public class TestGameMonitoringWhenDiscovering {
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, flag1);
 
         /* Place lookout tower */
-        Point point4 = new Point(21, 5);
+        Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
         /* Connect the lookout tower with the headquarter */
@@ -642,20 +642,19 @@ public class TestGameMonitoringWhenDiscovering {
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
         /* Wait for the lookout tower to get occupied */
-        Point point5 = new Point(31, 5);
+        Point point5 = new Point(35, 5);
         assertFalse(player0.getDiscoveredLand().contains(point5));
 
         Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
 
         /* Verify that an event was sent for the newly discovered stone */
-        assertFalse(player0.getDiscoveredLand().contains(point5));
         assertTrue(monitor.getEvents().size() >= 1);
 
         GameChangesList gameChangesList = monitor.getLastEvent();
 
-        assertEquals(gameChangesList.getNewFlags().size(), 1);
-        assertEquals(gameChangesList.getNewFlags().get(0), flag0);
-        assertEquals(gameChangesList.getNewRoads().size(), 2);
+        assertTrue(gameChangesList.getNewFlags().size() >= 1);
+        assertTrue(gameChangesList.getNewFlags().contains(flag0));
+        assertTrue(gameChangesList.getNewRoads().size() >= 2);
         assertTrue(gameChangesList.getNewRoads().contains(road0));
         assertTrue(gameChangesList.getNewRoads().contains(road1));
     }
@@ -676,18 +675,18 @@ public class TestGameMonitoringWhenDiscovering {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place headquarter for player 1 */
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
         /* Pick a border point for player 0 to discover */
-        Point point2 = new Point(28, 2);
+        Point point2 = new Point(33, 5);
 
         assertTrue(player1.getBorderPoints().contains(point2));
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -745,18 +744,18 @@ public class TestGameMonitoringWhenDiscovering {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place headquarter for player 1 */
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(51, 5);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         map.stepTime();
 
         /* Pick a border point for player 0 to discover */
-        Point point2 = new Point(28, 2);
+        Point point2 = new Point(33, 5);
 
         assertTrue(player1.getBorderPoints().contains(point2));
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -821,11 +820,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a sign to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Sign sign0 = map.placeSign(IRON, LARGE, point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -869,11 +868,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a sign to discover */
-        Point point1 = new Point(29, 5);
+        Point point1 = new Point(33, 5);
         Sign sign0 = map.placeSign(IRON, LARGE, point1);
 
         /* Place lookout tower */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
 
         /* Connect the lookout tower with the headquarter */
@@ -928,11 +927,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a crop for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Crop crop0 = map.placeCrop(point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -982,11 +981,11 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a crop for player 0 to discover */
-        Point point2 = new Point(29, 5);
+        Point point2 = new Point(33, 5);
         Crop crop0 = map.placeCrop(point2);
 
         /* Place lookout tower */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
         /* Connect the lookout tower with the headquarter */
@@ -1043,8 +1042,8 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a road for player 0 to discover */
-        Point point2 = new Point(27, 5);
-        Point point3 = new Point(31, 5);
+        Point point2 = new Point(33, 5);
+        Point point3 = new Point(37, 5);
 
         Flag flag0 = map.placeFlag(player1, point2);
         Flag flag1 = map.placeFlag(player1, point3);
@@ -1055,7 +1054,7 @@ public class TestGameMonitoringWhenDiscovering {
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, headquarter1.getFlag());
 
         /* Place lookout tower */
-        Point point4 = new Point(21, 5);
+        Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
         /* Connect the lookout tower with the headquarter */
@@ -1064,7 +1063,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Wait for the road to get a courier standing at the middle */
         Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        Point point5 = new Point(29, 5);
+        Point point5 = new Point(35, 5);
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
         /* Set up monitoring subscription for the player */
@@ -1112,8 +1111,8 @@ public class TestGameMonitoringWhenDiscovering {
         map.stepTime();
 
         /* Place a road for player 0 to discover */
-        Point point2 = new Point(27, 5);
-        Point point3 = new Point(31, 5);
+        Point point2 = new Point(33, 5);
+        Point point3 = new Point(37, 5);
 
         Flag flag0 = map.placeFlag(player1, point2);
         Flag flag1 = map.placeFlag(player1, point3);
@@ -1124,7 +1123,7 @@ public class TestGameMonitoringWhenDiscovering {
         Road road1 = map.placeAutoSelectedRoad(player1, flag0, headquarter1.getFlag());
 
         /* Place lookout tower */
-        Point point4 = new Point(21, 5);
+        Point point4 = new Point(19, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
         /* Connect the lookout tower with the headquarter */
@@ -1133,7 +1132,7 @@ public class TestGameMonitoringWhenDiscovering {
         /* Wait for the road to get a courier standing at the middle */
         Courier courier0 = Utils.waitForRoadToGetAssignedCourier(map, road0);
 
-        Point point5 = new Point(29, 5);
+        Point point5 = new Point(35, 5);
         Utils.fastForwardUntilWorkerReachesPoint(map, courier0, point5);
 
         /* Set up monitoring subscription for the player */

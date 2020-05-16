@@ -67,7 +67,7 @@ public class TestPlacementInTerrain {
         Utils.surroundPointWithVegetation(point4, WATER, map);
 
         /* Place headquarter */
-        Point point0 = new Point(6, 14);
+        Point point0 = new Point(16, 6);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fisheries like this:

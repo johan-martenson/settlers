@@ -56,7 +56,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver two planks and five stones */
@@ -98,7 +98,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver one plank and three stones */
@@ -142,7 +142,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Deliver one plank and three stones */
@@ -186,13 +186,11 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Placing road between (7, 21) and (6, 4) */
-        Point point23 = new Point(7, 21);
-        Point point36 = new Point(6, 4);
-        Road road0 = map.placeAutoSelectedRoad(player0, point23, point36);
+        /* Connect the watch tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, watchTower0.getFlag(), headquarter0.getFlag());
 
         /* Wait for the watch tower to finish construction */
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
@@ -235,18 +233,19 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(5, 23);
+        Point point22 = new Point(5, 13);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), watchTower0.getFlag());
 
-        /* Wait for the watch tower to finish construction */
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        /* Verify that the border doesn't change when the watch tower finishes construction */
+        Point point3 = new Point(6, 14);
+        assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilBuildingIsConstructed(watchTower0);
 
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point3));
     }
 
     @Test
@@ -263,7 +262,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(5, 23);
+        Point point22 = new Point(5, 13);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
@@ -290,12 +289,15 @@ public class TestWatchTower {
 
         /* Verify that the border is extended when the military reaches the watch tower */
         assertEquals(military.getTarget(), watchTower0.getPosition());
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        Point point3 = new Point(6, 14);
+        assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.fastForwardUntilWorkerReachesPoint(map, military, watchTower0.getPosition());
 
-        assertFalse(player0.getBorderPoints().contains(new Point(5, 25)));
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 39)));
+        Point point4 = new Point(7, 29);
+
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
     }
 
     @Test
@@ -312,7 +314,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -343,7 +345,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the watch tower can't hold militaries before it's finished */
@@ -370,7 +372,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -405,18 +407,20 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
 
         /* Verify that the border is grown with the correct radius */
-        assertTrue(player0.getBorderPoints().contains(new Point(6, 24)));
+        Point point3 = new Point(6, 14);
+        assertTrue(player0.getBorderPoints().contains(point3));
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
-        assertTrue(player0.getBorderPoints().contains(new Point(6, 38)));
+        Point point4 = new Point(7, 29);
+        assertTrue(player0.getBorderPoints().contains(point4));
     }
 
     @Test
@@ -433,7 +437,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -455,7 +459,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         assertFalse(watchTower0.needsMaterial(COIN));
@@ -475,7 +479,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -519,7 +523,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -555,7 +559,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -590,7 +594,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -630,7 +634,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -665,7 +669,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -702,7 +706,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -738,7 +742,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         Utils.constructHouse(watchTower0);
@@ -766,7 +770,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarter and watch tower */
@@ -803,7 +807,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarter and watch tower */
@@ -848,7 +852,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Finish construction of the watch tower */
@@ -890,7 +894,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Connect headquarters and watch tower */
@@ -923,7 +927,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Finish construction of the watch tower */
@@ -1089,7 +1093,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing watch tower */
-        Point point22 = new Point(5, 23);
+        Point point22 = new Point(5, 13);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Placing road */
@@ -1149,7 +1153,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place watch tower */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Construct the watch tower */
@@ -1173,7 +1177,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place watch tower */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Verify that the reported needed construction material is correct */
@@ -1206,7 +1210,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place watch tower */
-        Point point1 = new Point(6, 22);
+        Point point1 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Construct the watch tower */
@@ -1239,7 +1243,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Verify that the list of hosted militaries is empty */
@@ -1260,7 +1264,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */
@@ -1284,7 +1288,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */
@@ -1312,7 +1316,7 @@ public class TestWatchTower {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Place watch tower */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
         /* Construct watch tower */

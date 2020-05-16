@@ -36,6 +36,67 @@ public class GameUtils {
         return false;
     }
 
+    public static Collection<Point> getHexagonAroundPoint(Point point, int radius) {
+        Set<Point> hexagonBorder = new HashSet<>();
+
+        int upperY = point.y;
+        int lowerY = point.y;
+        for (int x = point.x - (radius * 2); x < point.x - radius; x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY++;
+            lowerY--;
+        }
+
+        upperY = point.y + radius;
+        lowerY = point.y - radius;
+        for (int x = point.x + radius; x < point.x + (radius * 2); x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY--;
+            lowerY++;
+        }
+
+        for (int x = point.x - radius; x < point.x + radius; x += 2) {
+            hexagonBorder.add(new Point(x, point.y + radius));
+            hexagonBorder.add(new Point(x, point.y - radius));
+        }
+
+        return hexagonBorder;
+    }
+
+    public static Collection<Point> getHexagonAreaAroundPoint(Point position, int i) {
+        Set<Point> area = new HashSet<>();
+
+        int xStart = position.x - i;
+        int xEnd = position.x + i;
+
+        for (int y = position.y - i; y < position.y; y++) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+
+        xStart = position.x - i;
+        xEnd = position.x + i;
+
+        for (int y = position.y + i; y >= position.y; y--) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+
+        return area;
+    }
+
     static class Line {
         final double k;
         final double m;

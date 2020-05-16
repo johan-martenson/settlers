@@ -238,17 +238,15 @@ public class TestWorker {
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Point point1 = new Point(39, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place barracks for player 0 */
-        Point point2 = new Point(21, 5);
-        Building barracks0 = new Barracks(player0);
-        map.placeBuilding(barracks0, point2);
+        Point point2 = new Point(17, 5);
+        Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(25, 5);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 

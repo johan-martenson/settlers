@@ -326,11 +326,9 @@ public class Player {
             }
 
             Set<Point> newBorderCalc = new HashSet<>(fullNewBorderCalc);
-
             newBorderCalc.removeAll(fullOldBorderCalc);
 
             Set<Point> removedBorderCalc = new HashSet<>(fullOldBorderCalc);
-
             removedBorderCalc.removeAll(fullNewBorderCalc);
 
             newBorder.addAll(newBorderCalc);

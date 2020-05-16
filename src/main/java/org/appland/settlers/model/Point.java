@@ -151,6 +151,19 @@ public class Point extends java.awt.Point {
         return adjacentPoints;
     }
 
+    public Point[] getAdjacentPointsExceptAboveAndBelow() {
+        Point[] adjacentPoints = new Point[6];
+
+        adjacentPoints[0] = new Point(x - 2, y    );
+        adjacentPoints[1] = new Point(x - 1, y + 1);
+        adjacentPoints[2] = new Point(x + 1, y + 1);
+        adjacentPoints[3] = new Point(x + 2, y    );
+        adjacentPoints[4] = new Point(x + 1, y - 1);
+        adjacentPoints[5] = new Point(x - 1, y - 1);
+
+        return adjacentPoints;
+    }
+
     Iterable<Point> getDiagonalPoints() {
         List<Point> result = new ArrayList<>();
 

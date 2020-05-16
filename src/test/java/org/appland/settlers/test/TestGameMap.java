@@ -22,6 +22,7 @@ import org.appland.settlers.model.Woodcutter;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.Color;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,12 +51,21 @@ public class TestGameMap {
     @Before
     public void setup() throws Exception {
 
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         players.add(player0);
-        map = new GameMap(players, 50, 50);
+
+        GameMap map = new GameMap(players, 50, 50);
     }
 
     @Test
-    public void testSetPlayers() {
+    public void testSetPlayers() throws Exception {
+
+        /* Create single player game */
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Some name", Color.YELLOW));
+
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Verify that the player list can be set */
         Player player0 = new Player("Player 0", GREEN);
@@ -74,7 +84,14 @@ public class TestGameMap {
     }
 
     @Test
-    public void testSetStartingPoints() {
+    public void testSetStartingPoints() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Verify that starting points can be set */
         List<Point> points = new ArrayList<>();
@@ -90,7 +107,13 @@ public class TestGameMap {
     }
 
     @Test
-    public void testMapIsCorrectAfterSetPlayers() {
+    public void testMapIsCorrectAfterSetPlayers() throws Exception {
+
+        /* Create single player game */
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Some player", Color.YELLOW));
+
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Verify that the player list can be set */
         Player player0 = new Player("Player 0", GREEN);
@@ -110,6 +133,15 @@ public class TestGameMap {
 
     @Test
     public void testPlaceBuildingOnEmptyMap() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Verify that a headquarter can be placed */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
@@ -118,83 +150,93 @@ public class TestGameMap {
 
     @Test(expected=Exception.class)
     public void testPlaceSameBuildingTwice() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place sawmill */
         Woodcutter woodcutter    = new Woodcutter(player0);
         Point wcPoint    = new Point(2, 2);
-        Point otherPoint = new Point(2, 8);
-
         map.placeBuilding(woodcutter, wcPoint);
+
+        /* Verify that it's not possible to place the woodcutter a second time */
+        Point otherPoint = new Point(2, 8);
         map.placeBuilding(woodcutter, otherPoint);
     }
 
     @Test(expected=Exception.class)
     public void testPlaceTwoBuildingsOnSameSpot() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place woodcutter */
         Woodcutter woodcutter  = new Woodcutter(player0);
-        Quarry     quarry0 = new Quarry(player0);
         Point wcPoint  = new Point(1, 1);
-
         map.placeBuilding(woodcutter, wcPoint);
+
+        /* Verify that it's not possible to place a quarry on the same spot as the woodcutter */
+        Quarry     quarry0 = new Quarry(player0);
         map.placeBuilding(quarry0, wcPoint);
     }
 
     @Test(expected=Exception.class)
     public void testPlaceFlagsOnSamePlace() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place flag */
         Point point1 = new Point(1, 1);
-        Point point2 = new Point(1, 1);
-
         map.placeFlag(player0, point1);
-        map.placeFlag(player0, point2);
+
+        /* Verify that it's not possible to place a second flag on top of the first flag */
+        map.placeFlag(player0, point1);
     }
 
     @Test(expected=Exception.class)
     public void testPlaceSameFlagTwice() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place flag */
         Point point1 = new Point(1, 1);
-
         map.placeFlag(player0, point1);
 
+        /* Verify that it's not possible to place the same flag again on a different point */
         point1.x = 3;
-
         map.placeFlag(player0, point1);
-    }
-
-    @Test(expected=Exception.class)
-    public void testAddRoadWithIdenticalStartAndEnd() throws Exception {
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
-
-        Point point1 = new Point(1, 1);
-        Point point2 = new Point(1, 1);
-
-        map.placeFlag(player0, point1);
-        map.placeFlag(player0, point2);
-
-        Road road = map.placeAutoSelectedRoad(player0, point1, point2);
     }
 
     @Test(expected=Exception.class)
     public void testAddRoadBetweenFlagsNotOnMap() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Create flags but don't put them on the map */
         Flag flag0 = new Flag(new Point(1, 1));
         Flag flag1 = new Flag(new Point(1, 2));
 
+        /* Verify that it's not possible to place a road between the flags */
         Road road = map.placeAutoSelectedRoad(player0, flag0, flag1);
     }
 
     @Test(expected=InvalidRouteException.class)
     public void testFindWayBetweenSameFlag() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
         Point hqPoint = new Point(8, 8);
@@ -210,6 +252,8 @@ public class TestGameMap {
 
     @Test
     public void testCreateMinimalMap() throws Exception {
+
+        /* Verify that it's possible to create a minimal game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -219,6 +263,8 @@ public class TestGameMap {
 
     @Test(expected=Exception.class)
     public void testCreateTooSmallMap() throws Exception {
+
+        /* Verify that it's not possible to create a too small game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -228,24 +274,35 @@ public class TestGameMap {
 
     @Test(expected=Exception.class)
     public void testCreateMapWithNegativeHeight() throws Exception {
+
+        /* Verify that it's not possible to create a map with negative height */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        new GameMap(players, 10, -1);
+        new GameMap(players, 10, -10);
     }
 
     @Test(expected=Exception.class)
     public void testCreateMapWithNegativeWidth() throws Exception {
+
+        /* Verify that it's not possible to create a game with a negative width */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        new GameMap(players, -3, 10);
+        new GameMap(players, -30, 10);
     }
 
     @Test
     public void testGetFlags() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
         Point hqPoint = new Point(8, 8);
@@ -269,30 +326,50 @@ public class TestGameMap {
 
     @Test(expected=Exception.class)
     public void testPlaceBuildingOnInvalidPoint() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Farm    farm      = new Farm(player0);
-        Point   farmPoint = new Point(3, 4);
+        /* Verify that it's not possible to place a farm on an invalid point */
+        Farm farm = new Farm(player0);
+        Point farmPoint = new Point(3, 3);
+
+        farmPoint.x = farmPoint.x + 1;
 
         map.placeBuilding(farm, farmPoint);
     }
 
     @Test(expected=Exception.class)
     public void testPlaceFlagOnInvalidPoint() throws Exception {
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
-        Point point0 = new Point(4, 7);
+        /* Verify that it's not possible to place a flag on an invalid point */
+        Point point0 = new Point(4, 6);
+
+        point0.x = point0.x + 1;
 
         map.placeFlag(player0, point0);
     }
 
     @Test
     public void testPlaceBuildingSetsMap() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Verify that the map field of the building gets set correctly when it's placed */
         Farm    farm   = new Farm(player0);
         Point   point0 = new Point(5, 5);
 
@@ -305,9 +382,19 @@ public class TestGameMap {
 
     @Test
     public void testFindWayBetweenHouseAndItsFlag() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place woodcutter */
         Woodcutter woodcutter     = new Woodcutter(player0);
         Point      point0 = new Point(5, 5);
         Point      point1 = new Point(6, 4);
@@ -328,9 +415,19 @@ public class TestGameMap {
 
     @Test
     public void testCreateHouseNextToExistingFlag() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point hqPoint = new Point(8, 8);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place flag */
         Point      point0 = new Point(5, 5);
         Flag       flag0  = map.placeFlag(player0, point0);
 
@@ -338,32 +435,6 @@ public class TestGameMap {
 
         assertEquals(woodcutter.getFlag(), flag0);
         assertNotNull(map.getRoad(woodcutter.getPosition(), point0));
-    }
-
-    @Test
-    public void testGetPerimeterWithOnlyHeadquarter() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 100, 100);
-        Point point0 = new Point(50, 50);
-        map.placeBuilding(new Headquarter(player0), point0);
-
-        Collection<Point> border = player0.getBorderPoints();
-        assertTrue(border.contains(new Point(50, 30)));
-        assertTrue(border.contains(new Point(50, 70)));
-
-        assertTrue(border.contains(new Point(30, 50)));
-        assertTrue(border.contains(new Point(70, 50)));
-
-        assertFalse(border.contains(new Point(28, 50)));
-        assertFalse(border.contains(new Point(32, 50)));
-
-        assertFalse(border.contains(new Point(68, 50)));
-        assertFalse(border.contains(new Point(72, 50)));
-
-        assertFalse(border.contains(new Point(71, 51)));
-        assertFalse(border.contains(new Point(71, 49)));
     }
 
     @Test(expected = Exception.class)
@@ -428,24 +499,16 @@ public class TestGameMap {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flags */
-        Point point1 = new Point(49, 67);
+        Point point1 = new Point(48, 58);
         map.placeFlag(player0, point1);
 
-        Point point9 = new Point(51, 65);
+        Point point9 = new Point(52, 58);
         map.placeFlag(player0, point9);
 
         /* Verify that it's not possible to create a road that goes outside the border */
-        Point point2 = new Point(48, 68);
-        Point point3 = new Point(49, 69);
-        Point point4 = new Point(48, 70);
-        Point point5 = new Point(49, 71);
-        Point point6 = new Point(50, 70);
-        Point point7 = new Point(51, 69);
-        Point point8 = new Point(50, 68);
-        Point point10 = new Point(51, 67);
 
         try {
-            map.placeRoad(player0, point1, point2, point3, point4, point5, point6, point7, point8, point10, point9);
+            map.placeRoad(player0, point1, point1.upRight(), point1.upRight().upRight(), point9.upLeft(), point9);
             fail();
         } catch (Exception e) {}
 
@@ -468,22 +531,17 @@ public class TestGameMap {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flags */
-        Point point1 = new Point(49, 67);
+        Point point1 = new Point(48, 58);
         map.placeFlag(player0, point1);
 
-        Point point9 = new Point(51, 65);
+        Point point9 = new Point(52, 58);
         map.placeFlag(player0, point9);
 
         /* Verify that it's not possible to create a road that touches the border */
-        Point point2 = new Point(48, 68);
-        Point point3 = new Point(49, 69);
-        Point point6 = new Point(50, 70);
-        Point point7 = new Point(51, 69);
-        Point point8 = new Point(50, 68);
-        Point point10 = new Point(51, 67);
 
         try {
-            map.placeRoad(player0, point1, point2, point3, point6, point7, point8, point10, point9);
+            map.placeRoad(player0, point1, point1.upRight(), point1.upRight(), point9.upLeft(), point9);
+
             fail();
         } catch (Exception e) {}
 
@@ -492,16 +550,23 @@ public class TestGameMap {
 
     @Test
     public void testRemoveFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(50, 68);
+        /* Place flag */
+        Point point1 = new Point(58, 50);
         Flag flag0 = map.placeFlag(player0, point1);
 
+        /* Verify that the flag can be removed */
         map.removeFlag(flag0);
 
         assertFalse(map.getFlags().contains(flag0));
@@ -531,16 +596,23 @@ public class TestGameMap {
 
     @Test
     public void testDestroyBuildingByRemovingFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(50, 68);
+        /* Place woodcutter */
+        Point point1 = new Point(58, 50);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Verify that removing the flag tears down the woodcutter */
         map.removeFlag(woodcutter.getFlag());
 
         assertEquals(map.getFlags().size(), 1);
@@ -551,19 +623,28 @@ public class TestGameMap {
 
     @Test
     public void testRemovingRemoteBarracksSplitsBorder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(50, 70)));
-        assertFalse(border.contains(new Point(50, 74)));
+        Point point10 = new Point(49, 59);
+        Point point11 = new Point(47, 67);
 
-        Point point1 = new Point(50, 68);
+        assertTrue(border.contains(point10));
+        assertFalse(border.contains(point11));
+
+        /* Place barracks */
+        Point point1 = new Point(48, 58);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         Utils.constructHouse(barracks0);
@@ -571,69 +652,95 @@ public class TestGameMap {
 
         border = player0.getBorderPoints();
 
-        assertFalse(border.contains(new Point(50, 70)));
-        assertTrue(border.contains(new Point(50, 76)));
+        assertFalse(border.contains(point10));
+        assertTrue(border.contains(point11));
 
-        Point point2 = new Point(50, 72);
+        /* Place barracks */
+        Point point2 = new Point(48, 66);
         Building barracks1 = map.placeBuilding(new Barracks(player0), point2);
+
+        /* Construct and occupy the barracks */
+        Point point3 = new Point(50, 66);
+        Point point4 = new Point(50, 74);
+
+        assertTrue(player0.getBorderPoints().contains(point3));
+        assertFalse(player0.getBorderPoints().contains(point4));
 
         Utils.constructHouse(barracks1);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
         border = player0.getBorderPoints();
 
-        assertFalse(border.contains(new Point(50, 74)));
-        assertTrue(border.contains(new Point(50, 80)));
+        assertFalse(player0.getBorderPoints().contains(point3));
+        assertTrue(player0.getBorderPoints().contains(point4));
 
-        Point point3 = new Point(50, 78);
-        Building barracks2 = map.placeBuilding(new Barracks(player0), point3);
+        /* Place barracks */
+        Point point5 = new Point(48, 74);
+        Building barracks2 = map.placeBuilding(new Barracks(player0), point5);
 
+        /* Construct and occupy the barracks */
         Utils.constructHouse(barracks2);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks2);
 
         border = player0.getBorderPoints();
 
-        assertFalse(border.contains(new Point(50, 80)));
-        assertTrue(border.contains(new Point(50, 86)));
+        Point point8 = new Point(47, 83);
 
-        Point point4 = new Point(50, 84);
-        Building barracks3 = map.placeBuilding(new Barracks(player0), point4);
+        assertFalse(border.contains(point4));
+        assertTrue(border.contains(point8));
 
+        /* Place barracks */
+        Point point6 = new Point(48, 82);
+        Building barracks3 = map.placeBuilding(new Barracks(player0), point6);
+
+        /* Construct and occupy the barracks */
         Utils.constructHouse(barracks3);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks3);
 
         border = player0.getBorderPoints();
 
-        assertFalse(border.contains(new Point(50, 86)));
-        assertTrue(border.contains(new Point(50, 92)));
+        assertFalse(border.contains(point8));
+        assertTrue(border.contains(new Point(47, 91)));
     }
 
     @Test
     public void testShrinkingBorderDestroysHouseNowOutsideOfBorder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(50, 70)));
-        assertFalse(border.contains(new Point(50, 74)));
+        assertTrue(border.contains(new Point(49, 59)));
+        assertFalse(border.contains(new Point(49, 63)));
 
-        Point point1 = new Point(50, 68);
+        /* Place barracks */
+        Point point1 = new Point(50, 58);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
+        /* Finish construction and populate the barracks */
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        Point point2 = new Point(50, 72);
+        /* Place woodcutter */
+        Point point2 = new Point(50, 62);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point2);
 
+        /* Finish construction of the woodcutter */
         Utils.constructHouse(woodcutter);
+
+        /* Place a second soldier in the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
+        /* Verify that the woodcutter burns down when the barracks is torn down */
         assertTrue(map.getBuildings().contains(woodcutter));
         assertTrue(woodcutter.isReady());
 
@@ -645,27 +752,36 @@ public class TestGameMap {
 
     @Test
     public void testShrinkingBorderDestroysFlagNowOutsideOfBorder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(50, 70)));
-        assertFalse(border.contains(new Point(50, 74)));
+        assertTrue(border.contains(new Point(49, 59)));
+        assertFalse(border.contains(new Point(49, 63)));
 
-        Point point1 = new Point(50, 68);
+        /* Place barracks */
+        Point point1 = new Point(48, 58);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
+        /* Construct and occupy the barracks */
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        Point point2 = new Point(50, 72);
+        /* Place flag */
+        Point point2 = new Point(50, 62);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Verify that the flag is removed when the barracks is torn down */
         assertTrue(map.getFlags().contains(flag0));
 
         barracks0.tearDown();
@@ -675,31 +791,40 @@ public class TestGameMap {
 
     @Test
     public void testShrinkingBorderDestroysRoadNowOutsideOfBorder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
         Point point0 = new Point(50, 50);
         map.placeBuilding(new Headquarter(player0), point0);
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(50, 70)));
-        assertFalse(border.contains(new Point(50, 74)));
+        assertTrue(border.contains(new Point(49, 59)));
+        assertFalse(border.contains(new Point(49, 63)));
 
-        Point point1 = new Point(50, 68);
+        /* Place barracks */
+        Point point1 = new Point(49, 57);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
+        /* Finish construction and populate the barracks */
         Utils.constructHouse(barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        Point point2 = new Point(50, 72);
+        /* Place flag */
+        Point point2 = new Point(49, 65);
         Flag flag0 = map.placeFlag(player0, point2);
 
-        Point point3 = new Point(48, 70);
+        /* Place flag */
+        Point point3 = new Point(52, 64);
         Flag flag1 = map.placeFlag(player0, point3);
 
-        Road road0 = map.placeRoad(player0, point2, point2.downLeft(), point3);
+        Road road0 = map.placeRoad(player0, point2, point2.downRight(), point3);
 
         assertTrue(map.getRoads().contains(road0));
 
@@ -720,7 +845,7 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
@@ -748,16 +873,16 @@ public class TestGameMap {
         Point point45 = new Point(22, 28);
         Building building4 = map.placeBuilding(new Barracks(player0), point45);
 
+        /* Finish construction and occupy the barracks */
         Utils.constructHouse(building4);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, building4);
 
         /* Verify that the border is concave */
         Collection<Point> border = player0.getBorderPoints();
+        assertTrue(border.contains(new Point(21, 37)));
+        assertTrue(border.contains(new Point(6, 32)));
 
-        assertTrue(border.contains(new Point(22, 36)));
-        assertTrue(border.contains(new Point(5, 31)));
-
-        Point point46 = new Point(11, 27);
+        Point point46 = new Point(11, 29);
         assertTrue(border.contains(point46));
     }
 
@@ -774,10 +899,10 @@ public class TestGameMap {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point1 = new Point(1, 21);
+        Point point1 = new Point(1, 13);
         assertTrue(player0.getBorderPoints().contains(point1));
 
-        Point point2 = new Point(1, 25);
+        Point point2 = new Point(2, 18);
         assertTrue(player0.getFieldOfView().contains(point2));
     }
 
@@ -821,7 +946,7 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place barracks */
@@ -854,14 +979,14 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Get the field of view before construction of barracks */
         Collection<Point> oldFieldOfView = player0.getFieldOfView();
 
-        Point point1 = new Point(5, 27);
-        Point point3 = new Point(4, 32);
+        Point point1 = new Point(4, 28);
+        Point point3 = new Point(5, 33);
 
         assertTrue(oldFieldOfView.contains(point1));
         assertFalse(oldFieldOfView.contains(point3));
@@ -957,7 +1082,7 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Placing headquarter */
-        Point point38 = new Point(5, 5);
+        Point point38 = new Point(5, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Placing barracks */
@@ -1060,9 +1185,8 @@ public class TestGameMap {
         /* Occupy barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks9);
 
-        /* Verify that there is an internal border created for the space that
-           the circle of barracks doesn't cover */
-        Point point86 = new Point(14, 24);
+        /* Verify that there is an internal border created for the space that the circle of barracks doesn't cover */
+        Point point86 = new Point(13, 25);
         assertTrue(player0.getBorderPoints().contains(point86));
     }
 
