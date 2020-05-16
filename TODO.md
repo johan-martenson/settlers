@@ -31,9 +31,13 @@ LARGER CHANGES
 
 * Adjust occupied areas based on measurements
 
+* Make discovered land separate from defended land, and make sure it's correct for all military buildings
+
 
 RE-FACTOR
 =========
+
+*  Fix TestGameMap
 
 *  Fix ugly heuristic in Land::<init>
 
