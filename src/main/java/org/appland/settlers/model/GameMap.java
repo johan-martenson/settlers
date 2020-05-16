@@ -130,106 +130,9 @@ public class GameMap {
         return PointInformation.NONE;
     }
 
-    public void reportBuildingConstructed(Building building) {
-        changedBuildings.add(building);
-    }
-
     enum PointInformation {
         NONE,
         STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP;
-    }
-
-    /**
-     * Finds the shortest possible placement for a new road between the given points for the given player
-     *
-     * @param player The player the road is for
-     * @param start The start of the road
-     * @param goal The end of the road
-     * @param avoid Points that the road must avoid
-     * @return A path a new road can follow
-     */
-    public List<Point> findAutoSelectedRoad(final Player player, Point start,
-            Point goal, Collection<Point> avoid) {
-        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
-
-            @Override
-            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
-                try {
-                    return getPossibleAdjacentRoadConnections(player, point, goal);
-                } catch (Exception ex) {
-                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                return new LinkedList<>();
-            }
-
-            @Override
-            public Double realDistance(Point currentPoint, Point neighbor) {
-                return (double)1;
-            }
-
-            @Override
-            public Double estimateDistance(Point from, Point to) {
-                return (double)getDistanceInGameSteps(from, to);
-            }
-        });
-    }
-
-    private boolean pointIsOnRoad(Point point) {
-        return getRoadAtPoint(point) != null;
-    }
-
-    /**
-     * Returns a road that covers the given point but does not start and end at it
-     *
-     * @param point A point on the map
-     * @return Returns the road if there is a road at the given point
-     */
-    public Road getRoadAtPoint(Point point) {
-
-        /* Don't include start and end points of roads so ignore the point if there is a flag */
-        if (isFlagAtPoint(point)) {
-            return null;
-        }
-
-        Set<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
-
-        /* Return null if there is no connected road */
-        if (connectedRoads.isEmpty()) {
-            return null;
-        }
-
-        /* Return the first found connected road */
-        return connectedRoads.iterator().next();
-    }
-
-    /**
-     * Removes the given road from the map
-     *
-     * @param road The road to remove
-     * @throws Exception If there is a failure in making the courier return to storage or removing the road
-     */
-    public void removeRoad(Road road) throws Exception {
-
-        if (road.getCourier() != null) {
-            road.getCourier().returnToStorage();
-        }
-
-        removeRoadButNotWorker(road);
-    }
-
-    private void removeRoadButNotWorker(Road road) throws Exception {
-
-        roads.remove(road);
-
-        for (Point point : road.getWayPoints()) {
-            MapPoint mp = pointToGameObject.get(point);
-
-            mp.removeConnectingRoad(road);
-        }
-
-        /* Report that the road is removed */
-        removedRoads.add(road);
     }
 
     /**
@@ -326,6 +229,103 @@ public class GameMap {
         removedSigns = new HashSet<>();
         newCrops = new HashSet<>();
         removedCrops = new HashSet<>();
+    }
+
+    void reportBuildingConstructed(Building building) {
+        changedBuildings.add(building);
+    }
+
+    /**
+     * Finds the shortest possible placement for a new road between the given points for the given player
+     *
+     * @param player The player the road is for
+     * @param start The start of the road
+     * @param goal The end of the road
+     * @param avoid Points that the road must avoid
+     * @return A path a new road can follow
+     */
+    public List<Point> findAutoSelectedRoad(final Player player, Point start,
+                                            Point goal, Collection<Point> avoid) {
+        return findShortestPath(start, goal, avoid, new GameUtils.ConnectionsProvider() {
+
+            @Override
+            public Iterable<Point> getPossibleConnections(Point point, Point goal) {
+                try {
+                    return getPossibleAdjacentRoadConnections(player, point, goal);
+                } catch (Exception ex) {
+                    Logger.getLogger(GameMap.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                return new LinkedList<>();
+            }
+
+            @Override
+            public Double realDistance(Point currentPoint, Point neighbor) {
+                return (double)1;
+            }
+
+            @Override
+            public Double estimateDistance(Point from, Point to) {
+                return (double)getDistanceInGameSteps(from, to);
+            }
+        });
+    }
+
+    private boolean pointIsOnRoad(Point point) {
+        return getRoadAtPoint(point) != null;
+    }
+
+    /**
+     * Returns a road that covers the given point but does not start and end at it
+     *
+     * @param point A point on the map
+     * @return Returns the road if there is a road at the given point
+     */
+    public Road getRoadAtPoint(Point point) {
+
+        /* Don't include start and end points of roads so ignore the point if there is a flag */
+        if (isFlagAtPoint(point)) {
+            return null;
+        }
+
+        Set<Road> connectedRoads = getMapPoint(point).getConnectedRoads();
+
+        /* Return null if there is no connected road */
+        if (connectedRoads.isEmpty()) {
+            return null;
+        }
+
+        /* Return the first found connected road */
+        return connectedRoads.iterator().next();
+    }
+
+    /**
+     * Removes the given road from the map
+     *
+     * @param road The road to remove
+     * @throws Exception If there is a failure in making the courier return to storage or removing the road
+     */
+    public void removeRoad(Road road) throws Exception {
+
+        if (road.getCourier() != null) {
+            road.getCourier().returnToStorage();
+        }
+
+        removeRoadButNotWorker(road);
+    }
+
+    private void removeRoadButNotWorker(Road road) throws Exception {
+
+        roads.remove(road);
+
+        for (Point point : road.getWayPoints()) {
+            MapPoint mp = pointToGameObject.get(point);
+
+            mp.removeConnectingRoad(road);
+        }
+
+        /* Report that the road is removed */
+        removedRoads.add(road);
     }
 
     /**
