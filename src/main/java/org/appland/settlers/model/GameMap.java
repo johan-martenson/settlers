@@ -61,7 +61,7 @@ public class GameMap {
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
     private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
 
-    private final String theLeader = "Mai Thi Van Anh";
+    private final String theLeader = "Anh Mai Mårtensson";
     private final int MINIMUM_WIDTH  = 5;
     private final int MINIMUM_HEIGHT = 5;
     private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
