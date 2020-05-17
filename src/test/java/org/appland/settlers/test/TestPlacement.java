@@ -109,14 +109,18 @@ public class TestPlacement {
         /* Verify that there is a valid flag point in the available flag points */
         Collection<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
-        assertTrue(flagPoints.contains(new Point(8, 6)));
+        Point point1 = new Point(8, 6);
+        assertTrue(flagPoints.contains(point1));
     }
 
     @Test
     public void testFlagsCannotBePlacedEdgeOfGameMap() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 10, 10);
 
         /* Place headquarter */
@@ -125,7 +129,7 @@ public class TestPlacement {
 
         Collection<Point> flagPoints = map.getAvailableFlagPoints(player0);
 
-        /* Test that flags can't be placed on the borders */
+        /* Test that flags can't be placed on the edge of the map */
         for (int y = 0; y < 11; y += 2) {
             assertFalse(flagPoints.contains(new Point(0, y)));
             assertFalse(flagPoints.contains(new Point(10, y)));
@@ -430,19 +434,19 @@ public class TestPlacement {
         assertFalse(possibleFlagPoints.contains(point0.downLeft()));
 
         /* Surrounding points */
-        assertTrue (possibleFlagPoints.contains(point0.up()));
-        assertTrue (possibleFlagPoints.contains(point0.down()));
-        assertTrue (possibleFlagPoints.contains(point0.upRight().upRight()));
-        assertTrue (possibleFlagPoints.contains(point0.upRight().right()));
-        assertTrue (possibleFlagPoints.contains(point0.right().right()));
-        assertTrue (possibleFlagPoints.contains(point0.downRight().right()));
-        assertTrue (possibleFlagPoints.contains(point0.downRight().downRight()));
-        assertTrue (possibleFlagPoints.contains(point0.down()));
-        assertTrue (possibleFlagPoints.contains(point0.downLeft().downLeft()));
-        assertTrue (possibleFlagPoints.contains(point0.downLeft().left()));
-        assertTrue (possibleFlagPoints.contains(point0.left().left()));
-        assertTrue (possibleFlagPoints.contains(point0.upLeft().left()));
-        assertTrue (possibleFlagPoints.contains(point0.upLeft().upLeft()));
+        assertTrue(possibleFlagPoints.contains(point0.up()));
+        assertTrue(possibleFlagPoints.contains(point0.down()));
+        assertTrue(possibleFlagPoints.contains(point0.upRight().upRight()));
+        assertTrue(possibleFlagPoints.contains(point0.upRight().right()));
+        assertTrue(possibleFlagPoints.contains(point0.right().right()));
+        assertTrue(possibleFlagPoints.contains(point0.downRight().right()));
+        assertTrue(possibleFlagPoints.contains(point0.downRight().downRight()));
+        assertTrue(possibleFlagPoints.contains(point0.down()));
+        assertTrue(possibleFlagPoints.contains(point0.downLeft().downLeft()));
+        assertTrue(possibleFlagPoints.contains(point0.downLeft().left()));
+        assertTrue(possibleFlagPoints.contains(point0.left().left()));
+        assertTrue(possibleFlagPoints.contains(point0.upLeft().left()));
+        assertTrue(possibleFlagPoints.contains(point0.upLeft().upLeft()));
     }
 
     @Test
@@ -463,27 +467,27 @@ public class TestPlacement {
         Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
         /* The house's own point */
-        assertFalse(possibleFlagPoints.contains(new Point(6, 4)));
+        assertFalse(possibleFlagPoints.contains(wcPoint));
 
         /* The house's flag */
-        assertFalse(possibleFlagPoints.contains(new Point(7, 3)));
+        assertFalse(possibleFlagPoints.contains(wcPoint.downRight()));
 
         /* Points in front, sampled */
-        assertFalse(possibleFlagPoints.contains(new Point(8, 2)));
-        assertFalse(possibleFlagPoints.contains(new Point(9, 3)));
+        assertFalse(possibleFlagPoints.contains(wcPoint.downRight().downRight()));
+        assertFalse(possibleFlagPoints.contains(wcPoint.downRight().right()));
 
         /* Points on left, sampled */
-        assertFalse(possibleFlagPoints.contains(new Point(6, 2)));
-        assertFalse(possibleFlagPoints.contains(new Point(5, 3)));
+        assertFalse(possibleFlagPoints.contains(wcPoint.down()));
+        assertFalse(possibleFlagPoints.contains(wcPoint.downLeft()));
 
         /* Points on top, sampled */
-        assertTrue (possibleFlagPoints.contains(new Point(4, 4)));
-        assertTrue (possibleFlagPoints.contains(new Point(5, 5)));
-        assertTrue (possibleFlagPoints.contains(new Point(6, 6)));
+        assertTrue(possibleFlagPoints.contains(wcPoint.left()));
+        assertTrue(possibleFlagPoints.contains(wcPoint.upLeft()));
+        assertTrue(possibleFlagPoints.contains(wcPoint.up()));
 
         /* Points on right, sampled */
-        assertTrue (possibleFlagPoints.contains(new Point(7, 5)));
-        assertFalse(possibleFlagPoints.contains(new Point(8, 4)));
+        assertTrue(possibleFlagPoints.contains(wcPoint.upRight()));
+        assertFalse(possibleFlagPoints.contains(wcPoint.right()));
     }
 
     @Test
@@ -528,7 +532,7 @@ public class TestPlacement {
 
         /* Points on top, sampled */
         assertFalse(possibleHouseSizes.containsKey(point0.upLeft()));
-        assertEquals (possibleHouseSizes.get(point0.up()), MEDIUM);
+        assertEquals(possibleHouseSizes.get(point0.up()), MEDIUM);
 
         /* Points on right, sampled */
         assertFalse(possibleHouseSizes.containsKey(point0.upRight()));
@@ -570,24 +574,24 @@ public class TestPlacement {
         /* Points on left, sampled */
         assertFalse(possibleFlagPoints.contains(point0.down()));
         assertFalse(possibleFlagPoints.contains(point0.downLeft()));
-        assertTrue (possibleFlagPoints.contains(point0.left()));
+        assertTrue(possibleFlagPoints.contains(point0.left()));
 
-        assertTrue (possibleFlagPoints.contains(point0.left().downLeft()));
-        assertTrue (possibleFlagPoints.contains(point0.left().down()));
+        assertTrue(possibleFlagPoints.contains(point0.left().downLeft()));
+        assertTrue(possibleFlagPoints.contains(point0.left().down()));
 
         /* Points on top, sampled */
-        assertTrue (possibleFlagPoints.contains(point0.upLeft()));
-        assertTrue (possibleFlagPoints.contains(point0.up()));
-        assertTrue (possibleFlagPoints.contains(point0.up().upRight()));
+        assertTrue(possibleFlagPoints.contains(point0.upLeft()));
+        assertTrue(possibleFlagPoints.contains(point0.up()));
+        assertTrue(possibleFlagPoints.contains(point0.up().upRight()));
 
         /* Points on right, sampled */
-        assertTrue (possibleFlagPoints.contains(point0.upRight()));
+        assertTrue(possibleFlagPoints.contains(point0.upRight()));
         assertFalse(possibleFlagPoints.contains(point0.right()));
 
-        assertTrue (possibleFlagPoints.contains(point0.right().up()));
-        assertTrue (possibleFlagPoints.contains(point0.right().upRight()));
-        assertTrue (possibleFlagPoints.contains(point0.right().right()));
-        assertTrue (possibleFlagPoints.contains(point0.right().right().downRight()));
+        assertTrue(possibleFlagPoints.contains(point0.right().up()));
+        assertTrue(possibleFlagPoints.contains(point0.right().upRight()));
+        assertTrue(possibleFlagPoints.contains(point0.right().right()));
+        assertTrue(possibleFlagPoints.contains(point0.right().right().downRight()));
     }
 
     @Test

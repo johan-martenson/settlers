@@ -182,11 +182,13 @@ public class TestBarracks {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
         /* Wait for the barracks to finish construction */
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        Point point2 = new Point(5, 25);
+
+        assertTrue(player0.getBorderPoints().contains(point2));
 
         Utils.fastForwardUntilBuildingIsConstructed(barracks0);
 
-        assertTrue(player0.getBorderPoints().contains(new Point(5, 25)));
+        assertTrue(player0.getBorderPoints().contains(point2));
     }
 
     @Test

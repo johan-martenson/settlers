@@ -322,10 +322,12 @@ public class TestConstruction {
         GameMap map = new GameMap(players,20, 20);
 
         /* Place headquarter */
-        map.placeBuilding(new Headquarter(player0), new Point(10, 10));
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
-        Building sawmill0 = map.placeBuilding(new Sawmill(player0), new Point(4, 4));
+        Point point1 = new Point(4, 4);
+        Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
         /* Finish construction of the sawmill */
         Utils.constructHouse(sawmill0);

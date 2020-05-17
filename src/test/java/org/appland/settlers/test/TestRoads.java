@@ -59,7 +59,10 @@ public class TestRoads {
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        assertNull(map.getRoad(new Point(1, 1), new Point(2, 2)));
+        /* Verify that trying to get a non-existing road returns null */
+        Point point1 = new Point(2, 2);
+        Point point2 = new Point(6, 2);
+        assertNull(map.getRoad(point1, point2));
     }
 
     @Test
@@ -707,8 +710,8 @@ public class TestRoads {
         /* Verify that there is no available road connection straight up or straight down */
         List<Point> points = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point1);
 
-        assertFalse(points.contains(new Point(16, 14)));
-        assertFalse(points.contains(new Point(16, 10)));
+        assertFalse(points.contains(point1.up()));
+        assertFalse(points.contains(point1.down()));
     }
 
     @Test
@@ -889,18 +892,41 @@ public class TestRoads {
 
     @Test
     public void testConnectNewRoadToFlagInExistingRoad() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        map.placeBuilding(new Headquarter(player0), new Point(5, 5));
-        map.placeFlag(player0, new Point(12, 4));
-        map.placeFlag(player0, new Point(14, 6));
-        map.placeRoad(player0, new Point(12, 4), new Point(13, 5), new Point(14, 6));
-        map.placeFlag(player0, new Point(16, 8));
-        map.placeRoad(player0, new Point(14, 6), new Point(15, 7), new Point(16, 8));
-        map.placeFlag(player0, new Point(16, 4));
-        map.placeRoad(player0, new Point(16, 4), new Point(15, 5), new Point(14, 6));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flags */
+        Point point1 = new Point(12, 4);
+        Point point2 = new Point(14, 6);
+
+        map.placeFlag(player0, point1);
+        map.placeFlag(player0, point2);
+
+        /* Place road */
+        map.placeRoad(player0, point1, point1.upRight(), point2);
+
+        /* Place flag */
+        Point point3 = new Point(16, 8);
+        map.placeFlag(player0, point3);
+
+        /* Place road */
+        map.placeRoad(player0, point2, point2.upRight(), point3);
+
+        /* Place flag */
+        Point point4 = new Point(16, 4);
+        map.placeFlag(player0, point4);
+
+        /* Place road */
+        map.placeRoad(player0, point4, point4.upLeft(), point2);
     }
 
     @Test
@@ -1004,16 +1030,26 @@ public class TestRoads {
 
     @Test
     public void testIdleCourierIsAssignedWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1050,7 +1086,8 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter at the end of the road */
         Point endPoint = new Point(14, 4);
@@ -1121,7 +1158,8 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter at the end of the road */
         Point endPoint = new Point(14, 4);
@@ -1192,7 +1230,8 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point endPoint = new Point(14, 4);
@@ -1234,7 +1273,8 @@ public class TestRoads {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point endPoint = new Point(14, 4);
@@ -1266,16 +1306,26 @@ public class TestRoads {
 
     @Test
     public void testCourierDeliveringCargoFinishesDeliveryAndIsAssignedWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1325,17 +1375,26 @@ public class TestRoads {
 
     @Test
     public void testCourierFarFromToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Storehouse headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Storehouse headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1399,17 +1458,26 @@ public class TestRoads {
 
     @Test
     public void testCourierCloseToBuildingDeliveringCargoFinishesDeliveryAndBecomesIdleWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Storehouse headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Storehouse headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1483,16 +1551,26 @@ public class TestRoads {
 
     @Test
     public void testCourierWalkingToAssignedRoadAdaptsWhenItsRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1524,17 +1602,26 @@ public class TestRoads {
 
     @Test
     public void testNewCourierIsDispatchedWhenRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), new Point(5, 5));
 
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1604,17 +1691,26 @@ public class TestRoads {
 
     @Test
     public void testCourierDeliversCorrectlyToBuildingAfterItsRoadIsSplit() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
-        Storehouse headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, new Point(5, 5));
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Storehouse headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
+        Point endPoint = new Point(14, 4);
+        Flag endFlag = map.placeFlag(player0, endPoint);
+
+        /* Place road */
         Point middlePoint1 = new Point(8, 4);
         Point middlePoint2 = new Point(10, 4);
         Point middlePoint3 = new Point(12, 4);
-        Point endPoint = new Point(14, 4);
-        Flag endFlag = map.placeFlag(player0, endPoint);
         Road road = map.placeRoad(player0, headquarter.getFlag().getPosition(),
                 middlePoint1,
                 middlePoint2,
@@ -1930,19 +2026,25 @@ public class TestRoads {
 
     @Test
     public void testSplitHorizontalRoadWithTooShortRemainingRoads() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        map.placeFlag(player0, new Point(9, 5));
-        map.placeFlag(player0, new Point(17, 5));
-
+        /* Place flags */
         Point start = new Point(9, 5);
         Point end = new Point(17, 5);
+        map.placeFlag(player0, start);
+        map.placeFlag(player0, end);
+
+        /* Place road */
         Point point1 = new Point(11, 5);
         Point point2 = new Point(13, 5);
         Point point3 = new Point(15, 5);
@@ -1952,6 +2054,7 @@ public class TestRoads {
 
         List<Point> wayPointsBefore = new ArrayList<>(road0.getWayPoints());
 
+        /* Verify that it's not possible to place a flag on the road directly next to another flag */
         try {
             map.placeFlag(player0, point1);
             fail();

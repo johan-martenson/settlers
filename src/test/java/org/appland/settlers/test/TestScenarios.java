@@ -373,14 +373,12 @@ public class TestScenarios {
         /*  - List all house spots -  */
         Map<Point, Size> possibleHouseSpots = map.getAvailableHousePoints(player0);
 
-        assertTrue(possibleHouseSpots.containsKey(new Point (22, 20)));
-        assertEquals(possibleHouseSpots.get(new Point(22, 20)), LARGE);
+        Point wcPoint = new Point(22, 20);
+        assertTrue(possibleHouseSpots.containsKey(wcPoint));
+        assertEquals(possibleHouseSpots.get(wcPoint), LARGE);
 
         /*  - Pick 22, 20 -  */
-        Woodcutter woodcutter      = new Woodcutter(player0);
-        Point      wcPoint = new Point(22, 20);
-
-        map.placeBuilding(woodcutter, wcPoint);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), wcPoint);
 
         fastForward(100, map);
 
@@ -396,14 +394,12 @@ public class TestScenarios {
         /*  - List all house spots -  */
         possibleHouseSpots = map.getAvailableHousePoints(player0);
 
-        assertTrue(possibleHouseSpots.containsKey(new Point (10, 10)));
-        assertEquals(possibleHouseSpots.get(new Point(10, 10)), LARGE);
+        Point   smPoint = new Point(10, 10);
+        assertTrue(possibleHouseSpots.containsKey(smPoint));
+        assertEquals(possibleHouseSpots.get(smPoint), LARGE);
 
         /*  - Pick 10, 10 -  */
-        Sawmill sawmill      = new Sawmill(player0);
-        Point   smPoint = new Point(10, 10);
-
-        map.placeBuilding(sawmill, smPoint);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), smPoint);
 
         fastForward(100, map);
 
@@ -417,83 +413,96 @@ public class TestScenarios {
         /*  - List possible adjacent connections for the road -  */
         List<Point> roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, startFlag.getPosition());
 
-        assertEquals(startFlag.getPosition(), new Point(16, 14));
+        Point point1 = new Point(17, 13);
 
-        assertTrue(roadConnections.contains(new Point(17, 13)));
+        assertEquals(startFlag.getPosition(), point1.upLeft());
+        assertTrue(roadConnections.contains(point1));
 
         /*  - Choose 17, 13 -  */
-        chosenPointsForRoad.add(new Point(17, 13));
+        chosenPointsForRoad.add(point1);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(17, 13));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point1);
 
-        assertTrue(roadConnections.contains(new Point(16, 12)));
+        Point point2 = new Point(16, 12);
+
+        assertTrue(roadConnections.contains(point2));
 
         /*  - Choose 16, 12 -  */
-        chosenPointsForRoad.add(new Point(16, 12));
+        chosenPointsForRoad.add(point2);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(16, 12));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point2);
 
-        assertTrue(roadConnections.contains(new Point(14, 12)));
+        Point point3 = new Point(14, 12);
+
+        assertTrue(roadConnections.contains(point3));
 
         /*  - Choose 14, 12 -  */
-        chosenPointsForRoad.add(new Point(14, 12));
+        chosenPointsForRoad.add(point3);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
         roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(14, 12));
 
-        assertTrue(roadConnections.contains(new Point(13, 11)));
+        Point point4 = new Point(13, 11);
+
+        assertTrue(roadConnections.contains(point4));
 
         /*  - Choose 13, 11 -  */
-        chosenPointsForRoad.add(new Point(13, 11));
+        chosenPointsForRoad.add(point4);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(13, 11));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point4);
 
-        assertTrue(roadConnections.contains(new Point(12, 10)));
+        Point point5 = new Point(12, 10);
+
+        assertTrue(roadConnections.contains(point5));
 
         /*  - Choose 12, 10 -  */
-        chosenPointsForRoad.add(new Point(12, 10));
+        chosenPointsForRoad.add(point5);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(12, 10));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point5);
 
-        assertTrue(roadConnections.contains(new Point(13, 9)));
+        Point point6 = new Point(13, 9);
+
+        assertTrue(roadConnections.contains(point6));
 
         /*  - Choose 13, 9 -  */
-        chosenPointsForRoad.add(new Point(13, 9));
+        chosenPointsForRoad.add(point6);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(13, 9));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point6);
 
-        assertTrue(roadConnections.contains(new Point(12, 8)));
+        Point point7 = new Point(12, 8);
+
+        assertTrue(roadConnections.contains(point7));
 
         /*  - Choose 12, 8 -  */
-        chosenPointsForRoad.add(new Point(12, 8));
+        chosenPointsForRoad.add(point7);
 
         fastForward(100, map);
 
         /*  - Connect to sawmill's flag -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(12, 8));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point7);
 
         assertTrue(roadConnections.contains(sawmill.getFlag().getPosition()));
 
 
         chosenPointsForRoad.add(0,startFlag.getPosition());
-	chosenPointsForRoad.add(sawmill.getFlag().getPosition());
+	    chosenPointsForRoad.add(sawmill.getFlag().getPosition());
 
         map.placeRoad(player0, chosenPointsForRoad);
 

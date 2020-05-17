@@ -746,8 +746,9 @@ public class TestGameMap {
 
         border = player0.getBorderPoints();
 
+        Point point7 = new Point(47, 91);
         assertFalse(border.contains(point8));
-        assertTrue(border.contains(new Point(47, 91)));
+        assertTrue(border.contains(point7));
     }
 
     @Test
@@ -766,8 +767,11 @@ public class TestGameMap {
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(49, 59)));
-        assertFalse(border.contains(new Point(49, 63)));
+        Point point3 = new Point(49, 59);
+        Point point4 = new Point(49, 63);
+
+        assertTrue(border.contains(point3));
+        assertFalse(border.contains(point4));
 
         /* Place barracks */
         Point point1 = new Point(50, 58);
@@ -813,8 +817,11 @@ public class TestGameMap {
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(49, 59)));
-        assertFalse(border.contains(new Point(49, 63)));
+        Point point3 = new Point(49, 59);
+        Point point4 = new Point(49, 63);
+
+        assertTrue(border.contains(point3));
+        assertFalse(border.contains(point4));
 
         /* Place barracks */
         Point point1 = new Point(48, 58);
@@ -852,8 +859,11 @@ public class TestGameMap {
 
         Collection<Point> border = player0.getBorderPoints();
 
-        assertTrue(border.contains(new Point(49, 59)));
-        assertFalse(border.contains(new Point(49, 63)));
+        Point point4 = new Point(49, 59);
+        Point point5 = new Point(49, 63);
+
+        assertTrue(border.contains(point4));
+        assertFalse(border.contains(point5));
 
         /* Place barracks */
         Point point1 = new Point(49, 57);
@@ -926,8 +936,12 @@ public class TestGameMap {
 
         /* Verify that the border is concave */
         Collection<Point> border = player0.getBorderPoints();
-        assertTrue(border.contains(new Point(21, 37)));
-        assertTrue(border.contains(new Point(6, 32)));
+
+        Point point5 = new Point(21, 37);
+        Point point6 = new Point(6, 32);
+
+        assertTrue(border.contains(point5));
+        assertTrue(border.contains(point6));
 
         Point point46 = new Point(11, 29);
         assertTrue(border.contains(point46));

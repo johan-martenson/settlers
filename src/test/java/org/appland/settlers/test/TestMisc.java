@@ -117,7 +117,7 @@ public class TestMisc {
         flag0.callScout();
 
         /* Create a road that connects the flag with the headquarter's flag */
-        Road road0 = map.placeAutoSelectedRoad(player, new Point(430, 200), new Point(434, 200));
+        Road road0 = map.placeAutoSelectedRoad(player, headquarter0.getFlag(), flag0);
 
         /* Wait for a scout to appear */
         Scout scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player).get(0);
