@@ -1455,8 +1455,7 @@ public class TestFishery {
         /* Occupy the fishery */
         Fisherman worker = Utils.occupyBuilding(new Fisherman(player0, map), fishery0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

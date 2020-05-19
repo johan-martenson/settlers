@@ -516,7 +516,7 @@ public class Storehouse extends Building implements Actor {
             retrieveOneFromInventory(GENERAL);
             military = new Military(getPlayer(), GENERAL_RANK, getMap());
         } else {
-            throw new Exception("No militaries available");
+            throw new Exception("No soldiers available");
         }
 
         military.setPosition(getFlag().getPosition());

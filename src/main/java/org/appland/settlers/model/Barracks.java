@@ -40,7 +40,7 @@ public class Barracks extends Building {
         /* Pre-construct the upgraded building */
         upgraded.setConstructionReady();
 
-        /* Set the position of the upgraded building so the militaries can enter */
+        /* Set the position of the upgraded building so the soldiers can enter */
         upgraded.setPosition(getPosition());
 
         /* Replace the buildings on the map */

@@ -188,8 +188,7 @@ public class TestLandStatistics {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when
-         the attacker reaches the flag */
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 

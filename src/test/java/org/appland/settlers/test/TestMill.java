@@ -1063,8 +1063,7 @@ public class TestMill {
         /* Occupy the mill */
         Miller worker = Utils.occupyBuilding(new Miller(player0, map), mill0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-         is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

@@ -917,8 +917,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MEAT, 0);
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
-        /* Make sure the headquarter has no planks or stone so the coal mine
-           will not be constructed */
+        /* Make sure the headquarter has no planks or stone so the coal mine will not be constructed */
         Utils.adjustInventoryTo(headquarter0, PLANK, 0);
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
@@ -1053,8 +1052,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, MEAT, 0);
         Utils.adjustInventoryTo(headquarter0, FISH, 0);
 
-        /* Make sure the headquarter has no miners so the coal mine will not be
-           constructed */
+        /* Make sure the headquarter has no miners so the coal mine will not be constructed */
         Utils.adjustInventoryTo(headquarter0, MINER, 0);
 
         /* Fill the stock in the coal mine so it doesn't need anything */
@@ -1360,8 +1358,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        /* Set the quota for coal consumers to only give coal to the
-           iron smelter */
+        /* Set the quota for coal consumers to only give coal to the iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 0);
         player0.setCoalQuota(Armory.class, 0);
@@ -1480,8 +1477,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        /* Set the quota for coal consumers to only give coal to the
-           iron smelter */
+        /* Set the quota for coal consumers to only give coal to the iron smelter */
         player0.setCoalQuota(IronSmelter.class, 0);
         player0.setCoalQuota(Mint.class, 1);
         player0.setCoalQuota(Armory.class, 0);
@@ -1600,8 +1596,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter0);
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        /* Set the quota for coal consumers to only give coal to the
-           iron smelter */
+        /* Set the quota for coal consumers to only give coal to the iron smelter */
         player0.setCoalQuota(IronSmelter.class, 0);
         player0.setCoalQuota(Mint.class, 0);
         player0.setCoalQuota(Armory.class, 1);
@@ -1714,8 +1709,7 @@ public class TestPrioritization {
         Utils.occupyBuilding(new Minter(player0, map), mint0);
         Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        /* Set the quota for coal consumers to only give coal to the
-           iron smelter */
+        /* Set the quota for coal consumers to only give coal to the iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 1);
         player0.setCoalQuota(Armory.class, 1);
@@ -1828,8 +1822,7 @@ public class TestPrioritization {
         Utils.adjustInventoryTo(headquarter0, PLANK, 0);
         Utils.adjustInventoryTo(headquarter0, STONE, 0);
 
-        /* Set the quota for coal consumers to only give coal to the
-           iron smelter */
+        /* Set the quota for coal consumers to only give coal to the iron smelter */
         player0.setCoalQuota(IronSmelter.class, 1);
         player0.setCoalQuota(Mint.class, 1);
         player0.setCoalQuota(Armory.class, 1);
@@ -1845,8 +1838,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /* Verify that the other consumers get coal when the iron smelter is
-           not yet constructed */
+        /* Verify that the other consumers get coal when the iron smelter is not yet constructed */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -1950,8 +1942,7 @@ public class TestPrioritization {
         /* Make sure the headquarter has no coal */
         Utils.adjustInventoryTo(headquarter0, COAL, 0);
 
-        /* Make sure the headquarter has no iron founder so the coal mine will
-           not be constructed */
+        /* Make sure the headquarter has no iron founder so the coal mine will not be constructed */
         Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 0);
 
         /* Fill the stock in the iron smelter so it doesn't need anything */
@@ -1972,8 +1963,7 @@ public class TestPrioritization {
         /* Verify that the storage worker isn't carrying something when the game starts */
         assertNull(headquarter0.getWorker().getCargo());
 
-        /* Verify that the other consumers get coal when the iron smelter is
-           already fully stocked and does not consume its resources */
+        /* Verify that the other consumers get coal when the iron smelter is already fully stocked and does not consume its resources */
         Map<Building, Integer> coalAllocation = new HashMap<>();
         Worker carrier = headquarter0.getWorker();
 
@@ -2257,8 +2247,7 @@ public class TestPrioritization {
         assertFalse(mill0.needsMaterial(WHEAT));
         assertTrue(well0.needsMaterial(PLANK));
 
-        /* Verify that the storage worker then planks until the well doesn't
-           need them anymore */
+        /* Verify that the storage worker then planks until the well doesn't need them anymore */
         currentCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storageWorker);
 
         assertNotNull(currentCargo);

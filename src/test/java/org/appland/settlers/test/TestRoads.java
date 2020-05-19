@@ -1431,8 +1431,7 @@ public class TestRoads {
         assertEquals(courier.getCargo(), cargo);
         assertEquals(courier.getTarget(), headquarter.getPosition());
 
-        /* Split road with the courier on the new road further away from the
-         headquarter */
+        /* Split road with the courier on the new road further away from the headquarter */
         Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
@@ -1517,8 +1516,7 @@ public class TestRoads {
         /* Let the courier pass the middle of the road */
         Utils.fastForwardUntilWorkerReachesPoint(map, courier, middlePoint1);
 
-        /* Split road with the courier on the new road closer to the
-         headquarter */
+        /* Split road with the courier on the new road closer to the headquarter */
         Flag middleFlag = map.placeFlag(player0, middlePoint2);
 
         assertFalse(courier.isWalkingToRoad());
@@ -2381,8 +2379,7 @@ public class TestRoads {
         /* Place a worker on the road */
         Courier courier = Utils.occupyRoad(road0, map);
 
-        /* Wait for the courier to deliver 99 water cargo without turning the
-           driveways into main roads */
+        /* Wait for the courier to deliver 99 water cargo without turning the driveways into main roads */
         Road driveway = map.getRoad(headquarter0.getPosition(), headquarter0.getFlag().getPosition());
 
         for (int i = 0; i < 99; i++) {
@@ -2441,8 +2438,7 @@ public class TestRoads {
         /* Place a worker on the road */
         Utils.occupyRoad(road0, map);
 
-        /* Wait for the well worker to deliver 99 water cargo without turning the
-           driveways into main roads */
+        /* Wait for the well worker to deliver 99 water cargo without turning the driveways into main roads */
         Road driveway = map.getRoad(well0.getPosition(), well0.getFlag().getPosition());
 
         for (int i = 0; i < 99; i++) {

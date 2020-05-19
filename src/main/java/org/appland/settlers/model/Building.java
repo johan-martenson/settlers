@@ -262,7 +262,7 @@ public class Building implements Actor, EndPoint {
         }
 
         if (hostedMilitary.size() >= getMaxHostedMilitary()) {
-            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " militaries");
+            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " soldiers");
         }
 
         State previousState = state;
@@ -393,7 +393,7 @@ public class Building implements Actor, EndPoint {
 
         if (isUnderAttack()) {
 
-            /* There is nothing to do if the building has no hosted militaries */
+            /* There is nothing to do if the building has no hosted soldiers */
             if (getNumberOfHostedMilitary() > 0) {
 
                 /* Send out a defender to the flag if needed */
@@ -443,7 +443,7 @@ public class Building implements Actor, EndPoint {
                 countdown.step();
             }
         } else if (isOccupied()) {
-            if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableMilitaries()) {
+            if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
                 if (countdown.reachedZero()) {
                     doPromotion();
                 } else {
@@ -511,7 +511,7 @@ public class Building implements Actor, EndPoint {
             worker.returnToStorage();
         }
 
-        /* Send home deployed militaries */
+        /* Send home deployed soldiers */
         for (Military military : hostedMilitary) {
             military.returnToStorage();
         }
@@ -720,7 +720,7 @@ public class Building implements Actor, EndPoint {
         }
     }
 
-    private boolean hostsPromotableMilitaries() {
+    private boolean hostsPromotableSoldiers() {
         for (Military military : hostedMilitary) {
             if (military.getRank() != GENERAL_RANK) {
                 return true;
@@ -900,7 +900,7 @@ public class Building implements Actor, EndPoint {
         /* Change the ownership of the building */
         setPlayer(player);
 
-        /* Reset the number of promised militaries */
+        /* Reset the number of promised soldiers */
         promisedMilitary.clear();
 
         /* Remove traces of the attack */

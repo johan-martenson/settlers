@@ -1071,8 +1071,7 @@ public class TestSawmill {
         /* Occupy the sawmill */
         SawmillWorker worker = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

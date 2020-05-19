@@ -130,8 +130,7 @@ public class TestConstruction {
 
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* The barracks needs a reference to the game map and this is set implicitly
-           when it's placed on the map */
+        /* The barracks needs a reference to the game map and this is set implicitly when it's placed on the map */
         GameMap map = new GameMap(players,30, 30);
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);

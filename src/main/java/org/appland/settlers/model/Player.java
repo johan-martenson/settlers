@@ -211,7 +211,7 @@ public class Player {
             throw new Exception("Cannot get available attackers for own building");
         }
 
-        /* Count militaries in military buildings that can reach the building */
+        /* Count soldiers in military buildings that can reach the building */
         for (Building building : getBuildings()) {
             if (!building.isMilitaryBuilding()) {
                 continue;
@@ -241,7 +241,7 @@ public class Player {
             eligibleBuildings.add(building);
         }
 
-        /* Retrieve militaries from the buildings */
+        /* Retrieve soldiers from the buildings */
         int allocated = 0;
 
         Set<Point> reservedSpots = new HashSet<>();

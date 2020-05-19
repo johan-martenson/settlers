@@ -518,8 +518,7 @@ public class TestDonkeyFarm {
 
         Utils.fastForward(20, map);
 
-        /* Verify that the donkey walks to the storage by itself and the donkey
-           breeder stays in the farm */
+        /* Verify that the donkey walks to the storage by itself and the donkey breeder stays in the farm */
         map.stepTime();
 
         assertTrue(donkeyBreeder.isInsideBuilding());
@@ -1467,8 +1466,7 @@ public class TestDonkeyFarm {
         /* Occupy the donkey farm */
         DonkeyBreeder worker = Utils.occupyBuilding(new DonkeyBreeder(player0, map), donkeyFarm0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

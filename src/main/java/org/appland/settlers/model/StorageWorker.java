@@ -93,8 +93,7 @@ public class StorageWorker extends Worker {
                     continue;
                 }
 
-                /* Make sure planks are only used for plank production if
-                   the limit is critically low */
+                /* Make sure planks are only used for plank production if the limit is critically low */
                 if (material == PLANK) {
 
                     if (getPlayer().isTreeConservationProgramActive() &&

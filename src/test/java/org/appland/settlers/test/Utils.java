@@ -525,7 +525,7 @@ public class Utils {
         return attacker;
     }
 
-    public static List<Military> findMilitariesOutsideBuilding(Player player) {
+    public static List<Military> findSoldiersOutsideBuilding(Player player) {
         GameMap map = player.getMap();
         List<Military> result = new LinkedList<>();
 

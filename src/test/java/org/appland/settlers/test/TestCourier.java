@@ -1211,8 +1211,7 @@ public class TestCourier {
         assertTrue(point4.distance(headquarter0.getPosition()) > point4.distance(headquarter1.getPosition()));
         assertTrue(point5.distance(headquarter0.getPosition()) > point5.distance(headquarter1.getPosition()));
 
-        /* Verify that the courier goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the courier goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(courier.getTarget(), headquarter0.getPosition());

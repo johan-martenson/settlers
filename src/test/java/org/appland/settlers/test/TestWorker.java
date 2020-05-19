@@ -345,19 +345,19 @@ public class TestWorker {
         assertEquals(attackersDistance, 50);
         assertEquals(defendersDistance, 50);
 
-        /* Verify that the militaries fight */
+        /* Verify that the soldiers fight */
         assertTrue(attacker.isFighting());
         assertTrue(defender.isFighting());
 
         /* Wait for the fight to end */
         for (int i = 0; i < 200; i++) {
 
-            /* Break when one of the militaries is gone */
+            /* Break when one of the soldiers is gone */
             if (!map.getWorkers().contains(attacker) || !map.getWorkers().contains(defender)) {
                 break;
             }
 
-            /* Verify that the militaries stay in place */
+            /* Verify that the soldiers stay in place */
             assertEquals(attacker.getPercentageOfDistanceTraveled(), attackersDistance);
             assertEquals(defender.getPercentageOfDistanceTraveled(), defendersDistance);
 

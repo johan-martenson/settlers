@@ -111,8 +111,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkerCarriesCargo(map, courier1, cargo);
 
-        /* Wait for the road to become a main road and verify that a donkey
-           gets dispatched from the headquarter */
+        /* Wait for the road to become a main road and verify that a donkey gets dispatched from the headquarter */
         assertEquals(courier1.getTarget(), flag0.getPosition());
         assertNull(road1.getDonkey());
 
@@ -360,8 +359,7 @@ public class TestDonkey {
 
         donkey.assignToRoad(road0);
 
-        /* Verify that the donkey walks to the middle of the road even when
-           there are cargo available for pickup */
+        /* Verify that the donkey walks to the middle of the road even when there are cargo available for pickup */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(donkey.isWalkingToRoad());
 

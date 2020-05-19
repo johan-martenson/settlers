@@ -246,8 +246,7 @@ public class GameUtils {
                 /* Calculate the real cost to reach the neighbor from the start */
                 tentativeCost = realCostToPoint.get(currentPoint) + connectionProvider.realDistance(currentPoint, neighbor);
 
-                /* Check if the neighbor hasn't been evaluated yet or if we
-                   have found a cheaper way to reach it */
+                /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
                 if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 
                     /* Keep track of how the neighbor was reached */
@@ -517,8 +516,7 @@ public class GameUtils {
                 /* Calculate the real cost to reach the neighbor from the start */
                 tentativeCost = realCostToPoint.get(currentPoint) + road.getWayPoints().size() - 1;
 
-                /* Check if the neighbor hasn't been evaluated yet or if we
-                   have found a cheaper way to reach it */
+                /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
                 if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 
                     /* Keep track of how the neighbor was reached */
@@ -613,8 +611,7 @@ public class GameUtils {
                 tentativeCost = realCostToPoint.get(currentPoint) +
                         road.getWayPoints().size() - 1;
 
-                /* Check if the neighbor hasn't been evaluated yet or if we
-                   have found a cheaper way to reach it */
+                /* Check if the neighbor hasn't been evaluated yet or if we have found a cheaper way to reach it */
                 if (!toEvaluate.contains(neighbor) || tentativeCost < realCostToPoint.get(neighbor)) {
 
                     /* Remember the cost to reach the neighbor */

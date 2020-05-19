@@ -550,8 +550,7 @@ public class TestQuarry {
 
         assertTrue(mason.isInsideBuilding());
 
-        /* Verify that the stone mason hasn't understood that there are no
-           resources available */
+        /* Verify that the stone mason hasn't understood that there are no resources available */
         assertFalse(quarry.outOfNaturalResources());
 
         /* Step once to verify that the stonemason stays inside */
@@ -1219,8 +1218,7 @@ public class TestQuarry {
         /* Occupy the quarry */
         Stonemason worker = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

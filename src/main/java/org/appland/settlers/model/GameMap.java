@@ -206,8 +206,7 @@ public class GameMap {
             throw new Exception("Each player must have a unique color");
         }
 
-        /* Set a constant initial seed for the random generator to get a
-           deterministic behavior */
+        /* Set a constant initial seed for the random generator to get a deterministic behavior */
         random.setSeed(1);
 
         /* There is no winner when the game starts */
@@ -445,8 +444,7 @@ public class GameMap {
         /* Remove wild animals that have been killed and turned to cargo */
         wildAnimals.removeAll(animalsToRemove);
 
-        /* Update buildings list to handle upgraded buildings where the old
-           building gets removed and a new building is added */
+        /* Update buildings list to handle upgraded buildings where the old building gets removed and a new building is added */
         buildings.removeAll(buildingsToRemove);
 
         buildings.addAll(buildingsToAdd);
@@ -1303,8 +1301,7 @@ public class GameMap {
                     Point lastPoint = courier.getLastPoint();
                     Point nextPoint = courier.getNextPoint();
 
-                    /* If the courier is on the road between one of the flags and
-                    a building, pick the road with the flag */
+                    /* If the courier is on the road between one of the flags and a building, pick the road with the flag */
 
                     /*    - Courier walking from flag to building */
                     if (isFlagAtPoint(lastPoint) && isBuildingAtPoint(nextPoint) && nextPoint.equals(lastPoint.upLeft())) {
@@ -1323,8 +1320,7 @@ public class GameMap {
                         }
                     } else {
 
-                        /* Pick the road the worker's last point was on if the next
-                           point is the new flag point */
+                        /* Pick the road the worker's last point was on if the next point is the new flag point */
                         if (nextPoint.equals(flagPoint)) {
                             if (newRoad1.getWayPoints().contains(lastPoint)) {
                                 roadToAssign = newRoad1;
@@ -1332,8 +1328,7 @@ public class GameMap {
                                 roadToAssign = newRoad2;
                             }
 
-                        /* Pick the road the worker's next point is on if the next
-                           point is not the new flag point */
+                        /* Pick the road the worker's next point is on if the next point is not the new flag point */
                         } else {
                             if (newRoad1.getWayPoints().contains(nextPoint)) {
                                 roadToAssign = newRoad1;

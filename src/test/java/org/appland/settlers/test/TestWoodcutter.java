@@ -1529,8 +1529,7 @@ public class TestWoodcutter {
         /* Occupy the woodcutter */
         WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());
@@ -1573,8 +1572,7 @@ public class TestWoodcutter {
         assertFalse(wcWorker.isInsideBuilding());
         assertTrue(wcWorker.isTraveling());
 
-        /* Verify that the woodcutter chooses a path that goes via the flag
-           and doesn't go through the house */
+        /* Verify that the woodcutter chooses a path that goes via the flag and doesn't go through the house */
         assertTrue(wcWorker.getPlannedPath().contains(woodcutter.getFlag().getPosition()));
         assertTrue(wcWorker.getPlannedPath().lastIndexOf(woodcutter.getPosition()) < 1);
 

@@ -1367,8 +1367,7 @@ public class TestFarm {
         /* Occupy the farm */
         Farmer worker = Utils.occupyBuilding(new Farmer(player0, map), farm0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

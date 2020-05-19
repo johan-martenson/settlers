@@ -314,7 +314,7 @@ public class TestFortress {
     }
 
     @Test
-    public void testFortressOnlyNeedsNineMilitaries() throws Exception {
+    public void testFortressOnlyNeedsNineSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -332,7 +332,7 @@ public class TestFortress {
 
         Utils.constructHouse(fortress0);
 
-        /* Occupy the fortress with nine militaries */
+        /* Occupy the fortress with nine soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -348,7 +348,7 @@ public class TestFortress {
     }
 
     @Test (expected = Exception.class)
-    public void testFortressCannotHoldMilitariesBeforeFinished() throws Exception {
+    public void testFortressCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -364,7 +364,7 @@ public class TestFortress {
         Point point22 = new Point(6, 22);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Verify that the fortress can't hold militaries before it's finished */
+        /* Verify that the fortress can't hold soldiers before it's finished */
         assertFalse(fortress0.needsMilitaryManning());
 
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -375,7 +375,7 @@ public class TestFortress {
     }
 
     @Test (expected = Exception.class)
-    public void testFortressCannotHoldMoreThanNineMilitaries() throws Exception {
+    public void testFortressCannotHoldMoreThanNineSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -393,7 +393,7 @@ public class TestFortress {
 
         Utils.constructHouse(fortress0);
 
-        /* Occupy the fortress with nine militaries */
+        /* Occupy the fortress with nine soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -897,7 +897,7 @@ public class TestFortress {
         /* Evacuate the fortress */
         fortress0.evacuate();
 
-        /* Verify that no militaries are assigned to the fortress */
+        /* Verify that no soldiers are assigned to the fortress */
         for (int i = 0; i < 200; i++) {
             assertEquals(fortress0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
@@ -1237,7 +1237,7 @@ public class TestFortress {
         Point point22 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, fortress0.getHostedMilitary().size());
     }
 
@@ -1261,7 +1261,7 @@ public class TestFortress {
         /* Construct fortress */
         Utils.constructHouse(fortress0);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, fortress0.getHostedMilitary().size());
     }
 
@@ -1288,7 +1288,7 @@ public class TestFortress {
         /* Add one military */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, fortress0);
 
-        /* Verify that the list of hosted militaries increased empty */
+        /* Verify that the list of hosted soldiers increased empty */
         assertEquals(1, fortress0.getHostedMilitary().size());
         assertEquals(fortress0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
     }

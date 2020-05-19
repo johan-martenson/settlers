@@ -5,26 +5,28 @@
  */
 package org.appland.settlers.test;
 
-import static java.awt.Color.BLUE;
-import static java.awt.Color.GREEN;
-import java.util.LinkedList;
-import java.util.List;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Military;
+import org.appland.settlers.model.Player;
+import org.appland.settlers.model.Point;
+import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
-import org.appland.settlers.model.Military;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
-import org.appland.settlers.model.Player;
-import org.appland.settlers.model.Point;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *
@@ -95,7 +97,7 @@ public class TestWinning {
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
 
-        /* Empty all militaries from the second player's headquarter */
+        /* Empty all soldiers from the second player's headquarter */
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);

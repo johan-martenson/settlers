@@ -1263,8 +1263,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Verify that no militaries leave the barracks before the attack is
-         initiated */
+        /* Verify that no soldiers leave the barracks before the attack is initiated */
         for (int i = 0; i < 100; i++) {
             for (Worker worker : map.getWorkers()) {
                 if (worker instanceof Military) {
@@ -1346,8 +1345,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Verify that no militaries leave the barracks before the attack is
-         initiated */
+        /* Verify that no soldiers leave the barracks before the attack is initiated */
         for (int i = 0; i < 100; i++) {
             for (Worker worker : map.getWorkers()) {
                 if (worker instanceof Military) {
@@ -1437,8 +1435,7 @@ public class TestMonitoringGameMessages {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);
 
-        /* Verify that no militaries leave the barracks before the attack is
-         initiated */
+        /* Verify that no soldiers leave the barracks before the attack is initiated */
         for (int i = 0; i < 100; i++) {
             for (Worker worker : map.getWorkers()) {
                 if (worker instanceof Military) {
@@ -1525,8 +1522,7 @@ public class TestMonitoringGameMessages {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when
-         the attacker reaches the flag */
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -1642,8 +1638,7 @@ public class TestMonitoringGameMessages {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when
-         the attacker reaches the flag */
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 
@@ -1770,8 +1765,7 @@ public class TestMonitoringGameMessages {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Verify that a military leaves the attacked building to defend when
-         the attacker reaches the flag */
+        /* Verify that a military leaves the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 

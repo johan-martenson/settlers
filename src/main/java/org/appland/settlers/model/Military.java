@@ -124,8 +124,7 @@ public class Military extends Worker {
 
                 if (buildingToAttack.needsMilitaryManning()) {
 
-                    /* Enter the building if it has already been taken over and
-                       needs additional manning */
+                    /* Enter the building if it has already been taken over and needs additional manning */
                     buildingToAttack.promiseMilitary(this);
 
                     state = WALKING_TO_TAKE_OVER_BUILDING;
@@ -163,7 +162,7 @@ public class Military extends Worker {
                 /* Return home or to storage */
                 returnAfterAttackIsOver();
 
-            /* Look for an attacker at the flag if this is the militaries own building */
+            /* Look for an attacker at the flag if this is the soldiers own building */
             } else if (getHome().equals(defendedBuilding)) {
 
                 /* Get the attacker at the flag */
@@ -193,8 +192,7 @@ public class Military extends Worker {
                 /* Walk half a point away */
                 walkHalfWayOffroadTo(getPosition().right());
 
-            /* Fight the next attacker if this is a remote defender and there are
-               attackers waiting */
+            /* Fight the next attacker if this is a remote defender and there are attackers waiting */
             } else if (!defendedBuilding.getWaitingAttackers().isEmpty()) {
 
                 /* Pick the next waiting attacker */
@@ -220,9 +218,7 @@ public class Military extends Worker {
             /* Deploy military in building */
             enterBuilding(building);
 
-            /* The building may have sent us back immediately, otherwise become
-               deployed
-            */
+            /* The building may have sent us back immediately, otherwise become deployed */
             if (state == WALKING_TO_TARGET) {
                 state = State.DEPLOYED;
             }
@@ -346,14 +342,12 @@ public class Military extends Worker {
                 returnAfterAttackIsOver();
             } else if (getHome().equals(defendedBuilding)) {
 
-                /* Stay by the flag if the military is defending its own
-                   building and the attack isn't over */
+                /* Stay by the flag if the military is defending its own building and the attack isn't over */
                 state = STANDBY_WAITING_DEFEND;
 
             } else if (defendedBuilding.getWaitingAttackers().isEmpty()) {
 
-                /* All attackers are busy so stand by and wait to see if
-                   there is a need to defend again */
+                /* All attackers are busy so stand by and wait to see if there is a need to defend again */
                 state = STANDBY_WAITING_DEFEND;
 
             } else {
@@ -595,8 +589,7 @@ public class Military extends Worker {
 
     private void reserveForFight() {
 
-        /* A defender has decided to fight this attacker so wait for it instead
-           of looking for a new fight */
+        /* A defender has decided to fight this attacker so wait for it instead of looking for a new fight */
         state = State.RESERVED_BY_DEFENDING_OPPONENT;
     }
 

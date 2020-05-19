@@ -228,8 +228,7 @@ public class TestGameLogic {
         Point point2 = new Point(10, 10);
         Flag flag1 = map.placeFlag(player0, point2.downRight());
 
-        /* Assign new workers to unoccupied places. Since there are no places
-         * that require workers this should not do anything */
+        /* Assign new workers to unoccupied places. Since there are no places that require workers this should not do anything */
         assertEquals(map.getWorkers().size(), 1);
 
         /* Step time to make the headquarter assign new workers */

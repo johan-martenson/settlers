@@ -1036,8 +1036,7 @@ public class TestBrewery {
         /* Occupy the brewery */
         Brewer worker = Utils.occupyBuilding(new Brewer(player0, map), brewery0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

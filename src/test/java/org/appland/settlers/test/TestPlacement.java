@@ -1384,8 +1384,7 @@ public class TestPlacement {
         Point point0 = new Point(10, 10);
         Flag flag0 = map.placeFlag(player0, point0);
 
-        /* Verify that a building cannot be place so that its flag is too
-           close to the other flag */
+        /* Verify that a building cannot be place so that its flag is too close to the other flag */
         Point point1 = new Point(7, 11);
         Building woodcutter0 = map.placeBuilding(new Building(player0), point1);
     }

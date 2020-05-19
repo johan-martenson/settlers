@@ -949,8 +949,7 @@ public class TestWell {
         /* Occupy the well */
         WellWorker worker = Utils.occupyBuilding(new WellWorker(player0, map), well0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

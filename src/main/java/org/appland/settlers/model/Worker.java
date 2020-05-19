@@ -30,7 +30,8 @@ public abstract class Worker implements Actor {
     }
 
     private final static int SPEED_ADJUST = 1;
-    private final Countdown     walkCountdown;
+
+    private final Countdown walkCountdown;
 
     GameMap     map;
 
@@ -222,7 +223,7 @@ public abstract class Worker implements Actor {
         if (getTargetBuilding() != null) {
             Building building = getTargetBuilding();
 
-            /* Enter the building for non-military workers. Militaries enter on their own */
+            /* Enter the building for non-military workers. soldiers enter on their own */
             if ( !(this instanceof Military)) {
 
                 /* Go back to storage if the building is not ok to enter */

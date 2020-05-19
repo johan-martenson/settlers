@@ -1072,8 +1072,7 @@ public class TestArmory {
         assertTrue(armory0.getPosition().distance(headquarter0.getPosition()) >
                    armory0.getPosition().distance(headquarter1.getPosition()));
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

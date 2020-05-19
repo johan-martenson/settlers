@@ -355,8 +355,7 @@ public class TestHunterHut {
 
         assertTrue(hunter.isInsideBuilding());
 
-        /* Verify that the hunter stays in the hut as long as there are no wild
-           animals close */
+        /* Verify that the hunter stays in the hut as long as there are no wild animals close */
         boolean animalClose;
         for (int i = 0; i < 500; i++) {
 
@@ -971,8 +970,7 @@ public class TestHunterHut {
         /* Occupy the hunter hut */
         Hunter worker = Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        /* Verify that the worker goes back to its own storage when the fortress
-           is torn down */
+        /* Verify that the worker goes back to its own storage when the fortress is torn down */
         fortress0.tearDown();
 
         assertEquals(worker.getTarget(), headquarter0.getPosition());

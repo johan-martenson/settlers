@@ -270,7 +270,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testBarracksOnlyNeedsTwoMilitaries() throws Exception {
+    public void testBarracksOnlyNeedsTwoSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -288,7 +288,7 @@ public class TestBarracks {
 
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks with two militaries */
+        /* Occupy the barracks with two soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
@@ -297,7 +297,7 @@ public class TestBarracks {
     }
 
     @Test (expected = Exception.class)
-    public void testBarracksCannotHoldMilitariesBeforeFinished() throws Exception {
+    public void testBarracksCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -313,7 +313,7 @@ public class TestBarracks {
         Point point22 = new Point(6, 22);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Verify that the barracks can't hold militaries before it's finished */
+        /* Verify that the barracks can't hold soldiers before it's finished */
         assertFalse(barracks0.needsMilitaryManning());
 
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -324,7 +324,7 @@ public class TestBarracks {
     }
 
     @Test (expected = Exception.class)
-    public void testBarracksCannotHoldMoreThanTwoMilitaries() throws Exception {
+    public void testBarracksCannotHoldMoreThanTwoSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -342,7 +342,7 @@ public class TestBarracks {
 
         Utils.constructHouse(barracks0);
 
-        /* Occupy the barracks with two militaries */
+        /* Occupy the barracks with two soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
@@ -915,7 +915,7 @@ public class TestBarracks {
         /* Verify that the barracks are evacuated */
         assertTrue(barracks0.isEvacuated());
 
-        /* Verify that no militaries are assigned to the barracks */
+        /* Verify that no soldiers are assigned to the barracks */
         for (int i = 0; i < 200; i++) {
             assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
@@ -1731,7 +1731,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        /* Verify that two more militaries can be hosted in the building */
+        /* Verify that two more soldiers can be hosted in the building */
         Building guardHouse0 = map.getBuildingAtPoint(barracks0.getPosition());
 
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
@@ -2035,7 +2035,7 @@ public class TestBarracks {
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Keep track of the original amount of militaries */
+        /* Keep track of the original amount of soldiers */
         int originalAmount = Utils.getAmountMilitary(headquarter0);
 
         /* Finish construction of the barracks */
@@ -2090,7 +2090,7 @@ public class TestBarracks {
             map.stepTime();
         }
 
-        /* Verify that the evacuated militaries are added correctly */
+        /* Verify that the evacuated soldiers are added correctly */
         assertEquals(Utils.getAmountMilitary(headquarter0), originalAmount);
     }
 
@@ -2116,7 +2116,7 @@ public class TestBarracks {
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
 
-        /* Add extra militaries to inventory */
+        /* Add extra soldiers to inventory */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
         /* Finish construction of the barracks */
@@ -2166,9 +2166,7 @@ public class TestBarracks {
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
         assertEquals(military.getTarget(), headquarter0.getPosition());
 
-        /* Verify that it's possible to cancel evacuation and fill up with militaries
-           again
-        */
+        /* Verify that it's possible to cancel evacuation and fill up with soldiers again */
         barracks0.cancelEvacuation();
 
         assertFalse(barracks0.isEvacuated());
@@ -2356,11 +2354,12 @@ public class TestBarracks {
         /* Finish construction of the barracks */
         Utils.constructHouse(barracks0);
 
-        /* Fill the barracks with militaries */
+        /* Fill the barracks with soldiers */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, 2, barracks0);
 
         assertEquals(barracks0.getNumberOfHostedMilitary(), 2);
-        /* Make sure there are enough militaries in the headquarter */
+
+        /* Make sure there are enough soldiers in the headquarter */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 200);
 
         /* Upgrade the barracks */
@@ -2415,14 +2414,14 @@ public class TestBarracks {
                 break;
             }
 
-            assertEquals(Utils.findMilitariesOutsideBuilding(player0).size(), 1);
+            assertEquals(Utils.findSoldiersOutsideBuilding(player0).size(), 1);
 
             map.stepTime();
         }
 
         assertEquals(barracks0.getNumberOfHostedMilitary(), 3);
 
-        /* Verify that no more militaries are sent */
+        /* Verify that no more soldiers are sent */
         for (int i = 0; i < 2000; i++) {
 
             assertNull(Utils.findMilitaryOutsideBuilding(player0));
@@ -2432,7 +2431,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testMilitariesOfDifferentTypesArePromotedInParallel() throws Exception {
+    public void testSoldiersOfDifferentTypesArePromotedInParallel() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2704,7 +2703,7 @@ public class TestBarracks {
         Point point22 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, barracks0.getHostedMilitary().size());
     }
 
@@ -2728,7 +2727,7 @@ public class TestBarracks {
         /* Construct barracks */
         Utils.constructHouse(barracks0);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, barracks0.getHostedMilitary().size());
     }
 
@@ -2755,7 +2754,7 @@ public class TestBarracks {
         /* Add one military */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
 
-        /* Verify that the list of hosted militaries increased empty */
+        /* Verify that the list of hosted soldiers increased empty */
         assertEquals(1, barracks0.getHostedMilitary().size());
         assertEquals(barracks0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
     }

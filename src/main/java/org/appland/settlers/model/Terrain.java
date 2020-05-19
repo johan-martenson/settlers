@@ -208,8 +208,7 @@ public class Terrain {
     public List<Tile> getSurroundingTiles(Point center) {
         List<Tile> result   = new LinkedList<>();
 
-        /* This method is called frequently. Treat the tiles one-by-one
-           to avoid creating a temporary list */
+        /* This method is called frequently. Treat the tiles one-by-one to avoid creating a temporary list */
 
         /* Tile down right */
         Tile tile = getTileDownRight(center);
@@ -265,8 +264,7 @@ public class Terrain {
         boolean matchFound = false;
         boolean nonMatchFound = false;
 
-        /* Go through the surrounding tiles and verify that they contain at least
-           on matching and one non-matching */
+        /* Go through the surrounding tiles and verify that they contain at least on matching and one non-matching */
         for (Tile tile : getSurroundingTiles(point)) {
 
             if (tile.getVegetationType().equals(vegetation)) {

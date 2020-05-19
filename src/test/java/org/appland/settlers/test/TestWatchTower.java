@@ -307,7 +307,7 @@ public class TestWatchTower {
     }
 
     @Test
-    public void testWatchTowerOnlyNeedsSixMilitaries() throws Exception {
+    public void testWatchTowerOnlyNeedsSixSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -325,7 +325,7 @@ public class TestWatchTower {
 
         Utils.constructHouse(watchTower0);
 
-        /* Occupy the watch tower with six militaries */
+        /* Occupy the watch tower with six soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
@@ -338,7 +338,7 @@ public class TestWatchTower {
     }
 
     @Test (expected = Exception.class)
-    public void testWatchTowerCannotHoldMilitariesBeforeFinished() throws Exception {
+    public void testWatchTowerCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -354,7 +354,7 @@ public class TestWatchTower {
         Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Verify that the watch tower can't hold militaries before it's finished */
+        /* Verify that the watch tower can't hold soldiers before it's finished */
         assertFalse(watchTower0.needsMilitaryManning());
 
         Military military = new Military(player0, PRIVATE_RANK, map);
@@ -365,7 +365,7 @@ public class TestWatchTower {
     }
 
     @Test (expected = Exception.class)
-    public void testWatchTowerCannotHoldMoreThanSixMilitaries() throws Exception {
+    public void testWatchTowerCannotHoldMoreThanSixSoldiers() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -383,7 +383,7 @@ public class TestWatchTower {
 
         Utils.constructHouse(watchTower0);
 
-        /* Occupy the watch tower with six militaries */
+        /* Occupy the watch tower with six soldiers */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
@@ -882,7 +882,7 @@ public class TestWatchTower {
         /* Evacuate the watch tower */
         watchTower0.evacuate();
 
-        /* Verify that no militaries are assigned to the watch tower */
+        /* Verify that no soldiers are assigned to the watch tower */
         for (int i = 0; i < 200; i++) {
             assertEquals(watchTower0.getNumberOfHostedMilitary(), 0);
             map.stepTime();
@@ -1222,7 +1222,7 @@ public class TestWatchTower {
         Point point22 = new Point(6, 12);
         Building watchTower0 = map.placeBuilding(new WatchTower(player0), point22);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, watchTower0.getHostedMilitary().size());
     }
 
@@ -1246,7 +1246,7 @@ public class TestWatchTower {
         /* Construct watch tower */
         Utils.constructHouse(watchTower0);
 
-        /* Verify that the list of hosted militaries is empty */
+        /* Verify that the list of hosted soldiers is empty */
         assertEquals(0, watchTower0.getHostedMilitary().size());
     }
 
@@ -1273,7 +1273,7 @@ public class TestWatchTower {
         /* Add one military */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, watchTower0);
 
-        /* Verify that the list of hosted militaries increased empty */
+        /* Verify that the list of hosted soldiers increased empty */
         assertEquals(1, watchTower0.getHostedMilitary().size());
         assertEquals(watchTower0.getHostedMilitary().get(0).getRank(), PRIVATE_RANK);
     }
