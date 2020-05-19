@@ -217,6 +217,59 @@ public class TestLookoutTower {
     }
 
     @Test
+    public void testScoutIsCreatedFromBowAndAssignedToLookoutTower() throws Exception {
+
+        /* Create new single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all scouts from the headquarter and add a bow */
+        Utils.adjustInventoryTo(headquarter, SCOUT, 0);
+        Utils.adjustInventoryTo(headquarter, Material.BOW, 1);
+
+        /* Place LookoutTower */
+        Point point3 = new Point(7, 9);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
+
+        /* Connect the LookoutTower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the LookoutTower */
+        Utils.constructHouse(lookoutTower0);
+
+        assertTrue(lookoutTower0.needsWorker());
+
+        /* Verify that a LookoutTower worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Let the LookoutTower worker reach the LookoutTower */
+        Scout Scout = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Scout) {
+                Scout = (Scout)worker;
+            }
+        }
+
+        assertNotNull(Scout);
+        assertEquals(Scout.getTarget(), lookoutTower0.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, Scout);
+
+        assertTrue(Scout.isInsideBuilding());
+        assertEquals(Scout.getHome(), lookoutTower0);
+        assertEquals(lookoutTower0.getWorker(), Scout);
+    }
+
+    @Test
     public void testUnoccupiedLookoutTowerDoesNotDiscoverLand() throws Exception {
 
         /* Create new single player game */

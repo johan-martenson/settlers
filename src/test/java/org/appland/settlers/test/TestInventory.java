@@ -253,12 +253,6 @@ public class TestInventory {
     }
 
     @Test(expected=Exception.class)
-    public void testRetrieveCourierLikeMaterial() throws Exception {
-        storehouse.depositWorker(new Courier(null, null));
-        storehouse.retrieve(COURIER);
-    }
-
-    @Test(expected=Exception.class)
     public void testRetrieveCourierLikeWorker() throws Exception {
         storehouse.depositWorker(new Courier(null, null));
         storehouse.retrieveWorker(COURIER);
@@ -287,13 +281,6 @@ public class TestInventory {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
 
         storehouse.retrieveWorker(PRIVATE);
-    }
-
-    @Test(expected=Exception.class)
-    public void testRetrieveMilitaryAsMaterial() throws Exception {
-        storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
-
-        storehouse.retrieve(PRIVATE);
     }
 
     private void assertNoMilitaryInInventory(Storehouse storehouse) {

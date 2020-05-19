@@ -257,6 +257,41 @@ public class TestHunterHut {
     }
 
     @Test
+    public void testHunterIsCreatedFromBow() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all hunters from the headquarter and add a bow */
+        Utils.adjustInventoryTo(headquarter, HUNTER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.BOW, 1);
+
+        /* Place hunter hut */
+        Point point1 = new Point(10, 4);
+        Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Connect the hunter hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        /* Finish the hunter hut */
+        Utils.constructHouse(hunterHut);
+
+        /* Run game logic twice, once to place courier and once to place hunter */
+        Utils.fastForward(2, map);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Hunter.class);
+    }
+
+    @Test
     public void testOnlyOneHunterIsAssignedToHunterHut() throws Exception {
 
         /* Create players */

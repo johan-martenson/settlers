@@ -244,6 +244,61 @@ public class TestIronSmelter {
     }
 
     @Test
+    public void testIronFounderGetsCreatedFromCrucible() throws Exception {
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all iron founders from the headquarter and add one crucible */
+        Utils.adjustInventoryTo(building0, IRON_FOUNDER, 0);
+        Utils.adjustInventoryTo(building0, Material.CRUCIBLE, 1);
+
+        /* Place iron smelter */
+        Point point3 = new Point(7, 9);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
+
+        /* Place a road between the headquarter and the iron smelter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), building0.getFlag());
+
+        /* Finish construction of the iron smelter */
+        Utils.constructHouse(ironSmelter);
+
+        assertTrue(ironSmelter.needsWorker());
+
+        /* Verify that a iron smelter worker leaves the headquarter */
+        assertEquals(map.getWorkers().size(), 1);
+
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
+
+        /* Let the iron smelter worker reach the iron smelter */
+        IronFounder ironFounder0 = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof IronFounder) {
+                ironFounder0 = (IronFounder)worker;
+            }
+        }
+
+        assertNotNull(ironFounder0);
+        assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, ironFounder0);
+
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter);
+        assertEquals(ironSmelter.getWorker(), ironFounder0);
+    }
+
+    @Test
     public void testOccupiedIronSmelterWithoutCoalAndIronProducesNothing() throws Exception {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();

@@ -261,6 +261,41 @@ public class TestForesterHut {
     }
 
     @Test
+    public void testForesterIsCreatedFromShovel() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create single player game */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all foresters and place shovels in the headquarter */
+        Utils.adjustInventoryTo(headquarter, FORESTER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.SHOVEL, 1);
+
+        /* Place forester hut */
+        Point point1 = new Point(10, 4);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
+
+        /* Connect the forester hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
+
+        /* Finish the forester hut */
+        Utils.constructHouse(foresterHut);
+
+        /* Run game logic twice, once to place courier and once to place forester */
+        Utils.fastForward(2, map);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Forester.class);
+    }
+
+    @Test
     public void testOnlyOneForesterIsAssignedToForesterHut() throws Exception {
 
         /* Create players */

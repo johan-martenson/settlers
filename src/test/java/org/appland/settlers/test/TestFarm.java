@@ -16,6 +16,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -270,6 +271,43 @@ public class TestFarm {
         Point point7 = new Point(7, 3);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+
+        /* Finish the forester hut */
+        Utils.constructHouse(farm);
+
+        /* Run game logic twice, once to place courier and once to place forester */
+        Utils.fastForward(2, map);
+
+        /* Verify that there was a farmer added */
+        assertEquals(map.getWorkers().size(), 3);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Farmer.class);
+    }
+
+    @Test
+    public void testFarmerIsCreatedFromScythe() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all farmers from the headquarter and add one scythe */
+        Utils.adjustInventoryTo(headquarter, FARMER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.SCYTHE, 1);
+
+        /* Place farm */
+        Point point3 = new Point(10, 6);
+        Building farm = map.placeBuilding(new Farm(player0), point3);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
         Utils.constructHouse(farm);

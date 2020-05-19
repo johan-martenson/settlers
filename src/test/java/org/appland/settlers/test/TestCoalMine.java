@@ -35,6 +35,7 @@ import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.MINER;
+import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
@@ -236,6 +237,49 @@ public class TestCoalMine {
         /* Place a headquarter */
         Point hqPoint = new Point(5, 5);
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Put a small mountain on the map */
+        Point point0 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point0, map);
+
+        /* Place a gold mine */
+        Building mine = map.placeBuilding(new CoalMine(player0), point0);
+
+        /* Place a road between the headquarter and the goldmine */
+        Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+
+        /* Construct the mine */
+        constructHouse(mine);
+
+        assertTrue(mine.isReady());
+
+        /* Run game logic twice, once to place courier and once to place miner */
+        Utils.fastForward(2, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Miner.class);
+
+        /* Keep running the game loop and make sure no more workers are allocated */
+        Utils.fastForward(200, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+    }
+
+    @Test
+    public void testMinerIsCreatedFromPickAxe() throws Exception {
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place a headquarter */
+        Point hqPoint = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Remove all miners from the headquarter and add one pick axe */
+        Utils.adjustInventoryTo(building0, MINER, 0);
+        Utils.adjustInventoryTo(building0, PICK_AXE, 1);
 
         /* Put a small mountain on the map */
         Point point0 = new Point(10, 8);

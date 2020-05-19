@@ -246,6 +246,68 @@ public class TestSawmill {
     }
 
     @Test
+    public void testSawmillWorkerGetsCreatedFromSaw() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all sawmill workers from the headquarter and add a saw */
+        Utils.adjustInventoryTo(building0, SAWMILL_WORKER, 0);
+        Utils.adjustInventoryTo(building0, Material.SAW, 1);
+
+        /* Place sawmill */
+        Point point3 = new Point(7, 9);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point3);
+
+        /* Place a road between the headquarter and the sawmill */
+        Point point4 = new Point(8, 8);
+        Point point5 = new Point(7, 7);
+        Point point6 = new Point(8, 6);
+        Point point7 = new Point(7, 5);
+        Point point8 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+
+        /* Finish construction of the sawmill */
+        Utils.constructHouse(sawmill);
+
+        assertTrue(sawmill.needsWorker());
+
+        /* Verify that a sawmill worker leaves the headquarter */
+        assertEquals(map.getWorkers().size(), 1);
+
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), SawmillWorker.class);
+
+        /* Let the sawmill worker reach the sawmill */
+        SawmillWorker sawmillWorker0 = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof SawmillWorker) {
+                sawmillWorker0 = (SawmillWorker)worker;
+            }
+        }
+
+        assertNotNull(sawmillWorker0);
+        assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, sawmillWorker0);
+
+        assertTrue(sawmillWorker0.isInsideBuilding());
+        assertEquals(sawmillWorker0.getHome(), sawmill);
+        assertEquals(sawmill.getWorker(), sawmillWorker0);
+    }
+
+    @Test
     public void testOccupiedSawmillWithoutWoodProducesNothing() throws Exception {
 
         /* Create a single player game */

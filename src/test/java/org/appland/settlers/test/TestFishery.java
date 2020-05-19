@@ -287,6 +287,41 @@ public class TestFishery {
     }
 
     @Test
+    public void testFishermanIsCreatedFromRod() throws Exception {
+
+        /* Create players */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        /* Create game map */
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all fishermen from the headquarter and add a fishing rod */
+        Utils.adjustInventoryTo(headquarter, FISHERMAN, 0);
+        Utils.adjustInventoryTo(headquarter, Material.FISHING_ROD, 1);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Finish the fisherman hut */
+        Utils.constructHouse(fishery);
+
+        /* Run game logic twice, once to place courier and once to place fisherman */
+        Utils.fastForward(2, map);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Fisherman.class);
+    }
+
+    @Test
     public void testOnlyOneFishermanIsAssignedToFishery() throws Exception {
 
         /* Create players */

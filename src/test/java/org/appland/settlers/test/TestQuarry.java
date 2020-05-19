@@ -50,7 +50,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestQuarry {
 
-
     @Test
     public void testQuarryOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
@@ -161,6 +160,43 @@ public class TestQuarry {
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
+
+        /* Finish the woodcutter */
+        Utils.constructHouse(quarry);
+
+        /* Run game logic twice, once to place courier and once to place woodcutter worker */
+        Utils.fastForward(2, map);
+
+        /* Verify that the right amount of workers are added to the map */
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Verify that the map contains a stonemason */
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Stonemason.class);
+    }
+
+    @Test
+    public void testStonemasonIsCreatedFromPickAxe() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all stone masons from the headquarter and add a pick axe */
+        Utils.adjustInventoryTo(building0, STONEMASON, 0);
+        Utils.adjustInventoryTo(building0, Material.PICK_AXE, 1);
+
+        /* Place quarry */
+        Point point1 = new Point(8, 6);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), building0.getFlag());
 
         /* Finish the woodcutter */
         Utils.constructHouse(quarry);

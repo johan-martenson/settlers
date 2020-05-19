@@ -32,6 +32,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.CRUCIBLE;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MINTER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -221,6 +222,59 @@ public class TestMint {
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+
+        /* Finish construction of the mint */
+        Utils.constructHouse(mint);
+
+        assertTrue(mint.needsWorker());
+
+        /* Verify that a minter leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Let the mint worker reach the mint */
+        Minter minter = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Minter) {
+                minter = (Minter)worker;
+            }
+        }
+
+        assertNotNull(minter);
+        assertEquals(minter.getTarget(), mint.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, minter);
+
+        assertTrue(minter.isInsideBuilding());
+        assertEquals(minter.getHome(), mint);
+        assertEquals(mint.getWorker(), minter);
+    }
+
+    @Test
+    public void testMinterGetsCreatedFromCrucible() throws Exception {
+
+        /* Create a single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all minters from the headquarter and add one crucible */
+        Utils.adjustInventoryTo(headquarter, MINTER, 0);
+        Utils.adjustInventoryTo(headquarter, CRUCIBLE, 1);
+
+        /* Place mint */
+        Point point3 = new Point(7, 9);
+        Mint mint = map.placeBuilding(new Mint(player0), point3);
+
+        /* Connect the mint with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the mint */
         Utils.constructHouse(mint);

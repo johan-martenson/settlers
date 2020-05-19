@@ -53,7 +53,7 @@ public enum Material {
     SCOUT,
     HUNTER,
     OFFICER,
-    CORPORAL;
+    CORPORAL, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE;
 
     private final static List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
     private final static List<Material> transportableItems = Collections.unmodifiableList(Arrays.asList(

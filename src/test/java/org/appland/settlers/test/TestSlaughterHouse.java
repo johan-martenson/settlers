@@ -196,6 +196,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testSlaughterHouseGetsAssignedWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -216,6 +218,60 @@ public class TestSlaughterHouse {
         Point point7 = new Point(7, 5);
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+
+        /* Finish construction of the slaughterHouse */
+        Utils.constructHouse(slaughterHouse);
+
+        assertTrue(slaughterHouse.needsWorker());
+
+        /* Verify that a slaughterHouse worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Let the slaughterHouse worker reach the slaughterHouse */
+        Butcher butcher = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Butcher) {
+                butcher = (Butcher)worker;
+            }
+        }
+
+        assertNotNull(butcher);
+        assertEquals(butcher.getTarget(), slaughterHouse.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, butcher);
+
+        assertTrue(butcher.isInsideBuilding());
+        assertEquals(butcher.getHome(), slaughterHouse);
+        assertEquals(slaughterHouse.getWorker(), butcher);
+    }
+
+    @Test
+    public void testButcherGetsCreatedFromCleaver() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all butchers from the headquarter and add one cleaver */
+        Utils.adjustInventoryTo(building0, BUTCHER, 0);
+        Utils.adjustInventoryTo(building0, Material.CLEAVER, 1);
+
+        /* Place slaughter house */
+        Point point3 = new Point(7, 9);
+        Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
+
+        /* Connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), building0.getFlag());
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse);

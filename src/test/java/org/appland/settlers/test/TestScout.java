@@ -8,6 +8,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
@@ -70,6 +71,46 @@ public class TestScout {
         /* Placing headquarter */
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Placing flag */
+        Point point1 = new Point(10, 10);
+        Flag flag = map.placeFlag(player0, point1);
+
+        /* Connect headquarter and flag */
+        map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag);
+
+        /* Wait for the road to get occupied */
+        Utils.fastForward(30, map);
+
+        /* Call scout from the flag */
+        int amountWorkers = map.getWorkers().size();
+
+        flag.callScout();
+
+        /* Verify that a scout is dispatched from the headquarter */
+        map.stepTime();
+
+        assertEquals(map.getWorkers().size(), amountWorkers + 1);
+
+        Utils.verifyListContainsWorkerOfType(map.getWorkers(), Scout.class);
+    }
+
+    @Test
+    public void testScoutGetsCreatedFromBow() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all scouts from the headquarter and add a bow */
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 0);
+        Utils.adjustInventoryTo(headquarter0, Material.BOW, 1);
 
         /* Placing flag */
         Point point1 = new Point(10, 10);

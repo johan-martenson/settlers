@@ -6,16 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.ARMORER;
+import static org.appland.settlers.model.Material.AXE;
 import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.BOW;
 import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.CATAPULT_WORKER;
+import static org.appland.settlers.model.Material.CLEAVER;
 import static org.appland.settlers.model.Material.COURIER;
+import static org.appland.settlers.model.Material.CRUCIBLE;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.FISHING_ROD;
 import static org.appland.settlers.model.Material.FORESTER;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
@@ -24,17 +29,23 @@ import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
+import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.ROLLING_PIN;
+import static org.appland.settlers.model.Material.SAW;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.SCOUT;
+import static org.appland.settlers.model.Material.SCYTHE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.SHIELD;
+import static org.appland.settlers.model.Material.SHOVEL;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
 import static org.appland.settlers.model.Material.SWORD;
+import static org.appland.settlers.model.Material.TONGS;
 import static org.appland.settlers.model.Material.WELL_WORKER;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
@@ -49,6 +60,7 @@ public class Storehouse extends Building implements Actor {
     final Map<Material, Integer> inventory;
 
     private final Countdown draftCountdown;
+    private final Map<Material, Material> workerToToolMap;
 
     public Storehouse(Player player) {
         super(player);
@@ -56,10 +68,23 @@ public class Storehouse extends Building implements Actor {
         inventory = new HashMap<>();
 
         draftCountdown = new Countdown();
-    }
+        workerToToolMap = new HashMap<>();
 
-    Storehouse() {
-        this(null);
+        /* Set up the mapping between workers and tools */
+        workerToToolMap.put(WOODCUTTER_WORKER, AXE);
+        workerToToolMap.put(FORESTER, SHOVEL);
+        workerToToolMap.put(STONEMASON, PICK_AXE);
+        workerToToolMap.put(FISHERMAN, FISHING_ROD);
+        workerToToolMap.put(HUNTER, BOW);
+        workerToToolMap.put(SCOUT, BOW);
+        workerToToolMap.put(SAWMILL_WORKER, SAW);
+        workerToToolMap.put(BUTCHER, CLEAVER);
+        workerToToolMap.put(BAKER, ROLLING_PIN);
+        workerToToolMap.put(IRON_FOUNDER, CRUCIBLE);
+        workerToToolMap.put(ARMORER, TONGS);
+        workerToToolMap.put(MINTER, CRUCIBLE);
+        workerToToolMap.put(MINER, PICK_AXE);
+        workerToToolMap.put(FARMER, SCYTHE);
     }
 
     /* This method updates the inventory as a side effect, without any locking */
@@ -161,7 +186,16 @@ public class Storehouse extends Building implements Actor {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(SCOUT)) {
-            return false;
+
+            if (hasAtLeastOne(BOW)) {
+                int toolAmount = inventory.get(BOW);
+                int scoutAmount = inventory.get(SCOUT);
+
+                inventory.put(BOW, toolAmount - 1);
+                inventory.put(SCOUT, scoutAmount + 1);
+            } else {
+                return false;
+            }
         }
 
         /* Go through flags and look for flags that are waiting for scouts */
@@ -216,7 +250,7 @@ public class Storehouse extends Building implements Actor {
                 if (building.needsWorker()) {
                     Material material = building.getWorkerType();
 
-                    if (!hasAtLeastOne(material)) {
+                    if (!hasAtLeastOne(material) && !hasAtLeastOne(getToolForWorker(material))) {
                         continue;
                     }
 
@@ -238,6 +272,10 @@ public class Storehouse extends Building implements Actor {
         }
 
         return false;
+    }
+
+    private Material getToolForWorker(Material worker) {
+        return workerToToolMap.get(worker);
     }
 
     private boolean assignCouriers() throws Exception {
@@ -291,10 +329,6 @@ public class Storehouse extends Building implements Actor {
 
         if (!hasAtLeastOne(material)) {
             throw new Exception("Can't retrieve " + material);
-        }
-
-        if (isWorker(material)) {
-            throw new Exception("Can't retrieve " + material + " as stuff");
         }
 
         retrieveOneFromInventory(material);
@@ -378,14 +412,24 @@ public class Storehouse extends Building implements Actor {
         getMap().removeWorker(worker);
     }
 
-    public Worker retrieveWorker(Material material) throws Exception {
+    public Worker retrieveWorker(Material workerType) throws Exception {
         Worker worker;
 
-        if (!hasAtLeastOne(material)) {
-            throw new Exception("There are no " + material + " to retrieve");
+        if (!hasAtLeastOne(workerType)) {
+            Material tool = getToolForWorker(workerType);
+
+            if (hasAtLeastOne(tool)) {
+                int toolAmount = inventory.get(tool);
+                int workerAmount = inventory.get(workerType);
+
+                inventory.put(tool, toolAmount - 1);
+                inventory.put(workerType, workerAmount + 1);
+            } else {
+                throw new Exception("There are no " + workerType + " to retrieve");
+            }
         }
 
-        switch (material) {
+        switch (workerType) {
         case FORESTER:
             worker = new Forester(getPlayer(), getMap());
             break;
@@ -453,12 +497,12 @@ public class Storehouse extends Building implements Actor {
             worker = new Hunter(getPlayer(), getMap());
             break;
         default:
-            throw new Exception("Can't retrieve worker of type " + material);
+            throw new Exception("Can't retrieve worker of type " + workerType);
         }
 
         worker.setPosition(getFlag().getPosition());
 
-        retrieveOneFromInventory(material);
+        retrieveOneFromInventory(workerType);
 
         return worker;
     }
@@ -565,19 +609,6 @@ public class Storehouse extends Building implements Actor {
         }
 
         return inventory.getOrDefault(material, 0);
-    }
-
-    private boolean isWorker(Material material) {
-        switch (material) {
-        case PRIVATE:
-        case SERGEANT:
-        case GENERAL:
-        case FORESTER:
-        case COURIER:
-            return true;
-        default:
-            return false;
-        }
     }
 
     private boolean hasMilitary() {

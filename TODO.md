@@ -31,7 +31,7 @@ LARGER CHANGES
 
 * Adjust occupied areas based on measurements
 
-* Make discovered land separate from defended land, and make sure it's correct for all military buildings
+* Make discovered the owned land separate from defended land, and make sure it's correct for all military buildings
 
 
 SMALLER CHANGES

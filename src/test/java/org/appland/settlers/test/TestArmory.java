@@ -255,6 +255,64 @@ public class TestArmory {
     }
 
     @Test
+    public void testArmorerGetsCreatedFromTongs() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all armorers from the headquarter and add tongs */
+        Utils.adjustInventoryTo(headquarter0, ARMORER, 0);
+        Utils.adjustInventoryTo(headquarter0, Material.TONGS, 1);
+
+        /* Place armory */
+        Point point1 = new Point(7, 9);
+        Building armory0 = map.placeBuilding(new Armory(player0), point1);
+
+        /* Place road to connect the armory with the headquarter */
+        Point point2 = new Point(8, 8);
+        Point point3 = new Point(7, 7);
+        Point point4 = new Point(8, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+
+        /* Finish construction of the armory */
+        Utils.constructHouse(armory0);
+
+        assertTrue(armory0.needsWorker());
+
+        /* Verify that a armory worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Let the armory worker reach the armory */
+        Armorer armorer0 = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Armorer) {
+                armorer0 = (Armorer)worker;
+            }
+        }
+
+        assertNotNull(armorer0);
+        assertEquals(armorer0.getTarget(), armory0.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, armorer0);
+
+        assertTrue(armorer0.isInsideBuilding());
+        assertEquals(armorer0.getHome(), armory0);
+        assertEquals(armory0.getWorker(), armorer0);
+    }
+
+    @Test
     public void testOccupiedArmoryWithoutCoalAndIronProducesNothing() throws Exception {
 
         /* Create single player game */

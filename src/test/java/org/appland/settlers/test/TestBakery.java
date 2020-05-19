@@ -252,6 +252,59 @@ public class TestBakery {
     }
 
     @Test
+    public void testBakerIsCreatedFromRollingPing() throws Exception {
+
+        /* Create new single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Remove all bakers from the headquarter and add one rolling pin */
+        Utils.adjustInventoryTo(headquarter, BAKER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.ROLLING_PIN, 1);
+
+        /* Place bakery */
+        Point point3 = new Point(7, 9);
+        Building bakery = map.placeBuilding(new Bakery(player0), point3);
+
+        /* Connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the bakery */
+        Utils.constructHouse(bakery);
+
+        assertTrue(bakery.needsWorker());
+
+        /* Verify that a bakery worker leaves the headquarter */
+        Utils.fastForward(3, map);
+
+        assertEquals(map.getWorkers().size(), 3);
+
+        /* Let the bakery worker reach the bakery */
+        Baker baker = null;
+
+        for (Worker worker : map.getWorkers()) {
+            if (worker instanceof Baker) {
+                baker = (Baker)worker;
+            }
+        }
+
+        assertNotNull(baker);
+        assertEquals(baker.getTarget(), bakery.getPosition());
+
+        Utils.fastForwardUntilWorkersReachTarget(map, baker);
+
+        assertTrue(baker.isInsideBuilding());
+        assertEquals(baker.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker);
+    }
+
+    @Test
     public void testOccupiedBakeryWithoutIngredientsProducesNothing() throws Exception {
 
         /* Create new single player game */
