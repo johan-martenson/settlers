@@ -2,7 +2,6 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.policy.InitialState;
 
-import java.util.Collection;
 import java.util.Map;
 
 import static org.appland.settlers.model.Material.ARMORER;
@@ -134,10 +133,5 @@ public class Headquarter extends Storehouse {
 
         /* Destroy the headquarter if it's captured */
         super.tearDown();
-    }
-
-    @Override
-    public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), 8);
     }
 }

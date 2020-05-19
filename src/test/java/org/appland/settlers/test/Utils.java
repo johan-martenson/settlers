@@ -1380,11 +1380,11 @@ public class Utils {
         return pointAtMaxY;
     }
 
-    public static Collection<Point> getPointsForX(Collection<Point> fieldOfView, int i) {
+    public static Collection<Point> getPointsForX(Collection<Point> fieldOfView, int x) {
         List<Point> points = new ArrayList<>();
 
         for (Point point : fieldOfView) {
-            if (point.x == i) {
+            if (point.x == x) {
                 points.add(point);
             }
         }
@@ -1486,9 +1486,9 @@ public class Utils {
         System.out.println(" -- Lower: " + minY + " " + pointAtMinY);
     }
 
-    public static void printAdjacentPointsForX(Set<Point> borderPoints, int i) {
+    public static void printAdjacentPointsForX(Collection<Point> borderPoints, int x) {
         for (Point point : borderPoints) {
-            if (point.x == i || point.x == i - 1 || point.x == i + 1) {
+            if (point.x == x || point.x == x - 1 || point.x == x + 1) {
                 System.out.print(point + " ");
             }
         }
@@ -1507,21 +1507,21 @@ public class Utils {
         occupyMilitaryBuilding(PRIVATE_RANK, barracks9);
     }
 
-    public static void printMinYAdjacentToX(Collection<Point> landInPoints, int i) {
+    public static void printMinYAdjacentToX(Collection<Point> landInPoints, int x) {
         Point pointMinYLeft = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
         Point pointMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
         Point pointMinYRight = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         for (Point point : landInPoints) {
-            if (point.x == i - 1 && pointMinYLeft.y > point.y) {
+            if (point.x == x - 1 && pointMinYLeft.y > point.y) {
                 pointMinYLeft = point;
             }
 
-            if (point.x == i && pointMinY.y > point.y) {
+            if (point.x == x && pointMinY.y > point.y) {
                 pointMinY = point;
             }
 
-            if (point.x == i + 1 && pointMinYRight.y > point.y) {
+            if (point.x == x + 1 && pointMinYRight.y > point.y) {
                 pointMinYRight = point;
             }
         }

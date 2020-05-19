@@ -5,8 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.Collection;
-
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Size.SMALL;
@@ -78,10 +76,5 @@ public class Barracks extends Building {
 
             upgraded.putCargo(coinCargo);
         }
-    }
-
-    @Override
-    public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), 7);
     }
 }

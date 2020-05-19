@@ -115,7 +115,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), getDefenceRadius() - 1);
+        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), getDefenceRadius() - 1, getMap());
     }
 
     public int getAmount(Material material) {
@@ -131,7 +131,7 @@ public class Building implements Actor, EndPoint {
     Collection<Point> getDiscoveredLand() {
         MilitaryBuilding militaryBuilding = getClass().getAnnotation(MilitaryBuilding.class);
 
-        return GameUtils.getHexagonAreaAroundPoint(getPosition(), militaryBuilding.discoveryRadius());
+        return GameUtils.getHexagonAreaAroundPoint(getPosition(), militaryBuilding.discoveryRadius(), getMap());
     }
 
     boolean isMine() {

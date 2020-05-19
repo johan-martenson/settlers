@@ -67,7 +67,7 @@ public class GameUtils {
         return hexagonBorder;
     }
 
-    public static Collection<Point> getHexagonAreaAroundPoint(Point position, int i) {
+    public static Collection<Point> getHexagonAreaAroundPoint(Point position, int i, GameMap map) {
         Set<Point> area = new HashSet<>();
 
         int xStart = position.x - i;
@@ -75,6 +75,10 @@ public class GameUtils {
 
         for (int y = position.y - i; y < position.y; y++) {
             for (int x = xStart; x <= xEnd; x += 2) {
+                if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
+                    continue;
+                }
+
                 area.add(new Point(x, y));
             }
 
@@ -87,6 +91,10 @@ public class GameUtils {
 
         for (int y = position.y + i; y >= position.y; y--) {
             for (int x = xStart; x <= xEnd; x += 2) {
+                if (x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight()) {
+                    continue;
+                }
+
                 area.add(new Point(x, y));
             }
 

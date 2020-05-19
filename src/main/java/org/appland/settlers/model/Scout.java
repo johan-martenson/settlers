@@ -140,7 +140,7 @@ public class Scout extends Worker {
         setHome(building);
 
         /* Discover the area around the tower */
-        for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS)) {
+        for (Point point : GameUtils.getHexagonAreaAroundPoint(building.getPosition(), LOOKOUT_TOWER_DISCOVER_RADIUS, getMap())) {
             getPlayer().discover(point);
         }
         

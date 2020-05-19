@@ -1098,7 +1098,7 @@ public class TestBarracks {
         players.add(player0);
 
         /* Create game map */
-        GameMap map = new GameMap(players, 40, 40);
+        GameMap map = new GameMap(players, 50, 50);
 
         /* Placing headquarter */
         Point point25 = new Point(7, 5);
@@ -2948,6 +2948,62 @@ public class TestBarracks {
         /* Verify that all points in the actual land are part of the hexagon land */
         for (Point point : barracksHexagonDiscoveredArea) {
             assertTrue(discoveredLand.contains(point));
+        }
+    }
+
+    @Test
+    public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(3, 3);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Verify that the discovered land is only inside the map */
+        for (Point point : player0.getDiscoveredLand()) {
+            assertTrue(point.x >= 0);
+            assertTrue(point.y >= 0);
+        }
+    }
+
+    @Test
+    public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(3, 3);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Verify that the discovered land is only inside the map */
+        for (Point point : player0.getLandInPoints()) {
+            assertTrue(point.x >= 0);
+            assertTrue(point.y >= 0);
         }
     }
 }

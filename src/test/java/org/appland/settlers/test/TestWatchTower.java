@@ -1464,7 +1464,69 @@ public class TestWatchTower {
 
         /* Verify that all points in the actual land are part of the hexagon land */
         for (Point point : watchTowerHexagonDiscoveredArea) {
+
+            /* Filter points outside the map */
+            if (point.x < 0 || point.y < 0) {
+                continue;
+            }
+
             assertTrue(discoveredLand.contains(point));
+        }
+    }
+
+    @Test
+    public void testDiscoveredLandForPlayerCannotBeOutsideTheMap() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(3, 3);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(watchTower0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+
+        /* Verify that the discovered land is only inside the map */
+        for (Point point : player0.getDiscoveredLand()) {
+            assertTrue(point.x >= 0);
+            assertTrue(point.y >= 0);
+        }
+    }
+
+    @Test
+    public void testOwnedLandForPlayerCannotBeOutsideTheMap() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(3, 3);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(watchTower0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
+
+        /* Verify that the discovered land is only inside the map */
+        for (Point point : player0.getLandInPoints()) {
+            assertTrue(point.x >= 0);
+            assertTrue(point.y >= 0);
         }
     }
 }

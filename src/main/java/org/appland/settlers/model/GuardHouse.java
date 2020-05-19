@@ -5,8 +5,6 @@
  */
 package org.appland.settlers.model;
 
-import java.util.Collection;
-
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Size.SMALL;
@@ -27,10 +25,5 @@ public class GuardHouse extends Building {
     @Override
     public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in barracks.");
-    }
-
-    @Override
-    public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), 8);
     }
 }
