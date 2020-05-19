@@ -1219,7 +1219,7 @@ public class TestGraniteMine {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Put a small mountain on the map */
-        Point point4 = new Point(28, 18);
+        Point point4 = new Point(28, 12);
         Utils.surroundPointWithMountain(point4, map);
         Utils.putGraniteAtSurroundingTiles(point4, LARGE, map);
 

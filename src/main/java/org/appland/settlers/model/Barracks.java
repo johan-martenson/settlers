@@ -5,12 +5,14 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Collection;
+
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Size.SMALL;
 
 @HouseSize(size = SMALL, material = {PLANK, PLANK})
-@MilitaryBuilding(maxHostedMilitary = 2, defenceRadius = 8, maxCoins = 1, attackRadius = 12, discoveryRadius = 10)
+@MilitaryBuilding(maxHostedMilitary = 2, defenceRadius = 8, maxCoins = 1, attackRadius = 12, discoveryRadius = 12)
 @UpgradeCost(stones = 3)
 public class Barracks extends Building {
 
@@ -76,5 +78,10 @@ public class Barracks extends Building {
 
             upgraded.putCargo(coinCargo);
         }
+    }
+
+    @Override
+    public Collection<Point> getDefendedLand() {
+        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), 7);
     }
 }

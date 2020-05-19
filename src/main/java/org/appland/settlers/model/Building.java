@@ -114,8 +114,8 @@ public class Building implements Actor, EndPoint {
         return militaryBuilding.defenceRadius();
     }
 
-    Collection<Point> getDefendedLand() {
-        return map.getPointsWithinRadius(getPosition(), getDefenceRadius());
+    public Collection<Point> getDefendedLand() {
+        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), getDefenceRadius() - 1);
     }
 
     public int getAmount(Material material) {

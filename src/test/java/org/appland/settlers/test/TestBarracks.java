@@ -24,7 +24,9 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
@@ -48,6 +50,27 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestBarracks {
+
+    /*
+    TODO:
+
+    add test for upgrade of non-occupied barracks!!
+
+    player's list of buildings is correct
+    gamemap mappoint, gamemap buildings
+
+    percentage of upgrade progress is getting updated
+    is possible to see if upgrades are possible
+    promotion timers are running through upgrades
+    it's not possible to deliver too much material to the barracks during upgrade
+    barracks being upgraded can be attacked and won
+    upgrades finish (and state goes back to normal)
+
+    lack of space can hinder upgrades
+    upgrade of regular building
+    isUpgrading() in regular buildings
+
+     */
 
     @Test
     public void testBarracksOnlyNeedsTwoPlanksForConstruction() throws Exception {
@@ -234,7 +257,7 @@ public class TestBarracks {
 
         /* Verify that the border is extended when the military reaches the barracks */
         Point point3 = new Point(5, 25);
-        Point point4 = new Point(6, 32);
+        Point point4 = new Point(9, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
@@ -329,38 +352,6 @@ public class TestBarracks {
         map.placeWorker(military, barracks0);
 
         military.enterBuilding(barracks0);
-    }
-
-    @Test
-    public void testBarracksRadiusIsCorrect() throws Exception{
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Placing headquarter */
-        Point point21 = new Point(5, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
-
-        /* Placing barracks */
-        Point point22 = new Point(6, 22);
-        Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
-
-        Utils.constructHouse(barracks0);
-
-        /* Verify that the border is grown with the correct radius */
-        Point point3 = new Point(5, 31);
-        Point point4 = new Point(6, 24);
-        assertTrue(player0.getBorderPoints().contains(point4));
-        assertFalse(player0.getBorderPoints().contains(point3));
-
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
-
-        assertTrue(player0.getBorderPoints().contains(point3));
-        assertFalse(player0.getBorderPoints().contains(point4));
     }
 
     @Test
@@ -1125,7 +1116,7 @@ public class TestBarracks {
 
         /* Verify that the field of view remains the same until the barracks gets occupied */
         Point pointInOldFOV = new Point(33, 5);
-        Point pointInNewFOV = new Point(41, 5);
+        Point pointInNewFOV = new Point(45, 5);
 
         for (int i = 0; i < 1000; i++) {
             if (barracks0.getNumberOfHostedMilitary() == 0) {
@@ -1789,8 +1780,8 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
 
         /* Verify the border before the upgrade */
-        Point point27 = new Point(30, 6);
-        Point point28 = new Point(33, 5);
+        Point point27 = new Point(37, 5);
+        Point point28 = new Point(39, 5);
 
         assertTrue(player0.getBorderPoints().contains(point27));
         assertFalse(player0.getBorderPoints().contains(point28));
@@ -1850,10 +1841,6 @@ public class TestBarracks {
         barracks0.putCargo(stoneCargo);
         barracks0.putCargo(stoneCargo);
         barracks0.putCargo(stoneCargo);
-
-        /* Verify the border before the upgrade */
-        Point point3 = new Point(29, 7);
-        assertTrue(player0.getBorderPoints().contains(point3));
 
         /* Wait for the upgrade */
         for (int i = 0; i < 100; i++) {
@@ -2800,22 +2787,168 @@ public class TestBarracks {
         assertEquals(barracks0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);
     }
 
-    /*
+    @Test
+    public void testBorderForBarracksIsCorrect() throws Exception {
 
-    add test for upgrade of non-occupied barracks!!
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
 
-    player's list of buildings is correct
-    gamemap mappoint, gamemap buildings
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-    percentage of upgrade progress is getting updated
-    is possible to see if upgrades are possible
-    promotion timers are running through upgrades
-    it's not possible to deliver too much material to the barracks during upgrade
-    barracks being upgraded can be attacked and won
-    upgrades finish (and state goes back to normal)
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-    lack of space can hinder upgrades
-    upgrade of regular building
-    isUpgrading() in regular buildings
-    */
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Verify that the border around the barracks is hexagon shaped and the middle of each line is 8 steps away from the center of the headquarter
+        Border:
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+
+        int radius = 8;
+        Set<Point> barracksHexagonBorder = Utils.getHexagonBorder(barracks0.getPosition(), radius);
+        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+
+        /* Verify that all points in the hexagon are part of the actual border */
+        Set<Point> border = player0.getBorderPoints();
+        for (Point point : barracksHexagonBorder) {
+
+            /* Ignore points that are within the player's land */
+            if (player0.getLandInPoints().contains(point)) {
+                continue;
+            }
+
+            assertTrue(border.contains(point));
+        }
+
+        /* Verify that all points in the actual border are part of the hexagon border */
+        for (Point point : border) {
+
+            /* Ignore points that are part of the hexagon around the headquarter */
+            if (headquarterHexagonBorder.contains(point)) {
+                continue;
+            }
+
+            assertTrue(barracksHexagonBorder.contains(point));
+        }
+    }
+
+    @Test
+    public void testLandForBarracksIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Verify that the land of the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        Set<Point> area = Utils.getAreaInsideHexagon(7, barracks0.getPosition());
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> land = barracks0.getDefendedLand();
+        for (Point point : land) {
+
+            /* Ignore points that are part of the headquarters land */
+            if (headquarter0.getDefendedLand().contains(point)) {
+                continue;
+            }
+
+            assertTrue(area.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : area) {
+            assertTrue(land.contains(point));
+        }
+    }
+
+    @Test
+    public void testDiscoveredLandForBarracksIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(barracks0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
+
+        /* Verify that the discovered land of the barracks is hexagon shaped and the middle of each line is 8 + 4 steps away
+        from the center of the headquarter
+
+         Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        Set<Point> barracksHexagonDiscoveredArea = Utils.getAreaInsideHexagon(12, barracks0.getPosition());
+        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> discoveredLand = player0.getDiscoveredLand();
+        for (Point point : discoveredLand) {
+
+            /* Ignore points within the discovered land for the headquarter */
+            if (headquarterDiscoveredLand.contains(point)) {
+                continue;
+            }
+
+            assertTrue(barracksHexagonDiscoveredArea.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : barracksHexagonDiscoveredArea) {
+            assertTrue(discoveredLand.contains(point));
+        }
+    }
 }

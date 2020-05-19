@@ -1179,13 +1179,13 @@ public class TestMessages {
 
         /* Placing barracks */
         Point point22 = new Point(5, 23);
-        Building barracks0 = map.placeBuilding(new Fortress(player0), point22);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Placing road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Wait for the barracks to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         /* Wait for a soldier to walk to the barracks */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
@@ -1204,10 +1204,10 @@ public class TestMessages {
         assertNotNull(military);
 
         /* Verify a message is sent when the barracks is populated so player 1 loses land */
-        Point point3 = new Point(13, 19);
+        Point point3 = new Point(12, 18);
         assertTrue(player1.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
@@ -1215,7 +1215,7 @@ public class TestMessages {
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
 
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.getBuilding(), fortress0);
     }
 
     @Test
@@ -1241,13 +1241,13 @@ public class TestMessages {
 
         /* Placing barracks */
         Point point22 = new Point(5, 23);
-        Building barracks0 = map.placeBuilding(new Fortress(player0), point22);
+        Fortress fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Placing road */
-        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), barracks0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), fortress0.getFlag());
 
         /* Wait for the barracks to finish construction */
-        Utils.fastForwardUntilBuildingIsConstructed(barracks0);
+        Utils.fastForwardUntilBuildingIsConstructed(fortress0);
 
         /* Wait for a soldier to walk to the barracks */
         assertTrue(headquarter0.getAmount(PRIVATE) > 0);
@@ -1266,10 +1266,10 @@ public class TestMessages {
         assertNotNull(military);
 
         /* Verify a message is sent when the barracks is populated so player 1 loses land */
-        Point point3 = new Point(15, 19);
+        Point point3 = new Point(14, 22);
         assertTrue(player1.getBorderPoints().contains(point3));
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, military, barracks0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, fortress0.getPosition());
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
@@ -1277,7 +1277,7 @@ public class TestMessages {
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
 
-        assertEquals(message.getBuilding(), barracks0);
+        assertEquals(message.getBuilding(), fortress0);
 
         /* Verify that only one message is sent */
         Utils.fastForward(10, map);

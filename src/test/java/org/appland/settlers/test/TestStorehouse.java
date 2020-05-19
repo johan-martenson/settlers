@@ -1078,7 +1078,7 @@ public class TestStorehouse {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Point point0 = new Point(7, 5);
+        Point point0 = new Point(7, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 2's headquarter */
@@ -1092,7 +1092,7 @@ public class TestStorehouse {
         map.placeBuilding(headquarter1, point1);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(21, 9);
         Building fortress0 = new Fortress(player0);
         map.placeBuilding(fortress0, point2);
 

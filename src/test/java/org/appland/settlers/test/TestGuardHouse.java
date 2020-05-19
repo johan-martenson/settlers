@@ -20,7 +20,9 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
@@ -41,6 +43,10 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestGuardHouse {
+
+    /*
+    TODO: test upgrade
+     */
 
     @Test
     public void testGuardHouseNeedsThreePlanksAndTwoStonesForConstruction() throws Exception {
@@ -277,7 +283,7 @@ public class TestGuardHouse {
 
         /* Verify that the border is extended when the military reaches the guard house */
         Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 34);
+        Point point4 = new Point(6, 32);
         assertEquals(military.getTarget(), guardHouse0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
@@ -373,38 +379,6 @@ public class TestGuardHouse {
         map.placeWorker(military, guardHouse0);
 
         military.enterBuilding(guardHouse0);
-    }
-
-    @Test
-    public void testGuardHouseRadiusIsCorrect() throws Exception{
-
-        /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
-
-        /* Placing guard house */
-        Point point22 = new Point(6, 12);
-        Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
-
-        Utils.constructHouse(guardHouse0);
-
-        /* Verify that the border is grown with the correct radius */
-        Point point3 = new Point(6, 14);
-        Point point4 = new Point(5, 23);
-        assertTrue(player0.getBorderPoints().contains(point3));
-        assertFalse(player0.getBorderPoints().contains(point4));
-
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
-
-        assertTrue(player0.getBorderPoints().contains(point4));
-        assertFalse(player0.getBorderPoints().contains(point3));
     }
 
     @Test
@@ -1309,5 +1283,170 @@ public class TestGuardHouse {
 
         /* Verify that the rank for the hosted military is correct */
         assertEquals(guardHouse0.getHostedMilitary().get(0).getRank(), SERGEANT_RANK);
+    }
+
+    @Test
+    public void testBorderForGuardHouseIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(guardHouse0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+
+        /* Verify that the border around the barracks is hexagon shaped and the middle of each line is 8 steps away from the center of the headquarter
+        Border:
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+
+        int radius = 9;
+        Set<Point> barracksHexagonBorder = Utils.getHexagonBorder(guardHouse0.getPosition(), radius);
+        Set<Point> headquarterHexagonBorder = Utils.getHexagonBorder(headquarter0.getPosition(), 9);
+
+        /* Verify that all points in the hexagon are part of the actual border */
+        Set<Point> border = player0.getBorderPoints();
+        for (Point point : barracksHexagonBorder) {
+
+            /* Ignore points that are within the player's land */
+            if (player0.getLandInPoints().contains(point)) {
+                continue;
+            }
+
+            assertTrue(border.contains(point));
+        }
+
+        /* Verify that all points in the actual border are part of the hexagon border */
+        for (Point point : border) {
+
+            /* Ignore points that are part of the hexagon around the headquarter */
+            if (headquarterHexagonBorder.contains(point)) {
+                continue;
+            }
+
+            assertTrue(barracksHexagonBorder.contains(point));
+        }
+    }
+
+    @Test
+    public void testLandForGuardHouseIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(guardHouse0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+
+        /* Verify that the land of the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        Set<Point> area = Utils.getAreaInsideHexagon(8, guardHouse0.getPosition());
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> land = guardHouse0.getDefendedLand();
+        for (Point point : land) {
+
+            /* Ignore points that are part of the headquarters land */
+            if (headquarter0.getDefendedLand().contains(point)) {
+                continue;
+            }
+
+            assertTrue(area.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : area) {
+            assertTrue(land.contains(point));
+        }
+    }
+
+    @Test
+    public void testDiscoveredLandForGuardHouseIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(25, 23);
+        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+
+        /* Construct and occupy the barracks */
+        Utils.constructHouse(guardHouse0);
+        Utils.occupyMilitaryBuilding(GENERAL_RANK, guardHouse0);
+
+        /* Verify that the discovered land of the barracks is hexagon shaped and the middle of each line is 8 + 4 steps away
+        from the center of the headquarter
+
+         Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        Set<Point> guardHouseHexagonDiscoveredArea = Utils.getAreaInsideHexagon(13, guardHouse0.getPosition());
+        Set<Point> headquarterDiscoveredLand = Utils.getAreaInsideHexagon(13, headquarter0.getPosition());
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> discoveredLand = player0.getDiscoveredLand();
+        for (Point point : discoveredLand) {
+
+            /* Ignore points within the discovered land for the headquarter */
+            if (headquarterDiscoveredLand.contains(point)) {
+                continue;
+            }
+
+            assertTrue(guardHouseHexagonDiscoveredArea.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : guardHouseHexagonDiscoveredArea) {
+            assertTrue(discoveredLand.contains(point));
+        }
     }
 }

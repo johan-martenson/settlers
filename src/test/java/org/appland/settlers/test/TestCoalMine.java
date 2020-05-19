@@ -1236,7 +1236,7 @@ public class TestCoalMine {
         map.placeBuilding(headquarter1, point3);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(21, 9);
         Building fortress0 = new Fortress(player0);
         map.placeBuilding(fortress0, point2);
 

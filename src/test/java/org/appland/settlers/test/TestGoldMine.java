@@ -1212,7 +1212,7 @@ public class TestGoldMine {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Put a small mountain on the map */
-        Point point4 = new Point(28, 18);
+        Point point4 = new Point(28, 6);
         Utils.surroundPointWithMountain(point4, map);
         Utils.putGoldAtSurroundingTiles(point4, LARGE, map);
 

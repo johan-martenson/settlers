@@ -13,12 +13,12 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
-import org.appland.settlers.model.GuardHouse;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.WatchTower;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -1229,14 +1229,14 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Placing headquarter */
-        Point point38 = new Point(21, 29);
+        Point point38 = new Point(21, 13);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Remove all donkeys from the inventory */
         Utils.adjustInventoryTo(headquarter0, DONKEY, 0);
 
         /* Extend the border */
-        Point point0 = new Point(7, 29);
+        Point point0 = new Point(11, 15);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
 
         /* Construct the fortress & occupy it */
@@ -1245,11 +1245,11 @@ public class TestDonkey {
 
         /* Place a guardhouse */
         Point point1 = new Point(7, 13);
-        GuardHouse guardHouse0 = map.placeBuilding(new GuardHouse(player0), point1);
+        WatchTower watchTower0 = map.placeBuilding(new WatchTower(player0), point1);
 
         /* Construct the guardhouse & occupy it*/
-        Utils.constructHouse(guardHouse0);
-        Utils.occupyMilitaryBuilding(PRIVATE_RANK, guardHouse0);
+        Utils.constructHouse(watchTower0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, watchTower0);
 
         /* Place flag */
         Point point2 = new Point(4, 4);

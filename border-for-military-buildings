@@ -7,5 +7,8 @@ Headquarter:
  Guardhouse:
   - Distance to side of hexagon: 9
 
+WatchTower:
+  - Distance to side of hexagon: 10
+
 Fortress:
   - Distance to side of hexagon: 11

@@ -553,7 +553,7 @@ public class TestCatapult {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point point0 = new Point(9, 5);
+        Point point0 = new Point(13, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place headquarter */
@@ -568,7 +568,7 @@ public class TestCatapult {
         Utils.constructHouse(barracks0);
 
         /* Place catapult */
-        Point point3 = new Point(21, 5);
+        Point point3 = new Point(27, 15);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
@@ -592,12 +592,15 @@ public class TestCatapult {
             /* Occupy the barracks if needed */
             if (barracks0.getNumberOfHostedMilitary() == 0) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
+assertFalse(player1.getLandInPoints().contains(point3));
             }
 
             /* Deliver stone to the catapult */
             catapult.putCargo(new Cargo(STONE, map));
 
             /* Wait for the catapult to throw a projectile */
+            assertTrue(catapult.isReady());
+
             Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
 
             int hostedBefore = barracks0.getNumberOfHostedMilitary();
@@ -1068,7 +1071,7 @@ public class TestCatapult {
         map.placeBuilding(headquarter1, point1);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(21, 9);
         Building fortress0 = new Fortress(player0);
         map.placeBuilding(fortress0, point2);
 

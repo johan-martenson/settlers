@@ -2055,7 +2055,7 @@ public class TestMonitoringOfAvailableConstruction {
         map.stepTime();
 
         GameChangesList gameChanges = monitor.getLastEvent();
-        System.out.println(gameChanges);
+
         assertTrue(gameChanges.getChangedAvailableConstruction().size() > 0);
 
         monitor.assertMonitoredAvailableConstructionMatchesWithMap(map, player0);
@@ -2369,7 +2369,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Verify that an event is sent when the military reaches the barracks and the border is extended */
         Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 32);
+        Point point4 = new Point(5, 31);
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
         assertFalse(player0.getBorderPoints().contains(point4));
@@ -2432,7 +2432,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Verify that an event is sent when the military reaches the barracks and the border is extended */
         Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 32);
+        Point point4 = new Point(5, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
@@ -2503,7 +2503,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Wait for the barracks to get occupied so the border extends */
         Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 32);
+        Point point4 = new Point(5, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));
@@ -2575,7 +2575,7 @@ public class TestMonitoringOfAvailableConstruction {
 
         /* Wait for the barracks to get occupied so the border extends */
         Point point3 = new Point(6, 24);
-        Point point4 = new Point(6, 32);
+        Point point4 = new Point(5, 31);
 
         assertEquals(military.getTarget(), barracks0.getPosition());
         assertTrue(player0.getBorderPoints().contains(point3));

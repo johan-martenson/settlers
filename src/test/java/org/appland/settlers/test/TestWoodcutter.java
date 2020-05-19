@@ -1510,7 +1510,7 @@ public class TestWoodcutter {
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
-        Point point2 = new Point(17, 5);
+        Point point2 = new Point(17, 9);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */

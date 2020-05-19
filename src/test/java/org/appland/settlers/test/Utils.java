@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Actor;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Catapult;
@@ -55,6 +56,7 @@ import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WHEAT;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.appland.settlers.model.Size.MEDIUM;
 import static org.appland.settlers.model.Size.SMALL;
@@ -1414,6 +1416,119 @@ public class Utils {
         return pointAtMinY;
     }
 
+    static Set<Point> getHexagonBorder(Point point0, int radius) {
+        Set<Point> hexagonBorder = new HashSet<>();
+
+        int upperY = point0.y;
+        int lowerY = point0.y;
+        for (int x = point0.x - (radius * 2); x < point0.x - radius; x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY++;
+            lowerY--;
+        }
+
+        upperY = point0.y + radius;
+        lowerY = point0.y - radius;
+        for (int x = point0.x + radius; x <= point0.x + (radius * 2); x++) {
+            hexagonBorder.add(new Point(x, upperY));
+            hexagonBorder.add(new Point(x, lowerY));
+
+            upperY--;
+            lowerY++;
+        }
+
+        for (int x = point0.x - radius; x < point0.x + radius; x += 2) {
+            hexagonBorder.add(new Point(x, point0.y + radius));
+            hexagonBorder.add(new Point(x, point0.y - radius));
+        }
+        return hexagonBorder;
+    }
+
+    public static void printMaxMinPoints(Collection<Point> points) {
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+
+        Point pointAtMinX = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointAtMaxX = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+        Point pointAtMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointAtMaxY = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+
+        for (Point point : points) {
+            if (point.x > maxX) {
+                maxX = point.x;
+                pointAtMaxX = point;
+            }
+
+            if (point.x < minX) {
+                minX = point.x;
+                pointAtMinX = point;
+            }
+
+            if (point.y > maxY) {
+                maxY = point.y;
+                pointAtMaxY = point;
+            }
+
+            if (point.y < minY) {
+                minY = point.y;
+                pointAtMinY = point;
+            }
+
+        }
+
+        System.out.println(" -- Right: " + maxX + " " + pointAtMaxX);
+        System.out.println(" -- Left:  " + minX + " " + pointAtMinX);
+        System.out.println(" -- Upper: " + maxY + " " + pointAtMaxY);
+        System.out.println(" -- Lower: " + minY + " " + pointAtMinY);
+    }
+
+    public static void printAdjacentPointsForX(Set<Point> borderPoints, int i) {
+        for (Point point : borderPoints) {
+            if (point.x == i || point.x == i - 1 || point.x == i + 1) {
+                System.out.print(point + " ");
+            }
+        }
+
+        System.out.println();
+    }
+
+    static void placeAndOccupyBarracks(Player player0, Point point88) throws Exception {
+        GameMap map = player0.getMap();
+        Building barracks9 = map.placeBuilding(new Barracks(player0), point88);
+
+        /* Finish construction of barracks */
+        constructHouse(barracks9);
+
+        /* Occupy barracks */
+        occupyMilitaryBuilding(PRIVATE_RANK, barracks9);
+    }
+
+    public static void printMinYAdjacentToX(Collection<Point> landInPoints, int i) {
+        Point pointMinYLeft = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointMinY = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Point pointMinYRight = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for (Point point : landInPoints) {
+            if (point.x == i - 1 && pointMinYLeft.y > point.y) {
+                pointMinYLeft = point;
+            }
+
+            if (point.x == i && pointMinY.y > point.y) {
+                pointMinY = point;
+            }
+
+            if (point.x == i + 1 && pointMinYRight.y > point.y) {
+                pointMinYRight = point;
+            }
+        }
+
+        System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
+    }
+
     public static class GameViewMonitor implements PlayerGameViewMonitor {
 
         private final List<GameChangesList> gameChanges;
@@ -1596,5 +1711,34 @@ public class Utils {
                 assertEquals(availableConstruction.get(minePoint).getAvailableBuilding(), MINE_POSSIBLE);
             }
         }
+    }
+
+    static Set<Point> getAreaInsideHexagon(int radius, Point position) {
+        Set<Point> area = new HashSet<>();
+
+        int xStart = position.x - radius;
+        int xEnd = position.x + radius;
+
+        for (int y = position.y - radius; y < position.y; y++) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+
+        xStart = position.x - radius;
+        xEnd = position.x + radius;
+
+        for (int y = position.y + radius; y >= position.y; y--) {
+            for (int x = xStart; x <= xEnd; x += 2) {
+                area.add(new Point(x, y));
+            }
+
+            xStart--;
+            xEnd++;
+        }
+        return area;
     }
 }

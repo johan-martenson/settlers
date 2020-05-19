@@ -1192,15 +1192,15 @@ public class TestCourier {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
         /* Place flag */
-        Point point3 = new Point(29, 19);
+        Point point3 = new Point(29, 15);
         Flag flag0 = map.placeFlag(player0, point3);
 
         /* Place flag */
-        Point point5 = new Point(29, 17);
+        Point point5 = new Point(29, 13);
         Flag flag1 = map.placeFlag(player0, point5);
 
         /* Place road close to the new border */
-        Point point4 = new Point(28, 18);
+        Point point4 = new Point(28, 14);
         Road road0 = map.placeRoad(player0, point3, point4, point5);
 
         /* Place a courier on the road */
@@ -1264,14 +1264,14 @@ public class TestCourier {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point point38 = new Point(5, 35);
+        Point point38 = new Point(5, 27);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
 
         /* Remove all donkeys from the inventory */
         Utils.adjustInventoryTo(headquarter0, DONKEY, 0);
 
         /* Extend the border */
-        Point point0 = new Point(7, 29);
+        Point point0 = new Point(7, 21);
         Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0);
 
         /* Construct the fortress */

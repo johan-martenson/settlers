@@ -34,6 +34,13 @@ LARGER CHANGES
 * Make discovered land separate from defended land, and make sure it's correct for all military buildings
 
 
+SMALLER CHANGES
+===============
+
+* When a military building extends border so that another military building that is ready but not yet occupied gets torn down.
+
+
+
 RE-FACTOR
 =========
 

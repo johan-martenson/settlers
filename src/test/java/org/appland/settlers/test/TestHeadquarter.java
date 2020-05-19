@@ -418,31 +418,7 @@ public class TestHeadquarter {
 
          */
         Point position = headquarter0.getPosition();
-        Set<Point> area = new HashSet<>();
-
-        int xStart = position.x - 8;
-        int xEnd = position.x + 8;
-
-        for (int y = position.y - 8; y < position.y; y++) {
-            for (int x = xStart; x <= xEnd; x += 2) {
-                area.add(new Point(x, y));
-            }
-
-            xStart--;
-            xEnd++;
-        }
-
-        xStart = position.x - 8;
-        xEnd = position.x + 8;
-
-        for (int y = position.y + 8; y >= position.y; y--) {
-            for (int x = xStart; x <= xEnd; x += 2) {
-                area.add(new Point(x, y));
-            }
-
-            xStart--;
-            xEnd++;
-        }
+        Set<Point> area = Utils.getAreaInsideHexagon(8, position);
 
         /* Verify that all points in the hexagon land are part of the actual land */
         Collection<Point> land = headquarter0.getDefendedLand();
@@ -453,6 +429,45 @@ public class TestHeadquarter {
         /* Verify that all points in the actual land are part of the hexagon land */
         for (Point point : area) {
             assertTrue(land.contains(point));
+        }
+    }
+
+    @Test
+    public void testDiscoveredLandForHeadquarterIsCorrect() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 80, 80);
+
+        /* Place headquarter */
+        Point point0 = new Point(30, 30);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that the discovered land of the headquarter is hexagon shaped and the middle of each line is 9 steps away from the center of the headquarter
+        Land
+
+                -8, +8  -------  +8, +8
+                  /                  \
+            -16, 0        H          16, 0
+                  \                  /
+                -8, -8  -------  +8, +8
+
+         */
+        int radius = 13; // Border is at 9, then 4 more points out is discovered
+        Point position = headquarter0.getPosition();
+        Set<Point> area = Utils.getAreaInsideHexagon(radius, position);
+
+        /* Verify that all points in the hexagon land are part of the actual land */
+        Collection<Point> discoveredLand = player0.getDiscoveredLand();
+        for (Point point : discoveredLand) {
+            assertTrue(area.contains(point));
+        }
+
+        /* Verify that all points in the actual land are part of the hexagon land */
+        for (Point point : area) {
+            assertTrue(discoveredLand.contains(point));
         }
     }
 }
