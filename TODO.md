@@ -11,7 +11,7 @@ LARGER CHANGES
 
 * Add ability to configure military parameters
 
-* Add tools and metalworks
+* Add metalworks
 
 * Improve available construction compared to map information through analytical regression
 
@@ -27,17 +27,11 @@ LARGER CHANGES
 
 * Add small boats
 
-* Change occupied border to hexagons
-
-* Adjust occupied areas based on measurements
-
 * Make discovered the owned land separate from defended land, and make sure it's correct for all military buildings
 
 
 SMALLER CHANGES
 ===============
-
-* When a military building extends border so that another military building that is ready but not yet occupied gets torn down.
 
 * Each military type goes back to headquarter (one missing)
 
