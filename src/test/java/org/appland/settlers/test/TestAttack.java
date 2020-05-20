@@ -1330,7 +1330,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testFieldOfViewIsUpdatedWhenAttackerTakesOverBuilding() throws Exception {
+    public void testDiscoveredLandIsUpdatedWhenAttackerTakesOverBuilding() throws Exception {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);
@@ -1423,18 +1423,17 @@ public class TestAttack {
         Point point4 = new Point(22, 18);
         Point point5 = new Point(35, 27);
 
-        assertTrue(player0.getFieldOfView().contains(point4));
-        assertFalse(player0.getFieldOfView().contains(point5));
+        assertTrue(player0.getDiscoveredLand().contains(point4));
+        assertFalse(player0.getDiscoveredLand().contains(point5));
 
         /* Wait for the attacker to go to the barracks */
         assertEquals(attacker.getTarget(), barracks1.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
 
-        /* Verify that the field of view is updated when the attacker has taken over the barracks */
+        /* Verify that the discovered land is updated when the attacker has taken over the barracks */
         assertTrue(barracks1.isOccupied());
-        assertFalse(player0.getFieldOfView().contains(point4));
-        assertTrue(player0.getFieldOfView().contains(point5));
+        assertTrue(player0.getDiscoveredLand().contains(point5));
     }
 
     @Test

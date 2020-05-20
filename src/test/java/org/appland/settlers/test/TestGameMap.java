@@ -22,7 +22,6 @@ import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
 import java.awt.Color;
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -935,35 +934,7 @@ public class TestGameMap {
         assertTrue(player0.getBorderPoints().contains(point1));
 
         Point point2 = new Point(2, 18);
-        assertTrue(player0.getFieldOfView().contains(point2));
-    }
-
-    @Test
-    public void testFieldOfViewContainsAllOwnedLand() throws Exception {
-
-        /* Create new single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Place headquarter */
-        Point point0 = new Point(5, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
-
-        Collection<Point> border = player0.getBorderPoints();
-        List<Point> fieldOfView = player0.getFieldOfView();
-
-        Path2D.Double path = new Path2D.Double();
-        path.moveTo(fieldOfView.get(fieldOfView.size() - 1).x, fieldOfView.get(fieldOfView.size() - 1).y);
-
-        for (Point point : fieldOfView) {
-            path.lineTo(point.x, point.y);
-        }
-
-        for (Point point : border) {
-            assertTrue(path.contains(point));
-        }
+        assertTrue(player0.getDiscoveredLand().contains(point2));
     }
 
     @Test
@@ -992,11 +963,11 @@ public class TestGameMap {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, building1);
 
         /* Verify that the field of view does not shrink when the barracks is destroyed */
-        Collection<Point> fieldOfViewBefore = player0.getFieldOfView();
+        Collection<Point> discoveredLandBefore = player0.getDiscoveredLand();
 
         building1.tearDown();
 
-        assertEquals(fieldOfViewBefore, player0.getFieldOfView());
+        assertEquals(player0.getDiscoveredLand().size(), discoveredLandBefore.size());
     }
 
     @Test
@@ -1015,13 +986,11 @@ public class TestGameMap {
         Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Get the field of view before construction of barracks */
-        Collection<Point> oldFieldOfView = player0.getFieldOfView();
-
         Point point1 = new Point(4, 28);
         Point point3 = new Point(5, 35);
 
-        assertTrue(oldFieldOfView.contains(point1));
-        assertFalse(oldFieldOfView.contains(point3));
+        assertTrue(player0.getDiscoveredLand().contains(point1));
+        assertFalse(player0.getDiscoveredLand().contains(point3));
 
         /* Place barracks */
         Point point2 = new Point(5, 23);
@@ -1034,10 +1003,7 @@ public class TestGameMap {
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, building1);
 
         /* Verify that the field of view has grown */
-        Collection<Point> newFieldOfView = player0.getFieldOfView();
-
-        assertTrue(newFieldOfView.contains(point3));
-        assertFalse(newFieldOfView.contains(point1));
+        assertTrue(player0.getDiscoveredLand().contains(point3));
     }
 
     @Test

@@ -21,10 +21,9 @@ import static org.appland.settlers.model.Material.PLANK;
 public class Player {
 
     private static final int PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM = 10;
-    private List<Point>          fieldOfView;
-    private GameMap              map;
-    private Color                color;
-    private String               name;
+    private GameMap map;
+    private Color   color;
+    private String  name;
     private boolean treeConservationProgramActive;
 
     private final List<Building>          buildings;
@@ -69,7 +68,6 @@ public class Player {
         this.name           = name;
         this.color          = color;
         buildings           = new LinkedList<>();
-        fieldOfView         = new LinkedList<>();
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
         ownedLand           = new ArrayList<>();
@@ -155,10 +153,6 @@ public class Player {
         return ownedLand;
     }
 
-    public List<Point> getFieldOfView() {
-        return fieldOfView;
-    }
-
     private List<Point> calculateFieldOfView(Collection<Point> discoveredLand) {
         return GameUtils.hullWanderer(discoveredLand);
     }
@@ -190,8 +184,6 @@ public class Player {
     void discover(Point point) {
         if (!discoveredLand.contains(point)) {
             discoveredLand.add(point);
-
-            fieldOfView = calculateFieldOfView(discoveredLand);
 
             /* Report that this is a newly discovered point */
             if (hasMonitor()) {
@@ -352,8 +344,6 @@ public class Player {
 
             /* Update field of view */
             updateDiscoveredLand();
-
-            fieldOfView = calculateFieldOfView(discoveredLand);
         }
 
         /* Calculate and remember the new owned land */
