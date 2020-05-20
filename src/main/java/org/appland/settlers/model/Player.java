@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -797,7 +796,7 @@ public class Player {
                     continue;
                 }
 
-                changedBorders.add(new BorderChange(player, newDiscoveredLand, Collections.EMPTY_LIST));
+                changedBorders.add(new BorderChange(player, newDiscoveredLand, new ArrayList<>()));
             }
 
             /* Find any discovered workers */

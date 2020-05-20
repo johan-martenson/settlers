@@ -55,7 +55,7 @@ public class TestToString {
     }
 
     @Test
-    public void testPointToString() throws Exception {
+    public void testPointToString() {
 
         /* Verify that the toString() method is correct */
         Point point0 = new Point(3, 5);

@@ -5,7 +5,7 @@ LARGER CHANGES
 
 * Add builders and diggers
 
-* Add limit to how many cargos can be placed on flag
+* Limit how many cargos can be placed on flag
 
 * Add ships, shipyard, harbour
 
@@ -81,7 +81,7 @@ TEST
 
 *  Test that the number of soldiers in a building goes down when a military has been retrieved
 
-*  Test that the closest building with available militaries is used in attacking
+*  Test that the closest building with available soldiers is used in attacking
 
 *  Test get attack radius for each military building
 
@@ -294,7 +294,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Fix enterBuilding in Baker - DONE
 
-*  Remove un-necessary try-catch in Baker, SamillWorker - DONE
+*  Remove un-necessary try-catch in Baker, SawmillWorker - DONE
 
 *  Remove hut variable from farm - DONE
 
@@ -344,7 +344,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add buttons to create iron, coal and stone mines to the app - DONE
 
-*  Send home workers and militaries when buildings are torn down - DONE
+*  Send home workers and soldiers when buildings are torn down - DONE
 
 *  it should not be possible to create cargo without a position and a map reference - DONE
 
@@ -398,7 +398,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add ability to create mints to the app - DONE
 
-*  Change barracks to only require two plancks for construction - DONE
+*  Change barracks to only require two planks for construction - DONE
 
 *  Test signs expire and eventually disappear - DONE
 
@@ -476,7 +476,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Fix so that it's not possible to create a road through crops - DONE
 
-*  Change cost of producing a barracks to only two plancks - DONE
+*  Change cost of producing a barracks to only two planks - DONE
 
 *  Add construction of pig farm to the app - DONE
 
@@ -530,7 +530,7 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add @Override to all getPosition and stepTime and all overriding the on* methods in Worker - DONE
 
-*  Test that evacuating soldiers updates getHostedMilitaries() - DONE
+*  Test that evacuating soldiers updates getHostedSoldiers() - DONE
 
 *  FIX: building never stops needing coins, even when it's full. Causes exception when courier tries to deliver coin - DONE
 
@@ -622,11 +622,11 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 *  Add method to see whether a military building is accepting coins - DONE
 
-*  Change PLANCK, PLANCK, etc in @HouseSize to plancks=2 - IGNORE
+*  Change PLANCK, PLANCK, etc in @HouseSize to planks=2 - IGNORE
 
 *  Test farmed crop fields eventually disappear - DONE
 
-*  Test that player is set correctly in militaries - DONE
+*  Test that player is set correctly in soldiers - DONE
 
 *  Implement option to set delivery priority for materials - DONE 
 

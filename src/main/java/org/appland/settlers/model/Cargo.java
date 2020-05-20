@@ -176,7 +176,7 @@ public class Cargo {
 
         Point target = path.get(path.size() - 1);
 
-        Point previousPoint = start;
+        Point previousPoint = start; // TODO: this variable is never used so this method shouldn't work
 
         for (Point point : path) {
 
