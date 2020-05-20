@@ -27,7 +27,7 @@ LARGER CHANGES
 
 * Add small boats
 
-* Make discovered the owned land separate from defended land, and make sure it's correct for all military buildings
+* Make discovered and owned land separate from defended land, and make sure it's correct for all military buildings
 
 
 SMALLER CHANGES
@@ -61,7 +61,7 @@ TEST
 
 *  Test one gold mine, one iron mine, one coal mine, and one un-occupied coal mine. All mines should get food
 
-*  Test that all mines wants all types of food!!
+*  Test that all mines want all types of food!!
 
 *  Test when worker is ordered to go offroad to a place but cannot (e.g. when surrounded by stones). Test for all workers 
 
@@ -69,7 +69,7 @@ TEST
 
 *  Test Size::contains(Size, Size)
 
-*  Test that all deployed militaries in a military building return to the storehouse if it's torn down
+*  Test that all deployed soldiers in a military building return to the storehouse if it's torn down
 
 *  Add tests for available buildings close to the border
 
@@ -79,7 +79,7 @@ TEST
 
 *  Test for the exact time of a fight
 
-*  Test that the number of militaries in a building goes down when a military has been retrieved
+*  Test that the number of soldiers in a building goes down when a military has been retrieved
 
 *  Test that the closest building with available militaries is used in attacking
 
@@ -115,8 +115,6 @@ TEST
  
 *  farm seems to always place crop on its flag
 
-*  test that barracks can only be built close to border
-
 *  do storages get a worker traveling from the hq or is it magically available directly?
 
 *  Q: how often does the storages/headquarter assign new workers?
@@ -140,10 +138,6 @@ TO IMPLEMENT
 *  Make sure all tests for stopped production have more material than necessary
 
 *  Add list of all possible building types to the model
-
-*  Make measurement used for tree conservation program consider all storages
-
-*  adjust the defense radius of barracks and the headquarter
 
 *  worker setTarget and setTargetOffroad should share much more code
 
