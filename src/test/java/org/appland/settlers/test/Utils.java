@@ -575,7 +575,7 @@ public class Utils {
 
         for (Worker worker : map.getWorkers()) {
             if (worker.getClass().equals(aClass) && !worker.isInsideBuilding() && worker.getPlayer().equals(player)) {
-                workersFound.add((T)worker);
+                workersFound.add(aClass.cast(worker));
             }
         }
 
@@ -592,7 +592,7 @@ public class Utils {
 
             for (Worker worker : map.getWorkers()) {
                 if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
-                    workers.add((T)worker);
+                    workers.add(type.cast(worker));
                 }
             }
 
@@ -1602,7 +1602,7 @@ public class Utils {
 
         public List<GameChangesList> getEventsAfterEvent(GameChangesList gameChangesEvent) {
             if (gameChangesEvent.equals(getLastEvent())) {
-                return Collections.EMPTY_LIST;
+                return new ArrayList<>();
             }
 
             int index = this.gameChanges.indexOf(gameChangesEvent);
