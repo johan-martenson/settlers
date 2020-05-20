@@ -1199,4 +1199,29 @@ public class Player {
 
         return true;
     }
+
+    public boolean canAttack(Building building) throws Exception {
+
+        /* Can only attack military buildings */
+        if (!building.isMilitaryBuilding()) {
+            return false;
+        }
+
+        /* Can not attack itself */
+        if (this.equals(building.getPlayer())) {
+            return false;
+        }
+
+        /* Can only attack buildings that are occupied */
+        if (!building.isOccupied()) {
+            return false;
+        }
+
+        /* Check that there are available attackers */
+        if (getAvailableAttackersForBuilding(building) == 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

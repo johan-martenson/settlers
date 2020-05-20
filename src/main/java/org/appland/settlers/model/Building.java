@@ -907,6 +907,9 @@ public class Building implements Actor, EndPoint {
         attackers.clear();
         defenders.clear();
         ownDefender = null;
+
+        /* Stop the evacuation if it is enabled */
+        evacuated = false;
     }
 
     void cancelPromisedDelivery(Cargo cargo) {

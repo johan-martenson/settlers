@@ -238,7 +238,7 @@ public class TestWorker {
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
-        Point point1 = new Point(39, 5);
+        Point point1 = new Point(31, 15);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place barracks for player 0 */
@@ -246,7 +246,7 @@ public class TestWorker {
         Building barracks0 = map.placeBuilding(new Barracks(player0), point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(25, 5);
+        Point point3 = new Point(17, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -257,6 +257,10 @@ public class TestWorker {
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        assertFalse(player0.getLandInPoints().contains(barracks1.getPosition()));
+        assertFalse(player0.getLandInPoints().contains(barracks1.getFlag().getPosition()));
+        assertTrue(barracks1.isReady());
 
         /* Populate player 1's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks1);

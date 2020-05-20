@@ -922,7 +922,7 @@ public class GameMap {
                 continue;
             }
 
-            if (building.isMilitaryBuilding()) {
+            if (building.isMilitaryBuilding() && building.isOccupied()) {
                 continue;
             }
 

@@ -1,6 +1,7 @@
 package org.appland.settlers.test;
 
 import org.appland.settlers.model.Armory;
+import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -21,8 +22,13 @@ import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+import static java.awt.Color.BLUE;
+import static java.awt.Color.GREEN;
+import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -35,6 +41,7 @@ public class TestMisc {
     /*
     TODO:
      - Coin delivery to upgraded building
+     - Evacuation of military building is disabled when a player takes over a military building
 
      */
 
@@ -478,5 +485,148 @@ public class TestMisc {
         GameChangesList gameChangesList = monitor.getLastEvent();
 
         assertTrue(gameChangesList.getWorkersWithNewTargets().contains(woodcutterWorker));
+    }
+
+    @Test
+    public void testUnoccupiedMilitaryBuildingIsDestroyedWhenEnemyBarracksIsOccupied() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(9, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(45, 5);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = new Barracks(player0);
+        map.placeBuilding(barracks0, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(29, 5);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Verify that player 1's barracks is torn down when player 0's barracks gets occupied */
+        assertTrue(barracks1.isReady());
+        assertFalse(barracks1.isOccupied());
+
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+
+        assertTrue(barracks1.isBurningDown());
+        assertFalse(map.isFlagAtPoint(barracks1.getFlag().getPosition()));
+    }
+
+    @Test
+    public void testEvacuationIsDisabledWhenPlayerTakesOverBuilding() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Headquarter headquarter0 = new Headquarter(player0);
+        Point point0 = new Point(9, 5);
+        map.placeBuilding(headquarter0, point0);
+
+        /* Place player 1's headquarter */
+        Headquarter headquarter1 = new Headquarter(player1);
+        Point point1 = new Point(37, 15);
+        map.placeBuilding(headquarter1, point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(21, 5);
+        Building barracks0 = new Barracks(player0);
+        map.placeBuilding(barracks0, point2);
+
+        /* Place barracks for player 1 */
+        Point point3 = new Point(21, 15);
+        Building barracks1 = new Barracks(player1);
+        map.placeBuilding(barracks1, point3);
+
+        /* Finish construction */
+        Utils.constructHouse(barracks0);
+        Utils.constructHouse(barracks1);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks1);
+
+        /* Empty barracks 1 */
+        Road road0 = map.placeAutoSelectedRoad(player1, barracks1.getFlag(), headquarter1.getFlag());
+
+        barracks1.evacuate();
+
+        Military military = Utils.waitForMilitaryOutsideBuilding(player1);
+
+        assertEquals(military.getTarget(), headquarter1.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, military, headquarter1.getPosition());
+
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+
+        /* Order an attack */
+        assertTrue(player0.canAttack(barracks1));
+
+        player0.attack(barracks1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), barracks1.getFlag().getPosition());
+
+        /* Verify that evacuation is disabled when the attacker takes over the building */
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 0);
+        assertEquals(barracks1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), barracks1.getPosition());
+        assertTrue(barracks1.isReady());
+        assertTrue(barracks1.isEvacuated());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, barracks1.getPosition());
+
+        assertFalse(barracks1.isEvacuated());
+        assertEquals(barracks1.getPlayer(), player0);
+        assertTrue(barracks1.getHostedMilitary().contains(attacker));
+        assertTrue(attacker.isInsideBuilding());
+        assertEquals(barracks1.getPlayer(), player0);
+        assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
     }
 }

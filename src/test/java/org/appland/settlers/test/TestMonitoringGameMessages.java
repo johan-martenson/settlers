@@ -1242,7 +1242,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1251,7 +1251,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1324,7 +1324,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1333,7 +1333,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1414,7 +1414,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1423,7 +1423,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1487,7 +1487,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1496,7 +1496,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1603,7 +1603,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1612,7 +1612,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
@@ -1730,7 +1730,7 @@ public class TestMonitoringGameMessages {
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 15);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -1739,7 +1739,7 @@ public class TestMonitoringGameMessages {
         map.placeBuilding(barracks0, point2);
 
         /* Place barracks for player 1 */
-        Point point3 = new Point(29, 5);
+        Point point3 = new Point(21, 15);
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 

@@ -39,6 +39,7 @@ SMALLER CHANGES
 
 * When a military building extends border so that another military building that is ready but not yet occupied gets torn down.
 
+* Each military type goes back to headquarter (one missing)
 
 
 RE-FACTOR
