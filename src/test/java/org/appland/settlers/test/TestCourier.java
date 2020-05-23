@@ -43,6 +43,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -298,9 +299,7 @@ public class TestCourier {
 
         courier.assignToRoad(road0);
 
-        /* Verify that the courier first walks to the middle of the road even if there is
-           a cargo to pick up
-         */
+        /* Verify that the courier first walks to the middle of the road even if there is a cargo to pick up */
         assertTrue(flag0.hasCargoWaitingForRoad(road0));
         assertTrue(courier.isWalkingToRoad());
         assertFalse(courier.isIdle());
@@ -1123,7 +1122,7 @@ public class TestCourier {
 
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotAssignTwoCouriersToSameRoad() throws Exception {
 
         /* Create single player game */
@@ -1152,7 +1151,12 @@ public class TestCourier {
         map.placeWorker(courier1, flag0);
 
         courier0.assignToRoad(road0);
-        courier1.assignToRoad(road0);
+
+        try {
+            courier1.assignToRoad(road0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1309,9 +1313,7 @@ public class TestCourier {
         Point point4 = new Point(40, 40);
         Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point4);
 
-        /* Verify that the opponent's headquarter doesn't try to deliver
-           a courier to the road
-        */
+        /* Verify that the opponent's headquarter doesn't try to deliver a courier to the road */
         for (int i = 0; i < 500; i++) {
 
             assertTrue(road0.needsCourier());

@@ -19,6 +19,7 @@ import java.util.List;
 import static java.awt.Color.GREEN;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -26,14 +27,18 @@ import static org.junit.Assert.assertTrue;
  */
 public class TestSeveralPlayers {
 
-    @Test(expected = Exception.class)
+    @Test
     public void testChooseNoPlayers() throws Exception {
 
         /* Create empty player list */
         List<Player> players = new LinkedList<>();
 
         /* Create game map choosing no players */
-        GameMap map = new GameMap(players, 20, 20);
+        try {
+            GameMap map = new GameMap(players, 20, 20);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -72,7 +77,7 @@ public class TestSeveralPlayers {
         assertTrue(map.getPlayers().contains(players.get(1)));
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testCannotPlacePlayersHeadquartersTogether() throws Exception {
 
         /* Create player list with two players */
@@ -90,11 +95,14 @@ public class TestSeveralPlayers {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Verify that the other player can't place a building close to the
-           first player's headquarter
-        */
+        /* Verify that the other player can't place a building close to the first player's headquarter */
         Point point1 = new Point(10, 10);
-        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        try {
+            Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

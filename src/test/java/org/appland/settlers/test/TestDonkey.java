@@ -38,6 +38,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -1117,7 +1118,7 @@ public class TestDonkey {
         donkey0.assignToRoad(road0);
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotAssignTwoDonkeysToSameRoad() throws Exception {
 
         /* Create game map */
@@ -1146,7 +1147,12 @@ public class TestDonkey {
         map.placeWorker(donkey1, flag0);
 
         donkey0.assignToRoad(road0);
-        donkey1.assignToRoad(road0);
+
+        try {
+            donkey1.assignToRoad(road0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

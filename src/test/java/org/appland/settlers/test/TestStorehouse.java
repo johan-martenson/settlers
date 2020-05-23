@@ -42,6 +42,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -988,7 +989,7 @@ public class TestStorehouse {
         assertNull(map.getRoad(storage0.getPosition(), storage0.getFlag().getPosition()));
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testProductionInStorageCannotBeStopped() throws Exception {
 
         /* Create game map */
@@ -1002,14 +1003,11 @@ public class TestStorehouse {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
-        Point point1 = new Point(8, 6);
+        Point point1 = new Point(10, 6);
         Building storage0 = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Connect the storage and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        Road road0 = map.placeAutoSelectedRoad(player0, storage0.getFlag(), headquarter.getFlag());
 
         /* Finish the storage */
         Utils.constructHouse(storage0);
@@ -1020,7 +1018,11 @@ public class TestStorehouse {
         Utils.occupyBuilding(storageWorker, storage0);
 
         /* Verify that production can't be stopped */
-        storage0.stopProduction();
+        try {
+            storage0.stopProduction();
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

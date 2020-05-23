@@ -36,6 +36,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestHunterHut {
 
@@ -146,44 +147,92 @@ public class TestHunterHut {
         assertEquals(hunterHut.getWorker(), hunter);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerToUnfinishedHunter() throws Exception {
         HunterHut hunterHut = new HunterHut(null);
 
         assertTrue(hunterHut.underConstruction());
 
-        hunterHut.promiseWorker(new Hunter(null, null));
+        try {
+            hunterHut.promiseWorker(new Hunter(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerToUnfinishedHunter() throws Exception {
         HunterHut hunterHut = new HunterHut(null);
 
         assertTrue(hunterHut.underConstruction());
 
-        hunterHut.assignWorker(new Hunter(null, null));
+        try {
+            hunterHut.assignWorker(new Hunter(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerTwice() throws Exception {
-        HunterHut hunterHut = new HunterHut(null);
 
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(15, 5);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
         Utils.constructHouse(hunterHut);
 
+        /* Assign a worker */
         hunterHut.assignWorker(new Hunter(null, null));
 
-        hunterHut.assignWorker(new Hunter(null, null));
+        /* Verify that it's not possible to assign a second worker */
+        try {
+            hunterHut.assignWorker(new Hunter(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerTwice() throws Exception {
-        HunterHut hunterHut = new HunterHut(null);
 
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(15, 5);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Finish construction of the hunter hut */
         Utils.constructHouse(hunterHut);
 
+        /* Promise a worker to the hunter hut */
         hunterHut.promiseWorker(new Hunter(null, null));
 
-        hunterHut.promiseWorker(new Hunter(null, null));
+        /* Verify that it's not possible to promise a second worker */
+        try {
+            hunterHut.promiseWorker(new Hunter(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

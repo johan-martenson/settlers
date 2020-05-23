@@ -40,6 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -51,19 +52,24 @@ public class TestInventory {
 
     @Before
     public void initTests() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(15, 15);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place storehouse */
         storehouse = new Storehouse(player0);
-
         Point point1 = new Point(10, 10);
         map.placeBuilding(storehouse, point1);
 
+        /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);
     }
 
@@ -204,13 +210,17 @@ public class TestInventory {
         storehouse.retrieveCourier();
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrieveAnyMilitaryFromEmptyInventory() throws Exception {
         assertEquals(storehouse.getAmount(PRIVATE), 0);
         assertEquals(storehouse.getAmount(SERGEANT), 0);
         assertEquals(storehouse.getAmount(GENERAL), 0);
 
-        storehouse.retrieveAnyMilitary();
+        try {
+            storehouse.retrieveAnyMilitary();
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -234,28 +244,48 @@ public class TestInventory {
         assertNotNull(military);
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrievePrivateFromEmptyInventory() throws Exception {
         assertFalse(storehouse.isInStock(PRIVATE));
-        storehouse.retrieveMilitary(PRIVATE);
+
+        try {
+            storehouse.retrieveMilitary(PRIVATE);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrieveSergeantFromEmptyInventory() throws Exception {
         assertFalse(storehouse.isInStock(SERGEANT));
+
+        try {
         storehouse.retrieveMilitary(SERGEANT);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrieveGeneralFromEmptyInventory() throws Exception {
         assertFalse(storehouse.isInStock(GENERAL));
-        storehouse.retrieveMilitary(GENERAL);
+
+        try {
+            storehouse.retrieveMilitary(GENERAL);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrieveCourierLikeWorker() throws Exception {
         storehouse.depositWorker(new Courier(null, null));
-        storehouse.retrieveWorker(COURIER);
+
+        try {
+            storehouse.retrieveWorker(COURIER);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -276,11 +306,15 @@ public class TestInventory {
         assertEquals(storehouse.getAmount(GENERAL), 0);
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testRetrieveMilitaryAsWorker() throws Exception {
         storehouse.depositWorker(new Military(null, PRIVATE_RANK, null));
 
-        storehouse.retrieveWorker(PRIVATE);
+        try {
+            storehouse.retrieveWorker(PRIVATE);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     private void assertNoMilitaryInInventory(Storehouse storehouse) {

@@ -240,18 +240,20 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnLake() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point waterPoint   = new Point(2, 2);
 
         /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create mini-lake */
+        Point waterPoint   = new Point(2, 2);
         Utils.surroundPointWithWater(waterPoint, map);
 
         /* Verify that there is no available spot for a building on the lake */
@@ -262,6 +264,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnStone() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -283,6 +287,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnStone() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -304,6 +310,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -325,6 +333,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -346,6 +356,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableFlagOnRoad() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -355,14 +367,14 @@ public class TestPlacement {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a road */
+        /* Place flags */
         Point point1 = new Point(5, 5);
-        Point point2 = new Point(7, 5);
         Point point3 = new Point(9, 5);
-
         map.placeFlag(player0, point1);
         map.placeFlag(player0, point3);
 
+        /* Place a road */
+        Point point2 = new Point(7, 5);
         map.placeRoad(player0, point1, point2, point3);
 
         /* Verify that there is no available spot for a flag on the tree */
@@ -373,6 +385,8 @@ public class TestPlacement {
 
     @Test
     public void testNoAvailableBuildingSpotOnRoad() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -382,14 +396,14 @@ public class TestPlacement {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place a road */
+        /* Place flags */
         Point point1 = new Point(5, 5);
-        Point point2 = new Point(7, 5);
         Point point3 = new Point(9, 5);
-
         map.placeFlag(player0, point1);
         map.placeFlag(player0, point3);
 
+        /* Place a road */
+        Point point2 = new Point(7, 5);
         map.placeRoad(player0, point1, point2, point3);
 
         /* Verify that there is no available spot for a building on the road */
@@ -451,17 +465,20 @@ public class TestPlacement {
 
     @Test
     public void testAvailableFlagsNextToSmallHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(12, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place a woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
         Point wcPoint = new Point(6, 4);
-
         map.placeBuilding(woodcutter, wcPoint);
 
         Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
@@ -808,27 +825,35 @@ public class TestPlacement {
         assertFalse(possibleFlags.contains(point0.upRight()));
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testPlaceFlagTooCloseToSmallHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(15, 15);
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 4);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place a woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
         Point wcPoint = new Point(6, 4);
-
         map.placeBuilding(woodcutter, wcPoint);
 
+        /* Verify that it's not possible to place a flag too close to the woodcutter */
         Point point0 = new Point(6, 2);
 
-        map.placeFlag(player0, point0);
+        try {
+            map.placeFlag(player0, point0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testPlaceFlagOnHouse() throws Exception {
 
         /* Create players */
@@ -840,7 +865,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 18);
+        Point hqPoint = new Point(18, 8);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place woodcutter */
@@ -848,54 +873,69 @@ public class TestPlacement {
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), wcPoint);
 
         /* Verify that it's not possible to place a flag on the woodcutter */
-        map.placeFlag(player0, wcPoint);
-    }
+        try {
+            map.placeFlag(player0, wcPoint);
 
-    @Test(expected=Exception.class)
-    public void testPlaceHouseOnFlag() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-
-        Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        Point point0  = new Point(6, 4);
-
-        map.placeFlag(player0, point0);
-
-        map.placeBuilding(woodcutter, wcPoint);
-    }
-
-    @Test(expected=Exception.class)
-    public void testPlaceHouseOnHouse() throws Exception {
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 20, 20);
-
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-
-        Woodcutter woodcutter  = new Woodcutter(player0);
-        Quarry     quarry0 = new Quarry(player0);
-        Point wcPoint  = new Point(6, 4);
-        Point qryPoint = new Point(5, 5);
-
-        map.placeBuilding(woodcutter, wcPoint);
-        map.placeBuilding(quarry0, qryPoint);
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
-    public void testAutomaticWaypointSelection() throws Exception {
+    public void testPlaceHouseOnFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
-        GameMap map = new GameMap(players, 10, 10);
-        //TODO: Add this test!
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(14, 4);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place a woodcutter */
+        Woodcutter woodcutter = new Woodcutter(player0);
+        Point wcPoint = new Point(6, 4);
+
+        /* Place flag */
+        Point point0 = new Point(6, 4);
+        map.placeFlag(player0, point0);
+
+        /* Verify that it's not possible to place a house on the flag */
+        try {
+            map.placeBuilding(woodcutter, wcPoint);
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
+    public void testPlaceHouseWithFlagOnOtherHouse() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place a woodcutter */
+        Woodcutter woodcutter  = new Woodcutter(player0);
+        Point wcPoint  = new Point(6, 4);
+        map.placeBuilding(woodcutter, wcPoint);
+
+        /* Verify that it's not possible to place a quarry so that the flag is on top of the woodcutter */
+        Quarry     quarry0 = new Quarry(player0);
+        Point qryPoint = new Point(5, 5);
+
+        try {
+            map.placeBuilding(quarry0, qryPoint);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -924,6 +964,7 @@ public class TestPlacement {
         waterTile.setVegetationType(WATER);
         grassTile.setVegetationType(GRASS);
 
+        /* Verify that it's possible to place flags next to the water */
         Collection<Point> possibleFlags = map.getAvailableFlagPoints(player0);
 
         assertTrue(possibleFlags.contains(sharedPoint1));
@@ -1119,19 +1160,25 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagOnStone() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
 
+        /* Place headquarter */
         Point hqPoint = new Point(6, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place stone */
+        Point point0 = new Point(3, 3);
         map.placeStone(point0);
 
+        /* Verify that it's not possible to place a flag on the stone */
         try {
             map.placeFlag(player0, point0);
+
             fail();
         } catch (Exception e) {}
 
@@ -1140,17 +1187,22 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceFlagOnTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
 
+        /* Place headquarter */
         Point hqPoint = new Point(6, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place tree */
+        Point point0 = new Point(3, 3);
         map.placeTree(point0);
 
+        /* Verify that it's not possible to place a flag on the tree */
         try {
             map.placeFlag(player0, point0);
             fail();
@@ -1161,17 +1213,22 @@ public class TestPlacement {
 
     @Test
     public void testCanNotPlaceBuildingIfFlagCanNotBePlaced() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
         Point point0  = new Point(3, 3);
 
+        /* Place headquarter */
         Point hqPoint = new Point(6, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Place tree */
         map.placeTree(point0.downRight());
 
+        /* Verify that it's not possible to place a house on the tree */
         try {
             map.placeBuilding(new Woodcutter(player0), point0);
             fail();
@@ -1182,7 +1239,7 @@ public class TestPlacement {
         assertEquals(map.getTrees().size(), 1);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testCannotPlaceRoadAcrossLake() throws Exception {
 
         /* Starting new game */
@@ -1204,7 +1261,7 @@ public class TestPlacement {
         assertEquals(map.getTerrain().getTileDownLeft(point0).getVegetationType(), WATER);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
+        Point point21 = new Point(4, 4);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing flag */
@@ -1216,7 +1273,11 @@ public class TestPlacement {
         Flag flag1 = map.placeFlag(player0, point4);
 
         /* Placing road between (8, 4) and (12, 4) */
-        Road road0 = map.placeRoad(player0, point1, point0, point4);
+        try {
+            Road road0 = map.placeRoad(player0, point1, point0, point4);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1259,17 +1320,19 @@ public class TestPlacement {
 
     @Test
     public void testFlagCanBePlacedOnSign() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
 
         /* Place headquarter */
         Point hqPoint = new Point(6, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sign */
+        Point point0  = new Point(3, 3);
         map.placeEmptySign(point0);
 
         assertFalse(map.getSigns().isEmpty());
@@ -1363,7 +1426,7 @@ public class TestPlacement {
         new Point(5, 4);
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotPlaceHouseIfFlagIsTooCloseToOtherFlag() throws Exception {
 
         /* Creating new game map with size 100x100 */
@@ -1386,10 +1449,15 @@ public class TestPlacement {
 
         /* Verify that a building cannot be place so that its flag is too close to the other flag */
         Point point1 = new Point(7, 11);
-        Building woodcutter0 = map.placeBuilding(new Building(player0), point1);
+
+        try {
+            Building woodcutter0 = map.placeBuilding(new Building(player0), point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testThatBuildingOtherThanHeadquarterCannotBeFirst() throws Exception {
 
         /* Creating new game map with size 100x100 */
@@ -1404,10 +1472,16 @@ public class TestPlacement {
 
         /* Placing headquarter */
         Point point38 = new Point(5, 5);
-        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point38);
+
+        /* Verify that it's not possible to place a house on the headquarter */
+        try {
+            Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point38);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testPlaceRoadWithoutFlagAtTheEnd() throws Exception {
 
         /* Create players */
@@ -1429,10 +1503,15 @@ public class TestPlacement {
         /* Verify that it's not possible to place a road without a flag at the end */
         Point point2 = new Point(10, 6);
         Point point3 = new Point(12, 6);
-        Road road0 = map.placeRoad(player0, point1, point2, point3);
+
+        try {
+            Road road0 = map.placeRoad(player0, point1, point2, point3);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotPlaceFlagOnFlag() throws Exception {
 
         /* Create players */
@@ -1452,7 +1531,11 @@ public class TestPlacement {
         Flag flag0 = map.placeFlag(player0, point1);
 
         /* Verify that it's not possible to place a flag on the existing flag */
-        Flag flag1 = map.placeFlag(player0, point1);
+        try {
+            Flag flag1 = map.placeFlag(player0, point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1595,7 +1678,7 @@ public class TestPlacement {
         } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotBuildHouseTooCloseToBottomEdgeOfMap() throws Exception {
 
         /* Create players */
@@ -1612,7 +1695,12 @@ public class TestPlacement {
 
         /* Verify that it's not possible to build a house too close to the bottom edge */
         Point point1 = new Point(5, 1);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        try {
+            Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -2297,6 +2385,7 @@ public class TestPlacement {
 
         /* Creating game map */
         GameMap map = new GameMap(players, 100, 100);
+
         /* Create a small mountain */
         Point point0 = new Point(5, 13);
         Point point1 = new Point(8, 14);

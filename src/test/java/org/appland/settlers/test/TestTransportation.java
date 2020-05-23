@@ -40,6 +40,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestTransportation {
 
@@ -92,7 +93,7 @@ public class TestTransportation {
         assertEquals(road.getEnd().y, 5);
     }
 
-    @Test(expected = InvalidEndPointException.class)
+    @Test
     public void testCreateRoadWithoutStartBuilding() throws Exception {
 
         /* Create single player game */
@@ -111,10 +112,15 @@ public class TestTransportation {
 
         /* Place road */
         Point point3 = new Point(5, 7);
-        map.placeAutoSelectedRoad(player0, new Flag(point3), new Flag(storehouse.getPosition()));
+
+        try {
+            map.placeAutoSelectedRoad(player0, new Flag(point3), new Flag(storehouse.getPosition()));
+
+            fail();
+        } catch (InvalidEndPointException e) {}
     }
 
-    @Test(expected = InvalidEndPointException.class)
+    @Test
     public void testCreateRoadWithoutEndBuilding() throws Exception {
 
         /* Create players */
@@ -135,10 +141,15 @@ public class TestTransportation {
 
         /* Verify that it' not possible to place a road without flags at both sides */
         Point point2 = new Point(8, 6);
-        map.placeAutoSelectedRoad(player0, new Flag(point2), woodcutter.getFlag());
+
+        try {
+            map.placeAutoSelectedRoad(player0, new Flag(point2), woodcutter.getFlag());
+
+            fail();
+        } catch (InvalidEndPointException e) {}
     }
 
-    @Test(expected = InvalidEndPointException.class)
+    @Test
     public void testCreateRoadWithoutAnyValidEndpoints() throws Exception {
 
         /* Create single player game */
@@ -154,7 +165,12 @@ public class TestTransportation {
         /* Place road */
         Point point1 = new Point(1, 1);
         Point point2 = new Point(3, 5);
-        map.placeAutoSelectedRoad(player0, new Flag(point1), new Flag(point2));
+
+        try {
+            map.placeAutoSelectedRoad(player0, new Flag(point1), new Flag(point2));
+
+            fail();
+        } catch (InvalidEndPointException e) {}
     }
 
     @Test
@@ -215,7 +231,7 @@ public class TestTransportation {
         }
     }
 
-    @Test(expected = InvalidRouteException.class)
+    @Test
     public void testFindRouteWithSameStartAndEnd() throws Exception {
 
         /* Create single player game */
@@ -225,7 +241,9 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 10, 10);
 
         /* Verify that there is no road with the same start and end points */
-        map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
+        try {
+            map.findWayWithExistingRoads(new Point(1, 1), new Point(1, 1));
+        } catch (InvalidRouteException e) {}
     }
 
     @Test
@@ -347,7 +365,7 @@ public class TestTransportation {
         assertEquals(forester.getPosition(), foresterHut.getPosition());
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testWorkerUnreachableTarget() throws Exception {
 
         /* Create single player game */
@@ -357,7 +375,7 @@ public class TestTransportation {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point point0 = new Point(15, 15);
+        Point point0 = new Point(14, 4);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place first flag */
@@ -365,23 +383,28 @@ public class TestTransportation {
         Flag end = map.placeFlag(player0, point4);
 
         /* Place second flag */
-        Point point2 = new Point(2, 2);
+        Point point2 = new Point(8, 2);
         map.placeFlag(player0, point2);
 
         /* Place third flag */
-        Point point1 = new Point(6, 2);
+        Point point1 = new Point(12, 2);
         Flag flag = map.placeFlag(player0, point1);
 
         /* Place road */
-        Point point3 = new Point(3, 3);
+        Point point3 = new Point(6, 2);
         Road targetRoad = map.placeRoad(player0, point2, point3, point4);
 
-        /* Place a courier */
+        /* Place a courier on the separate flag */
         Courier worker = new Courier(player0, map);
 
         map.placeWorker(worker, flag);
 
-        worker.assignToRoad(targetRoad);
+        /* Verify that it's not possible to assign the courier to the road because there is no way to walk there */
+        try {
+            worker.assignToRoad(targetRoad);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

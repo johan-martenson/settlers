@@ -177,12 +177,7 @@ public class TestArmory {
         Building armory = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter0.getFlag());
 
         /* Unfinished armory doesn't need worker */
         assertFalse(armory.needsWorker());
@@ -218,12 +213,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
-        Point point2 = new Point(8, 8);
-        Point point3 = new Point(7, 7);
-        Point point4 = new Point(8, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -276,12 +266,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
-        Point point2 = new Point(8, 8);
-        Point point3 = new Point(7, 7);
-        Point point4 = new Point(8, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -392,12 +377,7 @@ public class TestArmory {
         Armory armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
-        Point point2 = new Point(8, 8);
-        Point point3 = new Point(7, 7);
-        Point point4 = new Point(8, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -445,12 +425,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
-        Point point2 = new Point(8, 8);
-        Point point3 = new Point(7, 7);
-        Point point4 = new Point(8, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -554,9 +529,7 @@ public class TestArmory {
         /* Populate the armory */
         Worker armorer0 = Utils.occupyBuilding(new Armorer(player0, map), armory0);
 
-        /* Fast forward so that the armory worker would have produced weapons
-           if it had had the ingredients
-        */
+        /* Fast forward so that the armory worker would have produced weapons if it had had the ingredients */
         Utils.fastForward(150, map);
 
         assertNull(armorer0.getCargo());
@@ -592,12 +565,7 @@ public class TestArmory {
         Building armory0 = map.placeBuilding(new Armory(player0), point1);
 
         /* Place road to connect the armory with the headquarter */
-        Point point2 = new Point(8, 8);
-        Point point3 = new Point(7, 7);
-        Point point4 = new Point(8, 6);
-        Point point5 = new Point(7, 5);
-        Point point6 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the armory */
         Utils.constructHouse(armory0);
@@ -1136,7 +1104,7 @@ public class TestArmory {
         assertEquals(worker.getTarget(), headquarter0.getPosition());
     }
 
-    @Test (expected = InvalidUserActionException.class)
+    @Test
     public void testNonMilitaryBuildingCannotBeUpgraded() throws Exception {
 
         /* Create players */
@@ -1159,7 +1127,11 @@ public class TestArmory {
         Utils.constructHouse(armory0);
 
         /* Verify that non-military building cannot be upgraded */
-        armory0.upgrade();
+        try {
+            armory0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test

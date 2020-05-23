@@ -163,6 +163,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testUnfinishedDonkeyFarmNeedsNoDonkeyBreeder() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -182,6 +184,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testFinishedDonkeyFarmNeedsDonkeyBreeder() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -203,6 +207,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederIsAssignedToFinishedDonkeyFarm() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -216,12 +222,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Finish the donkey farm */
         Utils.constructHouse(farm);
@@ -235,6 +237,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederRestsInDonkeyFarmThenLeaves() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -248,15 +252,13 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
 
+        /* Construct the donkey farm */
         Utils.constructHouse(donkeyFarm);
 
+        /* Occupy the donkey farm */
         DonkeyBreeder donkeyBreeder = new DonkeyBreeder(player0, map);
 
         Utils.occupyBuilding(donkeyBreeder, donkeyFarm);
@@ -286,6 +288,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederFeedsTheDonkeysWhenItHasResources() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -299,13 +303,10 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
 
+        /* Construct the house */
         Utils.constructHouse(donkeyFarm);
 
         /* Deliver wheat and donkey to the farm */
@@ -360,6 +361,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederReturnsAfterFeeding() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -373,13 +376,10 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
 
+        /* Construct the house */
         Utils.constructHouse(donkeyFarm);
 
         /* Assign a donkey breeder to the farm */
@@ -438,6 +438,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyWalksToStorageByItself() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -451,12 +453,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(donkeyFarm);
 
@@ -545,6 +543,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyFarmWithoutDonkeyBreederProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -558,12 +558,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(donkeyFarm0);
 
@@ -742,6 +738,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederWithoutResourcesProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -779,6 +777,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederWithoutResourcesStaysInHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -816,6 +816,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederFeedsDonkeysWithWaterAndWheat() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1184,6 +1186,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyBreederCarriesNoCargo() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1197,12 +1201,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(donkeyFarm);
 
@@ -1230,6 +1230,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testDonkeyWalksToStorageOnExistingRoads() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1243,12 +1245,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(donkeyFarm0);
 
@@ -1310,6 +1308,8 @@ public class TestDonkeyFarm {
 
     @Test
     public void testProducedDonkeyIsOnlyAddedOnce() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1323,12 +1323,8 @@ public class TestDonkeyFarm {
         Point point3 = new Point(10, 6);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Place road */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter.getFlag());
 
         Utils.constructHouse(donkeyFarm0);
 
@@ -1898,9 +1894,7 @@ public class TestDonkeyFarm {
         /* Tear down the building */
         donkeyFarm0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), donkeyFarm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getPosition());

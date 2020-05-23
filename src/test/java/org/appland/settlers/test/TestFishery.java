@@ -44,6 +44,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -157,8 +158,10 @@ public class TestFishery {
         assertEquals(fishery.getWorker(), fisherman);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerToUnfinishedFishery() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -168,11 +171,17 @@ public class TestFishery {
 
         assertTrue(fishery.underConstruction());
 
-        fishery.promiseWorker(new Fisherman(player0, map));
+        try {
+            fishery.promiseWorker(new Fisherman(player0, map));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerToUnfinishedFisherman() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -182,39 +191,67 @@ public class TestFishery {
 
         assertTrue(fishery.underConstruction());
 
-        fishery.assignWorker(new Fisherman(player0, map));
+        try {
+            fishery.assignWorker(new Fisherman(player0, map));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerTwice() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery fishery = new Fishery(player0);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 10);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
 
         Utils.constructHouse(fishery);
 
         fishery.assignWorker(new Fisherman(player0, map));
 
-        fishery.assignWorker(new Fisherman(player0, map));
+        try {
+            fishery.assignWorker(new Fisherman(player0, map));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerTwice() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Fishery fishery = new Fishery(player0);
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(10, 10);
+        Fishery fishery = map.placeBuilding(new Fishery(player0), point1);
 
         Utils.constructHouse(fishery);
 
         fishery.promiseWorker(new Fisherman(player0, map));
 
-        fishery.promiseWorker(new Fisherman(player0, map));
+        try {
+            fishery.promiseWorker(new Fisherman(player0, map));
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

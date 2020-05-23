@@ -174,12 +174,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Connect the bakery with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Unfinished sawmill doesn't need worker */
         assertFalse(bakery.needsWorker());
@@ -215,12 +210,7 @@ public class TestBakery {
         Building bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Connect the bakery with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery);
@@ -384,12 +374,7 @@ public class TestBakery {
         Bakery bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Connect the bakery with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery);
@@ -437,12 +422,7 @@ public class TestBakery {
         Bakery bakery = map.placeBuilding(new Bakery(player0), point3);
 
         /* Connect the bakery with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the bakery */
         Utils.constructHouse(bakery);
@@ -546,9 +526,7 @@ public class TestBakery {
         /* Populate the bakery */
         Worker baker = Utils.occupyBuilding(new Baker(player0, map), bakery);
 
-        /* Fast forward so that the bakery worker would have produced bread
-           if it had had the ingredients
-        */
+        /* Fast forward so that the bakery worker would have produced bread if it had had the ingredients */
         Utils.fastForward(150, map);
 
         assertNull(baker.getCargo());
@@ -1496,6 +1474,7 @@ public class TestBakery {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
     }
+
     @Test
     public void testBakeryWithoutResourcesHasZeroProductivity() throws Exception {
 

@@ -217,6 +217,17 @@ public class Player {
     }
 
     public void attack(Building buildingToAttack, int nrAttackers) throws Exception {
+
+        /* Can only attack military buildings */
+        if (!buildingToAttack.isMilitaryBuilding()) {
+            throw new Exception("Cannot attack non-military building " + buildingToAttack);
+        }
+
+        /* A player cannot attack himself */
+        if (buildingToAttack.getPlayer().equals(this)) {
+            throw new Exception("Can only attack other players");
+        }
+
         List<Building> eligibleBuildings = new LinkedList<>();
 
         /* Find all eligible buildings to attack from */

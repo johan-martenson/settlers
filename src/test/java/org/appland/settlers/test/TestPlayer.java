@@ -23,6 +23,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.RED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -84,7 +85,7 @@ public class TestPlayer {
         assertEquals(woodcutter0.getFlag().getPlayer(), player);
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testPlayerCanOnlyCreateOneHeadquarter() throws Exception {
 
         /* Create player 'player one' */
@@ -107,7 +108,12 @@ public class TestPlayer {
 
         /* Place second headquarter */
         Point point1 = new Point(15, 15);
-        map.placeBuilding(headquarter1, point1);
+
+        try {
+            map.placeBuilding(headquarter1, point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -166,7 +172,7 @@ public class TestPlayer {
         assertEquals(road0.getPlayer(), player0);
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotPlaceBuildingWithInvalidPlayer() throws Exception {
 
         /* Create players */
@@ -184,10 +190,15 @@ public class TestPlayer {
         /* Verify that it's not possible to place a building with an invalid player */
         Player invalidPlayer = new Player("", BLUE);
         Point point1 = new Point(8, 6);
-        Building woodcutter = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
+
+        try {
+            Building woodcutter = map.placeBuilding(new Woodcutter(invalidPlayer), point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotPlaceRoadWithInvalidPlayer() throws Exception {
 
         /* Create players */
@@ -211,10 +222,15 @@ public class TestPlayer {
         /* Verify that it's not possible to place a road with an invalid player */
         Player invalidPlayer = new Player("", BLUE);
         Point point2 = new Point(10, 6);
-        Road road0 = map.placeRoad(invalidPlayer, point1, point2, point3);
+
+        try {
+            Road road0 = map.placeRoad(invalidPlayer, point1, point2, point3);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotPlaceFlagWithInvalidPlayer() throws Exception {
 
         /* Create players */
@@ -232,7 +248,12 @@ public class TestPlayer {
         /* Verify that it's not possible to place a flag with an invalid player */
         Player invalidPlayer = new Player("", BLUE);
         Point point1 = new Point(8, 6);
-        Flag flag0 = map.placeFlag(invalidPlayer, point1);
+
+        try {
+            Flag flag0 = map.placeFlag(invalidPlayer, point1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -271,7 +292,7 @@ public class TestPlayer {
         assertEquals(player0.getName(), "Another player");
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCannotHaveTwoPlayersWithSameColor() throws Exception {
 
         /* Create players */
@@ -282,6 +303,10 @@ public class TestPlayer {
         players.add(player1);
 
         /* Verify that it's not possible to have two players with the same color */
-        GameMap map = new GameMap(players, 20, 20);
+        try {
+            GameMap map = new GameMap(players, 20, 20);
+
+            fail();
+        } catch (Exception e) {}
     }
 }

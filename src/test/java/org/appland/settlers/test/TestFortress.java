@@ -347,7 +347,7 @@ public class TestFortress {
         assertFalse(fortress0.needsMilitaryManning());
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testFortressCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -361,7 +361,7 @@ public class TestFortress {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         /* Verify that the fortress can't hold soldiers before it's finished */
@@ -371,10 +371,14 @@ public class TestFortress {
 
         map.placeWorker(military, fortress0);
 
-        military.enterBuilding(fortress0);
+        try {
+            military.enterBuilding(fortress0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testFortressCannotHoldMoreThanNineSoldiers() throws Exception {
 
         /* Starting new game */
@@ -388,7 +392,7 @@ public class TestFortress {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing fortress */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building fortress0 = map.placeBuilding(new Fortress(player0), point22);
 
         Utils.constructHouse(fortress0);
@@ -409,7 +413,11 @@ public class TestFortress {
 
         map.placeWorker(military, fortress0);
 
-        military.enterBuilding(fortress0);
+        try {
+            military.enterBuilding(fortress0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1044,7 +1052,7 @@ public class TestFortress {
         }
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testProductionCannotBeResumedInFortress() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -1065,7 +1073,11 @@ public class TestFortress {
         Utils.constructHouse(fortress0);
 
         /* Verify that production cannot be resumed in fortress */
-        fortress0.resumeProduction();
+        try {
+            fortress0.resumeProduction();
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

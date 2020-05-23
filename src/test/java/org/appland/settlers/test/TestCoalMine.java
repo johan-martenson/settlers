@@ -132,6 +132,8 @@ public class TestCoalMine {
 
     @Test
     public void testConstructCoalMine() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -157,6 +159,8 @@ public class TestCoalMine {
 
     @Test
     public void testCoalmineIsNotMilitary() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -183,6 +187,8 @@ public class TestCoalMine {
 
     @Test
     public void testCoalmineUnderConstructionNotNeedsMiner() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -205,6 +211,8 @@ public class TestCoalMine {
 
     @Test
     public void testFinishedCoalmineNeedsMiner() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -229,6 +237,8 @@ public class TestCoalMine {
 
     @Test
     public void testMinerIsAssignedToFinishedCoalmine() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -268,6 +278,8 @@ public class TestCoalMine {
 
     @Test
     public void testMinerIsCreatedFromPickAxe() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -312,6 +324,7 @@ public class TestCoalMine {
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -334,6 +347,7 @@ public class TestCoalMine {
     @Test
     public void testArrivedMinerRests() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -376,6 +390,7 @@ public class TestCoalMine {
     @Test
     public void testMinerMinesCoal() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -429,6 +444,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineGoesToFlagWithCargoAndBack() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -489,14 +505,18 @@ public class TestCoalMine {
 
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
+
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point hqPoint = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
+        /* Verify that it's not possible to place a mine on the grass */
         Point point0 = new Point(2, 2);
         try {
             map.placeBuilding(new CoalMine(player0), point0);
@@ -588,6 +608,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineWithoutCoalProducesNothing() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -638,6 +659,7 @@ public class TestCoalMine {
     @Test
     public void testCoalmineWithoutFoodProducesNothing() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -681,6 +703,7 @@ public class TestCoalMine {
     @Test
     public void testMiningConsumesFood() throws Exception {
 
+        /* Create single player gmae */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1079,11 +1102,7 @@ public class TestCoalMine {
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Connect the coal mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the coal mine */
         Utils.constructHouse(coalMine0);
@@ -1148,11 +1167,7 @@ public class TestCoalMine {
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Connect the coal mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, coalMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the coal mine */
         Utils.constructHouse(coalMine0);
@@ -1811,6 +1826,7 @@ public class TestCoalMine {
             assertTrue(coalMine.getFlag().getStackedCargo().isEmpty());
             assertNull(miner0.getCargo());
             assertEquals(coalMine.getProductivity(), 0);
+
             map.stepTime();
         }
     }

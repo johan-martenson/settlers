@@ -296,7 +296,7 @@ public class TestBarracks {
         assertFalse(barracks0.needsMilitaryManning());
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testBarracksCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -310,7 +310,7 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         /* Verify that the barracks can't hold soldiers before it's finished */
@@ -320,10 +320,14 @@ public class TestBarracks {
 
         map.placeWorker(military, barracks0);
 
-        military.enterBuilding(barracks0);
+        try {
+            military.enterBuilding(barracks0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testBarracksCannotHoldMoreThanTwoSoldiers() throws Exception {
 
         /* Starting new game */
@@ -337,7 +341,7 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing barracks */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point22);
 
         Utils.constructHouse(barracks0);
@@ -351,7 +355,11 @@ public class TestBarracks {
 
         map.placeWorker(military, barracks0);
 
-        military.enterBuilding(barracks0);
+        try {
+            military.enterBuilding(barracks0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1065,7 +1073,7 @@ public class TestBarracks {
         }
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testProductionCannotBeResumedInBarracks() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -1086,7 +1094,11 @@ public class TestBarracks {
         Utils.constructHouse(barracks0);
 
         /* Verify that production cannot be resumed in barracks */
-        barracks0.resumeProduction();
+        try {
+            barracks0.resumeProduction();
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1199,7 +1211,7 @@ public class TestBarracks {
         assertEquals(upgradedBuilding.getClass(), GuardHouse.class);
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testUnfinishedBarracksCannotBeUpgraded() throws Exception {
 
         /* Creating new player */
@@ -1215,17 +1227,21 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
-        Point point26 = new Point(21, 5);
+        Point point26 = new Point(13, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Connect the barracks with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, barracks0.getFlag(), headquarter0.getFlag());
 
         /* Upgrade the barracks */
-        barracks0.upgrade();
+        try {
+            barracks0.upgrade();
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = InvalidUserActionException.class)
+    @Test
     public void testBurningBarracksCannotBeUpgraded() throws Exception {
 
         /* Creating new player */
@@ -1241,7 +1257,7 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
-        Point point26 = new Point(21, 5);
+        Point point26 = new Point(13, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Connect the barracks with the headquarter */
@@ -1254,7 +1270,11 @@ public class TestBarracks {
         barracks0.tearDown();
 
         /* Upgrade the barracks */
-        barracks0.upgrade();
+        try {
+            barracks0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test
@@ -1314,7 +1334,7 @@ public class TestBarracks {
         assertEquals(map.getBuildingAtPoint(barracks0.getPosition()).getClass(), GuardHouse.class);
     }
 
-    @Test (expected = InvalidUserActionException.class)
+    @Test
     public void testCannotUpgradeBarracksBeingUpgraded() throws Exception {
 
         /* Creating new player */
@@ -1330,7 +1350,7 @@ public class TestBarracks {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
         /* Placing barracks */
-        Point point26 = new Point(21, 5);
+        Point point26 = new Point(13, 5);
         Building barracks0 = map.placeBuilding(new Barracks(player0), point26);
 
         /* Connect the barracks with the headquarter */
@@ -1346,7 +1366,11 @@ public class TestBarracks {
         barracks0.upgrade();
 
         /* Verify that the barracks can't get upgraded again */
-        barracks0.upgrade();
+        try {
+            barracks0.upgrade();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test

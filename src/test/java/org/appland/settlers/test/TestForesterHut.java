@@ -41,6 +41,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestForesterHut {
 
@@ -151,44 +152,86 @@ public class TestForesterHut {
         assertEquals(foresterHut0.getWorker(), forester);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerToUnfinishedForester() throws Exception {
         ForesterHut foresterHut = new ForesterHut(null);
 
         assertTrue(foresterHut.underConstruction());
 
-        foresterHut.promiseWorker(new Forester(null, null));
+        try {
+            foresterHut.promiseWorker(new Forester(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerToUnfinishedForester() throws Exception {
         ForesterHut foresterHut = new ForesterHut(null);
 
         assertTrue(foresterHut.underConstruction());
 
-        foresterHut.assignWorker(new Forester(null, null));
+        try {
+            foresterHut.assignWorker(new Forester(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testAssignWorkerTwice() throws Exception {
-        ForesterHut foresterHut = new ForesterHut(null);
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(7, 9);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         Utils.constructHouse(foresterHut);
 
         foresterHut.assignWorker(new Forester(null, null));
 
-        foresterHut.assignWorker(new Forester(null, null));
+        try {
+            foresterHut.assignWorker(new Forester(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPromiseWorkerTwice() throws Exception {
-        ForesterHut foresterHut = new ForesterHut(null);
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place forester hut */
+        Point point1 = new Point(7, 9);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
         Utils.constructHouse(foresterHut);
 
         foresterHut.promiseWorker(new Forester(null, null));
 
-        foresterHut.promiseWorker(new Forester(null, null));
+        try {
+            foresterHut.promiseWorker(new Forester(null, null));
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

@@ -42,6 +42,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -56,6 +57,7 @@ public class TestCatapult {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -94,6 +96,7 @@ public class TestCatapult {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -131,6 +134,7 @@ public class TestCatapult {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -161,13 +165,14 @@ public class TestCatapult {
         assertFalse(catapult0.isReady());
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testCatapultCannotAddTooManyStonesWhenUnderConstruction() throws Exception {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -175,7 +180,7 @@ public class TestCatapult {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing catapult */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
         /* Deliver three stones */
@@ -187,14 +192,15 @@ public class TestCatapult {
         catapult0.promiseDelivery(STONE);
         catapult0.putCargo(stoneCargo);
 
-        catapult0.promiseDelivery(STONE);
-        catapult0.putCargo(stoneCargo);
-
         /* Verify that the catapult doesn't need more stones */
         assertFalse(catapult0.needsMaterial(STONE));
 
         /* Verify that delivering another stone throws an exception */
-        catapult0.putCargo(stoneCargo);
+        try {
+            catapult0.putCargo(stoneCargo);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -204,6 +210,7 @@ public class TestCatapult {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -230,23 +237,19 @@ public class TestCatapult {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place catapult */
         Point point3 = new Point(7, 9);
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Place a road between the headquarter and the catapult */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, catapult.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the catapult */
         Utils.constructHouse(catapult);
@@ -592,7 +595,8 @@ public class TestCatapult {
             /* Occupy the barracks if needed */
             if (barracks0.getNumberOfHostedMilitary() == 0) {
                 Utils.occupyMilitaryBuilding(PRIVATE_RANK, 1, barracks0);
-assertFalse(player1.getLandInPoints().contains(point3));
+
+                assertFalse(player1.getLandInPoints().contains(point3));
             }
 
             /* Deliver stone to the catapult */
@@ -1511,9 +1515,7 @@ assertFalse(player1.getLandInPoints().contains(point3));
         /* Tear down the building */
         catapult0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), catapult0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, catapult0.getPosition());

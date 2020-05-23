@@ -26,6 +26,7 @@ import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestConstruction {
 
@@ -243,7 +244,6 @@ public class TestConstruction {
             farm.stepTime();
         }
 
-
         Cargo plankCargo = new Cargo(PLANK, null);
         Cargo stoneCargo = new Cargo(STONE, null);
         farm.putCargo(plankCargo);
@@ -274,18 +274,21 @@ public class TestConstruction {
             farm.stepTime();
         }
 
-
         assertTrue(farm.isDestroyed());
     }
 
-    @Test(expected = InvalidMaterialException.class)
+    @Test
     public void testInvalidDeliveryToUnfinishedSawmill() throws Exception {
         Sawmill sawmill0 = new Sawmill(null);
 
-        sawmill0.putCargo(new Cargo(SWORD, null));
+        try {
+            sawmill0.putCargo(new Cargo(SWORD, null));
+
+            fail();
+        } catch (InvalidMaterialException e) {}
     }
 
-    @Test(expected = InvalidStateForProduction.class)
+    @Test
     public void testDeliveryToBurningSawmill() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -308,10 +311,14 @@ public class TestConstruction {
 
         sawmill0.tearDown();
 
-        sawmill0.putCargo(new Cargo(WOOD, null));
+        try {
+            sawmill0.putCargo(new Cargo(WOOD, null));
+
+            fail();
+        } catch (InvalidStateForProduction e) {}
     }
 
-    @Test(expected = InvalidStateForProduction.class)
+    @Test
     public void testDeliveryToDestroyedSawmill() throws Exception {
 
         /* Create single player game */
@@ -339,6 +346,10 @@ public class TestConstruction {
         Utils.fastForward(1000, map);
 
         /* Verify that it's not possible to deliver wood to a sawmill that doesn't exist on the map */
-        sawmill0.putCargo(new Cargo(WOOD, null));
+        try {
+            sawmill0.putCargo(new Cargo(WOOD, null));
+
+            fail();
+        } catch (InvalidStateForProduction e) {}
     }
 }

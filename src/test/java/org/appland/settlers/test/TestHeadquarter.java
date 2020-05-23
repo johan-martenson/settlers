@@ -220,7 +220,7 @@ public class TestHeadquarter {
         assertFalse(headquarter0.getFlag().getStackedCargo().isEmpty());
     }
 
-    @Test(expected = InvalidUserActionException.class)
+    @Test
     public void testHeadquarterCannotBeTornDown() throws Exception {
 
         /* Start single player game */
@@ -234,10 +234,14 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that trying to tear it down causes an exception */
-        headquarter0.tearDown();
+        try {
+            headquarter0.tearDown();
+
+            fail();
+        } catch (InvalidUserActionException e) {}
     }
 
-    @Test(expected = InvalidUserActionException.class)
+    @Test
     public void testHeadquarterCannotBeTornDownByRemovingFlag() throws Exception {
 
         /* Start single player game */
@@ -251,7 +255,11 @@ public class TestHeadquarter {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that trying to tear it down by removing the flag causes an invalid user action exception */
-        map.removeFlag(headquarter0.getFlag());
+        try {
+            map.removeFlag(headquarter0.getFlag());
+
+            fail();
+        } catch (InvalidUserActionException e) {}
     }
 
     @Test

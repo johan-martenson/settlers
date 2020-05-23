@@ -21,10 +21,11 @@ import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestProduction {
 
-    @Test(expected = InvalidMaterialException.class)
+    @Test
     public void testWrongMaterialToSawmill() throws Exception {
 
         /* Create single player game */
@@ -53,10 +54,14 @@ public class TestProduction {
 
         assertTrue(sawmill.isReady());
 
-        sawmill.putCargo(new Cargo(GOLD, null));
+        try {
+            sawmill.putCargo(new Cargo(GOLD, null));
+
+            fail();
+        } catch (InvalidMaterialException e) {}
     }
 
-    @Test(expected = DeliveryNotPossibleException.class)
+    @Test
     public void testDeliverMaterialToWoodcutter() throws Exception {
 
         /* Create single player game */
@@ -83,10 +88,14 @@ public class TestProduction {
         /* Wait for the forester hut to get constructed */
         Utils.waitForBuildingToBeConstructed(woodcutter);
 
-        woodcutter.putCargo(new Cargo(WOOD, null));
+        try {
+            woodcutter.putCargo(new Cargo(WOOD, null));
+
+            fail();
+        } catch (DeliveryNotPossibleException e) {}
     }
 
-    @Test(expected = DeliveryNotPossibleException.class)
+    @Test
     public void testDeliveryMaterialToQuarry() throws Exception {
 
         /* Create single player game */
@@ -113,13 +122,21 @@ public class TestProduction {
         /* Wait for the forester hut to get constructed */
         Utils.waitForBuildingToBeConstructed(quarry);
 
-        quarry.putCargo(new Cargo(BEER, null));
+        try {
+            quarry.putCargo(new Cargo(BEER, null));
+
+            fail();
+        } catch (DeliveryNotPossibleException e) {}
     }
 
-    @Test(expected=Exception.class)
+    @Test
     public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
         Headquarter headquarter = new Headquarter(null);
 
-        headquarter.getWorkerType();
+        try {
+            headquarter.getWorkerType();
+
+            fail();
+        } catch (Exception e) {}
     }
 }

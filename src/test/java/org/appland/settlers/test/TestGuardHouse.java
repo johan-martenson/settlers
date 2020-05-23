@@ -322,7 +322,7 @@ public class TestGuardHouse {
         assertFalse(guardHouse0.needsMilitaryManning());
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testGuardHouseCannotHoldsoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -336,7 +336,7 @@ public class TestGuardHouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         /* Verify that the guard house can't hold soldiers before it's finished */
@@ -346,10 +346,14 @@ public class TestGuardHouse {
 
         map.placeWorker(military, guardHouse0);
 
-        military.enterBuilding(guardHouse0);
+        try {
+            military.enterBuilding(guardHouse0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testGuardHouseCannotHoldMoreThanThreesoldiers() throws Exception {
 
         /* Starting new game */
@@ -363,7 +367,7 @@ public class TestGuardHouse {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
         /* Placing guard house */
-        Point point22 = new Point(6, 22);
+        Point point22 = new Point(6, 12);
         Building guardHouse0 = map.placeBuilding(new GuardHouse(player0), point22);
 
         Utils.constructHouse(guardHouse0);
@@ -378,7 +382,11 @@ public class TestGuardHouse {
 
         map.placeWorker(military, guardHouse0);
 
-        military.enterBuilding(guardHouse0);
+        try {
+            military.enterBuilding(guardHouse0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -1009,7 +1017,7 @@ public class TestGuardHouse {
         }
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testProductionCannotBeResumedInGuardHouse() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -1030,7 +1038,11 @@ public class TestGuardHouse {
         Utils.constructHouse(guardHouse0);
 
         /* Verify that production cannot be resumed in guard house */
-        guardHouse0.resumeProduction();
+        try {
+            guardHouse0.resumeProduction();
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

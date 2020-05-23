@@ -132,7 +132,7 @@ public class GameMap {
 
     enum PointInformation {
         NONE,
-        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP;
+        STONE, FLAG, BUILDING, ROAD, FLAG_AND_ROADS, SIGN, CROP, TREE, OUTSIDE_MAP
     }
 
     /**

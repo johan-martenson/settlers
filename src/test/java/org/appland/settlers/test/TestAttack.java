@@ -49,6 +49,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  *
@@ -128,7 +129,7 @@ public class TestAttack {
         assertEquals(player0.getAvailableAttackersForBuilding(headquarter1), 0);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testNoAvailableAttackersForNonMilitaryBuilding() throws Exception {
 
         /* Create player list with two players */
@@ -145,7 +146,7 @@ public class TestAttack {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
@@ -154,17 +155,21 @@ public class TestAttack {
         map.placeBuilding(headquarter1, point1);
 
         /* Place woodcutter for player 1 */
-        Point point2 = new Point(90, 80);
+        Point point2 = new Point(80, 90);
         Building woodcutter0 = new Woodcutter(player1);
         map.placeBuilding(woodcutter0, point2);
 
         /* Verify that get available attackers can not be called for non-military building */
         assertFalse(player0.canAttack(woodcutter0));
 
-        player0.getAvailableAttackersForBuilding(woodcutter0);
+        try {
+            player0.getAvailableAttackersForBuilding(woodcutter0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testNoAvailableAttackersForOwnBuilding() throws Exception {
 
         /* Create player list with two players */
@@ -181,7 +186,7 @@ public class TestAttack {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(5, 15);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter far away from player 0 */
@@ -190,14 +195,18 @@ public class TestAttack {
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
-        Point point2 = new Point(20, 10);
+        Point point2 = new Point(15, 15);
         Building barracks0 = new Barracks(player0);
         map.placeBuilding(barracks0, point2);
 
         /* Verify that get available attackers can not be called for own building */
         assertFalse(player0.canAttack(barracks0));
 
-        player0.getAvailableAttackersForBuilding(barracks0);
+        try {
+            player0.getAvailableAttackersForBuilding(barracks0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -403,7 +412,7 @@ public class TestAttack {
         player0.attack(barracks1, 1);
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testPlayerCannotAttackHimself() throws Exception {
 
         /* Create player list with two players */
@@ -429,7 +438,7 @@ public class TestAttack {
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
-        Point point2 = new Point(21, 5);
+        Point point2 = new Point(13, 5);
         Building barracks0 = new Barracks(player0);
         map.placeBuilding(barracks0, point2);
 
@@ -438,17 +447,24 @@ public class TestAttack {
         Building barracks1 = new Barracks(player1);
         map.placeBuilding(barracks1, point3);
 
+        /* Finish construction of player 0's barracks */
+        Utils.constructHouse(barracks0);
+
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
-        /* Verify that player 0 can attack its own barracks */
+        /* Verify that player 0 can't attack its own barracks */
         assertFalse(player0.canAttack(barracks0));
 
-        player0.attack(barracks0, 1);
+        try {
+            player0.attack(barracks0, 1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test(expected = Exception.class)
+    @Test
     public void testCannotAttackNonMilitaryBuilding() throws Exception {
 
         /* Create player list with two players */
@@ -465,12 +481,12 @@ public class TestAttack {
 
         /* Place player 0's headquarter */
         Headquarter headquarter0 = new Headquarter(player0);
-        Point point0 = new Point(5, 5);
+        Point point0 = new Point(15, 5);
         map.placeBuilding(headquarter0, point0);
 
         /* Place player 1's headquarter */
         Headquarter headquarter1 = new Headquarter(player1);
-        Point point1 = new Point(45, 5);
+        Point point1 = new Point(37, 5);
         map.placeBuilding(headquarter1, point1);
 
         /* Place barracks for player 0 */
@@ -483,14 +499,25 @@ public class TestAttack {
         Building woodcutter0 = new Woodcutter(player1);
         map.placeBuilding(woodcutter0, point3);
 
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(woodcutter0);
+
+        /* Finish construction of player0's barracks */
+        Utils.constructHouse(barracks0);
+
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
 
         /* Verify that player 0 can't attack player 1's woodcutter */
+        assertTrue(woodcutter0.isReady());
         assertFalse(player0.canAttack(woodcutter0));
 
-        player0.attack(woodcutter0, 1);
+        try {
+            player0.attack(woodcutter0, 1);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test

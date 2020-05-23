@@ -158,9 +158,12 @@ public class TestBrewery {
 
     @Test
     public void testBreweryNeedsWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -189,26 +192,24 @@ public class TestBrewery {
 
     @Test
     public void testBreweryGetsAssignedWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -245,9 +246,12 @@ public class TestBrewery {
 
     @Test
     public void testOccupiedBreweryWithoutWheatAndWaterProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -278,9 +282,12 @@ public class TestBrewery {
 
     @Test
     public void testUnoccupiedBreweryProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -303,9 +310,12 @@ public class TestBrewery {
 
     @Test
     public void testOccupiedBreweryWithWaterAndWheatProducesBeer() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -346,26 +356,24 @@ public class TestBrewery {
 
     @Test
     public void testBrewerLeavesBeerAtTheFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
         Building brewery = map.placeBuilding(new Brewery(player0), point3);
 
         /* Place a road between the headquarter and the brewery */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the brewery */
         Utils.constructHouse(brewery);
@@ -410,14 +418,17 @@ public class TestBrewery {
 
     @Test
     public void testProductionOfOneBeerConsumesOneWheatAndOneWater() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -447,14 +458,17 @@ public class TestBrewery {
 
     @Test
     public void testProductionCountdownStartsWhenWheatAndWaterAreAvailable() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -466,9 +480,7 @@ public class TestBrewery {
         /* Occupy the brewery */
         Worker brewer0 = Utils.occupyBuilding(new Brewer(player0, map), brewery);
 
-        /* Fast forward so that the brewer would produced beer
-           if it had had wheat and water
-        */
+        /* Fast forward so that the brewer would produced beer if it had had wheat and water */
         Utils.fastForward(150, map);
 
         assertNull(brewer0.getCargo());
@@ -488,6 +500,8 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWheat() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -495,7 +509,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -519,14 +533,17 @@ public class TestBrewery {
 
     @Test
     public void testBreweryCannotProduceWithOnlyWater() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -555,6 +572,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -626,6 +644,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -724,6 +743,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -767,6 +787,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -817,6 +838,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
@@ -882,6 +904,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
@@ -1125,7 +1148,6 @@ public class TestBrewery {
         Point point2 = new Point(14, 4);
         Building brewery0 = map.placeBuilding(new Brewery(player0), point2.upLeft());
 
-
         /* Connect headquarter and first flag */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
 
@@ -1177,6 +1199,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1238,6 +1261,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1288,6 +1312,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1341,6 +1366,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1397,6 +1423,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
@@ -1444,6 +1471,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1487,6 +1515,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1523,6 +1552,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1586,6 +1616,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1640,6 +1671,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1668,6 +1700,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1695,6 +1728,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1720,6 +1754,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */
@@ -1753,6 +1788,7 @@ public class TestBrewery {
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place headquarter */

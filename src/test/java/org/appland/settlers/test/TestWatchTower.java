@@ -337,7 +337,7 @@ public class TestWatchTower {
         assertFalse(watchTower0.needsMilitaryManning());
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testWatchTowerCannotHoldSoldiersBeforeFinished() throws Exception {
 
         /* Starting new game */
@@ -361,10 +361,14 @@ public class TestWatchTower {
 
         map.placeWorker(military, watchTower0);
 
-        military.enterBuilding(watchTower0);
+        try {
+            military.enterBuilding(watchTower0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
-    @Test (expected = Exception.class)
+    @Test
     public void testWatchTowerCannotHoldMoreThanSixSoldiers() throws Exception {
 
         /* Starting new game */
@@ -396,7 +400,11 @@ public class TestWatchTower {
 
         map.placeWorker(military, watchTower0);
 
-        military.enterBuilding(watchTower0);
+        try {
+            military.enterBuilding(watchTower0);
+
+            fail();
+        } catch (Exception e) {}
     }
 
     @Test
@@ -981,6 +989,34 @@ public class TestWatchTower {
     }
 
     @Test
+    public void testProductionCannotBeResumedInWatchTower() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point25 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
+
+        /* Placing watch tower */
+        Point point26 = new Point(8, 8);
+        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
+
+        /* Finish construction of the watch tower */
+        Utils.constructHouse(watchTower0);
+
+        /* Verify that production cannot be resumed in watch tower */
+        try {
+            watchTower0.resumeProduction();
+
+            fail();
+        } catch (Exception e) {}
+    }
+
+    @Test
     public void testMilitaryGoesBackOnToStorageOnRoadsIfPossibleWhenWatchTowerIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
@@ -1027,30 +1063,6 @@ public class TestWatchTower {
 
             assertTrue(map.isRoadAtPoint(point));
         }
-    }
-
-    @Test (expected = Exception.class)
-    public void testProductionCannotBeResumedInWatchTower() throws Exception {
-
-        /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
-        List<Player> players = new ArrayList<>();
-        players.add(player0);
-        GameMap map = new GameMap(players, 40, 40);
-
-        /* Placing headquarter */
-        Point point25 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
-
-        /* Placing watch tower */
-        Point point26 = new Point(8, 8);
-        Building watchTower0 = map.placeBuilding(new WatchTower(player0), point26);
-
-        /* Finish construction of the watch tower */
-        Utils.constructHouse(watchTower0);
-
-        /* Verify that production cannot be resumed in watch tower */
-        watchTower0.resumeProduction();
     }
 
     @Test
