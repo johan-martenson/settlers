@@ -130,7 +130,7 @@ public class TestProduction {
     }
 
     @Test
-    public void testGetWorkerTypeForBuildingNotNeedingWorker() throws Exception {
+    public void testGetWorkerTypeForBuildingNotNeedingWorker() {
         Headquarter headquarter = new Headquarter(null);
 
         try {

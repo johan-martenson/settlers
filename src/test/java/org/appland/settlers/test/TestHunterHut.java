@@ -150,7 +150,7 @@ public class TestHunterHut {
     }
 
     @Test
-    public void testPromiseWorkerToUnfinishedHunter() throws Exception {
+    public void testPromiseWorkerToUnfinishedHunter() {
         HunterHut hunterHut = new HunterHut(null);
 
         assertTrue(hunterHut.underConstruction());
@@ -163,7 +163,7 @@ public class TestHunterHut {
     }
 
     @Test
-    public void testAssignWorkerToUnfinishedHunter() throws Exception {
+    public void testAssignWorkerToUnfinishedHunter() {
         HunterHut hunterHut = new HunterHut(null);
 
         assertTrue(hunterHut.underConstruction());

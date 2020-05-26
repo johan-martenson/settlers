@@ -281,7 +281,7 @@ public class TestGameMap {
     }
 
     @Test
-    public void testCreateTooSmallMap() throws Exception {
+    public void testCreateTooSmallMap() {
 
         /* Verify that it's not possible to create a too small game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -296,7 +296,7 @@ public class TestGameMap {
     }
 
     @Test
-    public void testCreateMapWithNegativeHeight() throws Exception {
+    public void testCreateMapWithNegativeHeight() {
 
         /* Verify that it's not possible to create a map with negative height */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -311,7 +311,7 @@ public class TestGameMap {
     }
 
     @Test
-    public void testCreateMapWithNegativeWidth() throws Exception {
+    public void testCreateMapWithNegativeWidth() {
 
         /* Verify that it's not possible to create a game with a negative width */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

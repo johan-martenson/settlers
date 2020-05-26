@@ -293,7 +293,7 @@ public class TestPlayer {
     }
 
     @Test
-    public void testCannotHaveTwoPlayersWithSameColor() throws Exception {
+    public void testCannotHaveTwoPlayersWithSameColor() {
 
         /* Create players */
         Player player0 = new Player("Player 0", BLUE);

@@ -7,7 +7,6 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
-import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Donkey;
 import org.appland.settlers.model.DonkeyBreeder;
 import org.appland.settlers.model.DonkeyFarm;
@@ -30,10 +29,8 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
-import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;

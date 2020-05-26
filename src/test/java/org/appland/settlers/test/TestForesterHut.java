@@ -153,7 +153,7 @@ public class TestForesterHut {
     }
 
     @Test
-    public void testPromiseWorkerToUnfinishedForester() throws Exception {
+    public void testPromiseWorkerToUnfinishedForester() {
         ForesterHut foresterHut = new ForesterHut(null);
 
         assertTrue(foresterHut.underConstruction());
@@ -166,7 +166,7 @@ public class TestForesterHut {
     }
 
     @Test
-    public void testAssignWorkerToUnfinishedForester() throws Exception {
+    public void testAssignWorkerToUnfinishedForester() {
         ForesterHut foresterHut = new ForesterHut(null);
 
         assertTrue(foresterHut.underConstruction());

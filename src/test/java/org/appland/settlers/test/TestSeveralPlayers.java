@@ -28,7 +28,7 @@ import static org.junit.Assert.fail;
 public class TestSeveralPlayers {
 
     @Test
-    public void testChooseNoPlayers() throws Exception {
+    public void testChooseNoPlayers() {
 
         /* Create empty player list */
         List<Player> players = new LinkedList<>();

@@ -211,7 +211,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveAnyMilitaryFromEmptyInventory() throws Exception {
+    public void testRetrieveAnyMilitaryFromEmptyInventory() {
         assertEquals(storehouse.getAmount(PRIVATE), 0);
         assertEquals(storehouse.getAmount(SERGEANT), 0);
         assertEquals(storehouse.getAmount(GENERAL), 0);
@@ -245,7 +245,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrievePrivateFromEmptyInventory() throws Exception {
+    public void testRetrievePrivateFromEmptyInventory() {
         assertFalse(storehouse.isInStock(PRIVATE));
 
         try {
@@ -256,7 +256,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveSergeantFromEmptyInventory() throws Exception {
+    public void testRetrieveSergeantFromEmptyInventory() {
         assertFalse(storehouse.isInStock(SERGEANT));
 
         try {
@@ -267,7 +267,7 @@ public class TestInventory {
     }
 
     @Test
-    public void testRetrieveGeneralFromEmptyInventory() throws Exception {
+    public void testRetrieveGeneralFromEmptyInventory() {
         assertFalse(storehouse.isInStock(GENERAL));
 
         try {

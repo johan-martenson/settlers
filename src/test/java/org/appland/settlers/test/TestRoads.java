@@ -297,10 +297,6 @@ public class TestRoads {
 
         Point point3 = new Point(5, 3);
 
-        List<Point> points = new ArrayList<>();
-
-        points.add(point3);
-
         Road road = map.placeRoad(player0, point1, point3, point2);
 
         map.removeRoad(road);
@@ -375,16 +371,6 @@ public class TestRoads {
         Flag end2 = map.placeFlag(player0, point3);
         Point middlePoint = new Point(4, 4);
 
-        List<Point> wayPoints1 = new ArrayList<>();
-        List<Point> wayPoints2 = new ArrayList<>();
-        wayPoints1.add(commonStart.getPosition());
-        wayPoints1.add(middlePoint);
-        wayPoints1.add(end1.getPosition());
-
-        wayPoints2.add(commonStart.getPosition());
-        wayPoints2.add(middlePoint);
-        wayPoints2.add(end2.getPosition());
-
         map.placeRoad(player0, point1, middlePoint, point2.downLeft(), point2);
 
         try {
@@ -420,15 +406,9 @@ public class TestRoads {
         map.placeFlag(player0, end2);
 
         List<Point> wayPoints1 = new ArrayList<>();
-        List<Point> wayPoints2 = new ArrayList<>();
         wayPoints1.add(start1);
         wayPoints1.add(middlePoint);
         wayPoints1.add(end1);
-
-        wayPoints2.add(start2);
-        wayPoints2.add(middlePoint);
-        wayPoints2.add(end2);
-
 
         map.placeRoad(player0, wayPoints1);
 
