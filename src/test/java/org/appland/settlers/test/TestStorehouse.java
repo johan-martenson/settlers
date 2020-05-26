@@ -31,6 +31,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
@@ -108,7 +109,7 @@ public class TestStorehouse {
 
         /* Deliver three planks and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);
@@ -1795,6 +1796,158 @@ public class TestStorehouse {
 
         for (Material material : Material.values()) {
             assertEquals(storage0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testStorehouseWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Wait for the storehouse to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(storehouse, PLANK, 50);
+        Utils.adjustInventoryTo(storehouse, STONE, 50);
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, storehouse.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Place fortress */
+        Point point2 = new Point(12, 10);
+        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Connect the fortress with the storehouse */
+        Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
+
+        /* Verify that the storehouse waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(storehouse.getFlag().getStackedCargo().size(), 8);
+            assertNull(storehouse.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Remove one of the cargos */
+        Cargo cargo = storehouse.getFlag().getStackedCargo().get(0);
+        storehouse.getFlag().retrieveCargo(cargo);
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, storehouse.getWorker());
+    }
+
+    @Test
+    public void testStorehouseDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Wait for the storehouse to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        /* Make sure there is enough construction material in the storehouse */
+        Utils.adjustInventoryTo(storehouse, PLANK, 50);
+        Utils.adjustInventoryTo(storehouse, STONE, 50);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, storehouse.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Place fortress */
+        Point point2 = new Point(12, 10);
+        Fortress fortress = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Connect the fortress with the storehouse */
+        Road road1 = map.placeAutoSelectedRoad(player0, fortress.getFlag(), storehouse.getFlag());
+
+        /* The storehouse waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(storehouse.getFlag().getStackedCargo().size(), 8);
+            assertNull(storehouse.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Remove a cargo from the flag */
+        Cargo cargo = storehouse.getFlag().getStackedCargo().get(0);
+        storehouse.getFlag().retrieveCargo(cargo);
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 7);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertTrue(fortress.needsMaterial(PLANK));
+
+        Cargo newCargo = Utils.fastForwardUntilWorkerCarriesCargo(map, storehouse.getWorker());
+
+        assertEquals(storehouse.getWorker().getTarget(), storehouse.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, storehouse.getWorker(), storehouse.getFlag().getPosition());
+
+        assertEquals(storehouse.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the storehouse doesn't produce anything because the flag is full until the courier comes and removes a cargo */
+        for (int i = 0; i < 400; i++) {
+
+            if (storehouse.getFlag().getStackedCargo().size() < 8) {
+                break;
+            }
+
+            assertEquals(storehouse.getFlag().getStackedCargo().size(), 8);
+            assertNull(storehouse.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

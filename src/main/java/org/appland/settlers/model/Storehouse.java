@@ -604,6 +604,10 @@ public class Storehouse extends Building implements Actor {
 
     @Override
     public int getAmount(Material material) {
+        if (!isReady()) {
+            return super.getAmount(material);
+        }
+
         if (material == COURIER) {
             return 1;
         }

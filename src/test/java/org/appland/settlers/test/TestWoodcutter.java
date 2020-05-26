@@ -34,6 +34,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
@@ -2492,6 +2493,158 @@ public class TestWoodcutter {
 
         for (Material material : Material.values()) {
             assertEquals(woodcutter0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testWoodcutterWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(16, 6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place trees */
+        Point point2 = new Point(18, 6);
+        Point point3 = new Point(19, 7);
+        Point point4 = new Point(20, 6);
+        Tree tree0 = map.placeTree(point2);
+        Tree tree1 = map.placeTree(point3);
+        Tree tree2 = map.placeTree(point4);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the woodcutter to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, woodcutter.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the woodcutter waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 600; i++) {
+            assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the woodcutter with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 700; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutter.getWorker(), WOOD);
+    }
+
+    @Test
+    public void testWoodcutterDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(16, 6);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place trees */
+        Point point2 = new Point(18, 6);
+        Point point3 = new Point(19, 7);
+        Point point4 = new Point(20, 6);
+        Tree tree0 = map.placeTree(point2);
+        Tree tree1 = map.placeTree(point3);
+        Tree tree2 = map.placeTree(point4);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the woodcutter to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(woodcutter);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, woodcutter.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The woodcutter waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 500; i++) {
+            assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the woodcutter with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 600; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, woodcutter.getWorker(), WOOD);
+
+        /* Wait for the worker to put the cargo on the flag */
+        Utils.waitForFlagToGetStackedCargo(map, woodcutter.getFlag(), 8);
+
+        assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the woodcutter doesn't produce anything because the flag is full */
+        for (int i = 0; i < 600; i++) {
+            assertEquals(woodcutter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
         }
     }
 }

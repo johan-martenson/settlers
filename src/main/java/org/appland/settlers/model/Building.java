@@ -409,10 +409,9 @@ public class Building implements Actor, EndPoint {
         }
 
         if (underConstruction()) {
+
             if (countdown.reachedZero()) {
-
                 if (isMaterialForConstructionAvailable()) {
-
                     consumeConstructionMaterial();
 
                     state = State.UNOCCUPIED;

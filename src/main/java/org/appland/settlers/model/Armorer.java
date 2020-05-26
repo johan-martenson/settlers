@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Armorer.State.PRODUCING_WEAPON;
 import static org.appland.settlers.model.Armorer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Armorer.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Armorer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Armorer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON_BAR;
@@ -37,7 +38,7 @@ public class Armorer extends Worker {
         PRODUCING_WEAPON,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
 
@@ -79,22 +80,46 @@ public class Armorer extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                Cargo cargo = new Cargo(nextWeapon, map);
+
+                setCargo(cargo);
+
+                nextWeapon = getNextWeapon(nextWeapon);
+
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            }
         } else if (state == PRODUCING_WEAPON) {
             if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
 
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(nextWeapon, map);
 
-                    setCargo(cargo);
-
+                    /* Produce the weapon */
                     getHome().consumeOne(IRON_BAR);
                     getHome().consumeOne(COAL);
 
-                    nextWeapon = getNextWeapon(nextWeapon);
+                    /* Handle transportation */
+                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
+                    } else {
 
-                    state = GOING_TO_FLAG_WITH_CARGO;
+                        Cargo cargo = new Cargo(nextWeapon, map);
 
-                    setTarget(getHome().getFlag().getPosition());
+                        setCargo(cargo);
+
+                        nextWeapon = getNextWeapon(nextWeapon);
+
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    }
                 } else {
                     countdown.step();
 

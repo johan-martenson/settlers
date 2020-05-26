@@ -33,6 +33,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SHIELD;
@@ -1960,6 +1961,160 @@ public class TestArmory {
         for (int i = 0; i < 2000; i++) {
             assertEquals(armory0.getAmount(COAL), 2);
             assertEquals(armory0.getAmount(IRON_BAR), 2);
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testArmoryWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(16, 6);
+        Building armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
+
+        /* Wait for the armory to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(armory);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
+
+        /* Give material to the armory */
+        Utils.putCargoToBuilding(armory, IRON_BAR);
+        Utils.putCargoToBuilding(armory, COAL);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the armory waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+            assertNull(armory.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the armory with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(armory.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(armory.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, armory.getWorker(), SHIELD, SWORD);
+    }
+
+    @Test
+    public void testArmoryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place armory */
+        Point point1 = new Point(16, 6);
+        Armory armory = map.placeBuilding(new Armory(player0), point1);
+
+        /* Connect the armory with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
+
+        /* Wait for the armory to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(armory);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(armory);
+
+        /* Give material to the armory */
+        Utils.putCargoToBuilding(armory, IRON_BAR);
+        Utils.putCargoToBuilding(armory, IRON_BAR);
+        Utils.putCargoToBuilding(armory, COAL);
+        Utils.putCargoToBuilding(armory, COAL);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, armory.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The armory waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+            assertNull(armory.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the armory with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, armory.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(armory.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(armory.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo of shield or sword and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, armory.getWorker(), FLOUR, SWORD);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(armory.getWorker().getTarget(), armory.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, armory.getWorker(), armory.getFlag().getPosition());
+
+        assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the armory doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(armory.getFlag().getStackedCargo().size(), 8);
+            assertNull(armory.getWorker().getCargo());
 
             map.stepTime();
         }

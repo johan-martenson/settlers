@@ -33,6 +33,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
@@ -2246,6 +2247,157 @@ public class TestFishery {
 
         for (Material material : Material.values()) {
             assertEquals(fishery0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testFisheryWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place fish on one tile */
+        Point point2 = new Point(5, 5);
+
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place fishery */
+        Point point3 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the fishery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(fishery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, fishery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the fishery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 500; i++) {
+            assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the fishery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(fishery.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, fishery.getWorker(), FISH);
+    }
+
+    @Test
+    public void testFisheryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create new game map with one player */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place fish on one tile */
+        Point point2 = new Point(5, 5);
+
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+
+        /* Place headquarter */
+        Point hqPoint = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+
+        /* Place fishery */
+        Point point3 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+
+        /* Connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the fishery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(fishery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, fishery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The fishery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 500; i++) {
+            assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the fishery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(fishery.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, fishery.getWorker(), FISH);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fishery.getWorker(), fishery.getPosition());
+
+        /* Wait for the worker to put the cargo on the flag */
+        map.stepTime();
+
+        assertEquals(fishery.getWorker().getTarget(), fishery.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fishery.getWorker(), fishery.getFlag().getPosition());
+
+        assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the fishery doesn't produce anything because the flag is full */
+        for (int i = 0; i < 800; i++) {
+            assertEquals(fishery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
         }
     }
 }

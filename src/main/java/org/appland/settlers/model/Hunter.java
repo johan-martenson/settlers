@@ -29,7 +29,7 @@ public class Hunter extends Worker {
         SHOOTING,
         GOING_TO_PICK_UP_MEAT,
         GOING_TO_FLAG_TO_LEAVE_CARGO,
-        GOING_BACK_TO_HOUSE_WITHOUT_CARGO
+        WAITING_FOR_SPACE_ON_FLAG, GOING_BACK_TO_HOUSE_WITHOUT_CARGO
     }
 
     public Hunter(Player player, GameMap map) {
@@ -112,6 +112,14 @@ public class Hunter extends Worker {
 
                 countdown.countFrom(TIME_TO_SHOOT);
             }
+        } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            }
         }
     }
 
@@ -135,9 +143,15 @@ public class Hunter extends Worker {
                 countdown.countFrom(TIME_TO_SHOOT);
             }
         } else if (state == State.GOING_BACK_TO_HOUSE_WITH_CARGO) {
-            state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                state = State.GOING_TO_FLAG_TO_LEAVE_CARGO;
 
-            setTarget(getHome().getFlag().getPosition());
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            } else {
+                state = State.WAITING_FOR_SPACE_ON_FLAG;
+            }
         } else if (state == State.RETURNING_TO_STORAGE) {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 

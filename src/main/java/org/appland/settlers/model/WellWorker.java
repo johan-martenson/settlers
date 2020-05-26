@@ -38,7 +38,7 @@ public class WellWorker extends Worker {
         DRAWING_WATER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     @Override
@@ -68,6 +68,31 @@ public class WellWorker extends Worker {
             }
         } else if (state == State.DRAWING_WATER) {
             if (countdown.reachedZero()) {
+
+                /* Report that the well worker produced water */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
+
+                /* Handle transportation */
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = new Cargo(WATER, map);
+
+                    setCargo(cargo);
+
+                    /* Go out to the flag to deliver the water */
+                    setTarget(getHome().getFlag().getPosition());
+
+                    state = State.GOING_TO_FLAG_WITH_CARGO;
+
+                    getHome().getFlag().promiseCargo();
+                } else {
+                    state = WellWorker.State.WAITING_FOR_SPACE_ON_FLAG;
+                }
+            } else {
+                countdown.step();
+            }
+        } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
                 Cargo cargo = new Cargo(WATER, map);
 
                 setCargo(cargo);
@@ -77,11 +102,7 @@ public class WellWorker extends Worker {
 
                 state = State.GOING_TO_FLAG_WITH_CARGO;
 
-                /* Report that the well worker produced water */
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
-            } else {
-                countdown.step();
+                getHome().getFlag().promiseCargo();
             }
         }
     }

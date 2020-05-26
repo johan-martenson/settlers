@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Brewer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Brewer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Brewer.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Brewer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Brewer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.WATER;
@@ -35,7 +36,7 @@ public class Brewer extends Worker {
         BREWING_BEER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Brewer(Player player, GameMap map) {
@@ -68,24 +69,47 @@ public class Brewer extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+
+            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                Cargo cargo = new Cargo(BEER, map);
+
+                setCargo(cargo);
+
+                /* Go place the beer at the flag */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            }
+
         } else if (state == BREWING_BEER) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(BEER, map);
-
-                    setCargo(cargo);
 
                     /* Consume the ingredients */
                     getHome().consumeOne(WATER);
                     getHome().consumeOne(WHEAT);
 
-                    /* Go place the beer at the flag */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
+
+                    /* Handle transportation of the produced beer */
+                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                        state = Brewer.State.WAITING_FOR_SPACE_ON_FLAG;
+                    } else {
+                        Cargo cargo = new Cargo(BEER, map);
+
+                        setCargo(cargo);
+
+                        /* Go place the beer at the flag */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    }
                 } else {
                     countdown.step();
                 }

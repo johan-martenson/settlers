@@ -14,6 +14,7 @@ import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG;
 import static org.appland.settlers.model.Fisherman.State.IN_HOUSE_WITH_FISH;
 import static org.appland.settlers.model.Fisherman.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Fisherman.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Fisherman.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Fisherman.State.WALKING_TO_TARGET;
 
 /**
@@ -70,7 +71,7 @@ public class Fisherman extends Worker {
         IN_HOUSE_WITH_FISH,
         GOING_TO_FLAG,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Fisherman(Player player, GameMap map) {
@@ -143,9 +144,25 @@ public class Fisherman extends Worker {
                 countdown.step();
             }
         } else if (state == IN_HOUSE_WITH_FISH) {
-            state = GOING_TO_FLAG;
 
-            setTarget(getHome().getFlag().getPosition());
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                state = GOING_TO_FLAG;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            } else {
+                state = WAITING_FOR_SPACE_ON_FLAG;
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                state = GOING_TO_FLAG;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            }
         }
     }
 

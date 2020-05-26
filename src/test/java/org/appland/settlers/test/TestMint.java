@@ -33,6 +33,7 @@ import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.CRUCIBLE;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MINTER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -1911,6 +1912,160 @@ public class TestMint {
             }
 
             assertEquals(mint0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testMintWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point1 = new Point(16, 6);
+        Building mint = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the mint with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mint to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(mint);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mint);
+
+        /* Give material to the mint */
+        Utils.putCargoToBuilding(mint, GOLD);
+        Utils.putCargoToBuilding(mint, COAL);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, mint.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the mint waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+            assertNull(mint.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the mint with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(mint.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(mint.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, mint.getWorker(), COIN);
+    }
+
+    @Test
+    public void testMintDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mint */
+        Point point1 = new Point(16, 6);
+        Mint mint = map.placeBuilding(new Mint(player0), point1);
+
+        /* Connect the mint with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mint to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(mint);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mint);
+
+        /* Give material to the mint */
+        Utils.putCargoToBuilding(mint, GOLD);
+        Utils.putCargoToBuilding(mint, GOLD);
+        Utils.putCargoToBuilding(mint, COAL);
+        Utils.putCargoToBuilding(mint, COAL);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, mint.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The mint waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+            assertNull(mint.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the mint with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, mint.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(mint.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(mint.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, mint.getWorker(), COIN);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(mint.getWorker().getTarget(), mint.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mint.getWorker(), mint.getFlag().getPosition());
+
+        assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the mint doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(mint.getFlag().getStackedCargo().size(), 8);
+            assertNull(mint.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

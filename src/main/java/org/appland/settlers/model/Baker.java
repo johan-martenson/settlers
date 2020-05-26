@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Baker.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Baker.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Baker.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Baker.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Baker.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Baker.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
@@ -35,7 +36,7 @@ public class Baker extends Worker {
         BAKING_BREAD,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
 
@@ -69,24 +70,47 @@ public class Baker extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+
+            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                Cargo cargo = new Cargo(BREAD, map);
+
+                setCargo(cargo);
+
+                /* Go out to the flag to deliver the bread */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
+            }
+
         } else if (state == BAKING_BREAD) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(FLOUR) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(BREAD, map);
-
-                    setCargo(cargo);
 
                     /* Consume the ingredients */
                     getHome().consumeOne(WATER);
                     getHome().consumeOne(FLOUR);
 
-                    /* Go out to the flag to deliver the bread */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report production of the bread */
                     productivityMeasurer.reportProductivity();
+
+                    /* Handle the transportation of the produced bread */
+                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                        state = Baker.State.WAITING_FOR_SPACE_ON_FLAG;
+                    } else {
+                        Cargo cargo = new Cargo(BREAD, map);
+
+                        setCargo(cargo);
+
+                        /* Go out to the flag to deliver the bread */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    }
                 } else {
                     countdown.step();
                 }

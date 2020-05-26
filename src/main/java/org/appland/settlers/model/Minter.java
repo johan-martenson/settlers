@@ -14,6 +14,7 @@ import static org.appland.settlers.model.Minter.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Minter.State.MAKING_COIN;
 import static org.appland.settlers.model.Minter.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Minter.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Minter.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;
 
 /**
@@ -33,7 +34,7 @@ public class Minter extends Worker {
         MAKING_COIN,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     private State state;
@@ -69,22 +70,31 @@ public class Minter extends Worker {
         } else if (state == MAKING_COIN) {
             if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(COIN, map);
-
-                    setCargo(cargo);
 
                     /* Consume resources */
                     getHome().consumeOne(GOLD);
                     getHome().consumeOne(COAL);
 
-                    /* Go out to the flag to deliver the coin */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report that the minter produced a coin */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
+
+                    /* Handle transportation */
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                        Cargo cargo = new Cargo(COIN, map);
+
+                        setCargo(cargo);
+
+                        /* Go out to the flag to deliver the coin */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    } else {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
+                    }
                 } else {
                     countdown.step();
                 }
@@ -92,6 +102,20 @@ public class Minter extends Worker {
 
                 /* Report that the minter lacked resources and couldn't produce a coin */
                 productivityMeasurer.reportUnproductivity();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                Cargo cargo = new Cargo(COIN, map);
+
+                setCargo(cargo);
+
+                /* Go out to the flag to deliver the coin */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
             }
         }
     }

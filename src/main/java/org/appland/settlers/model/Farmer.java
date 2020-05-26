@@ -25,6 +25,7 @@ import static org.appland.settlers.model.Farmer.State.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.State.PLANTING;
 import static org.appland.settlers.model.Farmer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Farmer.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Farmer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Farmer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -127,7 +128,7 @@ public class Farmer extends Worker {
         GOING_BACK_TO_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         IN_HOUSE_WITH_CARGO,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Farmer(Player player, GameMap map) {
@@ -225,9 +226,27 @@ public class Farmer extends Worker {
                 countdown.step();
             }
         } else if (state == IN_HOUSE_WITH_CARGO) {
-            setTarget(getHome().getFlag().getPosition());
 
-            state = GOING_OUT_TO_PUT_CARGO;
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                setTarget(getHome().getFlag().getPosition());
+
+                state = GOING_OUT_TO_PUT_CARGO;
+
+                /* Tell the flag that the cargo will be delivered */
+                getHome().getFlag().promiseCargo();
+            } else {
+                state = WAITING_FOR_SPACE_ON_FLAG;
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                state = GOING_OUT_TO_PUT_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                /* Tell the flag that the cargo will be delivered */
+                getHome().getFlag().promiseCargo();
+            }
         }
     }
 
@@ -251,6 +270,7 @@ public class Farmer extends Worker {
     public void onArrival() throws Exception {
 
         if (state == GOING_OUT_TO_PUT_CARGO) {
+
             Cargo cargo = getCargo();
 
             cargo.setPosition(getPosition());

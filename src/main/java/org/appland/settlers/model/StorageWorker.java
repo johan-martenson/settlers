@@ -103,7 +103,6 @@ public class StorageWorker extends Worker {
 
                         continue;
                     }
-
                 }
 
                 /* Check if the building needs the material */
@@ -152,14 +151,19 @@ public class StorageWorker extends Worker {
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
-                Cargo cargo = tryToStartDelivery();
 
-                if (cargo != null) {
-                    setCargo(cargo);
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = tryToStartDelivery();
 
-                    setTarget(getHome().getFlag().getPosition());
+                    if (cargo != null) {
+                        setCargo(cargo);
 
-                    state = State.DELIVERING_CARGO_TO_FLAG;
+                        setTarget(getHome().getFlag().getPosition());
+
+                        state = State.DELIVERING_CARGO_TO_FLAG;
+
+                        getHome().getFlag().promiseCargo();
+                    }
                 }
             } else {
                 countdown.step();

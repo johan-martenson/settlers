@@ -378,17 +378,20 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material material) throws Exception {
+    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws Exception {
+
+        Set<Material> setOfMaterials = new HashSet<>(Arrays.asList(materials));
 
         for (int j = 0; j < 20000; j++) {
-            if (worker.getCargo() != null && worker.getCargo().getMaterial().equals(material)) {
+            if (worker.getCargo() != null && setOfMaterials.contains(worker.getCargo().getMaterial())) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(worker.getCargo().getMaterial(), material);
+        assertNotNull(worker.getCargo());
+        assertTrue(setOfMaterials.contains(worker.getCargo().getMaterial()));
     }
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws Exception {
@@ -1120,6 +1123,11 @@ public class Utils {
 
         for (int i = 0; i < 1000; i++) {
             for (Road road : roads) {
+
+                if (road.getCourier() == null) {
+                    continue;
+                }
+
                 couriers.add(road.getCourier());
 
                 if (couriers.size() == roads.length) {
@@ -1155,7 +1163,7 @@ public class Utils {
     public static void waitForBuildingToBeConstructed(Building building) throws Exception {
         GameMap map = building.getMap();
 
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 3000; i++) {
 
             if (building.isReady()) {
                 break;
@@ -1526,6 +1534,82 @@ public class Utils {
         }
 
         System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
+    }
+
+    public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws Exception {
+
+        for (int i = 0; i < 5000; i++) {
+            boolean allIdle = true;
+
+            for (Courier courier : couriers) {
+                if (!courier.isIdle()) {
+                    allIdle = false;
+
+                    break;
+                }
+            }
+
+            if (allIdle) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Courier courier : couriers) {
+            assertTrue(courier.isIdle());
+        }
+    }
+
+    public static Cargo placeCargo(GameMap map, Material material, Flag flag, Building building) throws Exception {
+        Cargo cargo = new Cargo(material, map);
+
+        cargo.setPosition(flag.getPosition());
+        cargo.setTarget(building);
+
+        flag.promiseCargo();
+        flag.putCargo(cargo);
+
+        return cargo;
+    }
+
+    public static void placeCargos(GameMap map, Material material, int amount, Flag flag, Building building) throws Exception {
+        for (int i = 0; i < amount; i++) {
+            placeCargo(map, material, flag, building);
+        }
+    }
+
+    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material) throws Exception {
+        GameMap map = building.getMap();
+
+        int amount = building.getAmount(material);
+
+        for (int i = 0; i < 1000; i++) {
+            if (building.getAmount(material) == amount + 1) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(building.getAmount(material), amount + 1);
+    }
+
+    public static void putCargoToBuilding(Building mill, Material material) throws Exception {
+        mill.promiseDelivery(material);
+        mill.putCargo(new Cargo(material, mill.getMap()));
+    }
+
+    public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws Exception {
+        for (int i = 0; i < 1000; i++) {
+            if (flag.getStackedCargo().size() == amount) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertEquals(flag.getStackedCargo().size(), amount);
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

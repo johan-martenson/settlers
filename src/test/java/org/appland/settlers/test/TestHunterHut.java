@@ -2,6 +2,7 @@ package org.appland.settlers.test;
 
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
@@ -25,6 +26,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANK;
@@ -1869,6 +1871,143 @@ public class TestHunterHut {
 
         for (Material material : Material.values()) {
             assertEquals(hunterHut0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testHunterHutWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunterHut */
+        Point point1 = new Point(16, 6);
+        Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Connect the hunterHut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the hunterHut to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, hunterHut.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the hunterHut waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 800; i++) {
+            assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the hunterHut with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 800; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(hunterHut.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, hunterHut.getWorker(), MEAT);
+    }
+
+    @Test
+    public void testHunterHutDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunterHut */
+        Point point1 = new Point(16, 6);
+        HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Connect the hunterHut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the hunterHut to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(hunterHut);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, hunterHut.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The hunterHut waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the hunterHut with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 800; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(hunterHut.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* Wait for the hunter to get more meat */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, hunterHut.getWorker(), MEAT);
+
+        /* Wait for the worker to put the cargo on the flag */
+        Utils.waitForFlagToGetStackedCargo(map, hunterHut.getFlag(), 8);
+
+        assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the hunterHut doesn't produce anything because the flag is full */
+        for (int i = 0; i < 800; i++) {
+            assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
         }
     }
 }

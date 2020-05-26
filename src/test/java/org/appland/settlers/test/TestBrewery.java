@@ -32,6 +32,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
@@ -1815,6 +1816,160 @@ public class TestBrewery {
             }
 
             assertEquals(brewery0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testBreweryWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(16, 6);
+        Building brewery = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Connect the brewery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the brewery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(brewery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
+
+        /* Give material to the brewery */
+        Utils.putCargoToBuilding(brewery, WHEAT);
+        Utils.putCargoToBuilding(brewery, WATER);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, brewery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the brewery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+            assertNull(brewery.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the brewery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(brewery.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(brewery.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, brewery.getWorker(), BEER);
+    }
+
+    @Test
+    public void testBreweryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(16, 6);
+        Brewery brewery = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Connect the brewery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the brewery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(brewery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery);
+
+        /* Give material to the brewery */
+        Utils.putCargoToBuilding(brewery, WHEAT);
+        Utils.putCargoToBuilding(brewery, WHEAT);
+        Utils.putCargoToBuilding(brewery, WATER);
+        Utils.putCargoToBuilding(brewery, WATER);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, brewery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The brewery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+            assertNull(brewery.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the brewery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, brewery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(brewery.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(brewery.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, brewery.getWorker(), BEER);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(brewery.getWorker().getTarget(), brewery.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewery.getWorker(), brewery.getFlag().getPosition());
+
+        assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the brewery doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(brewery.getFlag().getStackedCargo().size(), 8);
+            assertNull(brewery.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

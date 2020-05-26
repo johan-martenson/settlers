@@ -30,6 +30,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.STONE;
@@ -1862,6 +1863,160 @@ public class TestSawmill {
             }
 
             assertEquals(sawmill0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testSawmillWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(16, 6);
+        Building sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the sawmill to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Give material to the sawmill */
+        Utils.putCargoToBuilding(sawmill, WOOD);
+        Utils.putCargoToBuilding(sawmill, WOOD);
+        Utils.putCargoToBuilding(sawmill, WOOD);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, sawmill.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the sawmill waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+            assertNull(sawmill.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the sawmill with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(sawmill.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(sawmill.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill.getWorker(), PLANK);
+    }
+
+    @Test
+    public void testSawmillDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(16, 6);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the sawmill to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Give material to the sawmill */
+        Utils.putCargoToBuilding(sawmill, WOOD);
+        Utils.putCargoToBuilding(sawmill, WOOD);
+        Utils.putCargoToBuilding(sawmill, WOOD);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, sawmill.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The sawmill waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+            assertNull(sawmill.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the sawmill with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(sawmill.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(sawmill.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, sawmill.getWorker(), PLANK);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(sawmill.getWorker().getTarget(), sawmill.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, sawmill.getWorker(), sawmill.getFlag().getPosition());
+
+        assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the sawmill doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(sawmill.getFlag().getStackedCargo().size(), 8);
+            assertNull(sawmill.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

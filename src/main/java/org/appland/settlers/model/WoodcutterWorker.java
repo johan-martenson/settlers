@@ -55,7 +55,7 @@ public class WoodcutterWorker extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_PLACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public WoodcutterWorker(Player player, GameMap map) {
@@ -123,9 +123,23 @@ public class WoodcutterWorker extends Worker {
                 countdown.step();
             }
         } else if (state == State.IN_HOUSE_WITH_CARGO) {
-            setTarget(getHome().getFlag().getPosition());
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                setTarget(getHome().getFlag().getPosition());
 
-            state = State.GOING_OUT_TO_PUT_CARGO;
+                state = State.GOING_OUT_TO_PUT_CARGO;
+
+                getHome().getFlag().promiseCargo();
+            } else {
+                state = State.WAITING_FOR_PLACE_ON_FLAG;
+            }
+        } else if (state == State.WAITING_FOR_PLACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                setTarget(getHome().getFlag().getPosition());
+
+                state = State.GOING_OUT_TO_PUT_CARGO;
+
+                getHome().getFlag().promiseCargo();
+            }
         }
     }
 

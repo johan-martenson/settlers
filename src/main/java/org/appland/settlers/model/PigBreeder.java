@@ -17,6 +17,7 @@ import static org.appland.settlers.model.PigBreeder.State.GOING_OUT_TO_PUT_CARGO
 import static org.appland.settlers.model.PigBreeder.State.PREPARING_PIG_FOR_DELIVERY;
 import static org.appland.settlers.model.PigBreeder.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.PigBreeder.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.PigBreeder.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.PigBreeder.State.WALKING_TO_TARGET;
 
 /**
@@ -43,7 +44,7 @@ public class PigBreeder extends Worker {
         PREPARING_PIG_FOR_DELIVERY,
         GOING_BACK_TO_HOUSE,
         GOING_OUT_TO_PUT_CARGO,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public PigBreeder(Player player, GameMap map) {
@@ -106,6 +107,31 @@ public class PigBreeder extends Worker {
             }
         } else if (state == PREPARING_PIG_FOR_DELIVERY) {
             if (countdown.reachedZero()) {
+
+                /* Report that the pig breeder produced a pig */
+                productivityMeasurer.reportProductivity();
+                productivityMeasurer.nextProductivityCycle();
+
+                /* Handle transportation */
+                if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                    Cargo cargo = new Cargo(PIG, map);
+
+                    setCargo(cargo);
+
+                    /* Go out to the flag to deliver the pig */
+                    state = GOING_OUT_TO_PUT_CARGO;
+
+                    setTarget(getHome().getFlag().getPosition());
+
+                    getHome().getFlag().promiseCargo();
+                } else {
+                    state = PigBreeder.State.WAITING_FOR_SPACE_ON_FLAG;
+                }
+            } else {
+                countdown.step();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
                 Cargo cargo = new Cargo(PIG, map);
 
                 setCargo(cargo);
@@ -115,11 +141,7 @@ public class PigBreeder extends Worker {
 
                 setTarget(getHome().getFlag().getPosition());
 
-                /* Report that the pig breeder produced a pig */
-                productivityMeasurer.reportProductivity();
-                productivityMeasurer.nextProductivityCycle();
-            } else {
-                countdown.step();
+                getHome().getFlag().promiseCargo();
             }
         }
     }

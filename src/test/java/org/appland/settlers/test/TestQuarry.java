@@ -32,6 +32,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STONEMASON;
@@ -2133,5 +2134,152 @@ public class TestQuarry {
 
         /* Verify that tearing down the flag doesn't cause any problem */
         map.removeFlag(quarry0.getFlag());
+    }
+
+    @Test
+    public void testQuarryWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(16, 6);
+        Building quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place stone */
+        Point point2 = new Point(18, 6);
+        Stone stone = map.placeStone(point2);
+
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+
+        /* Wait for the quarry to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(quarry);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the quarry waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the quarry with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(quarry.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
+    }
+
+    @Test
+    public void testQuarryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(16, 6);
+        Quarry quarry = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place stone */
+        Point point2 = new Point(18, 6);
+        Stone stone = map.placeStone(point2);
+
+        /* Connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+
+        /* Wait for the quarry to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(quarry);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, quarry.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The quarry waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 800; i++) {
+            assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        /* Reconnect the quarry with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, quarry.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(courier.getCargo());
+            assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(quarry.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, quarry.getWorker(), STONE);
+
+        /* Wait for the worker to put the cargo on the flag */
+        Utils.waitForFlagToGetStackedCargo(map, quarry.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, quarry.getWorker(), quarry.getFlag().getPosition());
+
+        assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the quarry doesn't produce anything because the flag is full */
+        for (int i = 0; i < 800; i++) {
+            assertEquals(quarry.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
     }
 }

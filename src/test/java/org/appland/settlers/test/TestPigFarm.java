@@ -30,6 +30,7 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PIG;
 import static org.appland.settlers.model.Material.PIG_BREEDER;
 import static org.appland.settlers.model.Material.PLANK;
@@ -2073,6 +2074,160 @@ public class TestPigFarm {
             }
 
             assertEquals(pigFarm0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testPigFarmWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place pigFarm */
+        Point point1 = new Point(16, 6);
+        Building pigFarm = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Connect the pigFarm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
+
+        /* Wait for the pigFarm to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        /* Give material to the pigFarm */
+        Utils.putCargoToBuilding(pigFarm, WHEAT);
+        Utils.putCargoToBuilding(pigFarm, WATER);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, pigFarm.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the pigFarm waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+            assertNull(pigFarm.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the pigFarm with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(pigFarm.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, pigFarm.getWorker(), PIG);
+    }
+
+    @Test
+    public void testPigFarmDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place pigFarm */
+        Point point1 = new Point(16, 6);
+        PigFarm pigFarm = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Connect the pigFarm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
+
+        /* Wait for the pigFarm to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        /* Give material to the pigFarm */
+        Utils.putCargoToBuilding(pigFarm, WHEAT);
+        Utils.putCargoToBuilding(pigFarm, WHEAT);
+        Utils.putCargoToBuilding(pigFarm, WATER);
+        Utils.putCargoToBuilding(pigFarm, WATER);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, pigFarm.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The pigFarm waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+            assertNull(pigFarm.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the pigFarm with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(pigFarm.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, pigFarm.getWorker(), PIG);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(pigFarm.getWorker().getTarget(), pigFarm.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigFarm.getWorker(), pigFarm.getFlag().getPosition());
+
+        assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the pigFarm doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(pigFarm.getFlag().getStackedCargo().size(), 8);
+            assertNull(pigFarm.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

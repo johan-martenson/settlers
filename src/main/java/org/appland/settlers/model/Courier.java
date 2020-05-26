@@ -9,6 +9,7 @@ import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP
 import static org.appland.settlers.model.Courier.States.IDLE_AT_ROAD;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_IDLE_SPOT;
 import static org.appland.settlers.model.Courier.States.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Courier.States.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Courier.States.WALKING_TO_ROAD;
 
 @Walker(speed = 10)
@@ -50,7 +51,7 @@ public class Courier extends Worker {
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO,
         GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,
         GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Courier(Player player, GameMap map) {
@@ -81,6 +82,16 @@ public class Courier extends Worker {
                 planToPickUpCargo(cargo, end);
 
                 state = GOING_TO_FLAG_TO_PICK_UP_CARGO;
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            Flag flag = map.getFlagAtPoint(getCargo().getNextFlagOrBuilding());
+
+            if (!flag.hasNoPlaceForMoreCargo()) {
+                state = GOING_TO_FLAG_TO_DELIVER_CARGO;
+
+                setTarget(flag.getPosition());
+
+                flag.promiseCargo();
             }
         }
     }
@@ -226,23 +237,46 @@ public class Courier extends Worker {
     @Override
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
-        if (getCargo() != null) {
-            getCargo().setPosition(getPosition());
+        if (getCargo() == null) {
+            return;
+        }
 
-            /* Return the cargo to storage if the building is torn down */
-            if (state != RETURNING_TO_STORAGE &&
-                map.isFlagAtPoint(getPosition()) &&
-                (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {
+        getCargo().setPosition(getPosition());
 
-                Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        List<Point> plannedPath = getPlannedPath();
 
-                Cargo cargo = getCargo();
+        /* If at the point before the flag */
+        if (!plannedPath.isEmpty() && map.isFlagAtPoint(plannedPath.get(0))) {
 
-                cargo.setTarget(storage);
+            Point nextPoint = plannedPath.get(0);
+            Flag flag = map.getFlagAtPoint(nextPoint);
 
-                /* Deliver the cargo either to the storage's flag or directly to the storage */
-                deliverToFlagOrBuilding(cargo);
+            if (state == GOING_TO_FLAG_TO_DELIVER_CARGO && nextPoint.equals(getCargo().getNextFlagOrBuilding())) {
+
+                /* Wait if there is no space at the flag to put down the cargo */
+                if (flag.hasNoPlaceForMoreCargo()) {
+                    state = WAITING_FOR_SPACE_ON_FLAG;
+
+                    stopWalkingToTarget();
+                } else {
+                    flag.promiseCargo();
+                }
             }
+        }
+
+        /* Return the cargo to storage if the building is torn down */
+        else if (state != RETURNING_TO_STORAGE &&
+            map.isFlagAtPoint(getPosition()) &&
+            (getCargo().getTarget().isBurningDown() || getCargo().getTarget().isDestroyed())) {
+
+            Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+
+            Cargo cargo = getCargo();
+
+            cargo.setTarget(storage);
+
+            /* Deliver the cargo either to the storage's flag or directly to the storage */
+            deliverToFlagOrBuilding(cargo);
         }
     }
 

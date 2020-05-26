@@ -13,6 +13,7 @@ import static org.appland.settlers.model.Miller.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Miller.State.GRINDING_WHEAT;
 import static org.appland.settlers.model.Miller.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Miller.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Miller.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Miller.State.WALKING_TO_TARGET;
 
 /**
@@ -43,7 +44,8 @@ public class Miller extends Worker {
         GRINDING_WHEAT,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        RETURNING_TO_STORAGE,
+        WAITING_FOR_SPACE_ON_FLAG
     }
 
     @Override
@@ -67,20 +69,44 @@ public class Miller extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+
+            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+
+                Cargo cargo = new Cargo(FLOUR, map);
+
+                setCargo(cargo);
+
+                getHome().getFlag().promiseCargo();
+
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+            }
+
         } else if (state == GRINDING_WHEAT) {
             if (getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(FLOUR, map);
-
-                    setCargo(cargo);
 
                     /* Consume the wheat */
                     getHome().consumeOne(WHEAT);
 
-                    /* Go out to the flag to deliver the flour */
-                    setTarget(getHome().getFlag().getPosition());
+                    /* Wait for space on the flag if it's full */
+                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
 
-                    state = GOING_TO_FLAG_WITH_CARGO;
+                    /* Go out to the flag to deliver the flour */
+                    } else {
+                        Cargo cargo = new Cargo(FLOUR, map);
+
+                        cargo.setPosition(getPosition());
+
+                        setCargo(cargo);
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        state = GOING_TO_FLAG_WITH_CARGO;
+                    }
 
                     /* Report that the miller produced flour */
                     productivityMeasurer.reportProductivity();

@@ -18,6 +18,7 @@ import static org.appland.settlers.model.Miner.State.GOING_OUT_TO_FLAG;
 import static org.appland.settlers.model.Miner.State.MINING;
 import static org.appland.settlers.model.Miner.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Miner.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Miner.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Miner.State.WALKING_TO_TARGET;
 
 /**
@@ -42,7 +43,7 @@ public class Miner extends Worker {
         GOING_OUT_TO_FLAG,
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE,
-        NO_MORE_RESOURCES
+        WAITING_FOR_SPACE_ON_FLAG, NO_MORE_RESOURCES
     }
 
     public Miner(Player player, GameMap map) {
@@ -119,17 +120,24 @@ public class Miner extends Worker {
                 if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
 
-                    Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
-
-                    setCargo(cargo);
-
-                    /* Go out to delivery the cargo to the flag */
-                    setTarget(getHome().getFlag().getPosition());
-
-                    state = GOING_OUT_TO_FLAG;
-
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
+
+                    /* Handle transportation */
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                        Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+
+                        setCargo(cargo);
+
+                        /* Go out to delivery the cargo to the flag */
+                        setTarget(getHome().getFlag().getPosition());
+
+                        state = GOING_OUT_TO_FLAG;
+
+                        getHome().getFlag().promiseCargo();
+                    } else {
+                        state = State.WAITING_FOR_SPACE_ON_FLAG;
+                    }
                 } else {
 
                     /* Report that there is no more ore available in the mine */
@@ -141,6 +149,19 @@ public class Miner extends Worker {
                 }
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                Cargo cargo = map.mineMineralAtPoint(mineral, getPosition());
+
+                setCargo(cargo);
+
+                /* Go out to delivery the cargo to the flag */
+                setTarget(getHome().getFlag().getPosition());
+
+                state = GOING_OUT_TO_FLAG;
+
+                getHome().getFlag().promiseCargo();
             }
         }
     }

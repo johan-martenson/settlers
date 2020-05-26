@@ -33,7 +33,7 @@ public abstract class Worker implements Actor {
 
     private final Countdown walkCountdown;
 
-    GameMap     map;
+    GameMap map;
 
     private List<Point> path;
     private States      state;
@@ -76,7 +76,7 @@ public abstract class Worker implements Actor {
 
         boolean isProductivityCycleReached() {
             int measuredLength = currentProductivityMeasurement + currentUnproductivityMeasurement;
-            return  measuredLength >= cycleLength;
+            return measuredLength >= cycleLength;
         }
 
         void reportProductivity() {
@@ -133,6 +133,7 @@ public abstract class Worker implements Actor {
             walkCountdown.countFrom(getSpeed() - SPEED_ADJUST);
 
             state = WALKING_BETWEEN_POINTS;
+
         } else if (state == WALKING_BETWEEN_POINTS) {
             walkCountdown.step();
 
@@ -434,6 +435,13 @@ public abstract class Worker implements Actor {
             /* Report the new target so it can be monitored */
             getMap().reportWorkerWithNewTarget(this);
         }
+    }
+
+    void stopWalkingToTarget() {
+        state = IDLE_OUTSIDE;
+
+        path.clear();
+        target = null;
     }
 
     public Point getTarget() {

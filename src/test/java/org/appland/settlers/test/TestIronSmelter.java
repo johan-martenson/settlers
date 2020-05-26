@@ -31,6 +31,7 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.COAL;
+import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
@@ -1937,6 +1938,160 @@ public class TestIronSmelter {
             }
 
             assertEquals(ironSmelter0.getTotalAmountNeeded(material), 0);
+        }
+    }
+
+    @Test
+    public void testIronSmelterWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place ironSmelter */
+        Point point1 = new Point(16, 6);
+        Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Connect the ironSmelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the ironSmelter to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(ironSmelter);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter);
+
+        /* Give material to the ironSmelter */
+        Utils.putCargoToBuilding(ironSmelter, IRON);
+        Utils.putCargoToBuilding(ironSmelter, COAL);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, ironSmelter.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the ironSmelter waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+            assertNull(ironSmelter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the ironSmelter with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(ironSmelter.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, ironSmelter.getWorker(), IRON_BAR);
+    }
+
+    @Test
+    public void testIronSmelterDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place ironSmelter */
+        Point point1 = new Point(16, 6);
+        IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Connect the ironSmelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the ironSmelter to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(ironSmelter);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter);
+
+        /* Give material to the ironSmelter */
+        Utils.putCargoToBuilding(ironSmelter, IRON);
+        Utils.putCargoToBuilding(ironSmelter, IRON);
+        Utils.putCargoToBuilding(ironSmelter, COAL);
+        Utils.putCargoToBuilding(ironSmelter, COAL);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, ironSmelter.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The ironSmelter waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+            assertNull(ironSmelter.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the ironSmelter with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(ironSmelter.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, ironSmelter.getWorker(), IRON_BAR);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(ironSmelter.getWorker().getTarget(), ironSmelter.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironSmelter.getWorker(), ironSmelter.getFlag().getPosition());
+
+        assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the ironSmelter doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
+            assertNull(ironSmelter.getWorker().getCargo());
+
+            map.stepTime();
         }
     }
 }

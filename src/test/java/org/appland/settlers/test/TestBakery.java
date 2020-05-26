@@ -1776,4 +1776,158 @@ public class TestBakery {
             assertEquals(bakery0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testBakeryWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(16, 6);
+        Building bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the bakery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(bakery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        /* Give material to the bakery */
+        Utils.putCargoToBuilding(bakery, FLOUR);
+        Utils.putCargoToBuilding(bakery, WATER);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, bakery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the bakery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+            assertNull(bakery.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the bakery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(bakery.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(bakery.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the worker produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, bakery.getWorker(), BREAD);
+    }
+
+    @Test
+    public void testBakeryDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(16, 6);
+        Bakery bakery = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the bakery to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(bakery);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery);
+
+        /* Give material to the bakery */
+        Utils.putCargoToBuilding(bakery, FLOUR);
+        Utils.putCargoToBuilding(bakery, FLOUR);
+        Utils.putCargoToBuilding(bakery, WATER);
+        Utils.putCargoToBuilding(bakery, WATER);
+
+        /* Fill the flag with cargos */
+        Utils.placeCargos(map, FLOUR, 8, bakery.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The bakery waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+            assertNull(bakery.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the bakery with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(bakery.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(bakery.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The worker produces a cargo and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, bakery.getWorker(), BREAD);
+
+        /* Wait for the worker to put the cargo on the flag */
+        assertEquals(bakery.getWorker().getTarget(), bakery.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, bakery.getWorker(), bakery.getFlag().getPosition());
+
+        assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the bakery doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(bakery.getFlag().getStackedCargo().size(), 8);
+            assertNull(bakery.getWorker().getCargo());
+
+            map.stepTime();
+        }
+    }
 }

@@ -2357,11 +2357,7 @@ public class TestRoads {
 
         /* Deliver 99 cargo and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
-            Cargo cargo = new Cargo(COIN, map);
-
-            flag0.putCargo(cargo);
-
-            cargo.setTarget(headquarter0);
+            Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
 
             /* Wait for the courier to pick up the cargo */
             assertNull(courier.getCargo());
@@ -2431,11 +2427,7 @@ public class TestRoads {
 
         /* Deliver 99 cargo and verify that the road does not become a main road */
         for (int i = 0; i < 99; i++) {
-            Cargo cargo = new Cargo(COIN, map);
-
-            flag1.putCargo(cargo);
-
-            cargo.setTarget(headquarter0);
+            Cargo cargo = Utils.placeCargo(map, COIN, flag1, headquarter0);
 
             /* Wait for the courier to pick up the cargo */
             assertNull(courier1.getCargo());

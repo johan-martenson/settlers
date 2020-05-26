@@ -11,6 +11,7 @@ import static org.appland.settlers.model.Butcher.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Butcher.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Butcher.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Butcher.State.SLAUGHTERING_PIG;
+import static org.appland.settlers.model.Butcher.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Butcher.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
@@ -34,7 +35,7 @@ public class Butcher extends Worker {
         SLAUGHTERING_PIG,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Butcher(Player player, GameMap map) {
@@ -68,21 +69,29 @@ public class Butcher extends Worker {
         } else if (state == SLAUGHTERING_PIG) {
             if (getHome().getAmount(PIG) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(MEAT, map);
-
-                    setCargo(cargo);
 
                     /* Consume the resource */
                     getHome().consumeOne(PIG);
 
-                    /* Go out to the flag to deliver the meat */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report that the butcher produced one piece of meat */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
+
+                    /* Handle transportation */
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                        Cargo cargo = new Cargo(MEAT, map);
+
+                        setCargo(cargo);
+
+                        /* Go out to the flag to deliver the meat */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    } else {
+                        state = Butcher.State.WAITING_FOR_SPACE_ON_FLAG;
+                    }
                 } else {
                     countdown.step();
                 }
@@ -90,6 +99,19 @@ public class Butcher extends Worker {
 
                 /* Report that the butcher lacked resources and couldn't do his job */
                 productivityMeasurer.reportUnproductivity();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                Cargo cargo = new Cargo(MEAT, map);
+
+                setCargo(cargo);
+
+                /* Go out to the flag to deliver the meat */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
             }
         }
     }

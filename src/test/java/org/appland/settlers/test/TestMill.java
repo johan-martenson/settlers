@@ -1798,4 +1798,155 @@ public class TestMill {
             assertEquals(mill0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testMillWaitsWhenFlagIsFull() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(16, 6);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mill to get constructed and assigned a miller */
+        Utils.waitForBuildingToBeConstructed(mill);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Give wheat to the mill */
+        Utils.putCargoToBuilding(mill, WHEAT);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, mill.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* Verify that the mill waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+            assertNull(mill.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the mill with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(mill.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(mill.getFlag().getStackedCargo().size(), 7);
+
+        /* Verify that the miller produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, mill.getWorker(), FLOUR);
+    }
+
+    @Test
+    public void testMillDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place mill */
+        Point point1 = new Point(16, 6);
+        Building mill = map.placeBuilding(new Mill(player0), point1);
+
+        /* Connect the mill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the mill to get constructed and assigned a miller */
+        Utils.waitForBuildingToBeConstructed(mill);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(mill);
+
+        /* Give wheat to the mill */
+        Utils.putCargoToBuilding(mill, WHEAT);
+        Utils.putCargoToBuilding(mill, WHEAT);
+
+        /* Fill the flag with flour cargos */
+        Utils.placeCargos(map, FLOUR, 8, mill.getFlag(), headquarter);
+
+        /* Remove the road */
+        map.removeRoad(road0);
+
+        /* The mill waits for the flag to get empty and produces nothing */
+        for (int i = 0; i < 300; i++) {
+            assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+            assertNull(mill.getWorker().getCargo());
+
+            map.stepTime();
+        }
+
+        /* Reconnect the mill with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, mill.getFlag(), headquarter.getFlag());
+
+        /* Wait for the courier to pick up one of the cargos */
+        Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
+
+        for (int i = 0; i < 500; i++) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+                break;
+            }
+
+            assertNull(mill.getWorker().getCargo());
+            assertNull(courier.getCargo());
+            assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+
+            map.stepTime();
+        }
+
+        assertEquals(mill.getFlag().getStackedCargo().size(), 7);
+
+        /* Remove the road */
+        map.removeRoad(road1);
+
+        /* The miller produces a cargo of flour and puts it on the flag */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, mill.getWorker(), FLOUR);
+
+        /* Wait for the miller to put the cargo on the flag */
+        assertEquals(mill.getWorker().getTarget(), mill.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, mill.getWorker(), mill.getFlag().getPosition());
+
+        assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+
+        /* Verify that the mill doesn't produce anything because the flag is full */
+        for (int i = 0; i < 400; i++) {
+            assertEquals(mill.getFlag().getStackedCargo().size(), 8);
+            assertNull(mill.getWorker().getCargo());
+
+            map.stepTime();
+        }
+    }
 }

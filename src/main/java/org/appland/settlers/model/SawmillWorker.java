@@ -13,6 +13,7 @@ import static org.appland.settlers.model.SawmillWorker.State.GOING_BACK_TO_HOUSE
 import static org.appland.settlers.model.SawmillWorker.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.SawmillWorker.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.SawmillWorker.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.SawmillWorker.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
 
 /**
@@ -34,7 +35,7 @@ public class SawmillWorker extends Worker {
         CUTTING_WOOD,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public SawmillWorker(Player player, GameMap map) {
@@ -70,20 +71,27 @@ public class SawmillWorker extends Worker {
         } else if (state == CUTTING_WOOD) {
             if (getHome().getAmount(WOOD) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(PLANK, map);
-
-                    setCargo(cargo);
 
                     /* Consume the spent wood */
                     getHome().consumeOne(WOOD);
 
-                    /* Go out to delivery the plank to the flag */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report the production */
                     productivityMeasurer.reportProductivity();
+
+                    /* Handle transportation */
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                        Cargo cargo = new Cargo(PLANK, map);
+
+                        setCargo(cargo);
+                        /* Go out to delivery the plank to the flag */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    } else {
+                        state = WAITING_FOR_SPACE_ON_FLAG;
+                    }
                 } else {
                     countdown.step();
                 }
@@ -91,6 +99,18 @@ public class SawmillWorker extends Worker {
 
                 /* Report the that the sawmill worker was unproductive */
                 productivityMeasurer.reportUnproductivity();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                Cargo cargo = new Cargo(PLANK, map);
+
+                setCargo(cargo);
+                /* Go out to delivery the plank to the flag */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
             }
         }
     }

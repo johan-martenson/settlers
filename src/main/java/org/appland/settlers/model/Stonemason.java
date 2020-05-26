@@ -33,7 +33,7 @@ public class Stonemason extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     public Stonemason(Player player, GameMap map) {
@@ -159,14 +159,32 @@ public class Stonemason extends Worker {
             }
         } else if (state == State.IN_HOUSE_WITH_CARGO) {
 
-            /* Go out to the flag to deliver the stone */
-            setTarget(getHome().getFlag().getPosition());
-
-            state = State.GOING_OUT_TO_PUT_CARGO;
-
             /* Report that the stonemason produced a stone */
             productivityMeasurer.reportProductivity();
             productivityMeasurer.nextProductivityCycle();
+
+            /* Handle transportation */
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                /* Go out to the flag to deliver the stone */
+                setTarget(getHome().getFlag().getPosition());
+
+                state = State.GOING_OUT_TO_PUT_CARGO;
+
+                getHome().getFlag().promiseCargo();
+            } else {
+                state = Stonemason.State.WAITING_FOR_SPACE_ON_FLAG;
+            }
+        } else if (state == State.WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                /* Go out to the flag to deliver the stone */
+                setTarget(getHome().getFlag().getPosition());
+
+                state = State.GOING_OUT_TO_PUT_CARGO;
+
+                getHome().getFlag().promiseCargo();
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import static org.appland.settlers.model.IronFounder.State.GOING_TO_FLAG_WITH_CA
 import static org.appland.settlers.model.IronFounder.State.MELTING_IRON;
 import static org.appland.settlers.model.IronFounder.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.IronFounder.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.IronFounder.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.IronFounder.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON;
@@ -33,7 +34,7 @@ public class IronFounder extends Worker {
         MELTING_IRON,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
     }
 
     private State state;
@@ -69,22 +70,32 @@ public class IronFounder extends Worker {
         } else if (state == MELTING_IRON) {
             if (getHome().getAmount(COAL) > 0 && getHome().getAmount(IRON) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
-                    Cargo cargo = new Cargo(IRON_BAR, map);
-
-                    setCargo(cargo);
 
                     /* Consume the resources */
                     getHome().consumeOne(COAL);
                     getHome().consumeOne(IRON);
 
-                    /* Go out to the flag to deliver the iron bar */
-                    state = GOING_TO_FLAG_WITH_CARGO;
-
-                    setTarget(getHome().getFlag().getPosition());
-
                     /* Report that the iron founder produced */
                     productivityMeasurer.reportProductivity();
                     productivityMeasurer.nextProductivityCycle();
+
+                    /* Handle the transportation */
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                        Cargo cargo = new Cargo(IRON_BAR, map);
+
+                        setCargo(cargo);
+
+                        /* Go out to the flag to deliver the iron bar */
+                        state = GOING_TO_FLAG_WITH_CARGO;
+
+                        setTarget(getHome().getFlag().getPosition());
+
+                        getHome().getFlag().promiseCargo();
+                    } else {
+                        state = IronFounder.State.WAITING_FOR_SPACE_ON_FLAG;
+                    }
+
                 } else {
                     countdown.step();
                 }
@@ -92,6 +103,20 @@ public class IronFounder extends Worker {
 
                 /* Report that the iron founder lacked resources and couldn't work */
                 productivityMeasurer.reportUnproductivity();
+            }
+        } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
+                Cargo cargo = new Cargo(IRON_BAR, map);
+
+                setCargo(cargo);
+
+                /* Go out to the flag to deliver the iron bar */
+                state = GOING_TO_FLAG_WITH_CARGO;
+
+                setTarget(getHome().getFlag().getPosition());
+
+                getHome().getFlag().promiseCargo();
             }
         }
     }

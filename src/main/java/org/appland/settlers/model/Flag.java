@@ -5,18 +5,21 @@ import java.util.List;
 
 public class Flag implements EndPoint {
 
+    private static final int MAX_NUMBER_OF_STACKED_CARGO = 8;
     private final List<Cargo> stackedCargo;
 
     private Point  position;
     private int    geologistsCalled;
     private int    scoutsCalled;
     private Player player;
+    private int    promisedCargo;
 
     public Flag(Point point) {
-        position          = point;
-        stackedCargo      = new ArrayList<>();
-        geologistsCalled  = 0;
-        scoutsCalled      = 0;
+        position         = point;
+        stackedCargo     = new ArrayList<>();
+        geologistsCalled = 0;
+        scoutsCalled     = 0;
+        promisedCargo    = 0;
     }
 
     Flag(Player player, Point point) {
@@ -37,6 +40,9 @@ public class Flag implements EndPoint {
 
         /* Give the cargo a chance to re-plan */
         cargo.rerouteIfNeeded();
+
+        /* Remove the promise for this cargo */
+        promisedCargo = promisedCargo - 1;
     }
 
     @Override
@@ -141,5 +147,17 @@ public class Flag implements EndPoint {
 
     void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public boolean hasNoPlaceForMoreCargo() {
+        return stackedCargo.size() + promisedCargo >= MAX_NUMBER_OF_STACKED_CARGO;
+    }
+
+    public void promiseCargo() {
+        promisedCargo = promisedCargo + 1;
+    }
+
+    public boolean hasPlaceForMoreCargo() {
+        return stackedCargo.size() + promisedCargo < MAX_NUMBER_OF_STACKED_CARGO;
     }
 }
