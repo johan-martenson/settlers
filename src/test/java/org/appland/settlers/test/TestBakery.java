@@ -69,7 +69,7 @@ public class TestBakery {
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         bakery0.putCargo(plankCargo);
         bakery0.putCargo(plankCargo);
@@ -105,7 +105,7 @@ public class TestBakery {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         bakery0.putCargo(plankCargo);
         bakery0.putCargo(stoneCargo);
@@ -140,7 +140,7 @@ public class TestBakery {
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         bakery0.putCargo(plankCargo);
         bakery0.putCargo(plankCargo);

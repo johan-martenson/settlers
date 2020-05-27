@@ -73,7 +73,7 @@ public class TestArmory {
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         armory0.putCargo(plankCargo);
         armory0.putCargo(plankCargo);
@@ -109,7 +109,7 @@ public class TestArmory {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         armory0.putCargo(plankCargo);
         armory0.putCargo(stoneCargo);
@@ -144,7 +144,7 @@ public class TestArmory {
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         armory0.putCargo(plankCargo);
         armory0.putCargo(plankCargo);

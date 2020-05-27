@@ -514,7 +514,7 @@ public class TestTransportation {
 
         /* Assign couriers to the roads */
         Courier mdlToEndCr = new Courier(player0, map);
-        Courier hqToMdlCr  = new Courier(player0, map);
+        Courier hqToMdlCr = new Courier(player0, map);
         map.placeWorker(hqToMdlCr, middleFlag);
         map.placeWorker(mdlToEndCr, endFlag);
 

@@ -67,7 +67,7 @@ public class TestMill {
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(plankCargo);
@@ -103,7 +103,7 @@ public class TestMill {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(stoneCargo);
@@ -138,7 +138,7 @@ public class TestMill {
 
         /* Deliver two planks and one stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mill0.putCargo(plankCargo);
         mill0.putCargo(plankCargo);

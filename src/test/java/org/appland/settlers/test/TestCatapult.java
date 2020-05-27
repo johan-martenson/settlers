@@ -70,7 +70,7 @@ public class TestCatapult {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         catapult0.putCargo(plankCargo);
         catapult0.putCargo(plankCargo);
@@ -109,7 +109,7 @@ public class TestCatapult {
 
         /* Deliver three plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         catapult0.putCargo(plankCargo);
         catapult0.putCargo(plankCargo);
@@ -147,7 +147,7 @@ public class TestCatapult {
 
         /* Deliver four planks and one stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         catapult0.putCargo(plankCargo);
         catapult0.putCargo(plankCargo);
@@ -184,7 +184,7 @@ public class TestCatapult {
         Catapult catapult0 = map.placeBuilding(new Catapult(player0), point22);
 
         /* Deliver three stones */
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         catapult0.promiseDelivery(STONE);
         catapult0.putCargo(stoneCargo);

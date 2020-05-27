@@ -68,7 +68,7 @@ public class TestSawmill {
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(plankCargo);
@@ -104,7 +104,7 @@ public class TestSawmill {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(stoneCargo);
@@ -139,7 +139,7 @@ public class TestSawmill {
 
         /* Deliver two planks and one stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         sawmill0.putCargo(plankCargo);
         sawmill0.putCargo(plankCargo);

@@ -105,7 +105,7 @@ public class TestLookoutTower {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);

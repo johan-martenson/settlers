@@ -2105,7 +2105,7 @@ public class TestMonitoringGameMessages {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);
@@ -2161,7 +2161,7 @@ public class TestMonitoringGameMessages {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);
@@ -2224,7 +2224,7 @@ public class TestMonitoringGameMessages {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);

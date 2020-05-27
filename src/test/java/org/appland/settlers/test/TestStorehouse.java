@@ -70,7 +70,7 @@ public class TestStorehouse {
 
         /* Deliver four plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);
@@ -147,7 +147,7 @@ public class TestStorehouse {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);
@@ -185,7 +185,7 @@ public class TestStorehouse {
 
         /* Deliver four planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         storage0.putCargo(plankCargo);
         storage0.putCargo(plankCargo);

@@ -68,7 +68,7 @@ public class TestDonkeyFarm {
 
         /* Deliver three plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -106,7 +106,7 @@ public class TestDonkeyFarm {
 
         /* Deliver two plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);
@@ -143,7 +143,7 @@ public class TestDonkeyFarm {
 
         /* Deliver three planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         farm0.putCargo(plankCargo);
         farm0.putCargo(plankCargo);

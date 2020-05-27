@@ -295,14 +295,15 @@ public class TestRoads {
         Flag flag0 = map.placeFlag(player0, point1);
         Flag flag1 = map.placeFlag(player0, point2);
 
+        /* Place road */
         Point point3 = new Point(5, 3);
-
         Road road = map.placeRoad(player0, point1, point3, point2);
 
+        /* Remove the road */
         map.removeRoad(road);
 
+        /* Verify that it's not possible to assign a worker to the removed road */
         Courier courier = new Courier(player0, map);
-
         map.placeWorker(courier, flag0);
 
         try {
@@ -332,14 +333,17 @@ public class TestRoads {
         Flag flag0 = map.placeFlag(player0, point1);
         Flag flag1 = map.placeFlag(player0, point2);
 
-        Courier courier0 = new Courier(player0, map);
-        Courier courier1 = new Courier(player0, map);
-
+        /* Place road */
         Road road = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
+        /* Occupy the road */
+        Courier courier0 = new Courier(player0, map);
         map.placeWorker(courier0, flag0);
-        map.placeWorker(courier1, flag0);
         courier0.assignToRoad(road);
+
+        /* Verify that it's not possible to occupy the road again with a second worker */
+        Courier courier1 = new Courier(player0, map);
+        map.placeWorker(courier1, flag0);
 
         try {
             courier1.assignToRoad(road);
@@ -366,13 +370,15 @@ public class TestRoads {
         Point point2 = new Point(4, 6);
         Point point3 = new Point(6, 4);
 
-        Flag commonStart = map.placeFlag(player0, point1);
-        Flag end1 = map.placeFlag(player0, point2);
-        Flag end2 = map.placeFlag(player0, point3);
-        Point middlePoint = new Point(4, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
+        Flag flag1 = map.placeFlag(player0, point2);
+        Flag flag2 = map.placeFlag(player0, point3);
 
+        /* Place road */
+        Point middlePoint = new Point(4, 4);
         map.placeRoad(player0, point1, middlePoint, point2.downLeft(), point2);
 
+        /* Verify that it's not possible to place a second road that shares a segment with the previous road */
         try {
             map.placeRoad(player0, point1, middlePoint, point3);
 
@@ -405,13 +411,10 @@ public class TestRoads {
         map.placeFlag(player0, end1);
         map.placeFlag(player0, end2);
 
-        List<Point> wayPoints1 = new ArrayList<>();
-        wayPoints1.add(start1);
-        wayPoints1.add(middlePoint);
-        wayPoints1.add(end1);
+        /* Place road */
+        map.placeRoad(player0, start1, middlePoint, end1);
 
-        map.placeRoad(player0, wayPoints1);
-
+        /* Verify that it's not possible to place a road that crosses another road */
         try {
             map.placeRoad(player0, start2, start2.downRight(), middlePoint, end2.left(), end2);
 
@@ -443,18 +446,12 @@ public class TestRoads {
 
         /* Place road */
         Point middlePoint = new Point(4, 4);
-
-        List<Point> wayPoints = new ArrayList<>();
-        wayPoints.add(start);
-        wayPoints.add(middlePoint);
-        wayPoints.add(end);
-
-        map.placeRoad(player0, wayPoints);
+        map.placeRoad(player0, start, middlePoint, end);
 
         /* Verify that the way points are set correctly in the road */
         Road road = map.getRoad(start, end);
 
-        wayPoints = road.getWayPoints();
+        List<Point> wayPoints = road.getWayPoints();
 
         assertEquals(wayPoints.size(), 3);
         assertEquals(wayPoints.get(0), start);

@@ -71,7 +71,7 @@ public class TestMint {
 
         /* Deliver two plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mint0.putCargo(plankCargo);
         mint0.putCargo(plankCargo);
@@ -107,7 +107,7 @@ public class TestMint {
 
         /* Deliver one plank and two stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mint0.putCargo(plankCargo);
         mint0.putCargo(stoneCargo);
@@ -142,7 +142,7 @@ public class TestMint {
 
         /* Deliver two planks and one stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         mint0.putCargo(plankCargo);
         mint0.putCargo(plankCargo);

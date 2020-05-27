@@ -177,8 +177,8 @@ public class TestGameMap {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place woodcutter */
-        Woodcutter woodcutter  = new Woodcutter(player0);
-        Point wcPoint  = new Point(4, 4);
+        Woodcutter woodcutter = new Woodcutter(player0);
+        Point wcPoint = new Point(4, 4);
         map.placeBuilding(woodcutter, wcPoint);
 
         /* Verify that it's not possible to place a quarry on the same spot as the woodcutter */
@@ -340,7 +340,7 @@ public class TestGameMap {
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place flag */
-        Point point1    = new Point(6, 6);
+        Point point1 = new Point(6, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
         /* Place farm */
@@ -482,7 +482,7 @@ public class TestGameMap {
 
         /* Place flag */
         Point point0 = new Point(5, 5);
-        Flag flag0  = map.placeFlag(player0, point0);
+        Flag flag0 = map.placeFlag(player0, point0);
 
         /* Verify that it's possible place a house up-next from an existing flag */
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point0.upLeft());

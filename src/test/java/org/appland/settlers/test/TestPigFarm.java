@@ -70,7 +70,7 @@ public class TestPigFarm {
 
         /* Deliver three plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         pigFarm0.putCargo(plankCargo);
         pigFarm0.putCargo(plankCargo);
@@ -108,7 +108,7 @@ public class TestPigFarm {
 
         /* Deliver two plank and three stone */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         pigFarm0.putCargo(plankCargo);
         pigFarm0.putCargo(plankCargo);
@@ -145,7 +145,7 @@ public class TestPigFarm {
 
         /* Deliver three planks and two stones */
         Cargo plankCargo = new Cargo(PLANK, map);
-        Cargo stoneCargo  = new Cargo(STONE, map);
+        Cargo stoneCargo = new Cargo(STONE, map);
 
         pigFarm0.putCargo(plankCargo);
         pigFarm0.putCargo(plankCargo);

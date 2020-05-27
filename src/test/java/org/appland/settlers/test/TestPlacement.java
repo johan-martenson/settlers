@@ -229,7 +229,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create mini-lake */
-        Point waterPoint   = new Point(2, 2);
+        Point waterPoint = new Point(2, 2);
         Utils.surroundPointWithWater(waterPoint, map);
 
         /* Verify that there is no available spot for a flag on the lake */
@@ -253,7 +253,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create mini-lake */
-        Point waterPoint   = new Point(2, 2);
+        Point waterPoint = new Point(2, 2);
         Utils.surroundPointWithWater(waterPoint, map);
 
         /* Verify that there is no available spot for a building on the lake */
@@ -923,8 +923,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place a woodcutter */
-        Woodcutter woodcutter  = new Woodcutter(player0);
-        Point wcPoint  = new Point(6, 4);
+        Woodcutter woodcutter = new Woodcutter(player0);
+        Point wcPoint = new Point(6, 4);
         map.placeBuilding(woodcutter, wcPoint);
 
         /* Verify that it's not possible to place a quarry so that the flag is on top of the woodcutter */
@@ -950,8 +950,8 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
         Point sharedPoint1 = new Point(7, 5);
         Point sharedPoint2 = new Point(8, 6);
-        Point grassPoint   = new Point(9, 5);
-        Point waterPoint   = new Point(6, 6);
+        Point grassPoint = new Point(9, 5);
+        Point waterPoint = new Point(6, 6);
 
         /* Place headquarter */
         Point point0 = new Point(13, 5);
@@ -983,7 +983,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Place a lake */
-        Point centerPoint  = new Point(3, 1);
+        Point centerPoint = new Point(3, 1);
         Utils.surroundPointWithVegetation(centerPoint, WATER, map);
 
         /* Verify that the center point is in the middle of the lake */
@@ -1016,7 +1016,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 10, 10);
 
         /* Set a tile's vegetation to mountain */
-        Point top   = new Point(2, 2);
+        Point top = new Point(2, 2);
 
         Tile tile1 = map.getTerrain().getTileBelow(top);
 
@@ -1037,7 +1037,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 10, 10);
 
         /* Place stone */
-        Point point0  = new Point(3, 3);
+        Point point0 = new Point(3, 3);
         map.placeStone(point0);
 
         /* Verify that it's not possible to place a tree on the stone */
@@ -1219,13 +1219,13 @@ public class TestPlacement {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
-        Point point0  = new Point(3, 3);
 
         /* Place headquarter */
         Point hqPoint = new Point(6, 6);
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place tree */
+        Point point0 = new Point(3, 3);
         map.placeTree(point0.downRight());
 
         /* Verify that it's not possible to place a house on the tree */
@@ -1332,7 +1332,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place sign */
-        Point point0  = new Point(3, 3);
+        Point point0 = new Point(3, 3);
         map.placeEmptySign(point0);
 
         assertFalse(map.getSigns().isEmpty());
@@ -1363,7 +1363,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place sign */
@@ -2093,7 +2093,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Verify that there is an available point for a mine on the mountain */
@@ -2117,7 +2117,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Verify that there is no available point for a house on the mountain */
@@ -2141,7 +2141,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Verify that there is no available mine on the grass */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         assertFalse(map.isAvailableMinePoint(player0, point0));
         assertFalse(map.getAvailableMinePoints(player0).contains(point0));
     }
@@ -2162,7 +2162,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(47, 47);
+        Point point0 = new Point(47, 47);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Verify that there is no available mine on the grass */
@@ -2186,7 +2186,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a mine on the mountain */
@@ -2213,7 +2213,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a flag on the mountain */
@@ -2240,7 +2240,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place flags */
@@ -2269,7 +2269,7 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Put a lake on the map */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithWater(point0, map);
 
         /* Place headquarter */
@@ -2297,7 +2297,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Put a small mountain on point0 */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Utils.surroundPointWithMountain(point0, map);
 
         /* Verify that there are available flag points next to the mountain */
@@ -2343,7 +2343,7 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), hqPoint);
 
         /* Place a stone */
-        Point point0  = new Point(8, 8);
+        Point point0 = new Point(8, 8);
         Stone stone0 = map.placeStone(point0);
 
         /* Verify that there are available flag points next to the mountain */

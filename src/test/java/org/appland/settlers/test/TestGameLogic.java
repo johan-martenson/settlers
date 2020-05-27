@@ -237,7 +237,7 @@ public class TestGameLogic {
         assertEquals(map.getWorkers().size(), 1);
 
         /* Construct a road without any courier assigned */
-        Road road0  = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, flag1);
 
         assertEquals(map.getWorkers().size(), 1);
