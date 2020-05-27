@@ -1792,9 +1792,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Split the road and verify that an event is sent
-         *  - New flag, new roads, removed road, courier with new target
-         **/
+        /* Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target */
         Flag flag2 = map.placeFlag(player0, point3);
 
         map.stepTime();
@@ -1862,9 +1860,7 @@ public class TestGameMonitoring {
 
         assertEquals(monitor.getEvents().size(), 0);
 
-        /* Split the road and verify that an event is sent
-         *  - New flag, new roads, removed road, courier with new target
-         **/
+        /* Split the road and verify that an event is sent: new flag, new roads, removed road, courier with new target */
         Flag flag2 = map.placeFlag(player0, point3);
 
         map.stepTime();

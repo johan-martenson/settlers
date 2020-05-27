@@ -1070,9 +1070,7 @@ public class TestLookoutTower {
 
         lookoutTower0.tearDown();
 
-        /* Verify that the worker leaves the building and goes back to the headquarter instead of the unfinished closer
-           storage building
-           */
+        /* Verify that the worker leaves the building and goes back to the headquarter instead of the unfinished closer storage building */
         assertFalse(Scout.isInsideBuilding());
         assertEquals(Scout.getTarget(), headquarter0.getPosition());
 
@@ -1116,9 +1114,7 @@ public class TestLookoutTower {
         /* Tear down the building */
         lookoutTower0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), lookoutTower0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getPosition());

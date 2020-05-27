@@ -1535,9 +1535,7 @@ public class TestGeologist {
         /* Tear down the flag */
         map.removeFlag(flag);
 
-        /* Verify that the geologist goes back to the headquarter even though
-           the flag is removed
-        */
+        /* Verify that the geologist goes back to the headquarter even though the flag is removed */
         for (int i = 0; i < 10000; i++) {
 
             if (geologist.getPosition().equals(headquarter0.getFlag().getPosition())) {
@@ -1614,9 +1612,7 @@ public class TestGeologist {
         /* Remove the road but leave the flag */
         map.removeRoad(road0);
 
-        /* Verify that the geologist goes back to the headquarter even though
-           the flag is removed
-        */
+        /* Verify that the geologist goes back to the headquarter even though the flag is removed */
         for (int i = 0; i < 10000; i++) {
 
             if (geologist.getPosition().equals(headquarter0.getFlag().getPosition())) {

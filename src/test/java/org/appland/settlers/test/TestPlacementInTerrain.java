@@ -91,9 +91,7 @@ public class TestPlacementInTerrain {
         Fishery fishery0 = map.placeBuilding(new Fishery(player0), point5);
         Fishery fishery1 = map.placeBuilding(new Fishery(player0), point6);
 
-        /* Verify that it's possible to build a road between the flags that follows
-           the edge of the lake
-        */
+        /* Verify that it's possible to build a road between the flags that follows the edge of the lake */
         Point point7 = new Point(7, 5);
         Point point8 = new Point(8, 4);
 

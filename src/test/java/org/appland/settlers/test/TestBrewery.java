@@ -1498,9 +1498,7 @@ public class TestBrewery {
         /* Tear down the building */
         brewery0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), brewery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getPosition());

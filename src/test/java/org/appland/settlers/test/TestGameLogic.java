@@ -57,9 +57,7 @@ public class TestGameLogic {
 
         Utils.constructHouse(woodcutter0);
 
-        /* Since the woodcutter is finished it does not need any deliveries
-         * Verify that no new deliveries are initiated
-         */
+        /* Since the woodcutter is finished it does not need any deliveries, verify that no new deliveries are initiated */
         assertTrue(headquarter.getFlag().getStackedCargo().isEmpty());
         assertNull(headquarter.getWorker().getCargo());
 
@@ -324,9 +322,7 @@ public class TestGameLogic {
 
         assertEquals(map.getWorkers().size(), 5);
 
-        /* Finish construction of the forester hut which requires a
-         * forester worker to function
-         */
+        /* Finish construction of the forester hut which requires a forester worker to function */
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
         Utils.constructHouse(foresterHut0);
 

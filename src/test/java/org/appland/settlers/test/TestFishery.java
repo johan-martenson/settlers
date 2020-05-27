@@ -609,9 +609,7 @@ public class TestFishery {
 
         map.stepTime();
 
-        /* Verify that the fisherman is done fishing and that the amount of fish
-            has decreased
-        */
+        /* Verify that the fisherman is done fishing and that the amount of fish has decreased */
         assertFalse(fisherman.isFishing());
         assertNotNull(fisherman.getCargo());
         assertEquals(fisherman.getCargo().getMaterial(), FISH);
@@ -1960,9 +1958,7 @@ public class TestFishery {
         /* Tear down the building */
         fishery0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), fishery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getPosition());

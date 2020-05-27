@@ -211,9 +211,7 @@ public class TestMisc {
         players.add(player);
         GameMap map = new GameMap(players, 100, 100);
 
-        /* Verify that trying to get possible road connections from a point outside the map throws
-        * invalid user action exception
-        */
+        /* Verify that trying to get possible road connections from a point outside the map throws invalid user action exception */
         try {
             map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player, new Point(174, 132));
 

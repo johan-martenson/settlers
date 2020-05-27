@@ -528,9 +528,7 @@ public class TestSlaughterHouse {
         /* Populate the slaughterHouse */
         Worker butcher = Utils.occupyBuilding(new Butcher(player0, map), slaughterHouse);
 
-        /* Fast forward so that the slaughterHouse worker would have produced meat
-           if it had had a pig
-        */
+        /* Fast forward so that the slaughterHouse worker would have produced meat if it had had a pig */
         Utils.fastForward(150, map);
 
         assertNull(butcher.getCargo());
@@ -1555,9 +1553,7 @@ public class TestSlaughterHouse {
         /* Tear down the building */
         slaughterHouse0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), slaughterHouse0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getPosition());

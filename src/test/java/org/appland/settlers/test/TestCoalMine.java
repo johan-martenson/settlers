@@ -1779,9 +1779,7 @@ public class TestCoalMine {
         /* Tear down the building */
         coalMine0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), coalMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, coalMine0.getPosition());

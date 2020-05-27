@@ -1734,9 +1734,7 @@ public class TestGraniteMine {
         /* Tear down the building */
         graniteMine0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), graniteMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, graniteMine0.getPosition());

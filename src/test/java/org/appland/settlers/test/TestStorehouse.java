@@ -586,9 +586,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           burning, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's burning, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }
@@ -637,9 +635,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           burning, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's burning, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }
@@ -691,9 +687,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           destroyed, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's destroyed, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }
@@ -733,9 +727,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           burning, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's burning, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }
@@ -781,9 +773,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           burning, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's burning, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }
@@ -832,9 +822,7 @@ public class TestStorehouse {
 
         storage0.tearDown();
 
-        /* Verify that the storage worker avoids the second storage because it's
-           destroyed, although it's close
-        */
+        /* Verify that the storage worker avoids the second storage because it's destroyed, although it's close */
         assertFalse(storageWorker.isInsideBuilding());
         assertNotEquals(storageWorker.getTarget(), storage1.getPosition());
     }

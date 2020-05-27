@@ -548,9 +548,7 @@ public class TestMint {
         /* Populate the mint */
         Worker minter = Utils.occupyBuilding(new Minter(player0, map), mint);
 
-        /* Fast forward so that the mint worker would have produced bread
-           if it had had the ingredients
-        */
+        /* Fast forward so that the mint worker would have produced bread if it had had the ingredients */
         Utils.fastForward(150, map);
 
         assertNull(minter.getCargo());
@@ -1593,9 +1591,7 @@ public class TestMint {
         /* Tear down the building */
         mint0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), mint0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, mint0.getPosition());

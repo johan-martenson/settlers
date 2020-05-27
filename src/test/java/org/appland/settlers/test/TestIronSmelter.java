@@ -522,9 +522,7 @@ public class TestIronSmelter {
         /* Occupy the iron smelter */
         Worker ironFounder0 = Utils.occupyBuilding(new IronFounder(player0, map), ironSmelter);
 
-        /* Fast forward so that the iron smelter worker would produced iron bars
-           if it had had iron and coal
-        */
+        /* Fast forward so that the iron smelter worker would produced iron bars if it had had iron and coal */
         Utils.fastForward(150, map);
 
         assertNull(ironFounder0.getCargo());
@@ -1619,9 +1617,7 @@ public class TestIronSmelter {
         /* Tear down the building */
         ironSmelter0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), ironSmelter0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getPosition());

@@ -1290,9 +1290,7 @@ public class TestForesterHut {
         /* Manually place forester */
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut);
 
-        /* Wait for the forester to pick a spot to plant a tree where a flag
-           can be placed
-        */
+        /* Wait for the forester to pick a spot to plant a tree where a flag can be placed */
         for (int i = 0; i < 10000; i++) {
 
             Point spot = forester.getTarget();
@@ -1320,9 +1318,7 @@ public class TestForesterHut {
         /* Put a flag on the spot where the forester is planting the tree */
         map.placeFlag(player0, forester.getPosition());
 
-        /* Wait until the forester stops planting and verify that it goes back
-           to the forester hut without planting a tree
-        */
+        /* Wait until the forester stops planting and verify that it goes back to the forester hut without planting a tree */
         for (int i = 0; i < 200; i++) {
             if (!forester.isPlanting()) {
                 break;
@@ -1771,9 +1767,7 @@ public class TestForesterHut {
         /* Tear down the building */
         foresterHut0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), foresterHut0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, foresterHut0.getPosition());

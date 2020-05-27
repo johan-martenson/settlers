@@ -4609,9 +4609,7 @@ public class TestAttack {
         assertNotNull(attacker);
         assertEquals(attacker.getPlayer(), player0);
 
-        /* Wait for a military to leave the attacked building to defend when
-           the attacker reaches the flag
-        */
+        /* Wait for a military to leave the attacked building to defend when the attacker reaches the flag */
         assertEquals(barracks1.getNumberOfHostedMilitary(), 1);
         assertEquals(attacker.getTarget(), barracks1.getFlag().getPosition());
 

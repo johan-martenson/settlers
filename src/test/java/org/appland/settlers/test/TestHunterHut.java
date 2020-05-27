@@ -1488,9 +1488,7 @@ public class TestHunterHut {
         /* Tear down the building */
         hunterHut0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), hunterHut0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getPosition());

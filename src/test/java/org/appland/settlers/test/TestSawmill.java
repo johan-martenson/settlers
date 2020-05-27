@@ -539,9 +539,7 @@ public class TestSawmill {
         /* Occupy the sawmill */
         Worker sawmillWorker0 = Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill);
 
-        /* Fast forward so that the sawmill worker would produced planks
-           if it had had any wood
-        */
+        /* Fast forward so that the sawmill worker would produced planks if it had had any wood */
         Utils.fastForward(150, map);
 
         assertNull(sawmillWorker0.getCargo());
@@ -1566,9 +1564,7 @@ public class TestSawmill {
         /* Tear down the building */
         sawmill0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), sawmill0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, sawmill0.getPosition());

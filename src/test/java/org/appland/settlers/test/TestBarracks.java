@@ -2425,9 +2425,7 @@ public class TestBarracks {
         assertNotNull(military0);
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* Wait for the military to get to the barracks and verify no other
-           military is sent out
-        */
+        /* Wait for the military to get to the barracks and verify no other military is sent out */
         for (int i = 0; i < 2000; i++) {
 
             if (military0.getPosition().equals(barracks0.getPosition())) {

@@ -1463,9 +1463,7 @@ public class TestBakery {
         /* Tear down the building */
         bakery0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), bakery0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getPosition());

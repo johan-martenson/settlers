@@ -695,9 +695,7 @@ public class TestTransportation {
         assertEquals(hostedMilitary, 0);
         assertEquals(maxHostedMilitary, 2);
 
-        /* Get military from the headquarter
-         * - retrieve should set location of the worker
-         */
+        /* Get military from the headquarter and retrieve should set location of the worker */
         military = headquarter.retrieveAnyMilitary();
 
         /* Tell military to go to the barracks */

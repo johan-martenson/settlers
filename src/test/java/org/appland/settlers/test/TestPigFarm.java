@@ -1743,9 +1743,7 @@ public class TestPigFarm {
         /* Tear down the building */
         pigFarm0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), pigFarm0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getPosition());
