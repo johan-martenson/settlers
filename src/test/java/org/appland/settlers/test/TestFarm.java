@@ -228,12 +228,12 @@ public class TestFarm {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm */
-        Point point0 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point0);
+        Point point1 = new Point(10, 10);
+        Building farm = map.placeBuilding(new Farm(player0), point1);
 
         assertTrue(farm.underConstruction());
         assertFalse(farm.needsWorker());
@@ -250,12 +250,12 @@ public class TestFarm {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm */
-        Point point0 = new Point(10, 10);
-        Building farm = map.placeBuilding(new Farm(player0), point0);
+        Point point1 = new Point(10, 10);
+        Building farm = map.placeBuilding(new Farm(player0), point1);
 
         Utils.constructHouse(farm);
 
@@ -1361,8 +1361,8 @@ public class TestFarm {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place farm */
         Point point1 = new Point(20, 14);

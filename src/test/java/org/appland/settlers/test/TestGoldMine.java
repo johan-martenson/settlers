@@ -132,6 +132,8 @@ public class TestGoldMine {
 
     @Test
     public void testConstructGoldMine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -142,8 +144,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a goldmine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -157,6 +159,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineIsNotMilitary() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -167,8 +171,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -183,6 +187,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineUnderConstructionNotNeedsMiner() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -193,8 +199,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -205,6 +211,8 @@ public class TestGoldMine {
 
     @Test
     public void testFinishedGoldmineNeedsMiner() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -215,8 +223,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -229,21 +237,23 @@ public class TestGoldMine {
 
     @Test
     public void testMinerIsAssignedToFinishedGoldmine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(player0), point0);
+        Building mine = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Place a road between the headquarter and the goldmine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
@@ -268,27 +278,31 @@ public class TestGoldMine {
 
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a gold mine */
-        Building mine = map.placeBuilding(new GoldMine(player0), point0);
+        Building mine = map.placeBuilding(new GoldMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
     }
 
     @Test
     public void testArrivedMinerRests() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -299,8 +313,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -330,6 +344,8 @@ public class TestGoldMine {
 
     @Test
     public void testMinerMinesGold() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -341,8 +357,8 @@ public class TestGoldMine {
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -382,6 +398,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineGoesToFlagWithCargoAndBack() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -393,8 +411,8 @@ public class TestGoldMine {
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -442,17 +460,21 @@ public class TestGoldMine {
 
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        /* Place headquarter */
+        Point point0 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point0 = new Point(2, 2);
+        /* Verify that it's not possible to place a gold mine on grass */
+        Point point1 = new Point(2, 2);
         try {
-            map.placeBuilding(new GoldMine(player0), point0);
+            map.placeBuilding(new GoldMine(player0), point1);
             fail();
         } catch (Exception e) {}
 
@@ -481,8 +503,8 @@ public class TestGoldMine {
         }
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -540,6 +562,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineWithoutGoldProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -550,8 +574,8 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -589,6 +613,8 @@ public class TestGoldMine {
 
     @Test
     public void testGoldmineWithoutFoodProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -600,8 +626,8 @@ public class TestGoldMine {
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -644,8 +670,8 @@ public class TestGoldMine {
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -691,8 +717,8 @@ public class TestGoldMine {
         Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
@@ -1031,11 +1057,7 @@ public class TestGoldMine {
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Connect the gold mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the gold mine */
         Utils.constructHouse(goldMine0);
@@ -1100,11 +1122,7 @@ public class TestGoldMine {
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Connect the gold mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, goldMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the gold mine */
         Utils.constructHouse(goldMine0);
@@ -1166,16 +1184,16 @@ public class TestGoldMine {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Put a small mountain on the map */
-        Point point1 = new Point(10, 6);
-        Utils.surroundPointWithMountain(point1, map);
-        Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
+        Point point0 = new Point(10, 6);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGoldAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 9);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place gold mine */
-        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
+        Building goldMine0 = map.placeBuilding(new GoldMine(player0), point0);
 
         /* Finish construction of the gold mine */
         Utils.constructHouse(goldMine0);
@@ -1715,9 +1733,7 @@ public class TestGoldMine {
         /* Tear down the building */
         goldMine0.tearDown();
 
-        /* Verify that the worker goes to the building and then returns to the
-           headquarter instead of entering
-        */
+        /* Verify that the worker goes to the building and then returns to the headquarter instead of entering */
         assertEquals(worker.getTarget(), goldMine0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, worker, goldMine0.getPosition());

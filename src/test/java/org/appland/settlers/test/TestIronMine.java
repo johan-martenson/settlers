@@ -65,15 +65,15 @@ public class TestIronMine {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Put a small mountain on the map */
-        Point point22 = new Point(6, 12);
-        Utils.surroundPointWithMountain(point22, map);
+        Point point0 = new Point(6, 12);
+        Utils.surroundPointWithMountain(point0, map);
 
         /* Placing headquarter */
-        Point point21 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+        Point point1 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Placing iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point22);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Deliver four planks */
         Cargo plankCargo = new Cargo(PLANK, map);
@@ -142,8 +142,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -167,8 +167,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -193,8 +193,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -215,8 +215,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -237,15 +237,15 @@ public class TestIronMine {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a iron mine */
-        Building mine = map.placeBuilding(new IronMine(player0), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point1);
 
         /* Place a road between the headquarter and the iron mine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
@@ -276,15 +276,15 @@ public class TestIronMine {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a iron mine */
-        Building mine = map.placeBuilding(new IronMine(player0), point0);
+        Building mine = map.placeBuilding(new IronMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
     }
@@ -301,8 +301,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -343,8 +343,8 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -395,8 +395,8 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -449,12 +449,12 @@ public class TestIronMine {
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point0 = new Point(2, 2);
+        Point point1 = new Point(2, 2);
         try {
-            map.placeBuilding(new IronMine(player0), point0);
+            map.placeBuilding(new IronMine(player0), point1);
             fail();
         } catch (Exception e) {}
 
@@ -483,8 +483,8 @@ public class TestIronMine {
         }
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -552,8 +552,8 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -602,8 +602,8 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -644,8 +644,8 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -691,8 +691,8 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -1165,16 +1165,16 @@ public class TestIronMine {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Put a small mountain on the map */
-        Point point1 = new Point(10, 10);
-        Utils.surroundPointWithMountain(point1, map);
-        Utils.putIronAtSurroundingTiles(point1, LARGE, map);
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putIronAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place iron mine */
-        Building ironMine0 = map.placeBuilding(new IronMine(player0), point1);
+        Building ironMine0 = map.placeBuilding(new IronMine(player0), point0);
 
         /* Finish construction of the iron mine */
         Utils.constructHouse(ironMine0);

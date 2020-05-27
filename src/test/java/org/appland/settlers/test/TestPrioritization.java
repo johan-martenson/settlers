@@ -2034,12 +2034,12 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point point0 = new Point(20, 14);
-        Flag flag0 = map.placeFlag(player0, point0);
+        Point point1 = new Point(20, 14);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         /* Place road */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), flag0);
@@ -2057,21 +2057,21 @@ public class TestPrioritization {
 
         /* Place wood cargo to be delivered to the headquarter */
         Cargo woodCargo = new Cargo(WOOD, map);
-        woodCargo.setPosition(point0);
+        woodCargo.setPosition(point1);
         woodCargo.setTarget(headquarter0);
 
         flag0.putCargo(woodCargo);
 
         /* Place stone cargo to be delivered to the headquarter */
         Cargo stoneCargo = new Cargo(STONE, map);
-        stoneCargo.setPosition(point0);
+        stoneCargo.setPosition(point1);
         stoneCargo.setTarget(headquarter0);
 
         flag0.putCargo(stoneCargo);
 
         /* Place plank cargo to be delivered to the headquarter */
         Cargo plankCargo = new Cargo(PLANK, map);
-        plankCargo.setPosition(point0);
+        plankCargo.setPosition(point1);
         plankCargo.setTarget(headquarter0);
 
         flag0.putCargo(plankCargo);
@@ -2091,9 +2091,9 @@ public class TestPrioritization {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
 
-        assertTrue(courier.isAt(point0));
+        assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), stoneCargo);
 
         /* Wait for the courier to deliver the cargo */
@@ -2108,9 +2108,9 @@ public class TestPrioritization {
 
         map.stepTime();
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
 
-        assertTrue(courier.isAt(point0));
+        assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), woodCargo);
 
         /* Wait for the courier to deliver the cargo */
@@ -2121,9 +2121,9 @@ public class TestPrioritization {
         /* Verify that the courier picks up the plank cargo next */
         assertNull(courier.getCargo());
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point0);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point1);
 
-        assertTrue(courier.isAt(point0));
+        assertTrue(courier.isAt(point1));
         assertEquals(courier.getCargo(), plankCargo);
 
         /* Wait for the courier to deliver the cargo */
@@ -2142,28 +2142,28 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place mint */
-        Point point0 = new Point(20, 14);
-        Mint mint0 = map.placeBuilding(new Mint(player0), point0);
+        Point point1 = new Point(20, 14);
+        Mint mint0 = map.placeBuilding(new Mint(player0), point1);
 
         /* Place bakery */
-        Point point1 = new Point(24, 14);
-        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
+        Point point2 = new Point(24, 14);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point2);
 
         /* Place sawmill */
-        Point point2 = new Point(28, 14);
-        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
+        Point point3 = new Point(28, 14);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point3);
 
         /* Place mill */
-        Point point3 = new Point(24, 10);
-        Mill mill0 = map.placeBuilding(new Mill(player0), point3);
+        Point point4 = new Point(24, 10);
+        Mill mill0 = map.placeBuilding(new Mill(player0), point4);
 
         /* Place well */
-        Point point4 = new Point(20, 10);
-        Well well0 = map.placeBuilding(new Well(player0), point4);
+        Point point5 = new Point(20, 10);
+        Well well0 = map.placeBuilding(new Well(player0), point5);
 
         /* Construct all the buildings except the well */
         Utils.constructHouse(mint0);
@@ -2191,9 +2191,7 @@ public class TestPrioritization {
         Utils.occupyRoad(road3, map);
         Utils.occupyRoad(road4, map);
 
-        /* Verify that the storage worker in the headquarter delivers cargo
-           in the right order
-        */
+        /* Verify that the storage worker in the headquarter delivers cargo in the right order */
         assertTrue(mint0.needsMaterial(COAL));
         assertTrue(mint0.needsMaterial(GOLD));
         assertTrue(bakery0.needsMaterial(WATER));
@@ -2214,9 +2212,7 @@ public class TestPrioritization {
         player0.setTransportPriority(4, WATER);
         player0.setTransportPriority(5, FLOUR);
 
-        /* Ensure the headquarter has all the materials and enough to avoid the
-           tree conservation program
-        */
+        /* Ensure the headquarter has all the materials and enough to avoid the tree conservation program */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 20);
         Utils.adjustInventoryTo(headquarter0, PLANK, 20);
         Utils.adjustInventoryTo(headquarter0, COAL, 20);
@@ -2296,8 +2292,8 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Count initial number of times planks appear */
         assertEquals(Utils.countNumberElementAppearsInList(player0.getTransportPriorityList(), PLANK), 1);
@@ -2327,8 +2323,8 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that setting transport priority for a worker causes an invalid user action exception */
         List<Material> workers = new ArrayList<>();
@@ -2384,8 +2380,8 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to set transport priority for an item to a negative index */
         try {
@@ -2407,8 +2403,8 @@ public class TestPrioritization {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* There are 18 materials that the transport priority can be set for. Verify that it's not possible to set for an index higher than this */
         try {

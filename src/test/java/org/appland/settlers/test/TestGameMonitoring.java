@@ -2850,12 +2850,12 @@ public class TestGameMonitoring {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sign */
-        Point point0 = new Point(6, 6);
-        map.placeSign(IRON, SMALL, point0);
+        Point point1 = new Point(6, 6);
+        map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
@@ -2866,11 +2866,11 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         /* Verify that a monitoring event is sent when the sign disappears */
-        Sign sign0 = map.getSignAtPoint(point0);
+        Sign sign0 = map.getSignAtPoint(point1);
 
         Utils.waitForSignToDisappear(map, sign0);
 
-        assertFalse(map.isSignAtPoint(point0));
+        assertFalse(map.isSignAtPoint(point1));
         assertTrue(monitor.getEvents().size() >= 1);
 
         GameChangesList gameChanges = monitor.getLastEvent();
@@ -2902,12 +2902,12 @@ public class TestGameMonitoring {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sign */
-        Point point0 = new Point(6, 6);
-        map.placeSign(IRON, SMALL, point0);
+        Point point1 = new Point(6, 6);
+        map.placeSign(IRON, SMALL, point1);
 
         map.stepTime();
 
@@ -2918,11 +2918,11 @@ public class TestGameMonitoring {
         assertEquals(monitor.getEvents().size(), 0);
 
         /* Verify that a monitoring event is sent when the sign disappears */
-        Sign sign0 = map.getSignAtPoint(point0);
+        Sign sign0 = map.getSignAtPoint(point1);
 
         Utils.waitForSignToDisappear(map, sign0);
 
-        assertFalse(map.isSignAtPoint(point0));
+        assertFalse(map.isSignAtPoint(point1));
         assertTrue(monitor.getEvents().size() >= 1);
 
         GameChangesList gameChanges = monitor.getLastEvent();

@@ -132,6 +132,8 @@ public class TestGraniteMine {
 
     @Test
     public void testConstructGraniteMine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -142,8 +144,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -171,8 +173,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -201,8 +203,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -227,8 +229,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -241,21 +243,23 @@ public class TestGraniteMine {
 
     @Test
     public void testMinerIsAssignedToFinishedGraniteMine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a granite mine */
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        Building mine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Place a road between the headquarter and the granite mine */
         Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
@@ -280,27 +284,31 @@ public class TestGraniteMine {
 
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(5, 5);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
-        Point point0 = new Point(10, 8);
-        Utils.surroundPointWithMountain(point0, map);
+        Point point1 = new Point(10, 8);
+        Utils.surroundPointWithMountain(point1, map);
 
         /* Place a granite mine */
-        Building mine = map.placeBuilding(new GraniteMine(player0), point0);
+        Building mine = map.placeBuilding(new GraniteMine(player0), point1);
 
         assertEquals(map.getBuildings().size(), 2);
     }
 
     @Test
     public void testArrivedMinerRests() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -311,8 +319,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -342,6 +350,8 @@ public class TestGraniteMine {
 
     @Test
     public void testMinerMinesGranite() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -353,8 +363,8 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -394,6 +404,8 @@ public class TestGraniteMine {
 
     @Test
     public void testGraniteMineGoesToFlagWithCargoAndBack() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -405,8 +417,8 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -454,17 +466,19 @@ public class TestGraniteMine {
 
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
-        Point hqPoint = new Point(7, 7);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(7, 7);
+        map.placeBuilding(new Headquarter(player0), point0);
 
-        Point point0 = new Point(2, 2);
+        Point point1 = new Point(2, 2);
         try {
-            map.placeBuilding(new GraniteMine(player0), point0);
+            map.placeBuilding(new GraniteMine(player0), point1);
             fail();
         } catch (Exception e) {}
 
@@ -493,8 +507,8 @@ public class TestGraniteMine {
         }
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -552,6 +566,8 @@ public class TestGraniteMine {
 
     @Test
     public void testGraniteMineWithoutGraniteProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -562,8 +578,8 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point0, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -601,6 +617,8 @@ public class TestGraniteMine {
 
     @Test
     public void testGraniteMineWithoutFoodProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -612,8 +630,8 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -643,6 +661,8 @@ public class TestGraniteMine {
 
     @Test
     public void testMiningConsumesFood() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -654,8 +674,8 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -701,8 +721,8 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -1040,11 +1060,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Connect the granite mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the granite mine */
         Utils.constructHouse(graniteMine0);
@@ -1107,11 +1123,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Connect the granite mine and the headquarter */
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Point point5 = new Point(11, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5);
+        Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the granite mine */
         Utils.constructHouse(graniteMine0);
@@ -1173,16 +1185,16 @@ public class TestGraniteMine {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Put a small mountain on the map */
-        Point point1 = new Point(10, 10);
-        Utils.surroundPointWithMountain(point1, map);
-        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+        Point point0 = new Point(10, 10);
+        Utils.surroundPointWithMountain(point0, map);
+        Utils.putGraniteAtSurroundingTiles(point0, LARGE, map);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place granite mine */
-        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+        Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
         Utils.constructHouse(graniteMine0);

@@ -141,27 +141,27 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point point0 = new Point(8, 4);
-        Flag flag0 = map.placeFlag(player0, point0);
+        Point point1 = new Point(8, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         /* Place flag */
-        Point point1 = new Point(11, 3);
-        Flag flag1 = map.placeFlag(player0, point1);
+        Point point2 = new Point(11, 3);
+        Flag flag1 = map.placeFlag(player0, point2);
 
         /* Place flag */
-        Point point2 = new Point(4, 4);
-        Flag flag2 = map.placeFlag(player0, point2);
+        Point point3 = new Point(4, 4);
+        Flag flag2 = map.placeFlag(player0, point3);
 
         /* Place roads */
-        Point point3 = new Point(6, 4);
-        Point point4 = new Point(9, 3);
+        Point point4 = new Point(6, 4);
+        Point point5 = new Point(9, 3);
 
-        Road road0 = map.placeRoad(player0, point2, point3, point0);
-        Road road1 = map.placeRoad(player0, point0, point4, point1);
+        Road road0 = map.placeRoad(player0, point3, point4, point1);
+        Road road1 = map.placeRoad(player0, point1, point5, point2);
 
         /* Assign a donkey to road1 */
         Donkey donkey = new Donkey(player0, map);
@@ -186,8 +186,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -198,8 +198,8 @@ public class TestDonkey {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Place a donkey and assign it to the road */
         Donkey donkey = new Donkey(player0, map);
@@ -213,7 +213,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
 
-        assertEquals(donkey.getPosition(), point0);
+        assertEquals(donkey.getPosition(), point3);
         assertTrue(donkey.isArrived());
         assertTrue(donkey.isIdle());
         assertFalse(donkey.isWalkingToIdlePoint());
@@ -229,8 +229,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -241,8 +241,8 @@ public class TestDonkey {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Assign a donkey to the road */
         Donkey donkey = new Donkey(player0, map);
@@ -256,7 +256,7 @@ public class TestDonkey {
 
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
 
-        assertEquals(donkey.getPosition(), point0);
+        assertEquals(donkey.getPosition(), point3);
         assertTrue(donkey.isArrived());
 
         /* Verify that the donkey is idle after reaching the middle point */
@@ -273,8 +273,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -285,8 +285,8 @@ public class TestDonkey {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Place a donkey and assign it to the road */
         Donkey donkey = new Donkey(player0, map);
@@ -297,7 +297,7 @@ public class TestDonkey {
         /* Wait for the donkey to reach the road */
         Utils.fastForwardUntilWorkersReachTarget(map, donkey);
 
-        assertEquals(donkey.getPosition(), point0);
+        assertEquals(donkey.getPosition(), point3);
         assertTrue(donkey.isArrived());
 
         /* Verify that the donkey stays idle when there is nothing to do */
@@ -305,7 +305,7 @@ public class TestDonkey {
             assertTrue(donkey.isArrived());
             assertTrue(donkey.isIdle());
 
-            assertEquals(donkey.getPosition(), point0);
+            assertEquals(donkey.getPosition(), point3);
 
             assertFalse(flag1.hasCargoWaitingForRoad(road0));
             assertFalse(flag2.hasCargoWaitingForRoad(road0));
@@ -325,8 +325,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -385,8 +385,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -460,8 +460,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -552,8 +552,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
@@ -643,8 +643,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point flagPoint = new Point(10, 4);
@@ -730,8 +730,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
@@ -814,8 +814,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
@@ -906,8 +906,8 @@ public class TestDonkey {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point middleFlagPoint = new Point(10, 4);

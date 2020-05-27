@@ -1999,8 +1999,8 @@ public class TestRoads {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(6, 10);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(6, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         List<Point> path = map.findAutoSelectedRoad(player0, new Point(3, 3), new Point(12, 12), null);
 

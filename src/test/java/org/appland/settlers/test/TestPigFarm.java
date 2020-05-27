@@ -165,18 +165,20 @@ public class TestPigFarm {
 
     @Test
     public void testUnfinishedPigFarmNeedsNoPigBreeder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 11);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 11);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(player0), point0);
+        Point point1 = new Point(10, 6);
+        Building farm = map.placeBuilding(new PigFarm(player0), point1);
 
         assertTrue(farm.underConstruction());
         assertFalse(farm.needsWorker());
@@ -184,18 +186,20 @@ public class TestPigFarm {
 
     @Test
     public void testFinishedPigFarmNeedsPigBreeder() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
-        Point point0 = new Point(10, 6);
-        Building farm = map.placeBuilding(new PigFarm(player0), point0);
+        Point point1 = new Point(10, 6);
+        Building farm = map.placeBuilding(new PigFarm(player0), point1);
 
         Utils.constructHouse(farm);
 
@@ -205,6 +209,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederIsAssignedToFinishedPigFarm() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -218,12 +224,8 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
         /* Finish the pig farm */
         Utils.constructHouse(farm);
@@ -239,6 +241,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederRestsInPigFarmThenLeaves() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -252,18 +256,12 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
-        Utils.constructHouse(pigFarm);
-
-        PigBreeder pigBreeder = new PigBreeder(player0, map);
-
-        Utils.occupyBuilding(pigBreeder, pigFarm);
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        Worker pigBreeder = Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
 
         assertTrue(pigBreeder.isInsideBuilding());
 
@@ -290,6 +288,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederFeedsThePigsWhenItHasResources() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -303,14 +303,14 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
-        Utils.constructHouse(pigFarm);
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        PigBreeder pigBreeder = (PigBreeder) Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        assertTrue(pigBreeder.isInsideBuilding());
 
         /* Deliver wheat and pig to the farm */
         Cargo wheatCargo = new Cargo(WHEAT, map);
@@ -318,13 +318,6 @@ public class TestPigFarm {
 
         pigFarm.putCargo(wheatCargo);
         pigFarm.putCargo(waterCargo);
-
-        /* Occupy the pig farm with a pig breeder */
-        PigBreeder pigBreeder = new PigBreeder(player0, map);
-
-        Utils.occupyBuilding(pigBreeder, pigFarm);
-
-        assertTrue(pigBreeder.isInsideBuilding());
 
         /* Let the pigBreeder rest */
         Utils.fastForward(99, map);
@@ -364,6 +357,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederReturnsAfterFeeding() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -377,19 +372,12 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
-        Utils.constructHouse(pigFarm);
-
-        /* Assign a pigBreeder to the farm */
-        PigBreeder pigBreeder = new PigBreeder(player0, map);
-
-        Utils.occupyBuilding(pigBreeder, pigFarm);
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        PigBreeder pigBreeder = (PigBreeder) Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
 
         assertTrue(pigBreeder.isInsideBuilding());
 
@@ -442,6 +430,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederDeliversPigToFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -455,14 +445,14 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building pigFarm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm.getFlag(), headquarter.getFlag());
 
-        Utils.constructHouse(pigFarm);
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm);
+        PigBreeder pigBreeder = (PigBreeder) Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
+
+        assertTrue(pigBreeder.isInsideBuilding());
 
         /* Deliver resources to the pig farm */
         Cargo waterCargo = new Cargo(WATER, map);
@@ -470,13 +460,6 @@ public class TestPigFarm {
 
         pigFarm.putCargo(waterCargo);
         pigFarm.putCargo(wheatCargo);
-
-        /* Assign a pigBreeder to the farm */
-        PigBreeder pigBreeder = new PigBreeder(player0, map);
-
-        Utils.occupyBuilding(pigBreeder, pigFarm);
-
-        assertTrue(pigBreeder.isInsideBuilding());
 
         /* Let the pigBreeder rest */
         Utils.fastForward(99, map);
@@ -548,6 +531,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigFarmWithoutPigBreederProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -561,13 +546,10 @@ public class TestPigFarm {
         Point point3 = new Point(10, 6);
         Building farm = map.placeBuilding(new PigFarm(player0), point3);
 
-        Point point4 = new Point(11, 5);
-        Point point5 = new Point(10, 4);
-        Point point6 = new Point(9, 3);
-        Point point7 = new Point(7, 3);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        /* Connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, farm.getFlag(), headquarter.getFlag());
 
+        /* Construct the house */
         Utils.constructHouse(farm);
 
         /* Verify that the farm does not produce any wheat */
@@ -862,6 +844,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederWithoutResourcesProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -899,6 +883,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederWithoutResourcesStaysInHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -936,6 +922,8 @@ public class TestPigFarm {
 
     @Test
     public void testPigBreederFeedsPigsWithWaterAndWheat() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1246,8 +1234,8 @@ public class TestPigFarm {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place pig farm */
         Point point1 = new Point(20, 14);

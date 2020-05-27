@@ -626,9 +626,7 @@ public class Building implements Actor, EndPoint {
             return true;
         }
 
-        /* Return true if the building is being upgraded and requires the
-           material for the upgrade
-        */
+        /* Return true if the building is being upgraded and requires the material for the upgrade */
         if (getTotalAmountNeededForUpgrade(material) > 0) {
             return true;
         }

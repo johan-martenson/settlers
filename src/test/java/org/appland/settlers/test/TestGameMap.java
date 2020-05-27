@@ -127,10 +127,10 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Verify that a headquarter can be placed */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        assertEquals(headquarter.getPosition(), hqPoint);
+        assertEquals(headquarter.getPosition(), point0);
     }
 
     @Test
@@ -202,8 +202,8 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(4, 4);
@@ -228,12 +228,14 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(12, 6);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Create flags but don't put them on the map */
-        Flag flag0 = new Flag(new Point(4, 4));
-        Flag flag1 = new Flag(new Point(8, 4));
+        Point point1 = new Point(4, 4);
+        Point point2 = new Point(8, 4);
+        Flag flag0 = new Flag(point1);
+        Flag flag1 = new Flag(point2);
 
         /* Verify that it's not possible to place a road between the flags */
         try {
@@ -254,8 +256,8 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(3, 3);
@@ -336,8 +338,8 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(6, 6);
@@ -366,17 +368,17 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a farm on an invalid point */
         Farm farm = new Farm(player0);
-        Point farmPoint = new Point(3, 3);
+        Point point1 = new Point(3, 3);
 
-        farmPoint.x = farmPoint.x + 1;
+        point1.x = point1.x + 1;
 
         try {
-            map.placeBuilding(farm, farmPoint);
+            map.placeBuilding(farm, point1);
 
             fail();
         } catch (Exception e) {}
@@ -393,16 +395,16 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that it's not possible to place a flag on an invalid point */
-        Point point0 = new Point(4, 6);
+        Point point1 = new Point(4, 6);
 
-        point0.x = point0.x + 1;
+        point1.x = point1.x + 1;
 
         try {
-            map.placeFlag(player0, point0);
+            map.placeFlag(player0, point1);
 
             fail();
         } catch (Exception e) {}
@@ -419,16 +421,16 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Verify that the map field of the building gets set correctly when it's placed */
         Farm farm = new Farm(player0);
-        Point point0 = new Point(5, 5);
+        Point point1 = new Point(5, 5);
 
         assertNull(farm.getMap());
 
-        map.placeBuilding(farm, point0);
+        map.placeBuilding(farm, point1);
 
         assertEquals(farm.getMap(), map);
     }
@@ -444,26 +446,26 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
-        Point point0 = new Point(5, 5);
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point0);
+        Point point1 = new Point(5, 5);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify that it's possible to find a way between the woodcutter and its flag */
-        Point point1 = new Point(6, 4);
+        Point point2 = new Point(6, 4);
 
-        assertNotNull(map.getRoad(point0, point1));
+        assertNotNull(map.getRoad(point1, point2));
 
-        assertNotNull(map.findWayOffroad(point0, point1, null));
-        assertNotNull(map.findWayOffroad(point1, point0, null));
+        assertNotNull(map.findWayOffroad(point1, point2, null));
+        assertNotNull(map.findWayOffroad(point2, point1, null));
 
-        assertNotNull(map.findWayWithExistingRoads(point0, point1));
-        assertNotNull(map.findWayWithExistingRoads(point1, point0));
+        assertNotNull(map.findWayWithExistingRoads(point1, point2));
+        assertNotNull(map.findWayWithExistingRoads(point2, point1));
 
-        assertTrue(map.arePointsConnectedByRoads(point0, point1));
-        assertTrue(map.arePointsConnectedByRoads(point1, point0));
+        assertTrue(map.arePointsConnectedByRoads(point1, point2));
+        assertTrue(map.arePointsConnectedByRoads(point2, point1));
     }
 
     @Test
@@ -477,18 +479,18 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(8, 8);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(8, 8);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point point0 = new Point(5, 5);
-        Flag flag0 = map.placeFlag(player0, point0);
+        Point point1 = new Point(5, 5);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         /* Verify that it's possible place a house up-next from an existing flag */
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point0.upLeft());
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1.upLeft());
 
         assertEquals(woodcutter.getFlag(), flag0);
-        assertNotNull(map.getRoad(woodcutter.getPosition(), point0));
+        assertNotNull(map.getRoad(woodcutter.getPosition(), point1));
     }
 
     @Test

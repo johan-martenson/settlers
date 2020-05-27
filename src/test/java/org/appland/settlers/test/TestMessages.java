@@ -313,12 +313,12 @@ public class TestMessages {
         }
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place fishery */
-        Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Place a road from the headquarter to the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
@@ -759,8 +759,8 @@ public class TestMessages {
         }
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
@@ -844,8 +844,8 @@ public class TestMessages {
         }
 
         /* Place a headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 15);
+        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a gold mine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);

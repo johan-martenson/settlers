@@ -405,16 +405,16 @@ public class TestFishery {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point2 = new Point(5, 5);
+        Point point0 = new Point(5, 5);
 
-        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+        map.getTerrain().getTileBelow(point0).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point1);
 
-        Point point3 = new Point(10, 4);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point2 = new Point(10, 4);
+        Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
         /* Construct the fisherman hut */
         constructHouse(fishery);
@@ -457,11 +457,11 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point3 = new Point(6, 6);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(6, 6);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman fishery */
         constructHouse(fishery);
@@ -508,11 +508,11 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut);
@@ -561,11 +561,11 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut);
@@ -633,11 +633,11 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point3 = new Point(7, 5);
-        Building fishermanHut = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishermanHut = map.placeBuilding(new Fishery(player0), point4);
 
         /* Construct the fisherman hut */
         constructHouse(fishermanHut);
@@ -702,11 +702,11 @@ public class TestFishery {
         map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
-        Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Connect the headquarter with the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
@@ -788,8 +788,8 @@ public class TestFishery {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 9);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fishery */
         Point point1 = new Point(10, 4);
@@ -933,12 +933,12 @@ public class TestFishery {
         }
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point3 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place fishery */
-        Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point4 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point4);
 
         /* Place a road from the headquarter to the fishery */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), fishery.getFlag());
@@ -1451,8 +1451,8 @@ public class TestFishery {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place fishery */
         Point point1 = new Point(20, 14);
@@ -2260,17 +2260,17 @@ public class TestFishery {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point2 = new Point(5, 5);
+        Point point0 = new Point(5, 5);
 
-        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+        map.getTerrain().getTileBelow(point0).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place fishery */
-        Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point2 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
         /* Connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
@@ -2325,17 +2325,16 @@ public class TestFishery {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place fish on one tile */
-        Point point2 = new Point(5, 5);
-
-        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+        Point point0 = new Point(5, 5);
+        map.getTerrain().getTileBelow(point0).setVegetationType(WATER);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 9);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point1 = new Point(15, 9);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place fishery */
-        Point point3 = new Point(7, 5);
-        Building fishery = map.placeBuilding(new Fishery(player0), point3);
+        Point point2 = new Point(7, 5);
+        Building fishery = map.placeBuilding(new Fishery(player0), point2);
 
         /* Connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());

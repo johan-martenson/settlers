@@ -61,8 +61,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storage */
         Point point1 = new Point(10, 10);
@@ -84,28 +84,28 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point point0 = new Point(10, 4);
-        Flag flag0 = map.placeFlag(player0, point0);
+        Point point1 = new Point(10, 4);
+        Flag flag0 = map.placeFlag(player0, point1);
 
         /* Place flag */
-        Point point1 = new Point(13, 3);
-        Flag flag1 = map.placeFlag(player0, point1);
+        Point point2 = new Point(13, 3);
+        Flag flag1 = map.placeFlag(player0, point2);
 
         /* Place flag */
-        Point point2 = new Point(6, 4);
-        Flag flag2 = map.placeFlag(player0, point2);
+        Point point3 = new Point(6, 4);
+        Flag flag2 = map.placeFlag(player0, point3);
 
         /* Place road */
-        Point point3 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point3, point0);
+        Point point4 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point3, point4, point1);
 
         /* Place road */
-        Point point4 = new Point(11, 3);
-        Road road1 = map.placeRoad(player0, point0, point4, point1);
+        Point point5 = new Point(11, 3);
+        Road road1 = map.placeRoad(player0, point1, point5, point2);
 
         /* Put a courier on a flag on another road and assign it to the road */
         Courier courier = new Courier(player0, map);
@@ -130,8 +130,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -142,8 +142,8 @@ public class TestCourier {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Place a courier away from the road and assign it to the road */
         Courier courier = new Courier(player0, map);
@@ -157,7 +157,7 @@ public class TestCourier {
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        assertEquals(courier.getPosition(), point0);
+        assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
         assertTrue(courier.isIdle());
         assertFalse(courier.isWalkingToIdlePoint());
@@ -173,8 +173,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -185,8 +185,8 @@ public class TestCourier {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Place a courier away from the road and assign it to the road */
         Courier courier = new Courier(player0, map);
@@ -200,7 +200,7 @@ public class TestCourier {
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        assertEquals(courier.getPosition(), point0);
+        assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
         assertTrue(courier.isIdle());
     }
@@ -215,8 +215,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -227,15 +227,15 @@ public class TestCourier {
         Flag flag2 = map.placeFlag(player0, point2);
 
         /* Place road */
-        Point point0 = new Point(8, 4);
-        Road road0 = map.placeRoad(player0, point2, point0, point1);
+        Point point3 = new Point(8, 4);
+        Road road0 = map.placeRoad(player0, point2, point3, point1);
 
         /* Occupy the road and wait for the courier to reach the middle of the road */
         Courier courier = Utils.occupyRoad(road0, map);
 
         Utils.fastForwardUntilWorkersReachTarget(map, courier);
 
-        assertEquals(courier.getPosition(), point0);
+        assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
 
         /* Verify that the courier remains idle when there is no material to transport */
@@ -243,7 +243,7 @@ public class TestCourier {
             assertTrue(courier.isArrived());
             assertTrue(courier.isIdle());
 
-            assertEquals(courier.getPosition(), point0);
+            assertEquals(courier.getPosition(), point3);
 
             assertFalse(flag1.hasCargoWaitingForRoad(road0));
             assertFalse(flag2.hasCargoWaitingForRoad(road0));
@@ -263,8 +263,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -324,8 +324,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -400,8 +400,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 4);
@@ -493,8 +493,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
@@ -586,8 +586,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point flagPoint = new Point(10, 4);
@@ -675,8 +675,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
@@ -760,8 +760,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point rightFlagPoint = new Point(10, 4);
@@ -853,20 +853,20 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
-        Point point0 = new Point(6, 6);
-        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point0);
+        Point point1 = new Point(6, 6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Place forester hut */
-        Point point1 = new Point(10, 6);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
+        Point point2 = new Point(10, 6);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point2);
 
         /* Connect the woodcutter and the forester hut */
-        Point point2 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, woodcutter.getFlag().getPosition(), point2, foresterHut0.getFlag().getPosition());
+        Point point3 = new Point(9, 5);
+        Road road0 = map.placeRoad(player0, woodcutter.getFlag().getPosition(), point3, foresterHut0.getFlag().getPosition());
 
         /* Place cargo at the woodcutter's flag */
         Cargo cargoForForesterHut = new Cargo(PLANK, map);
@@ -881,11 +881,11 @@ public class TestCourier {
 
         /* Wait for the courier to walk to the idle point of the road */
         assertTrue(courier.isWalkingToRoad());
-        assertEquals(courier.getTarget(), point2);
+        assertEquals(courier.getTarget(), point3);
 
-        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point2);
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, point3);
 
-        assertEquals(courier.getPosition(), point2);
+        assertEquals(courier.getPosition(), point3);
         assertTrue(courier.isArrived());
         assertTrue(courier.isIdle());
 
@@ -939,8 +939,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Point hqPoint = new Point(19, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(19, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point middleFlagPoint = new Point(10, 4);
@@ -1232,8 +1232,8 @@ public class TestCourier {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 15);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 15);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(20, 14);

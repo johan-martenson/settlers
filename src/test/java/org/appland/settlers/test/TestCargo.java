@@ -52,8 +52,8 @@ public class TestCargo {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place the headquarter */
-        Point hqPoint = new Point(12, 12);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 12);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
         Point point1 = new Point(8, 6);
@@ -86,8 +86,8 @@ public class TestCargo {
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
-        Point hqPoint = new Point(12, 12);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 12);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
@@ -109,26 +109,26 @@ public class TestCargo {
         GameMap map = new GameMap(players, 40, 40);
 
         /* Placing headquarter */
-        Point point38 = new Point(5, 5);
-        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Placing forester */
-        Point point39 = new Point(10, 8);
-        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point39);
+        Point point1 = new Point(10, 8);
+        Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Placing flag */
         Point point2 = new Point(9, 5);
         Flag flag0 = map.placeFlag(player0, point2);
 
         /* Placing road between (11, 7) and (9, 5) */
-        Point point40 = new Point(11, 7);
-        Point point41 = new Point(10, 6);
-        Point point42 = new Point(7, 5);
-        Point point43 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point40, point41, point2);
+        Point point3 = new Point(11, 7);
+        Point point4 = new Point(10, 6);
+        Point point5 = new Point(7, 5);
+        Point point6 = new Point(6, 4);
+        Road road0 = map.placeRoad(player0, point3, point4, point2);
 
         /* Placing road between (9, 5) and (6, 4) */
-        Road road1 = map.placeRoad(player0, point2, point42, point43);
+        Road road1 = map.placeRoad(player0, point2, point5, point6);
 
         /* Place couriers on the roads */
         Utils.occupyRoad(road0, map);
