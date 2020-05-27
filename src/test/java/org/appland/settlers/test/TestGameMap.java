@@ -144,19 +144,19 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(12, 6);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place sawmill */
         Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(4, 4);
-        map.placeBuilding(woodcutter, wcPoint);
+        Point point1 = new Point(4, 4);
+        map.placeBuilding(woodcutter, point1);
 
         /* Verify that it's not possible to place the woodcutter a second time */
-        Point otherPoint = new Point(2, 8);
+        Point point2 = new Point(2, 8);
 
         try {
-            map.placeBuilding(woodcutter, otherPoint);
+            map.placeBuilding(woodcutter, point2);
 
             fail();
         } catch (Exception e) {}
@@ -173,19 +173,19 @@ public class TestGameMap {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place headquarter */
-        Point hqPoint = new Point(12, 4);
-        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 4);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(4, 4);
-        map.placeBuilding(woodcutter, wcPoint);
+        Point point1 = new Point(4, 4);
+        map.placeBuilding(woodcutter, point1);
 
         /* Verify that it's not possible to place a quarry on the same spot as the woodcutter */
         Quarry quarry0 = new Quarry(player0);
 
         try {
-            map.placeBuilding(quarry0, wcPoint);
+            map.placeBuilding(quarry0, point1);
 
             fail();
         } catch (Exception e) {}

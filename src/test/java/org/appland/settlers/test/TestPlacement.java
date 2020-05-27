@@ -473,38 +473,38 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(12, 6);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(12, 6);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        map.placeBuilding(woodcutter, wcPoint);
+        Point point1 = new Point(6, 4);
+        map.placeBuilding(woodcutter, point1);
 
         Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
         /* The house's own point */
-        assertFalse(possibleFlagPoints.contains(wcPoint));
+        assertFalse(possibleFlagPoints.contains(point1));
 
         /* The house's flag */
-        assertFalse(possibleFlagPoints.contains(wcPoint.downRight()));
+        assertFalse(possibleFlagPoints.contains(point1.downRight()));
 
         /* Points in front, sampled */
-        assertFalse(possibleFlagPoints.contains(wcPoint.downRight().downRight()));
-        assertFalse(possibleFlagPoints.contains(wcPoint.downRight().right()));
+        assertFalse(possibleFlagPoints.contains(point1.downRight().downRight()));
+        assertFalse(possibleFlagPoints.contains(point1.downRight().right()));
 
         /* Points on left, sampled */
-        assertFalse(possibleFlagPoints.contains(wcPoint.down()));
-        assertFalse(possibleFlagPoints.contains(wcPoint.downLeft()));
+        assertFalse(possibleFlagPoints.contains(point1.down()));
+        assertFalse(possibleFlagPoints.contains(point1.downLeft()));
 
         /* Points on top, sampled */
-        assertTrue(possibleFlagPoints.contains(wcPoint.left()));
-        assertTrue(possibleFlagPoints.contains(wcPoint.upLeft()));
-        assertTrue(possibleFlagPoints.contains(wcPoint.up()));
+        assertTrue(possibleFlagPoints.contains(point1.left()));
+        assertTrue(possibleFlagPoints.contains(point1.upLeft()));
+        assertTrue(possibleFlagPoints.contains(point1.up()));
 
         /* Points on right, sampled */
-        assertTrue(possibleFlagPoints.contains(wcPoint.upRight()));
-        assertFalse(possibleFlagPoints.contains(wcPoint.right()));
+        assertTrue(possibleFlagPoints.contains(point1.upRight()));
+        assertFalse(possibleFlagPoints.contains(point1.right()));
     }
 
     @Test
@@ -835,19 +835,19 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(14, 4);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(14, 4);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        map.placeBuilding(woodcutter, wcPoint);
+        Point point1 = new Point(6, 4);
+        map.placeBuilding(woodcutter, point1);
 
         /* Verify that it's not possible to place a flag too close to the woodcutter */
-        Point point0 = new Point(6, 2);
+        Point point3 = new Point(6, 2);
 
         try {
-            map.placeFlag(player0, point0);
+            map.placeFlag(player0, point3);
 
             fail();
         } catch (Exception e) {}
@@ -865,16 +865,16 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 50, 50);
 
         /* Place headquarter */
-        Point hqPoint = new Point(18, 8);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(18, 8);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
-        Point wcPoint = new Point(8, 8);
-        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), wcPoint);
+        Point point1 = new Point(8, 8);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify that it's not possible to place a flag on the woodcutter */
         try {
-            map.placeFlag(player0, wcPoint);
+            map.placeFlag(player0, point1);
 
             fail();
         } catch (Exception e) {}
@@ -890,20 +890,18 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(14, 4);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
-
-        /* Place a woodcutter */
-        Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
+        Point point0 = new Point(14, 4);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
-        Point point0 = new Point(6, 4);
-        map.placeFlag(player0, point0);
+        Point point1 = new Point(6, 4);
+        map.placeFlag(player0, point1);
 
         /* Verify that it's not possible to place a house on the flag */
+        Woodcutter woodcutter = new Woodcutter(player0);
+
         try {
-            map.placeBuilding(woodcutter, wcPoint);
+            map.placeBuilding(woodcutter, point1);
 
             fail();
         } catch (Exception e) {}
@@ -919,20 +917,20 @@ public class TestPlacement {
         GameMap map = new GameMap(players, 20, 20);
 
         /* Place headquarter */
-        Point hqPoint = new Point(15, 5);
-        map.placeBuilding(new Headquarter(player0), hqPoint);
+        Point point0 = new Point(15, 5);
+        map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
         Woodcutter woodcutter = new Woodcutter(player0);
-        Point wcPoint = new Point(6, 4);
-        map.placeBuilding(woodcutter, wcPoint);
+        Point point1 = new Point(6, 4);
+        map.placeBuilding(woodcutter, point1);
 
         /* Verify that it's not possible to place a quarry so that the flag is on top of the woodcutter */
-        Quarry     quarry0 = new Quarry(player0);
-        Point qryPoint = new Point(5, 5);
+        Quarry quarry0 = new Quarry(player0);
+        Point point2 = new Point(5, 5);
 
         try {
-            map.placeBuilding(quarry0, qryPoint);
+            map.placeBuilding(quarry0, point2);
 
             fail();
         } catch (Exception e) {}

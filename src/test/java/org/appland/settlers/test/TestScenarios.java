@@ -53,24 +53,27 @@ public class TestScenarios {
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
         Storehouse headquarter0 = new Headquarter(player0);
-        Point startPosition = new Point(6, 6);
+        Point point0 = new Point(6, 6);
+        map.placeBuilding(headquarter0, point0);
 
         /* Player creates woodcutter, sawmill and quarry */
+        Point point1 = new Point(6, 12);
+        Point point2 = new Point(12, 6);
+        Point point3 = new Point(20, 6);
+
         Building woodcutter0 = new Woodcutter(player0);
         Sawmill sawmill0 = new Sawmill(player0);
         Quarry quarry0 = new Quarry(player0);
 
-        Point wcSpot = new Point(6, 12);
-        Point smSpot = new Point(12, 6);
-        Point qrySpot = new Point(20, 6);
+        map.placeBuilding(woodcutter0, point1);
+        map.placeBuilding(sawmill0, point2);
+        map.placeBuilding(quarry0, point3);
 
-        map.placeBuilding(headquarter0, startPosition);
-        map.placeBuilding(woodcutter0, wcSpot);
-        map.placeBuilding(sawmill0, smSpot);
-        map.placeBuilding(quarry0, qrySpot);
-
-        map.placeTree(wcSpot.downRight().right());
+        /* Place tree */
+        map.placeTree(point1.downRight().right());
 
         /* Create roads */
         Road wcToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
@@ -81,12 +84,10 @@ public class TestScenarios {
         Courier wr1 = new Courier(player0, map);
         Courier wr2 = new Courier(player0, map);
         Courier wr3 = new Courier(player0, map);
-        WoodcutterWorker woodcutterWorker0 = new WoodcutterWorker(player0, map);
 
         map.placeWorker(wr1, woodcutter0.getFlag());
         map.placeWorker(wr2, sawmill0.getFlag());
         map.placeWorker(wr3, quarry0.getFlag());
-        map.placeWorker(woodcutterWorker0, woodcutter0);
 
         wr1.assignToRoad(wcToHqRoad);
         wr2.assignToRoad(smToHqRoad);
@@ -109,7 +110,12 @@ public class TestScenarios {
         assertEquals(headquarter0.getAmount(PLANK), 15);
         assertEquals(headquarter0.getAmount(STONE), 10);
 
+        /* Assign worker to the woodcutter */
+        WoodcutterWorker woodcutterWorker0 = new WoodcutterWorker(player0, map);
+        map.placeWorker(woodcutterWorker0, woodcutter0);
         Utils.occupyBuilding(woodcutterWorker0, woodcutter0);
+
+        /* Assign worker to the sawmill */
         Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
 
         /* Let the couriers reach their targeted roads */
@@ -291,20 +297,16 @@ public class TestScenarios {
     @Test
     public void buildWoodcutterSawmillQuarrySequentiallyFromScratch() throws Exception {
 
-        /*   --   SETUP   --   */
-
-
-        /* Create Initial Game Setup */
+        /* Create initial game setup */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(6, 6);
         Headquarter headquarter = new Headquarter(player0);
-
-        Point startPosition = new Point(6, 6);
-
-        map.placeBuilding(headquarter, startPosition);
-
+        map.placeBuilding(headquarter, point0);
 
         /*   --   START TEST   --   */
         fastForward(100, map);
@@ -312,10 +314,9 @@ public class TestScenarios {
         // TODO: assert that nothing happens
 
         /* Player creates woodcutter */
+        Point point1 = new Point(6, 12);
         Building woodcutter = new Woodcutter(player0);
-        Point wcSpot = new Point(6, 12);
-
-        map.placeBuilding(woodcutter, wcSpot);
+        map.placeBuilding(woodcutter, point1);
 
         fastForward(100, map);
 
@@ -331,13 +332,7 @@ public class TestScenarios {
         /* The road is occupied so the delivery of planks and stone to the woodcutter can start  */
         // TODO: assert that the woodcutter is under construction and has no material yet
 
-        fastForward(100, map);
-
-        fastForward(100, map);
-
-        fastForward(100, map);
-
-        fastForward(100, map);
+        fastForward(400, map);
 
         /* The woodcutter has all material so construction can finish */
         fastForward(150, map);
@@ -350,19 +345,17 @@ public class TestScenarios {
 
     @Test
     public void testGameStartFromScratchWithUserInput() throws Exception {
-        /*   --   SETUP   --   */
 
-
-        /* Create Initial Game Setup */
+        /* Create initial game setup */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(15, 15);
         Headquarter headquarter = new Headquarter(player0);
-
-        Point startPosition = new Point(15, 15);
-
-        map.placeBuilding(headquarter, startPosition);
+        map.placeBuilding(headquarter, point0);
 
         /*   --   User    --   */
 
@@ -373,37 +366,34 @@ public class TestScenarios {
         /*  - List all house spots -  */
         Map<Point, Size> possibleHouseSpots = map.getAvailableHousePoints(player0);
 
-        Point wcPoint = new Point(22, 20);
-        assertTrue(possibleHouseSpots.containsKey(wcPoint));
-        assertEquals(possibleHouseSpots.get(wcPoint), LARGE);
+        Point point1 = new Point(22, 20);
+        assertTrue(possibleHouseSpots.containsKey(point1));
+        assertEquals(possibleHouseSpots.get(point1), LARGE);
 
         /*  - Pick 22, 20 -  */
-        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), wcPoint);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         fastForward(100, map);
 
         /*   --   Create road to woodcutter   --   */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter.getFlag());
 
-        fastForward(100, map);
-
-        fastForward(100, map);
+        fastForward(200, map);
 
         /*   --   Create sawmill   --   */
 
         /*  - List all house spots -  */
         possibleHouseSpots = map.getAvailableHousePoints(player0);
 
-        Point   smPoint = new Point(10, 10);
-        assertTrue(possibleHouseSpots.containsKey(smPoint));
-        assertEquals(possibleHouseSpots.get(smPoint), LARGE);
+        Point point2 = new Point(10, 10);
+
+        assertTrue(possibleHouseSpots.containsKey(point2));
+        assertEquals(possibleHouseSpots.get(point2), LARGE);
 
         /*  - Pick 10, 10 -  */
-        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), smPoint);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point2);
 
-        fastForward(100, map);
-
-        fastForward(100, map);
+        fastForward(200, map);
 
         /*  - Build road carefully to sawmill -  */
         Flag startFlag = headquarter.getFlag();
@@ -413,48 +403,24 @@ public class TestScenarios {
         /*  - List possible adjacent connections for the road -  */
         List<Point> roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, startFlag.getPosition());
 
-        Point point1 = new Point(17, 13);
+        Point point3 = new Point(17, 13);
 
-        assertEquals(startFlag.getPosition(), point1.upLeft());
-        assertTrue(roadConnections.contains(point1));
-
-        /*  - Choose 17, 13 -  */
-        chosenPointsForRoad.add(point1);
-
-        fastForward(100, map);
-
-        /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point1);
-
-        Point point2 = new Point(16, 12);
-
-        assertTrue(roadConnections.contains(point2));
-
-        /*  - Choose 16, 12 -  */
-        chosenPointsForRoad.add(point2);
-
-        fastForward(100, map);
-
-        /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point2);
-
-        Point point3 = new Point(14, 12);
-
+        assertEquals(startFlag.getPosition(), point3.upLeft());
         assertTrue(roadConnections.contains(point3));
 
-        /*  - Choose 14, 12 -  */
+        /*  - Choose 17, 13 -  */
         chosenPointsForRoad.add(point3);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(14, 12));
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point3);
 
-        Point point4 = new Point(13, 11);
+        Point point4 = new Point(16, 12);
 
         assertTrue(roadConnections.contains(point4));
 
-        /*  - Choose 13, 11 -  */
+        /*  - Choose 16, 12 -  */
         chosenPointsForRoad.add(point4);
 
         fastForward(100, map);
@@ -462,23 +428,23 @@ public class TestScenarios {
         /*  - List possible adjacent connections for the road -  */
         roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point4);
 
-        Point point5 = new Point(12, 10);
+        Point point5 = new Point(14, 12);
 
         assertTrue(roadConnections.contains(point5));
 
-        /*  - Choose 12, 10 -  */
+        /*  - Choose 14, 12 -  */
         chosenPointsForRoad.add(point5);
 
         fastForward(100, map);
 
         /*  - List possible adjacent connections for the road -  */
-        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point5);
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, new Point(14, 12));
 
-        Point point6 = new Point(13, 9);
+        Point point6 = new Point(13, 11);
 
         assertTrue(roadConnections.contains(point6));
 
-        /*  - Choose 13, 9 -  */
+        /*  - Choose 13, 11 -  */
         chosenPointsForRoad.add(point6);
 
         fastForward(100, map);
@@ -486,20 +452,43 @@ public class TestScenarios {
         /*  - List possible adjacent connections for the road -  */
         roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point6);
 
-        Point point7 = new Point(12, 8);
+        Point point7 = new Point(12, 10);
 
         assertTrue(roadConnections.contains(point7));
 
-        /*  - Choose 12, 8 -  */
+        /*  - Choose 12, 10 -  */
         chosenPointsForRoad.add(point7);
 
         fastForward(100, map);
 
-        /*  - Connect to sawmill's flag -  */
+        /*  - List possible adjacent connections for the road -  */
         roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point7);
 
-        assertTrue(roadConnections.contains(sawmill.getFlag().getPosition()));
+        Point point8 = new Point(13, 9);
 
+        assertTrue(roadConnections.contains(point8));
+
+        /*  - Choose 13, 9 -  */
+        chosenPointsForRoad.add(point8);
+
+        fastForward(100, map);
+
+        /*  - List possible adjacent connections for the road -  */
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point8);
+
+        Point point9 = new Point(12, 8);
+
+        assertTrue(roadConnections.contains(point9));
+
+        /*  - Choose 12, 8 -  */
+        chosenPointsForRoad.add(point9);
+
+        fastForward(100, map);
+
+        /*  - Connect to sawmill's flag -  */
+        roadConnections = map.getPossibleAdjacentRoadConnectionsIncludingEndpoints(player0, point9);
+
+        assertTrue(roadConnections.contains(sawmill.getFlag().getPosition()));
 
         chosenPointsForRoad.add(0,startFlag.getPosition());
 	    chosenPointsForRoad.add(sawmill.getFlag().getPosition());

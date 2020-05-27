@@ -265,7 +265,7 @@ public class TestTransportation {
          *    |
          *    |---F7---F8
          */
-        Point wcPoint = new Point(12, 16);
+        Point point0 = new Point(12, 16);
         Point start = new Point(4, 18);
         Point point1 = new Point(8, 18);
         Point point2 = new Point(12, 18);
@@ -298,7 +298,7 @@ public class TestTransportation {
 
         /* Place forester hut */
         ForesterHut foresterHut = new ForesterHut(player0);
-        Building woodcutter = map.placeBuilding(foresterHut, wcPoint);
+        Building woodcutter = map.placeBuilding(foresterHut, point0);
 
         /* Place flag */
         map.placeFlag(player0, point9);
