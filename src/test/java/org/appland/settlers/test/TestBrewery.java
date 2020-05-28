@@ -169,7 +169,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -257,7 +257,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -293,7 +293,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -321,7 +321,7 @@ public class TestBrewery {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place brewery */
         Point point3 = new Point(7, 9);
@@ -1026,23 +1026,20 @@ public class TestBrewery {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);

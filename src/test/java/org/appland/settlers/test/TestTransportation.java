@@ -297,8 +297,7 @@ public class TestTransportation {
         map.placeRoad(player0, point3, point3.right(), point4);
 
         /* Place forester hut */
-        ForesterHut foresterHut = new ForesterHut(player0);
-        Building woodcutter = map.placeBuilding(foresterHut, point0);
+        Building foresterHut = map.placeBuilding(new ForesterHut(player0), point0);
 
         /* Place flag */
         map.placeFlag(player0, point9);
@@ -307,7 +306,7 @@ public class TestTransportation {
         map.placeAutoSelectedRoad(player0, point2, point9);
 
         /* Place road */
-        map.placeAutoSelectedRoad(player0, point9, woodcutter.getFlag().getPosition());
+        map.placeAutoSelectedRoad(player0, point9, foresterHut.getFlag().getPosition());
 
         /* Place flag */
         map.placeFlag(player0, point5);
@@ -335,7 +334,7 @@ public class TestTransportation {
 
         Flag target = foresterHut.getFlag();
 
-        assertEquals(target.getPosition(), woodcutter.getFlag().getPosition());
+        assertEquals(target.getPosition(), foresterHut.getFlag().getPosition());
 
         /* Place a forester on the map and assign it to the forester hut */
         Forester forester = new Forester(player0, map);
@@ -495,8 +494,7 @@ public class TestTransportation {
 
         /* Place headquarter */
         Point point0 = new Point(10, 6);
-        Storehouse storehouse = new Headquarter(player0);
-        map.placeBuilding(storehouse, point0);
+        Storehouse storehouse = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(10, 10); // headquarter to middle 6 steps
@@ -591,8 +589,7 @@ public class TestTransportation {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Storehouse storehouse = new Headquarter(player0);
-        map.placeBuilding(storehouse, point0);
+        Storehouse storehouse = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(11, 5);

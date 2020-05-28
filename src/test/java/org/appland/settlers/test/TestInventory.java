@@ -65,9 +65,8 @@ public class TestInventory {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place storehouse */
-        storehouse = new Storehouse(player0);
         Point point1 = new Point(10, 10);
-        map.placeBuilding(storehouse, point1);
+        storehouse = map.placeBuilding(new Storehouse(player0), point1);
 
         /* Finish construction of the storehouse */
         Utils.constructHouse(storehouse);

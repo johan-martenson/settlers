@@ -477,9 +477,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
-        Woodcutter woodcutter = new Woodcutter(player0);
         Point point1 = new Point(6, 4);
-        map.placeBuilding(woodcutter, point1);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         Collection<Point> possibleFlagPoints = map.getAvailableFlagPoints(player0);
 
@@ -839,9 +838,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
-        Woodcutter woodcutter = new Woodcutter(player0);
         Point point1 = new Point(6, 4);
-        map.placeBuilding(woodcutter, point1);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify that it's not possible to place a flag too close to the woodcutter */
         Point point3 = new Point(6, 2);
@@ -921,9 +919,8 @@ public class TestPlacement {
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place a woodcutter */
-        Woodcutter woodcutter = new Woodcutter(player0);
         Point point1 = new Point(6, 4);
-        map.placeBuilding(woodcutter, point1);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify that it's not possible to place a quarry so that the flag is on top of the woodcutter */
         Quarry quarry0 = new Quarry(player0);
@@ -1492,7 +1489,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(8, 6);
@@ -1522,7 +1519,7 @@ public class TestPlacement {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place flag */
         Point point1 = new Point(8, 6);

@@ -81,17 +81,22 @@ public class TestCargo {
 
     @Test
     public void testPuttingCargoAtFlagSetsPosition() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(12, 12);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place flag */
         Point point1 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point1);
 
+        /* Verify that placing a cargo sets its position */
         Cargo cargo = new Cargo(PLANK, map);
 
         flag0.putCargo(cargo);

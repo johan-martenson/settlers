@@ -156,18 +156,26 @@ public class TestMill {
 
     @Test
     public void testFinishedMillNeedsWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place mill */
         Point point1 = new Point(8, 6);
         Building mill = map.placeBuilding(new Mill(player0), point1);
 
+        /* Construct the mill */
         Utils.constructHouse(mill);
 
+        /* Verify that the mill needs a worker */
         assertTrue(mill.isReady());
         assertTrue(mill.needsWorker());
     }
@@ -1029,23 +1037,20 @@ public class TestMill {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);

@@ -121,57 +121,72 @@ public class TestWoodcutter {
 
     @Test
     public void testUnfinishedWoodcutterNeedsNoWoodcutter() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Verify the the woodcutter doesn't need any worker when it's under construction */
         assertTrue(woodcutter.underConstruction());
-
         assertFalse(woodcutter.needsWorker());
     }
 
     @Test
     public void testFinishedWoodcutterNeedsWoodcutterWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
+        /* Construct the woodcutter */
         Utils.constructHouse(woodcutter);
 
+        /* Verify that it needs a worker */
         assertTrue(woodcutter.needsWorker());
     }
 
     @Test
     public void testWoodcutterIsAssignedToFinishedHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
         Utils.constructHouse(woodcutter);
@@ -236,21 +251,23 @@ public class TestWoodcutter {
 
     @Test
     public void testOnlyOneWoodcutterIsAssignedToHouse() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
         constructHouse(woodcutter);
@@ -270,11 +287,15 @@ public class TestWoodcutter {
 
     @Test
     public void testArrivedWoodcutterRestsInHutAndThenLeaves() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -314,11 +335,14 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterFindsSpotToCutDownTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -363,11 +387,14 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterReachesPointToCutDownTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarer */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
@@ -386,7 +413,6 @@ public class TestWoodcutter {
 
         /* Manually place forester */
         Worker wcWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter);
-
 
         /* Wait for woodcutter worker to rest */
         Utils.fastForward(99, map);
@@ -413,17 +439,21 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterCutsDownTree() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
+
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
@@ -436,7 +466,6 @@ public class TestWoodcutter {
         /* Manually place forester */
         WoodcutterWorker wcWorker = new WoodcutterWorker(player0, map);
         Utils.occupyBuilding(wcWorker, woodcutter);
-
 
         /* Wait for the woodcutter to rest */
         Utils.fastForward(99, map);
@@ -480,25 +509,31 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterReturnsAndStoresWoodAsCargo() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
+
         GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
         /* Place and grow the tree */
         Point point2 = new Point(12, 4);
         Tree tree = map.placeTree(point2);
+
+        /* Wait for the tree to grow */
         Utils.fastForwardUntilTreeIsGrown(tree, map);
 
         /* Place the woodcutter */
         Point point1 = new Point(10, 4);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Point point4 = new Point(9, 3);
-
-        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point4, woodcutter.getFlag().getPosition());
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
         constructHouse(woodcutter);
@@ -698,19 +733,22 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterHutWithoutTreesProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(10, 4);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the forester hut */
-
         constructHouse(woodcutter);
 
         /* Manually place forester */
@@ -729,14 +767,18 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterDoesNotCutSmallOrMediumTrees() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(10, 4);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
@@ -797,11 +839,14 @@ public class TestWoodcutter {
 
     @Test
     public void testWoodcutterGoesOutToCutTreesSeveralTimes() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point3 = new Point(6, 4);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point3);
 
@@ -809,19 +854,19 @@ public class TestWoodcutter {
         Point point2 = new Point(12, 4);
         Tree tree0 = map.placeTree(point2);
 
+        /* Place tree */
         Point point5 = new Point(11, 5);
         Tree tree1 = map.placeTree(point5);
 
+        /* Wait for the tree to grow */
         Utils.fastForwardUntilTreeIsGrown(tree0, map);
 
         /* Place the woodcutter */
         Point point1 = new Point(10, 4);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Point point4 = new Point(9, 3);
-
-        Road road0 = map.placeRoad(player0, headquarter.getFlag().getPosition(), point4, woodcutter.getFlag().getPosition());
-
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Construct the forester hut */
         constructHouse(woodcutter);
@@ -901,21 +946,23 @@ public class TestWoodcutter {
 
     @Test
     public void testPositionIsCorrectWhenWoodcutterEntersHut() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
 
+        /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point1 = new Point(8, 6);
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(9, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4);
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
         Utils.constructHouse(woodcutter);

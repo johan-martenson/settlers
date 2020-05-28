@@ -5,7 +5,6 @@
  */
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Flag;
@@ -18,7 +17,6 @@ import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
-import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
@@ -55,22 +53,18 @@ public class TestScenarios {
         GameMap map = new GameMap(players, 30, 30);
 
         /* Place headquarter */
-        Storehouse headquarter0 = new Headquarter(player0);
         Point point0 = new Point(6, 6);
-        map.placeBuilding(headquarter0, point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Player creates woodcutter, sawmill and quarry */
         Point point1 = new Point(6, 12);
-        Point point2 = new Point(12, 6);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
         Point point3 = new Point(20, 6);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point3);
 
-        Building woodcutter0 = new Woodcutter(player0);
-        Sawmill sawmill0 = new Sawmill(player0);
-        Quarry quarry0 = new Quarry(player0);
-
-        map.placeBuilding(woodcutter0, point1);
-        map.placeBuilding(sawmill0, point2);
-        map.placeBuilding(quarry0, point3);
+        Point point2 = new Point(12, 6);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
         /* Place tree */
         map.placeTree(point1.downRight().right());
@@ -305,8 +299,7 @@ public class TestScenarios {
 
         /* Place headquarter */
         Point point0 = new Point(6, 6);
-        Headquarter headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /*   --   START TEST   --   */
         fastForward(100, map);
@@ -315,8 +308,7 @@ public class TestScenarios {
 
         /* Player creates woodcutter */
         Point point1 = new Point(6, 12);
-        Building woodcutter = new Woodcutter(player0);
-        map.placeBuilding(woodcutter, point1);
+        Woodcutter woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         fastForward(100, map);
 
@@ -354,8 +346,7 @@ public class TestScenarios {
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        Headquarter headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /*   --   User    --   */
 

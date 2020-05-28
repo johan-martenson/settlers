@@ -119,26 +119,24 @@ public class TestConstruction {
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
-        /* Create barracks */
-        Barracks barracks0 = new Barracks(player0);
+        GameMap map = new GameMap(players,30, 30);
+
+        /* Place headquarter */
+        Point point0 = new Point(10, 10);
+        map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place barracks */
+        Point point1 = new Point(13, 13);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
         assertTrue(barracks0.underConstruction());
-
         assertTrue(barracks0.isMilitaryBuilding());
         assertEquals(barracks0.getMaxHostedMilitary(), 2);
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
         assertEquals(barracks0.getPromisedMilitary(), 0);
-
         assertFalse(barracks0.needsMilitaryManning());
 
-        /* The barracks needs a reference to the game map and this is set implicitly when it's placed on the map */
-        GameMap map = new GameMap(players,30, 30);
-        Point point0 = new Point(10, 10);
-        map.placeBuilding(new Headquarter(player0), point0);
-
-        Point point1 = new Point(13, 13);
-        map.placeBuilding(barracks0, point1);
-
+        /* Construct the barracks */
         Utils.constructHouse(barracks0);
 
         assertTrue(barracks0.isMilitaryBuilding());
@@ -146,7 +144,6 @@ public class TestConstruction {
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
         assertEquals(barracks0.getMaxHostedMilitary(), 2);
         assertTrue(barracks0.needsMilitaryManning());
-
         assertTrue(barracks0.isMilitaryBuilding());
     }
 

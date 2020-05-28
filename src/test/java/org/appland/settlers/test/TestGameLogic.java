@@ -44,13 +44,11 @@ public class TestGameLogic {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter headquarter = new Headquarter(player0);
-        map.placeBuilding(headquarter, point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place woodcutter */
         Point point1 = new Point(5, 11);
-        Woodcutter woodcutter0 = new Woodcutter(player0);
-        map.placeBuilding(woodcutter0, point1);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Place road to connect the woodcutter and the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), woodcutter0.getFlag());
@@ -70,12 +68,10 @@ public class TestGameLogic {
         Utils.fastForward(20, map);
 
         /* Place an unfinished sawmill on the map and verify that it needs deliveries */
-        Sawmill sawmill0 = new Sawmill(player0);
-
         Point point2 = new Point(10, 10);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
-        map.placeBuilding(sawmill0, point2);
-
+        /* Connect the sawmill with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter.getFlag(), sawmill0.getFlag());
 
         /* Verify that a new delivery is initiated for the sawmill */
@@ -108,8 +104,7 @@ public class TestGameLogic {
 
         /* Place sawmill */
         Point point2 = new Point(5, 5);
-        Sawmill sawmill0 = new Sawmill(player0);
-        map.placeBuilding(sawmill0, point2);
+        Sawmill sawmill0 = map.placeBuilding(new Sawmill(player0), point2);
 
         /* Place road to connect the flag with the sawmill's flag */
         Road road0 = map.placeAutoSelectedRoad(player0, flag0, sawmill0.getFlag());

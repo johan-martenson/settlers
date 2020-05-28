@@ -158,6 +158,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testSlaughterHouseNeedsWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -165,19 +167,14 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Connect the slaughter house with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         /* Unfinished slaughter house doesn't need worker */
         assertFalse(slaughterHouse.needsWorker());
@@ -206,19 +203,14 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Connect the slaughter house with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse);
@@ -261,18 +253,18 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Remove all butchers from the headquarter and add one cleaver */
-        Utils.adjustInventoryTo(building0, BUTCHER, 0);
-        Utils.adjustInventoryTo(building0, Material.CLEAVER, 1);
+        Utils.adjustInventoryTo(headquarter, BUTCHER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.CLEAVER, 1);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Connect the slaughter house with the headquarter */
-        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), building0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse);
@@ -305,6 +297,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testOccupiedSlaughterHouseWithoutPigsProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -312,7 +306,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
@@ -338,6 +332,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testUnoccupiedSlaughterHouseProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -345,7 +341,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
@@ -363,6 +359,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testOccupiedSlaughterHouseWithPigsProducesMeat() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -370,19 +368,14 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Connect the slaughter house with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse);
@@ -413,6 +406,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testButcherLeavesMeatAtTheFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -420,19 +415,14 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
         Building slaughterHouse = map.placeBuilding(new SlaughterHouse(player0), point3);
 
         /* Connect the slaughter house with the headquarter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the slaughterHouse */
         Utils.constructHouse(slaughterHouse);
@@ -477,6 +467,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionOfOneBreadConsumesOnePig() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -484,7 +476,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
@@ -509,6 +501,8 @@ public class TestSlaughterHouse {
 
     @Test
     public void testProductionCountdownStartsWhenMaterialIsAvailable() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -516,7 +510,7 @@ public class TestSlaughterHouse {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place slaughter house */
         Point point3 = new Point(7, 9);
@@ -1087,23 +1081,20 @@ public class TestSlaughterHouse {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);

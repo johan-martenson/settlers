@@ -252,7 +252,7 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
@@ -262,7 +262,7 @@ public class TestGraniteMine {
         Building mine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Place a road between the headquarter and the granite mine */
-        Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the mine */
         constructHouse(mine);
@@ -293,7 +293,7 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
@@ -418,13 +418,13 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
         constructHouse(mine);
@@ -508,13 +508,13 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
         constructHouse(mine);
@@ -579,13 +579,13 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the granite mine */
         constructHouse(mine);
@@ -631,7 +631,7 @@ public class TestGraniteMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
@@ -1237,23 +1237,20 @@ public class TestGraniteMine {
         Utils.putGraniteAtSurroundingTiles(point4, LARGE, map);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point3 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point3);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point3);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 5);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);

@@ -148,24 +148,20 @@ public class TestSeveralPlayers {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
-        map.placeBuilding(headquarter0, point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter far away from player 0 */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(90, 84);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place woodcutter for player 0 */
         Point point2 = new Point(10, 6);
-        Building woodcutter0 = new Woodcutter(player0);
-        map.placeBuilding(woodcutter0, point2);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         /* Place woodcutter for player 1 */
         Point point3 = new Point(90, 80);
-        Building woodcutter1 = new Woodcutter(player1);
-        map.placeBuilding(woodcutter1, point3);
+        Building woodcutter1 = map.placeBuilding(new Woodcutter(player1), point3);
     }
 
     @Test

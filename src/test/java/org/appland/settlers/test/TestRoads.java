@@ -198,7 +198,7 @@ public class TestRoads {
         map.placeFlag(player0, target);
 
         /* Place roads to build up the network */
-        map.placeRoad(player0, points[0], new Point(5, 3), points[1]);
+        map.placeRoad(player0, points[0], points[0].right(), points[1]);
         map.placeRoad(player0, points[1], points[1].right(), points[2]);
 
         map.placeRoad(player0, points[2], points[2].right(), points[3]);
@@ -755,10 +755,11 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(15, 15);
-        map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place woodcutter */
         Point point2 = new Point(12, 8);
-        Building building1 = map.placeBuilding(new Woodcutter(player0), point2);
+        Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
 
         /* Place flag */
         Point point3 = new Point(10, 8);
@@ -900,7 +901,7 @@ public class TestRoads {
         map.placeFlag(player0, point2);
 
         /* Verify that it's possible to place a road with var args */
-        Road road = map.placeRoad(player0, point1, new Point(5, 3), point2);
+        Road road = map.placeRoad(player0, point1, point1.right(), point2);
 
         assertNotNull(road);
     }
@@ -1858,15 +1859,14 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
         Point point1 = new Point(12, 6);
-        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
-        Point point2 = new Point(6, 4);
-        Point point3 = new Point(8, 4);
-        Point point4 = new Point(10, 4);
-        Point point5 = new Point(12, 4);
-        Point point6 = new Point(13, 5);
-        Road road0 = map.placeRoad(player0, point2, point3, point4, point5, point6);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         assertTrue(road0.needsCourier());
         assertEquals(map.getWorkers().size(), 1);
@@ -1909,12 +1909,17 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
         Point point1 = new Point(13, 7);
-        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag */
         Point point2 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Place a road */
         Point point3 = new Point(12, 4);
         Point point4 = new Point(13, 5);
         Point point5 = new Point(14, 6);
@@ -1942,14 +1947,19 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
         Point point1 = new Point(14, 10);
-        Building building1 = map.placeBuilding(new Woodcutter(player0), point1);
+        Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place flag */
         Point point2 = new Point(13, 5);
         Flag flag0 = map.placeFlag(player0, point2);
 
         Utils.fastForward(100, map);
 
+        /* Place road */
         Point point3 = new Point(6, 4);
         Point point4 = new Point(8, 4);
         Point point5 = new Point(10, 4);
@@ -2031,10 +2041,13 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place flag */
         Point point2 = new Point(8, 6);
         Flag flag0 = map.placeFlag(player0, point2);
 
+        /* Verify that it's not possible to place a road through the flag */
         Point point3 = new Point(6, 4);
         Point point4 = new Point(5, 3);
         Point point5 = new Point(4, 4);
@@ -2059,8 +2072,9 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Verify that there is a road between the headquarter and its flag */
         Point point3 = new Point(6, 4);
 
         assertNotNull(map.getRoad(point0, point3));
@@ -2078,8 +2092,9 @@ public class TestRoads {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Verify that the drive way for the headquarter doesn't need a courier */
         Point point3 = new Point(6, 4);
 
         assertFalse(map.getRoad(point0, point3).needsCourier());
@@ -2099,10 +2114,12 @@ public class TestRoads {
         Point point0 = new Point(10, 10);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Place flag */
         Point point1 = new Point(3, 3);
-        Point point2 = new Point(5, 3);
-
         map.placeFlag(player0, point1);
+
+        /* Verify that it's not possible to place a flag too close to the other flag */
+        Point point2 = new Point(5, 3);
 
         try {
             map.placeFlag(player0, point2);

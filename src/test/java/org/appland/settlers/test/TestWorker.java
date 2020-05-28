@@ -233,9 +233,8 @@ public class TestWorker {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 0's headquarter */
-        Headquarter headquarter0 = new Headquarter(player0);
         Point point0 = new Point(5, 5);
-        map.placeBuilding(headquarter0, point0);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
         Point point1 = new Point(31, 15);
@@ -247,8 +246,7 @@ public class TestWorker {
 
         /* Place barracks for player 1 */
         Point point3 = new Point(17, 15);
-        Building barracks1 = new Barracks(player1);
-        map.placeBuilding(barracks1, point3);
+        Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         /* Finish construction */
         Utils.constructHouse(barracks0);

@@ -159,6 +159,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronSmelterNeedsWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -166,7 +168,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -190,6 +192,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronSmelterGetsAssignedWorker() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -197,19 +201,14 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
         /* Place a road between the headquarter and the iron smelter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the iron smelter */
         Utils.constructHouse(ironSmelter);
@@ -246,6 +245,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronFounderGetsCreatedFromCrucible() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -253,18 +254,18 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Remove all iron founders from the headquarter and add one crucible */
-        Utils.adjustInventoryTo(building0, IRON_FOUNDER, 0);
-        Utils.adjustInventoryTo(building0, Material.CRUCIBLE, 1);
+        Utils.adjustInventoryTo(headquarter, IRON_FOUNDER, 0);
+        Utils.adjustInventoryTo(headquarter, Material.CRUCIBLE, 1);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
         /* Place a road between the headquarter and the iron smelter */
-        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), building0.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the iron smelter */
         Utils.constructHouse(ironSmelter);
@@ -301,6 +302,8 @@ public class TestIronSmelter {
 
     @Test
     public void testOccupiedIronSmelterWithoutCoalAndIronProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -308,7 +311,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -334,6 +337,8 @@ public class TestIronSmelter {
 
     @Test
     public void testUnoccupiedIronSmelterProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -341,7 +346,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -359,6 +364,8 @@ public class TestIronSmelter {
 
     @Test
     public void testOccupiedIronSmelterWithIronAndCoalProducesIronBars() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -366,7 +373,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -402,6 +409,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronFounderLeavesIronBarAtTheFlag() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -409,19 +418,14 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point3);
 
         /* Place a road between the headquarter and the iron smelter */
-        Point point4 = new Point(8, 8);
-        Point point5 = new Point(7, 7);
-        Point point6 = new Point(8, 6);
-        Point point7 = new Point(7, 5);
-        Point point8 = new Point(6, 4);
-        Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the iron smelter */
         Utils.constructHouse(ironSmelter);
@@ -466,6 +470,8 @@ public class TestIronSmelter {
 
     @Test
     public void testProductionOfOneIronBarConsumesOneIronAndOneCoal() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -473,7 +479,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -503,6 +509,8 @@ public class TestIronSmelter {
 
     @Test
     public void testProductionCountdownStartsWhenIronAndCoalAreAvailable() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -510,7 +518,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -542,6 +550,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronSmelterCannotProduceWithOnlyIron() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -549,7 +559,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -573,6 +583,8 @@ public class TestIronSmelter {
 
     @Test
     public void testIronSmelterCannotProduceWithOnlyCoal() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -580,7 +592,7 @@ public class TestIronSmelter {
 
         /* Place headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place iron smelter */
         Point point3 = new Point(7, 9);
@@ -1151,23 +1163,20 @@ public class TestIronSmelter {
         GameMap map = new GameMap(players, 100, 100);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 9);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);

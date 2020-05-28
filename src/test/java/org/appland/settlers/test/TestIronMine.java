@@ -132,6 +132,8 @@ public class TestIronMine {
 
     @Test
     public void testConstructIronMine() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -157,6 +159,8 @@ public class TestIronMine {
 
     @Test
     public void testIronMineIsNotMilitary() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -183,6 +187,8 @@ public class TestIronMine {
 
     @Test
     public void testIronMineUnderConstructionNotNeedsMiner() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -205,6 +211,8 @@ public class TestIronMine {
 
     @Test
     public void testFinishedIronMineNeedsMiner() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -238,7 +246,7 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
@@ -248,7 +256,7 @@ public class TestIronMine {
         Building mine = map.placeBuilding(new IronMine(player0), point1);
 
         /* Place a road between the headquarter and the iron mine */
-        Road road0 = map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the mine */
         constructHouse(mine);
@@ -270,6 +278,8 @@ public class TestIronMine {
 
     @Test
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -277,7 +287,7 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point0 = new Point(5, 5);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point0);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Put a small mountain on the map */
         Point point1 = new Point(10, 8);
@@ -291,6 +301,8 @@ public class TestIronMine {
 
     @Test
     public void testArrivedMinerRests() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -332,6 +344,8 @@ public class TestIronMine {
 
     @Test
     public void testMinerMinesIron() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -384,6 +398,8 @@ public class TestIronMine {
 
     @Test
     public void testIronMineGoesToFlagWithCargoAndBack() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -396,13 +412,13 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the iron mine */
         constructHouse(mine);
@@ -444,14 +460,18 @@ public class TestIronMine {
 
     @Test
     public void testCanNotPlaceMineOnGrass() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
 
+        /* Place headquarter */
         Point point0 = new Point(7, 7);
         map.placeBuilding(new Headquarter(player0), point0);
 
+        /* Verify that it's not possible to place a mine on grass */
         Point point1 = new Point(2, 2);
         try {
             map.placeBuilding(new IronMine(player0), point1);
@@ -484,13 +504,13 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the iron mine */
         constructHouse(mine);
@@ -542,6 +562,8 @@ public class TestIronMine {
 
     @Test
     public void testIronMineWithoutIronProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -553,13 +575,13 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
         /* Place a road from headquarter to mine */
-        map.placeAutoSelectedRoad(player0, building0.getFlag(), mine.getFlag());
+        map.placeAutoSelectedRoad(player0, headquarter.getFlag(), mine.getFlag());
 
         /* Construct the iron mine */
         constructHouse(mine);
@@ -591,6 +613,8 @@ public class TestIronMine {
 
     @Test
     public void testIronMineWithoutFoodProducesNothing() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -603,7 +627,7 @@ public class TestIronMine {
 
         /* Place a headquarter */
         Point point1 = new Point(15, 15);
-        Headquarter building0 = map.placeBuilding(new Headquarter(player0), point1);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point1);
 
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
@@ -633,6 +657,8 @@ public class TestIronMine {
 
     @Test
     public void testMiningConsumesFood() throws Exception {
+
+        /* Create single player game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1217,23 +1243,20 @@ public class TestIronMine {
         Utils.putIronAtSurroundingTiles(point4, LARGE, map);
 
         /* Place player 2's headquarter */
-        Headquarter headquarter2 = new Headquarter(player2);
         Point point10 = new Point(70, 70);
-        map.placeBuilding(headquarter2, point10);
+        Headquarter headquarter2 = map.placeBuilding(new Headquarter(player2), point10);
 
         /* Place player 0's headquarter */
         Point point0 = new Point(9, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place player 1's headquarter */
-        Headquarter headquarter1 = new Headquarter(player1);
         Point point1 = new Point(45, 5);
-        map.placeBuilding(headquarter1, point1);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
 
         /* Place fortress for player 0 */
         Point point2 = new Point(21, 5);
-        Building fortress0 = new Fortress(player0);
-        map.placeBuilding(fortress0, point2);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
         Utils.constructHouse(fortress0);
