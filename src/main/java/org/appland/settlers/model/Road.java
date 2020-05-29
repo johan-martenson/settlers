@@ -5,16 +5,19 @@ import java.util.List;
 
 public class Road {
 
-    private static final int MAIN_ROAD_THRESHOLD = 99;
+    private static final int MAIN_ROAD_THRESHOLD = 100;
 
-    private int         usage;
     private final EndPoint    start;
     private final EndPoint    end;
+    private final List<Point> steps;
+
+    private int         usage;
     private Courier     courier;
     private Donkey      donkey;
-    private final List<Point> steps;
     private boolean     needsCourier;
     private Player      player;
+    private boolean     isMainRoad;
+    private GameMap     map;
 
     protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
         if (roadStepsTooLong(wayPoints)) {
@@ -33,6 +36,8 @@ public class Road {
         needsCourier = true;
 
         usage = 0;
+
+        isMainRoad = false;
     }
 
     protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
@@ -137,12 +142,20 @@ public class Road {
     }
 
     public boolean isMainRoad() {
-        return usage > MAIN_ROAD_THRESHOLD;
+        return isMainRoad;
     }
 
     void registerUsage() {
-        if (usage <= MAIN_ROAD_THRESHOLD) {
-            usage++;
+        if (isMainRoad) {
+            return;
+        }
+
+        usage = usage + 1;
+
+        if (usage == MAIN_ROAD_THRESHOLD) {
+            isMainRoad = true;
+
+            map.reportPromotedRoad(this);
         }
     }
 
@@ -171,4 +184,7 @@ public class Road {
         this.player = player;
     }
 
+    public void setMap(GameMap gameMap) {
+        map = gameMap;
+    }
 }

@@ -62,6 +62,7 @@ public class Player {
     private final List<Point> newOwnedLand;
     private final List<Point> newLostLand;
     private final List<Message> newMessages;
+    private final List<Road> promotedRoads;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -126,6 +127,7 @@ public class Player {
         newOwnedLand = new ArrayList<>();
         newLostLand = new ArrayList<>();
         newMessages = new ArrayList<>();
+        promotedRoads = new ArrayList<>();
     }
 
     public String getName() {
@@ -742,7 +744,7 @@ public class Player {
             removedSigns.isEmpty() && newCrops.isEmpty() && removedCrops.isEmpty() &&
             newDiscoveredLand.isEmpty() && newBorder.isEmpty() && removedBorder.isEmpty() &&
             workersWithNewTargets.isEmpty() && changedBorders.isEmpty() && newStones.isEmpty() &&
-            newMessages.isEmpty()) {
+            newMessages.isEmpty() && promotedRoads.isEmpty()) {
             return;
         }
 
@@ -954,7 +956,8 @@ public class Player {
                 new ArrayList<>(changedBorders),
                 new ArrayList<>(newStones), newWorkers,
                 new ArrayList<>(changedAvailableConstruction),
-                new ArrayList<>(newMessages));
+                new ArrayList<>(newMessages),
+                new ArrayList<>(promotedRoads));
 
         /* Send the event to all monitors */
         for (PlayerGameViewMonitor monitor : gameViewMonitors) {
@@ -986,6 +989,7 @@ public class Player {
         newLostLand.clear();
         newMessages.clear();
         newStones.clear();
+        promotedRoads.clear();
     }
 
     private void addChangedAvailableConstructionForStone(Stone stone) {
@@ -1223,5 +1227,9 @@ public class Player {
         }
 
         return true;
+    }
+
+    public void reportPromotedRoad(Road road) {
+        promotedRoads.add(road);
     }
 }

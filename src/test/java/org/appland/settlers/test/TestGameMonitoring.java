@@ -3,6 +3,7 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.BorderChange;
 import org.appland.settlers.model.Building;
+import org.appland.settlers.model.Cargo;
 import org.appland.settlers.model.Courier;
 import org.appland.settlers.model.Crop;
 import org.appland.settlers.model.Farm;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.JUST_PLANTED;
+import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Size.SMALL;
@@ -4670,5 +4672,148 @@ public class TestGameMonitoring {
         assertTrue(gameChanges.getTime() > 0);
         assertEquals(gameChanges.getNewFlags().size(), 1);
         assertEquals(gameChanges.getNewFlags().get(0), flag0);
+    }
+
+    @Test
+    public void testMonitoringWhenRoadBecomesPromotedToMainRoad() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place a worker on the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Deliver 99 cargo - the road does not become a main road */
+        for (int i = 0; i < 99; i++) {
+            Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier.getCargo());
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+            assertNull(courier.getCargo());
+
+            assertFalse(road0.isMainRoad());
+        }
+
+        /* Deliver one more cargo and make it a main road */
+        Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+
+        /* Wait for the courier to pick up the cargo */
+        assertNull(courier.getCargo());
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        /* Start monitoring the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        assertTrue(road0.isMainRoad());
+
+        /* Verify that an event is sent when the road becomes a main road */
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.getPromotedRoads().size(), 1);
+        assertEquals(gameChangesList.getPromotedRoads().get(0), road0);
+    }
+
+    @Test
+    public void testMonitoringWhenRoadBecomesPromotedToMainRoadIsOnlySentOnce() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point38 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point38);
+
+        /* Place flag */
+        Point point2 = new Point(5, 9);
+        Flag flag0 = map.placeFlag(player0, point2);
+
+        /* Place road between the headquarter and the flag */
+        Road road0 = map.placeAutoSelectedRoad(player0, flag0, headquarter0.getFlag());
+
+        /* Place a worker on the road */
+        Courier courier = Utils.occupyRoad(road0, map);
+
+        /* Deliver 99 cargo - the road does not become a main road */
+        for (int i = 0; i < 99; i++) {
+            Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+
+            /* Wait for the courier to pick up the cargo */
+            assertNull(courier.getCargo());
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+            /* Wait for the courier to deliver the cargo */
+            assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getPosition());
+
+            assertNull(courier.getCargo());
+
+            assertFalse(road0.isMainRoad());
+        }
+
+        /* Deliver one more cargo and make it a main road */
+        Cargo cargo = Utils.placeCargo(map, COIN, flag0, headquarter0);
+
+        /* Wait for the courier to pick up the cargo */
+        assertNull(courier.getCargo());
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, courier, cargo);
+
+        /* Start monitoring the player */
+        Utils.GameViewMonitor monitor = new Utils.GameViewMonitor();
+        player0.monitorGameView(monitor);
+
+        /* Wait for the courier to deliver the cargo */
+        assertEquals(courier.getTarget(), headquarter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, courier, headquarter0.getFlag().getPosition());
+
+        assertTrue(road0.isMainRoad());
+
+        /* Verify that an event is sent when the road becomes a main road */
+        GameChangesList gameChangesList = monitor.getLastEvent();
+
+        assertEquals(gameChangesList.getPromotedRoads().size(), 1);
+        assertEquals(gameChangesList.getPromotedRoads().get(0), road0);
+
+        /* Verify that the road promotion is only reported once */
+        Utils.fastForward(20, map);
+
+        for (GameChangesList newChanges : monitor.getEventsAfterEvent(gameChangesList)) {
+            assertFalse(newChanges.getPromotedRoads().contains(road0));
+        }
     }
 }

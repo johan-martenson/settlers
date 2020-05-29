@@ -86,6 +86,7 @@ public class GameMap {
     private final Set<Sign> removedSigns;
     private final Set<Crop> newCrops;
     private final Set<Crop> removedCrops;
+    private final Set<Road> promotedRoads;
 
     PointInformation whatIsAtPoint(Point point) {
         MapPoint mp = getMapPoint(point);
@@ -128,6 +129,10 @@ public class GameMap {
         }
 
         return PointInformation.NONE;
+    }
+
+    public void reportPromotedRoad(Road road) {
+        promotedRoads.add(road);
     }
 
     enum PointInformation {
@@ -228,6 +233,7 @@ public class GameMap {
         removedSigns = new HashSet<>();
         newCrops = new HashSet<>();
         removedCrops = new HashSet<>();
+        promotedRoads = new HashSet<>();
     }
 
     void reportBuildingConstructed(Building building) {
@@ -629,6 +635,14 @@ public class GameMap {
                 player.reportRemovedCrop(crop);
             }
 
+            for (Road road : promotedRoads) {
+                if (!GameUtils.setContainsAny(player.getDiscoveredLand(), road.getWayPoints())) {
+                    continue;
+                }
+
+                player.reportPromotedRoad(road);
+            }
+
             player.sendMonitoringEvents(time);
         }
 
@@ -648,6 +662,7 @@ public class GameMap {
         removedSigns.clear();
         newCrops.clear();
         removedCrops.clear();
+        promotedRoads.clear();
 
         /* Step the time keeper */
         time = time + 1;
@@ -1002,6 +1017,7 @@ public class GameMap {
 
         Road road = new Road(building.getPlayer(), building, wayPoints, building.getFlag());
 
+        road.setMap(this);
         road.setNeedsCourier(false);
 
         roads.add(road);
@@ -1103,6 +1119,9 @@ public class GameMap {
         Flag endFlag   = getFlagAtPoint(end);
 
         Road road = new Road(player, startFlag, wayPoints, endFlag);
+
+        /* Set the map field in the road */
+        road.setMap(this);
 
         roads.add(road);
 

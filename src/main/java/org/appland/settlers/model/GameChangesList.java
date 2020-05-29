@@ -29,6 +29,7 @@ public class GameChangesList {
     private final List<Worker> newWorkers;
     private final Collection<Point> changedAvailableConstruction;
     private final List<Message> newMessages;
+    private final List<Road> promotedRoads;
 
     public GameChangesList(long time,
                            List<Worker> workersWithNewTargets,
@@ -52,7 +53,7 @@ public class GameChangesList {
                            List<Stone> newStones,
                            List<Worker> newWorkers,
                            Collection<Point> changedAvailableConstruction,
-                           List<Message> newMessages) {
+                           List<Message> newMessages, List<Road> promotedRoads) {
         this.time = time;
         this.workersWithNewTargets = workersWithNewTargets;
         this.newFlags = newFlags;
@@ -76,6 +77,7 @@ public class GameChangesList {
         this.newWorkers = newWorkers;
         this.changedAvailableConstruction = changedAvailableConstruction;
         this.newMessages = newMessages;
+        this.promotedRoads = promotedRoads;
     }
 
     public long getTime() {
@@ -154,28 +156,29 @@ public class GameChangesList {
     public String toString() {
         return "GameChangesList{" +
                 "time=" + time +
-                ", workersWithNewTargets=" + workersWithNewTargets +
-                ", newFlags=" + newFlags +
-                ", removedFlags=" + removedFlags +
-                ", newBuildings=" + newBuildings +
-                ", changedBuildings=" + changedBuildings +
-                ", removedBuildings=" + removedBuildings +
-                ", addedRoads=" + addedRoads +
-                ", removedRoads=" + removedRoads +
-                ", removedWorkers=" + removedWorkers +
-                ", newTrees=" + newTrees +
-                ", removedTrees=" + removedTrees +
-                ", removedStones=" + removedStones +
-                ", newSigns=" + newSigns +
-                ", removedSigns=" + removedSigns +
-                ", newCrops=" + newCrops +
-                ", removedCrops=" + removedCrops +
-                ", newDiscoveredLand=" + newDiscoveredLand +
-                ", borderChanges=" + borderChanges +
-                ", newStones=" + newStones +
-                ", newWorkers=" + newWorkers +
-                ", changedAvailableConstruction=" + changedAvailableConstruction +
-                ", newMessages=" + newMessages +
+                ", \nworkersWithNewTargets=" + workersWithNewTargets +
+                ", \nnewFlags=" + newFlags +
+                ", \nremovedFlags=" + removedFlags +
+                ", \nnewBuildings=" + newBuildings +
+                ", \nchangedBuildings=" + changedBuildings +
+                ", \nremovedBuildings=" + removedBuildings +
+                ", \naddedRoads=" + addedRoads +
+                ", \nremovedRoads=" + removedRoads +
+                ", \nremovedWorkers=" + removedWorkers +
+                ", \nnewTrees=" + newTrees +
+                ", \nremovedTrees=" + removedTrees +
+                ", \nremovedStones=" + removedStones +
+                ", \nnewSigns=" + newSigns +
+                ", \nremovedSigns=" + removedSigns +
+                ", \nnewCrops=" + newCrops +
+                ", \nremovedCrops=" + removedCrops +
+                ", \nnewDiscoveredLand=" + newDiscoveredLand +
+                ", \nborderChanges=" + borderChanges +
+                ", \nnewStones=" + newStones +
+                ", \nnewWorkers=" + newWorkers +
+                ", \nchangedAvailableConstruction=" + changedAvailableConstruction +
+                ", \nnewMessages=" + newMessages +
+                ", \npromotedRoads=" + promotedRoads +
                 '}';
     }
 
@@ -197,5 +200,9 @@ public class GameChangesList {
 
     public List<Message> getNewGameMessages() {
         return newMessages;
+    }
+
+    public List<Road> getPromotedRoads() {
+        return promotedRoads;
     }
 }
