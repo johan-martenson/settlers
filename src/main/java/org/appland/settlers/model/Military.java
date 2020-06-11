@@ -3,9 +3,9 @@ package org.appland.settlers.model;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
-import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.appland.settlers.model.Military.State.ATTACKING;
 import static org.appland.settlers.model.Military.State.DEFENDING;
@@ -32,9 +32,8 @@ public class Military extends Worker {
     public enum Rank {
         PRIVATE_RANK,
         SERGEANT_RANK,
-        CORPORAL_RANK,
         OFFICER_RANK,
-        GENERAL_RANK
+        PRIVATE_FIRST_CLASS_RANK, GENERAL_RANK
     }
 
     protected enum State {
@@ -63,7 +62,7 @@ public class Military extends Worker {
     private static final int GENERAL_FIGHT_DURATION  = 300;
 
     private static final int PRIVATE_HEALTH  = 20;
-    private static final int CORPORAL_HEALTH = 70;
+    private static final int PRIVATE_FIRST_CLASS_HEALTH = 70;
     private static final int SERGEANT_HEALTH = 220;
     private static final int OFFICER_HEALTH  = 670;
     private static final int GENERAL_HEALTH  = 2020;
@@ -91,9 +90,9 @@ public class Military extends Worker {
     void promote() {
         switch (rank) {
         case PRIVATE_RANK:
-            rank = CORPORAL_RANK;
+            rank = PRIVATE_FIRST_CLASS_RANK;
             break;
-        case CORPORAL_RANK:
+            case PRIVATE_FIRST_CLASS_RANK:
             rank = SERGEANT_RANK;
             break;
         case SERGEANT_RANK:
@@ -476,8 +475,8 @@ public class Military extends Worker {
         switch (rank) {
         case PRIVATE_RANK:
             return PRIVATE_HEALTH;
-        case CORPORAL_RANK:
-            return CORPORAL_HEALTH;
+            case PRIVATE_FIRST_CLASS_RANK:
+            return PRIVATE_FIRST_CLASS_HEALTH;
         case SERGEANT_RANK:
             return SERGEANT_HEALTH;
         case OFFICER_RANK:

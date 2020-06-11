@@ -63,6 +63,7 @@ public class Player {
     private final List<Point> newLostLand;
     private final List<Message> newMessages;
     private final List<Road> promotedRoads;
+    private boolean treeConservationProgramEnabled;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -96,6 +97,9 @@ public class Player {
 
         /* The tree conservation program is not active at start */
         treeConservationProgramActive = false;
+
+        /* The tree conservation program is enabled by default */
+        treeConservationProgramEnabled = true;
 
         /* Prepare for monitors of the game */
         gameViewMonitors = new HashSet<>();
@@ -1168,7 +1172,7 @@ public class Player {
         /* Enable/disable the tree conservation program if needed */
         if (shouldConserveTrees()) {
 
-            if (!treeConservationProgramActive) {
+            if (!treeConservationProgramActive && treeConservationProgramEnabled) {
                 activateTreeConservationProgram();
             }
         } else {
@@ -1231,5 +1235,18 @@ public class Player {
 
     public void reportPromotedRoad(Road road) {
         promotedRoads.add(road);
+    }
+
+    public void enableTreeConservationProgram() {
+        treeConservationProgramEnabled = true;
+    }
+
+    public boolean isTreeConservationProgramEnabled() {
+        return treeConservationProgramEnabled;
+    }
+
+    public void disableTreeConservationProgram() {
+        treeConservationProgramEnabled = false;
+        treeConservationProgramActive = false;
     }
 }

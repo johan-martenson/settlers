@@ -19,12 +19,13 @@ LARGER CHANGES
 
 * Change so that military buildings cannot be placed too close together / only close to the border
 
-* Make the tree conservation program configurable
-
 * Add small boats
 
 * Make discovered and owned land separate from defended land, and make sure it's correct for all military buildings
 
+* Make it possible to configure allocation of planks
+
+* Correct range for workers
 
 SMALLER CHANGES
 ===============
@@ -639,4 +640,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 * Fix so headquarter can stop storehouse of material and force output - DONE
 
 * Limit how many cargos can be placed on flag - DONE
+
+* Correct the possible military ranks - DONE
+
+* Make the tree conservation program configurable - DONE
 

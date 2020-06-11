@@ -28,7 +28,7 @@ import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
@@ -526,7 +526,7 @@ public class TestWatchTower {
             map.stepTime();
         }
 
-        assertEquals(military.getRank(), CORPORAL_RANK);
+        assertEquals(military.getRank(), PRIVATE_FIRST_CLASS_RANK);
     }
 
     @Test
@@ -560,8 +560,8 @@ public class TestWatchTower {
         /* Wait for the promotion to happen */
         Utils.fastForward(100, map);
 
-        assertTrue((military1.getRank() == CORPORAL_RANK && military2.getRank() == PRIVATE_RANK) ||
-                   (military1.getRank() == PRIVATE_RANK  && military2.getRank() == CORPORAL_RANK));
+        assertTrue((military1.getRank() == PRIVATE_FIRST_CLASS_RANK && military2.getRank() == PRIVATE_RANK) ||
+                   (military1.getRank() == PRIVATE_RANK  && military2.getRank() == PRIVATE_FIRST_CLASS_RANK));
     }
 
     @Test
@@ -601,7 +601,7 @@ public class TestWatchTower {
 
         map.stepTime();
 
-        assertEquals(military.getRank(), CORPORAL_RANK);
+        assertEquals(military.getRank(), PRIVATE_FIRST_CLASS_RANK);
     }
 
     @Test

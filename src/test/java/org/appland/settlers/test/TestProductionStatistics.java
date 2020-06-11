@@ -19,7 +19,7 @@ import java.util.List;
 
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
@@ -373,7 +373,7 @@ public class TestProductionStatistics {
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(IRON));
 
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(PRIVATE));
-        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(CORPORAL));
+        assertNotNull(statisticsManager.getProductionStatisticsForMaterial(PRIVATE_FIRST_CLASS));
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(SERGEANT));
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(OFFICER));
         assertNotNull(statisticsManager.getProductionStatisticsForMaterial(GENERAL));

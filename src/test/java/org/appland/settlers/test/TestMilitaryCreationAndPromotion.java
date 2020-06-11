@@ -19,9 +19,9 @@ import java.util.List;
 import static org.appland.settlers.model.Material.COIN;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.PRIVATE;
-import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -75,7 +75,7 @@ public class TestMilitaryCreationAndPromotion {
         assertEquals(Military.Rank.values().length, 5);
 
         assertEquals(Military.Rank.valueOf("PRIVATE_RANK"), Military.Rank.PRIVATE_RANK);
-        assertEquals(Military.Rank.valueOf("CORPORAL_RANK"), CORPORAL_RANK);
+        assertEquals(Military.Rank.valueOf("PRIVATE_FIRST_CLASS_RANK"), Military.Rank.PRIVATE_FIRST_CLASS_RANK);
         assertEquals(Military.Rank.valueOf("SERGEANT_RANK"), Military.Rank.SERGEANT_RANK);
         assertEquals(Military.Rank.valueOf("OFFICER_RANK"), Military.Rank.OFFICER_RANK);
         assertEquals(Military.Rank.valueOf("GENERAL_RANK"), GENERAL_RANK);
@@ -84,7 +84,7 @@ public class TestMilitaryCreationAndPromotion {
     @Test
     public void testAvailableMilitary() {
         assertEquals(Material.valueOf("PRIVATE"), Material.PRIVATE);
-        assertEquals(Material.valueOf("CORPORAL"), Material.CORPORAL);
+        assertEquals(Material.valueOf("PRIVATE_FIRST_CLASS"), Material.PRIVATE_FIRST_CLASS);
         assertEquals(Material.valueOf("SERGEANT"), Material.SERGEANT);
         assertEquals(Material.valueOf("OFFICER"), Material.OFFICER);
         assertEquals(Material.valueOf("GENERAL"), Material.GENERAL);
@@ -277,7 +277,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.fastForward(100, map);
 
         assertEquals(barracks0.getHostedMilitary().size(), 1);
-        assertEquals(barracks0.getHostedMilitary().get(0).getRank(), CORPORAL_RANK);
+        assertEquals(barracks0.getHostedMilitary().get(0).getRank(), PRIVATE_FIRST_CLASS_RANK);
     }
 
     @Test
@@ -301,7 +301,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         /* Place a corporal in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.CORPORAL_RANK, barracks0);
+        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);

@@ -33,15 +33,15 @@ import java.util.Set;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
-import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.OFFICER;
 import static org.appland.settlers.model.Material.PRIVATE;
 import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
-import static org.appland.settlers.model.Military.Rank.CORPORAL_RANK;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.OFFICER_RANK;
+import static org.appland.settlers.model.Military.Rank.PRIVATE_FIRST_CLASS_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Military.Rank.SERGEANT_RANK;
 import static org.junit.Assert.assertEquals;
@@ -1843,7 +1843,7 @@ public class TestAttack {
         Utils.constructHouse(fortress0);
 
         /* Populate player 0's barracks */
-        Utils.occupyMilitaryBuilding(CORPORAL_RANK, 2, barracks0);
+        Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, 2, barracks0);
 
         /* Populate player 1's barracks */
         assertTrue(fortress0.isReady());
@@ -1852,13 +1852,13 @@ public class TestAttack {
 
         /* Empty both headquarters for soldiers */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter0, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter1, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -1885,7 +1885,7 @@ public class TestAttack {
         assertEquals(attacker.getPosition(), fortress0.getFlag().getPosition());
 
         /* Verify that the attacking corporal beats three privates */
-        assertEquals(attacker.getRank(), CORPORAL_RANK);
+        assertEquals(attacker.getRank(), PRIVATE_FIRST_CLASS_RANK);
 
         for (int i = 0; i < 3; i++) {
 
@@ -1962,17 +1962,17 @@ public class TestAttack {
         /* Populate player 1's barracks */
         assertTrue(fortress0.isReady());
 
-        Utils.occupyMilitaryBuilding(CORPORAL_RANK, 7, fortress0);
+        Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, 7, fortress0);
 
         /* Empty both headquarters for soldiers */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter0, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter1, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -2080,13 +2080,13 @@ public class TestAttack {
 
         /* Empty both headquarters for soldiers */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter0, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter1, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
@@ -2194,13 +2194,13 @@ public class TestAttack {
 
         /* Empty both headquarters for soldiers */
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter0, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter0, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter0, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter0, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter0, GENERAL, 0);
 
         Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
-        Utils.adjustInventoryTo(headquarter1, CORPORAL, 0);
+        Utils.adjustInventoryTo(headquarter1, PRIVATE_FIRST_CLASS, 0);
         Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
         Utils.adjustInventoryTo(headquarter1, OFFICER, 0);
         Utils.adjustInventoryTo(headquarter1, GENERAL, 0);

@@ -14,10 +14,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class TestTreeConservationProgram {
+
+    @Test
+    public void testTreeConservationProgramIsEnabledByDefault() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Verify that the tree conservation program is enabled by default */
+        assertTrue(player0.isTreeConservationProgramEnabled());
+    }
+
+    @Test
+    public void testCanEnableTreeConservationProgram() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Verify that the tree conservation program can be enabled */
+        player0.enableTreeConservationProgram();
+
+        assertTrue(player0.isTreeConservationProgramEnabled());
+    }
+
+    @Test
+    public void testCanDisableTreeConservationProgram() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Verify that the tree conservation program can be enabled */
+        player0.disableTreeConservationProgram();
+
+        assertFalse(player0.isTreeConservationProgramEnabled());
+    }
 
     @Test
     public void testTreeConservationProgramIsActivatedWhenAmountOfPlanksIsLow() throws Exception {
@@ -43,12 +99,50 @@ public class TestTreeConservationProgram {
         Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
 
         /* Verify that a message is sent */
+        assertTrue(player0.isTreeConservationProgramEnabled());
         assertTrue(player0.getMessages().isEmpty());
         assertFalse(player0.isTreeConservationProgramActive());
 
         Utils.waitForTreeConservationProgramToActivate(player0);
 
         assertTrue(player0.isTreeConservationProgramActive());
+    }
+
+    @Test
+    public void testTreeConservationProgramDoesNotActivateIfItIsDisabled() throws Exception {
+
+        /* Starting new game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Placing headquarter */
+        Point point21 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
+
+        /* Set the amount of planks to just above the limit for the tree conservation program */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 11);
+        Utils.adjustInventoryTo(headquarter0, STONE, 5);
+
+        /* Try to build a building that doesn't get resources */
+        Point point2 = new Point(10, 6);
+        Armory armory0 = map.placeBuilding(new Armory(player0), point2);
+
+        /* Connect the armory to the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, armory0.getFlag(), headquarter0.getFlag());
+
+        /* Verify that the tree conservation program does not activate if it's disabled */
+        player0.disableTreeConservationProgram();
+
+        assertFalse(player0.isTreeConservationProgramEnabled());
+        assertFalse(player0.isTreeConservationProgramActive());
+
+        Utils.waitForBuildingToBeConstructed(armory0);
+
+        assertTrue(armory0.isReady());
+        assertTrue(headquarter0.getAmount(PLANK) < 10);
+        assertFalse(player0.isTreeConservationProgramActive());
     }
 
     @Test

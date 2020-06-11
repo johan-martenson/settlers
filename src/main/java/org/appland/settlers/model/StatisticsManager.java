@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
-import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
@@ -31,7 +31,7 @@ public class StatisticsManager {
         SHIELD,
         COIN,
         PRIVATE,
-        CORPORAL,
+            PRIVATE_FIRST_CLASS,
         SERGEANT,
         OFFICER,
         GENERAL,

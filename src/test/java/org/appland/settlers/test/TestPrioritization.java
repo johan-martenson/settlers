@@ -50,7 +50,7 @@ import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.CATAPULT_WORKER;
 import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.CORPORAL;
+import static org.appland.settlers.model.Material.PRIVATE_FIRST_CLASS;
 import static org.appland.settlers.model.Material.COURIER;
 import static org.appland.settlers.model.Material.DONKEY;
 import static org.appland.settlers.model.Material.DONKEY_BREEDER;
@@ -2357,7 +2357,7 @@ public class TestPrioritization {
         workers.add(SCOUT);
         workers.add(HUNTER);
         workers.add(OFFICER);
-        workers.add(CORPORAL);
+        workers.add(PRIVATE_FIRST_CLASS);
 
         for (Material worker : workers) {
             try {
