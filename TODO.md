@@ -5,8 +5,6 @@ LARGER CHANGES
 
 * Add builders and diggers
 
-* Limit how many cargos can be placed on flag
-
 * Add ships, shipyard, harbour
 
 * Add ability to configure military parameters
@@ -20,8 +18,6 @@ LARGER CHANGES
 * Add game message and monitoring for when a player wins or loses
 
 * Change so that military buildings cannot be placed too close together / only close to the border
-
-* Fix so headquarter can stop storehouse of material and force output
 
 * Make the tree conservation program configurable
 
@@ -639,3 +635,8 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 *  Quarry seems to always get its stone late. Does the tree conservation program stop it? It seems very likely - RESOLVED (it was because of the tree conservation program)
 
 *  getClosestStorage - DONE
+
+* Fix so headquarter can stop storehouse of material and force output - DONE
+
+* Limit how many cargos can be placed on flag - DONE
+
