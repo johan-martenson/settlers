@@ -13,6 +13,7 @@ import static org.appland.settlers.model.Butcher.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Butcher.State.SLAUGHTERING_PIG;
 import static org.appland.settlers.model.Butcher.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Butcher.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.BUTCHER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PIG;
 
@@ -22,6 +23,7 @@ import static org.appland.settlers.model.Material.PIG;
  */
 @Walker(speed = 10)
 public class Butcher extends Worker {
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
@@ -35,7 +37,7 @@ public class Butcher extends Worker {
         SLAUGHTERING_PIG,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Butcher(Player player, GameMap map) {
@@ -113,6 +115,12 @@ public class Butcher extends Worker {
 
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -143,6 +151,28 @@ public class Butcher extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUTCHER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
@@ -153,7 +183,7 @@ public class Butcher extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getHome(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BUTCHER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -161,12 +191,18 @@ public class Butcher extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BUTCHER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -194,5 +230,12 @@ public class Butcher extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

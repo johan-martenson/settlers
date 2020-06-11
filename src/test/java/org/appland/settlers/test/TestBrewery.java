@@ -32,7 +32,6 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BREWER;
-import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WATER;
@@ -603,14 +602,14 @@ public class TestBrewery {
         /* Let the brewer rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the brewer to produce a new bread cargo */
+        /* Wait for the brewer to produce a new beer cargo */
         Utils.fastForward(50, map);
 
         Worker worker = brewery0.getWorker();
 
         assertNotNull(worker.getCargo());
 
-        /* Verify that the brewer puts the bread cargo at the flag */
+        /* Verify that the brewer puts the beer cargo at the flag */
         assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
         assertTrue(brewery0.getFlag().getStackedCargo().isEmpty());
 
@@ -675,14 +674,14 @@ public class TestBrewery {
         /* Let the brewer rest */
         Utils.fastForward(100, map);
 
-        /* Wait for the brewer to produce a new bread cargo */
+        /* Wait for the brewer to produce a new beer cargo */
         Utils.fastForward(50, map);
 
         Worker worker = brewery0.getWorker();
 
         assertNotNull(worker.getCargo());
 
-        /* Verify that the brewer puts the bread cargo at the flag */
+        /* Verify that the brewer puts the beer cargo at the flag */
         assertEquals(worker.getTarget(), brewery0.getFlag().getPosition());
         assertTrue(brewery0.getFlag().getStackedCargo().isEmpty());
 
@@ -1572,7 +1571,7 @@ public class TestBrewery {
         /* Connect the brewery with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery.getFlag());
 
-        /* Make the brewery create some bread with full resources available */
+        /* Make the brewery create some beer with full resources available */
         for (int i = 0; i < 1000; i++) {
 
             map.stepTime();
@@ -1636,7 +1635,7 @@ public class TestBrewery {
         /* Connect the brewery with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), brewery.getFlag());
 
-        /* Make the brewery create some bread with full resources available */
+        /* Make the brewery create some beer with full resources available */
         for (int i = 0; i < 1000; i++) {
 
             map.stepTime();
@@ -1844,7 +1843,7 @@ public class TestBrewery {
         Utils.putCargoToBuilding(brewery, WATER);
 
         /* Fill the flag with flour cargos */
-        Utils.placeCargos(map, FLOUR, 8, brewery.getFlag(), headquarter);
+        Utils.placeCargos(map, WHEAT, 8, brewery.getFlag(), headquarter);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -1864,7 +1863,7 @@ public class TestBrewery {
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
-            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == WHEAT) {
                 break;
             }
 
@@ -1913,7 +1912,7 @@ public class TestBrewery {
         Utils.putCargoToBuilding(brewery, WATER);
 
         /* Fill the flag with cargos */
-        Utils.placeCargos(map, FLOUR, 8, brewery.getFlag(), headquarter);
+        Utils.placeCargos(map, WHEAT, 8, brewery.getFlag(), headquarter);
 
         /* Remove the road */
         map.removeRoad(road0);
@@ -1933,7 +1932,7 @@ public class TestBrewery {
         Courier courier = Utils.waitForRoadToGetAssignedCourier(map, road1);
 
         for (int i = 0; i < 500; i++) {
-            if (courier.getCargo() != null && courier.getCargo().getMaterial() == FLOUR) {
+            if (courier.getCargo() != null && courier.getCargo().getMaterial() == WHEAT) {
                 break;
             }
 
@@ -1966,5 +1965,399 @@ public class TestBrewery {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenBeerDeliveryAreBlockedBreweryFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Brewery */
+        Point point1 = new Point(7, 9);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Place road to connect the brewery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the brewery to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(brewery0);
+
+        Worker brewer0 = Utils.waitForNonMilitaryBuildingToGetPopulated(brewery0);
+
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery0);
+        assertEquals(brewery0.getWorker(), brewer0);
+
+        /* Add a lot of material to the headquarter for the brewery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(BEER);
+
+        /* Verify that the brewery puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, brewery0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, brewery0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(brewery0.getFlag().getStackedCargo().size(), 8);
+            assertTrue(brewer0.isInsideBuilding());
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), BEER);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndBreweryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place brewery */
+        Point point2 = new Point(18, 6);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the brewery */
+        Road road1 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the brewery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, brewery0);
+
+        /* Add a lot of material to the headquarter for the brewery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the brewery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, brewery0);
+
+        Worker brewer0 = brewery0.getWorker();
+
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery0);
+        assertEquals(brewery0.getWorker(), brewer0);
+
+        /* Verify that the worker goes to the storage when the brewery is torn down */
+        headquarter0.blockDeliveryOfMaterial(BREWER);
+
+        brewery0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(brewer0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, brewery0.getFlag().getPosition());
+
+        assertEquals(brewer0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, brewer0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(brewer0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndBreweryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place brewery */
+        Point point2 = new Point(18, 6);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the brewery */
+        Road road1 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the brewery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, brewery0);
+
+        /* Add a lot of material to the headquarter for the brewery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the brewery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, brewery0);
+
+        Worker brewer0 = brewery0.getWorker();
+
+        assertTrue(brewer0.isInsideBuilding());
+        assertEquals(brewer0.getHome(), brewery0);
+        assertEquals(brewery0.getWorker(), brewer0);
+
+        /* Verify that the worker goes to the storage off-road when the brewery is torn down */
+        headquarter0.blockDeliveryOfMaterial(BREWER);
+
+        brewery0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(brewer0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, brewery0.getFlag().getPosition());
+
+        assertEquals(brewer0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(brewer0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BREWER, 1);
+
+        assertEquals(headquarter0.getAmount(BREWER), 1);
+
+        headquarter0.pushOutAll(BREWER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Brewer.class, player0);
+
+            assertEquals(headquarter0.getAmount(BREWER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BREWER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(BREWER);
+        headquarter0.pushOutAll(BREWER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Brewer.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(7, 9);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Place road to connect the brewery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the brewery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(brewery0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(brewery0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(BREWER);
+
+        Worker worker = brewery0.getWorker();
+
+        brewery0.tearDown();
+
+        assertEquals(worker.getPosition(), brewery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, brewery0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), brewery0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), brewery0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place brewery */
+        Point point1 = new Point(7, 9);
+        Brewery brewery0 = map.placeBuilding(new Brewery(player0), point1);
+
+        /* Place road to connect the brewery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, brewery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the brewery to get constructed */
+        Utils.waitForBuildingToBeConstructed(brewery0);
+
+        /* Wait for a brewer to start walking to the brewery */
+        Brewer brewer = Utils.waitForWorkerOutsideBuilding(Brewer.class, player0);
+
+        /* Wait for the brewer to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the brewer goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(brewer.getTarget(), brewery0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(BREWER);
+
+        brewery0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, brewery0.getFlag().getPosition());
+
+        assertEquals(brewer.getPosition(), brewery0.getFlag().getPosition());
+        assertNotEquals(brewer.getTarget(), headquarter0.getPosition());
+        assertFalse(brewer.isInsideBuilding());
+        assertNull(brewery0.getWorker());
+        assertNotNull(brewer.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, brewer, brewer.getTarget());
+
+        Point point = brewer.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(brewer.isDead());
+            assertEquals(brewer.getPosition(), point);
+            assertTrue(map.getWorkers().contains(brewer));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(brewer));
     }
 }

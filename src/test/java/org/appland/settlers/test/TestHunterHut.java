@@ -30,6 +30,9 @@ import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.WATER;
+import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.test.Utils.constructHouse;
 import static org.junit.Assert.assertEquals;
@@ -2004,5 +2007,396 @@ public class TestHunterHut {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenMeatDeliveryAreBlockedHunterHutFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place HunterHut */
+        Point point1 = new Point(7, 9);
+        HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Place road to connect the hunter hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the hunter hut to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(hunterHut0);
+
+        Worker hunter0 = Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut0);
+
+        assertTrue(hunter0.isInsideBuilding());
+        assertEquals(hunter0.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunter0);
+
+        /* Add a lot of material to the headquarter for the hunter hut to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(MEAT);
+
+        /* Verify that the hunter hut puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, hunterHut0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(hunterHut0.getFlag().getStackedCargo().size(), 8);
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), MEAT);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndHunterHutIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place hunter hut */
+        Point point2 = new Point(18, 6);
+        HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the hunter hut */
+        Road road1 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the hunter hut and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, hunterHut0);
+
+        /* Add a lot of material to the headquarter for the hunter hut to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the hunter hut and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, hunterHut0);
+
+        Worker hunter0 = hunterHut0.getWorker();
+
+        assertEquals(hunter0.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunter0);
+
+        /* Verify that the worker goes to the storage when the hunter hut is torn down */
+        headquarter0.blockDeliveryOfMaterial(HUNTER);
+
+        hunterHut0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(hunter0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getFlag().getPosition());
+
+        assertEquals(hunter0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, hunter0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(hunter0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndHunterHutIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place hunter hut */
+        Point point2 = new Point(18, 6);
+        HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the hunter hut */
+        Road road1 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the hunter hut and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, hunterHut0);
+
+        /* Add a lot of material to the headquarter for the hunter hut to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the hunter hut and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, hunterHut0);
+
+        Worker hunter0 = hunterHut0.getWorker();
+
+        assertEquals(hunter0.getHome(), hunterHut0);
+        assertEquals(hunterHut0.getWorker(), hunter0);
+
+        /* Verify that the worker goes to the storage off-road when the hunter hut is torn down */
+        headquarter0.blockDeliveryOfMaterial(HUNTER);
+
+        hunterHut0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(hunter0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getFlag().getPosition());
+
+        assertEquals(hunter0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(hunter0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, HUNTER, 1);
+
+        assertEquals(headquarter0.getAmount(HUNTER), 1);
+
+        headquarter0.pushOutAll(HUNTER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
+
+            assertEquals(headquarter0.getAmount(HUNTER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, HUNTER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(HUNTER);
+        headquarter0.pushOutAll(HUNTER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Place road to connect the hunter hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the hunter hut to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(hunterHut0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(HUNTER);
+
+        Worker worker = hunterHut0.getWorker();
+
+        hunterHut0.tearDown();
+
+        assertEquals(worker.getPosition(), hunterHut0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, hunterHut0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), hunterHut0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), hunterHut0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place hunter hut */
+        Point point1 = new Point(7, 9);
+        HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
+
+        /* Place road to connect the hunter hut with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, hunterHut0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the hunter hut to get constructed */
+        Utils.waitForBuildingToBeConstructed(hunterHut0);
+
+        /* Wait for a hunter to start walking to the hunter hut */
+        Hunter hunter = Utils.waitForWorkerOutsideBuilding(Hunter.class, player0);
+
+        /* Wait for the hunter to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the hunter goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(hunter.getTarget(), hunterHut0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(HUNTER);
+
+        hunterHut0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunterHut0.getFlag().getPosition());
+
+        assertEquals(hunter.getPosition(), hunterHut0.getFlag().getPosition());
+        assertNotEquals(hunter.getTarget(), headquarter0.getPosition());
+        assertFalse(hunter.isInsideBuilding());
+        assertNull(hunterHut0.getWorker());
+        assertNotNull(hunter.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, hunter, hunter.getTarget());
+
+        Point point = hunter.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(hunter.isDead());
+            assertEquals(hunter.getPosition(), point);
+            assertTrue(map.getWorkers().contains(hunter));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(hunter));
     }
 }

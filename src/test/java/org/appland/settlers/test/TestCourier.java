@@ -20,6 +20,7 @@ import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.Storehouse;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
@@ -50,6 +51,11 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestCourier {
+
+    /*
+    TODO:
+     - Deliver to house that was just torn down
+     */
 
     @Test
     public void testNewStorageHasCouriers() throws Exception {
@@ -1318,5 +1324,63 @@ public class TestCourier {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testCourierReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
+
+        /* Creating new game map with size 40x40 */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 27);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place sawmill */
+        Point point1 = new Point(5, 31);
+        Sawmill sawmill = map.placeBuilding(new Sawmill(player0), point1);
+
+        /* Connect the sawmill with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, sawmill.getFlag(), headquarter0.getFlag());
+
+        /* Fill up the headquarter with material */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 40);
+        Utils.adjustInventoryTo(headquarter0, STONE, 40);
+        Utils.adjustInventoryTo(headquarter0, WOOD, 40);
+
+        /* Wait for the sawmill to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(sawmill);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(sawmill);
+
+        /* Wait for the courier to pick up a delivery for the sawmill */
+        Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), WOOD);
+
+        /* Wait until the courier reaches the sawmill's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+
+        /* Verify that the courier instead returns the cargo to the headquarter because the sawmill is torn down */
+        map.stepTime();
+
+        sawmill.tearDown();
+
+        assertEquals(road0.getCourier().getTarget(), sawmill.getPosition());
+
+        Cargo cargo = road0.getCourier().getCargo();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getPosition());
+
+        assertNotNull(road0.getCourier().getCargo());
+        assertEquals(road0.getCourier().getCargo(), cargo);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), sawmill.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), headquarter0.getPosition());
+
+        assertNull(road0.getCourier().getCargo());
     }
 }

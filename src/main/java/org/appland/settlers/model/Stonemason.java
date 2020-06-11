@@ -8,6 +8,7 @@ package org.appland.settlers.model;
 import java.util.List;
 
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.STONEMASON;
 
 /**
  *
@@ -18,6 +19,7 @@ public class Stonemason extends Worker {
 
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_GET_STONE = 49;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
     private State state;
@@ -33,7 +35,7 @@ public class Stonemason extends Worker {
         IN_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Stonemason(Player player, GameMap map) {
@@ -185,6 +187,12 @@ public class Stonemason extends Worker {
 
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -220,13 +228,34 @@ public class Stonemason extends Worker {
             Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
-        }
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+        }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
@@ -234,12 +263,18 @@ public class Stonemason extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), STONEMASON);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -267,5 +302,12 @@ public class Stonemason extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

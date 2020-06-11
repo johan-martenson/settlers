@@ -378,7 +378,7 @@ public class Utils {
         assertTrue(building.isReady());
     }
 
-    public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws Exception {
+    public static Cargo fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Material... materials) throws Exception {
 
         Set<Material> setOfMaterials = new HashSet<>(Arrays.asList(materials));
 
@@ -392,6 +392,8 @@ public class Utils {
 
         assertNotNull(worker.getCargo());
         assertTrue(setOfMaterials.contains(worker.getCargo().getMaterial()));
+
+        return worker.getCargo();
     }
 
     public static void fastForwardUntilWorkerCarriesCargo(GameMap map, Worker worker, Cargo cargo) throws Exception {
@@ -608,6 +610,25 @@ public class Utils {
         assertEquals(workers.size(), nr);
 
         return workers;
+    }
+
+    public static <T extends Worker> T waitForWorkerOutsideBuilding(Class<T> type, Player player) throws Exception {
+        GameMap map = player.getMap();
+
+        for (int i = 0; i < 1000; i++) {
+
+            for (Worker worker : map.getWorkers()) {
+                if (worker.getClass().equals(type) && !worker.isInsideBuilding() && player.equals(worker.getPlayer())) {
+                    return type.cast(worker);
+                }
+            }
+
+            map.stepTime();
+        }
+
+        fail();
+
+        return null;
     }
 
     public static <T extends Building> void waitForBuildingToDisappear(T building) throws Exception {
@@ -1579,20 +1600,18 @@ public class Utils {
         }
     }
 
-    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material) throws Exception {
+    public static void waitForBuildingToGetAmountOfMaterial(Building building, Material material, int targetAmount) throws Exception {
         GameMap map = building.getMap();
 
-        int amount = building.getAmount(material);
-
-        for (int i = 0; i < 1000; i++) {
-            if (building.getAmount(material) == amount + 1) {
+        for (int i = 0; i < 10000; i++) {
+            if (building.getAmount(material) == targetAmount) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(building.getAmount(material), amount + 1);
+        assertEquals(building.getAmount(material), targetAmount);
     }
 
     public static void putCargoToBuilding(Building mill, Material material) throws Exception {
@@ -1601,7 +1620,7 @@ public class Utils {
     }
 
     public static void waitForFlagToGetStackedCargo(GameMap map, Flag flag, int amount) throws Exception {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 5000; i++) {
             if (flag.getStackedCargo().size() == amount) {
                 break;
             }
@@ -1610,6 +1629,89 @@ public class Utils {
         }
 
         assertEquals(flag.getStackedCargo().size(), amount);
+    }
+
+    public static void waitForBuildingsToBeConstructed(Building... buildings) throws Exception {
+        GameMap map = buildings[0].getMap();
+
+        for (int i = 0; i < 10000; i++) {
+            boolean allDone = true;
+
+            for (Building building : buildings) {
+                if (!building.isReady()) {
+                    allDone = false;
+
+                    break;
+                }
+            }
+
+            if (allDone) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Building building : buildings) {
+            assertTrue(building.isReady());
+        }
+    }
+
+    public static void waitForNonMilitaryBuildingsToGetPopulated(Building... buildings) throws Exception {
+        GameMap map = buildings[0].getMap();
+
+        for (int i = 0; i < 4000; i++) {
+            boolean allPopulated = true;
+
+            for (Building building : buildings) {
+                if (!building.isOccupied()) {
+                    allPopulated = false;
+
+                    break;
+                }
+            }
+
+            if (allPopulated) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        for (Building building : buildings) {
+            assertTrue(building.isOccupied());
+            assertNotNull(building.getWorker());
+        }
+    }
+
+    public static void verifyWorkerWalksToTargetOnRoads(GameMap map, Worker worker, Point point) throws Exception {
+        for (int i = 0; i < 10000; i++) {
+
+            if (worker.isExactlyAtPoint() && point.equals(worker.getPosition())) {
+                break;
+            }
+
+            if (worker.isExactlyAtPoint()) {
+                assertTrue(map.isRoadAtPoint(worker.getPosition()));
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isExactlyAtPoint());
+        assertEquals(worker.getPosition(), point);
+    }
+
+    public static void waitForWorkerToBeInside(Worker worker, GameMap map) throws Exception {
+        for (int i = 0; i < 10000; i++) {
+            if (worker.isInsideBuilding()) {
+                break;
+            }
+
+            map.stepTime();
+        }
+
+        assertTrue(worker.isInsideBuilding());
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

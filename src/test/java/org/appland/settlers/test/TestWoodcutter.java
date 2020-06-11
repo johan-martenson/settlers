@@ -36,6 +36,7 @@ import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.Material.WOODCUTTER_WORKER;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
@@ -2691,5 +2692,393 @@ public class TestWoodcutter {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenWoodDeliveryAreBlockedWoodcutterFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Woodcutter */
+        Point point1 = new Point(7, 9);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place road to connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Place trees */
+        for (Point point : Utils.getAreaInsideHexagon(6, woodcutter0.getPosition())) {
+            try {
+                map.placeTree(point);
+            } catch (Exception e) {}
+        }
+
+        /* Wait for the woodcutter to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        Worker woodcutterWorker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
+
+        assertTrue(woodcutterWorker0.isInsideBuilding());
+        assertEquals(woodcutterWorker0.getHome(), woodcutter0);
+        assertEquals(woodcutter0.getWorker(), woodcutterWorker0);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(WOOD);
+
+        /* Verify that the woodcutter puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, woodcutter0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(woodcutter0.getFlag().getStackedCargo().size(), 8);
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), WOOD);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(18, 6);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the woodcutter and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, woodcutter0);
+
+        /* Wait for the woodcutter and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, woodcutter0);
+
+        Worker woodcutterWorker0 = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker0.isInsideBuilding());
+        assertEquals(woodcutterWorker0.getHome(), woodcutter0);
+        assertEquals(woodcutter0.getWorker(), woodcutterWorker0);
+
+        /* Verify that the worker goes to the storage when the woodcutter is torn down */
+        headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
+
+        woodcutter0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(woodcutterWorker0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getFlag().getPosition());
+
+        assertEquals(woodcutterWorker0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, woodcutterWorker0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(woodcutterWorker0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place woodcutter */
+        Point point2 = new Point(18, 6);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the woodcutter */
+        Road road1 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the woodcutter and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, woodcutter0);
+
+        /* Wait for the woodcutter and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, woodcutter0);
+
+        Worker woodcutterWorker0 = woodcutter0.getWorker();
+
+        assertTrue(woodcutterWorker0.isInsideBuilding());
+        assertEquals(woodcutterWorker0.getHome(), woodcutter0);
+        assertEquals(woodcutter0.getWorker(), woodcutterWorker0);
+
+        /* Verify that the worker goes to the storage off-road when the woodcutter is torn down */
+        headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
+
+        woodcutter0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(woodcutterWorker0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getFlag().getPosition());
+
+        assertEquals(woodcutterWorker0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(woodcutterWorker0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 1);
+
+        assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 1);
+
+        headquarter0.pushOutAll(WOODCUTTER_WORKER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+
+            assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, WOODCUTTER_WORKER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
+        headquarter0.pushOutAll(WOODCUTTER_WORKER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(7, 9);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place road to connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the woodcutter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(woodcutter0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
+
+        Worker worker = woodcutter0.getWorker();
+
+        woodcutter0.tearDown();
+
+        assertEquals(worker.getPosition(), woodcutter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, woodcutter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), woodcutter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), woodcutter0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place woodcutter */
+        Point point1 = new Point(7, 9);
+        Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
+
+        /* Place road to connect the woodcutter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the woodcutter to get constructed */
+        Utils.waitForBuildingToBeConstructed(woodcutter0);
+
+        /* Wait for a woodcutter worker to start walking to the woodcutter */
+        WoodcutterWorker woodcutterWorker = Utils.waitForWorkerOutsideBuilding(WoodcutterWorker.class, player0);
+
+        /* Wait for the woodcutter worker to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the woodcutter worker goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(woodcutterWorker.getTarget(), woodcutter0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(WOODCUTTER_WORKER);
+
+        woodcutter0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutter0.getFlag().getPosition());
+
+        assertEquals(woodcutterWorker.getPosition(), woodcutter0.getFlag().getPosition());
+        assertNotEquals(woodcutterWorker.getTarget(), headquarter0.getPosition());
+        assertFalse(woodcutterWorker.isInsideBuilding());
+        assertNull(woodcutter0.getWorker());
+        assertNotNull(woodcutterWorker.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, woodcutterWorker.getTarget());
+
+        Point point = woodcutterWorker.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(woodcutterWorker.isDead());
+            assertEquals(woodcutterWorker.getPosition(), point);
+            assertTrue(map.getWorkers().contains(woodcutterWorker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(woodcutterWorker));
     }
 }

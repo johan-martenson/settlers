@@ -2300,4 +2300,391 @@ public class TestQuarry {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testWhenStoneDeliveryAreBlockedQuarryFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Quarry */
+        Point point1 = new Point(7, 9);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place stones */
+        Point point2 = new Point(9, 9);
+        Point point3 = new Point(10, 8);
+        Stone stone0 = map.placeStone(point2);
+        Stone stone1 = map.placeStone(point3);
+
+        /* Place road to connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the quarry to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(quarry0);
+
+        Worker stonemason0 = Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
+
+        assertTrue(stonemason0.isInsideBuilding());
+        assertEquals(stonemason0.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), stonemason0);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(STONE);
+
+        /* Verify that the quarry puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, quarry0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(quarry0.getFlag().getStackedCargo().size(), 8);
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), STONE);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndQuarryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place quarry */
+        Point point2 = new Point(18, 6);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the quarry */
+        Road road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the quarry and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, quarry0);
+
+        /* Wait for the quarry and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
+
+        Worker stonemason0 = quarry0.getWorker();
+
+        assertTrue(stonemason0.isInsideBuilding());
+        assertEquals(stonemason0.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), stonemason0);
+
+        /* Verify that the worker goes to the storage when the quarry is torn down */
+        headquarter0.blockDeliveryOfMaterial(STONEMASON);
+
+        quarry0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(stonemason0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getFlag().getPosition());
+
+        assertEquals(stonemason0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, stonemason0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(stonemason0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndQuarryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place quarry */
+        Point point2 = new Point(18, 6);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the quarry */
+        Road road1 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the quarry and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, quarry0);
+
+        /* Wait for the quarry and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, quarry0);
+
+        Worker stonemason0 = quarry0.getWorker();
+
+        assertTrue(stonemason0.isInsideBuilding());
+        assertEquals(stonemason0.getHome(), quarry0);
+        assertEquals(quarry0.getWorker(), stonemason0);
+
+        /* Verify that the worker goes to the storage off-road when the quarry is torn down */
+        headquarter0.blockDeliveryOfMaterial(STONEMASON);
+
+        quarry0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(stonemason0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getFlag().getPosition());
+
+        assertEquals(stonemason0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(stonemason0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, STONEMASON, 1);
+
+        assertEquals(headquarter0.getAmount(STONEMASON), 1);
+
+        headquarter0.pushOutAll(STONEMASON);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+
+            assertEquals(headquarter0.getAmount(STONEMASON), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, STONEMASON, 1);
+
+        headquarter0.blockDeliveryOfMaterial(STONEMASON);
+        headquarter0.pushOutAll(STONEMASON);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place road to connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the quarry to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(quarry0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(quarry0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(STONEMASON);
+
+        Worker worker = quarry0.getWorker();
+
+        quarry0.tearDown();
+
+        assertEquals(worker.getPosition(), quarry0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, quarry0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), quarry0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), quarry0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place quarry */
+        Point point1 = new Point(7, 9);
+        Quarry quarry0 = map.placeBuilding(new Quarry(player0), point1);
+
+        /* Place road to connect the quarry with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, quarry0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the quarry to get constructed */
+        Utils.waitForBuildingToBeConstructed(quarry0);
+
+        /* Wait for a stonemason to start walking to the quarry */
+        Stonemason stonemason = Utils.waitForWorkerOutsideBuilding(Stonemason.class, player0);
+
+        /* Wait for the stonemason to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the stonemason goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(STONEMASON);
+
+        quarry0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
+
+        assertEquals(stonemason.getPosition(), quarry0.getFlag().getPosition());
+        assertNotEquals(stonemason.getTarget(), headquarter0.getPosition());
+        assertFalse(stonemason.isInsideBuilding());
+        assertNull(quarry0.getWorker());
+        assertNotNull(stonemason.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, stonemason.getTarget());
+
+        Point point = stonemason.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(stonemason.isDead());
+            assertEquals(stonemason.getPosition(), point);
+            assertTrue(map.getWorkers().contains(stonemason));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(stonemason));
+    }
 }

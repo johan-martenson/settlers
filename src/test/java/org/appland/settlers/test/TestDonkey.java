@@ -46,6 +46,11 @@ import static org.junit.Assert.fail;
  */
 public class TestDonkey {
 
+    /*
+    * TODO:
+    *   - House is torn down just before donkey attempts to deliver - donkey drops cargo and goes back to the road and continues
+    * */
+
     @Test
     public void testDonkeyIsDispatchedToMainRoad() throws Exception {
 

@@ -105,6 +105,60 @@ public class GameUtils {
         return area;
     }
 
+    public static Building getClosestStorageOffroadWhereDeliveryIsPossible(Point point, Building avoid, Player player, Material material) {
+        Storehouse storehouse = null;
+        int distance = Integer.MAX_VALUE;
+
+        GameMap map = player.getMap();
+
+        for (Building building : map.getBuildings()) {
+
+            /* Filter buildings that belong to another player */
+            if (!player.equals(building.getPlayer())) {
+                continue;
+            }
+
+            /* Filter buildings to avoid */
+            if (building.equals(avoid)) {
+                continue;
+            }
+
+            /* Filter buildings that are destroyed */
+            if (building.isBurningDown() || building.isDestroyed() || building.underConstruction()) {
+                continue;
+            }
+
+            /* Filter buildings that are not storehouses */
+            if (! (building instanceof Storehouse)) {
+                continue;
+            }
+
+            /* Filter storehouses where the delivery is not allowed */
+            if (((Storehouse)building).isDeliveryBlocked(material)) {
+                continue;
+            }
+
+            /* If the building has its flag on the point we know we have found the closest building */
+            if (building.getFlag().getPosition().equals(point)) {
+                storehouse = (Storehouse)building;
+                break;
+            }
+
+            List<Point> path = map.findWayOffroad(point, building.getFlag().getPosition(), null);
+
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() < distance) {
+                distance = path.size();
+                storehouse = (Storehouse) building;
+            }
+        }
+
+        return storehouse;
+    }
+
     static class Line {
         final double k;
         final double m;
@@ -956,28 +1010,77 @@ public class GameUtils {
             }
 
             /* Filter buildings that are destroyed */
-            if (building.isBurningDown() ||
-                building.isDestroyed()   ||
-                building.underConstruction()) {
+            if (building.isBurningDown() || building.isDestroyed() || building.underConstruction()) {
                 continue;
             }
 
-            if (building instanceof Storehouse) {
-                if (building.getFlag().getPosition().equals(point)) {
-                    storehouse = (Storehouse)building;
-                    break;
-                }
+            /* Filter buildings that are not storehouses */
+            if (! (building instanceof Storehouse)) {
+                continue;
+            }
 
-                List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+            /* If the building has its flag on the point we know we have found the closest building */
+            if (building.getFlag().getPosition().equals(point)) {
+                storehouse = (Storehouse)building;
+                break;
+            }
 
-                if (path == null) {
-                    continue;
-                }
+            List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
 
-                if (path.size() < distance) {
-                    distance = path.size();
-                    storehouse = (Storehouse) building;
-                }
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() < distance) {
+                distance = path.size();
+                storehouse = (Storehouse) building;
+            }
+        }
+
+        return storehouse;
+    }
+
+    public static Storehouse getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(Point point, Building avoid, GameMap map, Material material) throws InvalidRouteException {
+        Storehouse storehouse = null;
+        int distance = Integer.MAX_VALUE;
+
+        for (Building building : map.getBuildings()) {
+
+            /* Filter buildings to avoid */
+            if (building.equals(avoid)) {
+                continue;
+            }
+
+            /* Filter buildings that are destroyed */
+            if (building.isBurningDown() || building.isDestroyed() || building.underConstruction()) {
+                continue;
+            }
+
+            /* Filter buildings that are not storehouses */
+            if (! (building instanceof Storehouse)) {
+                continue;
+            }
+
+            /* Filter storehouses where the delivery is not allowed */
+            if (((Storehouse)building).isDeliveryBlocked(material)) {
+                continue;
+            }
+
+            /* If the building has its flag on the point we know we have found the closest building */
+            if (building.getFlag().getPosition().equals(point)) {
+                storehouse = (Storehouse)building;
+                break;
+            }
+
+            List<Point> path = map.findWayWithExistingRoads(point, building.getFlag().getPosition());
+
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() < distance) {
+                distance = path.size();
+                storehouse = (Storehouse) building;
             }
         }
 

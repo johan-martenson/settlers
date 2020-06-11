@@ -3071,5 +3071,4 @@ public class GameMap {
     public void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
     }
-
 }

@@ -7,12 +7,16 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Baker.State.BAKING_BREAD;
+import static org.appland.settlers.model.Baker.State.DEAD;
 import static org.appland.settlers.model.Baker.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Baker.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Baker.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Baker.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Baker.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Baker.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Baker.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Baker.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.BAKER;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.WATER;
@@ -23,6 +27,7 @@ import static org.appland.settlers.model.Material.WATER;
  */
 @Walker(speed = 10)
 public class Baker extends Worker {
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
@@ -36,7 +41,7 @@ public class Baker extends Worker {
         BAKING_BREAD,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
 
@@ -50,13 +55,20 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building building) {
-        if (building instanceof Bakery) {
-            setHome(building);
-        }
+    protected void onEnterBuilding(Building building) throws Exception {
+        if (building.isReady()) {
 
-        state = RESTING_IN_HOUSE;
-        countdown.countFrom(RESTING_TIME);
+            if (building instanceof Bakery) {
+                setHome(building);
+            }
+
+            state = RESTING_IN_HOUSE;
+            countdown.countFrom(RESTING_TIME);
+        } else {
+            state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+            setOffroadTarget(building.getPosition().downRight());
+        }
     }
 
     @Override
@@ -119,6 +131,12 @@ public class Baker extends Worker {
                 /* Report the that the baker was unproductive */
                 productivityMeasurer.reportUnproductivity();
             }
+        } else if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -149,12 +167,35 @@ public class Baker extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BAKER);
+
+            if (storehouse != null) {
+
+                state = Baker.State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BAKER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -162,12 +203,18 @@ public class Baker extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BAKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -200,5 +247,12 @@ public class Baker extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                 (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

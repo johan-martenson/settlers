@@ -2152,7 +2152,7 @@ public class TestPigFarm {
         Utils.waitForBuildingToBeConstructed(pigFarm);
         Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm);
 
-        /* Give material to the pigFarm */
+        /* Give material to the pig farm */
         Utils.putCargoToBuilding(pigFarm, WHEAT);
         Utils.putCargoToBuilding(pigFarm, WHEAT);
         Utils.putCargoToBuilding(pigFarm, WATER);
@@ -2212,5 +2212,398 @@ public class TestPigFarm {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenPigDeliveryAreBlockedPigFarmFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Pig farm */
+        Point point1 = new Point(7, 9);
+        PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Place road to connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(pigFarm0);
+
+        Worker pigBreeder0 = Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm0);
+
+        assertTrue(pigBreeder0.isInsideBuilding());
+        assertEquals(pigBreeder0.getHome(), pigFarm0);
+        assertEquals(pigFarm0.getWorker(), pigBreeder0);
+
+        /* Add a lot of material to the headquarter for the pig farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(PIG);
+
+        /* Verify that the pig farm puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, pigFarm0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(pigFarm0.getFlag().getStackedCargo().size(), 8);
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), PIG);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndPigFarmIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place pig farm */
+        Point point2 = new Point(18, 6);
+        PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the pig farm */
+        Road road1 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the pig farm and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, pigFarm0);
+
+        /* Add a lot of material to the headquarter for the pig farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the pig farm and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, pigFarm0);
+
+        Worker pigBreeder0 = pigFarm0.getWorker();
+
+        assertTrue(pigBreeder0.isInsideBuilding());
+        assertEquals(pigBreeder0.getHome(), pigFarm0);
+        assertEquals(pigFarm0.getWorker(), pigBreeder0);
+
+        /* Verify that the worker goes to the storage when the pig farm is torn down */
+        headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
+
+        pigFarm0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(pigBreeder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getFlag().getPosition());
+
+        assertEquals(pigBreeder0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, pigBreeder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(pigBreeder0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndPigFarmIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place pig farm */
+        Point point2 = new Point(18, 6);
+        PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the pig farm */
+        Road road1 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the pig farm and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, pigFarm0);
+
+        /* Add a lot of material to the headquarter for the pig farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the pig farm and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, pigFarm0);
+
+        Worker pigBreeder0 = pigFarm0.getWorker();
+
+        assertTrue(pigBreeder0.isInsideBuilding());
+        assertEquals(pigBreeder0.getHome(), pigFarm0);
+        assertEquals(pigFarm0.getWorker(), pigBreeder0);
+
+        /* Verify that the worker goes to the storage off-road when the pig farm is torn down */
+        headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
+
+        pigFarm0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(pigBreeder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getFlag().getPosition());
+
+        assertEquals(pigBreeder0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(pigBreeder0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, PIG_BREEDER, 1);
+
+        assertEquals(headquarter0.getAmount(PIG_BREEDER), 1);
+
+        headquarter0.pushOutAll(PIG_BREEDER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
+
+            assertEquals(headquarter0.getAmount(PIG_BREEDER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, PIG_BREEDER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
+        headquarter0.pushOutAll(PIG_BREEDER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place pig farm */
+        Point point1 = new Point(7, 9);
+        PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Place road to connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the pig farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(pigFarm0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(pigFarm0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
+
+        Worker worker = pigFarm0.getWorker();
+
+        pigFarm0.tearDown();
+
+        assertEquals(worker.getPosition(), pigFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, pigFarm0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), pigFarm0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), pigFarm0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place pig farm */
+        Point point1 = new Point(7, 9);
+        PigFarm pigFarm0 = map.placeBuilding(new PigFarm(player0), point1);
+
+        /* Place road to connect the pig farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, pigFarm0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the pig farm to get constructed */
+        Utils.waitForBuildingToBeConstructed(pigFarm0);
+
+        /* Wait for a pig breeder to start walking to the pig farm */
+        PigBreeder pigBreeder = Utils.waitForWorkerOutsideBuilding(PigBreeder.class, player0);
+
+        /* Wait for the pig breeder to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the pig breeder goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(pigBreeder.getTarget(), pigFarm0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(PIG_BREEDER);
+
+        pigFarm0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigFarm0.getFlag().getPosition());
+
+        assertEquals(pigBreeder.getPosition(), pigFarm0.getFlag().getPosition());
+        assertNotEquals(pigBreeder.getTarget(), headquarter0.getPosition());
+        assertFalse(pigBreeder.isInsideBuilding());
+        assertNull(pigFarm0.getWorker());
+        assertNotNull(pigBreeder.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder, pigBreeder.getTarget());
+
+        Point point = pigBreeder.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(pigBreeder.isDead());
+            assertEquals(pigBreeder.getPosition(), point);
+            assertTrue(map.getWorkers().contains(pigBreeder));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(pigBreeder));
     }
 }

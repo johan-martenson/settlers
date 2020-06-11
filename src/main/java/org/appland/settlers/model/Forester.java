@@ -7,11 +7,14 @@ package org.appland.settlers.model;
 
 /* WALKING_TO_TARGET -> RESTING_IN_HOUSE -> GOING_OUT_TO_PLANT -> PLANTING -> GOING_BACK_TO_HOUSE -> RESTING_IN_HOUSE  */
 
+import static org.appland.settlers.model.Material.FORESTER;
+
 @Walker(speed = 10)
 public class Forester extends Worker {
     private static final int TIME_TO_PLANT = 19;
     private static final int TIME_TO_REST = 99;
     private static final int RANGE = 8;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private State state;
@@ -77,7 +80,7 @@ public class Forester extends Worker {
         GOING_OUT_TO_PLANT,
         PLANTING,
         GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Forester(Player player, GameMap map) {
@@ -133,6 +136,12 @@ public class Forester extends Worker {
             } else {
                 countdown.step();
             }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -152,13 +161,34 @@ public class Forester extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
-        }
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FORESTER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+        }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FORESTER);
 
         if (storage != null) {
             state = State.RETURNING_TO_STORAGE;
@@ -166,12 +196,18 @@ public class Forester extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), FORESTER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -190,5 +226,12 @@ public class Forester extends Worker {
             /* Go back to the storage */
             returnToStorage();
         }
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

@@ -7,6 +7,7 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.FLOUR;
+import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Miller.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miller.State.GOING_TO_FLAG_WITH_CARGO;
@@ -24,6 +25,7 @@ import static org.appland.settlers.model.Miller.State.WALKING_TO_TARGET;
 public class Miller extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME = 99;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -45,7 +47,7 @@ public class Miller extends Worker {
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE,
-        WAITING_FOR_SPACE_ON_FLAG
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, WAITING_FOR_SPACE_ON_FLAG
     }
 
     @Override
@@ -71,8 +73,7 @@ public class Miller extends Worker {
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
 
-            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
-
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
                 Cargo cargo = new Cargo(FLOUR, map);
 
                 setCargo(cargo);
@@ -80,6 +81,8 @@ public class Miller extends Worker {
                 getHome().getFlag().promiseCargo();
 
                 state = GOING_TO_FLAG_WITH_CARGO;
+
+                getHome().getFlag().promiseCargo();
 
                 setTarget(getHome().getFlag().getPosition());
             }
@@ -91,12 +94,9 @@ public class Miller extends Worker {
                     /* Consume the wheat */
                     getHome().consumeOne(WHEAT);
 
-                    /* Wait for space on the flag if it's full */
-                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
-                        state = WAITING_FOR_SPACE_ON_FLAG;
-
                     /* Go out to the flag to deliver the flour */
-                    } else {
+                    if (getHome().getFlag().hasPlaceForMoreCargo()) {
+
                         Cargo cargo = new Cargo(FLOUR, map);
 
                         cargo.setPosition(getPosition());
@@ -106,6 +106,13 @@ public class Miller extends Worker {
                         setTarget(getHome().getFlag().getPosition());
 
                         state = GOING_TO_FLAG_WITH_CARGO;
+
+                        getHome().getFlag().promiseCargo();
+
+                    /* Wait for space on the flag if it's full */
+                    } else {
+                        System.out.println("No place - waiting");
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     }
 
                     /* Report that the miller produced flour */
@@ -118,6 +125,12 @@ public class Miller extends Worker {
 
                 /* Report that the miller couldn't produce flour because it had no wheat */
                 productivityMeasurer.reportUnproductivity();
+            }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
             }
         }
     }
@@ -148,12 +161,34 @@ public class Miller extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MILLER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MILLER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -161,12 +196,18 @@ public class Miller extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MILLER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -194,5 +235,12 @@ public class Miller extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

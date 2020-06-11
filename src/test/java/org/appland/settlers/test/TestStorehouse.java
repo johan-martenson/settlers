@@ -18,8 +18,10 @@ import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
 import org.appland.settlers.model.Road;
+import org.appland.settlers.model.Scout;
 import org.appland.settlers.model.StorageWorker;
 import org.appland.settlers.model.Storehouse;
+import org.appland.settlers.model.Well;
 import org.appland.settlers.model.Woodcutter;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
@@ -31,10 +33,14 @@ import java.util.List;
 import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
+import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.SCOUT;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Material.STORAGE_WORKER;
+import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.junit.Assert.assertEquals;
@@ -50,6 +56,24 @@ import static org.junit.Assert.fail;
  * @author johan
  */
 public class TestStorehouse {
+
+    /*
+    TODO:
+      - material can be pushed out:
+          - push cargo from headquarter to storehouse DONE
+          - push worker from headquarter to storehouse DONE
+          - push cargo from headquarter without any place to store - headquarter flag fills up DONE
+          - push out follows priority order DONE
+      - material can be blocked:
+          - deliveries go to another storehouse DONE
+          - test for each type of house/worker:
+            - flags fill up and then deliveries stop if there is nowhere to put them
+            - push worker from headquarter without any place to store - worker goes away and dies
+            - push worker from headquarter without blocking - worker goes out and in again
+            - when house is burned and storing of worker is blocked, worker goes to other storehouse
+            - when house is burned, storing of worker is blocked, and there is no other place to store - worker walks away and dies
+      - push out and block at the same time - material and worker
+     */
 
     @Test
     public void testStorageOnlyNeedsFourPlanksAndThreeStonesForConstruction() throws Exception {
@@ -1923,6 +1947,285 @@ public class TestStorehouse {
 
             assertEquals(storehouse.getFlag().getStackedCargo().size(), 8);
             assertNull(storehouse.getWorker().getCargo());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
+    public void testPushedOutCargoGoesToOtherStorehouse() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Wait for the storehouse to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        /* Push out fish from the headquarter */
+        Utils.adjustInventoryTo(headquarter, FISH, 10);
+
+        headquarter.pushOutAll(FISH);
+
+        /* Verify that all the fish gets transported to the storehouse */
+        assertEquals(storehouse.getAmount(FISH), 0);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter.getWorker(), FISH);
+
+        assertEquals(headquarter.getWorker().getCargo().getMaterial(), FISH);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(headquarter, FISH, 0);
+
+        assertEquals(headquarter.getAmount(FISH), 0);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(storehouse, FISH, 10);
+
+        assertEquals(storehouse.getAmount(FISH), 10);
+    }
+
+    @Test
+    public void testPushedOutWorkerGoesToOtherStorehouseWhenOwnStoreIsBlocked() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Wait for the storehouse to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        /* Push out fish from the headquarter */
+        Utils.adjustInventoryTo(headquarter, SCOUT, 10);
+
+        headquarter.pushOutAll(SCOUT);
+        headquarter.blockDeliveryOfMaterial(SCOUT);
+
+        /* Verify that all the scout goes to the storehouse */
+        assertEquals(storehouse.getAmount(SCOUT), 0);
+
+        Worker scout = Utils.waitForWorkersOutsideBuilding(Scout.class, 1, player0).get(0);
+
+        assertEquals(scout.getPosition(), headquarter.getPosition());
+        assertNull(headquarter.getWorker().getCargo());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter.getFlag().getPosition());
+
+        assertEquals(scout.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(scout));
+
+        Utils.waitForBuildingToGetAmountOfMaterial(headquarter, SCOUT, 0);
+
+        assertEquals(headquarter.getAmount(SCOUT), 0);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(storehouse, SCOUT, 10);
+
+        assertEquals(storehouse.getAmount(SCOUT), 10);
+    }
+
+    @Test
+    public void testPushedOutMaterialFollowsPriorityOrder() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Wait for the storehouse to get constructed and assigned a worker */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(storehouse);
+
+        /* Push out fish from the headquarter */
+        Utils.adjustInventoryTo(headquarter, FISH, 10);
+        Utils.adjustInventoryTo(headquarter, COIN, 10);
+
+        headquarter.pushOutAll(FISH);
+        headquarter.pushOutAll(COIN);
+
+        /* Set transport priority for fish above coin */
+        player0.setTransportPriority(0, FISH);
+        player0.setTransportPriority(1, COIN);
+
+        /* Verify that all the fish gets transported to the storehouse before the coins */
+        assertEquals(storehouse.getAmount(FISH), 0);
+
+        Utils.fastForwardUntilWorkerCarriesCargo(map, headquarter.getWorker(), FISH);
+
+        assertEquals(headquarter.getWorker().getCargo().getMaterial(), FISH);
+
+        Utils.waitForBuildingToGetAmountOfMaterial(headquarter, FISH, 0);
+
+        assertEquals(headquarter.getAmount(FISH), 0);
+        assertEquals(headquarter.getAmount(COIN), 10);
+    }
+
+    @Test
+    public void testDeliveriesGoToOtherStorehouseWhenDeliveryIsBlocked() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(16, 6);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place well */
+        Point point2 = new Point(9, 7);
+        Well well = map.placeBuilding(new Well(player0), point2);
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter.getFlag());
+
+        /* Wait for the storehouse to get constructed */
+        Utils.waitForBuildingToBeConstructed(storehouse);
+
+        /* Connect the well with the headquarter */
+        Road road1 = map.placeAutoSelectedRoad(player0, well.getFlag(), headquarter.getFlag());
+
+        /* Wait for the well to get constructed */
+        Utils.waitForBuildingToBeConstructed(well);
+
+        Utils.waitForNonMilitaryBuildingToGetPopulated(well);
+
+        /* Verify that when delivery is blocked for water in the headquarter,
+           all deliveries from the well go to the storehouse even if it's further away
+        */
+        assertTrue(well.isReady());
+        assertNotNull(well.getWorker());
+
+        headquarter.blockDeliveryOfMaterial(WATER);
+
+        Utils.adjustInventoryTo(storehouse, WATER, 0);
+
+        for (int i = 0; i < 10; i++) {
+
+            /* Wait for the well worker to produce a water cargo */
+            Cargo cargo = Utils.fastForwardUntilWorkerCarriesCargo(map, well.getWorker(), WATER);
+
+            /* Wait for the courier for the road between the well and the headquarter to pick up the water cargo */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, road1.getCourier(), cargo);
+
+            assertEquals(road1.getCourier().getTarget(), headquarter.getFlag().getPosition());
+
+            /* Verify that the cargo is put on the headquarter's flag and picked up by the second courier,
+               instead of delivered to the headquarter
+             */
+            Utils.fastForwardUntilWorkerReachesPoint(map, road1.getCourier(), headquarter.getFlag().getPosition());
+
+            assertTrue(headquarter.getFlag().getStackedCargo().contains(cargo));
+
+            Utils.fastForwardUntilWorkerCarriesCargo(map, road0.getCourier(), cargo);
+
+            assertEquals(road0.getCourier().getTarget(), storehouse.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, road0.getCourier(), storehouse.getPosition());
+
+            assertNull(road0.getCourier().getCargo());
+            assertEquals(storehouse.getAmount(WATER), i + 1);
+        }
+    }
+
+    @Test
+    public void testPushedOutMaterialStopsWhenFlagFillsUp() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 20, 20);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Make sure there is enough construction material in the headquarter */
+        Utils.adjustInventoryTo(headquarter, PLANK, 50);
+        Utils.adjustInventoryTo(headquarter, STONE, 50);
+
+        /* Verify that pushing out planks will fill up the flag and then stop */
+        assertEquals(headquarter.getFlag().getStackedCargo().size(), 0);
+
+        headquarter.pushOutAll(PLANK);
+
+        Utils.waitForFlagToGetStackedCargo(map, headquarter.getFlag(), 8);
+
+        assertEquals(headquarter.getFlag().getStackedCargo().size(), 8);
+        assertEquals(headquarter.getWorker().getTarget(), headquarter.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, headquarter.getWorker(), headquarter.getPosition());
+
+        for (int i = 0; i < 200; i++) {
+            assertTrue(headquarter.getWorker().isInsideBuilding());
+            assertNull(headquarter.getWorker().getCargo());
 
             map.stepTime();
         }

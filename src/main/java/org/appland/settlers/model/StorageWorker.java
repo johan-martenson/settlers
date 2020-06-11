@@ -75,11 +75,29 @@ public class StorageWorker extends Worker {
                 continue;
             }
 
-            /* Iterate over all buildings, instead of just the ones that can be
-               reached from the headquarter
+            /* Send out the material if it's ordered to be pushed out */
+            if (!material.isWorker() && ((Storehouse)getHome()).isPushedOut(material)) {
 
-               This will perform the quick tests first and only perform the
-               expensive test if the quick ones pass
+                /* Find receiving storehouse */
+                Storehouse receivingStorehouse = getPlayer().getClosestStorage(getHome().getPosition(), getHome());
+
+                Cargo cargo = ownStorehouse.retrieve(material);
+
+                /* Deliver to the building if it exists, otherwise just put the cargo on the flag */
+                if (receivingStorehouse != null) {
+
+                    receivingStorehouse.promiseDelivery(material);
+
+                    cargo.setTarget(receivingStorehouse);
+
+                }
+
+                return cargo;
+            }
+
+            /* Iterate over all buildings, instead of just the ones that can be reached from the headquarter
+
+               This will perform the quick tests first and only perform the expensive test if the quick ones pass
             */
             for (Building building : getPlayer().getBuildings()) {
 

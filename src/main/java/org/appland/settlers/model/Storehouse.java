@@ -3,7 +3,9 @@ package org.appland.settlers.model;
 import org.appland.settlers.policy.ProductionDelays;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.AXE;
@@ -61,6 +63,8 @@ public class Storehouse extends Building implements Actor {
 
     private final Countdown draftCountdown;
     private final Map<Material, Material> workerToToolMap;
+    private final Set<Material> materialToPushOut;
+    private final Set<Material> materialBlockedForDelivery;
 
     public Storehouse(Player player) {
         super(player);
@@ -85,6 +89,9 @@ public class Storehouse extends Building implements Actor {
         workerToToolMap.put(MINTER, CRUCIBLE);
         workerToToolMap.put(MINER, PICK_AXE);
         workerToToolMap.put(FARMER, SCYTHE);
+
+        materialToPushOut = new HashSet<>();
+        materialBlockedForDelivery = new HashSet<>();
     }
 
     /* This method updates the inventory as a side effect, without any locking */
@@ -122,29 +129,51 @@ public class Storehouse extends Building implements Actor {
         }
 
         /* Send out new workers */
-        assignNewWorkerToUnoccupiedPlaces();
+        boolean assignedNewWorker = assignNewWorkerToUnoccupiedPlaces();
+
+        /* Send pushed out workers */
+        if (!assignedNewWorker) {
+            for (Material material : materialToPushOut) {
+
+                if (getAmount(material) <= 0) {
+                    continue;
+                }
+
+                if (!material.isWorker()) {
+                    continue;
+                }
+
+                Worker worker = retrieveWorker(material);
+
+                getMap().placeWorker(worker, this);
+
+                worker.goToOtherStorage(this);
+            }
+        }
     }
 
-    private void assignNewWorkerToUnoccupiedPlaces() throws Exception {
+    private boolean assignNewWorkerToUnoccupiedPlaces() throws Exception {
         if (assignCouriers()) {
-            return;
+            return true;
         }
 
         if (assignDonkeys()) {
-            return;
+            return true;
         }
 
         if (assignWorkerToUnoccupiedBuildings()) {
-            return;
+            return true;
         }
 
         if (assignGeologists()) {
-            return;
+            return true;
         }
 
         if (assignScouts()) {
-            return;
+            return true;
         }
+
+        return false;
     }
 
     private boolean assignGeologists() throws Exception {
@@ -688,5 +717,21 @@ public class Storehouse extends Building implements Actor {
     @Override
     void onConstructionFinished() {
         getPlayer().reportStorageReady(this);
+    }
+
+    public void pushOutAll(Material fish) {
+        materialToPushOut.add(fish);
+    }
+
+    public boolean isPushedOut(Material material) {
+        return materialToPushOut.contains(material);
+    }
+
+    public void blockDeliveryOfMaterial(Material water) {
+        materialBlockedForDelivery.add(water);
+    }
+
+    public boolean isDeliveryBlocked(Material material) {
+        return materialBlockedForDelivery.contains(material);
     }
 }

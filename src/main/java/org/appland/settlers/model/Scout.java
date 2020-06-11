@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Random;
 
 import static org.appland.settlers.model.Material.SCOUT;
+import static org.appland.settlers.model.Scout.State.DEAD;
+import static org.appland.settlers.model.Scout.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Scout.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Scout.State.GOING_TO_NEXT_POINT;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_FLAG;
 import static org.appland.settlers.model.Scout.State.RETURNING_TO_STORAGE;
@@ -26,12 +29,14 @@ import static org.appland.settlers.model.Scout.State.WORKING_IN_LOOKOUT_TOWER;
 public class Scout extends Worker {
 
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private final Countdown countdown;
 
     protected enum State {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_POINT,
         RETURNING_TO_FLAG,
-        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, RETURNING_TO_STORAGE
+        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     private static final int DISCOVERY_RADIUS = 4;
@@ -52,6 +57,18 @@ public class Scout extends Worker {
         segmentCount = 0;
 
         random = new Random(4);
+        countdown = new Countdown();
+    }
+
+    @Override
+    void onIdle() throws Exception {
+         if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
+        }
     }
 
     @Override
@@ -123,6 +140,29 @@ public class Scout extends Worker {
             storage.putCargo(new Cargo(SCOUT, map));
 
             enterBuilding(storage);
+
+            map.removeWorker(this);
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
+            if (storehouse != null) {
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
@@ -248,9 +288,9 @@ public class Scout extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
-        state = State.RETURNING_TO_STORAGE;
+        state = RETURNING_TO_STORAGE;
 
         clearTargetBuilding();
 
@@ -259,11 +299,26 @@ public class Scout extends Worker {
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SCOUT);
 
-            state = RETURNING_TO_STORAGE;
+            if (storage != null) {
+                state = RETURNING_TO_STORAGE;
 
-            setOffroadTarget(storage.getPosition());
+                setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
+            }
         }
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

@@ -1491,16 +1491,16 @@ public class TestBakery {
         Utils.constructHouse(bakery);
 
         /* Populate the bakery */
-        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
+        Worker baker0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
 
-        assertTrue(armorer0.isInsideBuilding());
-        assertEquals(armorer0.getHome(), bakery);
-        assertEquals(bakery.getWorker(), armorer0);
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker0);
 
         /* Verify that the productivity is 0% when the bakery doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(bakery.getFlag().getStackedCargo().isEmpty());
-            assertNull(armorer0.getCargo());
+            assertNull(baker0.getCargo());
             assertEquals(bakery.getProductivity(), 0);
             map.stepTime();
         }
@@ -1527,11 +1527,11 @@ public class TestBakery {
         Utils.constructHouse(bakery);
 
         /* Populate the bakery */
-        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
+        Worker baker0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
 
-        assertTrue(armorer0.isInsideBuilding());
-        assertEquals(armorer0.getHome(), bakery);
-        assertEquals(bakery.getWorker(), armorer0);
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker0);
 
         /* Connect the bakery with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
@@ -1590,11 +1590,11 @@ public class TestBakery {
         Utils.constructHouse(bakery);
 
         /* Populate the bakery */
-        Worker armorer0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
+        Worker baker0 = Utils.occupyBuilding(new Baker(player0, map), bakery);
 
-        assertTrue(armorer0.isInsideBuilding());
-        assertEquals(armorer0.getHome(), bakery);
-        assertEquals(bakery.getWorker(), armorer0);
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery);
+        assertEquals(bakery.getWorker(), baker0);
 
         /* Connect the bakery with the headquarter */
         map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), bakery.getFlag());
@@ -1924,5 +1924,399 @@ public class TestBakery {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenBreadIsBlockedBakeryFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Bakery */
+        Point point1 = new Point(7, 9);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Place road to connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the bakery to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(bakery0);
+
+        Worker baker0 = Utils.waitForNonMilitaryBuildingToGetPopulated(bakery0);
+
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery0);
+        assertEquals(bakery0.getWorker(), baker0);
+
+        /* Add a lot of material to the headquarter for the bakery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(BREAD);
+
+        /* Verify that the bakery puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, bakery0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(bakery0.getFlag().getStackedCargo().size(), 8);
+            assertTrue(baker0.isInsideBuilding());
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), BREAD);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndBakeryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place bakery */
+        Point point2 = new Point(18, 6);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the bakery */
+        Road road1 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the bakery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, bakery0);
+
+        /* Add a lot of material to the headquarter for the bakery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
+
+        /* Wait for the bakery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, bakery0);
+
+        Worker baker0 = bakery0.getWorker();
+
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery0);
+        assertEquals(bakery0.getWorker(), baker0);
+
+        /* Verify that the worker goes to the storage when the bakery is torn down */
+        headquarter0.blockDeliveryOfMaterial(BAKER);
+
+        bakery0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(baker0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getFlag().getPosition());
+
+        assertEquals(baker0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, baker0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(baker0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndBakeryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place bakery */
+        Point point2 = new Point(18, 6);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the bakery */
+        Road road1 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the bakery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, bakery0);
+
+        /* Add a lot of material to the headquarter for the bakery to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
+
+        /* Wait for the bakery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, bakery0);
+
+        Worker baker0 = bakery0.getWorker();
+
+        assertTrue(baker0.isInsideBuilding());
+        assertEquals(baker0.getHome(), bakery0);
+        assertEquals(bakery0.getWorker(), baker0);
+
+        /* Verify that the worker goes to the storage off-road when the bakery is torn down */
+        headquarter0.blockDeliveryOfMaterial(BAKER);
+
+        bakery0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(baker0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getFlag().getPosition());
+
+        assertEquals(baker0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(baker0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BAKER, 1);
+
+        assertEquals(headquarter0.getAmount(BAKER), 1);
+
+        headquarter0.pushOutAll(BAKER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
+
+            assertEquals(headquarter0.getAmount(BAKER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BAKER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(BAKER);
+        headquarter0.pushOutAll(BAKER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Place road to connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the bakery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(bakery0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(bakery0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(BAKER);
+
+        Worker worker = bakery0.getWorker();
+
+        bakery0.tearDown();
+
+        assertEquals(worker.getPosition(), bakery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, bakery0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), bakery0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), bakery0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place bakery */
+        Point point1 = new Point(7, 9);
+        Bakery bakery0 = map.placeBuilding(new Bakery(player0), point1);
+
+        /* Place road to connect the bakery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, bakery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the bakery to get constructed */
+        Utils.waitForBuildingToBeConstructed(bakery0);
+
+        /* Wait for a baker to start walking to the bakery */
+        Baker baker = Utils.waitForWorkerOutsideBuilding(Baker.class, player0);
+
+        /* Wait for the baker to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the baker goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(baker.getTarget(), bakery0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(BAKER);
+
+        bakery0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, bakery0.getFlag().getPosition());
+
+        assertEquals(baker.getPosition(), bakery0.getFlag().getPosition());
+        assertNotEquals(baker.getTarget(), headquarter0.getPosition());
+        assertFalse(baker.isInsideBuilding());
+        assertNull(bakery0.getWorker());
+        assertNotNull(baker.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, baker, baker.getTarget());
+
+        Point point = baker.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(baker.isDead());
+            assertEquals(baker.getPosition(), point);
+            assertTrue(map.getWorkers().contains(baker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(baker));
     }
 }

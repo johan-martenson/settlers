@@ -35,6 +35,7 @@ import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.FISHERMAN;
 import static org.appland.settlers.model.Material.FLOUR;
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 import static org.appland.settlers.model.Tile.Vegetation.WATER;
@@ -2391,5 +2392,414 @@ public class TestFishery {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenFishDeliveryAreBlockedFisheryFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Fishery */
+        Point point1 = new Point(7, 9);
+        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Place fish on one tile */
+        Point point2 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+
+        /* Place road to connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the fishery to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(fishery0);
+
+        Worker fisherman0 = Utils.waitForNonMilitaryBuildingToGetPopulated(fishery0);
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery0);
+        assertEquals(fishery0.getWorker(), fisherman0);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(FISH);
+
+        /* Verify that the fishery puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, fishery0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, fishery0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(fishery0.getFlag().getStackedCargo().size(), 8);
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), FISH);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndFisheryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place fishery */
+        Point point2 = new Point(18, 6);
+        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point2);
+
+        /* Place fish on one tile */
+        Point point3 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point3).setVegetationType(WATER);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the fishery */
+        Road road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the fishery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, fishery0);
+
+        /* Wait for the fishery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, fishery0);
+
+        Worker fisherman0 = fishery0.getWorker();
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery0);
+        assertEquals(fishery0.getWorker(), fisherman0);
+
+        /* Verify that the worker goes to the storage when the fishery is torn down */
+        headquarter0.blockDeliveryOfMaterial(FISHERMAN);
+
+        fishery0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(fisherman0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, fishery0.getFlag().getPosition());
+
+        assertEquals(fisherman0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, fisherman0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(fisherman0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndFisheryIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place fishery */
+        Point point2 = new Point(18, 6);
+        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point2);
+
+        /* Place fish on one tile */
+        Point point3 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point3).setVegetationType(WATER);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the fishery */
+        Road road1 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the fishery and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, fishery0);
+
+        /* Wait for the fishery and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, fishery0);
+
+        Worker fisherman0 = fishery0.getWorker();
+
+        assertTrue(fisherman0.isInsideBuilding());
+        assertEquals(fisherman0.getHome(), fishery0);
+        assertEquals(fishery0.getWorker(), fisherman0);
+
+        /* Verify that the worker goes to the storage off-road when the fishery is torn down */
+        headquarter0.blockDeliveryOfMaterial(FISHERMAN);
+
+        fishery0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(fisherman0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, fishery0.getFlag().getPosition());
+
+        assertEquals(fisherman0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(fisherman0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fish on one tile */
+        Point point1 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point1).setVegetationType(WATER);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, FISHERMAN, 1);
+
+        assertEquals(headquarter0.getAmount(FISHERMAN), 1);
+
+        headquarter0.pushOutAll(FISHERMAN);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+
+            assertEquals(headquarter0.getAmount(FISHERMAN), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fish on one tile */
+        Point point1 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point1).setVegetationType(WATER);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, FISHERMAN, 1);
+
+        headquarter0.blockDeliveryOfMaterial(FISHERMAN);
+        headquarter0.pushOutAll(FISHERMAN);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Place fish on one tile */
+        Point point2 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+
+        /* Place road to connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the fishery to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(fishery0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(fishery0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(FISHERMAN);
+
+        Worker worker = fishery0.getWorker();
+
+        fishery0.tearDown();
+
+        assertEquals(worker.getPosition(), fishery0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, fishery0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), fishery0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), fishery0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place fishery */
+        Point point1 = new Point(7, 9);
+        Fishery fishery0 = map.placeBuilding(new Fishery(player0), point1);
+
+        /* Place fish on one tile */
+        Point point2 = new Point(11, 11);
+        map.getTerrain().getTileBelow(point2).setVegetationType(WATER);
+
+        /* Place road to connect the fishery with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, fishery0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the fishery to get constructed */
+        Utils.waitForBuildingToBeConstructed(fishery0);
+
+        /* Wait for a fisherman to start walking to the fishery */
+        Fisherman fisherman = Utils.waitForWorkerOutsideBuilding(Fisherman.class, player0);
+
+        /* Wait for the fisherman to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the fisherman goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(fisherman.getTarget(), fishery0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(FISHERMAN);
+
+        fishery0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fishery0.getFlag().getPosition());
+
+        assertEquals(fisherman.getPosition(), fishery0.getFlag().getPosition());
+        assertNotEquals(fisherman.getTarget(), headquarter0.getPosition());
+        assertFalse(fisherman.isInsideBuilding());
+        assertNull(fishery0.getWorker());
+        assertNotNull(fisherman.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, fisherman, fisherman.getTarget());
+
+        Point point = fisherman.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(fisherman.isDead());
+            assertEquals(fisherman.getPosition(), point);
+            assertTrue(map.getWorkers().contains(fisherman));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(fisherman));
     }
 }

@@ -12,6 +12,7 @@ import static org.appland.settlers.model.Material.FISH;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.MEAT;
+import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Miner.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Miner.State.GOING_OUT_TO_FLAG;
@@ -29,6 +30,7 @@ import static org.appland.settlers.model.Miner.State.WALKING_TO_TARGET;
 public class Miner extends Worker {
     private final static int RESTING_TIME = 99;
     private final static int TIME_TO_MINE = 49;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -43,7 +45,7 @@ public class Miner extends Worker {
         GOING_OUT_TO_FLAG,
         GOING_BACK_TO_HOUSE,
         RETURNING_TO_STORAGE,
-        WAITING_FOR_SPACE_ON_FLAG, NO_MORE_RESOURCES
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, DEAD, GOING_TO_DIE, NO_MORE_RESOURCES
     }
 
     public Miner(Player player, GameMap map) {
@@ -163,6 +165,12 @@ public class Miner extends Worker {
 
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -190,20 +198,40 @@ public class Miner extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     private boolean hasFood() {
         Building home = getHome();
 
-        return home.getAmount(BREAD) > 0 ||
-               home.getAmount(FISH)  > 0 ||
-               home.getAmount(MEAT)  > 0;
+        return home.getAmount(BREAD) > 0 || home.getAmount(FISH)  > 0 || home.getAmount(MEAT)  > 0;
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -211,12 +239,18 @@ public class Miner extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -244,5 +278,12 @@ public class Miner extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

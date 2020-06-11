@@ -10,12 +10,15 @@ import static org.appland.settlers.model.Fisherman.State.FISHING;
 import static org.appland.settlers.model.Fisherman.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Fisherman.State.GOING_BACK_TO_HOUSE_WITH_FISH;
 import static org.appland.settlers.model.Fisherman.State.GOING_OUT_TO_FISH;
+import static org.appland.settlers.model.Fisherman.State.GOING_TO_DIE;
 import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG;
+import static org.appland.settlers.model.Fisherman.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Fisherman.State.IN_HOUSE_WITH_FISH;
 import static org.appland.settlers.model.Fisherman.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Fisherman.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Fisherman.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Fisherman.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.FISHERMAN;
 
 /**
  *
@@ -25,6 +28,7 @@ import static org.appland.settlers.model.Fisherman.State.WALKING_TO_TARGET;
 public class Fisherman extends Worker {
     private static final int TIME_TO_FISH = 19;
     private static final int TIME_TO_REST = 99;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -71,7 +75,7 @@ public class Fisherman extends Worker {
         IN_HOUSE_WITH_FISH,
         GOING_TO_FLAG,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Fisherman(Player player, GameMap map) {
@@ -90,13 +94,15 @@ public class Fisherman extends Worker {
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Fishery) {
-            setHome(building);
+        if (building.isReady()) {
+            if (building instanceof Fishery) {
+                setHome(building);
+            }
+
+            state = RESTING_IN_HOUSE;
+
+            countdown.countFrom(TIME_TO_REST);
         }
-
-        state = RESTING_IN_HOUSE;
-
-        countdown.countFrom(TIME_TO_REST);
     }
 
     @Override
@@ -163,6 +169,12 @@ public class Fisherman extends Worker {
 
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == Fisherman.State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -198,12 +210,34 @@ public class Fisherman extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FISHERMAN);
+
+            if (storehouse != null) {
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FISHERMAN);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -211,12 +245,18 @@ public class Fisherman extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), FISHERMAN);
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -244,5 +284,12 @@ public class Fisherman extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

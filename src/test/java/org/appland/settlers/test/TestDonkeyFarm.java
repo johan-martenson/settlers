@@ -2203,4 +2203,391 @@ public class TestDonkeyFarm {
             assertEquals(donkeyFarm0.getTotalAmountNeeded(material), 0);
         }
     }
+
+    @Test
+    public void testWhenDonkeyDeliveryAreBlockedDonkeyFarmProducesNoMoreDonkeys() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place DonkeyFarm */
+        Point point1 = new Point(7, 9);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Place road to connect the donkey farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the donkey farm to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(donkeyFarm0);
+
+        Worker donkeyBreeder0 = Utils.waitForNonMilitaryBuildingToGetPopulated(donkeyFarm0);
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm0);
+        assertEquals(donkeyFarm0.getWorker(), donkeyBreeder0);
+
+        /* Add a lot of material to the headquarter for the donkey farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(DONKEY);
+
+        /* Verify that the donkey farm stops producing donkeys */
+        for (int i = 0; i < 500; i++) {
+            map.stepTime();
+
+            for (Worker worker : map.getWorkers()) {
+                assertFalse(worker instanceof Donkey);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndDonkeyFarmIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place donkey farm */
+        Point point2 = new Point(18, 6);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the donkey farm */
+        Road road1 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the donkey farm and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, donkeyFarm0);
+
+        /* Add a lot of material to the headquarter for the donkey farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the donkey farm and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, donkeyFarm0);
+
+        Worker donkeyBreeder0 = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm0);
+        assertEquals(donkeyFarm0.getWorker(), donkeyBreeder0);
+
+        /* Verify that the worker goes to the storage when the donkey farm is torn down */
+        headquarter0.blockDeliveryOfMaterial(DONKEY_BREEDER);
+
+        donkeyFarm0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(donkeyBreeder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
+
+        assertEquals(donkeyBreeder0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, donkeyBreeder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(donkeyBreeder0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndDonkeyFarmIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place donkey farm */
+        Point point2 = new Point(18, 6);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the donkey farm */
+        Road road1 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the donkey farm and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, donkeyFarm0);
+
+        /* Add a lot of material to the headquarter for the donkey farm to consume */
+        Utils.adjustInventoryTo(headquarter0, WATER, 40);
+        Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
+
+        /* Wait for the donkey farm and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, donkeyFarm0);
+
+        Worker donkeyBreeder0 = donkeyFarm0.getWorker();
+
+        assertTrue(donkeyBreeder0.isInsideBuilding());
+        assertEquals(donkeyBreeder0.getHome(), donkeyFarm0);
+        assertEquals(donkeyFarm0.getWorker(), donkeyBreeder0);
+
+        /* Verify that the worker goes to the storage off-road when the donkey farm is torn down */
+        headquarter0.blockDeliveryOfMaterial(DONKEY_BREEDER);
+
+        donkeyFarm0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(donkeyBreeder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, donkeyFarm0.getFlag().getPosition());
+
+        assertEquals(donkeyBreeder0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(donkeyBreeder0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, DONKEY_BREEDER, 1);
+
+        assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 1);
+
+        headquarter0.pushOutAll(DONKEY_BREEDER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
+
+            assertEquals(headquarter0.getAmount(DONKEY_BREEDER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, DONKEY_BREEDER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(DONKEY_BREEDER);
+        headquarter0.pushOutAll(DONKEY_BREEDER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Place road to connect the donkey farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the donkey farm to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(donkeyFarm0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(donkeyFarm0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(DONKEY_BREEDER);
+
+        Worker worker = donkeyFarm0.getWorker();
+
+        donkeyFarm0.tearDown();
+
+        assertEquals(worker.getPosition(), donkeyFarm0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, donkeyFarm0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), donkeyFarm0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), donkeyFarm0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place donkey farm */
+        Point point1 = new Point(7, 9);
+        DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
+
+        /* Place road to connect the donkey farm with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, donkeyFarm0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the donkey farm to get constructed */
+        Utils.waitForBuildingToBeConstructed(donkeyFarm0);
+
+        /* Wait for a donkey breeder to start walking to the donkey farm */
+        DonkeyBreeder donkeyBreeder = Utils.waitForWorkerOutsideBuilding(DonkeyBreeder.class, player0);
+
+        /* Wait for the donkey breeder to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the donkey breeder goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(donkeyBreeder.getTarget(), donkeyFarm0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(DONKEY_BREEDER);
+
+        donkeyFarm0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyFarm0.getFlag().getPosition());
+
+        assertEquals(donkeyBreeder.getPosition(), donkeyFarm0.getFlag().getPosition());
+        assertNotEquals(donkeyBreeder.getTarget(), headquarter0.getPosition());
+        assertFalse(donkeyBreeder.isInsideBuilding());
+        assertNull(donkeyFarm0.getWorker());
+        assertNotNull(donkeyBreeder.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, donkeyBreeder, donkeyBreeder.getTarget());
+
+        Point point = donkeyBreeder.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(donkeyBreeder.isDead());
+            assertEquals(donkeyBreeder.getPosition(), point);
+            assertTrue(map.getWorkers().contains(donkeyBreeder));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(donkeyBreeder));
+    }
 }

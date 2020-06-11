@@ -7,6 +7,7 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.SAWMILL_WORKER;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.CUTTING_WOOD;
 import static org.appland.settlers.model.SawmillWorker.State.GOING_BACK_TO_HOUSE;
@@ -22,6 +23,7 @@ import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class SawmillWorker extends Worker {
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
@@ -35,7 +37,7 @@ public class SawmillWorker extends Worker {
         CUTTING_WOOD,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public SawmillWorker(Player player, GameMap map) {
@@ -112,6 +114,12 @@ public class SawmillWorker extends Worker {
 
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == State.DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -142,8 +150,29 @@ public class SawmillWorker extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
-        }
+        } else if (state == State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SAWMILL_WORKER);
+
+            if (storehouse != null) {
+                state = State.RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == State.GOING_TO_DIE) {
+            super.setDead();
+
+            state = State.DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
+        }
     }
 
     @Override
@@ -153,7 +182,7 @@ public class SawmillWorker extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SAWMILL_WORKER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -161,12 +190,18 @@ public class SawmillWorker extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), SAWMILL_WORKER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = State.GOING_TO_DIE;
             }
         }
     }
@@ -194,5 +229,12 @@ public class SawmillWorker extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

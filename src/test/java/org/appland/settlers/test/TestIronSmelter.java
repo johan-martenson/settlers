@@ -2099,4 +2099,398 @@ public class TestIronSmelter {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testWhenBeerDeliveryAreBlockedIronSmelterFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place IronSmelter */
+        Point point1 = new Point(7, 9);
+        IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place road to connect the iron smelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the iron smelter to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(ironSmelter0);
+
+        Worker ironFounder0 = Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter0);
+
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter0);
+        assertEquals(ironSmelter0.getWorker(), ironFounder0);
+
+        /* Add a lot of material to the headquarter for the iron smelter to consume */
+        Utils.adjustInventoryTo(headquarter0, IRON, 40);
+        Utils.adjustInventoryTo(headquarter0, COAL, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(IRON_BAR);
+
+        /* Verify that the iron smelter puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, ironSmelter0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(ironSmelter0.getFlag().getStackedCargo().size(), 8);
+            assertTrue(ironFounder0.isInsideBuilding());
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), IRON_BAR);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndIronSmelterIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place iron smelter */
+        Point point2 = new Point(18, 6);
+        IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the iron smelter */
+        Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the iron smelter and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, ironSmelter0);
+
+        /* Add a lot of material to the headquarter for the iron smelter to consume */
+        Utils.adjustInventoryTo(headquarter0, IRON, 40);
+        Utils.adjustInventoryTo(headquarter0, COAL, 40);
+
+        /* Wait for the iron smelter and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, ironSmelter0);
+
+        Worker ironFounder0 = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter0);
+        assertEquals(ironSmelter0.getWorker(), ironFounder0);
+
+        /* Verify that the worker goes to the storage when the iron smelter is torn down */
+        headquarter0.blockDeliveryOfMaterial(IRON_FOUNDER);
+
+        ironSmelter0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(ironFounder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getFlag().getPosition());
+
+        assertEquals(ironFounder0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, ironFounder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(ironFounder0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndIronSmelterIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place iron smelter */
+        Point point2 = new Point(18, 6);
+        IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the iron smelter */
+        Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the iron smelter and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, ironSmelter0);
+
+        /* Add a lot of material to the headquarter for the iron smelter to consume */
+        Utils.adjustInventoryTo(headquarter0, IRON, 40);
+        Utils.adjustInventoryTo(headquarter0, COAL, 40);
+
+        /* Wait for the iron smelter and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, ironSmelter0);
+
+        Worker ironFounder0 = ironSmelter0.getWorker();
+
+        assertTrue(ironFounder0.isInsideBuilding());
+        assertEquals(ironFounder0.getHome(), ironSmelter0);
+        assertEquals(ironSmelter0.getWorker(), ironFounder0);
+
+        /* Verify that the worker goes to the storage off-road when the iron smelter is torn down */
+        headquarter0.blockDeliveryOfMaterial(IRON_FOUNDER);
+
+        ironSmelter0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(ironFounder0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getFlag().getPosition());
+
+        assertEquals(ironFounder0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(ironFounder0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 1);
+
+        assertEquals(headquarter0.getAmount(IRON_FOUNDER), 1);
+
+        headquarter0.pushOutAll(IRON_FOUNDER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
+
+            assertEquals(headquarter0.getAmount(IRON_FOUNDER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, IRON_FOUNDER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(IRON_FOUNDER);
+        headquarter0.pushOutAll(IRON_FOUNDER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(7, 9);
+        IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place road to connect the iron smelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the iron smelter to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(ironSmelter0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(IRON_FOUNDER);
+
+        Worker worker = ironSmelter0.getWorker();
+
+        ironSmelter0.tearDown();
+
+        assertEquals(worker.getPosition(), ironSmelter0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, ironSmelter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), ironSmelter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), ironSmelter0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place iron smelter */
+        Point point1 = new Point(7, 9);
+        IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
+
+        /* Place road to connect the iron smelter with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the iron smelter to get constructed */
+        Utils.waitForBuildingToBeConstructed(ironSmelter0);
+
+        /* Wait for a iron founder to start walking to the iron smelter */
+        IronFounder ironFounder = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
+
+        /* Wait for the iron founder to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the iron founder goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(ironFounder.getTarget(), ironSmelter0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(IRON_FOUNDER);
+
+        ironSmelter0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
+
+        assertEquals(ironFounder.getPosition(), ironSmelter0.getFlag().getPosition());
+        assertNotEquals(ironFounder.getTarget(), headquarter0.getPosition());
+        assertFalse(ironFounder.isInsideBuilding());
+        assertNull(ironSmelter0.getWorker());
+        assertNotNull(ironFounder.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironFounder.getTarget());
+
+        Point point = ironFounder.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(ironFounder.isDead());
+            assertEquals(ironFounder.getPosition(), point);
+            assertTrue(map.getWorkers().contains(ironFounder));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(ironFounder));
+    }
 }

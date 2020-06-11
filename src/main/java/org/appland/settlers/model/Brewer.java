@@ -7,13 +7,17 @@
 package org.appland.settlers.model;
 
 import static org.appland.settlers.model.Brewer.State.BREWING_BEER;
+import static org.appland.settlers.model.Brewer.State.DEAD;
 import static org.appland.settlers.model.Brewer.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Brewer.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Brewer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Brewer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Brewer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Brewer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Brewer.State.WALKING_TO_TARGET;
 import static org.appland.settlers.model.Material.BEER;
+import static org.appland.settlers.model.Material.BREWER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -23,6 +27,7 @@ import static org.appland.settlers.model.Material.WHEAT;
  */
 @Walker(speed = 10)
 public class Brewer extends Worker {
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
@@ -36,7 +41,7 @@ public class Brewer extends Worker {
         BREWING_BEER,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Brewer(Player player, GameMap map) {
@@ -118,6 +123,12 @@ public class Brewer extends Worker {
                 /* Report the that the brewer was unproductive */
                 productivityMeasurer.reportUnproductivity();
             }
+        } else if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -148,12 +159,35 @@ public class Brewer extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == Brewer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
+
+            if (storehouse != null) {
+
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -161,12 +195,18 @@ public class Brewer extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BREWER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -194,5 +234,12 @@ public class Brewer extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

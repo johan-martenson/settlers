@@ -1291,4 +1291,334 @@ public class TestLookoutTower {
         /* Verify that the reported needed construction material is correct */
         assertEquals(lookoutTower0.getMaterialNeeded().size(), 0);
     }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place lookout tower */
+        Point point2 = new Point(18, 6);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the lookout tower */
+        Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the lookout tower and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, lookoutTower0);
+
+        /* Wait for the lookout tower and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, lookoutTower0);
+
+        Worker scout0 = lookoutTower0.getWorker();
+
+        assertTrue(scout0.isInsideBuilding());
+        assertEquals(scout0.getHome(), lookoutTower0);
+        assertEquals(lookoutTower0.getWorker(), scout0);
+
+        /* Verify that the worker goes to the storage when the lookout tower is torn down */
+        headquarter0.blockDeliveryOfMaterial(SCOUT);
+
+        lookoutTower0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(scout0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, lookoutTower0.getFlag().getPosition());
+
+        assertEquals(scout0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, scout0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(scout0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndLookoutTowerIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place lookout tower */
+        Point point2 = new Point(18, 6);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the lookout tower */
+        Road road1 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the lookout tower and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, lookoutTower0);
+
+        /* Wait for the lookout tower and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, lookoutTower0);
+
+        Worker scout0 = lookoutTower0.getWorker();
+
+        assertTrue(scout0.isInsideBuilding());
+        assertEquals(scout0.getHome(), lookoutTower0);
+        assertEquals(lookoutTower0.getWorker(), scout0);
+
+        /* Verify that the worker goes to the storage off-road when the lookout tower is torn down */
+        headquarter0.blockDeliveryOfMaterial(SCOUT);
+
+        lookoutTower0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(scout0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, lookoutTower0.getFlag().getPosition());
+
+        assertEquals(scout0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(scout0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
+
+        assertEquals(headquarter0.getAmount(SCOUT), 1);
+
+        headquarter0.pushOutAll(SCOUT);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
+
+            assertEquals(headquarter0.getAmount(SCOUT), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, SCOUT, 1);
+
+        headquarter0.blockDeliveryOfMaterial(SCOUT);
+        headquarter0.pushOutAll(SCOUT);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place lookout tower */
+        Point point1 = new Point(7, 9);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
+
+        /* Place road to connect the lookout tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the lookout tower to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(lookoutTower0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(lookoutTower0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(SCOUT);
+
+        Worker worker = lookoutTower0.getWorker();
+
+        lookoutTower0.tearDown();
+
+        assertEquals(worker.getPosition(), lookoutTower0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, lookoutTower0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), lookoutTower0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), lookoutTower0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place lookout tower */
+        Point point1 = new Point(7, 9);
+        LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
+
+        /* Place road to connect the lookout tower with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the lookout tower to get constructed */
+        Utils.waitForBuildingToBeConstructed(lookoutTower0);
+
+        /* Wait for a scout to start walking to the lookout tower */
+        Scout scout = Utils.waitForWorkerOutsideBuilding(Scout.class, player0);
+
+        /* Wait for the scout to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the scout goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(scout.getTarget(), lookoutTower0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(SCOUT);
+
+        lookoutTower0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, lookoutTower0.getFlag().getPosition());
+
+        assertEquals(scout.getPosition(), lookoutTower0.getFlag().getPosition());
+        assertNotEquals(scout.getTarget(), headquarter0.getPosition());
+        assertFalse(scout.isInsideBuilding());
+        assertNull(lookoutTower0.getWorker());
+        assertNotNull(scout.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, scout, scout.getTarget());
+
+        Point point = scout.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(scout.isDead());
+            assertEquals(scout.getPosition(), point);
+            assertTrue(map.getWorkers().contains(scout));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(scout));
+    }
 }

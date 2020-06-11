@@ -3,6 +3,7 @@ package org.appland.settlers.model;
 import java.util.List;
 
 import static org.appland.settlers.model.Courier.States.GOING_BACK_TO_ROAD;
+import static org.appland.settlers.model.Courier.States.GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_BUILDING_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_DELIVER_CARGO;
 import static org.appland.settlers.model.Courier.States.GOING_TO_FLAG_TO_PICK_UP_CARGO;
@@ -51,7 +52,7 @@ public class Courier extends Worker {
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO,
         GOING_TO_FLAG_TO_DELIVER_CARGO, RETURNING_TO_IDLE_SPOT,
         GOING_TO_BUILDING_TO_DELIVER_CARGO, GOING_BACK_TO_ROAD,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO, RETURNING_TO_STORAGE
     }
 
     public Courier(Player player, GameMap map) {
@@ -205,11 +206,25 @@ public class Courier extends Worker {
         } else if (state == GOING_TO_FLAG_TO_PICK_UP_CARGO) {
             pickUpCargo();
         } else if (state == GOING_TO_BUILDING_TO_DELIVER_CARGO) {
-            deliverCargo();
 
-            state = GOING_BACK_TO_ROAD;
+            Building building = map.getBuildingAtPoint(getPosition());
 
-            setTarget(getPosition().downRight());
+            /* Cannot delivery if the building has just been torn down */
+            if (building.isBurningDown()) {
+
+                /* Return to the headquarter offroad because the driveway is gone */
+                state = Courier.States.GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
+
+                setOffroadTarget(getPosition().downRight());
+
+            /* Deliver the cargo normally */
+            } else {
+                deliverCargo();
+
+                state = GOING_BACK_TO_ROAD;
+
+                setTarget(getPosition().downRight());
+            }
         } else if (state == GOING_TO_FLAG_TO_DELIVER_CARGO) {
             deliverCargo();
 
@@ -231,6 +246,13 @@ public class Courier extends Worker {
             Storehouse storehouse = (Storehouse) map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO) {
+            state = GOING_TO_BUILDING_TO_DELIVER_CARGO;
+
+            /* Return the cargo to the headquarter */
+            getCargo().transportToStorage();
+
+            setTarget(getAssignedRoad().getOtherPoint(getPosition()));
         }
     }
 

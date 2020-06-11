@@ -95,7 +95,7 @@ public class Cargo {
     }
 
     void transportToStorage() throws Exception {
-        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, material);
 
         if (storehouse0 != null) {
             setTarget(storehouse0);
@@ -105,10 +105,10 @@ public class Cargo {
     }
 
     private void returnToClosestStorage() throws Exception {
-        Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
+        Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
 
-        if (storehouse0 != null) {
-            setTarget(storehouse0);
+        if (storehouse != null) {
+            setTarget(storehouse);
         }
     }
 

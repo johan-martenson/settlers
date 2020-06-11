@@ -5,6 +5,7 @@
  */
 package org.appland.settlers.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.appland.settlers.model.Worker.States.IDLE_INSIDE;
@@ -35,6 +36,7 @@ public abstract class Worker implements Actor {
 
     GameMap map;
 
+    private boolean     dead;
     private List<Point> path;
     private States      state;
     private Cargo       carriedCargo;
@@ -118,6 +120,8 @@ public abstract class Worker implements Actor {
         walkCountdown  = new Countdown();
 
         state = IDLE_OUTSIDE;
+
+        dead = false;
     }
 
     @Override
@@ -543,6 +547,37 @@ public abstract class Worker implements Actor {
 
     int getProductivity() {
         return 0;
+    }
+
+    public void goToOtherStorage(Building building) throws Exception {
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    protected Point findPlaceToDie() {
+        Collection<Point> area = GameUtils.getHexagonAreaAroundPoint(getPosition(), 8, map);
+
+        for (Point point : area) {
+            List<Point> path = map.findWayOffroad(getPosition(), point, null);
+
+            if (path == null) {
+                continue;
+            }
+
+            if (path.size() == 0) {
+                continue;
+            }
+
+            return point;
+        }
+
+        return null;
+    }
+
+    protected void setDead() {
+        dead = true;
     }
 }
 

@@ -1998,4 +1998,395 @@ public class TestSlaughterHouse {
             map.stepTime();
         }
     }
+
+    @Test
+    public void testWhenMeatDeliveryAreBlockedSlaughterHouseFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place Slaughter house */
+        Point point1 = new Point(7, 9);
+        SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Place road to connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the slaughter house to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(slaughterHouse0);
+
+        Worker butcher0 = Utils.waitForNonMilitaryBuildingToGetPopulated(slaughterHouse0);
+
+        assertTrue(butcher0.isInsideBuilding());
+        assertEquals(butcher0.getHome(), slaughterHouse0);
+        assertEquals(slaughterHouse0.getWorker(), butcher0);
+
+        /* Add a lot of material to the headquarter for the slaughter house to consume */
+        Utils.adjustInventoryTo(headquarter0, PIG, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(MEAT);
+
+        /* Verify that the slaughter house puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, slaughterHouse0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher0, slaughterHouse0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(slaughterHouse0.getFlag().getStackedCargo().size(), 8);
+            assertTrue(butcher0.isInsideBuilding());
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), MEAT);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndSlaughterHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place slaughter house */
+        Point point2 = new Point(18, 6);
+        SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the slaughter house */
+        Road road1 = map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the slaughter house and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, slaughterHouse0);
+
+        /* Add a lot of material to the headquarter for the slaughter house to consume */
+        Utils.adjustInventoryTo(headquarter0, PIG, 40);
+
+        /* Wait for the slaughter house and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, slaughterHouse0);
+
+        Worker butcher0 = slaughterHouse0.getWorker();
+
+        assertTrue(butcher0.isInsideBuilding());
+        assertEquals(butcher0.getHome(), slaughterHouse0);
+        assertEquals(slaughterHouse0.getWorker(), butcher0);
+
+        /* Verify that the worker goes to the storage when the slaughter house is torn down */
+        headquarter0.blockDeliveryOfMaterial(BUTCHER);
+
+        slaughterHouse0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(butcher0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher0, slaughterHouse0.getFlag().getPosition());
+
+        assertEquals(butcher0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, butcher0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(butcher0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndSlaughterHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Place slaughter house */
+        Point point2 = new Point(18, 6);
+        SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the slaughter house */
+        Road road1 = map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the slaughter house and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, slaughterHouse0);
+
+        /* Add a lot of material to the headquarter for the slaughter house to consume */
+        Utils.adjustInventoryTo(headquarter0, PIG, 40);
+
+        /* Wait for the slaughter house and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, slaughterHouse0);
+
+        Worker butcher0 = slaughterHouse0.getWorker();
+
+        assertTrue(butcher0.isInsideBuilding());
+        assertEquals(butcher0.getHome(), slaughterHouse0);
+        assertEquals(slaughterHouse0.getWorker(), butcher0);
+
+        /* Verify that the worker goes to the storage off-road when the slaughter house is torn down */
+        headquarter0.blockDeliveryOfMaterial(BUTCHER);
+
+        slaughterHouse0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(butcher0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher0, slaughterHouse0.getFlag().getPosition());
+
+        assertEquals(butcher0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(butcher0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BUTCHER, 1);
+
+        assertEquals(headquarter0.getAmount(BUTCHER), 1);
+
+        headquarter0.pushOutAll(BUTCHER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Butcher.class, player0);
+
+            assertEquals(headquarter0.getAmount(BUTCHER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, BUTCHER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(BUTCHER);
+        headquarter0.pushOutAll(BUTCHER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Butcher.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point1 = new Point(7, 9);
+        SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Place road to connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the slaughter house to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(slaughterHouse0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(slaughterHouse0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(BUTCHER);
+
+        Worker worker = slaughterHouse0.getWorker();
+
+        slaughterHouse0.tearDown();
+
+        assertEquals(worker.getPosition(), slaughterHouse0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, slaughterHouse0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), slaughterHouse0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), slaughterHouse0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place slaughter house */
+        Point point1 = new Point(7, 9);
+        SlaughterHouse slaughterHouse0 = map.placeBuilding(new SlaughterHouse(player0), point1);
+
+        /* Place road to connect the slaughter house with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, slaughterHouse0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the slaughter house to get constructed */
+        Utils.waitForBuildingToBeConstructed(slaughterHouse0);
+
+        /* Wait for a butcher to start walking to the slaughter house */
+        Butcher butcher = Utils.waitForWorkerOutsideBuilding(Butcher.class, player0);
+
+        /* Wait for the butcher to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the butcher goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(butcher.getTarget(), slaughterHouse0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(BUTCHER);
+
+        slaughterHouse0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher, slaughterHouse0.getFlag().getPosition());
+
+        assertEquals(butcher.getPosition(), slaughterHouse0.getFlag().getPosition());
+        assertNotEquals(butcher.getTarget(), headquarter0.getPosition());
+        assertFalse(butcher.isInsideBuilding());
+        assertNull(slaughterHouse0.getWorker());
+        assertNotNull(butcher.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, butcher, butcher.getTarget());
+
+        Point point = butcher.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(butcher.isDead());
+            assertEquals(butcher.getPosition(), point);
+            assertTrue(map.getWorkers().contains(butcher));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(butcher));
+    }
 }

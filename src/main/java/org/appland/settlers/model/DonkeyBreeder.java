@@ -5,13 +5,18 @@
  */
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.DonkeyBreeder.State.DEAD;
 import static org.appland.settlers.model.DonkeyBreeder.State.FEEDING;
 import static org.appland.settlers.model.DonkeyBreeder.State.GOING_BACK_TO_HOUSE_AFTER_FEEDING;
 import static org.appland.settlers.model.DonkeyBreeder.State.GOING_OUT_TO_FEED;
+import static org.appland.settlers.model.DonkeyBreeder.State.GOING_TO_DIE;
+import static org.appland.settlers.model.DonkeyBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.DonkeyBreeder.State.PREPARING_DONKEY_FOR_DELIVERY;
 import static org.appland.settlers.model.DonkeyBreeder.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.DonkeyBreeder.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.DonkeyBreeder.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.DONKEY;
+import static org.appland.settlers.model.Material.DONKEY_BREEDER;
 import static org.appland.settlers.model.Material.WATER;
 import static org.appland.settlers.model.Material.WHEAT;
 
@@ -25,6 +30,7 @@ public class DonkeyBreeder extends Worker {
     private static final int TIME_TO_REST           = 99;
     private static final int TIME_TO_FEED           = 19;
     private static final int TIME_TO_PREPARE_DONKEY = 19;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private State state;
     private final Countdown countdown;
@@ -37,7 +43,7 @@ public class DonkeyBreeder extends Worker {
         FEEDING,
         GOING_BACK_TO_HOUSE_AFTER_FEEDING,
         PREPARING_DONKEY_FOR_DELIVERY,
-        RETURNING_TO_STORAGE
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public DonkeyBreeder(Player player, GameMap map) {
@@ -99,8 +105,8 @@ public class DonkeyBreeder extends Worker {
         } else if (state == PREPARING_DONKEY_FOR_DELIVERY) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
 
-                /* Don't create a donkey if there is no road to a storage */
-                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(getHome().getPosition(), getPlayer());
+                /* Don't create a donkey if no delivery is possible */
+                Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getHome().getPosition(), null, map, DONKEY);
 
                 if (storehouse == null) {
                     return;
@@ -124,6 +130,12 @@ public class DonkeyBreeder extends Worker {
             } else if (getHome().isProductionEnabled()) {
                 countdown.step();
             }
+        } else if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -143,12 +155,34 @@ public class DonkeyBreeder extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == DonkeyBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, DONKEY_BREEDER);
+
+            if (storehouse != null) {
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getHome(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, DONKEY_BREEDER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -156,12 +190,18 @@ public class DonkeyBreeder extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), DONKEY_BREEDER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -189,5 +229,12 @@ public class DonkeyBreeder extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

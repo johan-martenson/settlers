@@ -1946,7 +1946,7 @@ public class TestGraniteMine {
         /* Place granite mine */
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
-        /* Finish construction of the coal mine */
+        /* Finish construction of the stone mine */
         Utils.constructHouse(graniteMine);
 
         /* Populate the granite mine */
@@ -2221,5 +2221,419 @@ public class TestGraniteMine {
 
             map.stepTime();
         }
+    }
+
+    @Test
+    public void testWhenStoneDeliveryAreBlockedGraniteMineFillsUpFlagAndThenStops() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place Stone mine */
+        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Place road to connect the stone mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+
+        /* Wait for the stone mine to get constructed and occupied */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        Utils.waitForBuildingToBeConstructed(stoneMine0);
+
+        Worker miner0 = Utils.waitForNonMilitaryBuildingToGetPopulated(stoneMine0);
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), stoneMine0);
+        assertEquals(stoneMine0.getWorker(), miner0);
+
+        /* Add a lot of material to the headquarter for the stone mine to consume */
+        Utils.adjustInventoryTo(headquarter0, MEAT, 40);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 40);
+
+        /* Block storage of weapons */
+        headquarter0.blockDeliveryOfMaterial(STONE);
+
+        /* Verify that the stone mine puts eight weapons on the flag and then stops */
+        Utils.waitForFlagToGetStackedCargo(map, stoneMine0.getFlag(), 8);
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getPosition());
+
+        for (int i = 0; i < 300; i++) {
+            map.stepTime();
+
+            assertEquals(stoneMine0.getFlag().getStackedCargo().size(), 8);
+            assertTrue(miner0.isInsideBuilding());
+
+            if (road0.getCourier().getCargo() != null) {
+                assertNotEquals(road0.getCourier().getCargo().getMaterial(), STONE);
+            }
+        }
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Put a small mountain on the map */
+        Point point2 = new Point(18, 6);
+        Utils.surroundPointWithMountain(point2, map);
+        Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
+
+        /* Place stone mine */
+        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the stone mine */
+        Road road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the stone mine and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, stoneMine0);
+
+        /* Add a lot of material to the headquarter for the stone mine to consume */
+        Utils.adjustInventoryTo(headquarter0, MEAT, 40);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 40);
+
+        /* Wait for the stone mine and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, stoneMine0);
+
+        Worker miner0 = stoneMine0.getWorker();
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), stoneMine0);
+        assertEquals(stoneMine0.getWorker(), miner0);
+
+        /* Verify that the worker goes to the storage when the stone mine is torn down */
+        headquarter0.blockDeliveryOfMaterial(MINER);
+
+        stoneMine0.tearDown();
+
+        map.stepTime();
+
+        assertFalse(miner0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getFlag().getPosition());
+
+        assertEquals(miner0.getTarget(), storehouse.getPosition());
+
+        Utils.verifyWorkerWalksToTargetOnRoads(map, miner0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(miner0));
+    }
+
+    @Test
+    public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place storehouse */
+        Point point1 = new Point(5, 5);
+        Storehouse storehouse = map.placeBuilding(new Storehouse(player0), point1);
+
+        /* Put a small mountain on the map */
+        Point point2 = new Point(18, 6);
+        Utils.surroundPointWithMountain(point2, map);
+        Utils.putGraniteAtSurroundingTiles(point2, LARGE, map);
+
+        /* Place stone mine */
+        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point2);
+
+        /* Place road to connect the storehouse with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, storehouse.getFlag(), headquarter0.getFlag());
+
+        /* Place road to connect the headquarter with the stone mine */
+        Road road1 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+
+        /* Add a lot of planks and stones to the headquarter */
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the stone mine and the storehouse to get constructed */
+        Utils.waitForBuildingsToBeConstructed(storehouse, stoneMine0);
+
+        /* Add a lot of material to the headquarter for the stone mine to consume */
+        Utils.adjustInventoryTo(headquarter0, MEAT, 40);
+        Utils.adjustInventoryTo(headquarter0, BREAD, 40);
+
+        /* Wait for the stone mine and the storage to get occupied */
+        Utils.waitForNonMilitaryBuildingsToGetPopulated(storehouse, stoneMine0);
+
+        Worker miner0 = stoneMine0.getWorker();
+
+        assertTrue(miner0.isInsideBuilding());
+        assertEquals(miner0.getHome(), stoneMine0);
+        assertEquals(stoneMine0.getWorker(), miner0);
+
+        /* Verify that the worker goes to the storage off-road when the stone mine is torn down */
+        headquarter0.blockDeliveryOfMaterial(MINER);
+
+        stoneMine0.tearDown();
+
+        map.removeRoad(road0);
+
+        map.stepTime();
+
+        assertFalse(miner0.isInsideBuilding());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getFlag().getPosition());
+
+        assertEquals(miner0.getTarget(), storehouse.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner0, storehouse.getPosition());
+
+        assertFalse(map.getWorkers().contains(miner0));
+    }
+
+    @Test
+    public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, MINER, 1);
+
+        assertEquals(headquarter0.getAmount(MINER), 1);
+
+        headquarter0.pushOutAll(MINER);
+
+        for (int i = 0; i < 10; i++) {
+            Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+
+            assertEquals(headquarter0.getAmount(MINER), 0);
+            assertEquals(worker.getPosition(), headquarter0.getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+            assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+            assertEquals(worker.getTarget(), headquarter0.getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getPosition());
+
+            assertFalse(map.getWorkers().contains(worker));
+        }
+    }
+
+    @Test
+    public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Verify that worker goes out and in continuously when sent out without being blocked */
+        Utils.adjustInventoryTo(headquarter0, MINER, 1);
+
+        headquarter0.blockDeliveryOfMaterial(MINER);
+        headquarter0.pushOutAll(MINER);
+
+        Worker worker = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+
+        assertEquals(worker.getPosition(), headquarter0.getPosition());
+        assertEquals(worker.getTarget(), headquarter0.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, headquarter0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), headquarter0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place stone mine */
+        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Place road to connect the stone mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the stone mine to get constructed and occupied */
+        Utils.waitForBuildingToBeConstructed(stoneMine0);
+        Utils.waitForNonMilitaryBuildingToGetPopulated(stoneMine0);
+
+        /* Verify that worker goes out and then walks away and dies when the building is torn down because delivery is
+           blocked in the headquarter
+        */
+        headquarter0.blockDeliveryOfMaterial(MINER);
+
+        Worker worker = stoneMine0.getWorker();
+
+        stoneMine0.tearDown();
+
+        assertEquals(worker.getPosition(), stoneMine0.getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, stoneMine0.getFlag().getPosition());
+
+        assertEquals(worker.getPosition(), stoneMine0.getFlag().getPosition());
+        assertNotNull(worker.getTarget());
+        assertNotEquals(worker.getTarget(), stoneMine0.getPosition());
+        assertNotEquals(worker.getTarget(), headquarter0.getPosition());
+        assertFalse(worker.isDead());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, worker, worker.getTarget());
+
+        assertTrue(worker.isDead());
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(worker.isDead());
+            assertTrue(map.getWorkers().contains(worker));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(worker));
+    }
+
+    @Test
+    public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
+
+        /* Start new game with one player only */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(12, 6);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Put a small mountain on the map */
+        Point point1 = new Point(7, 9);
+        Utils.surroundPointWithMountain(point1, map);
+        Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
+
+        /* Place stone mine */
+        GraniteMine stoneMine0 = map.placeBuilding(new GraniteMine(player0), point1);
+
+        /* Place road to connect the stone mine with the headquarter */
+        Road road0 = map.placeAutoSelectedRoad(player0, stoneMine0.getFlag(), headquarter0.getFlag());
+
+        Utils.adjustInventoryTo(headquarter0, PLANK, 30);
+        Utils.adjustInventoryTo(headquarter0, STONE, 30);
+
+        /* Wait for the stone mine to get constructed */
+        Utils.waitForBuildingToBeConstructed(stoneMine0);
+
+        /* Wait for a miner to start walking to the stone mine */
+        Miner miner = Utils.waitForWorkerOutsideBuilding(Miner.class, player0);
+
+        /* Wait for the miner to go past the headquarter's flag */
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, headquarter0.getFlag().getPosition());
+
+        map.stepTime();
+
+        /* Verify that the miner goes away and dies when the house has been torn down and storage is not possible */
+        assertEquals(miner.getTarget(), stoneMine0.getPosition());
+
+        headquarter0.blockDeliveryOfMaterial(MINER);
+
+        stoneMine0.tearDown();
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, stoneMine0.getFlag().getPosition());
+
+        assertEquals(miner.getPosition(), stoneMine0.getFlag().getPosition());
+        assertNotEquals(miner.getTarget(), headquarter0.getPosition());
+        assertFalse(miner.isInsideBuilding());
+        assertNull(stoneMine0.getWorker());
+        assertNotNull(miner.getTarget());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, miner, miner.getTarget());
+
+        Point point = miner.getPosition();
+        for (int i = 0; i < 100; i++) {
+            assertTrue(miner.isDead());
+            assertEquals(miner.getPosition(), point);
+            assertTrue(map.getWorkers().contains(miner));
+
+            map.stepTime();
+        }
+
+        assertFalse(map.getWorkers().contains(miner));
     }
 }

@@ -6,13 +6,17 @@
 
 package org.appland.settlers.model;
 
+import static org.appland.settlers.model.Armorer.State.DEAD;
 import static org.appland.settlers.model.Armorer.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Armorer.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
 import static org.appland.settlers.model.Armorer.State.PRODUCING_WEAPON;
 import static org.appland.settlers.model.Armorer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Armorer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Armorer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Armorer.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.ARMORER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.SHIELD;
@@ -24,6 +28,7 @@ import static org.appland.settlers.model.Material.SWORD;
  */
 @Walker(speed = 10)
 public class Armorer extends Worker {
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
     private final Countdown countdown;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
@@ -38,9 +43,8 @@ public class Armorer extends Worker {
         PRODUCING_WEAPON,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, GOING_TO_FLAG_THEN_GOING_TO_DIE, RETURNING_TO_STORAGE
     }
-
 
     public Armorer(Player player, GameMap map) {
         super(player, map);
@@ -71,6 +75,7 @@ public class Armorer extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
+
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
                 state = PRODUCING_WEAPON;
@@ -132,6 +137,12 @@ public class Armorer extends Worker {
 
                 productivityMeasurer.nextProductivityCycle();
             }
+        } else if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -162,25 +173,53 @@ public class Armorer extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
+
+            if (storehouse != null) {
+
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = Armorer.State.GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), ARMORER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -212,5 +251,12 @@ public class Armorer extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() / (double)(4 * PRODUCTION_TIME)) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }

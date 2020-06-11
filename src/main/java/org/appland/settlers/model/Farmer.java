@@ -15,11 +15,14 @@ import java.util.Set;
 
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
+import static org.appland.settlers.model.Farmer.State.DEAD;
 import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Farmer.State.GOING_BACK_TO_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_HARVEST;
 import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PLANT;
 import static org.appland.settlers.model.Farmer.State.GOING_OUT_TO_PUT_CARGO;
+import static org.appland.settlers.model.Farmer.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Farmer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 import static org.appland.settlers.model.Farmer.State.HARVESTING;
 import static org.appland.settlers.model.Farmer.State.IN_HOUSE_WITH_CARGO;
 import static org.appland.settlers.model.Farmer.State.PLANTING;
@@ -27,6 +30,7 @@ import static org.appland.settlers.model.Farmer.State.RESTING_IN_HOUSE;
 import static org.appland.settlers.model.Farmer.State.RETURNING_TO_STORAGE;
 import static org.appland.settlers.model.Farmer.State.WAITING_FOR_SPACE_ON_FLAG;
 import static org.appland.settlers.model.Farmer.State.WALKING_TO_TARGET;
+import static org.appland.settlers.model.Material.FARMER;
 import static org.appland.settlers.model.Material.WHEAT;
 
 /**
@@ -38,6 +42,7 @@ public class Farmer extends Worker {
     private final static int TIME_TO_REST    = 99;
     private final static int TIME_TO_PLANT   = 19;
     private final static int TIME_TO_HARVEST = 19;
+    private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
@@ -128,7 +133,7 @@ public class Farmer extends Worker {
         GOING_BACK_TO_HOUSE_WITH_CARGO,
         GOING_OUT_TO_PUT_CARGO,
         IN_HOUSE_WITH_CARGO,
-        WAITING_FOR_SPACE_ON_FLAG, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     public Farmer(Player player, GameMap map) {
@@ -247,6 +252,12 @@ public class Farmer extends Worker {
                 /* Tell the flag that the cargo will be delivered */
                 getHome().getFlag().promiseCargo();
             }
+        } else if (state == DEAD) {
+            if (countdown.reachedZero()) {
+                map.removeWorker(this);
+            } else {
+                countdown.step();
+            }
         }
     }
 
@@ -304,12 +315,34 @@ public class Farmer extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+
+            /* Go to the closest storage */
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FARMER);
+
+            if (storehouse != null) {
+                state = RETURNING_TO_STORAGE;
+
+                setTarget(storehouse.getPosition());
+            } else {
+                state = GOING_TO_DIE;
+
+                Point point = super.findPlaceToDie();
+
+                setOffroadTarget(point);
+            }
+        } else if (state == GOING_TO_DIE) {
+            super.setDead();
+
+            state = DEAD;
+
+            countdown.countFrom(TIME_FOR_SKELETON_TO_DISAPPEAR);
         }
     }
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FARMER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
@@ -317,12 +350,18 @@ public class Farmer extends Worker {
             setTarget(storage.getPosition());
         } else {
 
-            storage = GameUtils.getClosestStorageOffroad(getPlayer(), getPosition());
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), FARMER);
 
             if (storage != null) {
                 state = State.RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
+            } else {
+                Point point = findPlaceToDie();
+
+                setOffroadTarget(point, getPosition().downRight());
+
+                state = GOING_TO_DIE;
             }
         }
     }
@@ -350,5 +389,12 @@ public class Farmer extends Worker {
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
                         (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+    }
+
+    @Override
+    public void goToOtherStorage(Building building) throws Exception {
+        state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+
+        setTarget(building.getFlag().getPosition());
     }
 }
