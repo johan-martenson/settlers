@@ -1437,38 +1437,38 @@ public class TestQuarry {
         /* Connect the first flag with the second flag */
         Road road1 = map.placeAutoSelectedRoad(player0, flag0, quarry0.getFlag());
 
-        /* Wait for the stoneMason to be on the second road on its way to the flag */
+        /* Wait for the stonemason to be on the second road on its way to the flag */
         Utils.waitForWorkersOutsideBuilding(Stonemason.class, 1, player0);
 
-        Stonemason stoneMason = null;
+        Stonemason stonemason = null;
 
         for (Worker worker : map.getWorkers()) {
             if (worker instanceof Stonemason) {
-                stoneMason = (Stonemason) worker;
+                stonemason = (Stonemason) worker;
             }
         }
 
-        assertNotNull(stoneMason);
-        assertEquals(stoneMason.getTarget(), quarry0.getPosition());
+        assertNotNull(stonemason);
+        assertEquals(stonemason.getTarget(), quarry0.getPosition());
 
         /* Wait for the stone mason to reach the first flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, flag0.getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, flag0.getPosition());
 
         map.stepTime();
 
         /* See that the stone mason has started walking */
-        assertFalse(stoneMason.isExactlyAtPoint());
+        assertFalse(stonemason.isExactlyAtPoint());
 
         /* Tear down the quarry */
         quarry0.tearDown();
 
         /* Verify that the stone mason continues walking to the next flag */
-        Utils.fastForwardUntilWorkerReachesPoint(map, stoneMason, quarry0.getFlag().getPosition());
+        Utils.fastForwardUntilWorkerReachesPoint(map, stonemason, quarry0.getFlag().getPosition());
 
-        assertEquals(stoneMason.getPosition(), quarry0.getFlag().getPosition());
+        assertEquals(stonemason.getPosition(), quarry0.getFlag().getPosition());
 
         /* Verify that the stone mason goes back to storage */
-        assertEquals(stoneMason.getTarget(), headquarter0.getPosition());
+        assertEquals(stonemason.getTarget(), headquarter0.getPosition());
     }
 
     @Test

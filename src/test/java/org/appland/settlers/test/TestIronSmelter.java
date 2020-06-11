@@ -1323,7 +1323,7 @@ public class TestIronSmelter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, ironSmelter0.getFlag().getPosition());
 
-        /* Verify that the iron founder goes out to ironFounder instead of going directly back */
+        /* Verify that the iron founder goes out to iron founder instead of going directly back */
         assertNotEquals(ironFounder.getTarget(), headquarter0.getPosition());
     }
 
@@ -1434,7 +1434,7 @@ public class TestIronSmelter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder, storehouse0.getPosition());
 
-        /* Verify that the ironFounder is stored correctly in the headquarter */
+        /* Verify that the iron founder is stored correctly in the headquarter */
         assertEquals(storehouse0.getAmount(IRON_FOUNDER), amount + 1);
     }
 
@@ -1607,7 +1607,7 @@ public class TestIronSmelter {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place ironSmelter */
+        /* Place iron smelter */
         Point point26 = new Point(17, 17);
         Building ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point26);
 
@@ -1960,18 +1960,18 @@ public class TestIronSmelter {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place ironSmelter */
+        /* Place iron smelter */
         Point point1 = new Point(16, 6);
         Building ironSmelter = map.placeBuilding(new IronSmelter(player0), point1);
 
-        /* Connect the ironSmelter with the headquarter */
+        /* Connect the iron smelter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
-        /* Wait for the ironSmelter to get constructed and assigned a worker */
+        /* Wait for the iron smelter to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(ironSmelter);
         Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter);
 
-        /* Give material to the ironSmelter */
+        /* Give material to the iron smelter */
         Utils.putCargoToBuilding(ironSmelter, IRON);
         Utils.putCargoToBuilding(ironSmelter, COAL);
 
@@ -1981,7 +1981,7 @@ public class TestIronSmelter {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the ironSmelter waits for the flag to get empty and produces nothing */
+        /* Verify that the iron smelter waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
             assertNull(ironSmelter.getWorker().getCargo());
@@ -1989,7 +1989,7 @@ public class TestIronSmelter {
             map.stepTime();
         }
 
-        /* Reconnect the ironSmelter with the headquarter */
+        /* Reconnect the iron smelter with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2027,18 +2027,18 @@ public class TestIronSmelter {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place ironSmelter */
+        /* Place iron smelter */
         Point point1 = new Point(16, 6);
         IronSmelter ironSmelter = map.placeBuilding(new IronSmelter(player0), point1);
 
-        /* Connect the ironSmelter with the headquarter */
+        /* Connect the iron smelter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
-        /* Wait for the ironSmelter to get constructed and assigned a worker */
+        /* Wait for the iron smelter to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(ironSmelter);
         Utils.waitForNonMilitaryBuildingToGetPopulated(ironSmelter);
 
-        /* Give material to the ironSmelter */
+        /* Give material to the iron smelter */
         Utils.putCargoToBuilding(ironSmelter, IRON);
         Utils.putCargoToBuilding(ironSmelter, IRON);
         Utils.putCargoToBuilding(ironSmelter, COAL);
@@ -2050,7 +2050,7 @@ public class TestIronSmelter {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The ironSmelter waits for the flag to get empty and produces nothing */
+        /* The iron smelter waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
             assertNull(ironSmelter.getWorker().getCargo());
@@ -2058,7 +2058,7 @@ public class TestIronSmelter {
             map.stepTime();
         }
 
-        /* Reconnect the ironSmelter with the headquarter */
+        /* Reconnect the iron smelter with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, ironSmelter.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2091,7 +2091,7 @@ public class TestIronSmelter {
 
         assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the ironSmelter doesn't produce anything because the flag is full */
+        /* Verify that the iron smelter doesn't produce anything because the flag is full */
         for (int i = 0; i < 400; i++) {
             assertEquals(ironSmelter.getFlag().getStackedCargo().size(), 8);
             assertNull(ironSmelter.getWorker().getCargo());
@@ -2113,7 +2113,7 @@ public class TestIronSmelter {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place IronSmelter */
+        /* Place iron smelter */
         Point point1 = new Point(7, 9);
         IronSmelter ironSmelter0 = map.placeBuilding(new IronSmelter(player0), point1);
 

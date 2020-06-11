@@ -140,7 +140,7 @@ public class TestHunterHut {
         /* Verify that the forrester is unoccupied when it's newly constructed */
         assertTrue(hunterHut.needsWorker());
 
-        /* Verify that the HunterHut requires a worker */
+        /* Verify that the hunter hut requires a worker */
         assertTrue(hunterHut.needsWorker());
 
         Hunter hunter = new Hunter(null, null);
@@ -1238,7 +1238,7 @@ public class TestHunterHut {
         /* See that the hunter has started walking */
         assertFalse(hunter.isExactlyAtPoint());
 
-        /* Tear down the hunterHut */
+        /* Tear down the hunter hut */
         hunterHut0.tearDown();
 
         /* Verify that the hunter continues walking to the next flag */
@@ -1263,24 +1263,24 @@ public class TestHunterHut {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing hunterHut */
+        /* Placing hunter hut */
         Point point26 = new Point(17, 17);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
-        /* Finish construction of the hunterHut */
+        /* Finish construction of the hunter hut */
         Utils.constructHouse(hunterHut0);
 
-        /* Occupy the hunterHut */
+        /* Occupy the hunter hut */
         Utils.occupyBuilding(new Hunter(player0, map), hunterHut0);
 
-        /* Place a second storage closer to the hunterHut */
+        /* Place a second storage closer to the hunter hut */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the hunterHut */
+        /* Destroy the hunter hut */
         Worker hunter = hunterHut0.getWorker();
 
         assertTrue(hunter.isInsideBuilding());
@@ -1469,7 +1469,7 @@ public class TestHunterHut {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place hunterHut */
+        /* Place hunter hut */
         Point point26 = new Point(17, 17);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point26);
 
@@ -1886,14 +1886,14 @@ public class TestHunterHut {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place hunterHut */
+        /* Place hunter hut */
         Point point1 = new Point(16, 6);
         Building hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        /* Connect the hunterHut with the headquarter */
+        /* Connect the hunter hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        /* Wait for the hunterHut to get constructed and assigned a worker */
+        /* Wait for the hunter hut to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(hunterHut);
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
@@ -1903,14 +1903,14 @@ public class TestHunterHut {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the hunterHut waits for the flag to get empty and produces nothing */
+        /* Verify that the hunter hut waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 800; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        /* Reconnect the hunterHut with the headquarter */
+        /* Reconnect the hunter hut with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -1947,14 +1947,14 @@ public class TestHunterHut {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place hunterHut */
+        /* Place hunter hut */
         Point point1 = new Point(16, 6);
         HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        /* Connect the hunterHut with the headquarter */
+        /* Connect the hunter hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
-        /* Wait for the hunterHut to get constructed and assigned a worker */
+        /* Wait for the hunter hut to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(hunterHut);
         Utils.waitForNonMilitaryBuildingToGetPopulated(hunterHut);
 
@@ -1964,14 +1964,14 @@ public class TestHunterHut {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The hunterHut waits for the flag to get empty and produces nothing */
+        /* The hunter hut waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
             map.stepTime();
         }
 
-        /* Reconnect the hunterHut with the headquarter */
+        /* Reconnect the hunter hut with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, hunterHut.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2001,7 +2001,7 @@ public class TestHunterHut {
 
         assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the hunterHut doesn't produce anything because the flag is full */
+        /* Verify that the hunter hut doesn't produce anything because the flag is full */
         for (int i = 0; i < 800; i++) {
             assertEquals(hunterHut.getFlag().getStackedCargo().size(), 8);
 
@@ -2022,7 +2022,7 @@ public class TestHunterHut {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place HunterHut */
+        /* Place hunter hut */
         Point point1 = new Point(7, 9);
         HunterHut hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 

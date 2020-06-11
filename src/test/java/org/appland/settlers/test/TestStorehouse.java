@@ -1354,7 +1354,7 @@ public class TestStorehouse {
 
         map.stepTime();
 
-        /* See that the storageWorker has started walking */
+        /* See that the storage worker has started walking */
         assertFalse(storageWorker.isExactlyAtPoint());
 
         /* Remove the current road */
@@ -1418,7 +1418,7 @@ public class TestStorehouse {
         assertNotNull(storageWorker);
         assertEquals(storageWorker.getTarget(), storage0.getPosition());
 
-        /* Wait for the storageWorker to reach the first flag */
+        /* Wait for the storage worker to reach the first flag */
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, flag0.getPosition());
 
         map.stepTime();
@@ -1640,7 +1640,7 @@ public class TestStorehouse {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, storageWorker, headquarter0.getPosition());
 
-        /* Verify that the storageWorker is stored correctly in the headquarter */
+        /* Verify that the storage worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(STORAGE_WORKER), amount + 1);
     }
 

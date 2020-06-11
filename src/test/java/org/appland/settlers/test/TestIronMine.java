@@ -1468,7 +1468,7 @@ public class TestIronMine {
         /* See that the miner has started walking */
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Tear down the ironMine */
+        /* Tear down the iron mine */
         ironMine0.tearDown();
 
         /* Verify that the miner continues walking to the next flag */
@@ -1504,7 +1504,7 @@ public class TestIronMine {
         /* Finish construction of the iron Mine */
         Utils.constructHouse(ironMine0);
 
-        /* Occupy the ironMine */
+        /* Occupy the iron mine */
         Utils.occupyBuilding(new Miner(player0, map), ironMine0);
 
         /* Place a second storage closer to the iron Mine */
@@ -2085,17 +2085,17 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place ironMine */
+        /* Place iron mine */
         Building ironMine = map.placeBuilding(new IronMine(player0), point1);
 
-        /* Connect the ironMine with the headquarter */
+        /* Connect the iron mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the ironMine to get constructed and assigned a worker */
+        /* Wait for the iron mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(ironMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(ironMine);
 
-        /* Give material to the ironMine */
+        /* Give material to the iron mine */
         Utils.putCargoToBuilding(ironMine, BREAD);
         Utils.putCargoToBuilding(ironMine, BREAD);
         Utils.putCargoToBuilding(ironMine, FISH);
@@ -2107,7 +2107,7 @@ public class TestIronMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the ironMine waits for the flag to get empty and produces nothing */
+        /* Verify that the iron mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(ironMine.getFlag().getStackedCargo().size(), 8);
             assertNull(ironMine.getWorker().getCargo());
@@ -2115,7 +2115,7 @@ public class TestIronMine {
             map.stepTime();
         }
 
-        /* Reconnect the ironMine with the headquarter */
+        /* Reconnect the iron mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2158,17 +2158,17 @@ public class TestIronMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putIronAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place ironMine */
+        /* Place iron mine */
         IronMine ironMine = map.placeBuilding(new IronMine(player0), point1);
 
-        /* Connect the ironMine with the headquarter */
+        /* Connect the iron mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the ironMine to get constructed and assigned a worker */
+        /* Wait for the iron mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(ironMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(ironMine);
 
-        /* Give material to the ironMine */
+        /* Give material to the iron mine */
         Utils.putCargoToBuilding(ironMine, BREAD);
         Utils.putCargoToBuilding(ironMine, BREAD);
         Utils.putCargoToBuilding(ironMine, FISH);
@@ -2180,7 +2180,7 @@ public class TestIronMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The ironMine waits for the flag to get empty and produces nothing */
+        /* The iron mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(ironMine.getFlag().getStackedCargo().size(), 8);
             assertNull(ironMine.getWorker().getCargo());
@@ -2188,7 +2188,7 @@ public class TestIronMine {
             map.stepTime();
         }
 
-        /* Reconnect the ironMine with the headquarter */
+        /* Reconnect the iron mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, ironMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2221,7 +2221,7 @@ public class TestIronMine {
 
         assertEquals(ironMine.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the ironMine doesn't produce anything because the flag is full */
+        /* Verify that the iron mine doesn't produce anything because the flag is full */
         for (int i = 0; i < 400; i++) {
             assertEquals(ironMine.getFlag().getStackedCargo().size(), 8);
             assertNull(ironMine.getWorker().getCargo());

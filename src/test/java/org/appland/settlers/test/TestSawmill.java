@@ -1227,7 +1227,7 @@ public class TestSawmill {
 
         map.stepTime();
 
-        /* See that the sawmillWorker has started walking */
+        /* See that the sawmill worker has started walking */
         assertFalse(sawmillWorker.isExactlyAtPoint());
 
         /* Remove the current road */

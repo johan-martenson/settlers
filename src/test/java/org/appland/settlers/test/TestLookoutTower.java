@@ -64,7 +64,7 @@ public class TestLookoutTower {
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
@@ -76,7 +76,7 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
 
-        /* Verify that this is enough to construct the LookoutTower */
+        /* Verify that this is enough to construct the lookout tower */
         for (int i = 0; i < 100; i++) {
             assertTrue(lookoutTower0.underConstruction());
 
@@ -99,7 +99,7 @@ public class TestLookoutTower {
         Point point21 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point21);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point22 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point22);
 
@@ -111,7 +111,7 @@ public class TestLookoutTower {
         lookoutTower0.putCargo(plankCargo);
         lookoutTower0.putCargo(plankCargo);
 
-        /* Verify that this is not enough to construct the LookoutTower */
+        /* Verify that this is not enough to construct the lookout tower */
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.underConstruction());
 
@@ -134,11 +134,11 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -149,7 +149,7 @@ public class TestLookoutTower {
         /* Unfinished lookout tower doesn't need worker */
         assertFalse(lookoutTower0.needsWorker());
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
@@ -175,11 +175,11 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -187,17 +187,17 @@ public class TestLookoutTower {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a LookoutTower worker leaves the headquarter */
+        /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
 
-        /* Let the LookoutTower worker reach the LookoutTower */
+        /* Let the lookout tower worker reach the lookout tower */
         Scout Scout = null;
 
         for (Worker worker : map.getWorkers()) {
@@ -233,24 +233,24 @@ public class TestLookoutTower {
         Utils.adjustInventoryTo(headquarter, SCOUT, 0);
         Utils.adjustInventoryTo(headquarter, Material.BOW, 1);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter.getFlag());
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a LookoutTower worker leaves the headquarter */
+        /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
 
-        /* Let the LookoutTower worker reach the LookoutTower */
+        /* Let the lookout tower worker reach the lookout tower */
         Scout Scout = null;
 
         for (Worker worker : map.getWorkers()) {
@@ -282,11 +282,11 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Point point4 = new Point(8, 8);
         Point point5 = new Point(7, 7);
         Point point6 = new Point(8, 6);
@@ -294,7 +294,7 @@ public class TestLookoutTower {
         Point point8 = new Point(6, 4);
         Road road0 = map.placeRoad(player0, point4, point5, point6, point7, point8);
 
-        /* Verify that the unoccupied LookoutTower does not discover any land */
+        /* Verify that the unoccupied lookout tower does not discover any land */
         Set<Point> discoveredLandBefore = new HashSet<>(player0.getDiscoveredLand());
 
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
@@ -315,19 +315,19 @@ public class TestLookoutTower {
         Point point0 = new Point(9, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(23, 5);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter.getFlag(), lookoutTower0.getFlag());
 
-        /* Wait for construction of the LookoutTower */
+        /* Wait for construction of the lookout tower */
         Utils.waitForBuildingToBeConstructed(lookoutTower0);
 
         assertTrue(lookoutTower0.needsWorker());
 
-        /* Verify that a LookoutTower worker leaves the headquarter */
+        /* Verify that a lookout tower worker leaves the headquarter */
         Utils.fastForward(3, map);
 
         assertEquals(map.getWorkers().size(), 3);
@@ -367,21 +367,21 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the LookoutTower */
+        /* Populate the lookout tower */
         Worker Scout = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
         assertEquals(Scout.getHome(), lookoutTower0);
         assertEquals(lookoutTower0.getWorker(), Scout);
 
-        /* Verify that the LookoutTower doesn't produce anything */
+        /* Verify that the lookout tower doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.getFlag().getStackedCargo().isEmpty());
             assertNull(Scout.getCargo());
@@ -402,14 +402,14 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point3 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point3);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the LookoutTower doesn't produce anything */
+        /* Verify that the lookout tower doesn't produce anything */
         for (int i = 0; i < 500; i++) {
             assertTrue(lookoutTower0.getFlag().getStackedCargo().isEmpty());
             map.stepTime();
@@ -429,17 +429,17 @@ public class TestLookoutTower {
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -472,20 +472,20 @@ public class TestLookoutTower {
         Point point25 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(8, 8);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         map.placeAutoSelectedRoad(player0, lookoutTower0.getFlag(), headquarter0.getFlag());
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -522,27 +522,27 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(8, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Connect the LookoutTower and the headquarter */
+        /* Connect the lookout tower and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the LookoutTower */
+        /* Finish the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Assign a worker to the LookoutTower */
+        /* Assign a worker to the lookout tower */
         Scout Scout = new Scout(player0, map);
 
         Utils.occupyBuilding(Scout, lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
 
-        /* Verify that it's not possible to stop production in the LookoutTower */
+        /* Verify that it's not possible to stop production in the lookout tower */
         try {
             lookoutTower0.stopProduction();
 
@@ -565,27 +565,27 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(8, 6);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Connect the LookoutTower and the headquarter */
+        /* Connect the lookout tower and the headquarter */
         Point point2 = new Point(6, 4);
         Point point3 = new Point(8, 4);
         Point point4 = new Point(9, 5);
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
-        /* Finish the LookoutTower */
+        /* Finish the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Assign a worker to the LookoutTower */
+        /* Assign a worker to the lookout tower */
         Scout Scout = new Scout(player0, map);
 
         Utils.occupyBuilding(Scout, lookoutTower0);
 
         assertTrue(Scout.isInsideBuilding());
 
-        /* Verify that production cannot be resumed in the LookoutTower */
+        /* Verify that production cannot be resumed in the lookout tower */
         try {
             lookoutTower0.resumeProduction();
 
@@ -608,14 +608,14 @@ public class TestLookoutTower {
         Point point0 = new Point(15, 15);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(20, 14);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Connect the LookoutTower with the headquarter */
+        /* Connect the lookout tower with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), lookoutTower0.getFlag());
 
         /* Wait for Scout to get assigned and leave the headquarter */
@@ -669,14 +669,14 @@ public class TestLookoutTower {
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
 
-        /* Place LookoutTower close to the new border */
+        /* Place lookout tower close to the new border */
         Point point4 = new Point(28, 18);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point4);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Scout worker = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
         /* Verify that the worker goes back to its own storage when the fortress is torn down */
@@ -702,7 +702,7 @@ public class TestLookoutTower {
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -764,7 +764,7 @@ public class TestLookoutTower {
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -829,7 +829,7 @@ public class TestLookoutTower {
         Point point1 = new Point(10, 4);
         Flag flag0 = map.placeFlag(player0, point1);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point2 = new Point(14, 4);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point2.upLeft());
 
@@ -861,7 +861,7 @@ public class TestLookoutTower {
         /* See that the Scout has started walking */
         assertFalse(Scout.isExactlyAtPoint());
 
-        /* Tear down the LookoutTower */
+        /* Tear down the lookout tower */
         lookoutTower0.tearDown();
 
         /* Verify that the Scout continues walking to the next flag */
@@ -886,24 +886,24 @@ public class TestLookoutTower {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the LookoutTower */
+        /* Place a second storage closer to the lookout tower */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -936,17 +936,17 @@ public class TestLookoutTower {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the LookoutTower */
+        /* Place a second storage closer to the lookout tower */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
@@ -956,7 +956,7 @@ public class TestLookoutTower {
         /* Destroy the storage */
         storehouse0.tearDown();
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -989,17 +989,17 @@ public class TestLookoutTower {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the LookoutTower */
+        /* Place a second storage closer to the lookout tower */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
@@ -1012,7 +1012,7 @@ public class TestLookoutTower {
         /* Wait for the storage to burn down */
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -1045,21 +1045,21 @@ public class TestLookoutTower {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Placing LookoutTower */
+        /* Placing lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Occupy the LookoutTower */
+        /* Occupy the lookout tower */
         Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Place a second storage closer to the LookoutTower */
+        /* Place a second storage closer to the lookout tower */
         Point point2 = new Point(13, 13);
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
-        /* Destroy the LookoutTower */
+        /* Destroy the lookout tower */
         Worker Scout = lookoutTower0.getWorker();
 
         assertTrue(Scout.isInsideBuilding());
@@ -1092,14 +1092,14 @@ public class TestLookoutTower {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point26 = new Point(17, 17);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point26);
 
-        /* Place road to connect the headquarter and the LookoutTower */
+        /* Place road to connect the headquarter and the lookout tower */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), lookoutTower0.getFlag());
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         /* Wait for a worker to start walking to the building */
@@ -1134,14 +1134,14 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the LookoutTower */
+        /* Populate the lookout tower */
         Worker armorer0 = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
         assertTrue(armorer0.isInsideBuilding());
@@ -1170,14 +1170,14 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Verify that the unoccupied LookoutTower is unproductive */
+        /* Verify that the unoccupied lookout tower is unproductive */
         for (int i = 0; i < 1000; i++) {
             assertEquals(lookoutTower0.getProductivity(), 0);
 
@@ -1198,17 +1198,17 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(7, 9);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Finish construction of the LookoutTower */
+        /* Finish construction of the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
-        /* Populate the LookoutTower */
+        /* Populate the lookout tower */
         Worker Scout0 = Utils.occupyBuilding(new Scout(player0, map), lookoutTower0);
 
-        /* Verify that the LookoutTower can't produce */
+        /* Verify that the lookout tower can't produce */
         assertFalse(lookoutTower0.canProduce());
     }
 
@@ -1225,11 +1225,11 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Construct the LookoutTower */
+        /* Construct the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         /* Verify that the reported output is correct */
@@ -1249,7 +1249,7 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
@@ -1281,11 +1281,11 @@ public class TestLookoutTower {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place LookoutTower */
+        /* Place lookout tower */
         Point point1 = new Point(6, 12);
         LookoutTower lookoutTower0 = map.placeBuilding(new LookoutTower(player0), point1);
 
-        /* Construct the LookoutTower */
+        /* Construct the lookout tower */
         Utils.constructHouse(lookoutTower0);
 
         /* Verify that the reported needed construction material is correct */

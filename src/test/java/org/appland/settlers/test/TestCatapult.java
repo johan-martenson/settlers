@@ -1216,12 +1216,12 @@ public class TestCatapult {
 
         assertEquals(catapultWorker.getPosition(), flag0.getPosition());
 
-        /* Verify that the catapultWorker continues to the final flag */
+        /* Verify that the catapult worker continues to the final flag */
         assertEquals(catapultWorker.getTarget(), catapult0.getPosition());
 
         Utils.fastForwardUntilWorkerReachesPoint(map, catapultWorker, catapult0.getFlag().getPosition());
 
-        /* Verify that the catapultWorker goes out to catapultWorker instead of going directly back */
+        /* Verify that the catapult worker goes out to catapult worker instead of going directly back */
         assertNotEquals(catapultWorker.getTarget(), headquarter0.getPosition());
     }
 

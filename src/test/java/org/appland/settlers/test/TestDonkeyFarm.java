@@ -500,7 +500,7 @@ public class TestDonkeyFarm {
 
         map.stepTime();
 
-        /* DonkeyBreeder is walking back to farm without carrying a cargo */
+        /* Donkey breeder is walking back to farm without carrying a cargo */
         assertFalse(donkeyBreeder.isFeeding());
         assertEquals(donkeyBreeder.getTarget(), donkeyFarm.getPosition());
         assertNull(donkeyBreeder.getCargo());
@@ -1872,7 +1872,7 @@ public class TestDonkeyFarm {
         Point point25 = new Point(9, 9);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point25);
 
-        /* Place donkeyFarm */
+        /* Place donkey farm */
         Point point26 = new Point(17, 17);
         Building donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point26);
 
@@ -2217,7 +2217,7 @@ public class TestDonkeyFarm {
         Point point0 = new Point(5, 5);
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
-        /* Place DonkeyFarm */
+        /* Place donkey farm */
         Point point1 = new Point(7, 9);
         DonkeyFarm donkeyFarm0 = map.placeBuilding(new DonkeyFarm(player0), point1);
 

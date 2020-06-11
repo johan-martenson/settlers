@@ -1461,7 +1461,7 @@ public class TestGoldMine {
         /* See that the miner has started walking */
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Tear down the goldMine */
+        /* Tear down the gold mine */
         goldMine0.tearDown();
 
         /* Verify that the miner continues walking to the next flag */
@@ -1624,7 +1624,7 @@ public class TestGoldMine {
         /* Wait for the storage to burn down */
         Utils.waitForBuildingToBurnDown(storehouse0);
 
-        /* Destroy the goldMine */
+        /* Destroy the gold mine */
         Worker miner = goldMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1713,7 +1713,7 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place goldMine */
+        /* Place gold mine */
         Building goldMine0 = map.placeBuilding(new GoldMine(player0), point1);
 
         /* Place road to connect the headquarter and the gold mine */
@@ -2077,17 +2077,17 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place goldMine */
+        /* Place gold mine */
         Building goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the goldMine with the headquarter */
+        /* Connect the gold mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the goldMine to get constructed and assigned a worker */
+        /* Wait for the gold mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(goldMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Give material to the goldMine */
+        /* Give material to the gold mine */
         Utils.putCargoToBuilding(goldMine, BREAD);
         Utils.putCargoToBuilding(goldMine, BREAD);
         Utils.putCargoToBuilding(goldMine, FISH);
@@ -2099,7 +2099,7 @@ public class TestGoldMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the goldMine waits for the flag to get empty and produces nothing */
+        /* Verify that the gold mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());
@@ -2107,7 +2107,7 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Reconnect the goldMine with the headquarter */
+        /* Reconnect the gold mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2150,17 +2150,17 @@ public class TestGoldMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGoldAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place goldMine */
+        /* Place gold mine */
         GoldMine goldMine = map.placeBuilding(new GoldMine(player0), point1);
 
-        /* Connect the goldMine with the headquarter */
+        /* Connect the gold mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the goldMine to get constructed and assigned a worker */
+        /* Wait for the gold mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(goldMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(goldMine);
 
-        /* Give material to the goldMine */
+        /* Give material to the gold mine */
         Utils.putCargoToBuilding(goldMine, BREAD);
         Utils.putCargoToBuilding(goldMine, BREAD);
         Utils.putCargoToBuilding(goldMine, FISH);
@@ -2172,7 +2172,7 @@ public class TestGoldMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The goldMine waits for the flag to get empty and produces nothing */
+        /* The gold mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());
@@ -2180,7 +2180,7 @@ public class TestGoldMine {
             map.stepTime();
         }
 
-        /* Reconnect the goldMine with the headquarter */
+        /* Reconnect the gold mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, goldMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2213,7 +2213,7 @@ public class TestGoldMine {
 
         assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the goldMine doesn't produce anything because the flag is full */
+        /* Verify that the gold mine doesn't produce anything because the flag is full */
         for (int i = 0; i < 400; i++) {
             assertEquals(goldMine.getFlag().getStackedCargo().size(), 8);
             assertNull(goldMine.getWorker().getCargo());

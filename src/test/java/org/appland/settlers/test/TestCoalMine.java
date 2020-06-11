@@ -1759,7 +1759,7 @@ public class TestCoalMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place coalMine */
+        /* Place coal mine */
         Building coalMine0 = map.placeBuilding(new CoalMine(player0), point1);
 
         /* Place road to connect the headquarter and the coal mine */
@@ -2125,17 +2125,17 @@ public class TestCoalMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place coalMine */
+        /* Place coal mine */
         Building coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
-        /* Connect the coalMine with the headquarter */
+        /* Connect the coal mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the coalMine to get constructed and assigned a worker */
+        /* Wait for the coal mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(coalMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
 
-        /* Give material to the coalMine */
+        /* Give material to the coal mine */
         Utils.putCargoToBuilding(coalMine, BREAD);
         Utils.putCargoToBuilding(coalMine, BREAD);
         Utils.putCargoToBuilding(coalMine, FISH);
@@ -2147,7 +2147,7 @@ public class TestCoalMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the coalMine waits for the flag to get empty and produces nothing */
+        /* Verify that the coal mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(coalMine.getFlag().getStackedCargo().size(), 8);
             assertNull(coalMine.getWorker().getCargo());
@@ -2155,7 +2155,7 @@ public class TestCoalMine {
             map.stepTime();
         }
 
-        /* Reconnect the coalMine with the headquarter */
+        /* Reconnect the coal mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2198,17 +2198,17 @@ public class TestCoalMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putCoalAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place coalMine */
+        /* Place coal mine */
         CoalMine coalMine = map.placeBuilding(new CoalMine(player0), point1);
 
-        /* Connect the coalMine with the headquarter */
+        /* Connect the coal mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the coalMine to get constructed and assigned a worker */
+        /* Wait for the coal mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(coalMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(coalMine);
 
-        /* Give material to the coalMine */
+        /* Give material to the coal mine */
         Utils.putCargoToBuilding(coalMine, BREAD);
         Utils.putCargoToBuilding(coalMine, BREAD);
         Utils.putCargoToBuilding(coalMine, FISH);
@@ -2220,7 +2220,7 @@ public class TestCoalMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The coalMine waits for the flag to get empty and produces nothing */
+        /* The coal mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(coalMine.getFlag().getStackedCargo().size(), 8);
             assertNull(coalMine.getWorker().getCargo());
@@ -2228,7 +2228,7 @@ public class TestCoalMine {
             map.stepTime();
         }
 
-        /* Reconnect the coalMine with the headquarter */
+        /* Reconnect the coal mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, coalMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2261,7 +2261,7 @@ public class TestCoalMine {
 
         assertEquals(coalMine.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the coalMine doesn't produce anything because the flag is full */
+        /* Verify that the coal mine doesn't produce anything because the flag is full */
         for (int i = 0; i < 400; i++) {
             assertEquals(coalMine.getFlag().getStackedCargo().size(), 8);
             assertNull(coalMine.getWorker().getCargo());

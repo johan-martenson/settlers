@@ -1461,7 +1461,7 @@ public class TestGraniteMine {
         /* See that the miner has started walking */
         assertFalse(miner.isExactlyAtPoint());
 
-        /* Tear down the graniteMine */
+        /* Tear down the granite mine */
         graniteMine0.tearDown();
 
         /* Verify that the miner continues walking to the next flag */
@@ -1564,7 +1564,7 @@ public class TestGraniteMine {
         /* Destroy the storage */
         storehouse0.tearDown();
 
-        /* Destroy the graniteMine */
+        /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
 
         assertTrue(miner.isInsideBuilding());
@@ -1713,7 +1713,7 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place graniteMine */
+        /* Place granite mine */
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Place road to connect the headquarter and the granite mine */
@@ -2078,17 +2078,17 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place graniteMine */
+        /* Place granite mine */
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
-        /* Connect the graniteMine with the headquarter */
+        /* Connect the granite mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the graniteMine to get constructed and assigned a worker */
+        /* Wait for the granite mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(graniteMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
 
-        /* Give material to the graniteMine */
+        /* Give material to the granite mine */
         Utils.putCargoToBuilding(graniteMine, BREAD);
         Utils.putCargoToBuilding(graniteMine, BREAD);
         Utils.putCargoToBuilding(graniteMine, FISH);
@@ -2100,7 +2100,7 @@ public class TestGraniteMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* Verify that the graniteMine waits for the flag to get empty and produces nothing */
+        /* Verify that the granite mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(graniteMine.getFlag().getStackedCargo().size(), 8);
             assertNull(graniteMine.getWorker().getCargo());
@@ -2108,7 +2108,7 @@ public class TestGraniteMine {
             map.stepTime();
         }
 
-        /* Reconnect the graniteMine with the headquarter */
+        /* Reconnect the granite mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2151,17 +2151,17 @@ public class TestGraniteMine {
         Utils.surroundPointWithMountain(point1, map);
         Utils.putGraniteAtSurroundingTiles(point1, LARGE, map);
 
-        /* Place graniteMine */
+        /* Place granite mine */
         GraniteMine graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
-        /* Connect the graniteMine with the headquarter */
+        /* Connect the granite mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
-        /* Wait for the graniteMine to get constructed and assigned a worker */
+        /* Wait for the granite mine to get constructed and assigned a worker */
         Utils.waitForBuildingToBeConstructed(graniteMine);
         Utils.waitForNonMilitaryBuildingToGetPopulated(graniteMine);
 
-        /* Give material to the graniteMine */
+        /* Give material to the granite mine */
         Utils.putCargoToBuilding(graniteMine, BREAD);
         Utils.putCargoToBuilding(graniteMine, BREAD);
         Utils.putCargoToBuilding(graniteMine, FISH);
@@ -2173,7 +2173,7 @@ public class TestGraniteMine {
         /* Remove the road */
         map.removeRoad(road0);
 
-        /* The graniteMine waits for the flag to get empty and produces nothing */
+        /* The granite mine waits for the flag to get empty and produces nothing */
         for (int i = 0; i < 300; i++) {
             assertEquals(graniteMine.getFlag().getStackedCargo().size(), 8);
             assertNull(graniteMine.getWorker().getCargo());
@@ -2181,7 +2181,7 @@ public class TestGraniteMine {
             map.stepTime();
         }
 
-        /* Reconnect the graniteMine with the headquarter */
+        /* Reconnect the granite mine with the headquarter */
         Road road1 = map.placeAutoSelectedRoad(player0, graniteMine.getFlag(), headquarter.getFlag());
 
         /* Wait for the courier to pick up one of the cargos */
@@ -2214,7 +2214,7 @@ public class TestGraniteMine {
 
         assertEquals(graniteMine.getFlag().getStackedCargo().size(), 8);
 
-        /* Verify that the graniteMine doesn't produce anything because the flag is full */
+        /* Verify that the granite mine doesn't produce anything because the flag is full */
         for (int i = 0; i < 400; i++) {
             assertEquals(graniteMine.getFlag().getStackedCargo().size(), 8);
             assertNull(graniteMine.getWorker().getCargo());

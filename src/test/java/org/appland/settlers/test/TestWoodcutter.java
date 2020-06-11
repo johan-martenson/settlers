@@ -1967,7 +1967,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, storehouse0.getPosition());
 
-        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarter */
         assertEquals(storehouse0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2020,7 +2020,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2076,7 +2076,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
@@ -2123,7 +2123,7 @@ public class TestWoodcutter {
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker, headquarter0.getPosition());
 
-        /* Verify that the woodcutterWorker is stored correctly in the headquarter */
+        /* Verify that the woodcutter worker is stored correctly in the headquarter */
         assertEquals(headquarter0.getAmount(WOODCUTTER_WORKER), amount + 1);
     }
 
