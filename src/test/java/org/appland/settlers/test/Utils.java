@@ -372,7 +372,7 @@ public class Utils {
                 break;
             }
 
-            building.stepTime();
+            map.stepTime();
         }
 
         assertTrue(building.isReady());
@@ -1555,6 +1555,10 @@ public class Utils {
         }
 
         System.out.println(pointMinYLeft + " " + pointMinY + " " + pointMinYRight);
+    }
+
+    public static void waitForCouriersToBeIdle(GameMap map, Courier... couriers) throws Exception {
+        waitForCouriersToBeIdle(map, Arrays.asList(couriers));
     }
 
     public static void waitForCouriersToBeIdle(GameMap map, Collection<Courier> couriers) throws Exception {

@@ -1527,9 +1527,12 @@ public class TestHunterHut {
 
         /* Verify that the productivity is 0% when the hunter hut doesn't produce anything */
         for (int i = 0; i < 500; i++) {
+            map.getWildAnimals().clear();
+
             assertTrue(hunterHut0.getFlag().getStackedCargo().isEmpty());
             assertNull(hunter.getCargo());
             assertEquals(hunterHut0.getProductivity(), 0);
+
             map.stepTime();
         }
     }
@@ -1548,7 +1551,7 @@ public class TestHunterHut {
         Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
 
         /* Place hunter hut */
-        Point point1 = new Point(7, 9);
+        Point point1 = new Point(5, 9);
         Building hunterHut0 = map.placeBuilding(new HunterHut(player0), point1);
 
         /* Finish construction of the hunter hut */

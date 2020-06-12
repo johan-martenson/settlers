@@ -214,23 +214,9 @@ public class TestSawmill {
         assertTrue(sawmill.needsWorker());
 
         /* Verify that a sawmill worker leaves the headquarter */
-        assertEquals(map.getWorkers().size(), 1);
-
-        Utils.fastForward(3, map);
-
-        assertEquals(map.getWorkers().size(), 3);
-
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), SawmillWorker.class);
+        Worker sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(SawmillWorker.class, player0);
 
         /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sawmillWorker0 = null;
-
-        for (Worker worker : map.getWorkers()) {
-            if (worker instanceof SawmillWorker) {
-                sawmillWorker0 = (SawmillWorker)worker;
-            }
-        }
-
         assertNotNull(sawmillWorker0);
         assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
 
@@ -271,23 +257,9 @@ public class TestSawmill {
         assertTrue(sawmill.needsWorker());
 
         /* Verify that a sawmill worker leaves the headquarter */
-        assertEquals(map.getWorkers().size(), 1);
-
-        Utils.fastForward(3, map);
-
-        assertEquals(map.getWorkers().size(), 3);
-
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), SawmillWorker.class);
+        Worker sawmillWorker0 = Utils.waitForWorkerOutsideBuilding(SawmillWorker.class, player0);
 
         /* Let the sawmill worker reach the sawmill */
-        SawmillWorker sawmillWorker0 = null;
-
-        for (Worker worker : map.getWorkers()) {
-            if (worker instanceof SawmillWorker) {
-                sawmillWorker0 = (SawmillWorker)worker;
-            }
-        }
-
         assertNotNull(sawmillWorker0);
         assertEquals(sawmillWorker0.getTarget(), sawmill.getPosition());
 

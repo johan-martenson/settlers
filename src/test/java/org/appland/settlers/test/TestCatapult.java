@@ -257,23 +257,11 @@ public class TestCatapult {
         assertTrue(catapult.needsWorker());
 
         /* Verify that a catapult worker leaves the headquarter */
-        assertEquals(map.getWorkers().size(), 1);
+        Worker catapultWorker = Utils.waitForWorkerOutsideBuilding(CatapultWorker.class, player0);
 
-        Utils.fastForward(3, map);
-
-        assertEquals(map.getWorkers().size(), 3);
-
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), CatapultWorker.class);
+        assertTrue(map.getWorkers().contains(catapultWorker));
 
         /* Let the catapult worker reach the catapult */
-        CatapultWorker catapultWorker = null;
-
-        for (Worker worker : map.getWorkers()) {
-            if (worker instanceof CatapultWorker) {
-                catapultWorker = (CatapultWorker)worker;
-            }
-        }
-
         assertNotNull(catapultWorker);
         assertEquals(catapultWorker.getTarget(), catapult.getPosition());
 

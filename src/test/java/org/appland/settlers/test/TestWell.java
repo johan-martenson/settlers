@@ -1169,6 +1169,9 @@ public class TestWell {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
+        /* Wait for the well worker to be back inside the well */
+        Utils.waitForWorkerToBeInside(well0.getWorker(), map);
+
         /* Destroy the well */
         Worker wellWorker = well0.getWorker();
 
@@ -1221,6 +1224,9 @@ public class TestWell {
 
         /* Destroy the storage */
         storehouse0.tearDown();
+
+        /* Wait for the well worker to be back inside the well */
+        Utils.waitForWorkerToBeInside(well0.getWorker(), map);
 
         /* Destroy the well */
         Worker wellWorker = well0.getWorker();

@@ -1405,11 +1405,13 @@ public class TestBarracks {
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
 
-	assertFalse(barracks0.needsMilitaryManning());
-	assertFalse(barracks0.needsMaterial(PRIVATE));
+        assertFalse(barracks0.needsMilitaryManning());
+        assertFalse(barracks0.needsMaterial(PRIVATE));
 
         /* Place the courier on the road */
-        Courier courier0 = Utils.occupyRoad(road0, map);
+        assertNotNull(road0.getCourier());
+
+        Courier courier0 = road0.getCourier();
 
         /* Verify that the barracks doesn't need stone before the upgrade */
         assertFalse(barracks0.needsMaterial(STONE));

@@ -1561,6 +1561,9 @@ public class TestForesterHut {
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
 
+        /* Wait for the forester to be inside the house */
+        Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
+
         /* Destroy the forester hut */
         Worker forester = foresterHut0.getWorker();
 
@@ -1610,6 +1613,9 @@ public class TestForesterHut {
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
+
+        /* Wait for the forester to be inside the house */
+        Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
 
         /* Destroy the storage */
         storehouse0.tearDown();
@@ -1663,6 +1669,9 @@ public class TestForesterHut {
 
         /* Finish construction of the storage */
         Utils.constructHouse(storehouse0);
+
+        /* Wait for the forester to be inside the house */
+        Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
 
         /* Destroy the storage */
         storehouse0.tearDown();

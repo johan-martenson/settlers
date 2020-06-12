@@ -2015,6 +2015,8 @@ public class TestFarm {
         /* Destroy the farm */
         Worker farmer = farm0.getWorker();
 
+        Utils.waitForWorkerToBeInside(farmer, map);
+
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());
 
@@ -2067,6 +2069,8 @@ public class TestFarm {
 
         /* Destroy the farm */
         Worker farmer = farm0.getWorker();
+
+        Utils.waitForWorkerToBeInside(farmer, map);
 
         assertTrue(farmer.isInsideBuilding());
         assertEquals(farmer.getPosition(), farm0.getPosition());

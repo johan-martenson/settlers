@@ -413,9 +413,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.DESERT, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -425,6 +422,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -1160,9 +1160,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.GRASS, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -1172,6 +1169,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -1476,9 +1476,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SAVANNAH, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -1489,9 +1486,10 @@ public class TestPlacementInTerrain {
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
-        /* Verify that the worker can reach the animal */
-        assertTrue(animal0.isExactlyAtPoint());
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
+        /* Verify that the worker can reach the animal */
         boolean meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
@@ -1813,9 +1811,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.SHALLOW_WATER, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -1825,6 +1820,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -2150,9 +2148,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.STEPPE, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -2163,9 +2158,10 @@ public class TestPlacementInTerrain {
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
-        /* Verify that the worker can reach the animal */
-        assertTrue(animal0.isExactlyAtPoint());
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
+        /* Verify that the worker can reach the animal */
         boolean meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
@@ -2487,9 +2483,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN_MEADOW, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -2499,6 +2492,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -2823,9 +2819,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.BUILDABLE_MOUNTAIN, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -2836,9 +2829,10 @@ public class TestPlacementInTerrain {
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
 
-        /* Verify that the worker can reach the animal */
-        assertTrue(animal0.isExactlyAtPoint());
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
+        /* Verify that the worker can reach the animal */
         boolean meet = false;
         for (int i = 0; i < 1000; i++) {
             hunter0.getWorker().stepTime();
@@ -4863,9 +4857,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MAGENTA, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -4875,6 +4866,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());
@@ -5285,9 +5279,6 @@ public class TestPlacementInTerrain {
         Point point2 = new Point(4, 6);
         Utils.surroundPointWithVegetation(point2, Tile.Vegetation.MOUNTAIN, map);
 
-        /* Place wild animal */
-        WildAnimal animal0 = map.placeWildAnimal(point2);
-
         /* Place hunter hut */
         Point point1 = new Point(8, 6);
         Building hunter0 = map.placeBuilding(new HunterHut(player0), point1);
@@ -5297,6 +5288,9 @@ public class TestPlacementInTerrain {
 
         /* Occupy the hunter hut */
         Hunter hunter = Utils.occupyBuilding(new Hunter(player0, map), hunter0);
+
+        /* Place wild animal */
+        WildAnimal animal0 = map.placeWildAnimal(point2);
 
         /* Verify that the worker can reach the animal */
         assertTrue(animal0.isExactlyAtPoint());

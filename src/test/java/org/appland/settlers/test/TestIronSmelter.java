@@ -216,23 +216,9 @@ public class TestIronSmelter {
         assertTrue(ironSmelter.needsWorker());
 
         /* Verify that a iron smelter worker leaves the headquarter */
-        assertEquals(map.getWorkers().size(), 1);
-
-        Utils.fastForward(3, map);
-
-        assertEquals(map.getWorkers().size(), 3);
-
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
+        IronFounder ironFounder0 = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
 
         /* Let the iron smelter worker reach the iron smelter */
-        IronFounder ironFounder0 = null;
-
-        for (Worker worker : map.getWorkers()) {
-            if (worker instanceof IronFounder) {
-                ironFounder0 = (IronFounder)worker;
-            }
-        }
-
         assertNotNull(ironFounder0);
         assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 
@@ -273,23 +259,9 @@ public class TestIronSmelter {
         assertTrue(ironSmelter.needsWorker());
 
         /* Verify that a iron smelter worker leaves the headquarter */
-        assertEquals(map.getWorkers().size(), 1);
-
-        Utils.fastForward(3, map);
-
-        assertEquals(map.getWorkers().size(), 3);
-
-        Utils.verifyListContainsWorkerOfType(map.getWorkers(), IronFounder.class);
+        IronFounder ironFounder0 = Utils.waitForWorkerOutsideBuilding(IronFounder.class, player0);
 
         /* Let the iron smelter worker reach the iron smelter */
-        IronFounder ironFounder0 = null;
-
-        for (Worker worker : map.getWorkers()) {
-            if (worker instanceof IronFounder) {
-                ironFounder0 = (IronFounder)worker;
-            }
-        }
-
         assertNotNull(ironFounder0);
         assertEquals(ironFounder0.getTarget(), ironSmelter.getPosition());
 

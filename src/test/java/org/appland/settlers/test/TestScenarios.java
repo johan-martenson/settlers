@@ -18,7 +18,6 @@ import org.appland.settlers.model.Sawmill;
 import org.appland.settlers.model.SawmillWorker;
 import org.appland.settlers.model.Size;
 import org.appland.settlers.model.Woodcutter;
-import org.appland.settlers.model.WoodcutterWorker;
 import org.appland.settlers.model.Worker;
 import org.junit.Test;
 
@@ -75,17 +74,17 @@ public class TestScenarios {
         Road qryToHqRoad = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), quarry0.getFlag());
 
         /* Assign workers to the roads */
-        Courier wr1 = new Courier(player0, map);
-        Courier wr2 = new Courier(player0, map);
-        Courier wr3 = new Courier(player0, map);
+        Courier courier0 = new Courier(player0, map);
+        Courier courier1 = new Courier(player0, map);
+        Courier courier2 = new Courier(player0, map);
 
-        map.placeWorker(wr1, woodcutter0.getFlag());
-        map.placeWorker(wr2, sawmill0.getFlag());
-        map.placeWorker(wr3, quarry0.getFlag());
+        map.placeWorker(courier0, woodcutter0.getFlag());
+        map.placeWorker(courier1, sawmill0.getFlag());
+        map.placeWorker(courier2, quarry0.getFlag());
 
-        wr1.assignToRoad(wcToHqRoad);
-        wr2.assignToRoad(smToHqRoad);
-        wr3.assignToRoad(qryToHqRoad);
+        courier0.assignToRoad(wcToHqRoad);
+        courier1.assignToRoad(smToHqRoad);
+        courier2.assignToRoad(qryToHqRoad);
 
         /* Move forward in time until the small buildings are done */
         Utils.constructHouse(woodcutter0);
@@ -105,15 +104,13 @@ public class TestScenarios {
         assertEquals(headquarter0.getAmount(STONE), 10);
 
         /* Assign worker to the woodcutter */
-        WoodcutterWorker woodcutterWorker0 = new WoodcutterWorker(player0, map);
-        map.placeWorker(woodcutterWorker0, woodcutter0);
-        Utils.occupyBuilding(woodcutterWorker0, woodcutter0);
+        assertNotNull(woodcutter0.getWorker());
 
         /* Assign worker to the sawmill */
         Utils.occupyBuilding(new SawmillWorker(player0, map), sawmill0);
 
         /* Let the couriers reach their targeted roads */
-        Utils.fastForwardUntilWorkersReachTarget(map, wr1, wr2, wr3);
+        Utils.waitForCouriersToBeIdle(map, courier0, courier1, courier2);
 
         /*   --   START TEST   --   */
 
