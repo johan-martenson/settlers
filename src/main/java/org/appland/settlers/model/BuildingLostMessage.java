@@ -15,4 +15,9 @@ public class BuildingLostMessage implements Message {
     public Building getBuilding() {
         return building;
     }
+
+    @Override
+    public String toString() {
+        return "Message: " + building.getClass().getSimpleName() + " " + building.getPosition() + " lost to enemy";
+    }
 }

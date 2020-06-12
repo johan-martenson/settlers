@@ -21,4 +21,9 @@ public class GeologistFindMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.GEOLOGIST_FIND;
     }
+
+    @Override
+    public String toString() {
+        return "Message: Geologist found " + material.name().toLowerCase() + " at " + point;
+    }
 }

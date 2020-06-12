@@ -8,4 +8,9 @@ public class TreeConservationProgramActivatedMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.TREE_CONSERVATION_PROGRAM_ACTIVATED;
     }
+
+    @Override
+    public String toString() {
+        return "Message: Tree conservation program is activated";
+    }
 }

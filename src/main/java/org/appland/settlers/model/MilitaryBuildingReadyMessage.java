@@ -15,4 +15,9 @@ public class MilitaryBuildingReadyMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.MILITARY_BUILDING_READY;
     }
+
+    @Override
+    public String toString() {
+        return "Message: " + building.getClass().getSimpleName() + " " + building.getPosition() + " is ready";
+    }
 }

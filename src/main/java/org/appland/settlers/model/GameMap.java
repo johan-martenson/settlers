@@ -87,6 +87,7 @@ public class GameMap {
     private final Set<Crop> newCrops;
     private final Set<Crop> removedCrops;
     private final Set<Road> promotedRoads;
+    private boolean winnerReported;
 
     PointInformation whatIsAtPoint(Point point) {
         MapPoint mp = getMapPoint(point);
@@ -234,6 +235,8 @@ public class GameMap {
         newCrops = new HashSet<>();
         removedCrops = new HashSet<>();
         promotedRoads = new HashSet<>();
+
+        winnerReported = false;
     }
 
     void reportBuildingConstructed(Building building) {
@@ -480,6 +483,14 @@ public class GameMap {
         /* There can only be a winner if there originally were more than one player */
         if (playersWithBuildings == 1 && players.size() > 1) {
             winner = playerWithBuildings;
+
+            if (!winnerReported) {
+                for (Player player : players) {
+                    player.reportWinner(winner);
+                }
+
+                winnerReported = true;
+            }
         }
 
         /* Collect statistics */
@@ -663,6 +674,10 @@ public class GameMap {
         newCrops.clear();
         removedCrops.clear();
         promotedRoads.clear();
+
+        if (winner != null) {
+            winnerReported = true;
+        }
 
         /* Step the time keeper */
         time = time + 1;

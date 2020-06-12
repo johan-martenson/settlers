@@ -15,8 +15,6 @@ LARGER CHANGES
 
 * Correct the production times for buildings
 
-* Add game message and monitoring for when a player wins or loses
-
 * Change so that military buildings cannot be placed too close together / only close to the border
 
 * Add small boats
@@ -26,6 +24,7 @@ LARGER CHANGES
 * Make it possible to configure allocation of planks
 
 * Correct range for workers
+
 
 SMALLER CHANGES
 ===============
@@ -644,4 +643,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 * Correct the possible military ranks - DONE
 
 * Make the tree conservation program configurable - DONE
+
+* Add game message and monitoring for when a player wins or loses - DONE
 

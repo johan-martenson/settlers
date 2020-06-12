@@ -15,4 +15,9 @@ public class MilitaryBuildingCausedLostLandMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND;
     }
+
+    @Override
+    public String toString() {
+        return "Message: " + building.getClass().getSimpleName() + " " + building.getPosition() + " has caused lost land";
+    }
 }

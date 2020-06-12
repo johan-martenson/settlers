@@ -15,4 +15,9 @@ public class StoreHouseIsReadyMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.STORE_HOUSE_IS_READY;
     }
+
+    @Override
+    public String toString() {
+        return "Message: Storehouse " + building.getPosition() + " is ready";
+    }
 }

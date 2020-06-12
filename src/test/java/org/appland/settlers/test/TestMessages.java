@@ -3,16 +3,20 @@ package org.appland.settlers.test;
 import org.appland.settlers.model.Armory;
 import org.appland.settlers.model.Bakery;
 import org.appland.settlers.model.Barracks;
+import org.appland.settlers.model.BombardedByCatapultMessage;
 import org.appland.settlers.model.Brewery;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.BuildingCapturedMessage;
 import org.appland.settlers.model.BuildingLostMessage;
 import org.appland.settlers.model.Cargo;
+import org.appland.settlers.model.Catapult;
+import org.appland.settlers.model.CatapultWorker;
 import org.appland.settlers.model.CoalMine;
 import org.appland.settlers.model.Fisherman;
 import org.appland.settlers.model.Fishery;
 import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
+import org.appland.settlers.model.GameEndedMessage;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Geologist;
 import org.appland.settlers.model.GeologistFindMessage;
@@ -26,6 +30,7 @@ import org.appland.settlers.model.Miner;
 import org.appland.settlers.model.NoMoreResourcesMessage;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.appland.settlers.model.Projectile;
 import org.appland.settlers.model.Quarry;
 import org.appland.settlers.model.Road;
 import org.appland.settlers.model.Sawmill;
@@ -49,13 +54,17 @@ import static java.awt.Color.GREEN;
 import static org.appland.settlers.model.Material.BREAD;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.FISH;
+import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.MEAT;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.SERGEANT;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Message.MessageType.BOMBARDED_BY_CATAPULT;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_CAPTURED;
 import static org.appland.settlers.model.Message.MessageType.BUILDING_LOST;
+import static org.appland.settlers.model.Message.MessageType.GAME_ENDED;
 import static org.appland.settlers.model.Message.MessageType.GEOLOGIST_FIND;
 import static org.appland.settlers.model.Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND;
 import static org.appland.settlers.model.Message.MessageType.NO_MORE_RESOURCES;
@@ -81,7 +90,7 @@ public class TestMessages {
     /**
      * TODO:
      *  - We are being bombarded by a catapult
-     *  - Game ended, win/lose/draw
+     *  - Game ended with draw
      *
      */
 
@@ -1275,5 +1284,452 @@ public class TestMessages {
                 assertNotEquals(newMessage.getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
             }
         }
+    }
+
+    @Test
+    public void testMessageSentWhenPlayerWins() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(39, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(19, 5);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Finish construction */
+        Utils.constructHouse(fortress0);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
+
+        /* Empty all soldiers from the second player's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
+
+        /* Order an attack */
+        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+
+        player0.attack(headquarter1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
+
+        /* Verify that the headquarter is destroyed and the first player won the game */
+        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), headquarter1.getPosition());
+        assertNull(map.getWinner());
+
+        for (Message message : player0.getMessages()) {
+            assertNotEquals(message.getMessageType(), GAME_ENDED);
+        }
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+
+        map.stepTime();
+
+        assertEquals(map.getWinner(), player0);
+        assertEquals(player1.getBuildings().size(), 1);
+        assertTrue(player1.getBuildings().get(0).isBurningDown());
+        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+
+        GameEndedMessage message = (GameEndedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+
+        assertEquals(message.getWinner(), player0);
+    }
+
+    @Test
+    public void testOnlyOneMessageSentWhenPlayerWins() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(39, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(19, 5);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Finish construction */
+        Utils.constructHouse(fortress0);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
+
+        /* Empty all soldiers from the second player's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
+
+        /* Order an attack */
+        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+
+        player0.attack(headquarter1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
+
+        /* Verify that the headquarter is destroyed and the first player won the game */
+        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), headquarter1.getPosition());
+        assertNull(map.getWinner());
+
+        for (Message message : player0.getMessages()) {
+            assertNotEquals(message.getMessageType(), GAME_ENDED);
+        }
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+
+        map.stepTime();
+
+        assertEquals(map.getWinner(), player0);
+        assertEquals(player1.getBuildings().size(), 1);
+        assertTrue(player1.getBuildings().get(0).isBurningDown());
+        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+
+        GameEndedMessage message = (GameEndedMessage) player0.getMessages().get(player0.getMessages().size() - 1);
+
+        assertEquals(message.getWinner(), player0);
+
+        /* Verify that only one message is sent for the event */
+        Utils.fastForward(20, map);
+
+        int gameEndedMessages = 0;
+        for (Message newMessage : player0.getMessages()) {
+            if (newMessage.getMessageType() == GAME_ENDED) {
+                gameEndedMessages = gameEndedMessages + 1;
+            }
+        }
+
+        assertEquals(gameEndedMessages, 1);
+    }
+
+    @Test
+    public void testMessageSentToEachPlayerWhenPlayerWins() throws Exception {
+
+        /* Create player list with two players */
+        Player player0 = new Player("Player 0", BLUE);
+        Player player1 = new Player("Player 1", GREEN);
+
+        List<Player> players = new LinkedList<>();
+
+        players.add(player0);
+        players.add(player1);
+
+        /* Create game map choosing two players */
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place player 0's headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place player 1's headquarter */
+        Point point1 = new Point(39, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks for player 0 */
+        Point point2 = new Point(19, 5);
+        Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
+
+        /* Finish construction */
+        Utils.constructHouse(fortress0);
+
+        /* Populate player 0's barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
+
+        /* Empty all soldiers from the second player's headquarter */
+        Utils.adjustInventoryTo(headquarter1, PRIVATE, 0);
+        Utils.adjustInventoryTo(headquarter1, SERGEANT, 0);
+        Utils.adjustInventoryTo(headquarter1, GENERAL, 0);
+
+        /* Order an attack */
+        assertTrue(player0.getAvailableAttackersForBuilding(headquarter1) > 0);
+
+        player0.attack(headquarter1, 1);
+
+        /* Find the military that was chosen to attack */
+        map.stepTime();
+
+        Military attacker = Utils.findMilitaryOutsideBuilding(player0);
+
+        assertNotNull(attacker);
+
+        /* Wait for the attacker to get to the attacked buildings flag */
+        assertEquals(attacker.getTarget(), headquarter1.getFlag().getPosition());
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getFlag().getPosition());
+
+        assertEquals(attacker.getPosition(), headquarter1.getFlag().getPosition());
+
+        /* Verify that the headquarter is destroyed and the first player won the game */
+        assertEquals(headquarter1.getNumberOfHostedMilitary(), 0);
+        assertEquals(headquarter1.getPlayer(), player1);
+        assertEquals(attacker.getTarget(), headquarter1.getPosition());
+        assertNull(map.getWinner());
+
+        for (Message message : player0.getMessages()) {
+            assertNotEquals(message.getMessageType(), GAME_ENDED);
+        }
+
+        Utils.fastForwardUntilWorkerReachesPoint(map, attacker, headquarter1.getPosition());
+
+        map.stepTime();
+
+        assertEquals(map.getWinner(), player0);
+        assertEquals(player1.getBuildings().size(), 1);
+        assertTrue(player1.getBuildings().get(0).isBurningDown());
+        assertEquals(player0.getMessages().get(player0.getMessages().size() - 1).getMessageType(), GAME_ENDED);
+
+        GameEndedMessage messageForPlayer0 = null;
+        GameEndedMessage messageForPlayer1 = null;
+
+        for (Message message : player0.getMessages()) {
+            if (message.getMessageType() == GAME_ENDED) {
+                messageForPlayer0 = (GameEndedMessage) message;
+            }
+        }
+
+        for (Message message : player1.getMessages()) {
+            if (message.getMessageType() == GAME_ENDED) {
+                messageForPlayer1 = (GameEndedMessage) message;
+            }
+        }
+
+        assertNotNull(messageForPlayer0);
+        assertNotNull(messageForPlayer1);
+        assertEquals(messageForPlayer0.getWinner(), player0);
+        assertEquals(messageForPlayer1.getWinner(), player0);
+    }
+
+    @Test
+    public void testMessageSentWhenCatapultHitsBarracks() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks */
+        Point point2 = new Point(33, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Place catapult */
+        Point point3 = new Point(19, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult);
+
+        /* Occupy the catapult */
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
+
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
+
+        /* Verify that a message is sent when the catapult destroys the barracks */
+        for (int i = 0; i < 1000; i++) {
+
+            /* Deliver stone to the catapult */
+            catapult.putCargo(new Cargo(STONE, map));
+
+            /* Wait for the catapult to throw a projectile */
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
+
+            /* Wait for the projectile to reach its target */
+            Utils.waitForProjectileToReachTarget(projectile, map);
+
+            /* Check if the projectile hit the barracks */
+            if (barracks0.getNumberOfHostedMilitary() == 0) {
+                break;
+            }
+        }
+
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+
+        int numberOfBombardedByCatapultMessages = 0;
+        BombardedByCatapultMessage bombardedByCatapultMessage = null;
+
+        for (Message message : player1.getMessages()) {
+            if (message.getMessageType() == BOMBARDED_BY_CATAPULT) {
+                numberOfBombardedByCatapultMessages = numberOfBombardedByCatapultMessages + 1;
+                bombardedByCatapultMessage = (BombardedByCatapultMessage) message;
+            }
+        }
+
+        assertEquals(numberOfBombardedByCatapultMessages, 1);
+        assertNotNull(bombardedByCatapultMessage);
+        assertEquals(bombardedByCatapultMessage.getCatapult(), catapult);
+        assertEquals(bombardedByCatapultMessage.getHitBuilding(), barracks0);
+    }
+
+    @Test
+    public void testMessageSentWhenCatapultHitsBarracksIsOnlySentOnce() throws Exception {
+
+        /* Create new game map */
+        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player1 = new Player("Player 1", java.awt.Color.RED);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+        players.add(player1);
+        GameMap map = new GameMap(players, 100, 100);
+
+        /* Place headquarter */
+        Point point0 = new Point(9, 5);
+        Headquarter headquarter0 = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place headquarter */
+        Point point1 = new Point(45, 5);
+        Headquarter headquarter1 = map.placeBuilding(new Headquarter(player1), point1);
+
+        /* Place barracks */
+        Point point2 = new Point(33, 5);
+        Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
+
+        /* Finish construction of the woodcutter */
+        Utils.constructHouse(barracks0);
+
+        /* Occupy the barracks */
+        Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
+
+        /* Place catapult */
+        Point point3 = new Point(19, 5);
+        Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
+
+        /* Finish construction of the catapult */
+        Utils.constructHouse(catapult);
+
+        /* Occupy the catapult */
+        Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
+
+        assertTrue(catapultWorker0.isInsideBuilding());
+        assertEquals(catapultWorker0.getHome(), catapult);
+        assertEquals(catapult.getWorker(), catapultWorker0);
+
+        /* Remove all the stones in the headquarter */
+        Utils.adjustInventoryTo(headquarter0, STONE, 0);
+
+        /* Verify that a message is sent when the catapult destroys the barracks */
+        for (int i = 0; i < 1000; i++) {
+
+            /* Deliver stone to the catapult */
+            catapult.putCargo(new Cargo(STONE, map));
+
+            /* Wait for the catapult to throw a projectile */
+            Projectile projectile = Utils.waitForCatapultToThrowProjectile(catapult);
+
+            /* Wait for the projectile to reach its target */
+            Utils.waitForProjectileToReachTarget(projectile, map);
+
+            /* Check if the projectile hit the barracks */
+            if (barracks0.getNumberOfHostedMilitary() == 0) {
+                break;
+            }
+        }
+
+        assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
+
+        int numberOfBombardedByCatapultMessages = 0;
+        BombardedByCatapultMessage bombardedByCatapultMessage = null;
+
+        for (Message message : player1.getMessages()) {
+            if (message.getMessageType() == BOMBARDED_BY_CATAPULT) {
+                numberOfBombardedByCatapultMessages = numberOfBombardedByCatapultMessages + 1;
+                bombardedByCatapultMessage = (BombardedByCatapultMessage) message;
+            }
+        }
+
+        assertEquals(numberOfBombardedByCatapultMessages, 1);
+        assertNotNull(bombardedByCatapultMessage);
+        assertEquals(bombardedByCatapultMessage.getCatapult(), catapult);
+        assertEquals(bombardedByCatapultMessage.getHitBuilding(), barracks0);
+
+        /* Verify that the message is only sent once */
+        Utils.fastForward(30, map);
+
+        numberOfBombardedByCatapultMessages = 0;
+        for (Message message : player1.getMessages()) {
+            if (message.getMessageType() == BOMBARDED_BY_CATAPULT) {
+                numberOfBombardedByCatapultMessages = numberOfBombardedByCatapultMessages + 1;
+            }
+        }
+
+        assertEquals(numberOfBombardedByCatapultMessages, 1);
     }
 }

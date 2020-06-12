@@ -15,4 +15,9 @@ public class NoMoreResourcesMessage implements Message {
     public MessageType getMessageType() {
         return MessageType.NO_MORE_RESOURCES;
     }
+
+    @Override
+    public String toString() {
+        return "Message: No more resources in " + building.getClass().getSimpleName() + " at " + building.getPosition();
+    }
 }

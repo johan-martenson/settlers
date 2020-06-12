@@ -968,7 +968,9 @@ public class Building implements Actor, EndPoint {
         return 0;
     }
 
-    void hitByCatapult() throws Exception {
+    void hitByCatapult(Catapult catapult) throws Exception {
+
+        getPlayer().reportHitByCatapult(catapult, this);
 
         if (getNumberOfHostedMilitary() > 0) {
             hostedMilitary.remove(0);

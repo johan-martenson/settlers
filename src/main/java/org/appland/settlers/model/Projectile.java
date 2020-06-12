@@ -17,24 +17,24 @@ public class Projectile implements Actor {
     private final static Random RANDOM    = new Random(1);
 
     private final Building  target;
-    private final Point     source;
+    private final Catapult  source;
     private final Countdown countdown;
     private final GameMap   map;
 
-    Projectile(Point src, Building targetBuilding, GameMap map) {
-        target   = targetBuilding;
-        source   = src;
+    Projectile(Catapult source, Building targetBuilding, GameMap map) {
+        this.target = targetBuilding;
+        this.source = source;
         this.map = map;
 
         countdown = new Countdown();
-        countdown.countFrom((int)(src.distance(targetBuilding.getPosition()) * SPEED));
+        countdown.countFrom((int)(source.getPosition().distance(targetBuilding.getPosition()) * SPEED));
     }
 
     public Point getTarget() {
         return target.getPosition();
     }
 
-    public Point getSource() {
+    public Catapult getSource() {
         return source;
     }
 
@@ -56,7 +56,7 @@ public class Projectile implements Actor {
 
             /* Determine if the projectile hit the target - the hit rate is 75% */
             if (RANDOM.nextDouble() > FAIL_RATE) {
-                target.hitByCatapult();
+                target.hitByCatapult(source);
             }
 
             map.removeProjectileFromWithinStepTime(this);

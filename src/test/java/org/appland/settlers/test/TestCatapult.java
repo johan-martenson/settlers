@@ -50,6 +50,11 @@ import static org.junit.Assert.fail;
  */
 public class TestCatapult {
 
+    /*
+    * TODO:
+    *   - Catapult must not shoot at unoccupied military buildings
+    * */
+
     @Test
     public void testCatapultOnlyNeedsFourPlanksAndTwoStonesForConstruction() throws Exception {
 
@@ -456,7 +461,7 @@ public class TestCatapult {
         assertEquals(projectile.getTarget(), barracks0.getPosition());
 
         /* Verify that the projectile comes from the catapult */
-        assertEquals(projectile.getSource(), catapult.getPosition());
+        assertEquals(projectile.getSource(), catapult);
 
         /* Verify that the projectile starts at the source */
         assertEquals(projectile.getProgress(), 0);

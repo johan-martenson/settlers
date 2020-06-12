@@ -55,7 +55,7 @@ public class CatapultWorker extends Worker {
 
                     /* Fire a projectile if there was a suitable target */
                     if (target != null) {
-                        Projectile projectile = new Projectile(getPosition(), target, map);
+                        Projectile projectile = new Projectile((Catapult)getHome(), target, map);
 
                         map.placeProjectile(projectile, getPosition());
 

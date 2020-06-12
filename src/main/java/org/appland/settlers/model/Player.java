@@ -1249,4 +1249,12 @@ public class Player {
         treeConservationProgramEnabled = false;
         treeConservationProgramActive = false;
     }
+
+    public void reportWinner(Player winner) {
+        messages.add(new GameEndedMessage(winner));
+    }
+
+    public void reportHitByCatapult(Catapult catapult, Building hitBuilding) {
+        messages.add(new BombardedByCatapultMessage(catapult, hitBuilding));
+    }
 }
