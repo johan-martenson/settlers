@@ -1,0 +1,168 @@
+The Settlers II
+
+
+Here are some tips for The Settlers II.  This is not meant to be an official FAQ, and has not been created 
+in conjunction with BlueByte or anyone other than myself.  Please contact me if there are any gross errors 
+in here, on 100734,1751.
+
+I will not go over the basics of the game - I will assume that everyone has read the manual (if you haven’t, 
+do so!).  I assume that you are familiar with the essential dynamics of getting resources in order to 
+construct buildings, make food etc.
+
+Please note that I may sometimes not use the correct word for some of the buildings or people (especially 
+the tree-planter, called a Sylviculteur in French!) - this is because I am playing the French version.  It 
+should, however, be obvious what I am talking about.
+
+Without further ado, here are the tips:
+
+General
+
+Use the Observer to scout, especially in enemy territory as he will not be attacked and he is cheaper than 
+building the observation towers.  Place a flag as close to the border and send him to explore there.
+
+For wood, 1 tree-planter and 1 sawmill will serve 2 lumberjacks.  Build the sawmill between the 
+lumberjacks and the nearest warehouse.  Make sure that you don’t place a farm near the tree-planter, 
+because he will happily plant trees in the middle of the crops.
+
+If you are notified that the Emergency Plan is in effect, construct a tree-planter close to a lumberjack who 
+is no longer productive (use the S key to show the productivity of all buildings, and C to show their 
+names).
+
+For stone, quarries are better than granite mines because they do not require food.  OK they run out - but 
+then so do the mines.  Quarries also clear ground for more buildings.
+
+Destroy most buildings when they are no longer productive.  Exceptions may be the lumberjack and the 
+huntsman’s cottage, which may be brought back into service by building a tree-planter.
+
+Unstock items from warehouses if you want to keep certain items in other warehouses where they are 
+closer to the buildings which require them.  In particular, keep stocks close to the periphery of your 
+territory (although be careful if a warehouse is vulnerable to attack).
+
+Your supply of colonists is inexhaustible - however, they need the tools for the job (a scythe for the farmer 
+etc).  If new buildings stay unoccupied, you need to make more tools (note that you can determine the 
+priority of tool production if you need one type in particular).
+
+Control the distribution of goods to buildings using the Distribution window if certain buildings are 
+inexplicably unproductive and you have all of the requisite resources.
+
+All levels in Campaign mode end when you find the Magic Portal.
+
+See Appendix 1 for a table showing material requirements for all buildings.
+
+Roads
+
+Flags should generally be placed as frequently as possible; however, turn on the Building Help (space bar) 
+to ensure that you do not remove useful building sites by placing them badly.
+
+Much-used roads will be automatically paved and will become quicker - you have no control over this.
+
+In busy areas (eg around warehouses), build a complex network of roads so that there are multiple routes 
+for your goods.  This will speed up transportation.
+
+Choose flat ground for roads if possible - the transporters are slowed down by hills.
+
+Build a Mule farm to speed up transport.  For this, you will require 2 farms and a well in order to provide 
+the necessary wheat and water.
+
+A maximum of 8 items can be kept at a flag.  If your flags are blocked, you are losing production from 
+your buildings - get mules or build additional roads.  If absolutely necessary, you can remove the flag, 
+thus losing the items at the flag but possibly freeing up a blocked route.
+
+Food
+
+Build the huntsman’s cabin close to a forest, preferably where you see game roaming around on the 
+screen.  He will eventually exhaust the supply, but if there is forest around it will return (make a tree-
+planter to regenerate the forest).
+
+Fish will always be found in the sea, but only sometimes in lakes.  Destroy the cabins when they exhaust 
+the supply - fish never return.
+
+Farms must be built with open space around them for the fields.  You can readily see if there is enough 
+space by checking out the productivity level, which corresponds only to the space available.  Remember to 
+keep them away from the tree-planters!
+
+For efficient production, build 3 farms to 1 well, 1 mill and 1 bakery.  As you see, you will need lots of 
+farms!
+
+For 1 pig-farm you need 3 normal farms (again), 1 well and 1 butcher.  Is it worth it?  Don’t know - but 
+you need food to keep your buildings going.  I don’t yet know what the most efficient means of food 
+production is - if anyone knows, please tell me (obviously the fisherman and huntsman are the easiest, but 
+they don’t last forever).
+
+Mines
+
+The size of the coloured portion of the signs indicate the level of resources available for mining.  The 
+signs disappear after a while, but this does not affect the availability of the resource.
+
+Destroy mines as soon as they are exhausted - they still take food, and you will free up the miner for 
+another mine.
+
+Militia
+
+To make one soldier, you need a sword, a shield and a keg of beer in a warehouse (not in separate ones).
+
+Soldiers go up in rank according to the supply of gold coins, and this affects their strength.
+
+Use the military settings to send troops towards the frontiers rather than the middle of your territory 
+(unless you have a good reason for not doing so).
+
+Attack enemy military buildings which protect production buildings - if you take it, he will lose all of the 
+buildings within it’s radius.  Even if it is taken back, he will have to rebuild.
+
+Catapults are often more useful than soldiers and military buildings - crucially, destruction of an enemy 
+building by catapult is not seen as an act of war.  Each catapult attack consumes 1 stone and, if successful, 
+reduces the garrison of a building by 1 soldier until the building is destroyed.  Change the transport 
+priorities if you need the catapults to fire quicker.
+
+You can affect the use of gold by selecting the “no gold” icon in military buildings which are away from 
+the conflict zone.
+
+Seafaring
+
+Ships hold up to 40 items (colonists and goods) and can only be built in a shipyard - suitable sites for 
+building shipyards are very rare.  You also have to build a naval port in order to supply ships - remember 
+to take planks and stones with you to build on your new islands.
+
+
+Appendix 1 - Material Requirements for Buildings
+
+Building	       Planks  Stones
+Headquarters		-	-
+Huntsman’s Cottage	2	-
+Fisherman’s Cabin	2	-
+Quarry			2	-
+Tree-planter’s Cabin	2	-
+Lumberjack’s Cabin	2	-
+Sawmill			2	2
+Farm			3	3
+Well			2	-
+Pig-farm		3	3
+Butcher			2	2
+Mill			2	2
+Bakery			2	2
+Mule farm		3	3
+Mine (any)		4	-
+Foundry		2	2
+Mint			2	2
+Workshop (tools etc.)	2	2
+Forge			2	2
+Warehouse		3	3
+Shipyard		2	3
+Port Warehouse	4	6
+Boat			1	-
+Ship			13	-
+Watch Tower		3	-
+Barracks		2	-
+Guard House		2	3
+Guard Tower		3	4
+Fortress		4	7
+Catapult		4	2
+
+
+Appendix 2 - Dependency Chart
+
+This chart shows which buildings and resources are required for which products.  See the manual for 
+details of how to find the resources.
+
+I have this chart as a PowerPoint presentation, in both English and French versions, which could be 
+uploaded if there is sufficient interest.

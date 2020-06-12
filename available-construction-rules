@@ -1,0 +1,45 @@
+Flag+planned small building(barracks)
+=====================================
+Flag Up left: -- NA -- the building
+Flag Up right: from flag to nothing
+Flag Right: large to medium building
+Flag Down right: flag to none
+Flag Down left:
+Flag Left:
+Flag Above:
+Flag Below:
+
+Building left: large to flag
+Building left, down left: large to medium
+Building down left: small to none
+Building down left, down left: -- NA -- small to small
+
+Flag
+====
+Up left: Any building
+Up right: Mine to nothing, sm
+Right: medium building (not large),
+Down right: small building (or better?),     flag to nothing
+Down left: flag to nothing
+Left: mine to nothing
+Up: Mine to flag
+Down: flag to nothing
+Up right, up right: large building to flag
+Left, up left:
+
+
+Flag on road
+============
+Up left: Any building,     flag to no nothing
+Left: Flag to none
+Up right: Flag to none,    buildings unchanged
+Down right: Flag to none,  buildings unchanged
+Left, up left: Small building to flag
+
+
+Road point (not flag)
+=====================
+Up left: -- NA -- large building unchanged
+Left: -- NA -- large building unchanged
+Right OR down right: large building to medium
+
