@@ -111,7 +111,6 @@ public class Miller extends Worker {
 
                     /* Wait for space on the flag if it's full */
                     } else {
-                        System.out.println("No place - waiting");
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     }
 
