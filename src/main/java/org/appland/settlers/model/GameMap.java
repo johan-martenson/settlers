@@ -1033,7 +1033,7 @@ public class GameMap {
         Road road = new Road(building.getPlayer(), building, wayPoints, building.getFlag());
 
         road.setMap(this);
-        road.setNeedsCourier(false);
+        road.setDriveway();
 
         roads.add(road);
 
@@ -2871,7 +2871,7 @@ public class GameMap {
         double density = (double)wildAnimals.size() / (width * height);
 
         if (density < Constants.WILD_ANIMAL_NATURAL_DENSITY) {
-            if (animalCountdown.reachedZero()) {
+            if (animalCountdown.hasReachedZero()) {
 
                 /* Find point to place new wild animal on */
                 Point point = findRandomPossiblePointToPlaceFreeMovingActor();

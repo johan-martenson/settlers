@@ -141,7 +141,7 @@ public abstract class Worker implements Actor {
         } else if (state == WALKING_BETWEEN_POINTS) {
             walkCountdown.step();
 
-            if (walkCountdown.reachedZero()) {
+            if (walkCountdown.hasReachedZero()) {
 
                 state = WALKING_AND_EXACTLY_AT_POINT;
 

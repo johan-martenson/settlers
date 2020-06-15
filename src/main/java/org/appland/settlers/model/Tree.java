@@ -36,7 +36,7 @@ public class Tree implements Actor {
             return;
         }
 
-        if (countdown.reachedZero()) {
+        if (countdown.hasReachedZero()) {
             if (size == MEDIUM) {
                 size = LARGE;
 

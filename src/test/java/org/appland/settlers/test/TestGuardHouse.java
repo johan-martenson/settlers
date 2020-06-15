@@ -79,7 +79,7 @@ public class TestGuardHouse {
 
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 100; i++) {
-            assertTrue(guardHouse0.underConstruction());
+            assertTrue(guardHouse0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -117,7 +117,7 @@ public class TestGuardHouse {
 
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 500; i++) {
-            assertTrue(guardHouse0.underConstruction());
+            assertTrue(guardHouse0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -155,7 +155,7 @@ public class TestGuardHouse {
 
         /* Verify that this is enough to construct the guard house */
         for (int i = 0; i < 500; i++) {
-            assertTrue(guardHouse0.underConstruction());
+            assertTrue(guardHouse0.isUnderConstruction());
 
             map.stepTime();
         }

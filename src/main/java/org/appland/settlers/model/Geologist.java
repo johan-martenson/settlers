@@ -60,7 +60,7 @@ public class Geologist extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == INVESTIGATING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 Material foundMaterial = placeSignWithResult(getPosition());
 
                 nrSitesInvestigated++;

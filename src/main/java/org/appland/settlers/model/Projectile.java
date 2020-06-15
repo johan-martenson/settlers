@@ -48,11 +48,11 @@ public class Projectile implements Actor {
     @Override
     public void stepTime() throws Exception {
 
-        if (!countdown.reachedZero()) {
+        if (!countdown.hasReachedZero()) {
             countdown.step();
         }
 
-        if (countdown.reachedZero()) {
+        if (countdown.hasReachedZero()) {
 
             /* Determine if the projectile hit the target - the hit rate is 75% */
             if (RANDOM.nextDouble() > FAIL_RATE) {
@@ -63,7 +63,7 @@ public class Projectile implements Actor {
         }
     }
 
-    public boolean arrived() {
-        return countdown.reachedZero();
+    public boolean isArrived() {
+        return countdown.hasReachedZero();
     }
 }

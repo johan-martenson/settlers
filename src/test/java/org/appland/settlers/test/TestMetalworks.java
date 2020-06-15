@@ -20,7 +20,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +96,7 @@ public class TestMetalworks {
 
         /* Verify that this is enough to construct the metalworks */
         for (int i = 0; i < 150; i++) {
-            assertTrue(metalworks0.underConstruction());
+            assertTrue(metalworks0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -132,7 +131,7 @@ public class TestMetalworks {
 
         /* Verify that this is not enough to construct the metalworks */
         for (int i = 0; i < 500; i++) {
-            assertTrue(metalworks0.underConstruction());
+            assertTrue(metalworks0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -167,7 +166,7 @@ public class TestMetalworks {
 
         /* Verify that this is not enough to construct the metalworks */
         for (int i = 0; i < 500; i++) {
-            assertTrue(metalworks0.underConstruction());
+            assertTrue(metalworks0.isUnderConstruction());
 
             map.stepTime();
         }

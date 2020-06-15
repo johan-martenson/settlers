@@ -78,7 +78,7 @@ public class TestBrewery {
 
         /* Verify that this is enough to construct the brewery */
         for (int i = 0; i < 150; i++) {
-            assertTrue(brewery0.underConstruction());
+            assertTrue(brewery0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -113,7 +113,7 @@ public class TestBrewery {
 
         /* Verify that this is not enough to construct the brewery */
         for (int i = 0; i < 500; i++) {
-            assertTrue(brewery0.underConstruction());
+            assertTrue(brewery0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -148,7 +148,7 @@ public class TestBrewery {
 
         /* Verify that this is not enough to construct the brewery */
         for (int i = 0; i < 500; i++) {
-            assertTrue(brewery0.underConstruction());
+            assertTrue(brewery0.isUnderConstruction());
 
             map.stepTime();
         }

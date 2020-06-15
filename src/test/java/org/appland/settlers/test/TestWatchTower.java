@@ -82,7 +82,7 @@ public class TestWatchTower {
 
         /* Verify that this is enough to construct the watch tower */
         for (int i = 0; i < 150; i++) {
-            assertTrue(watchTower0.underConstruction());
+            assertTrue(watchTower0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -126,7 +126,7 @@ public class TestWatchTower {
 
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {
-            assertTrue(watchTower0.underConstruction());
+            assertTrue(watchTower0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -170,7 +170,7 @@ public class TestWatchTower {
 
         /* Verify that this is not enough to construct the watch tower */
         for (int i = 0; i < 500; i++) {
-            assertTrue(watchTower0.underConstruction());
+            assertTrue(watchTower0.isUnderConstruction());
 
             map.stepTime();
         }

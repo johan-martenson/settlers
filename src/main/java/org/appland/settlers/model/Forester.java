@@ -109,7 +109,7 @@ public class Forester extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 Point point = getTreeSpot();
 
                 if (point == null) {
@@ -123,7 +123,7 @@ public class Forester extends Worker {
                 countdown.step();
             }
         } else if (state == State.PLANTING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Place a tree if the point is still open */
                 if (spotIsClearForTree(getPosition())) {
@@ -137,7 +137,7 @@ public class Forester extends Worker {
                 countdown.step();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

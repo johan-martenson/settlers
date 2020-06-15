@@ -79,7 +79,7 @@ public class TestDonkeyFarm {
 
         /* Verify that this is enough to construct the donkey farm */
         for (int i = 0; i < 200; i++) {
-            assertTrue(farm0.underConstruction());
+            assertTrue(farm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -116,7 +116,7 @@ public class TestDonkeyFarm {
 
         /* Verify that this is not enough to construct the donkey farm */
         for (int i = 0; i < 500; i++) {
-            assertTrue(farm0.underConstruction());
+            assertTrue(farm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -153,7 +153,7 @@ public class TestDonkeyFarm {
 
         /* Verify that this is not enough to construct the donkey farm */
         for (int i = 0; i < 500; i++) {
-            assertTrue(farm0.underConstruction());
+            assertTrue(farm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -178,7 +178,7 @@ public class TestDonkeyFarm {
         Point point1 = new Point(10, 10);
         Building farm = map.placeBuilding(new DonkeyFarm(player0), point1);
 
-        assertTrue(farm.underConstruction());
+        assertTrue(farm.isUnderConstruction());
         assertFalse(farm.needsWorker());
     }
 

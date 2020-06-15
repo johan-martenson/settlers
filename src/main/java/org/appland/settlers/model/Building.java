@@ -240,7 +240,7 @@ public class Building implements Actor, EndPoint {
     public void assignWorker(Worker worker) throws Exception {
 
         /* A building can't get an assigned worker while it's still under construction */
-        if (underConstruction()) {
+        if (isUnderConstruction()) {
             throw new Exception("Can't assign " + worker + " to unfinished " + this);
         }
 
@@ -304,7 +304,7 @@ public class Building implements Actor, EndPoint {
         Material material = cargo.getMaterial();
 
         /* Planks and stone can be delivered during construction */
-        if (underConstruction()) {
+        if (isUnderConstruction()) {
 
             Map<Material, Integer> materialsNeeded = getMaterialsToBuildHouse();
 
@@ -409,9 +409,9 @@ public class Building implements Actor, EndPoint {
             }
         }
 
-        if (underConstruction()) {
+        if (isUnderConstruction()) {
 
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 if (isMaterialForConstructionAvailable()) {
                     consumeConstructionMaterial();
 
@@ -432,7 +432,7 @@ public class Building implements Actor, EndPoint {
                 countdown.step();
             }
         } else if (isBurningDown()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = State.DESTROYED;
 
                 countdown.countFrom(TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR);
@@ -444,14 +444,14 @@ public class Building implements Actor, EndPoint {
             }
         } else if (isOccupied()) {
             if (isMilitaryBuilding() && getAmount(COIN) > 0 && hostsPromotableSoldiers()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
                     doPromotion();
                 } else {
                     countdown.step();
                 }
             }
         } else if (isDestroyed()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeBuilding(this);
 
                 /* Report that the building is removed */
@@ -463,7 +463,7 @@ public class Building implements Actor, EndPoint {
 
         if (isUpgrading()) {
 
-            if (upgradeCountdown.reachedZero()) {
+            if (upgradeCountdown.hasReachedZero()) {
 
                 if (isMaterialForUpgradeAvailable()) {
 
@@ -662,7 +662,7 @@ public class Building implements Actor, EndPoint {
         return false;
     }
 
-    public boolean underConstruction() {
+    public boolean isUnderConstruction() {
         return state == State.UNDER_CONSTRUCTION;
     }
 
@@ -996,7 +996,7 @@ public class Building implements Actor, EndPoint {
         }
 
         /* Refuse to upgrade while under construction */
-        if (underConstruction()) {
+        if (isUnderConstruction()) {
             throw new InvalidUserActionException("Cannot upgrade while under construction.");
         }
 
@@ -1110,7 +1110,7 @@ public class Building implements Actor, EndPoint {
 
         Set<Material> result = EnumSet.noneOf(Material.class);
 
-        if (underConstruction()) {
+        if (isUnderConstruction()) {
             HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
 
             result.addAll(Arrays.asList(houseSize.material()));

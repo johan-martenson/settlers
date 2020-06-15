@@ -81,7 +81,7 @@ public class TestPigFarm {
 
         /* Verify that this is enough to construct the pig farm */
         for (int i = 0; i < 200; i++) {
-            assertTrue(pigFarm0.underConstruction());
+            assertTrue(pigFarm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -118,7 +118,7 @@ public class TestPigFarm {
 
         /* Verify that this is not enough to construct the pig farm */
         for (int i = 0; i < 500; i++) {
-            assertTrue(pigFarm0.underConstruction());
+            assertTrue(pigFarm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -155,7 +155,7 @@ public class TestPigFarm {
 
         /* Verify that this is not enough to construct the pig farm */
         for (int i = 0; i < 500; i++) {
-            assertTrue(pigFarm0.underConstruction());
+            assertTrue(pigFarm0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -180,7 +180,7 @@ public class TestPigFarm {
         Point point1 = new Point(10, 6);
         Building farm = map.placeBuilding(new PigFarm(player0), point1);
 
-        assertTrue(farm.underConstruction());
+        assertTrue(farm.isUnderConstruction());
         assertFalse(farm.needsWorker());
     }
 

@@ -74,7 +74,7 @@ public class Baker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = BAKING_BREAD;
                 countdown.countFrom(PRODUCTION_TIME);
 
@@ -99,7 +99,7 @@ public class Baker extends Worker {
 
         } else if (state == BAKING_BREAD) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(FLOUR) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the ingredients */
                     getHome().consumeOne(WATER);
@@ -132,7 +132,7 @@ public class Baker extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

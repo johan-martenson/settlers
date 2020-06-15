@@ -57,7 +57,7 @@ public class WellWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled() && isWaterInGround()) {
+            if (countdown.hasReachedZero() && getHome().isProductionEnabled() && isWaterInGround()) {
                 state = State.DRAWING_WATER;
 
                 countdown.countFrom(PRODUCTION_TIME);
@@ -69,7 +69,7 @@ public class WellWorker extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == State.DRAWING_WATER) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Report that the well worker produced water */
                 productivityMeasurer.reportProductivity();
@@ -107,7 +107,7 @@ public class WellWorker extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

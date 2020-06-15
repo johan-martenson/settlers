@@ -119,7 +119,7 @@ public class Storehouse extends Building {
 
         /* Handle draft with delay */
         if (isDraftPossible(inventory)) {
-            if (draftCountdown.reachedZero()) {
+            if (draftCountdown.hasReachedZero()) {
                 draftMilitary();
                 draftCountdown.countFrom(ProductionDelays.DRAFT_DELAY);
             } else if (draftCountdown.isCounting()) {

@@ -63,7 +63,7 @@ public class Minter extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = MAKING_COIN;
                 countdown.countFrom(PRODUCTION_TIME);
             } else {
@@ -71,7 +71,7 @@ public class Minter extends Worker {
             }
         } else if (state == MAKING_COIN) {
             if (getHome().getAmount(GOLD) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume resources */
                     getHome().consumeOne(GOLD);
@@ -120,7 +120,7 @@ public class Minter extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

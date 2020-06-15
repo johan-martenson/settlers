@@ -79,7 +79,7 @@ public class TestFishery {
 
         /* Verify that this is enough to construct the fishery */
         for (int i = 0; i < 100; i++) {
-            assertTrue(fishery0.underConstruction());
+            assertTrue(fishery0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -111,7 +111,7 @@ public class TestFishery {
 
         /* Verify that this is not enough to construct the fishery */
         for (int i = 0; i < 500; i++) {
-            assertTrue(fishery0.underConstruction());
+            assertTrue(fishery0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -139,7 +139,7 @@ public class TestFishery {
         /* Connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        assertTrue(fishery.underConstruction());
+        assertTrue(fishery.isUnderConstruction());
         assertFalse(fishery.needsWorker());
 
         /* Wait for the fishery to get constructed */
@@ -171,7 +171,7 @@ public class TestFishery {
 
         Fishery fishery = new Fishery(player0);
 
-        assertTrue(fishery.underConstruction());
+        assertTrue(fishery.isUnderConstruction());
 
         try {
             fishery.promiseWorker(new Fisherman(player0, map));
@@ -191,7 +191,7 @@ public class TestFishery {
 
         Fishery fishery = new Fishery(player0);
 
-        assertTrue(fishery.underConstruction());
+        assertTrue(fishery.isUnderConstruction());
 
         try {
             fishery.assignWorker(new Fisherman(player0, map));
@@ -276,7 +276,7 @@ public class TestFishery {
         /* Connect the fishery with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, fishery.getFlag(), headquarter.getFlag());
 
-        assertTrue(fishery.underConstruction());
+        assertTrue(fishery.isUnderConstruction());
         assertFalse(fishery.needsWorker());
 
         /* Wait for the fishery to get constructed */

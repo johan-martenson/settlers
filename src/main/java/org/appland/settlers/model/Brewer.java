@@ -66,7 +66,7 @@ public class Brewer extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = BREWING_BEER;
                 countdown.countFrom(PRODUCTION_TIME);
 
@@ -91,7 +91,7 @@ public class Brewer extends Worker {
 
         } else if (state == BREWING_BEER) {
             if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the ingredients */
                     getHome().consumeOne(WATER);
@@ -124,7 +124,7 @@ public class Brewer extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

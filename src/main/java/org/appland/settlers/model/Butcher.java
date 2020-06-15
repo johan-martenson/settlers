@@ -62,7 +62,7 @@ public class Butcher extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = SLAUGHTERING_PIG;
                 countdown.countFrom(PRODUCTION_TIME);
             } else {
@@ -70,7 +70,7 @@ public class Butcher extends Worker {
             }
         } else if (state == SLAUGHTERING_PIG) {
             if (getHome().getAmount(PIG) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the resource */
                     getHome().consumeOne(PIG);
@@ -116,7 +116,7 @@ public class Butcher extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

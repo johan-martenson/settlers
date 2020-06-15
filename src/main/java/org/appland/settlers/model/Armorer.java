@@ -77,7 +77,7 @@ public class Armorer extends Worker {
     protected void onIdle() throws Exception {
 
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = PRODUCING_WEAPON;
                 countdown.countFrom(PRODUCTION_TIME);
 
@@ -102,7 +102,7 @@ public class Armorer extends Worker {
         } else if (state == PRODUCING_WEAPON) {
             if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
 
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Produce the weapon */
                     getHome().consumeOne(IRON_BAR);
@@ -138,7 +138,7 @@ public class Armorer extends Worker {
                 productivityMeasurer.nextProductivityCycle();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

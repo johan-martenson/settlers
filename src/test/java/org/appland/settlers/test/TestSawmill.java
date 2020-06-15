@@ -77,7 +77,7 @@ public class TestSawmill {
 
         /* Verify that this is enough to construct the sawmill */
         for (int i = 0; i < 150; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -112,7 +112,7 @@ public class TestSawmill {
 
         /* Verify that this is not enough to construct the sawmill */
         for (int i = 0; i < 500; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -147,7 +147,7 @@ public class TestSawmill {
 
         /* Verify that this is not enough to construct the sawmill */
         for (int i = 0; i < 500; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
 
             map.stepTime();
         }

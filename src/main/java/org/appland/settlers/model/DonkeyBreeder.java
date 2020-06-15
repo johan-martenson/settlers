@@ -75,7 +75,7 @@ public class DonkeyBreeder extends Worker {
     @Override
     protected void onIdle() throws Exception, InvalidRouteException {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
                     Point pointToFeedDonkeysAt = getHome().getPosition().downLeft();
 
@@ -91,7 +91,7 @@ public class DonkeyBreeder extends Worker {
                 countdown.step();
             }
         } else if (state == FEEDING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 getHome().consumeOne(WATER);
                 getHome().consumeOne(WHEAT);
@@ -103,7 +103,7 @@ public class DonkeyBreeder extends Worker {
                 countdown.step();
             }
         } else if (state == PREPARING_DONKEY_FOR_DELIVERY) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
 
                 /* Don't create a donkey if no delivery is possible */
                 Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getHome().getPosition(), null, map, DONKEY);
@@ -131,7 +131,7 @@ public class DonkeyBreeder extends Worker {
                 countdown.step();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

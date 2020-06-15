@@ -8,7 +8,6 @@ import org.appland.settlers.model.Forester;
 import org.appland.settlers.model.ForesterHut;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
-import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Military;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
@@ -273,7 +272,7 @@ public class TestGameLogic {
         /* Construct the barracks */
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        assertTrue(barracks0.underConstruction());
+        assertTrue(barracks0.isUnderConstruction());
         assertTrue(barracks0.isMilitaryBuilding());
         assertTrue(headquarter0.getAmount(PRIVATE) >= 10);
 

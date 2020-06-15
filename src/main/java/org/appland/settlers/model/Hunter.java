@@ -62,7 +62,7 @@ public class Hunter extends Worker {
     protected void onIdle() throws Exception {
 
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Find an animal to hunt */
                 for (WildAnimal animal : getMap().getWildAnimals()) {
@@ -97,7 +97,7 @@ public class Hunter extends Worker {
                 countdown.step();
             }
         } else if (state == State.SHOOTING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Tell the animal it's been shot */
                 prey.shoot();
@@ -124,7 +124,7 @@ public class Hunter extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

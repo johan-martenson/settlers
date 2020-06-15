@@ -50,7 +50,7 @@ public class CatapultWorker extends Worker {
             /* Countdown if there are stones available */
             if (getHome().getAmount(STONE) > 0) {
 
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
                     Building target = findReachableTarget();
 
                     /* Fire a projectile if there was a suitable target */

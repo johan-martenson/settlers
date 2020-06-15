@@ -86,7 +86,7 @@ public class TestGoldMine {
 
         /* Verify that this is enough to construct the gold mine */
         for (int i = 0; i < 100; i++) {
-            assertTrue(goldMine0.underConstruction());
+            assertTrue(goldMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -123,7 +123,7 @@ public class TestGoldMine {
 
         /* Verify that this is not enough to construct the gold mine */
         for (int i = 0; i < 500; i++) {
-            assertTrue(goldMine0.underConstruction());
+            assertTrue(goldMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -151,7 +151,7 @@ public class TestGoldMine {
         /* Place a goldmine */
         Building mine = map.placeBuilding(new GoldMine(player0), point0);
 
-        assertTrue(mine.underConstruction());
+        assertTrue(mine.isUnderConstruction());
 
         constructHouse(mine);
 

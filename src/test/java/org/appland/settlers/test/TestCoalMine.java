@@ -87,7 +87,7 @@ public class TestCoalMine {
 
         /* Verify that this is enough to construct the coal mine */
         for (int i = 0; i < 100; i++) {
-            assertTrue(coalMine0.underConstruction());
+            assertTrue(coalMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -124,7 +124,7 @@ public class TestCoalMine {
 
         /* Verify that this is not enough to construct the coal mine */
         for (int i = 0; i < 500; i++) {
-            assertTrue(coalMine0.underConstruction());
+            assertTrue(coalMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -152,7 +152,7 @@ public class TestCoalMine {
         /* Place a coalmine */
         Building mine = map.placeBuilding(new CoalMine(player0), point0);
 
-        assertTrue(mine.underConstruction());
+        assertTrue(mine.isUnderConstruction());
 
         constructHouse(mine);
 

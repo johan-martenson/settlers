@@ -168,7 +168,7 @@ public class StorageWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 if (getHome().getFlag().hasPlaceForMoreCargo()) {
                     Cargo cargo = tryToStartDelivery();

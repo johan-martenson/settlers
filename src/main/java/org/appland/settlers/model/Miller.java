@@ -64,7 +64,7 @@ public class Miller extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = GRINDING_WHEAT;
 
                 countdown.countFrom(PRODUCTION_TIME);
@@ -89,7 +89,7 @@ public class Miller extends Worker {
 
         } else if (state == GRINDING_WHEAT) {
             if (getHome().getAmount(WHEAT) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the wheat */
                     getHome().consumeOne(WHEAT);
@@ -126,7 +126,7 @@ public class Miller extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

@@ -339,7 +339,7 @@ public class TestMisc {
 
             previousProgress = armory0.getConstructionProgress();
 
-            if (!armory0.underConstruction()) {
+            if (!armory0.isUnderConstruction()) {
                 break;
             }
 

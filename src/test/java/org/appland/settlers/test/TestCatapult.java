@@ -86,7 +86,7 @@ public class TestCatapult {
 
         /* Verify that this is enough to construct the catapult */
         for (int i = 0; i < 150; i++) {
-            assertTrue(catapult0.underConstruction());
+            assertTrue(catapult0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -124,7 +124,7 @@ public class TestCatapult {
 
         /* Verify that this is not enough to construct the catapult */
         for (int i = 0; i < 500; i++) {
-            assertTrue(catapult0.underConstruction());
+            assertTrue(catapult0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -162,7 +162,7 @@ public class TestCatapult {
 
         /* Verify that this is not enough to construct the catapult */
         for (int i = 0; i < 500; i++) {
-            assertTrue(catapult0.underConstruction());
+            assertTrue(catapult0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -475,7 +475,7 @@ public class TestCatapult {
             map.stepTime();
         }
 
-        assertTrue(projectile.arrived());
+        assertTrue(projectile.isArrived());
         assertTrue(map.getProjectiles().isEmpty());
 
     }

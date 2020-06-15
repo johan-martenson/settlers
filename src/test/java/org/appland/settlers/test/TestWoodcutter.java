@@ -80,7 +80,7 @@ public class TestWoodcutter {
 
         /* Verify that this is enough to construct the woodcutter */
         for (int i = 0; i < 100; i++) {
-            assertTrue(woodcutter0.underConstruction());
+            assertTrue(woodcutter0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -112,7 +112,7 @@ public class TestWoodcutter {
 
         /* Verify that this is enough to construct the woodcutter */
         for (int i = 0; i < 500; i++) {
-            assertTrue(woodcutter0.underConstruction());
+            assertTrue(woodcutter0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -139,7 +139,7 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Verify the the woodcutter doesn't need any worker when it's under construction */
-        assertTrue(woodcutter.underConstruction());
+        assertTrue(woodcutter.isUnderConstruction());
         assertFalse(woodcutter.needsWorker());
     }
 

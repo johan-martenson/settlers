@@ -81,7 +81,7 @@ public class TestFortress {
 
         /* Verify that this is enough to construct the fortress */
         for (int i = 0; i < 200; i++) {
-            assertTrue(fortress0.underConstruction());
+            assertTrue(fortress0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -128,7 +128,7 @@ public class TestFortress {
 
         /* Verify that this is not enough to construct the fortress */
         for (int i = 0; i < 500; i++) {
-            assertTrue(fortress0.underConstruction());
+            assertTrue(fortress0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -175,7 +175,7 @@ public class TestFortress {
 
         /* Verify that this is not enough to construct the fortress */
         for (int i = 0; i < 500; i++) {
-            assertTrue(fortress0.underConstruction());
+            assertTrue(fortress0.isUnderConstruction());
 
             map.stepTime();
         }

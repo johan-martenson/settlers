@@ -97,7 +97,7 @@ public class TestBarracks {
 
         /* Verify that this is enough to construct the barracks */
         for (int i = 0; i < 100; i++) {
-            assertTrue(barracks0.underConstruction());
+            assertTrue(barracks0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -129,7 +129,7 @@ public class TestBarracks {
 
         /* Verify that this is enough to construct the barracks */
         for (int i = 0; i < 500; i++) {
-            assertTrue(barracks0.underConstruction());
+            assertTrue(barracks0.isUnderConstruction());
 
             map.stepTime();
         }

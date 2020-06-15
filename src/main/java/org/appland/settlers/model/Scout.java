@@ -63,7 +63,7 @@ public class Scout extends Worker {
     @Override
     void onIdle() {
          if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

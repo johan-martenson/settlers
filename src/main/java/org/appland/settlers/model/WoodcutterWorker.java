@@ -87,7 +87,7 @@ public class WoodcutterWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 Point point = getTreeToCutDown();
 
                 if (point == null) {
@@ -103,7 +103,7 @@ public class WoodcutterWorker extends Worker {
                 countdown.step();
             }
         } else if (state == State.CUTTING_TREE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Remove the tree if it's still in place */
                 if (map.isTreeAtPoint(getPosition())) {
@@ -143,7 +143,7 @@ public class WoodcutterWorker extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

@@ -82,7 +82,7 @@ public class TestArmory {
 
         /* Verify that this is enough to construct the armory */
         for (int i = 0; i < 150; i++) {
-            assertTrue(armory0.underConstruction());
+            assertTrue(armory0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -117,7 +117,7 @@ public class TestArmory {
 
         /* Verify that this is not enough to construct the armory */
         for (int i = 0; i < 500; i++) {
-            assertTrue(armory0.underConstruction());
+            assertTrue(armory0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -152,7 +152,7 @@ public class TestArmory {
 
         /* Verify that this is not enough to construct the armory */
         for (int i = 0; i < 500; i++) {
-            assertTrue(armory0.underConstruction());
+            assertTrue(armory0.isUnderConstruction());
 
             map.stepTime();
         }

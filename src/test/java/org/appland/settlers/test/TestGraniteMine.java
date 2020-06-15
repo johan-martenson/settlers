@@ -85,7 +85,7 @@ public class TestGraniteMine {
 
         /* Verify that this is enough to construct the granite mine */
         for (int i = 0; i < 100; i++) {
-            assertTrue(graniteMine0.underConstruction());
+            assertTrue(graniteMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -122,7 +122,7 @@ public class TestGraniteMine {
 
         /* Verify that this is not enough to construct the granite mine */
         for (int i = 0; i < 500; i++) {
-            assertTrue(graniteMine0.underConstruction());
+            assertTrue(graniteMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -150,7 +150,7 @@ public class TestGraniteMine {
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
-        assertTrue(mine.underConstruction());
+        assertTrue(mine.isUnderConstruction());
 
         constructHouse(mine);
 

@@ -62,7 +62,7 @@ public class SawmillWorker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = CUTTING_WOOD;
                 countdown.countFrom(PRODUCTION_TIME);
 
@@ -72,7 +72,7 @@ public class SawmillWorker extends Worker {
             }
         } else if (state == CUTTING_WOOD) {
             if (getHome().getAmount(WOOD) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the spent wood */
                     getHome().consumeOne(WOOD);
@@ -115,7 +115,7 @@ public class SawmillWorker extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

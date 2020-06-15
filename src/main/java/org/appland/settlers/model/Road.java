@@ -20,7 +20,7 @@ public class Road {
     private GameMap     map;
 
     protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
-        if (roadStepsTooLong(wayPoints)) {
+        if (areRoadStepsTooLong(wayPoints)) {
             throw new Exception("The steps are too long in " + wayPoints);
         }
 
@@ -88,7 +88,7 @@ public class Road {
         return steps;
     }
 
-    private boolean roadStepsTooLong(List<Point> wayPoints) {
+    private boolean areRoadStepsTooLong(List<Point> wayPoints) {
         Point previous = null;
 
         for (Point current : wayPoints) {
@@ -137,8 +137,8 @@ public class Road {
         throw new Exception(flag + " is not an endpoint to this road (" + this + ")");
     }
 
-    void setNeedsCourier(boolean needsCourier) {
-        this.needsCourier = needsCourier;
+    void setDriveway() {
+        needsCourier = false;
     }
 
     public boolean isMainRoad() {

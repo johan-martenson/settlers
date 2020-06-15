@@ -53,7 +53,7 @@ public class TestConstruction {
         /* Verify that the sawmill needs the right amount of material for construction */
         assertEquals(sawmill0.getAmount(WOOD), 0);
         assertEquals(sawmill0.getAmount(PLANK), 0);
-        assertTrue(sawmill0.underConstruction());
+        assertTrue(sawmill0.isUnderConstruction());
 
         assertTrue(sawmill0.needsMaterial(PLANK));
 
@@ -69,7 +69,7 @@ public class TestConstruction {
 
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
             sawmill0.stepTime();
         }
 
@@ -78,7 +78,7 @@ public class TestConstruction {
         sawmill0.putCargo(plankCargo);
 
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
             sawmill0.stepTime();
         }
 
@@ -129,7 +129,7 @@ public class TestConstruction {
         Point point1 = new Point(13, 13);
         Barracks barracks0 = map.placeBuilding(new Barracks(player0), point1);
 
-        assertTrue(barracks0.underConstruction());
+        assertTrue(barracks0.isUnderConstruction());
         assertTrue(barracks0.isMilitaryBuilding());
         assertEquals(barracks0.getMaxHostedMilitary(), 2);
         assertEquals(barracks0.getNumberOfHostedMilitary(), 0);
@@ -164,11 +164,11 @@ public class TestConstruction {
         Point point1 = new Point(9, 9);
         Building sawmill0 = map.placeBuilding(new Sawmill(player0), point1);
 
-        assertTrue(sawmill0.underConstruction());
+        assertTrue(sawmill0.isUnderConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
             sawmill0.stepTime();
         }
 
@@ -185,7 +185,7 @@ public class TestConstruction {
         sawmill0.putCargo(stoneCargo);
 
         for (int i = 0; i < 1000; i++) {
-            assertTrue(sawmill0.underConstruction());
+            assertTrue(sawmill0.isUnderConstruction());
             sawmill0.stepTime();
         }
 
@@ -233,11 +233,11 @@ public class TestConstruction {
         Point point1 = new Point(9, 9);
         Building farm = map.placeBuilding(new Farm(player0), point1);
 
-        assertTrue(farm.underConstruction());
+        assertTrue(farm.isUnderConstruction());
 
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
-            assertTrue(farm.underConstruction());
+            assertTrue(farm.isUnderConstruction());
             farm.stepTime();
         }
 
@@ -250,7 +250,7 @@ public class TestConstruction {
         farm.putCargo(stoneCargo);
 
         for (int i = 0; i < 1000; i++) {
-            assertTrue(farm.underConstruction());
+            assertTrue(farm.isUnderConstruction());
             farm.stepTime();
         }
 

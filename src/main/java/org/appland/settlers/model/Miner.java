@@ -100,7 +100,7 @@ public class Miner extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 if (hasFood()) {
 
                     /* Start mining when the rest is over and there is food available */
@@ -118,7 +118,7 @@ public class Miner extends Worker {
                 countdown.step();
             }
         } else if (state == MINING) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 if (map.getAmountOfMineralAtPoint(mineral, getPosition()) > 0) {
                     consumeFood();
 
@@ -166,7 +166,7 @@ public class Miner extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

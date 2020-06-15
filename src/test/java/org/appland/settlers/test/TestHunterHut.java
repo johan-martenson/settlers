@@ -70,7 +70,7 @@ public class TestHunterHut {
 
         /* Verify that this is enough to construct the hunter hut */
         for (int i = 0; i < 100; i++) {
-            assertTrue(hunterHut0.underConstruction());
+            assertTrue(hunterHut0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -102,7 +102,7 @@ public class TestHunterHut {
 
         /* Verify that this is enough to construct the hunter hut */
         for (int i = 0; i < 500; i++) {
-            assertTrue(hunterHut0.underConstruction());
+            assertTrue(hunterHut0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -127,7 +127,7 @@ public class TestHunterHut {
         Point point1 = new Point(10, 10);
         HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        assertTrue(hunterHut.underConstruction());
+        assertTrue(hunterHut.isUnderConstruction());
 
         assertFalse(hunterHut.needsWorker());
 
@@ -156,7 +156,7 @@ public class TestHunterHut {
     public void testPromiseWorkerToUnfinishedHunter() {
         HunterHut hunterHut = new HunterHut(null);
 
-        assertTrue(hunterHut.underConstruction());
+        assertTrue(hunterHut.isUnderConstruction());
 
         try {
             hunterHut.promiseWorker(new Hunter(null, null));
@@ -169,7 +169,7 @@ public class TestHunterHut {
     public void testAssignWorkerToUnfinishedHunter() {
         HunterHut hunterHut = new HunterHut(null);
 
-        assertTrue(hunterHut.underConstruction());
+        assertTrue(hunterHut.isUnderConstruction());
 
         try {
             hunterHut.assignWorker(new Hunter(null, null));
@@ -257,7 +257,7 @@ public class TestHunterHut {
         Point point1 = new Point(10, 10);
         HunterHut hunterHut = map.placeBuilding(new HunterHut(player0), point1);
 
-        assertTrue(hunterHut.underConstruction());
+        assertTrue(hunterHut.isUnderConstruction());
 
         assertFalse(hunterHut.needsWorker());
 

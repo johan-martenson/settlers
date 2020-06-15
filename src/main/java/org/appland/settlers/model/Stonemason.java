@@ -67,7 +67,7 @@ public class Stonemason extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 Point accessPoint = null;
                 double distance = Integer.MAX_VALUE;
                 Point homePoint = getHome().getPosition();
@@ -141,7 +141,7 @@ public class Stonemason extends Worker {
                 countdown.step();
             }
         } else if (state == State.GETTING_STONE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Remove a piece of the stone if it still exists */
                 if (map.isStoneAtPoint(stoneTarget)) {
@@ -188,7 +188,7 @@ public class Stonemason extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

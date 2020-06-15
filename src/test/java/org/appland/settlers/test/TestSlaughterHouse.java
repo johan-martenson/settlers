@@ -78,7 +78,7 @@ public class TestSlaughterHouse {
 
         /* Verify that this is enough to construct the slaughter house */
         for (int i = 0; i < 150; i++) {
-            assertTrue(slaughterHouse0.underConstruction());
+            assertTrue(slaughterHouse0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -113,7 +113,7 @@ public class TestSlaughterHouse {
 
         /* Verify that this is not enough to construct the slaughter house */
         for (int i = 0; i < 500; i++) {
-            assertTrue(slaughterHouse0.underConstruction());
+            assertTrue(slaughterHouse0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -148,7 +148,7 @@ public class TestSlaughterHouse {
 
         /* Verify that this is not enough to construct the slaughter house */
         for (int i = 0; i < 500; i++) {
-            assertTrue(slaughterHouse0.underConstruction());
+            assertTrue(slaughterHouse0.isUnderConstruction());
 
             map.stepTime();
         }

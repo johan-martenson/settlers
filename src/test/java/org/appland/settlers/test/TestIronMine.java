@@ -86,7 +86,7 @@ public class TestIronMine {
 
         /* Verify that this is enough to construct the iron mine */
         for (int i = 0; i < 100; i++) {
-            assertTrue(ironMine0.underConstruction());
+            assertTrue(ironMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -123,7 +123,7 @@ public class TestIronMine {
 
         /* Verify that this is not enough to construct the iron mine */
         for (int i = 0; i < 500; i++) {
-            assertTrue(ironMine0.underConstruction());
+            assertTrue(ironMine0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -151,7 +151,7 @@ public class TestIronMine {
         /* Place a iron mine */
         Building mine = map.placeBuilding(new IronMine(player0), point0);
 
-        assertTrue(mine.underConstruction());
+        assertTrue(mine.isUnderConstruction());
 
         constructHouse(mine);
 

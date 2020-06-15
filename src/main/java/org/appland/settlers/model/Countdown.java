@@ -24,7 +24,7 @@ public class Countdown {
         count--;
     }
 
-    public boolean reachedZero() {
+    public boolean hasReachedZero() {
         return count == 0;
     }
 

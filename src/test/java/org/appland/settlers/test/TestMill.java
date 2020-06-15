@@ -76,7 +76,7 @@ public class TestMill {
 
         /* Verify that this is enough to construct the mill */
         for (int i = 0; i < 150; i++) {
-            assertTrue(mill0.underConstruction());
+            assertTrue(mill0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -111,7 +111,7 @@ public class TestMill {
 
         /* Verify that this is not enough to construct the mill */
         for (int i = 0; i < 500; i++) {
-            assertTrue(mill0.underConstruction());
+            assertTrue(mill0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -146,7 +146,7 @@ public class TestMill {
 
         /* Verify that this is not enough to construct the mill */
         for (int i = 0; i < 500; i++) {
-            assertTrue(mill0.underConstruction());
+            assertTrue(mill0.isUnderConstruction());
 
             map.stepTime();
         }

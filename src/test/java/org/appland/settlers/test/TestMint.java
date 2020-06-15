@@ -81,7 +81,7 @@ public class TestMint {
 
         /* Verify that this is enough to construct the mint */
         for (int i = 0; i < 150; i++) {
-            assertTrue(mint0.underConstruction());
+            assertTrue(mint0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -116,7 +116,7 @@ public class TestMint {
 
         /* Verify that this is not enough to construct the mint */
         for (int i = 0; i < 500; i++) {
-            assertTrue(mint0.underConstruction());
+            assertTrue(mint0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -151,7 +151,7 @@ public class TestMint {
 
         /* Verify that this is not enough to construct the mint */
         for (int i = 0; i < 500; i++) {
-            assertTrue(mint0.underConstruction());
+            assertTrue(mint0.isUnderConstruction());
 
             map.stepTime();
         }

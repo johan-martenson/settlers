@@ -76,7 +76,7 @@ public class TestForesterHut {
 
         /* Verify that this is enough to construct the forester hut */
         for (int i = 0; i < 100; i++) {
-            assertTrue(foresterHut0.underConstruction());
+            assertTrue(foresterHut0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -108,7 +108,7 @@ public class TestForesterHut {
 
         /* Verify that this is enough to construct the forester hut */
         for (int i = 0; i < 500; i++) {
-            assertTrue(foresterHut0.underConstruction());
+            assertTrue(foresterHut0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -133,7 +133,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        assertTrue(foresterHut0.underConstruction());
+        assertTrue(foresterHut0.isUnderConstruction());
         assertFalse(foresterHut0.needsWorker());
 
         /* Connect the forester with the headquarter */
@@ -161,7 +161,7 @@ public class TestForesterHut {
     public void testPromiseWorkerToUnfinishedForester() {
         ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(foresterHut.underConstruction());
+        assertTrue(foresterHut.isUnderConstruction());
 
         try {
             foresterHut.promiseWorker(new Forester(null, null));
@@ -174,7 +174,7 @@ public class TestForesterHut {
     public void testAssignWorkerToUnfinishedForester() {
         ForesterHut foresterHut = new ForesterHut(null);
 
-        assertTrue(foresterHut.underConstruction());
+        assertTrue(foresterHut.isUnderConstruction());
 
         try {
             foresterHut.assignWorker(new Forester(null, null));
@@ -256,7 +256,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
-        assertTrue(foresterHut0.underConstruction());
+        assertTrue(foresterHut0.isUnderConstruction());
         assertFalse(foresterHut0.needsWorker());
 
         /* Connect the forester with the headquarter */

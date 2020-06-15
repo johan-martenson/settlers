@@ -352,7 +352,7 @@ public class Utils {
     public static void constructHouse(Building building) throws Exception {
         GameMap map = building.getMap();
 
-        assertTrue(building.underConstruction());
+        assertTrue(building.isUnderConstruction());
 
         for (int i = 0; i < 20; i++) {
             if (building.needsMaterial(PLANK)) {
@@ -720,14 +720,14 @@ public class Utils {
 
         for (int i = 0; i < 1000; i++) {
 
-            if (projectile.arrived()) {
+            if (projectile.isArrived()) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertTrue(projectile.arrived());
+        assertTrue(projectile.isArrived());
     }
 
     static WildAnimal waitForAnimalToAppear(GameMap map) throws Exception {

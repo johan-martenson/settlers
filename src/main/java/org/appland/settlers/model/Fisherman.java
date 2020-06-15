@@ -109,7 +109,7 @@ public class Fisherman extends Worker {
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (!getHome().outOfNaturalResources()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
                     Point point = getFishingSpot();
 
                     if (point == null) {
@@ -134,7 +134,7 @@ public class Fisherman extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == FISHING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 Cargo cargo = map.catchFishAtPoint(getPosition());
 
@@ -170,7 +170,7 @@ public class Fisherman extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == Fisherman.State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

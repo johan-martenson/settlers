@@ -98,7 +98,7 @@ public class Metalworker extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = MAKING_TOOL;
                 countdown.countFrom(PRODUCTION_TIME);
 
@@ -125,7 +125,7 @@ public class Metalworker extends Worker {
 
         } else if (state == MAKING_TOOL) {
             if (getHome().getAmount(PLANK) > 0 && getHome().getAmount(IRON_BAR) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the ingredients */
                     getHome().consumeOne(PLANK);
@@ -160,7 +160,7 @@ public class Metalworker extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

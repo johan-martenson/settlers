@@ -45,7 +45,7 @@ public class Crop implements Actor {
             return;
         }
 
-        if (growthCountdown.reachedZero()) {
+        if (growthCountdown.hasReachedZero()) {
             if (state == JUST_PLANTED) {
                 state = HALFWAY;
 

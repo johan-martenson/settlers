@@ -106,7 +106,7 @@ public class TestStorehouse {
 
         /* Verify that this is enough to construct the storage */
         for (int i = 0; i < 150; i++) {
-            assertTrue(storage0.underConstruction());
+            assertTrue(storage0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -144,7 +144,7 @@ public class TestStorehouse {
 
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 500; i++) {
-            assertTrue(storage0.underConstruction());
+            assertTrue(storage0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -182,7 +182,7 @@ public class TestStorehouse {
 
         /* Verify that this is not enough to construct the storage */
         for (int i = 0; i < 500; i++) {
-            assertTrue(storage0.underConstruction());
+            assertTrue(storage0.isUnderConstruction());
 
             map.stepTime();
         }

@@ -79,7 +79,7 @@ public class TestIronSmelter {
 
         /* Verify that this is enough to construct the iron smelter */
         for (int i = 0; i < 150; i++) {
-            assertTrue(ironSmelter0.underConstruction());
+            assertTrue(ironSmelter0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -114,7 +114,7 @@ public class TestIronSmelter {
 
         /* Verify that this is not enough to construct the iron smelter */
         for (int i = 0; i < 500; i++) {
-            assertTrue(ironSmelter0.underConstruction());
+            assertTrue(ironSmelter0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -149,7 +149,7 @@ public class TestIronSmelter {
 
         /* Verify that this is not enough to construct the iron smelter */
         for (int i = 0; i < 500; i++) {
-            assertTrue(ironSmelter0.underConstruction());
+            assertTrue(ironSmelter0.isUnderConstruction());
 
             map.stepTime();
         }

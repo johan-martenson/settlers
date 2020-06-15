@@ -76,7 +76,7 @@ public class TestQuarry {
 
         /* Verify that this is enough to construct the quarry */
         for (int i = 0; i < 100; i++) {
-            assertTrue(quarry0.underConstruction());
+            assertTrue(quarry0.isUnderConstruction());
 
             map.stepTime();
         }
@@ -108,7 +108,7 @@ public class TestQuarry {
 
         /* Verify that this is enough to construct the quarry */
         for (int i = 0; i < 500; i++) {
-            assertTrue(quarry0.underConstruction());
+            assertTrue(quarry0.isUnderConstruction());
 
             map.stepTime();
         }

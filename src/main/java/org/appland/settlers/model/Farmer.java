@@ -170,7 +170,7 @@ public class Farmer extends Worker {
     protected void onIdle() throws Exception {
 
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero() && getHome().isProductionEnabled()) {
+            if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 Crop cropToHarvest = findCropToHarvest();
 
                 if (cropToHarvest != null) {
@@ -200,7 +200,7 @@ public class Farmer extends Worker {
                 productivityMeasurer.reportUnproductivity();
             }
         } else if (state == PLANTING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.placeCrop(getPosition());
 
                 state = GOING_BACK_TO_HOUSE;
@@ -210,7 +210,7 @@ public class Farmer extends Worker {
                 countdown.step();
             }
         } else if (state == HARVESTING) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 Crop crop = map.getCropAtPoint(getPosition());
                 crop.harvest();
@@ -253,7 +253,7 @@ public class Farmer extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

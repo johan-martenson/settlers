@@ -63,7 +63,7 @@ public class IronFounder extends Worker {
     @Override
     protected void onIdle() throws Exception {
         if (state == RESTING_IN_HOUSE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 state = MELTING_IRON;
                 countdown.countFrom(PRODUCTION_TIME);
             } else {
@@ -71,7 +71,7 @@ public class IronFounder extends Worker {
             }
         } else if (state == MELTING_IRON) {
             if (getHome().getAmount(COAL) > 0 && getHome().getAmount(IRON) > 0 && getHome().isProductionEnabled()) {
-                if (countdown.reachedZero()) {
+                if (countdown.hasReachedZero()) {
 
                     /* Consume the resources */
                     getHome().consumeOne(COAL);
@@ -121,7 +121,7 @@ public class IronFounder extends Worker {
                 getHome().getFlag().promiseCargo();
             }
         } else if (state == State.DEAD) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
                 map.removeWorker(this);
             } else {
                 countdown.step();

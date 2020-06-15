@@ -58,7 +58,7 @@ public class WildAnimal extends Worker {
     protected void onIdle() throws Exception {
 
         if (state == State.ALIVE) {
-            if (countdown.reachedZero()) {
+            if (countdown.hasReachedZero()) {
 
                 /* Should the animal stand still or move? */
                 if (random.nextBoolean()) {
