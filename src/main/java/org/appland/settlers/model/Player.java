@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -444,7 +445,7 @@ public class Player {
 
     public Map<Material, Integer> getInventory() {
 
-        Map<Material, Integer> result = new HashMap<>();
+        Map<Material, Integer> result = new EnumMap<>(Material.class);
         int current;
 
         for (Building building : getBuildings()) {
@@ -731,7 +732,7 @@ public class Player {
     }
 
     public void reportWorkerWithNewTarget(Worker worker) {
-        if (worker.getPlannedPath().isEmpty() || worker.getPlannedPath().size() == 0) {
+        if (worker.getPlannedPath().isEmpty() || worker.getPlannedPath().isEmpty()) {
             return;
         }
 
@@ -1216,7 +1217,7 @@ public class Player {
         }
 
         /* Can not attack itself */
-        if (this.equals(building.getPlayer())) {
+        if (equals(building.getPlayer())) {
             return false;
         }
 

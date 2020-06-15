@@ -54,10 +54,10 @@ public abstract class Worker implements Actor {
 
         ProductivityMeasurer(int cycleLength) {
             this.cycleLength = cycleLength;
-            this.currentProductivityMeasurement = 0;
-            this.productiveTime = new int[] {0, 0, 0, 0};
-            this.productionCycle = 0;
-            this.currentUnproductivityMeasurement = 0;
+            currentProductivityMeasurement = 0;
+            productiveTime = new int[] {0, 0, 0, 0};
+            productionCycle = 0;
+            currentUnproductivityMeasurement = 0;
         }
 
         void nextProductivityCycle() {
@@ -280,7 +280,7 @@ public abstract class Worker implements Actor {
     }
 
     private int getSpeed() {
-        Walker walker = this.getClass().getAnnotation(Walker.class);
+        Walker walker = getClass().getAnnotation(Walker.class);
 
         return walker.speed();
     }
@@ -324,10 +324,10 @@ public abstract class Worker implements Actor {
             return 100;
         }
 
-        return (int)(((double)(getSpeed() - walkCountdown.getCount()) / (double)getSpeed()) * 100);
+        return (int)(((double)(getSpeed() - walkCountdown.getCount()) / getSpeed()) * 100);
     }
 
-    public void enterBuilding(Building building) throws Exception {
+    public void enterBuilding(Building building) throws Exception, InvalidGameLogicException {
         if (!getPosition().equals(building.getPosition())) {
             throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
         }
@@ -410,7 +410,7 @@ public abstract class Worker implements Actor {
         }
     }
 
-    void setTarget(Point point, Point via) throws Exception {
+    void setTarget(Point point, Point via) throws Exception, InvalidRouteException {
 
         target = point;
 
@@ -530,7 +530,7 @@ public abstract class Worker implements Actor {
         path.add(previousLastPoint);
 
         /* Set the state to be walking between two fixed points */
-        state = States.WALKING_BETWEEN_POINTS;
+        state = WALKING_BETWEEN_POINTS;
     }
 
     GameMap getMap() {
@@ -538,11 +538,11 @@ public abstract class Worker implements Actor {
     }
 
     void cancelWalkingToTarget() {
-        state = States.IDLE_OUTSIDE;
+        state = IDLE_OUTSIDE;
     }
 
     void clearTargetBuilding() {
-        this.buildingToEnter = null;
+        buildingToEnter = null;
     }
 
     int getProductivity() {
@@ -560,13 +560,13 @@ public abstract class Worker implements Actor {
         Collection<Point> area = GameUtils.getHexagonAreaAroundPoint(getPosition(), 8, map);
 
         for (Point point : area) {
-            List<Point> path = map.findWayOffroad(getPosition(), point, null);
+            List<Point> path = map.findWayOffroad(getPosition(), point, null); // FIXME: this hides a field
 
             if (path == null) {
                 continue;
             }
 
-            if (path.size() == 0) {
+            if (path.isEmpty()) {
                 continue;
             }
 

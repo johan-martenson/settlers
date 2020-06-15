@@ -12,12 +12,12 @@ public class LookoutTower extends Building {
     }
 
     @Override
-    public void stopProduction() throws Exception {
+    public void stopProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot stop production in barracks.");
     }
 
     @Override
-    public void resumeProduction() throws Exception {
+    public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in barracks.");
     }
 }

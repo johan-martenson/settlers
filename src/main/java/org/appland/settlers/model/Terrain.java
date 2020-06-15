@@ -364,7 +364,7 @@ public class Terrain {
      * @return
      */
     public boolean isNextToSwamp(Point site) {
-        return isAnyAdjacentTile(site, Vegetation.SWAMP);
+        return isAnyAdjacentTile(site, SWAMP);
     }
 
     /**

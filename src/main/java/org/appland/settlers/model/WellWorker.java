@@ -116,7 +116,7 @@ public class WellWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == State.GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = getHome().getFlag();
             Cargo cargo = getCargo();
@@ -152,12 +152,12 @@ public class WellWorker extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -166,7 +166,7 @@ public class WellWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WELL_WORKER);
 
         if (storage != null) {
@@ -213,7 +213,7 @@ public class WellWorker extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     private boolean isWaterInGround() {

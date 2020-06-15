@@ -11,7 +11,7 @@ import static org.appland.settlers.model.Material.PLANK;
 
 @HouseSize(size = Size.SMALL, material = {PLANK, PLANK})
 @RequiresWorker(workerType = HUNTER)
-@Production(requiredGoods = {}, output = {MEAT})
+@Production(requiredGoods = {}, output = MEAT)
 public class HunterHut extends Building {
 
     public HunterHut(Player player0) {

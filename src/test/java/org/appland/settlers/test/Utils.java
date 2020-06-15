@@ -861,14 +861,14 @@ public class Utils {
 
         for (int i = 0; i < 1000; i++) {
 
-            if (crop.getGrowthState() == Crop.GrowthState.FULL_GROWN) {
+            if (crop.getGrowthState() == FULL_GROWN) {
                 break;
             }
 
             map.stepTime();
         }
 
-        assertEquals(crop.getGrowthState(), Crop.GrowthState.FULL_GROWN);
+        assertEquals(crop.getGrowthState(), FULL_GROWN);
     }
 
     static Crop waitForFarmerToPlantCrop(GameMap map, Farmer farmer0) throws Exception {
@@ -1851,7 +1851,7 @@ public class Utils {
                 return new ArrayList<>();
             }
 
-            int index = this.gameChanges.indexOf(gameChangesEvent);
+            int index = gameChanges.indexOf(gameChangesEvent);
 
             return gameChanges.subList(index + 1, gameChanges.size() - 1);
 
@@ -1862,11 +1862,11 @@ public class Utils {
 
             for (Map.Entry<Point, Size> entry : availableHousePoints.entrySet()) {
                 if (entry.getValue() == LARGE) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(LARGE_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 } else if (entry.getValue() == MEDIUM) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
-                } else if (entry.getValue() == Size.SMALL) {
-                    availableConstruction.put(entry.getKey(), new AvailableConstruction(AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, entry.getKey()));
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(MEDIUM_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
+                } else if (entry.getValue() == SMALL) {
+                    availableConstruction.put(entry.getKey(), new AvailableConstruction(SMALL_POSSIBLE, NO_FLAG_POSSIBLE, entry.getKey()));
                 }
             }
 
@@ -1884,9 +1884,9 @@ public class Utils {
                 AvailableConstruction availableConstructionAtPoint = availableConstruction.get(minePoint);
 
                 if (availableConstructionAtPoint == null) {
-                    availableConstruction.put(minePoint, new AvailableConstruction(AvailableConstruction.PossibleBuildings.MINE_POSSIBLE, AvailableConstruction.PossibleFlag.NO_FLAG_POSSIBLE, minePoint));
+                    availableConstruction.put(minePoint, new AvailableConstruction(MINE_POSSIBLE, NO_FLAG_POSSIBLE, minePoint));
                 } else {
-                    availableConstruction.get(minePoint).setAvailableBuilding(AvailableConstruction.PossibleBuildings.MINE_POSSIBLE);
+                    availableConstruction.get(minePoint).setAvailableBuilding(MINE_POSSIBLE);
                 }
             }
         }
@@ -1902,12 +1902,12 @@ public class Utils {
 
                 if (entry.getValue().getAvailableBuilding() == NO_BUILDING_POSSIBLE) {
                     assertFalse(availableBuildingsOnMap.containsKey(entry.getKey()));
-                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE) {
-                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), Size.LARGE);
-                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE) {
+                } else if (entry.getValue().getAvailableBuilding() == LARGE_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), LARGE);
+                } else if (entry.getValue().getAvailableBuilding() == MEDIUM_POSSIBLE) {
                     assertEquals(availableBuildingsOnMap.get(entry.getKey()), MEDIUM);
-                } else if (entry.getValue().getAvailableBuilding() == AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE) {
-                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), Size.SMALL);
+                } else if (entry.getValue().getAvailableBuilding() == SMALL_POSSIBLE) {
+                    assertEquals(availableBuildingsOnMap.get(entry.getKey()), SMALL);
                 }
 
                 if (entry.getValue().getAvailableFlag() == FLAG_POSSIBLE) {
@@ -1929,17 +1929,17 @@ public class Utils {
                     assertNotNull(availableConstruction.get(entry.getKey()));
                     assertEquals(
                             availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            AvailableConstruction.PossibleBuildings.LARGE_POSSIBLE
+                            LARGE_POSSIBLE
                     );
                 } else if (entry.getValue() == MEDIUM) {
                     assertEquals(
                             availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            AvailableConstruction.PossibleBuildings.MEDIUM_POSSIBLE
+                            MEDIUM_POSSIBLE
                     );
                 } else if (entry.getValue() == SMALL) {
                     assertEquals(
                             availableConstruction.get(entry.getKey()).getAvailableBuilding(),
-                            AvailableConstruction.PossibleBuildings.SMALL_POSSIBLE
+                            SMALL_POSSIBLE
                     );
                 } else {
                     assertEquals(

@@ -104,6 +104,6 @@ public class Land {
 
     @Override
     public String toString() {
-        return "Border: " + border + ", containing" + points;
+        return "Border: " + border + ", containing " + points;
     }
 }

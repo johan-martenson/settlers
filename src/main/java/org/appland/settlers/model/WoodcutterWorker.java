@@ -152,7 +152,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception {
+    public void onArrival() throws Exception, InvalidRouteException {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
@@ -195,12 +195,12 @@ public class WoodcutterWorker extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -209,7 +209,7 @@ public class WoodcutterWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, WOODCUTTER_WORKER);
 
         if (storage != null) {
@@ -255,7 +255,7 @@ public class WoodcutterWorker extends Worker {
 
         return (int)
                 ((double)(productivityMeasurer.getSumMeasured()) /
-                        (double)(productivityMeasurer.getNumberOfCycles()) * 100);
+                        (productivityMeasurer.getNumberOfCycles()) * 100);
     }
 
     @Override

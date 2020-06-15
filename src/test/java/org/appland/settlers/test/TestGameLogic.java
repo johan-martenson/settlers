@@ -275,7 +275,7 @@ public class TestGameLogic {
 
         assertTrue(barracks0.underConstruction());
         assertTrue(barracks0.isMilitaryBuilding());
-        assertTrue(headquarter0.getAmount(Material.PRIVATE) >= 10);
+        assertTrue(headquarter0.getAmount(PRIVATE) >= 10);
 
         int currentNumberOfMilitary = headquarter0.getAmount(PRIVATE);
 
@@ -292,7 +292,7 @@ public class TestGameLogic {
         assertFalse(map.getWorkers().get(3).isArrived());
         assertTrue(map.getWorkers().get(3).isTraveling());
 
-        assertEquals(headquarter0.getAmount(Material.PRIVATE), currentNumberOfMilitary - 1);
+        assertEquals(headquarter0.getAmount(PRIVATE), currentNumberOfMilitary - 1);
 
         /* Let the military reach the barracks */
         Utils.fastForwardUntilWorkersReachTarget(map, map.getWorkers().get(3));

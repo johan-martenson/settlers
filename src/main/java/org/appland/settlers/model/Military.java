@@ -219,7 +219,7 @@ public class Military extends Worker {
 
             /* The building may have sent us back immediately, otherwise become deployed */
             if (state == WALKING_TO_TARGET) {
-                state = State.DEPLOYED;
+                state = DEPLOYED;
             }
         } else if (state == RETURNING_TO_STORAGE) {
             Building storage = map.getBuildingAtPoint(getPosition());
@@ -368,16 +368,16 @@ public class Military extends Worker {
             setHome(building);
         }
 
-	if (state == State.WALKING_TO_TARGET             ||
-	    state == State.WALKING_TO_TAKE_OVER_BUILDING ||
-	    state == State.WALKING_HOME_AFTER_FIGHT      ||
-            state == State.DEPLOYED) {
+	if (state == WALKING_TO_TARGET             ||
+	    state == WALKING_TO_TAKE_OVER_BUILDING ||
+	    state == WALKING_HOME_AFTER_FIGHT      ||
+            state == DEPLOYED) {
             building.deployMilitary(this);
         }
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;
@@ -468,7 +468,7 @@ public class Military extends Worker {
     }
 
     public boolean isFighting() {
-        return state == State.DEFENDING || state == State.ATTACKING;
+        return state == DEFENDING || state == ATTACKING;
     }
 
     private int getHealthForRank(Rank rank) {
@@ -570,7 +570,7 @@ public class Military extends Worker {
         /* Start the fight when the military is in the right position */
         if (state == State.WALKING_APART_TO_DEFEND) {
             state = DEFENDING;
-        } else if (state == State.WALKING_APART_TO_ATTACK) {
+        } else if (state == WALKING_APART_TO_ATTACK) {
             state = ATTACKING;
         }
     }

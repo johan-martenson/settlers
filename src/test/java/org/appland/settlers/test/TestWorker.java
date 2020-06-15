@@ -44,7 +44,7 @@ public class TestWorker {
     public void testWorkerCannotEnterBuildingWhenItsNotAtRightPosition() throws Exception {
 
         /* Create a single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -74,7 +74,7 @@ public class TestWorker {
     public void testWalking() throws Exception {
 
         /* Create gamemap */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);

@@ -55,7 +55,7 @@ public class TestForesterHut {
     public void testForesterHutOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -88,7 +88,7 @@ public class TestForesterHut {
     public void testForesterHutCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -120,7 +120,7 @@ public class TestForesterHut {
     public void testConstructForester() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -187,7 +187,7 @@ public class TestForesterHut {
     public void testAssignWorkerTwice() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -200,7 +200,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        Utils.constructHouse(foresterHut);
+        constructHouse(foresterHut);
 
         foresterHut.assignWorker(new Forester(null, null));
 
@@ -215,7 +215,7 @@ public class TestForesterHut {
     public void testPromiseWorkerTwice() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -228,7 +228,7 @@ public class TestForesterHut {
         Point point1 = new Point(7, 9);
         Building foresterHut = map.placeBuilding(new ForesterHut(player0), point1);
 
-        Utils.constructHouse(foresterHut);
+        constructHouse(foresterHut);
 
         foresterHut.promiseWorker(new Forester(null, null));
 
@@ -243,7 +243,7 @@ public class TestForesterHut {
     public void testForesterHutIsNotMilitary() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -281,7 +281,7 @@ public class TestForesterHut {
     public void testForesterIsAssignedToForesterHut() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -300,7 +300,7 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut);
+        constructHouse(foresterHut);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -312,7 +312,7 @@ public class TestForesterHut {
     public void testForesterIsCreatedFromShovel() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -335,7 +335,7 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, foresterHut.getFlag(), headquarter.getFlag());
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut);
+        constructHouse(foresterHut);
 
         /* Run game logic twice, once to place courier and once to place forester */
         Utils.fastForward(2, map);
@@ -347,7 +347,7 @@ public class TestForesterHut {
     public void testOnlyOneForesterIsAssignedToForesterHut() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -383,7 +383,7 @@ public class TestForesterHut {
     public void testArrivedForesterRestsInHutAndThenLeaves() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -422,7 +422,7 @@ public class TestForesterHut {
     public void testForesterFindsSpotToPlantNewTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -467,7 +467,7 @@ public class TestForesterHut {
     public void testForesterReachesPointToPlantTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -512,7 +512,7 @@ public class TestForesterHut {
     public void testForesterPlantsTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -570,7 +570,7 @@ public class TestForesterHut {
     public void testForesterReturnsHomeAfterPlantingTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -634,7 +634,7 @@ public class TestForesterHut {
     public void testForesterHutProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -668,7 +668,7 @@ public class TestForesterHut {
     public void testForesterStaysInsideWhenThereAreNoSpotsAvailable() throws Exception {
 
         /* Create a new game map with a single player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -719,7 +719,7 @@ public class TestForesterHut {
     public void testForesterAvoidsUnreachableSpots() throws Exception {
 
         /* Create a new game map with a single player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -775,7 +775,7 @@ public class TestForesterHut {
     public void testForesterDoesNotPlantTreesInWater() throws Exception {
 
         /* Create a new game map with a single player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -831,7 +831,7 @@ public class TestForesterHut {
     public void testForesterDoesNotPlantTreeOnStone() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -880,7 +880,7 @@ public class TestForesterHut {
     public void testForesterDoesNotPlantTreeOnMountain() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -941,7 +941,7 @@ public class TestForesterHut {
     public void testForesterGoesBackToStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -955,7 +955,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point26);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -984,7 +984,7 @@ public class TestForesterHut {
     public void testForesterGoesBackOnToStorageOnRoadsIfPossibleWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1001,7 +1001,7 @@ public class TestForesterHut {
         map.placeAutoSelectedRoad(player0, foresterHut0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Worker forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1032,7 +1032,7 @@ public class TestForesterHut {
     public void testProductionInForesterHutCanBeStopped() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1052,7 +1052,7 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Assign a worker to the forester hut */
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1100,7 +1100,7 @@ public class TestForesterHut {
     public void testProductionInForesterHutCanBeResumed() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1120,7 +1120,7 @@ public class TestForesterHut {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Assign a worker to the forester hut */
         Forester forester = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1181,7 +1181,7 @@ public class TestForesterHut {
     public void testAssignedForesterHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1197,7 +1197,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Connect the forester hut with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
@@ -1248,7 +1248,7 @@ public class TestForesterHut {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -1258,7 +1258,7 @@ public class TestForesterHut {
         ForesterHut foresterHut0 = map.placeBuilding(new ForesterHut(player0), point4);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Forester worker = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1273,7 +1273,7 @@ public class TestForesterHut {
     public void testForesterReturnsHomeWithoutPlantingTreeIfAFlagIsPlacedThereWhilePlanting() throws Exception {
 
         /* Create a game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1347,7 +1347,7 @@ public class TestForesterHut {
     public void testForesterReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1409,7 +1409,7 @@ public class TestForesterHut {
     public void testForesterContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1474,7 +1474,7 @@ public class TestForesterHut {
     public void testForesterReturnsToStorageIfForesterHutIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1535,7 +1535,7 @@ public class TestForesterHut {
     public void testForesterGoesOffroadBackToClosestStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1549,7 +1549,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1559,7 +1559,7 @@ public class TestForesterHut {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Wait for the forester to be inside the house */
         Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
@@ -1588,7 +1588,7 @@ public class TestForesterHut {
     public void testForesterReturnsOffroadAndAvoidsBurningStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1602,7 +1602,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1612,7 +1612,7 @@ public class TestForesterHut {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Wait for the forester to be inside the house */
         Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
@@ -1644,7 +1644,7 @@ public class TestForesterHut {
     public void testForesterReturnsOffroadAndAvoidsDestroyedStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1658,7 +1658,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1668,7 +1668,7 @@ public class TestForesterHut {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Wait for the forester to be inside the house */
         Utils.waitForWorkerToBeInside(foresterHut0.getWorker(), map);
@@ -1703,7 +1703,7 @@ public class TestForesterHut {
     public void testForesterReturnsOffroadAndAvoidsUnfinishedStorageWhenForesterHutIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1717,7 +1717,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Occupy the forester hut */
         Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1750,7 +1750,7 @@ public class TestForesterHut {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1767,7 +1767,7 @@ public class TestForesterHut {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), foresterHut0.getFlag());
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Wait for a worker to start walking to the building */
         Worker worker = Utils.waitForWorkersOutsideBuilding(Forester.class, 1, player0).get(0);
@@ -1792,7 +1792,7 @@ public class TestForesterHut {
     public void testTwoForestersThatTryToPlantOnSameSpotResultInOneTreeAndBothGoBack() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 50, 50);
@@ -1855,7 +1855,7 @@ public class TestForesterHut {
     public void testForesterHutCannotProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1869,7 +1869,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Finish construction of the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Populate the forester hut */
         Worker forester0 = Utils.occupyBuilding(new Forester(player0, map), foresterHut0);
@@ -1882,7 +1882,7 @@ public class TestForesterHut {
     public void testForesterHutReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1896,7 +1896,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Verify that the reported output is correct */
         assertEquals(foresterHut0.getProducedMaterial().length, 0);
@@ -1906,7 +1906,7 @@ public class TestForesterHut {
     public void testForesterHutReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1937,7 +1937,7 @@ public class TestForesterHut {
     public void testForesterHutReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1951,7 +1951,7 @@ public class TestForesterHut {
         Building foresterHut0 = map.placeBuilding(new ForesterHut(player0), point1);
 
         /* Construct the forester hut */
-        Utils.constructHouse(foresterHut0);
+        constructHouse(foresterHut0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(foresterHut0.getMaterialNeeded().size(), 0);
@@ -1965,7 +1965,7 @@ public class TestForesterHut {
     public void testWorkerGoesToOtherStorageWhenStorageIsBlockedAndForesterHutIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2028,7 +2028,7 @@ public class TestForesterHut {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndForesterHutIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2092,7 +2092,7 @@ public class TestForesterHut {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2130,7 +2130,7 @@ public class TestForesterHut {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2175,7 +2175,7 @@ public class TestForesterHut {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2235,7 +2235,7 @@ public class TestForesterHut {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

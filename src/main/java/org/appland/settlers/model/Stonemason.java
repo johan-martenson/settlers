@@ -197,7 +197,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception {
+    public void onArrival() throws Exception, InvalidRouteException {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
@@ -240,12 +240,12 @@ public class Stonemason extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -254,7 +254,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
 
         if (storage != null) {
@@ -301,7 +301,7 @@ public class Stonemason extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

@@ -1148,7 +1148,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testBarracksCanBeUpgraded() throws Exception {
+    public void testBarracksCanBeUpgraded() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1278,7 +1278,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testCannotUpgradeBarracksWithoutMaterial() throws Exception {
+    public void testCannotUpgradeBarracksWithoutMaterial() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1335,7 +1335,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testCannotUpgradeBarracksBeingUpgraded() throws Exception {
+    public void testCannotUpgradeBarracksBeingUpgraded() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1374,7 +1374,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testUpgradingCausesMaterialToGetDelivered() throws Exception {
+    public void testUpgradingCausesMaterialToGetDelivered() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1468,7 +1468,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testOccupiedBarracksIsOccupiedAfterUpgrade() throws Exception {
+    public void testOccupiedBarracksIsOccupiedAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1524,7 +1524,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testCoinRemainsAfterUpgrade() throws Exception {
+    public void testCoinRemainsAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1583,7 +1583,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception {
+    public void testBuildingDuringUpgradeCanBeDestroyed() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1638,7 +1638,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testPlayerIsCorrectAfterUpgrade() throws Exception {
+    public void testPlayerIsCorrectAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1705,7 +1705,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception {
+    public void testCanHostRightNumberOfSoldiersAfterUpgraded() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1761,7 +1761,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testBorderIsExpandedAfterUpgrade() throws Exception {
+    public void testBorderIsExpandedAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1824,7 +1824,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testFlagIsCorrectAfterUpgrade() throws Exception {
+    public void testFlagIsCorrectAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1881,7 +1881,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception {
+    public void testOccupiedBuildingRemainsOccupiedDuringUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -1975,7 +1975,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testCanUpgradeAfterDisablingPromotions() throws Exception {
+    public void testCanUpgradeAfterDisablingPromotions() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2206,7 +2206,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception {
+    public void testUpgradeDoesNotDestroyNearbyHouses() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2291,7 +2291,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception {
+    public void testUnoccupiedBuildingRemainsUnoccupiedDuringAndAfterUpgrade() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2352,7 +2352,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception {
+    public void testUpgradeOfBuildingWithMilitaryDoesNotCauseOverAllocation() throws Exception, InvalidUserActionException {
 
         /* Creating new player */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2486,7 +2486,7 @@ public class TestBarracks {
     }
 
     @Test
-    public void testUpgradedBarracksGetsPopulatedFully() throws Exception {
+    public void testUpgradedBarracksGetsPopulatedFully() throws Exception, InvalidUserActionException {
 
         /* Starting new game */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);

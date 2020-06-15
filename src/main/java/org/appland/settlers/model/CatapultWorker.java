@@ -87,7 +87,7 @@ public class CatapultWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {

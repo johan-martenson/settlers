@@ -59,7 +59,7 @@ public class TestGraniteMine {
     public void testGraniteMineOnlyNeedsFourPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -97,7 +97,7 @@ public class TestGraniteMine {
     public void testGraniteMineCannotBeConstructedWithThreePlanks() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -134,7 +134,7 @@ public class TestGraniteMine {
     public void testConstructGraniteMine() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -152,7 +152,7 @@ public class TestGraniteMine {
 
         assertTrue(mine.underConstruction());
 
-        Utils.constructHouse(mine);
+        constructHouse(mine);
 
         assertTrue(mine.isReady());
     }
@@ -161,7 +161,7 @@ public class TestGraniteMine {
     public void testGraniteMineIsNotMilitary() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -182,7 +182,7 @@ public class TestGraniteMine {
         /* Verify that the mine is not a military building */
         assertFalse(mine.isMilitaryBuilding());
 
-        Utils.constructHouse(mine);
+        constructHouse(mine);
 
         assertFalse(mine.isMilitaryBuilding());
     }
@@ -191,7 +191,7 @@ public class TestGraniteMine {
     public void testGraniteMineUnderConstructionNotNeedsMiner() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -217,7 +217,7 @@ public class TestGraniteMine {
     public void testFinishedGraniteMineNeedsMiner() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -235,7 +235,7 @@ public class TestGraniteMine {
         /* Place a granite mine */
         Building mine = map.placeBuilding(new GraniteMine(player0), point0);
 
-        Utils.constructHouse(mine);
+        constructHouse(mine);
 
         /* Verify that the finished mine needs a worker */
         assertTrue(mine.needsWorker());
@@ -245,7 +245,7 @@ public class TestGraniteMine {
     public void testMinerIsAssignedToFinishedGraniteMine() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -286,7 +286,7 @@ public class TestGraniteMine {
     public void testCanPlaceMineOnPointSurroundedByMountain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -309,7 +309,7 @@ public class TestGraniteMine {
     public void testArrivedMinerRests() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -352,7 +352,7 @@ public class TestGraniteMine {
     public void testMinerMinesGranite() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -406,7 +406,7 @@ public class TestGraniteMine {
     public void testGraniteMineGoesToFlagWithCargoAndBack() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -468,7 +468,7 @@ public class TestGraniteMine {
     public void testCanNotPlaceMineOnGrass() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 10, 10);
@@ -489,7 +489,7 @@ public class TestGraniteMine {
     public void testGraniteMineRunsOutOfGranite() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -568,7 +568,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutGraniteProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -619,7 +619,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutFoodProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -663,7 +663,7 @@ public class TestGraniteMine {
     public void testMiningConsumesFood() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -710,7 +710,7 @@ public class TestGraniteMine {
     public void testGraniteMineCanConsumeAllTypesOfFood() throws Exception {
 
         /* Start new game with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -768,7 +768,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -786,7 +786,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -839,7 +839,7 @@ public class TestGraniteMine {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -857,7 +857,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Deliver material to the granite mine */
         Cargo fishCargo = new Cargo(FISH, map);
@@ -941,7 +941,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackToStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -959,7 +959,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -988,7 +988,7 @@ public class TestGraniteMine {
     public void testMinerGoesBackOnToStorageOnRoadsIfPossibleWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1009,7 +1009,7 @@ public class TestGraniteMine {
         map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1042,7 +1042,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeStopped() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1063,7 +1063,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -1105,7 +1105,7 @@ public class TestGraniteMine {
     public void testProductionInGraniteMineCanBeResumed() throws Exception {
 
         /* Create game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1126,7 +1126,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, graniteMine0.getFlag(), headquarter.getFlag());
 
         /* Finish the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Deliver food to the miner */
         Cargo food = new Cargo(BREAD, map);
@@ -1177,7 +1177,7 @@ public class TestGraniteMine {
     public void testAssignedMinerHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1197,7 +1197,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point0);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Connect the granite mine with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
@@ -1253,7 +1253,7 @@ public class TestGraniteMine {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -1262,7 +1262,7 @@ public class TestGraniteMine {
         GraniteMine graniteMine0 = map.placeBuilding(new GraniteMine(player0), point4);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Miner worker = Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1277,7 +1277,7 @@ public class TestGraniteMine {
     public void testMinerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1343,7 +1343,7 @@ public class TestGraniteMine {
     public void testMinerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1412,7 +1412,7 @@ public class TestGraniteMine {
     public void testMinerReturnsToStorageIfGraniteMineIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1477,7 +1477,7 @@ public class TestGraniteMine {
     public void testMinerGoesOffroadBackToClosestStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1495,7 +1495,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1505,7 +1505,7 @@ public class TestGraniteMine {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the granite mine */
         Worker miner = graniteMine0.getWorker();
@@ -1531,7 +1531,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsBurningStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1549,7 +1549,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1559,7 +1559,7 @@ public class TestGraniteMine {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the storage */
         storehouse0.tearDown();
@@ -1588,7 +1588,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsDestroyedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1606,7 +1606,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1616,7 +1616,7 @@ public class TestGraniteMine {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the storage */
         storehouse0.tearDown();
@@ -1648,7 +1648,7 @@ public class TestGraniteMine {
     public void testMinerReturnsOffroadAndAvoidsUnfinishedStorageWhenGraniteMineIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1666,7 +1666,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Occupy the granite mine */
         Utils.occupyBuilding(new Miner(player0, map), graniteMine0);
@@ -1699,7 +1699,7 @@ public class TestGraniteMine {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1720,7 +1720,7 @@ public class TestGraniteMine {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), graniteMine0.getFlag());
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Wait for a worker to start walking to the building */
         Worker worker = Utils.waitForWorkersOutsideBuilding(Miner.class, 1, player0).get(0);
@@ -1745,7 +1745,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithoutResourcesHasZeroProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1763,7 +1763,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine);
+        constructHouse(graniteMine);
 
         /* Populate the granite mine */
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
@@ -1785,7 +1785,7 @@ public class TestGraniteMine {
     public void testGraniteMineWithAbundantResourcesHasFullProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1803,7 +1803,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine);
+        constructHouse(graniteMine);
 
         /* Populate the granite mine */
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
@@ -1844,7 +1844,7 @@ public class TestGraniteMine {
     public void testGraniteMineLosesProductivityWhenResourcesRunOut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1862,7 +1862,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine);
+        constructHouse(graniteMine);
 
         /* Populate the granite mine */
         Worker miner0 = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
@@ -1898,7 +1898,7 @@ public class TestGraniteMine {
     public void testUnoccupiedGraniteMineHasNoProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1916,7 +1916,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the granite mine */
-        Utils.constructHouse(graniteMine);
+        constructHouse(graniteMine);
 
         /* Verify that the unoccupied granite mine is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -1930,7 +1930,7 @@ public class TestGraniteMine {
     public void testGraniteMineCanProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1947,7 +1947,7 @@ public class TestGraniteMine {
         Building graniteMine = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Finish construction of the stone mine */
-        Utils.constructHouse(graniteMine);
+        constructHouse(graniteMine);
 
         /* Populate the granite mine */
         Worker miner = Utils.occupyBuilding(new Miner(player0, map), graniteMine);
@@ -1960,7 +1960,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1977,7 +1977,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Construct the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Verify that the reported output is correct */
         assertEquals(graniteMine0.getProducedMaterial().length, 1);
@@ -1988,7 +1988,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2022,7 +2022,7 @@ public class TestGraniteMine {
     public void testGraniteMineReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2039,7 +2039,7 @@ public class TestGraniteMine {
         Building graniteMine0 = map.placeBuilding(new GraniteMine(player0), point1);
 
         /* Construct the granite mine */
-        Utils.constructHouse(graniteMine0);
+        constructHouse(graniteMine0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(graniteMine0.getMaterialNeeded().size(), 3);
@@ -2063,7 +2063,7 @@ public class TestGraniteMine {
     public void testGraniteMineWaitsWhenFlagIsFull() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2136,7 +2136,7 @@ public class TestGraniteMine {
     public void testGraniteMineDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2227,7 +2227,7 @@ public class TestGraniteMine {
     public void testWhenStoneDeliveryAreBlockedGraniteMineFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2287,7 +2287,7 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2356,7 +2356,7 @@ public class TestGraniteMine {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndGraniteMineIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2427,7 +2427,7 @@ public class TestGraniteMine {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2465,7 +2465,7 @@ public class TestGraniteMine {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2510,7 +2510,7 @@ public class TestGraniteMine {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2574,7 +2574,7 @@ public class TestGraniteMine {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

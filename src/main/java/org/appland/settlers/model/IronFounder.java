@@ -95,7 +95,7 @@ public class IronFounder extends Worker {
 
                         getHome().getFlag().promiseCargo();
                     } else {
-                        state = IronFounder.State.WAITING_FOR_SPACE_ON_FLAG;
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     }
 
                 } else {
@@ -130,7 +130,7 @@ public class IronFounder extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
 
             Flag flag = map.getFlagAtPoint(getPosition());
@@ -163,18 +163,18 @@ public class IronFounder extends Worker {
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, IRON_FOUNDER);
 
             if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setTarget(storehouse.getPosition());
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -188,7 +188,7 @@ public class IronFounder extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, IRON_FOUNDER);
 
         if (storage != null) {
@@ -200,7 +200,7 @@ public class IronFounder extends Worker {
             storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), IRON_FOUNDER);
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
@@ -217,7 +217,7 @@ public class IronFounder extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
@@ -235,7 +235,7 @@ public class IronFounder extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

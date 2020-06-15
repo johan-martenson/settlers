@@ -19,12 +19,12 @@ public class Barracks extends Building {
     }
 
     @Override
-    public void stopProduction() throws Exception {
+    public void stopProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot stop production in barracks.");
     }
 
     @Override
-    public void resumeProduction() throws Exception {
+    public void resumeProduction() throws InvalidUserActionException {
         throw new InvalidUserActionException("Cannot resume production in barracks.");
     }
 
@@ -55,7 +55,7 @@ public class Barracks extends Building {
         for (int i = 0; i < currentMilitary; i++) {
 
             /* Move one military from the old to the new building */
-            Military military = this.retrieveMilitary();
+            Military military = retrieveMilitary();
 
             upgraded.promiseMilitary(military);
             military.enterBuilding(upgraded);

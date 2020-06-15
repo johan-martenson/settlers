@@ -147,7 +147,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -184,14 +184,14 @@ public class Armorer extends Worker {
 
                 setTarget(storehouse.getPosition());
             } else {
-                state = Armorer.State.GOING_TO_DIE;
+                state = GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = DEAD;
 
@@ -200,7 +200,7 @@ public class Armorer extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
 
         if (storage != null) {
@@ -250,7 +250,7 @@ public class Armorer extends Worker {
 
         /* Measure productivity across the length of four rest-work periods */
         return (int)
-                (((double)productivityMeasurer.getSumMeasured() / (double)(4 * PRODUCTION_TIME)) * 100);
+                (((double)productivityMeasurer.getSumMeasured() / (4 * PRODUCTION_TIME)) * 100);
     }
 
     @Override

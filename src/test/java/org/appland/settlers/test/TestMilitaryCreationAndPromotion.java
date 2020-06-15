@@ -47,7 +47,7 @@ public class TestMilitaryCreationAndPromotion {
 
         Utils.constructHouse(storehouse0);
 
-        int numberOfPrivates = storehouse0.getAmount(Material.PRIVATE);
+        int numberOfPrivates = storehouse0.getAmount(PRIVATE);
 
         storehouse0.putCargo(new Cargo(Material.BEER, null));
         storehouse0.putCargo(new Cargo(Material.SWORD, null));
@@ -56,14 +56,14 @@ public class TestMilitaryCreationAndPromotion {
         storehouse0.putCargo(new Cargo(Material.SHIELD, null));
         storehouse0.putCargo(new Cargo(Material.SHIELD, null));
 
-        assertEquals(storehouse0.getAmount(Material.PRIVATE), numberOfPrivates);
+        assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates);
         assertEquals(storehouse0.getAmount(Material.BEER), 1);
         assertEquals(storehouse0.getAmount(Material.SWORD), 2);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 3);
 
         Utils.fastForward(110, storehouse0);
 
-        assertEquals(storehouse0.getAmount(Material.PRIVATE), numberOfPrivates + 1);
+        assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates + 1);
         assertEquals(storehouse0.getAmount(Material.BEER), 0);
         assertEquals(storehouse0.getAmount(Material.SWORD), 1);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 2);
@@ -75,15 +75,15 @@ public class TestMilitaryCreationAndPromotion {
         assertEquals(Military.Rank.values().length, 5);
 
         assertEquals(Military.Rank.valueOf("PRIVATE_RANK"), Military.Rank.PRIVATE_RANK);
-        assertEquals(Military.Rank.valueOf("PRIVATE_FIRST_CLASS_RANK"), Military.Rank.PRIVATE_FIRST_CLASS_RANK);
-        assertEquals(Military.Rank.valueOf("SERGEANT_RANK"), Military.Rank.SERGEANT_RANK);
-        assertEquals(Military.Rank.valueOf("OFFICER_RANK"), Military.Rank.OFFICER_RANK);
+        assertEquals(Military.Rank.valueOf("PRIVATE_FIRST_CLASS_RANK"), PRIVATE_FIRST_CLASS_RANK);
+        assertEquals(Military.Rank.valueOf("SERGEANT_RANK"), SERGEANT_RANK);
+        assertEquals(Military.Rank.valueOf("OFFICER_RANK"), OFFICER_RANK);
         assertEquals(Military.Rank.valueOf("GENERAL_RANK"), GENERAL_RANK);
     }
 
     @Test
     public void testAvailableMilitary() {
-        assertEquals(Material.valueOf("PRIVATE"), Material.PRIVATE);
+        assertEquals(Material.valueOf("PRIVATE"), PRIVATE);
         assertEquals(Material.valueOf("PRIVATE_FIRST_CLASS"), Material.PRIVATE_FIRST_CLASS);
         assertEquals(Material.valueOf("SERGEANT"), Material.SERGEANT);
         assertEquals(Material.valueOf("OFFICER"), Material.OFFICER);
@@ -107,17 +107,17 @@ public class TestMilitaryCreationAndPromotion {
         Utils.adjustInventoryTo(headquarter0, GOLD, 10);
         Utils.adjustInventoryTo(headquarter0, PRIVATE, 10);
 
-        assertEquals(10, headquarter0.getAmount(Material.COIN));
-        assertEquals(10, headquarter0.getAmount(Material.GOLD));
-        assertEquals(10, headquarter0.getAmount(Material.PRIVATE));
+        assertEquals(10, headquarter0.getAmount(COIN));
+        assertEquals(10, headquarter0.getAmount(GOLD));
+        assertEquals(10, headquarter0.getAmount(PRIVATE));
         assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
         assertEquals(0, headquarter0.getAmount(Material.GENERAL));
 
         Utils.fastForward(500, map);
 
-        assertEquals(10, headquarter0.getAmount(Material.COIN));
-        assertEquals(10, headquarter0.getAmount(Material.GOLD));
-        assertEquals(10, headquarter0.getAmount(Material.PRIVATE));
+        assertEquals(10, headquarter0.getAmount(COIN));
+        assertEquals(10, headquarter0.getAmount(GOLD));
+        assertEquals(10, headquarter0.getAmount(PRIVATE));
         assertEquals(0, headquarter0.getAmount(Material.SERGEANT));
         assertEquals(0, headquarter0.getAmount(Material.GENERAL));
     }
@@ -301,7 +301,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         /* Place a corporal in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.PRIVATE_FIRST_CLASS_RANK, barracks0);
+        Military military0 = Utils.occupyMilitaryBuilding(PRIVATE_FIRST_CLASS_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -336,7 +336,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         /* Place a sergeant in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.SERGEANT_RANK, barracks0);
+        Military military0 = Utils.occupyMilitaryBuilding(SERGEANT_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -371,7 +371,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         /* Place an officer in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.OFFICER_RANK, barracks0);
+        Military military0 = Utils.occupyMilitaryBuilding(OFFICER_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);
@@ -406,7 +406,7 @@ public class TestMilitaryCreationAndPromotion {
         Utils.constructHouse(barracks0);
 
         /* Place a general in the barracks */
-        Military military0 = Utils.occupyMilitaryBuilding(Military.Rank.GENERAL_RANK, barracks0);
+        Military military0 = Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
 
         /* Add one coin */
         Cargo coinCargo = new Cargo(COIN, map);

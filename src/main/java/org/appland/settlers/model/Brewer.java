@@ -102,7 +102,7 @@ public class Brewer extends Worker {
 
                     /* Handle transportation of the produced beer */
                     if (!getHome().getFlag().hasPlaceForMoreCargo()) {
-                        state = Brewer.State.WAITING_FOR_SPACE_ON_FLAG;
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
                         Cargo cargo = new Cargo(BEER, map);
 
@@ -133,7 +133,7 @@ public class Brewer extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -159,7 +159,7 @@ public class Brewer extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
-        } else if (state == Brewer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             /* Go to the closest storage */
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
@@ -172,12 +172,12 @@ public class Brewer extends Worker {
             } else {
                 state = GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = DEAD;
 
@@ -186,7 +186,7 @@ public class Brewer extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BREWER);
 
         if (storage != null) {
@@ -198,7 +198,7 @@ public class Brewer extends Worker {
             storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), BREWER);
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
@@ -215,7 +215,7 @@ public class Brewer extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
@@ -233,7 +233,7 @@ public class Brewer extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class Projectile implements Actor {
     private final GameMap   map;
 
     Projectile(Catapult source, Building targetBuilding, GameMap map) {
-        this.target = targetBuilding;
+        target = targetBuilding;
         this.source = source;
         this.map = map;
 
@@ -42,7 +42,7 @@ public class Projectile implements Actor {
 
         int traveled = countdown.getStartedAt() - countdown.getCount();
 
-        return (int) ((double) traveled / (double) countdown.getStartedAt() * 100);
+        return (int) ((double) traveled / countdown.getStartedAt() * 100);
     }
 
     @Override

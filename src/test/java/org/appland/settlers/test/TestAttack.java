@@ -4236,7 +4236,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testConqueredBarracksCanBeUpgradedAndGetMaterial() throws Exception {
+    public void testConqueredBarracksCanBeUpgradedAndGetMaterial() throws Exception, org.appland.settlers.model.InvalidUserActionException {
 
         /* Create player list with two players */
         Player player0 = new Player("Player 0", BLUE);

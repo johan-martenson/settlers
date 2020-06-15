@@ -66,7 +66,7 @@ public class StorageWorker extends Worker {
         assignedCoal.put(Armory.class, 0);
     }
 
-    private Cargo tryToStartDelivery() throws Exception {
+    private Cargo tryToStartDelivery() throws Exception, InvalidRouteException {
 
         for (Material material : getPlayer().getTransportPriorityList()) {
 
@@ -215,7 +215,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {

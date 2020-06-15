@@ -98,7 +98,7 @@ public class TestMessages {
     public void testNoMessagesOnStart() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -117,7 +117,7 @@ public class TestMessages {
     public void testAMessageIsReceivedWhenBarracksIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -153,7 +153,7 @@ public class TestMessages {
     public void testNoMessageWhenNonMilitaryBuildingIsReady() throws Exception {
 
         /* Create new single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -170,7 +170,7 @@ public class TestMessages {
         Road road0 = map.placeAutoSelectedRoad(player0, bakery.getFlag(), headquarter.getFlag());
 
         /* Finish construction of the bakery */
-        Utils.constructHouse(bakery);
+        constructHouse(bakery);
 
         /* Verify that no message was sent */
         assertTrue(player0.getMessages().isEmpty());
@@ -180,7 +180,7 @@ public class TestMessages {
     public void testBorderIsExtendedWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -236,7 +236,7 @@ public class TestMessages {
     public void testMessageSentWhenQuarryRunsOutOfResources() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -250,7 +250,7 @@ public class TestMessages {
         Building quarry0 = map.placeBuilding(new Quarry(player0), point1);
 
         /* Finish construction of the quarry */
-        Utils.constructHouse(quarry0);
+        constructHouse(quarry0);
 
         /* Populate the quarry */
         Worker stonemason = Utils.occupyBuilding(new Stonemason(player0, map), quarry0);
@@ -283,7 +283,7 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
+        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
         assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
@@ -295,7 +295,7 @@ public class TestMessages {
     public void testMessageSentWhenFishermanCanRunOutOfFish() throws Exception {
 
         /* Create new game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -389,7 +389,7 @@ public class TestMessages {
         Utils.waitForNewMessage(player0);
 
         assertEquals(player0.getMessages().size(), 1);
-        assertEquals(player0.getMessages().get(0).getMessageType(), Message.MessageType.NO_MORE_RESOURCES);
+        assertEquals(player0.getMessages().get(0).getMessageType(), NO_MORE_RESOURCES);
         assertTrue(player0.getMessages().get(0) instanceof NoMoreResourcesMessage);
 
         NoMoreResourcesMessage message = (NoMoreResourcesMessage) player0.getMessages().get(0);
@@ -401,7 +401,7 @@ public class TestMessages {
     public void testNoMessageWhenOtherBuildingRunsOutOfResources() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -418,7 +418,7 @@ public class TestMessages {
         assertFalse(sawmill.needsWorker());
 
         /* Finish construction of the sawmill */
-        Utils.constructHouse(sawmill);
+        constructHouse(sawmill);
 
         assertTrue(sawmill.needsWorker());
 
@@ -430,7 +430,7 @@ public class TestMessages {
     public void testMessageSentWhenGeologistFindsGoldOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -502,7 +502,7 @@ public class TestMessages {
     public void testNoMessageSentWhenGeologistFindsNothingOnMountain() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -593,8 +593,8 @@ public class TestMessages {
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0);
-        Utils.constructHouse(barracks1);
+        constructHouse(barracks0);
+        constructHouse(barracks1);
 
         /* Populate player barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, barracks0);
@@ -657,8 +657,8 @@ public class TestMessages {
         Building barracks1 = map.placeBuilding(new Barracks(player1), point3);
 
         /* Finish construction */
-        Utils.constructHouse(barracks0);
-        Utils.constructHouse(barracks1);
+        constructHouse(barracks0);
+        constructHouse(barracks1);
 
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(GENERAL_RANK, barracks0);
@@ -739,7 +739,7 @@ public class TestMessages {
     public void testMessageSentWhenCoalmineRunsOutOfCoal() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -824,7 +824,7 @@ public class TestMessages {
     public void testMessageIsOnlySentOnceWhenCoalmineRunsOutOfCoal() throws Exception {
 
         /* Create game map with one player */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -913,7 +913,7 @@ public class TestMessages {
     public void testMessageSentWhenStorageIsReady() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -964,7 +964,7 @@ public class TestMessages {
     public void testMessageSentWhenTreeConservationProgramIsActivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1003,7 +1003,7 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenTreeConservationProgramIsActivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1049,7 +1049,7 @@ public class TestMessages {
     public void testMessageSentWhenTreeConservationProgramIsDeactivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1097,7 +1097,7 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenTreeConservationProgramIsDeactivated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1156,7 +1156,7 @@ public class TestMessages {
     public void testThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", Color.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1207,7 +1207,7 @@ public class TestMessages {
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
-        assertEquals(player1.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND);
+        assertEquals(player1.getMessages().get(0).getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
 
@@ -1218,7 +1218,7 @@ public class TestMessages {
     public void testOnlyOneMessageSentWhenThisBuildingHasCausedYouToLoseLandWhenBarracksIsPopulated() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", Color.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1269,7 +1269,7 @@ public class TestMessages {
 
         assertFalse(player1.getBorderPoints().contains(point3));
         assertEquals(player1.getMessages().size(), 1);
-        assertEquals(player1.getMessages().get(0).getMessageType(), Message.MessageType.MILITARY_BUILDING_CAUSED_LOST_LAND);
+        assertEquals(player1.getMessages().get(0).getMessageType(), MILITARY_BUILDING_CAUSED_LOST_LAND);
 
         MilitaryBuildingCausedLostLandMessage message = (MilitaryBuildingCausedLostLandMessage) player1.getMessages().get(0);
 
@@ -1314,7 +1314,7 @@ public class TestMessages {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
@@ -1395,7 +1395,7 @@ public class TestMessages {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
@@ -1488,7 +1488,7 @@ public class TestMessages {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Populate player 0's barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, 2, fortress0);
@@ -1561,7 +1561,7 @@ public class TestMessages {
     public void testMessageSentWhenCatapultHitsBarracks() throws Exception {
 
         /* Create new game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", java.awt.Color.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1581,7 +1581,7 @@ public class TestMessages {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(barracks0);
+        constructHouse(barracks0);
 
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
@@ -1591,7 +1591,7 @@ public class TestMessages {
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult);
+        constructHouse(catapult);
 
         /* Occupy the catapult */
         Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);
@@ -1643,7 +1643,7 @@ public class TestMessages {
     public void testMessageSentWhenCatapultHitsBarracksIsOnlySentOnce() throws Exception {
 
         /* Create new game map */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", java.awt.Color.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1663,7 +1663,7 @@ public class TestMessages {
         Barracks barracks0 = map.placeBuilding(new Barracks(player1), point2);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(barracks0);
+        constructHouse(barracks0);
 
         /* Occupy the barracks */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, barracks0);
@@ -1673,7 +1673,7 @@ public class TestMessages {
         Catapult catapult = map.placeBuilding(new Catapult(player0), point3);
 
         /* Finish construction of the catapult */
-        Utils.constructHouse(catapult);
+        constructHouse(catapult);
 
         /* Occupy the catapult */
         Worker catapultWorker0 = Utils.occupyBuilding(new CatapultWorker(player0, map), catapult);

@@ -164,13 +164,13 @@ public class GameUtils {
         final double m;
 
         Line (java.awt.Point point1, java.awt.Point point2) {
-            double newK = (double)(point1.y - point2.y) / (double)(point1.x - point2.x);
+            double newK = (double)(point1.y - point2.y) / (point1.x - point2.x);
 
             // y = kx + m, m = y - kx
             double newM = point1.y - newK * point1.x;
 
-            this.k = newK;
-            this.m = newM;
+            k = newK;
+            m = newM;
         }
 
         Line(double k, double m) {
@@ -179,23 +179,23 @@ public class GameUtils {
         }
 
         public Line(java.awt.Point point, int directionX, int directionY) {
-            this.k = (double)directionY / (double)directionX;
-            this.m = point.y - point.x * this.k;
+            k = (double)directionY / directionX;
+            m = point.y - point.x * k;
         }
 
         Line getOrthogonalLineThroughPoint(java.awt.Point point) {
-            double orthogonalK = 1/this.k;
+            double orthogonalK = 1/ k;
 
             // y = kx + m, m = y - kx
             return new Line(orthogonalK, point.y - orthogonalK * point.x);
         }
 
         java.awt.Point getPointOnLineAtX(int x) {
-            return new java.awt.Point(x, (int)(this.k * x + this.m));
+            return new java.awt.Point(x, (int)(k * x + m));
         }
 
         public double getYForX(int x) {
-            return this.k * x + this.m;
+            return k * x + m;
         }
     }
 
@@ -1132,8 +1132,8 @@ public class GameUtils {
     }
 
     static int getDistanceInGameSteps(Point start, Point end) {
-        int distanceX = Math.abs(start.x - end.x);
-        int distanceY = Math.abs(start.y - end.y);
+        int distanceX = abs(start.x - end.x);
+        int distanceY = abs(start.y - end.y);
 
         if (distanceX > distanceY) {
             return distanceY + (distanceX - distanceY) / 2;

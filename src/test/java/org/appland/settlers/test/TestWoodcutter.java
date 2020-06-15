@@ -59,7 +59,7 @@ public class TestWoodcutter {
     public void testWoodcutterOnlyNeedsTwoPlanksForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -92,7 +92,7 @@ public class TestWoodcutter {
     public void testWoodcutterCannotBeConstructedWithOnePlank() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -124,7 +124,7 @@ public class TestWoodcutter {
     public void testUnfinishedWoodcutterNeedsNoWoodcutter() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -147,7 +147,7 @@ public class TestWoodcutter {
     public void testFinishedWoodcutterNeedsWoodcutterWorker() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -162,7 +162,7 @@ public class TestWoodcutter {
         Building woodcutter = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Verify that it needs a worker */
         assertTrue(woodcutter.needsWorker());
@@ -172,7 +172,7 @@ public class TestWoodcutter {
     public void testWoodcutterIsAssignedToFinishedHouse() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -190,7 +190,7 @@ public class TestWoodcutter {
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -211,7 +211,7 @@ public class TestWoodcutter {
     public void testWoodcutterIsCreatedFromTools() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -233,7 +233,7 @@ public class TestWoodcutter {
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter0.getFlag());
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -254,7 +254,7 @@ public class TestWoodcutter {
     public void testOnlyOneWoodcutterIsAssignedToHouse() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -290,7 +290,7 @@ public class TestWoodcutter {
     public void testArrivedWoodcutterRestsInHutAndThenLeaves() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -338,7 +338,7 @@ public class TestWoodcutter {
     public void testWoodcutterFindsSpotToCutDownTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -390,7 +390,7 @@ public class TestWoodcutter {
     public void testWoodcutterReachesPointToCutDownTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -442,7 +442,7 @@ public class TestWoodcutter {
     public void testWoodcutterCutsDownTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -512,7 +512,7 @@ public class TestWoodcutter {
     public void testWoodcutterReturnsAndStoresWoodAsCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -622,7 +622,7 @@ public class TestWoodcutter {
     public void testWoodCargoIsCorrect() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -734,7 +734,7 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithoutTreesProducesNothing() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -768,7 +768,7 @@ public class TestWoodcutter {
     public void testWoodcutterDoesNotCutSmallOrMediumTrees() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -840,7 +840,7 @@ public class TestWoodcutter {
     public void testWoodcutterGoesOutToCutTreesSeveralTimes() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -947,7 +947,7 @@ public class TestWoodcutter {
     public void testPositionIsCorrectWhenWoodcutterEntersHut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -964,7 +964,7 @@ public class TestWoodcutter {
         Road road0 = map.placeAutoSelectedRoad(player0, woodcutter.getFlag(), headquarter.getFlag());
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Run game logic twice, once to place courier and once to place woodcutter worker */
         Utils.fastForward(2, map);
@@ -989,7 +989,7 @@ public class TestWoodcutter {
     public void testWoodcutterWithoutConnectedStorageKeepsProducing() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1012,7 +1012,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1084,7 +1084,7 @@ public class TestWoodcutter {
     public void testCargoProducedWithoutConnectedStorageAreDeliveredWhenStorageIsAvailable() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1104,7 +1104,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1190,7 +1190,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesBackToStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1204,7 +1204,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1233,7 +1233,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesBackOnToStorageOnRoadsIfPossibleWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1250,7 +1250,7 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1283,7 +1283,7 @@ public class TestWoodcutter {
     public void testDestroyedWoodcutterIsRemovedAfterSomeTime() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1300,7 +1300,7 @@ public class TestWoodcutter {
         map.placeAutoSelectedRoad(player0, woodcutter0.getFlag(), headquarter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Destroy the woodcutter */
         woodcutter0.tearDown();
@@ -1328,7 +1328,7 @@ public class TestWoodcutter {
     public void testDrivewayIsRemovedWhenFlagIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1342,7 +1342,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Remove the flag and verify that the driveway is removed */
         assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
@@ -1356,7 +1356,7 @@ public class TestWoodcutter {
     public void testDrivewayIsRemovedWhenBuildingIsRemoved() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1370,7 +1370,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Tear down the building and verify that the driveway is removed */
         assertNotNull(map.getRoad(woodcutter0.getPosition(), woodcutter0.getFlag().getPosition()));
@@ -1384,7 +1384,7 @@ public class TestWoodcutter {
     public void testProductionInWoodcutterCanBeStopped() throws Exception {
 
         /* Create gamemap */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1410,7 +1410,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Assign a worker to the woodcutter */
         WoodcutterWorker worker = new WoodcutterWorker(player0, map);
@@ -1455,7 +1455,7 @@ public class TestWoodcutter {
     public void testProductionInWoodcutterCanBeResumed() throws Exception {
 
         /* Create gamemap */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -1484,7 +1484,7 @@ public class TestWoodcutter {
         Road road0 = map.placeRoad(player0, point2, point3, point4);
 
         /* Finish the woodcutter */
-        Utils.constructHouse(woodcutter);
+        constructHouse(woodcutter);
 
         /* Assign a worker to the woodcutter */
         WoodcutterWorker worker = new WoodcutterWorker(player0, map);
@@ -1536,7 +1536,7 @@ public class TestWoodcutter {
     public void testAssignedWoodcutterWorkerHasCorrectlySetPlayer() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1552,7 +1552,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Connect the woodcutter with the headquarter */
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
@@ -1604,7 +1604,7 @@ public class TestWoodcutter {
         Building fortress0 = map.placeBuilding(new Fortress(player0), point2);
 
         /* Finish construction of the fortress */
-        Utils.constructHouse(fortress0);
+        constructHouse(fortress0);
 
         /* Occupy the fortress */
         Utils.occupyMilitaryBuilding(PRIVATE_RANK, fortress0);
@@ -1614,7 +1614,7 @@ public class TestWoodcutter {
         Woodcutter woodcutter0 = map.placeBuilding(new Woodcutter(player0), point4);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         WoodcutterWorker worker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1629,7 +1629,7 @@ public class TestWoodcutter {
     public void testWoodcutterDoesNotWalkStraightThroughHouse() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1690,7 +1690,7 @@ public class TestWoodcutter {
     public void testWoodcutterDoesNotWalkStraightThroughStone() throws Exception {
 
         /* Create players */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1735,7 +1735,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsEarlyIfNextPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1797,7 +1797,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerContinuesIfCurrentPartOfTheRoadIsRemoved() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1862,7 +1862,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsToStorageIfWoodcutterIsDestroyed() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1923,7 +1923,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerGoesOffroadBackToClosestStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1937,7 +1937,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1947,7 +1947,7 @@ public class TestWoodcutter {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the woodcutter */
         Worker woodcutterWorker = woodcutter0.getWorker();
@@ -1973,7 +1973,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsBurningStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1987,7 +1987,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -1997,7 +1997,7 @@ public class TestWoodcutter {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the storage */
         storehouse0.tearDown();
@@ -2026,7 +2026,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsDestroyedStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2040,7 +2040,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2050,7 +2050,7 @@ public class TestWoodcutter {
         Storehouse storehouse0 = map.placeBuilding(new Storehouse(player0), point2);
 
         /* Finish construction of the storage */
-        Utils.constructHouse(storehouse0);
+        constructHouse(storehouse0);
 
         /* Destroy the storage */
         storehouse0.tearDown();
@@ -2082,7 +2082,7 @@ public class TestWoodcutter {
     public void testWoodcutterWorkerReturnsOffroadAndAvoidsUnfinishedStorageWhenWoodcutterIsDestroyed() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2096,7 +2096,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point26);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Occupy the woodcutter */
         Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2129,7 +2129,7 @@ public class TestWoodcutter {
     public void testWorkerDoesNotEnterBurningBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2146,7 +2146,7 @@ public class TestWoodcutter {
         Road road0 = map.placeAutoSelectedRoad(player0, headquarter0.getFlag(), woodcutter0.getFlag());
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Wait for a worker to start walking to the building */
         Worker worker = Utils.waitForWorkersOutsideBuilding(WoodcutterWorker.class, 1, player0).get(0);
@@ -2171,7 +2171,7 @@ public class TestWoodcutter {
     public void testTwoWoodcuttersTryToCutDownSameTree() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -2255,7 +2255,7 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithoutResourcesHasZeroProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2269,7 +2269,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
         Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2291,7 +2291,7 @@ public class TestWoodcutter {
     public void testWoodcutterHutWithAbundantResourcesHasFullProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2305,7 +2305,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
         Worker woodcutterWorker = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2349,7 +2349,7 @@ public class TestWoodcutter {
     public void testWoodcutterHutLosesProductivityWhenResourcesRunOut() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2363,7 +2363,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Populate the woodcutter hut */
         Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2405,7 +2405,7 @@ public class TestWoodcutter {
     public void testUnoccupiedWoodcutterHutHasNoProductivity() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2419,7 +2419,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter hut */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Verify that the unoccupied woodcutter hut is unproductive */
         for (int i = 0; i < 1000; i++) {
@@ -2433,7 +2433,7 @@ public class TestWoodcutter {
     public void testWoodcutterCanProduce() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2447,7 +2447,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Finish construction of the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Populate the woodcutter */
         Worker woodcutterWorker0 = Utils.occupyBuilding(new WoodcutterWorker(player0, map), woodcutter0);
@@ -2460,7 +2460,7 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectOutput() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2474,7 +2474,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Verify that the reported output is correct */
         assertEquals(woodcutter0.getProducedMaterial().length, 1);
@@ -2485,7 +2485,7 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectMaterialsNeededForConstruction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2516,7 +2516,7 @@ public class TestWoodcutter {
     public void testWoodcutterReportsCorrectMaterialsNeededForProduction() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2530,7 +2530,7 @@ public class TestWoodcutter {
         Building woodcutter0 = map.placeBuilding(new Woodcutter(player0), point1);
 
         /* Construct the woodcutter */
-        Utils.constructHouse(woodcutter0);
+        constructHouse(woodcutter0);
 
         /* Verify that the reported needed construction material is correct */
         assertEquals(woodcutter0.getMaterialNeeded().size(), 0);
@@ -2544,7 +2544,7 @@ public class TestWoodcutter {
     public void testWoodcutterWaitsWhenFlagIsFull() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2613,7 +2613,7 @@ public class TestWoodcutter {
     public void testWoodcutterDeliversThenWaitsWhenFlagIsFullAgain() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -2696,7 +2696,7 @@ public class TestWoodcutter {
     public void testWhenWoodDeliveryAreBlockedWoodcutterFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2754,7 +2754,7 @@ public class TestWoodcutter {
     public void testWorkerGoesToOtherStorageWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2815,7 +2815,7 @@ public class TestWoodcutter {
     public void testWorkerGoesToOtherStorageOffRoadWhereStorageIsBlockedAndWoodcutterIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2878,7 +2878,7 @@ public class TestWoodcutter {
     public void testWorkerGoesOutAndBackInWhenSentOutWithoutBlocking() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2916,7 +2916,7 @@ public class TestWoodcutter {
     public void testPushedOutWorkerWithNowhereToGoWalksAwayAndDies() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -2961,7 +2961,7 @@ public class TestWoodcutter {
     public void testWorkerWithNowhereToGoWalksAwayAndDiesWhenHouseIsTornDown() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -3021,7 +3021,7 @@ public class TestWoodcutter {
     public void testWorkerGoesAwayAndDiesWhenItReachesTornDownHouseAndStorageIsBlocked() throws Exception {
 
         /* Start new game with one player only */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

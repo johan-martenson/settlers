@@ -75,7 +75,7 @@ class MapPoint {
         Point previous = null;
 
         /* Find connected neighbors */
-        for (Point point : road.getWayPoints()) {
+        for (Point point : road.getWayPoints()) { // FIXME: this hides a field
             if (point.equals(this.point) && previous != null) {
                 connectedNeighbors.add(previous);
             }

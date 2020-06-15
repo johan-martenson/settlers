@@ -264,7 +264,7 @@ public class TestPlayer {
         Player player0 = new Player("Player 0", RED);
 
         /* Change the color */
-        player0.setColor(Color.BLUE);
+        player0.setColor(BLUE);
 
         /* Verify that the color is set correctly */
         assertEquals(player0.getColor(), BLUE);

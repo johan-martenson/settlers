@@ -20,7 +20,7 @@ public class Cargo {
     }
 
     public Material getMaterial() {
-        return this.material;
+        return material;
     }
 
     public void setTarget(Building target) {
@@ -68,7 +68,7 @@ public class Cargo {
 
         position = point;
 
-        if (path != null && path.size() > 0 && path.get(0).equals(point)) {
+        if (path != null && !path.isEmpty() && path.get(0).equals(point)) {
             path.remove(0);
         }
     }
@@ -94,7 +94,7 @@ public class Cargo {
         deliveryPromised = false;
     }
 
-    void transportToStorage() throws Exception {
+    void transportToStorage() throws InvalidRouteException {
         Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, material);
 
         if (storehouse0 != null) {
@@ -104,7 +104,7 @@ public class Cargo {
         }
     }
 
-    private void returnToClosestStorage() throws Exception {
+    private void returnToClosestStorage() throws InvalidRouteException {
         Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, getMaterial());
 
         if (storehouse != null) {
@@ -112,7 +112,7 @@ public class Cargo {
         }
     }
 
-    private void returnToStorage() throws Exception {
+    private void returnToStorage() throws InvalidRouteException {
         Storehouse storehouse0 = GameUtils.getClosestStorageConnectedByRoads(getPosition(), map);
 
         if (storehouse0 != null) {
@@ -174,7 +174,7 @@ public class Cargo {
      */
     private boolean looksLikeOptimalRoute(Point start, List<Point> path) {
 
-        Point target = path.get(path.size() - 1);
+        Point target = path.get(path.size() - 1); //FIXME: this hides a field
 
         Point previousPoint = start; // TODO: this variable is never used so this method shouldn't work
 

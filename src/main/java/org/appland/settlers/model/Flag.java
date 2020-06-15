@@ -51,7 +51,7 @@ public class Flag implements EndPoint {
     }
 
     public void setPosition(Point point) {
-        this.position = point;
+        position = point;
     }
 
     @Override

@@ -66,14 +66,14 @@ public class Point extends java.awt.Point {
         if ((roundedGameX + roundedGameY) % 2 != 0) {
 
             /* Find the closest valid point (odd-odd, or even-even) */
-            if (Math.abs(faultX) > Math.abs(faultY)) {
+            if (abs(faultX) > abs(faultY)) {
 
                 if (faultX > 0) {
                     roundedGameX++;
                 } else {
                     roundedGameX--;
                 }
-            } else if (Math.abs(faultX) < Math.abs(faultY)) {
+            } else if (abs(faultX) < abs(faultY)) {
                 if (faultY > 0) {
                     roundedGameY++;
                 } else {
@@ -189,26 +189,26 @@ public class Point extends java.awt.Point {
     }
 
     public boolean isLeftOf(Point from) {
-        return this.x == from.x - 2 && this.y == from.y;
+        return x == from.x - 2 && y == from.y;
     }
 
     public boolean isUpLeftOf(Point from) {
-        return this.x == from.x - 1 && this.y == from.y + 1;
+        return x == from.x - 1 && y == from.y + 1;
     }
 
     public boolean isUpRightOf(Point from) {
-        return this.x == from.x + 1 && this.y == from.y + 1;
+        return x == from.x + 1 && y == from.y + 1;
     }
 
     public boolean isRightOf(Point from) {
-        return this.x == from.x + 2 && this.y == from.y;
+        return x == from.x + 2 && y == from.y;
     }
 
     public boolean isDownRightOf(Point from) {
-        return this.x == from.x + 1 && this.y == from.y - 1;
+        return x == from.x + 1 && y == from.y - 1;
     }
 
     public boolean isDownLeftOf(Point from) {
-        return this.x == from.x - 1 && this.y == from.y - 1;
+        return x == from.x - 1 && y == from.y - 1;
     }
 }

@@ -146,7 +146,7 @@ public class Forester extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == State.GOING_OUT_TO_PLANT) {
             state = State.PLANTING;
 
@@ -173,12 +173,12 @@ public class Forester extends Worker {
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -187,7 +187,7 @@ public class Forester extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FORESTER);
 
         if (storage != null) {

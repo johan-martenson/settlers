@@ -72,7 +72,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
 
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
@@ -153,12 +153,12 @@ public class Scout extends Worker {
             } else {
                 state = GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = DEAD;
 
@@ -287,7 +287,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
         state = RETURNING_TO_STORAGE;

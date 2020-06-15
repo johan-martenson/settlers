@@ -213,7 +213,7 @@ public class Courier extends Worker {
             if (building.isBurningDown()) {
 
                 /* Return to the headquarter offroad because the driveway is gone */
-                state = Courier.States.GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
+                state = GOING_OFFROAD_TO_FLAG_THEN_GOING_TO_BUILDING_TO_DELIVER_CARGO;
 
                 setOffroadTarget(getPosition().downRight());
 
@@ -257,7 +257,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws Exception, InvalidRouteException {
 
         if (getCargo() == null) {
             return;
@@ -303,7 +303,7 @@ public class Courier extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = getPlayer().getClosestStorage(getPosition(), null);
 
         if (storage != null) {

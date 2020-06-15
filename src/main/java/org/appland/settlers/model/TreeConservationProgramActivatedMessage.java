@@ -1,8 +1,6 @@
 package org.appland.settlers.model;
 
 public class TreeConservationProgramActivatedMessage implements Message {
-    public TreeConservationProgramActivatedMessage() {
-    }
 
     @Override
     public MessageType getMessageType() {

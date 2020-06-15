@@ -69,7 +69,7 @@ public class Crop implements Actor {
     }
 
     public Cargo harvest() {
-        state = GrowthState.HARVESTED;
+        state = HARVESTED;
 
         /* Countdown until the crop should disappear */
         growthCountdown.countFrom(TIME_TO_WITHER);

@@ -5,8 +5,9 @@ import org.appland.settlers.model.Military.Rank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +116,7 @@ public class Building implements Actor, EndPoint {
     }
 
     public Collection<Point> getDefendedLand() {
-        return GameUtils.getHexagonAreaAroundPoint(this.getPosition(), getDefenceRadius() - 1, getMap());
+        return GameUtils.getHexagonAreaAroundPoint(getPosition(), getDefenceRadius() - 1, getMap());
     }
 
     public int getAmount(Material material) {
@@ -298,7 +299,7 @@ public class Building implements Actor, EndPoint {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws Exception {
+    public void putCargo(Cargo cargo) throws Exception, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
 
         Material material = cargo.getMaterial();
 
@@ -482,7 +483,7 @@ public class Building implements Actor, EndPoint {
         return flag;
     }
 
-    public void tearDown() throws Exception {
+    public void tearDown() throws Exception, InvalidUserActionException {
 
         /* A building cannot be torn down if it's already burning or destroyed */
         if (state == State.BURNING || state == State.DESTROYED) {
@@ -575,7 +576,7 @@ public class Building implements Actor, EndPoint {
     private Map<Material, Integer> getMaterialsToBuildHouse() {
         HouseSize houseSize              = getClass().getAnnotation(HouseSize.class);
         Material[] materialsArray        = houseSize.material();
-        Map<Material, Integer> materials = new HashMap<>();
+        Map<Material, Integer> materials = new EnumMap<>(Material.class);
 
         if (materialsArray.length != 0) {
             for (Material material : materialsArray) {
@@ -636,7 +637,7 @@ public class Building implements Actor, EndPoint {
 
     private boolean canAcceptGoods() {
 
-        if (requiredGoodsForProduction.size() > 0) {
+        if (!requiredGoodsForProduction.isEmpty()) {
             return true;
         }
 
@@ -1090,31 +1091,31 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean canProduce() {
-        Production production = this.getClass().getAnnotation(Production.class);
+        Production production = getClass().getAnnotation(Production.class);
 
         return production != null;
     }
 
     public Material[] getProducedMaterial() {
-        Production production = this.getClass().getAnnotation(Production.class);
+        Production production = getClass().getAnnotation(Production.class);
 
         if (production == null) {
             return new Material[] {};
         }
 
-        return this.getClass().getAnnotation(Production.class).output();
+        return getClass().getAnnotation(Production.class).output();
     }
 
     public Collection<Material> getMaterialNeeded() {
 
-        Set<Material> result = new HashSet<>();
+        Set<Material> result = EnumSet.noneOf(Material.class);
 
         if (underConstruction()) {
-            HouseSize houseSize = this.getClass().getAnnotation(HouseSize.class);
+            HouseSize houseSize = getClass().getAnnotation(HouseSize.class);
 
             result.addAll(Arrays.asList(houseSize.material()));
         } else if (isReady()) {
-            Production production = this.getClass().getAnnotation(Production.class);
+            Production production = getClass().getAnnotation(Production.class);
 
             if (production != null) {
                 result.addAll(Arrays.asList(production.requiredGoods()));

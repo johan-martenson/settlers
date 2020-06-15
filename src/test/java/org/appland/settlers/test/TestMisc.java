@@ -49,7 +49,7 @@ public class TestMisc {
     public void testRemoveRoadWhenCourierGoesToBuildingToDeliverCargo() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
@@ -107,7 +107,7 @@ public class TestMisc {
     public void testScoutReturnsWhenFlagRemainsButRoadHasBeenRemoved() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
@@ -161,7 +161,7 @@ public class TestMisc {
     public void testPlaceRoadToSamePointOnEdgeOfScreen() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
@@ -186,7 +186,7 @@ public class TestMisc {
     public void testPlaceFirstBuildingOnEdgeOfScreen() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
@@ -206,7 +206,7 @@ public class TestMisc {
     public void testGetPossibleAdjacentRoadConnectionsIncludingEndpointsOutsideMap() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 100, 100);
@@ -225,7 +225,7 @@ public class TestMisc {
     public void testPlaceRoadWithoutPoints() throws Exception {
 
         /* Starting new game */
-        Player player = new Player("Player 0", java.awt.Color.BLUE);
+        Player player = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player);
         GameMap map = new GameMap(players, 500, 250);
@@ -246,7 +246,7 @@ public class TestMisc {
     public void testUnoccupiedMilitaryBuildingDoesNotIncreaseDiscoveredArea() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -297,7 +297,7 @@ public class TestMisc {
     public void testBuildingWhereConstructionHasNotStartedIsAtZeroPercentProgress() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -318,7 +318,7 @@ public class TestMisc {
     public void testConstructionProgressNeverGoesBackwards() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -351,7 +351,7 @@ public class TestMisc {
     public void testFullyConstructedBuildingIsAtHundredPercentProgress() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -375,7 +375,7 @@ public class TestMisc {
     public void testNoMonitoringEventWithEmptyPathForStorageWorker() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -432,7 +432,7 @@ public class TestMisc {
     public void testMonitoringEventWhenWorkerLeavesBuilding() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);

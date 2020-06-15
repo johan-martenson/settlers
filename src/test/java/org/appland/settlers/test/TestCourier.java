@@ -61,7 +61,7 @@ public class TestCourier {
     public void testNewStorageHasCouriers() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 20, 20);
@@ -84,7 +84,7 @@ public class TestCourier {
     public void testCourierWalksToIntendedRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -130,7 +130,7 @@ public class TestCourier {
     public void testCourierGoesToMiddlePointOfRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -173,7 +173,7 @@ public class TestCourier {
     public void testCourierIsIdleWhenMiddlePointIsReached() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -215,7 +215,7 @@ public class TestCourier {
     public void testCourierRemainsIdleWhenThereIsNoCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -263,7 +263,7 @@ public class TestCourier {
     public void testCourierWalksToMiddleOfRoadWhenItIsAssignedEvenIfFlagsHaveCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -324,7 +324,7 @@ public class TestCourier {
     public void testCourierPicksUpCargoFromFlag() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -400,7 +400,7 @@ public class TestCourier {
     public void testCourierDeliversCargoAndBecomesIdle() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -493,7 +493,7 @@ public class TestCourier {
     public void testCourierPicksUpNewCargoAtSameFlagAfterDelivery() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -586,7 +586,7 @@ public class TestCourier {
     public void testCourierPicksUpNewCargoAtOtherFlagAfterDelivery() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -675,7 +675,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingAfterBeingIdle() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -760,7 +760,7 @@ public class TestCourier {
     public void testCourierGoesBackToIdlePointAfterDeliveryToBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -783,7 +783,7 @@ public class TestCourier {
         Road road0 = map.placeRoad(player0, leftFlagPoint, middlePoint, rightFlagPoint);
 
         /* Place cargo at flag0 */
-        Cargo cargoForRightWoodcutter = new Cargo(Material.PLANK, map);
+        Cargo cargoForRightWoodcutter = new Cargo(PLANK, map);
         rightFlag.putCargo(cargoForRightWoodcutter);
         cargoForRightWoodcutter.setTarget(woodcutter0);
 
@@ -853,7 +853,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingAfterDeliveryToOtherBuilding() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -939,7 +939,7 @@ public class TestCourier {
     public void testCourierDeliversToBuildingWhenItIsAlreadyAtFlagAndPicksUpCargo() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -1036,7 +1036,7 @@ public class TestCourier {
     public void testCouriersStopCarryingThingsAtSplittingRoads() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 40, 40);
@@ -1132,7 +1132,7 @@ public class TestCourier {
     public void testCannotAssignTwoCouriersToSameRoad() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
         GameMap map = new GameMap(players, 30, 30);
@@ -1228,7 +1228,7 @@ public class TestCourier {
     public void testAssignedCourierHasCorrectlySetPlayer() throws Exception {
 
         /* Create single player game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 
@@ -1261,7 +1261,7 @@ public class TestCourier {
     public void testCourierIsNotDispatchedToOpponentsRoadWithoutConnectedStorage() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", java.awt.Color.RED);
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -1330,7 +1330,7 @@ public class TestCourier {
     public void testCourierReturnsCargoToStorehouseWhenHouseHasBeenTornDown() throws Exception {
 
         /* Creating new game map with size 40x40 */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         List<Player> players = new ArrayList<>();
         players.add(player0);
 

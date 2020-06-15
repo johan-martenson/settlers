@@ -122,11 +122,11 @@ public class Headquarter extends Storehouse {
 
     @Override
     public String toString() {
-        return "Headquarter with inventory " + this.inventory;
+        return "Headquarter with inventory " + inventory;
     }
 
     @Override
-    public void tearDown() throws Exception {
+    public void tearDown() throws InvalidUserActionException {
         throw new InvalidUserActionException("Can not tear down headquarter");
     }
 

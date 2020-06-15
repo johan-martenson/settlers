@@ -5,13 +5,13 @@ import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
 import org.appland.settlers.model.Player;
 import org.appland.settlers.model.Point;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.fail;
 import static org.appland.settlers.model.Size.LARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -87,7 +87,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.right());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }
@@ -114,7 +114,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.downRight());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }
@@ -141,7 +141,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.downLeft());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }
@@ -168,7 +168,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.left());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }
@@ -195,7 +195,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.upLeft());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }
@@ -222,7 +222,7 @@ public class TestHeight {
         /* Verify that it's not possible to place a fortress when the height difference is too big */
         try {
             Fortress fortress0 = map.placeBuilding(new Fortress(player0), point0.upRight());
-            fail();
+            Assert.fail();
         } catch (Exception e) {
         }
     }

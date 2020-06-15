@@ -31,7 +31,7 @@ public class TestLandStatistics {
     public void testGetLandStatistics() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -55,7 +55,7 @@ public class TestLandStatistics {
     public void testGetCurrentTimeForGame() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -74,7 +74,7 @@ public class TestLandStatistics {
     public void testCurrentTimeFollowsMapStepTime() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
 
         List<Player> players = new ArrayList<>();
         players.add(player0);
@@ -104,7 +104,7 @@ public class TestLandStatistics {
     public void testThereIsLandStatisticsAtStartForEachPlayer() throws Exception {
 
         /* Starting new game */
-        Player player0 = new Player("Player 0", java.awt.Color.BLUE);
+        Player player0 = new Player("Player 0", BLUE);
         Player player1 = new Player("Player 1", java.awt.Color.RED);
 
         List<Player> players = new ArrayList<>();

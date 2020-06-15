@@ -73,7 +73,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws Exception, InvalidRouteException {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero() && getHome().isProductionEnabled()) {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
@@ -140,7 +140,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception {
+    public void onArrival() throws Exception, InvalidRouteException {
         if (state == GOING_BACK_TO_HOUSE_AFTER_FEEDING) {
             enterBuilding(getHome());
 
@@ -155,7 +155,7 @@ public class DonkeyBreeder extends Worker {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
             storehouse.depositWorker(this);
-        } else if (state == DonkeyBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
+        } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             /* Go to the closest storage */
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, DONKEY_BREEDER);
@@ -167,12 +167,12 @@ public class DonkeyBreeder extends Worker {
             } else {
                 state = GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = DEAD;
 
@@ -181,7 +181,7 @@ public class DonkeyBreeder extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, DONKEY_BREEDER);
 
         if (storage != null) {
@@ -193,7 +193,7 @@ public class DonkeyBreeder extends Worker {
             storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), DONKEY_BREEDER);
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
@@ -210,7 +210,7 @@ public class DonkeyBreeder extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
@@ -228,7 +228,7 @@ public class DonkeyBreeder extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

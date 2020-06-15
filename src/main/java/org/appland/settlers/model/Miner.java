@@ -138,7 +138,7 @@ public class Miner extends Worker {
 
                         getHome().getFlag().promiseCargo();
                     } else {
-                        state = State.WAITING_FOR_SPACE_ON_FLAG;
+                        state = WAITING_FOR_SPACE_ON_FLAG;
                     }
                 } else {
 
@@ -175,7 +175,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == GOING_OUT_TO_FLAG) {
             Cargo cargo = getCargo();
 
@@ -204,18 +204,18 @@ public class Miner extends Worker {
             Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
             if (storehouse != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setTarget(storehouse.getPosition());
             } else {
                 state = State.GOING_TO_DIE;
 
-                Point point = super.findPlaceToDie();
+                Point point = findPlaceToDie();
 
                 setOffroadTarget(point);
             }
         } else if (state == State.GOING_TO_DIE) {
-            super.setDead();
+            setDead();
 
             state = State.DEAD;
 
@@ -230,7 +230,7 @@ public class Miner extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINER);
 
         if (storage != null) {
@@ -242,7 +242,7 @@ public class Miner extends Worker {
             storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), MINER);
 
             if (storage != null) {
-                state = State.RETURNING_TO_STORAGE;
+                state = RETURNING_TO_STORAGE;
 
                 setOffroadTarget(storage.getPosition());
             } else {
@@ -259,7 +259,7 @@ public class Miner extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
@@ -277,7 +277,7 @@ public class Miner extends Worker {
         /* Measure productivity across the length of four rest-work periods */
         return (int)
                 (((double)productivityMeasurer.getSumMeasured() /
-                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
+                        (productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

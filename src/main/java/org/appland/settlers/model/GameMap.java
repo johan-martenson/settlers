@@ -61,10 +61,10 @@ public class GameMap {
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
     private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
 
-    private final String theLeader = "Anh Mai Mårtensson";
-    private final int MINIMUM_WIDTH  = 5;
-    private final int MINIMUM_HEIGHT = 5;
-    private final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
+    private static final String theLeader = "Anh Mai Mårtensson";
+    private static final int MINIMUM_WIDTH  = 5;
+    private static final int MINIMUM_HEIGHT = 5;
+    private static final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
     private final int statisticsCollectionPeriod;
 
     private Player winner;
@@ -706,7 +706,7 @@ public class GameMap {
      * @return The house placed
      * @throws Exception Any exceptions encountered while placing the building
      */
-    public <T extends Building> T placeBuilding(T house, Point point) throws Exception {
+    public <T extends Building> T placeBuilding(T house, Point point) throws Exception, InvalidUserActionException, InvalidGameLogicException {
 
         boolean firstHouse = false;
 
@@ -1069,7 +1069,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exceptions encountered while placing the new road
      */
-    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception {
+    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception, InvalidUserActionException, InvalidEndPointException {
 
         /* Only allow roads that are at least three points long
         *   -- Driveways are shorter but they are created with a separate method
@@ -1081,7 +1081,7 @@ public class GameMap {
         /* Verify that all points of the road are within the border */
         for (Point point : wayPoints) {
             if (!player.isWithinBorder(point)) {
-                throw new InvalidUserActionException("Can't place road " + wayPoints + "with " + point + " outside the border");
+                throw new InvalidUserActionException("Can't place road " + wayPoints + " with " + point + " outside the border");
             }
         }
 
@@ -1170,7 +1170,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exception encountered while placing the new road
      */
-    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception {
+    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception, InvalidEndPointException {
 
         /* Throw an exception if the start and end are the same */
         if (start.equals(end)) {
@@ -1285,7 +1285,7 @@ public class GameMap {
         return doPlaceFlag(flag, false);
     }
 
-    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception {
+    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception, InvalidUserActionException {
 
         Point flagPoint = flag.getPosition();
 
@@ -1489,7 +1489,7 @@ public class GameMap {
         }
 
         if (isCropAtPoint(point) &&
-            getCropAtPoint(point).getGrowthState() != Crop.GrowthState.HARVESTED) {
+            getCropAtPoint(point).getGrowthState() != HARVESTED) {
             return false;
         }
 
@@ -1587,7 +1587,7 @@ public class GameMap {
     }
 
     private List<Point> getPossibleAdjacentRoadConnections(Player player, Point start, Point end) {
-        Point[] adjacentPoints = new Point[] {
+        Point[] adjacentPoints = {
             new Point(start.x - 2, start.y),
             new Point(start.x + 2, start.y),
             new Point(start.x - 1, start.y - 1),
@@ -1981,7 +1981,7 @@ public class GameMap {
      * @return The path found or null if there is no way
      */
     public List<Point> findWayOffroad(Point start, Point goal, Collection<Point> avoid) {
-        return GameUtils.findShortestPath(start, goal, avoid, new ConnectionsProvider() {
+        return findShortestPath(start, goal, avoid, new ConnectionsProvider() {
 
             @Override
             public Iterable<Point> getPossibleConnections(Point start, Point goal) {
@@ -2868,7 +2868,7 @@ public class GameMap {
 
     private void handleWildAnimalPopulation() {
 
-        double density = (double)wildAnimals.size() / (double)(width * height);
+        double density = (double)wildAnimals.size() / (width * height);
 
         if (density < Constants.WILD_ANIMAL_NATURAL_DENSITY) {
             if (animalCountdown.reachedZero()) {
@@ -3048,7 +3048,7 @@ public class GameMap {
     }
 
     public StatisticsManager getStatisticsManager() {
-        return this.statisticsManager;
+        return statisticsManager;
     }
 
     public long getCurrentTime() {

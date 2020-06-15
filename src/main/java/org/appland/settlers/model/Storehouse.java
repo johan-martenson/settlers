@@ -58,7 +58,7 @@ import static org.appland.settlers.model.Size.MEDIUM;
 
 @HouseSize(size = MEDIUM, material = {PLANK, PLANK, PLANK, PLANK, STONE, STONE, STONE})
 @RequiresWorker(workerType = STORAGE_WORKER)
-public class Storehouse extends Building implements Actor {
+public class Storehouse extends Building {
 
     final Map<Material, Integer> inventory;
 
@@ -177,7 +177,7 @@ public class Storehouse extends Building implements Actor {
         return false;
     }
 
-    private boolean assignGeologists() throws Exception {
+    private boolean assignGeologists() throws Exception, InvalidRouteException {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(GEOLOGIST)) {
@@ -212,7 +212,7 @@ public class Storehouse extends Building implements Actor {
         return false;
     }
 
-    private boolean assignScouts() throws Exception {
+    private boolean assignScouts() throws Exception, InvalidRouteException {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(SCOUT)) {
@@ -256,7 +256,7 @@ public class Storehouse extends Building implements Actor {
         return false;
     }
 
-    private boolean assignWorkerToUnoccupiedBuildings() throws Exception {
+    private boolean assignWorkerToUnoccupiedBuildings() throws Exception, InvalidRouteException {
         for (Building building : getPlayer().getBuildings()) {
             if (building.isMilitaryBuilding()) {
                 if (!hasMilitary()) {
@@ -308,7 +308,7 @@ public class Storehouse extends Building implements Actor {
         return workerToToolMap.get(worker);
     }
 
-    private boolean assignCouriers() throws Exception {
+    private boolean assignCouriers() throws Exception, InvalidRouteException {
 
         if (hasAtLeastOne(COURIER)) {
             for (Road road : getMap().getRoads()) {
@@ -382,13 +382,13 @@ public class Storehouse extends Building implements Actor {
 
             switch (military.getRank()) {
             case PRIVATE_RANK:
-                material = Material.PRIVATE;
+                material = PRIVATE;
                 break;
             case SERGEANT_RANK:
-                material = Material.SERGEANT;
+                material = SERGEANT;
                 break;
             case GENERAL_RANK:
-                material = Material.GENERAL;
+                material = GENERAL;
                 break;
             default:
                 throw new Exception("Can't handle military with rank " + military.getRank());
@@ -553,13 +553,13 @@ public class Storehouse extends Building implements Actor {
 
         switch (material) {
         case GENERAL:
-            rank = Military.Rank.GENERAL_RANK;
+            rank = GENERAL_RANK;
             break;
         case SERGEANT:
-            rank = Military.Rank.SERGEANT_RANK;
+            rank = SERGEANT_RANK;
             break;
         case PRIVATE:
-            rank = Military.Rank.PRIVATE_RANK;
+            rank = PRIVATE_RANK;
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + material);
@@ -668,7 +668,7 @@ public class Storehouse extends Building implements Actor {
         return equals(storehouse);
     }
 
-    private boolean assignDonkeys() throws Exception {
+    private boolean assignDonkeys() throws Exception, InvalidRouteException {
         if (hasAtLeastOne(DONKEY)) {
             for (Road road : getMap().getRoads()) {
                 if (!road.getPlayer().equals(getPlayer())) {
@@ -685,7 +685,7 @@ public class Storehouse extends Building implements Actor {
 
                 Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoads(road.getStart(), getPlayer());
 
-                if (storehouse != null && !this.equals(storehouse)) {
+                if (storehouse != null && !equals(storehouse)) {
                     continue;
                 }
 

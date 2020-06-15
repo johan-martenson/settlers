@@ -97,7 +97,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws Exception, InvalidRouteException {
         if (state == WALKING_TO_TARGET) {
             flagPoint = getPosition();
 
@@ -228,7 +228,7 @@ public class Geologist extends Worker {
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
-        if (state == State.WALKING_TO_TARGET &&
+        if (state == WALKING_TO_TARGET &&
             map.isFlagAtPoint(getPosition()) &&
             !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
             returnToStorage();
@@ -236,10 +236,10 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception {
+    protected void onReturnToStorage() throws Exception, InvalidRouteException {
         Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
-        state = State.RETURNING_TO_STORAGE;
+        state = RETURNING_TO_STORAGE;
 
         if (storage != null) {
             setTarget(storage.getPosition());

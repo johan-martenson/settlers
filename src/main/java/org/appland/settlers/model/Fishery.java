@@ -16,7 +16,7 @@ import static org.appland.settlers.model.Material.PLANK;
  */
 @HouseSize(size = Size.SMALL, material = {PLANK, PLANK})
 @RequiresWorker(workerType = FISHERMAN)
-@Production(requiredGoods = {}, output = {FISH})
+@Production(requiredGoods = {}, output = FISH)
 public class Fishery extends Building {
 
     public Fishery(Player player0) {
