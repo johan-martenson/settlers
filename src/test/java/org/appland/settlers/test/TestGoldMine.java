@@ -2262,10 +2262,10 @@ public class TestGoldMine {
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of gold */
         headquarter0.blockDeliveryOfMaterial(GOLD);
 
-        /* Verify that the gold mine puts eight weapons on the flag and then stops */
+        /* Verify that the gold mine puts eight gold pieces on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, goldMine0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner0, goldMine0.getPosition());

@@ -30,7 +30,6 @@ import static java.awt.Color.BLUE;
 import static java.awt.Color.GREEN;
 import static java.awt.Color.RED;
 import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.BOW;
 import static org.appland.settlers.model.Material.CLEAVER;
 import static org.appland.settlers.model.Material.CRUCIBLE;
@@ -1825,8 +1824,13 @@ public class TestMetalworks {
         Utils.constructHouse(metalworks0);
 
         /* Verify that the reported output is correct */
-        assertEquals(metalworks0.getProducedMaterial().length, 1);
-        assertEquals(metalworks0.getProducedMaterial()[0], BEER);
+        assertEquals(metalworks0.getProducedMaterial().length, TOOLS.size());
+
+        Set<Material> producedMaterial = new HashSet<>(Arrays.asList(metalworks0.getProducedMaterial()));
+
+        for (Material tool : TOOLS) {
+            assertTrue(producedMaterial.contains(tool));
+        }
     }
 
     @Test
@@ -2059,7 +2063,7 @@ public class TestMetalworks {
     }
 
     @Test
-    public void testWhenBeerDeliveryAreBlockedMetalworksFillsUpFlagAndThenStops() throws Exception {
+    public void testWhenToolDeliveryAreBlockedMetalworksFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2094,10 +2098,10 @@ public class TestMetalworks {
         Utils.adjustInventoryTo(headquarter0, IRON_BAR, 40);
         Utils.adjustInventoryTo(headquarter0, PLANK, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of tools */
         Utils.blockDeliveryOfTools(headquarter0);
 
-        /* Verify that the metalworks puts eight weapons on the flag and then stops */
+        /* Verify that the metalworks puts eight tools on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, metalworks0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks0.getPosition());

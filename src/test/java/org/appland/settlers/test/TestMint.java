@@ -2094,10 +2094,10 @@ public class TestMint {
         Utils.adjustInventoryTo(headquarter0, COAL, 40);
         Utils.adjustInventoryTo(headquarter0, GOLD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of coins */
         headquarter0.blockDeliveryOfMaterial(COIN);
 
-        /* Verify that the mint puts eight weapons on the flag and then stops */
+        /* Verify that the mint puts eight coins on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, mint0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, minter0, mint0.getPosition());

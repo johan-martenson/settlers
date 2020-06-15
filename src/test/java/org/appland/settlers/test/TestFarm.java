@@ -2632,10 +2632,10 @@ public class TestFarm {
         assertEquals(farmer0.getHome(), farm0);
         assertEquals(farm0.getWorker(), farmer0);
 
-        /* Block storage of weapons */
+        /* Block storage of wheat */
         headquarter0.blockDeliveryOfMaterial(WHEAT);
 
-        /* Verify that the farm puts eight weapons on the flag and then stops */
+        /* Verify that the farm puts eight wheats on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, farm0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, farmer0, farm0.getPosition());

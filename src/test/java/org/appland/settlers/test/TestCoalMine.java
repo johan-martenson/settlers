@@ -2310,10 +2310,10 @@ public class TestCoalMine {
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of coal */
         headquarter0.blockDeliveryOfMaterial(COAL);
 
-        /* Verify that the coal mine puts eight weapons on the flag and then stops */
+        /* Verify that the coal mine puts eight coals on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, coalMine0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner0, coalMine0.getPosition());

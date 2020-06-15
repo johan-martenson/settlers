@@ -2005,10 +2005,10 @@ public class TestSawmill {
         /* Add a lot of material to the headquarter for the sawmill to consume */
         Utils.adjustInventoryTo(headquarter0, WOOD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of planks */
         headquarter0.blockDeliveryOfMaterial(PLANK);
 
-        /* Verify that the sawmill puts eight weapons on the flag and then stops */
+        /* Verify that the sawmill puts eight planks on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, sawmill0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, sawmillWorker0, sawmill0.getPosition());

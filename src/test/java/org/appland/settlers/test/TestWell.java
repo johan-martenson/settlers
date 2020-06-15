@@ -1793,10 +1793,10 @@ public class TestWell {
         assertEquals(wellWorker0.getHome(), well0);
         assertEquals(well0.getWorker(), wellWorker0);
 
-        /* Block storage of weapons */
+        /* Block storage of water */
         headquarter0.blockDeliveryOfMaterial(WATER);
 
-        /* Verify that the well puts eight weapons on the flag and then stops */
+        /* Verify that the well puts eight waters on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, well0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, wellWorker0, well0.getPosition());

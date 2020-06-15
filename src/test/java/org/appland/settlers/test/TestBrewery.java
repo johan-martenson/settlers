@@ -1991,10 +1991,10 @@ public class TestBrewery {
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of beer */
         headquarter0.blockDeliveryOfMaterial(BEER);
 
-        /* Verify that the brewery puts eight weapons on the flag and then stops */
+        /* Verify that the brewery puts eight beers on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, brewery0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, brewer0, brewery0.getPosition());

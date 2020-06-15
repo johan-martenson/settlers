@@ -2250,10 +2250,10 @@ public class TestPigFarm {
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of pigs */
         headquarter0.blockDeliveryOfMaterial(PIG);
 
-        /* Verify that the pig farm puts eight weapons on the flag and then stops */
+        /* Verify that the pig farm puts eight pigs on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, pigFarm0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, pigBreeder0, pigFarm0.getPosition());

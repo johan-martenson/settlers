@@ -2034,10 +2034,10 @@ public class TestSlaughterHouse {
         /* Add a lot of material to the headquarter for the slaughter house to consume */
         Utils.adjustInventoryTo(headquarter0, PIG, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of wheat */
         headquarter0.blockDeliveryOfMaterial(MEAT);
 
-        /* Verify that the slaughter house puts eight weapons on the flag and then stops */
+        /* Verify that the slaughter house puts eight wheats on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, slaughterHouse0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, butcher0, slaughterHouse0.getPosition());

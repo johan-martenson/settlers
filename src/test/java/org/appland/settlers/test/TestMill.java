@@ -1988,10 +1988,10 @@ public class TestMill {
         /* Add a lot of material to the headquarter for the mill to consume */
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of flour */
         headquarter0.blockDeliveryOfMaterial(FLOUR);
 
-        /* Verify that the mill puts eight weapons on the flag and then stops */
+        /* Verify that the mill puts eight flour bags on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, mill0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miller0, mill0.getPosition());

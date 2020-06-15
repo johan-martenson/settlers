@@ -2240,7 +2240,7 @@ public class TestDonkeyFarm {
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of donkeys */
         headquarter0.blockDeliveryOfMaterial(DONKEY);
 
         /* Verify that the donkey farm stops producing donkeys */

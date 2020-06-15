@@ -1962,10 +1962,10 @@ public class TestBakery {
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, FLOUR, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of bread */
         headquarter0.blockDeliveryOfMaterial(BREAD);
 
-        /* Verify that the bakery puts eight weapons on the flag and then stops */
+        /* Verify that the bakery puts eight breads on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, bakery0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, baker0, bakery0.getPosition());

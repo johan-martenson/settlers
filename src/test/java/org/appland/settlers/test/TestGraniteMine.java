@@ -2263,10 +2263,10 @@ public class TestGraniteMine {
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of stone */
         headquarter0.blockDeliveryOfMaterial(STONE);
 
-        /* Verify that the stone mine puts eight weapons on the flag and then stops */
+        /* Verify that the stone mine puts eight stones on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, stoneMine0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner0, stoneMine0.getPosition());

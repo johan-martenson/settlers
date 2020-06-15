@@ -2270,10 +2270,10 @@ public class TestIronMine {
         Utils.adjustInventoryTo(headquarter0, MEAT, 40);
         Utils.adjustInventoryTo(headquarter0, BREAD, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of iron */
         headquarter0.blockDeliveryOfMaterial(IRON);
 
-        /* Verify that the iron mine puts eight weapons on the flag and then stops */
+        /* Verify that the iron mine puts eight iron ores on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, ironMine0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, miner0, ironMine0.getPosition());

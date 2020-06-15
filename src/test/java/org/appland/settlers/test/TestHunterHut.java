@@ -2048,10 +2048,10 @@ public class TestHunterHut {
         Utils.adjustInventoryTo(headquarter0, WATER, 40);
         Utils.adjustInventoryTo(headquarter0, WHEAT, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of wheat */
         headquarter0.blockDeliveryOfMaterial(MEAT);
 
-        /* Verify that the hunter hut puts eight weapons on the flag and then stops */
+        /* Verify that the hunter hut puts eight wheats on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, hunterHut0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, hunter0, hunterHut0.getPosition());

@@ -2073,7 +2073,7 @@ public class TestIronSmelter {
     }
 
     @Test
-    public void testWhenBeerDeliveryAreBlockedIronSmelterFillsUpFlagAndThenStops() throws Exception {
+    public void testWhenIronBarDeliveryAreBlockedIronSmelterFillsUpFlagAndThenStops() throws Exception {
 
         /* Start new game with one player only */
         Player player0 = new Player("Player 0", java.awt.Color.BLUE);
@@ -2108,10 +2108,10 @@ public class TestIronSmelter {
         Utils.adjustInventoryTo(headquarter0, IRON, 40);
         Utils.adjustInventoryTo(headquarter0, COAL, 40);
 
-        /* Block storage of weapons */
+        /* Block storage of iron bar */
         headquarter0.blockDeliveryOfMaterial(IRON_BAR);
 
-        /* Verify that the iron smelter puts eight weapons on the flag and then stops */
+        /* Verify that the iron smelter puts eight iron bars on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, ironSmelter0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, ironFounder0, ironSmelter0.getPosition());

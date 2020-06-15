@@ -2430,10 +2430,10 @@ public class TestFishery {
         assertEquals(fisherman0.getHome(), fishery0);
         assertEquals(fishery0.getWorker(), fisherman0);
 
-        /* Block storage of weapons */
+        /* Block storage of fish */
         headquarter0.blockDeliveryOfMaterial(FISH);
 
-        /* Verify that the fishery puts eight weapons on the flag and then stops */
+        /* Verify that the fishery puts eight fishes on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, fishery0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, fisherman0, fishery0.getPosition());

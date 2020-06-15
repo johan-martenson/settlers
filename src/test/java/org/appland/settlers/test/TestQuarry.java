@@ -2339,10 +2339,10 @@ public class TestQuarry {
         assertEquals(stonemason0.getHome(), quarry0);
         assertEquals(quarry0.getWorker(), stonemason0);
 
-        /* Block storage of weapons */
+        /* Block storage of stones */
         headquarter0.blockDeliveryOfMaterial(STONE);
 
-        /* Verify that the quarry puts eight weapons on the flag and then stops */
+        /* Verify that the quarry puts eight stones on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, quarry0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, stonemason0, quarry0.getPosition());

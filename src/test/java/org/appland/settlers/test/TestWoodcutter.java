@@ -2731,10 +2731,10 @@ public class TestWoodcutter {
         assertEquals(woodcutterWorker0.getHome(), woodcutter0);
         assertEquals(woodcutter0.getWorker(), woodcutterWorker0);
 
-        /* Block storage of weapons */
+        /* Block storage of wood */
         headquarter0.blockDeliveryOfMaterial(WOOD);
 
-        /* Verify that the woodcutter puts eight weapons on the flag and then stops */
+        /* Verify that the woodcutter puts eight wood pieces on the flag and then stops */
         Utils.waitForFlagToGetStackedCargo(map, woodcutter0.getFlag(), 8);
 
         Utils.fastForwardUntilWorkerReachesPoint(map, woodcutterWorker0, woodcutter0.getPosition());
