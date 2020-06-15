@@ -46,4 +46,5 @@ public class InitialState {
     public static final int STORAGE_INITIAL_DONKEY_BREEDER = 1;
     public static final int STORAGE_INITIAL_SCOUT = 1;
     public static final int STORAGE_INITIAL_HUNTER = 2;
+    public static final int STORAGE_INITIAL_METALWORKER = 1;
 }

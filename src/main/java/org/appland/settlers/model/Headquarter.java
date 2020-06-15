@@ -26,6 +26,7 @@ import static org.appland.settlers.model.Material.IRON;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
 import static org.appland.settlers.model.Material.MEAT;
+import static org.appland.settlers.model.Material.METALWORKER;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
@@ -116,6 +117,7 @@ public class Headquarter extends Storehouse {
         inventory.put(DONKEY_BREEDER, InitialState.STORAGE_INITIAL_DONKEY_BREEDER);
         inventory.put(SCOUT, InitialState.STORAGE_INITIAL_SCOUT);
         inventory.put(HUNTER, InitialState.STORAGE_INITIAL_HUNTER);
+        inventory.put(METALWORKER, InitialState.STORAGE_INITIAL_METALWORKER);
     }
 
     @Override

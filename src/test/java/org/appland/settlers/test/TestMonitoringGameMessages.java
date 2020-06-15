@@ -77,11 +77,12 @@ public class TestMonitoringGameMessages {
      *  - Test titles
      *  - Only sent once
      *  - To the right player
-     *  - This building has caused you to lose land
      *  - Test all messages received before starting to monitor are not sent to the monitor
-     *  - Bombarded by catapult
-     *  - Game ended
-     *  - no more resources for mine
+     *  - Test new message types:
+     *    - Bombarded by catapult
+     *    - Game ended
+     *    - no more resources for mine
+     *    - This building has caused you to lose land
      */
 
     @Test

@@ -45,15 +45,26 @@ import java.util.logging.Logger;
 import static java.lang.Math.abs;
 import static org.appland.settlers.model.Crop.GrowthState.FULL_GROWN;
 import static org.appland.settlers.model.Crop.GrowthState.HARVESTED;
+import static org.appland.settlers.model.Material.AXE;
+import static org.appland.settlers.model.Material.BOW;
+import static org.appland.settlers.model.Material.CLEAVER;
 import static org.appland.settlers.model.Material.COAL;
 import static org.appland.settlers.model.Material.COIN;
+import static org.appland.settlers.model.Material.CRUCIBLE;
+import static org.appland.settlers.model.Material.FISHING_ROD;
 import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.IRON;
+import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PLANK;
 import static org.appland.settlers.model.Material.PRIVATE;
+import static org.appland.settlers.model.Material.ROLLING_PIN;
+import static org.appland.settlers.model.Material.SAW;
+import static org.appland.settlers.model.Material.SCYTHE;
 import static org.appland.settlers.model.Material.SERGEANT;
+import static org.appland.settlers.model.Material.SHOVEL;
 import static org.appland.settlers.model.Material.STONE;
+import static org.appland.settlers.model.Material.TONGS;
 import static org.appland.settlers.model.Material.WHEAT;
 import static org.appland.settlers.model.Military.Rank.PRIVATE_RANK;
 import static org.appland.settlers.model.Size.LARGE;
@@ -1716,6 +1727,52 @@ public class Utils {
         }
 
         assertTrue(worker.isInsideBuilding());
+    }
+
+    public static void verifyWorkerCarriesTool(Worker worker) {
+        assertNotNull(worker.getCargo());
+
+        switch (worker.getCargo().getMaterial()) {
+            case AXE:
+            case SHOVEL:
+            case PICK_AXE:
+            case FISHING_ROD:
+            case BOW:
+            case SAW:
+            case CLEAVER:
+            case ROLLING_PIN:
+            case CRUCIBLE:
+            case TONGS:
+            case SCYTHE:
+                break;
+            default:
+                fail();
+        }
+    }
+
+    public static void blockDeliveryOfTools(Storehouse storehouse) {
+        storehouse.blockDeliveryOfMaterial(AXE);
+        storehouse.blockDeliveryOfMaterial(SHOVEL);
+        storehouse.blockDeliveryOfMaterial(PICK_AXE);
+        storehouse.blockDeliveryOfMaterial(FISHING_ROD);
+        storehouse.blockDeliveryOfMaterial(BOW);
+        storehouse.blockDeliveryOfMaterial(SAW);
+        storehouse.blockDeliveryOfMaterial(CLEAVER);
+        storehouse.blockDeliveryOfMaterial(ROLLING_PIN);
+        storehouse.blockDeliveryOfMaterial(CRUCIBLE);
+        storehouse.blockDeliveryOfMaterial(TONGS);
+        storehouse.blockDeliveryOfMaterial(SCYTHE);
+    }
+
+    public static void verifyWorkerDoesNotCarryTool(Worker worker) {
+        switch (worker.getCargo().getMaterial()) {
+            case BOW:
+            case SAW:
+                fail();
+                break;
+            default:
+                break;
+        }
     }
 
     public static class GameViewMonitor implements PlayerGameViewMonitor {

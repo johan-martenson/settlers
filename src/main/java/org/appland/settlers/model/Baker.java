@@ -84,7 +84,7 @@ public class Baker extends Worker {
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
 
-            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
                 Cargo cargo = new Cargo(BREAD, map);
 
                 setCargo(cargo);
@@ -109,7 +109,7 @@ public class Baker extends Worker {
                     productivityMeasurer.reportProductivity();
 
                     /* Handle the transportation of the produced bread */
-                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                    if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = Baker.State.WAITING_FOR_SPACE_ON_FLAG;
                     } else {
                         Cargo cargo = new Cargo(BREAD, map);

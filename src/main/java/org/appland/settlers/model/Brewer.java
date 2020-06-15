@@ -76,7 +76,7 @@ public class Brewer extends Worker {
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
 
-            if (!getHome().getFlag().hasNoPlaceForMoreCargo()) {
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
                 Cargo cargo = new Cargo(BEER, map);
 
                 setCargo(cargo);
@@ -101,7 +101,7 @@ public class Brewer extends Worker {
                     productivityMeasurer.reportProductivity();
 
                     /* Handle transportation of the produced beer */
-                    if (getHome().getFlag().hasNoPlaceForMoreCargo()) {
+                    if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = Brewer.State.WAITING_FOR_SPACE_ON_FLAG;
                     } else {
                         Cargo cargo = new Cargo(BEER, map);

@@ -28,6 +28,7 @@ import static org.appland.settlers.model.Material.GENERAL;
 import static org.appland.settlers.model.Material.GEOLOGIST;
 import static org.appland.settlers.model.Material.HUNTER;
 import static org.appland.settlers.model.Material.IRON_FOUNDER;
+import static org.appland.settlers.model.Material.METALWORKER;
 import static org.appland.settlers.model.Material.MILLER;
 import static org.appland.settlers.model.Material.MINER;
 import static org.appland.settlers.model.Material.MINTER;
@@ -436,6 +437,8 @@ public class Storehouse extends Building implements Actor {
             storeOneInInventory(SCOUT);
         } else if (worker instanceof Hunter) {
             storeOneInInventory(HUNTER);
+        } else if (worker instanceof Metalworker) {
+            storeOneInInventory(METALWORKER);
         }
 
         getMap().removeWorker(worker);
@@ -524,6 +527,9 @@ public class Storehouse extends Building implements Actor {
             break;
         case HUNTER:
             worker = new Hunter(getPlayer(), getMap());
+            break;
+        case METALWORKER:
+            worker = new Metalworker(getPlayer(), getMap());
             break;
         default:
             throw new Exception("Can't retrieve worker of type " + workerType);

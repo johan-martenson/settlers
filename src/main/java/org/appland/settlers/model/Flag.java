@@ -149,10 +149,6 @@ public class Flag implements EndPoint {
         this.player = player;
     }
 
-    public boolean hasNoPlaceForMoreCargo() {
-        return stackedCargo.size() + promisedCargo >= MAX_NUMBER_OF_STACKED_CARGO;
-    }
-
     public void promiseCargo() {
         promisedCargo = promisedCargo + 1;
     }

@@ -53,7 +53,7 @@ public enum Material {
     SCOUT,
     HUNTER,
     OFFICER,
-    PRIVATE_FIRST_CLASS, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE;
+    PRIVATE_FIRST_CLASS, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE, METALWORKER;
 
     private final static List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
     private final static List<Material> transportableItems = Collections.unmodifiableList(Arrays.asList(
@@ -116,6 +116,7 @@ public enum Material {
             case HUNTER:
             case OFFICER:
             case PRIVATE_FIRST_CLASS:
+            case METALWORKER:
                 return true;
         }
 

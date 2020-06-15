@@ -1,71 +1,93 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.appland.settlers.model;
 
-import static org.appland.settlers.model.Armorer.State.DEAD;
-import static org.appland.settlers.model.Armorer.State.GOING_BACK_TO_HOUSE;
-import static org.appland.settlers.model.Armorer.State.GOING_TO_DIE;
-import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
-import static org.appland.settlers.model.Armorer.State.GOING_TO_FLAG_WITH_CARGO;
-import static org.appland.settlers.model.Armorer.State.PRODUCING_WEAPON;
-import static org.appland.settlers.model.Armorer.State.RESTING_IN_HOUSE;
-import static org.appland.settlers.model.Armorer.State.RETURNING_TO_STORAGE;
-import static org.appland.settlers.model.Armorer.State.WAITING_FOR_SPACE_ON_FLAG;
-import static org.appland.settlers.model.Armorer.State.WALKING_TO_TARGET;
-import static org.appland.settlers.model.Material.ARMORER;
-import static org.appland.settlers.model.Material.COAL;
-import static org.appland.settlers.model.Material.IRON_BAR;
-import static org.appland.settlers.model.Material.SHIELD;
-import static org.appland.settlers.model.Material.SWORD;
+import java.util.Arrays;
+import java.util.List;
 
-/**
- *
- * @author johan
- */
+import static org.appland.settlers.model.Material.AXE;
+import static org.appland.settlers.model.Material.BOW;
+import static org.appland.settlers.model.Material.CLEAVER;
+import static org.appland.settlers.model.Material.CRUCIBLE;
+import static org.appland.settlers.model.Material.FISHING_ROD;
+import static org.appland.settlers.model.Material.IRON_BAR;
+import static org.appland.settlers.model.Material.METALWORKER;
+import static org.appland.settlers.model.Material.PICK_AXE;
+import static org.appland.settlers.model.Material.PLANK;
+import static org.appland.settlers.model.Material.ROLLING_PIN;
+import static org.appland.settlers.model.Material.SAW;
+import static org.appland.settlers.model.Material.SCYTHE;
+import static org.appland.settlers.model.Material.SHOVEL;
+import static org.appland.settlers.model.Material.TONGS;
+import static org.appland.settlers.model.Metalworker.State.DEAD;
+import static org.appland.settlers.model.Metalworker.State.GOING_BACK_TO_HOUSE;
+import static org.appland.settlers.model.Metalworker.State.GOING_TO_DIE;
+import static org.appland.settlers.model.Metalworker.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
+import static org.appland.settlers.model.Metalworker.State.GOING_TO_FLAG_WITH_CARGO;
+import static org.appland.settlers.model.Metalworker.State.MAKING_TOOL;
+import static org.appland.settlers.model.Metalworker.State.RESTING_IN_HOUSE;
+import static org.appland.settlers.model.Metalworker.State.RETURNING_TO_STORAGE;
+import static org.appland.settlers.model.Metalworker.State.WAITING_FOR_SPACE_ON_FLAG;
+import static org.appland.settlers.model.Metalworker.State.WALKING_TO_TARGET;
+
 @Walker(speed = 10)
-public class Armorer extends Worker {
+public class Metalworker extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+    private static final List<Material> TOOLS = Arrays.asList(
+            AXE,
+            SHOVEL,
+            PICK_AXE,
+            FISHING_ROD,
+            BOW,
+            SAW,
+            CLEAVER,
+            ROLLING_PIN,
+            CRUCIBLE,
+            TONGS,
+            SCYTHE);
     private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
-    private final ProductivityMeasurer productivityMeasurer;
 
-    private Material nextWeapon = SWORD;
-    private State    state;
+    private State state;
+    private Material currentTool;
 
     protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
-        PRODUCING_WEAPON,
+        MAKING_TOOL,
         GOING_TO_FLAG_WITH_CARGO,
         GOING_BACK_TO_HOUSE,
-        WAITING_FOR_SPACE_ON_FLAG, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, GOING_TO_FLAG_THEN_GOING_TO_DIE, RETURNING_TO_STORAGE
+        WAITING_FOR_SPACE_ON_FLAG,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE,
+        GOING_TO_DIE,
+        DEAD,
+        RETURNING_TO_STORAGE
     }
 
-    public Armorer(Player player, GameMap map) {
+    public Metalworker(Player player, GameMap map) {
         super(player, map);
 
         countdown = new Countdown();
         state = WALKING_TO_TARGET;
 
         productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
+
+        currentTool = TOOLS.get(TOOLS.size() - 1);
     }
 
-    private Material getNextWeapon(Material current) {
-        if (current == SWORD) {
-            return SHIELD;
+    private Material getNextTool(Material currentMaterial) {
+        int index = TOOLS.indexOf(currentMaterial);
+
+        if (index < TOOLS.size() - 1) {
+            return TOOLS.get(index + 1);
         } else {
-            return SWORD;
+            return TOOLS.get(0);
         }
     }
 
     @Override
     protected void onEnterBuilding(Building building) {
-        if (building instanceof Armory) {
+        if (building instanceof Metalworks) {
             setHome(building);
         }
 
@@ -75,10 +97,9 @@ public class Armorer extends Worker {
 
     @Override
     protected void onIdle() throws Exception {
-
         if (state == RESTING_IN_HOUSE) {
             if (countdown.reachedZero()) {
-                state = PRODUCING_WEAPON;
+                state = MAKING_TOOL;
                 countdown.countFrom(PRODUCTION_TIME);
 
                 productivityMeasurer.nextProductivityCycle();
@@ -86,39 +107,44 @@ public class Armorer extends Worker {
                 countdown.step();
             }
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
-            if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Cargo cargo = new Cargo(nextWeapon, map);
 
+            if (getHome().getFlag().hasPlaceForMoreCargo()) {
+                Material nextTool = getNextTool(currentTool);
+                currentTool = nextTool;
+
+                Cargo cargo = new Cargo(nextTool, map);
                 setCargo(cargo);
 
-                nextWeapon = getNextWeapon(nextWeapon);
-
+                /* Go place the tool at the flag */
                 state = GOING_TO_FLAG_WITH_CARGO;
 
                 setTarget(getHome().getFlag().getPosition());
 
                 getHome().getFlag().promiseCargo();
             }
-        } else if (state == PRODUCING_WEAPON) {
-            if (getHome().getAmount(IRON_BAR) > 0 && getHome().getAmount(COAL) > 0 && getHome().isProductionEnabled()) {
 
+        } else if (state == MAKING_TOOL) {
+            if (getHome().getAmount(PLANK) > 0 && getHome().getAmount(IRON_BAR) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.reachedZero()) {
 
-                    /* Produce the weapon */
+                    /* Consume the ingredients */
+                    getHome().consumeOne(PLANK);
                     getHome().consumeOne(IRON_BAR);
-                    getHome().consumeOne(COAL);
 
-                    /* Handle transportation */
+                    /* Report the production */
+                    productivityMeasurer.reportProductivity();
+
+                    /* Handle transportation of the produced tool */
                     if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
+                        Material nextTool = getNextTool(currentTool);
+                        currentTool = nextTool;
 
-                        Cargo cargo = new Cargo(nextWeapon, map);
-
+                        Cargo cargo = new Cargo(nextTool, map);
                         setCargo(cargo);
 
-                        nextWeapon = getNextWeapon(nextWeapon);
-
+                        /* Go place the tool at the flag */
                         state = GOING_TO_FLAG_WITH_CARGO;
 
                         setTarget(getHome().getFlag().getPosition());
@@ -127,15 +153,11 @@ public class Armorer extends Worker {
                     }
                 } else {
                     countdown.step();
-
-                    /* Count this as a productive step */
-                    productivityMeasurer.reportProductivity();
                 }
             } else {
 
+                /* Report the that the brewer was unproductive */
                 productivityMeasurer.reportUnproductivity();
-
-                productivityMeasurer.nextProductivityCycle();
             }
         } else if (state == DEAD) {
             if (countdown.reachedZero()) {
@@ -176,7 +198,7 @@ public class Armorer extends Worker {
         } else if (state == GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE) {
 
             /* Go to the closest storage */
-            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
+            Storehouse storehouse = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, METALWORKER);
 
             if (storehouse != null) {
 
@@ -184,7 +206,7 @@ public class Armorer extends Worker {
 
                 setTarget(storehouse.getPosition());
             } else {
-                state = Armorer.State.GOING_TO_DIE;
+                state = GOING_TO_DIE;
 
                 Point point = super.findPlaceToDie();
 
@@ -201,14 +223,15 @@ public class Armorer extends Worker {
 
     @Override
     protected void onReturnToStorage() throws Exception {
-        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, ARMORER);
+        Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, METALWORKER);
 
         if (storage != null) {
             state = RETURNING_TO_STORAGE;
 
             setTarget(storage.getPosition());
         } else {
-            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), ARMORER);
+
+            storage = GameUtils.getClosestStorageOffroadWhereDeliveryIsPossible(getPosition(), null, getPlayer(), METALWORKER);
 
             if (storage != null) {
                 state = RETURNING_TO_STORAGE;
@@ -225,19 +248,14 @@ public class Armorer extends Worker {
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + state.name().toLowerCase();
-    }
-
-    @Override
     protected void onWalkingAndAtFixedPoint() throws Exception {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
-            map.isFlagAtPoint(getPosition()) &&
-            !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
+                map.isFlagAtPoint(getPosition()) &&
+                !map.arePointsConnectedByRoads(getPosition(), getTarget())) {
 
-            /* Don't try to enter the armory upon arrival */
+            /* Don't try to enter upon arrival */
             clearTargetBuilding();
 
             /* Go back to the storage */
@@ -250,7 +268,8 @@ public class Armorer extends Worker {
 
         /* Measure productivity across the length of four rest-work periods */
         return (int)
-                (((double)productivityMeasurer.getSumMeasured() / (double)(4 * PRODUCTION_TIME)) * 100);
+                (((double)productivityMeasurer.getSumMeasured() /
+                        (double)(productivityMeasurer.getNumberOfCycles())) * 100);
     }
 
     @Override

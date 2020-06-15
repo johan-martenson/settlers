@@ -87,7 +87,7 @@ public class Courier extends Worker {
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
             Flag flag = map.getFlagAtPoint(getCargo().getNextFlagOrBuilding());
 
-            if (!flag.hasNoPlaceForMoreCargo()) {
+            if (flag.hasPlaceForMoreCargo()) {
                 state = GOING_TO_FLAG_TO_DELIVER_CARGO;
 
                 setTarget(flag.getPosition());
@@ -276,7 +276,7 @@ public class Courier extends Worker {
             if (state == GOING_TO_FLAG_TO_DELIVER_CARGO && nextPoint.equals(getCargo().getNextFlagOrBuilding())) {
 
                 /* Wait if there is no space at the flag to put down the cargo */
-                if (flag.hasNoPlaceForMoreCargo()) {
+                if (!flag.hasPlaceForMoreCargo()) {
                     state = WAITING_FOR_SPACE_ON_FLAG;
 
                     stopWalkingToTarget();
