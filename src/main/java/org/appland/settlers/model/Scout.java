@@ -36,7 +36,7 @@ public class Scout extends Worker {
         WALKING_TO_TARGET,
         GOING_TO_NEXT_POINT,
         RETURNING_TO_FLAG,
-        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
+        WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
     private static final int DISCOVERY_RADIUS = 4;
@@ -61,7 +61,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    void onIdle() throws Exception {
+    void onIdle() {
          if (state == DEAD) {
             if (countdown.reachedZero()) {
                 map.removeWorker(this);
