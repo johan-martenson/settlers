@@ -120,7 +120,7 @@ public class Cargo {
         }
     }
 
-    void rerouteIfNeeded() throws Exception {
+    void rerouteIfNeeded() throws InvalidRouteException {
 
         /* Handle the case where the targeted building cannot receive the cargo */
         if (target == null) {

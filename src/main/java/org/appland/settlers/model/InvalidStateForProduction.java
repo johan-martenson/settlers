@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-public class InvalidStateForProduction extends Exception {
+public class InvalidStateForProduction extends InvalidGameLogicException {
 
     /**
      *

@@ -60,7 +60,7 @@ public class Headquarter extends Storehouse {
     }
 
     @Override
-    protected void setMap(GameMap map) throws Exception {
+    protected void setMap(GameMap map) throws InvalidRouteException {
         super.setMap(map);
 
         Worker storageWorker = new StorageWorker(getPlayer(), map);
@@ -131,7 +131,7 @@ public class Headquarter extends Storehouse {
     }
 
     @Override
-    void capture(Player player) throws Exception {
+    void capture(Player player) throws InvalidUserActionException, InvalidRouteException {
 
         /* Destroy the headquarter if it's captured */
         super.tearDown();

@@ -17,7 +17,7 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  *
  * @author johan
  */
-public abstract class Worker implements Actor {
+public abstract class Worker {
     private final Player player;
 
     enum States {
@@ -124,8 +124,7 @@ public abstract class Worker implements Actor {
         dead = false;
     }
 
-    @Override
-    public void stepTime() throws Exception {
+    public void stepTime() throws InvalidRouteException, InvalidUserActionException {
 
         if (state == WALKING_AND_EXACTLY_AT_POINT) {
 
@@ -213,16 +212,16 @@ public abstract class Worker implements Actor {
         return "Idle courier at " + getPosition();
     }
 
-    void onArrival() throws Exception {
+    void onArrival() throws InvalidRouteException, InvalidUserActionException {
     }
 
-    void onIdle() throws Exception {
+    void onIdle() throws InvalidRouteException, InvalidUserActionException {
     }
 
-    void onEnterBuilding(Building building) throws Exception {
+    void onEnterBuilding(Building building) throws InvalidRouteException {
     }
 
-    private void handleArrival() throws Exception {
+    private void handleArrival() throws InvalidRouteException {
 
         /* If there is a building set as target, enter it */
         if (getTargetBuilding() != null) {
@@ -251,7 +250,15 @@ public abstract class Worker implements Actor {
         }
 
         /* This lets subclasses add their own logic */
-        onArrival();
+        try {
+            onArrival();
+        } catch (InvalidUserActionException e) {
+            InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("");
+
+            invalidGameLogicException.initCause(e);
+
+            throw invalidGameLogicException;
+        }
     }
 
     public void setPosition(Point point) {
@@ -285,7 +292,7 @@ public abstract class Worker implements Actor {
         return walker.speed();
     }
 
-    public void setTargetBuilding(Building building) throws Exception {
+    public void setTargetBuilding(Building building) throws InvalidRouteException {
         buildingToEnter = building;
         setTarget(building.getPosition());
 
@@ -308,9 +315,9 @@ public abstract class Worker implements Actor {
         return position;
     }
 
-    public Point getNextPoint() throws Exception {
+    public Point getNextPoint() {
         if (path == null || path.isEmpty()) {
-            throw new Exception("No next point set. Target is " + getTarget());
+            return null;
         }
 
         return path.get(0);
@@ -327,7 +334,7 @@ public abstract class Worker implements Actor {
         return (int)(((double)(getSpeed() - walkCountdown.getCount()) / getSpeed()) * 100);
     }
 
-    public void enterBuilding(Building building) throws Exception, InvalidGameLogicException {
+    public void enterBuilding(Building building) throws InvalidRouteException {
         if (!getPosition().equals(building.getPosition())) {
             throw new InvalidGameLogicException("Can't enter " + building + " when worker is at " + getPosition());
         }
@@ -355,11 +362,11 @@ public abstract class Worker implements Actor {
         return carriedCargo;
     }
 
-    void setOffroadTarget(Point point) throws Exception {
+    void setOffroadTarget(Point point) throws InvalidRouteException {
         setOffroadTarget(point, null);
     }
 
-    void setOffroadTarget(Point point, Point via) throws Exception {
+    void setOffroadTarget(Point point, Point via) throws InvalidRouteException {
         boolean wasInside = false;
 
         target = point;
@@ -398,7 +405,7 @@ public abstract class Worker implements Actor {
         }
     }
 
-    void setTarget(Point point) throws Exception {
+    void setTarget(Point point) throws InvalidRouteException {
         if (state == IDLE_INSIDE) {
             if (!point.equals(home.getFlag().getPosition())) {
                 setTarget(point, home.getFlag().getPosition());
@@ -410,7 +417,7 @@ public abstract class Worker implements Actor {
         }
     }
 
-    void setTarget(Point point, Point via) throws Exception, InvalidRouteException {
+    void setTarget(Point point, Point via) throws InvalidRouteException {
 
         target = point;
 
@@ -474,11 +481,11 @@ public abstract class Worker implements Actor {
         return path;
     }
 
-    void returnHomeOffroad() throws Exception {
+    void returnHomeOffroad() throws InvalidRouteException {
         setOffroadTarget(home.getPosition(), home.getFlag().getPosition());
     }
 
-    void returnHome() throws Exception {
+    void returnHome() throws InvalidRouteException {
         if (getPosition().equals(home.getFlag().getPosition())) {
             setTarget(home.getPosition());
         } else {
@@ -490,11 +497,11 @@ public abstract class Worker implements Actor {
         home = building;
     }
 
-    void returnToStorage() throws Exception {
+    void returnToStorage() throws InvalidRouteException {
         onReturnToStorage();
     }
 
-    void onReturnToStorage() throws Exception {
+    void onReturnToStorage() throws InvalidRouteException {
 
     }
 
@@ -502,9 +509,9 @@ public abstract class Worker implements Actor {
         return player;
     }
 
-    void onWalkingAndAtFixedPoint() throws Exception {}
+    void onWalkingAndAtFixedPoint() throws InvalidRouteException {}
 
-    void walkHalfWayOffroadTo(Point point) throws Exception {
+    void walkHalfWayOffroadTo(Point point) throws InvalidRouteException {
 
         /* Walk half way to the given target */
         setOffroadTarget(point);
@@ -549,7 +556,7 @@ public abstract class Worker implements Actor {
         return 0;
     }
 
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
     }
 
     public boolean isDead() {

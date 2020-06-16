@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-public class DeliveryNotPossibleException extends Exception {
+public class DeliveryNotPossibleException extends InvalidGameLogicException {
 
     /**
      *

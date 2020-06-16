@@ -198,15 +198,15 @@ public class Player {
         }
     }
 
-    public int getAvailableAttackersForBuilding(Building buildingToAttack) throws Exception {
+    public int getAvailableAttackersForBuilding(Building buildingToAttack) throws InvalidUserActionException {
         int availableAttackers = 0;
 
         if (!buildingToAttack.isMilitaryBuilding()) {
-            throw new Exception("Cannot get available attackers for non-military building");
+            throw new InvalidUserActionException("Cannot get available attackers for non-military building");
         }
 
         if (equals(buildingToAttack.getPlayer())) {
-            throw new Exception("Cannot get available attackers for own building");
+            throw new InvalidUserActionException("Cannot get available attackers for own building");
         }
 
         /* Count soldiers in military buildings that can reach the building */
@@ -223,16 +223,16 @@ public class Player {
         return availableAttackers;
     }
 
-    public void attack(Building buildingToAttack, int nrAttackers) throws Exception {
+    public void attack(Building buildingToAttack, int nrAttackers) throws InvalidUserActionException, InvalidRouteException {
 
         /* Can only attack military buildings */
         if (!buildingToAttack.isMilitaryBuilding()) {
-            throw new Exception("Cannot attack non-military building " + buildingToAttack);
+            throw new InvalidUserActionException("Cannot attack non-military building " + buildingToAttack);
         }
 
         /* A player cannot attack himself */
         if (buildingToAttack.getPlayer().equals(this)) {
-            throw new Exception("Can only attack other players");
+            throw new InvalidUserActionException("Can only attack other players");
         }
 
         List<Building> eligibleBuildings = new LinkedList<>();
@@ -1209,7 +1209,7 @@ public class Player {
         return true;
     }
 
-    public boolean canAttack(Building building) throws Exception {
+    public boolean canAttack(Building building) throws InvalidUserActionException {
 
         /* Can only attack military buildings */
         if (!building.isMilitaryBuilding()) {

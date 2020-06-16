@@ -20,7 +20,7 @@ import static org.appland.settlers.model.Material.STONE;
 import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
-public class Building implements Actor, EndPoint {
+public class Building implements EndPoint {
     private Military ownDefender;
     private Military primaryAttacker;
     private boolean  outOfResources;
@@ -148,7 +148,7 @@ public class Building implements Actor, EndPoint {
         return militaryBuilding.maxCoins();
     }
 
-    void setMap(GameMap map) throws Exception {
+    void setMap(GameMap map) throws InvalidRouteException {
         this.map = map;
     }
 
@@ -181,6 +181,10 @@ public class Building implements Actor, EndPoint {
     }
 
     public boolean needsWorker() {
+        if (getWorkerType() == null) {
+            return false;
+        }
+
         if (!isUnoccupied()) {
             return false;
         }
@@ -188,11 +192,11 @@ public class Building implements Actor, EndPoint {
         return worker == null && promisedWorker == null;
     }
 
-    public Material getWorkerType() throws Exception {
+    public Material getWorkerType() {
         RequiresWorker requiresWorker = getClass().getAnnotation(RequiresWorker.class);
 
         if (requiresWorker == null) {
-            throw new Exception("No worker needed in " + this);
+            return null;
         }
 
         return requiresWorker.workerType();
@@ -202,13 +206,13 @@ public class Building implements Actor, EndPoint {
         promisedMilitary.add(military);
     }
 
-    public void promiseWorker(Worker worker) throws Exception {
+    public void promiseWorker(Worker worker) {
         if (!isReady()) {
-            throw new Exception("Can't promise worker to building in state " + state);
+            throw new InvalidGameLogicException("Can't promise worker to building in state " + state);
         }
 
         if (promisedWorker != null) {
-            throw new Exception("Building " + this + " is already promised worker " + promisedWorker);
+            throw new InvalidGameLogicException("Building " + this + " is already promised worker " + promisedWorker);
         }
 
         promisedWorker = worker;
@@ -237,16 +241,16 @@ public class Building implements Actor, EndPoint {
         return promisedMilitary.size();
     }
 
-    public void assignWorker(Worker worker) throws Exception {
+    public void assignWorker(Worker worker) {
 
         /* A building can't get an assigned worker while it's still under construction */
         if (isUnderConstruction()) {
-            throw new Exception("Can't assign " + worker + " to unfinished " + this);
+            throw new InvalidGameLogicException("Can't assign " + worker + " to unfinished " + this);
         }
 
         /* A building can only have one worker */
         if (isOccupied()) {
-            throw new Exception("Building " + this + " is already occupied.");
+            throw new InvalidGameLogicException("Building " + this + " is already occupied.");
         }
 
 
@@ -256,14 +260,14 @@ public class Building implements Actor, EndPoint {
         state = State.OCCUPIED;
     }
 
-    void deployMilitary(Military military) throws Exception {
+    void deployMilitary(Military military) throws InvalidRouteException {
 
         if (!isReady()) {
-            throw new Exception("Cannot assign military when the building is not ready");
+            throw new InvalidGameLogicException("Cannot assign military when the building is not ready");
         }
 
         if (hostedMilitary.size() >= getMaxHostedMilitary()) {
-            throw new Exception("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " soldiers");
+            throw new InvalidGameLogicException("Can not host military, " + this + " already hosting " + hostedMilitary.size() + " soldiers");
         }
 
         State previousState = state;
@@ -299,7 +303,7 @@ public class Building implements Actor, EndPoint {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws Exception, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
+    public void putCargo(Cargo cargo) throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
 
         Material material = cargo.getMaterial();
 
@@ -315,7 +319,7 @@ public class Building implements Actor, EndPoint {
 
             /* Throw an exception if too much is being delivered */
             if (getAmount(material) >= getTotalAmountNeeded(material)) {
-                throw new Exception("Can't accept delivery of " + material);
+                throw new InvalidGameLogicException("Can't accept delivery of " + material);
             }
         }
 
@@ -327,7 +331,7 @@ public class Building implements Actor, EndPoint {
         if (isReady()) {
 
             if (material == COIN && isMilitaryBuilding() && getAmount(COIN) >= getMaxCoins()) {
-                throw new Exception("This building doesn't need any more coins");
+                throw new InvalidGameLogicException("This building doesn't need any more coins");
             }
 
             if (!canAcceptGoods()) {
@@ -389,8 +393,7 @@ public class Building implements Actor, EndPoint {
         promisedDeliveries.put(material, amount + 1);
     }
 
-    @Override
-    public void stepTime() throws Exception {
+    void stepTime() throws InvalidRouteException {
 
         if (isUnderAttack()) {
 
@@ -483,7 +486,7 @@ public class Building implements Actor, EndPoint {
         return flag;
     }
 
-    public void tearDown() throws Exception, InvalidUserActionException {
+    public void tearDown() throws InvalidUserActionException, InvalidRouteException {
 
         /* A building cannot be torn down if it's already burning or destroyed */
         if (state == State.BURNING || state == State.DESTROYED) {
@@ -736,7 +739,7 @@ public class Building implements Actor, EndPoint {
         enablePromotions = true;
     }
 
-    public void evacuate() throws Exception {
+    public void evacuate() throws InvalidRouteException {
         for (Military military : hostedMilitary) {
             military.returnToStorage();
         }
@@ -750,11 +753,11 @@ public class Building implements Actor, EndPoint {
         evacuated = false;
     }
 
-    public void stopProduction() throws Exception {
+    public void stopProduction() throws InvalidUserActionException {
         productionEnabled = false;
     }
 
-    public void resumeProduction() throws Exception {
+    public void resumeProduction() throws InvalidUserActionException {
         productionEnabled = true;
     }
 
@@ -893,7 +896,7 @@ public class Building implements Actor, EndPoint {
         return false;
     }
 
-    void capture(Player player) throws Exception {
+    void capture(Player player) throws InvalidRouteException, InvalidUserActionException {
 
         /* Change the ownership of the building */
         setPlayer(player);
@@ -969,7 +972,7 @@ public class Building implements Actor, EndPoint {
         return 0;
     }
 
-    void hitByCatapult(Catapult catapult) throws Exception {
+    void hitByCatapult(Catapult catapult) throws InvalidUserActionException, InvalidRouteException {
 
         getPlayer().reportHitByCatapult(catapult, this);
 
@@ -1016,7 +1019,7 @@ public class Building implements Actor, EndPoint {
         upgradeCountdown.countFrom(TIME_TO_UPGRADE);
     }
 
-    void doUpgradeBuilding() throws Exception {
+    void doUpgradeBuilding() throws InvalidRouteException {
     }
 
     private boolean isMaterialForUpgradeAvailable() {

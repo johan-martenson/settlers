@@ -30,6 +30,7 @@ public class Scout extends Worker {
 
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+
     private final Countdown countdown;
 
     protected enum State {
@@ -72,7 +73,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception, InvalidRouteException {
+    protected void onArrival() throws InvalidRouteException, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
 
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
 
@@ -188,7 +189,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Discover each point the scout walks on */
         map.discoverPointsWithinRadius(getPlayer(), getPosition(), DISCOVERY_RADIUS);
@@ -287,7 +288,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, SCOUT);
 
         state = RETURNING_TO_STORAGE;
@@ -316,7 +317,7 @@ public class Scout extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

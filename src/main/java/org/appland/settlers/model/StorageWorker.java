@@ -66,7 +66,7 @@ public class StorageWorker extends Worker {
         assignedCoal.put(Armory.class, 0);
     }
 
-    private Cargo tryToStartDelivery() throws Exception, InvalidRouteException {
+    private Cargo tryToStartDelivery() throws InvalidRouteException {
 
         for (Material material : getPlayer().getTransportPriorityList()) {
 
@@ -166,7 +166,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == State.RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
 
@@ -190,7 +190,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() throws InvalidRouteException {
         if (state == State.DELIVERING_CARGO_TO_FLAG) {
             Flag flag = getHome().getFlag();
 
@@ -215,7 +215,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
@@ -352,7 +352,7 @@ public class StorageWorker extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&

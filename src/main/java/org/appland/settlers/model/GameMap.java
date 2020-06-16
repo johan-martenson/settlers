@@ -149,10 +149,10 @@ public class GameMap {
      * @param height The height of the new game map
      * @throws Exception An exception is thrown if the given width and height are too small or too large
      */
-    public GameMap(List<Player> players, int width, int height) throws Exception {
+    public GameMap(List<Player> players, int width, int height) throws InvalidUserActionException {
 
         if (players.isEmpty()) {
-            throw new Exception("Can't create game map with no players");
+            throw new InvalidUserActionException("Can't create game map with no players");
         }
 
         this.players = players;
@@ -160,7 +160,7 @@ public class GameMap {
         this.height = height;
 
         if (width < MINIMUM_WIDTH || height < MINIMUM_HEIGHT) {
-            throw new Exception("Can't create too small map (" + width + "x" + height + ")");
+            throw new InvalidUserActionException("Can't create too small map (" + width + "x" + height + ")");
         }
 
         buildings           = new ArrayList<>();
@@ -209,7 +209,7 @@ public class GameMap {
 
         /* Verify that all players have unique colors */
         if (!allPlayersHaveUniqueColor()) {
-            throw new Exception("Each player must have a unique color");
+            throw new InvalidUserActionException("Each player must have a unique color");
         }
 
         /* Set a constant initial seed for the random generator to get a deterministic behavior */
@@ -313,7 +313,7 @@ public class GameMap {
      * @param road The road to remove
      * @throws Exception If there is a failure in making the courier return to storage or removing the road
      */
-    public void removeRoad(Road road) throws Exception {
+    public void removeRoad(Road road) throws InvalidRouteException {
 
         if (road.getCourier() != null) {
             road.getCourier().returnToStorage();
@@ -322,7 +322,7 @@ public class GameMap {
         removeRoadButNotWorker(road);
     }
 
-    private void removeRoadButNotWorker(Road road) throws Exception {
+    private void removeRoadButNotWorker(Road road) {
 
         roads.remove(road);
 
@@ -374,7 +374,7 @@ public class GameMap {
      *
      * @throws Exception Any exception encountered while updating the game
      */
-    public void stepTime() throws Exception {
+    public void stepTime() throws InvalidRouteException, InvalidUserActionException {
 
         projectilesToRemove.clear();
         workersToRemove.clear();
@@ -706,7 +706,7 @@ public class GameMap {
      * @return The house placed
      * @throws Exception Any exceptions encountered while placing the building
      */
-    public <T extends Building> T placeBuilding(T house, Point point) throws Exception, InvalidUserActionException, InvalidGameLogicException {
+    public <T extends Building> T placeBuilding(T house, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
         boolean firstHouse = false;
 
@@ -810,7 +810,7 @@ public class GameMap {
         return house;
     }
 
-    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) throws Exception {
+    void updateBorder(Building buildingCausedUpdate, BorderChangeCause cause) throws InvalidRouteException {
 
         /* Build map Point->Building, picking buildings with the highest claim */
         Map<Point, Building>    claims       = new HashMap<>();
@@ -959,7 +959,14 @@ public class GameMap {
             Player player = building.getPlayer();
 
             if (!player.isWithinBorder(building.getPosition()) || !player.isWithinBorder(building.getFlag().getPosition())) {
-                building.tearDown();
+                try {
+                    building.tearDown();
+                } catch (InvalidUserActionException | InvalidRouteException e) {
+                    InvalidGameLogicException invalidGameLogicException = new InvalidGameLogicException("During update border");
+                    invalidGameLogicException.initCause(e);
+
+                    throw invalidGameLogicException;
+                }
             }
         }
 
@@ -1024,7 +1031,7 @@ public class GameMap {
         statisticsManager.collectLandStatisticsFromPlayers(time, players);
     }
 
-    private Road placeDriveWay(Building building) throws Exception {
+    private Road placeDriveWay(Building building) {
         List<Point> wayPoints = new ArrayList<>();
 
         wayPoints.add(building.getPosition());
@@ -1053,9 +1060,9 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exceptions encountered while placing the new road
      */
-    public Road placeRoad(Player player, Point... points) throws Exception {
+    public Road placeRoad(Player player, Point... points) throws InvalidUserActionException, InvalidEndPointException {
         if (!players.contains(player)) {
-            throw new Exception("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
+            throw new InvalidUserActionException("Can't place road at " + Arrays.asList(points) + " because the player is invalid.");
         }
 
         return placeRoad(player, Arrays.asList(points));
@@ -1069,7 +1076,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exceptions encountered while placing the new road
      */
-    public Road placeRoad(Player player, List<Point> wayPoints) throws Exception, InvalidUserActionException, InvalidEndPointException {
+    public Road placeRoad(Player player, List<Point> wayPoints) throws InvalidUserActionException, InvalidEndPointException {
 
         /* Only allow roads that are at least three points long
         *   -- Driveways are shorter but they are created with a separate method
@@ -1103,7 +1110,7 @@ public class GameMap {
 
         /* Verify that the road does not overlap itself */
         if (!GameUtils.isUnique(wayPoints)) {
-            throw new Exception("Cannot create a road that overlaps itself");
+            throw new InvalidUserActionException("Cannot create a road that overlaps itself");
         }
 
         /*
@@ -1111,7 +1118,7 @@ public class GameMap {
            endpoints so the courier has somewhere to stand
         */
         if (wayPoints.size() < 3) {
-            throw new Exception("Road " + wayPoints + " is too short.");
+            throw new InvalidUserActionException("Road " + wayPoints + " is too short.");
         }
 
         for (Point point : wayPoints) {
@@ -1127,7 +1134,7 @@ public class GameMap {
                 continue;
             }
 
-            throw new Exception(point + " in road is invalid");
+            throw new InvalidUserActionException(point + " in road is invalid");
         }
 
         Flag startFlag = getFlagAtPoint(start);
@@ -1157,7 +1164,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exception encountered while placing the road
      */
-    public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws Exception {
+    public Road placeAutoSelectedRoad(Player player, Flag start, Flag end) throws InvalidEndPointException, InvalidUserActionException {
         return placeAutoSelectedRoad(player, start.getPosition(), end.getPosition());
     }
 
@@ -1170,7 +1177,7 @@ public class GameMap {
      * @return The newly placed road
      * @throws Exception Any exception encountered while placing the new road
      */
-    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws Exception, InvalidEndPointException {
+    public Road placeAutoSelectedRoad(Player player, Point start, Point end) throws InvalidEndPointException, InvalidUserActionException {
 
         /* Throw an exception if the start and end are the same */
         if (start.equals(end)) {
@@ -1267,25 +1274,25 @@ public class GameMap {
      * @return The placed flag
      * @throws Exception Any exception encountered while placing the flag
      */
-    public Flag placeFlag(Player player, Point point) throws Exception {
+    public Flag placeFlag(Player player, Point point) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
         /* Verify that the player is valid */
         if (!players.contains(player)) {
-            throw new Exception("Can't place flag at " + point + " because the player is invalid.");
+            throw new InvalidUserActionException("Can't place flag at " + point + " because the player is invalid.");
         }
 
         return placeFlag(new Flag(player, point));
     }
 
-    private Flag placeFlag(Flag flag) throws Exception {
+    private Flag placeFlag(Flag flag) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
         return doPlaceFlag(flag, true);
     }
 
-    private Flag placeFlagRegardlessOfBorder(Flag flag) throws Exception {
+    private Flag placeFlagRegardlessOfBorder(Flag flag) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
         return doPlaceFlag(flag, false);
     }
 
-    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws Exception, InvalidUserActionException {
+    private Flag doPlaceFlag(Flag flag, boolean checkBorder) throws InvalidUserActionException, InvalidEndPointException, InvalidRouteException {
 
         Point flagPoint = flag.getPosition();
 
@@ -2012,15 +2019,15 @@ public class GameMap {
      * @return The placed tree
      * @throws Exception Throws exception if the tree cannot be placed
      */
-    public Tree placeTree(Point point) throws Exception {
+    public Tree placeTree(Point point) throws InvalidUserActionException {
         MapPoint mp = pointToGameObject.get(point);
 
         if (mp.isFlag()) {
-            throw new Exception("Can't place tree on " + point + " on existing flag");
+            throw new InvalidUserActionException("Can't place tree on " + point + " on existing flag");
         } else if (mp.isRoad()) {
-            throw new Exception("Can't place tree on " + point + " on existing road");
+            throw new InvalidUserActionException("Can't place tree on " + point + " on existing road");
         } else if (mp.isStone()) {
-            throw new Exception("Can't place tree on " + point + " on existing stone");
+            throw new InvalidUserActionException("Can't place tree on " + point + " on existing stone");
         }
 
         Tree tree = new Tree(point);
@@ -2088,14 +2095,14 @@ public class GameMap {
      * @return The placed crop
      * @throws Exception Throws exception if the crop cannot be placed
      */
-    public Crop placeCrop(Point point) throws Exception {
+    public Crop placeCrop(Point point) throws InvalidUserActionException {
         MapPoint mp = pointToGameObject.get(point);
 
         if (isCropAtPoint(point)) {
             Crop crop = mp.getCrop();
 
             if (crop.getGrowthState() != HARVESTED) {
-                throw new Exception("Can't place crop on non-harvested crop at " + point);
+                throw new InvalidUserActionException("Can't place crop on non-harvested crop at " + point);
             }
         }
 
@@ -2232,7 +2239,7 @@ public class GameMap {
      * @param flag The flag to remove
      * @throws Exception Throws exception if there is a fault when removing connected roads
      */
-    public void removeFlag(Flag flag) throws Exception{
+    public void removeFlag(Flag flag) throws InvalidUserActionException, InvalidRouteException {
         MapPoint mpUpLeft = pointToGameObject.get(flag.getPosition().upLeft());
         MapPoint mp = pointToGameObject.get(flag.getPosition());
 
@@ -2312,7 +2319,7 @@ public class GameMap {
      * @return A cargo containing the fish
      * @throws Exception Thrown if there was no fish to catch
      */
-    public Cargo catchFishAtPoint(Point point) throws Exception {
+    public Cargo catchFishAtPoint(Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
             if (tile.getAmountFish() > 0) {
                 tile.consumeFish();
@@ -2321,7 +2328,7 @@ public class GameMap {
             }
         }
 
-        throw new Exception("Can't find any fish to catch at " + point);
+        throw new InvalidGameLogicException("Can't find any fish to catch at " + point);
     }
 
     /**
@@ -2332,7 +2339,7 @@ public class GameMap {
      * @return a cargo containing the mined ore
      * @throws Exception is thrown if there is no ore to mine
      */
-    public Cargo mineMineralAtPoint(Material mineral, Point point) throws Exception {
+    public Cargo mineMineralAtPoint(Material mineral, Point point) {
         for (Tile tile : terrain.getSurroundingTiles(point)) {
             if (tile.getAmountOfMineral(mineral) > 0) {
                 tile.mine(mineral);
@@ -2341,7 +2348,7 @@ public class GameMap {
             }
         }
 
-        throw new Exception("Can't find any gold to mine at " + point);
+        throw new InvalidGameLogicException("Can't find any gold to mine at " + point);
     }
 
     /**
@@ -2937,7 +2944,7 @@ public class GameMap {
         removedCrops.add(crop);
     }
 
-    void replaceBuilding(Building upgradedBuilding, Point position) throws Exception {
+    void replaceBuilding(Building upgradedBuilding, Point position) {
 
         /* Plan to remove the pre-upgrade building */
         Building oldBuilding = getBuildingAtPoint(position);
@@ -3055,7 +3062,7 @@ public class GameMap {
         return time;
     }
 
-    public void reportWorkerWithNewTarget(Worker worker) {
+    void reportWorkerWithNewTarget(Worker worker) {
         workersWithNewTargets.add(worker);
     }
 
@@ -3071,19 +3078,19 @@ public class GameMap {
         removedFlags.add(flag);
     }
 
-    public void reportTornDownBuilding(Building building) {
+    void reportTornDownBuilding(Building building) {
         changedBuildings.add(building);
     }
 
-    public void reportBuildingBurnedDown(Building building) {
+    void reportBuildingBurnedDown(Building building) {
         changedBuildings.add(building);
     }
 
-    public void reportBuildingRemoved(Building building) {
+    void reportBuildingRemoved(Building building) {
         removedBuildings.add(building);
     }
 
-    public void reportWorkerEnteredBuilding(Worker worker) {
+    void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
     }
 }

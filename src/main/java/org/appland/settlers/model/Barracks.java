@@ -29,7 +29,7 @@ public class Barracks extends Building {
     }
 
     @Override
-    protected void doUpgradeBuilding() throws Exception {
+    protected void doUpgradeBuilding() throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException, InvalidRouteException {
         Building upgraded = new GuardHouse(getPlayer());
 
         /* Set the map in the upgraded building */

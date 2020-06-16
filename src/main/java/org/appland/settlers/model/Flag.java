@@ -33,7 +33,7 @@ public class Flag implements EndPoint {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws Exception {
+    public void putCargo(Cargo cargo) throws InvalidRouteException {
 
         cargo.setPosition(getPosition());
         stackedCargo.add(cargo);

@@ -25,8 +25,10 @@ import static org.appland.settlers.model.Minter.State.WALKING_TO_TARGET;
 @Walker(speed = 10)
 public class Minter extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
 
@@ -61,7 +63,7 @@ public class Minter extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 state = MAKING_COIN;
@@ -129,7 +131,7 @@ public class Minter extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception, InvalidRouteException {
+    protected void onArrival() throws InvalidRouteException {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -186,7 +188,7 @@ public class Minter extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, MINTER);
 
         if (storage != null) {
@@ -212,7 +214,7 @@ public class Minter extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -237,7 +239,7 @@ public class Minter extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

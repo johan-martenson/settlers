@@ -167,7 +167,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException, InvalidUserActionException {
 
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
@@ -278,7 +278,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception, InvalidRouteException {
+    public void onArrival() throws InvalidRouteException {
 
         if (state == GOING_OUT_TO_PUT_CARGO) {
 
@@ -341,7 +341,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, FARMER);
 
         if (storage != null) {
@@ -367,7 +367,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -392,7 +392,7 @@ public class Farmer extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

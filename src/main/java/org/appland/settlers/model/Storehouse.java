@@ -114,7 +114,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    public void stepTime() throws Exception {
+    void stepTime() throws InvalidRouteException {
         super.stepTime();
 
         /* Handle draft with delay */
@@ -153,7 +153,7 @@ public class Storehouse extends Building {
         }
     }
 
-    private boolean assignNewWorkerToUnoccupiedPlaces() throws Exception {
+    private boolean assignNewWorkerToUnoccupiedPlaces() throws InvalidRouteException {
         if (assignCouriers()) {
             return true;
         }
@@ -177,7 +177,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignGeologists() throws Exception, InvalidRouteException {
+    private boolean assignGeologists() throws InvalidRouteException {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(GEOLOGIST)) {
@@ -212,7 +212,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignScouts() throws Exception, InvalidRouteException {
+    private boolean assignScouts() throws InvalidRouteException {
 
         /* Leave if there are no scouts in this storage */
         if (!hasAtLeastOne(SCOUT)) {
@@ -256,7 +256,7 @@ public class Storehouse extends Building {
         return false;
     }
 
-    private boolean assignWorkerToUnoccupiedBuildings() throws Exception, InvalidRouteException {
+    private boolean assignWorkerToUnoccupiedBuildings() throws InvalidRouteException {
         for (Building building : getPlayer().getBuildings()) {
             if (building.isMilitaryBuilding()) {
                 if (!hasMilitary()) {
@@ -308,7 +308,7 @@ public class Storehouse extends Building {
         return workerToToolMap.get(worker);
     }
 
-    private boolean assignCouriers() throws Exception, InvalidRouteException {
+    private boolean assignCouriers() throws InvalidRouteException {
 
         if (hasAtLeastOne(COURIER)) {
             for (Road road : getMap().getRoads()) {
@@ -344,7 +344,7 @@ public class Storehouse extends Building {
     }
 
     @Override
-    public void putCargo(Cargo cargo) throws Exception {
+    public void putCargo(Cargo cargo) throws InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
         if (!isWorking()) {
             super.putCargo(cargo);
         } else {
@@ -355,10 +355,10 @@ public class Storehouse extends Building {
         }
     }
 
-    public Cargo retrieve(Material material) throws Exception {
+    public Cargo retrieve(Material material) {
 
         if (!hasAtLeastOne(material)) {
-            throw new Exception("Can't retrieve " + material);
+            throw new InvalidGameLogicException("Can't retrieve " + material);
         }
 
         retrieveOneFromInventory(material);
@@ -375,7 +375,7 @@ public class Storehouse extends Building {
         return hasAtLeastOne(material);
     }
 
-    public void depositWorker(Worker worker) throws Exception {
+    public void depositWorker(Worker worker) {
         if (worker instanceof Military) {
             Military military = (Military) worker;
             Material material;
@@ -391,7 +391,7 @@ public class Storehouse extends Building {
                 material = GENERAL;
                 break;
             default:
-                throw new Exception("Can't handle military with rank " + military.getRank());
+                throw new InvalidGameLogicException("Can't handle military with rank " + military.getRank());
             }
 
             storeOneInInventory(material);
@@ -444,7 +444,7 @@ public class Storehouse extends Building {
         getMap().removeWorker(worker);
     }
 
-    public Worker retrieveWorker(Material workerType) throws Exception {
+    public Worker retrieveWorker(Material workerType) {
         Worker worker;
 
         if (!hasAtLeastOne(workerType)) {
@@ -457,7 +457,7 @@ public class Storehouse extends Building {
                 inventory.put(tool, toolAmount - 1);
                 inventory.put(workerType, workerAmount + 1);
             } else {
-                throw new Exception("There are no " + workerType + " to retrieve");
+                throw new InvalidGameLogicException("There are no " + workerType + " to retrieve");
             }
         }
 
@@ -532,7 +532,7 @@ public class Storehouse extends Building {
             worker = new Metalworker(getPlayer(), getMap());
             break;
         default:
-            throw new Exception("Can't retrieve worker of type " + workerType);
+            throw new InvalidGameLogicException("Can't retrieve worker of type " + workerType);
         }
 
         worker.setPosition(getFlag().getPosition());
@@ -542,11 +542,11 @@ public class Storehouse extends Building {
         return worker;
     }
 
-    public Military retrieveMilitary(Material material) throws Exception {
+    public Military retrieveMilitary(Material material) {
         Military.Rank rank;
 
         if (!hasAtLeastOne(material)) {
-            throw new Exception("Can't retrieve military " + material);
+            throw new InvalidGameLogicException("Can't retrieve military " + material);
         }
 
         retrieveOneFromInventory(material);
@@ -562,7 +562,7 @@ public class Storehouse extends Building {
             rank = PRIVATE_RANK;
             break;
         default:
-            throw new Exception("Can't retrieve worker of type " + material);
+            throw new InvalidGameLogicException("Can't retrieve worker of type " + material);
         }
 
         Military military = new Military(getPlayer(), rank, getMap());
@@ -582,7 +582,7 @@ public class Storehouse extends Building {
         return courier;
     }
 
-    public Military retrieveAnyMilitary() throws Exception {
+    public Military retrieveAnyMilitary() {
         Military military;
 
         if (hasAtLeastOne(PRIVATE)) {
@@ -595,7 +595,7 @@ public class Storehouse extends Building {
             retrieveOneFromInventory(GENERAL);
             military = new Military(getPlayer(), GENERAL_RANK, getMap());
         } else {
-            throw new Exception("No soldiers available");
+            throw new InvalidGameLogicException("No soldiers available");
         }
 
         military.setPosition(getFlag().getPosition());
@@ -668,7 +668,7 @@ public class Storehouse extends Building {
         return equals(storehouse);
     }
 
-    private boolean assignDonkeys() throws Exception, InvalidRouteException {
+    private boolean assignDonkeys() throws InvalidRouteException {
         if (hasAtLeastOne(DONKEY)) {
             for (Road road : getMap().getRoads()) {
                 if (!road.getPlayer().equals(getPlayer())) {

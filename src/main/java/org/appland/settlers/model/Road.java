@@ -19,9 +19,9 @@ public class Road {
     private boolean     isMainRoad;
     private GameMap     map;
 
-    protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) throws Exception {
+    protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) {
         if (areRoadStepsTooLong(wayPoints)) {
-            throw new Exception("The steps are too long in " + wayPoints);
+            throw new InvalidGameLogicException("The steps are too long in " + wayPoints);
         }
 
         this.start = start;
@@ -40,7 +40,7 @@ public class Road {
         isMainRoad = false;
     }
 
-    protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) throws Exception {
+    protected Road(Player player, EndPoint startFlag, List<Point> wayPoints, EndPoint endFlag) {
         this(startFlag, wayPoints, endFlag);
 
         this.player = player;
@@ -67,17 +67,17 @@ public class Road {
         return courier;
     }
 
-    void setCourier(Courier wr) throws Exception {
+    void setCourier(Courier wr) {
         if (wr instanceof Donkey) {
 
             if (donkey != null) {
-                throw new Exception("Can't assign donkey, there is already a donkey assigned.");
+                throw new InvalidGameLogicException("Can't assign donkey, there is already a donkey assigned.");
             }
 
             donkey = (Donkey) wr;
         } else {
             if (courier != null) {
-                throw new Exception("Can't assign courier, there is already a courier assigned.");
+                throw new InvalidGameLogicException("Can't assign courier, there is already a courier assigned.");
             }
 
             courier = wr;

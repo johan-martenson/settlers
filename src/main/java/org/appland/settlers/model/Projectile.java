@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author johan
  */
-public class Projectile implements Actor {
+public class Projectile {
     private final static double FAIL_RATE = 0.25;
     private final static int    SPEED     = 5;
     private final static Random RANDOM    = new Random(1);
@@ -45,8 +45,7 @@ public class Projectile implements Actor {
         return (int) ((double) traveled / countdown.getStartedAt() * 100);
     }
 
-    @Override
-    public void stepTime() throws Exception {
+    public void stepTime() throws InvalidUserActionException, InvalidRouteException {
 
         if (!countdown.hasReachedZero()) {
             countdown.step();

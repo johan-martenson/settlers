@@ -1,6 +1,6 @@
 package org.appland.settlers.model;
 
-public class InvalidMaterialException extends Exception {
+public class InvalidMaterialException extends InvalidGameLogicException {
 
     /**
      *

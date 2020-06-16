@@ -20,6 +20,7 @@ import static org.appland.settlers.model.Material.BEER;
 import static org.appland.settlers.model.Material.GOLD;
 import static org.appland.settlers.model.Material.WOOD;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -133,10 +134,7 @@ public class TestProduction {
     public void testGetWorkerTypeForBuildingNotNeedingWorker() {
         Headquarter headquarter = new Headquarter(null);
 
-        try {
-            headquarter.getWorkerType();
-
-            fail();
-        } catch (Exception e) {}
+        assertFalse(headquarter.needsWorker());
+        assertNull(headquarter.getWorkerType());
     }
 }

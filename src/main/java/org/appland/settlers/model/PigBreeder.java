@@ -34,6 +34,7 @@ public class PigBreeder extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private State state;
+
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
 
@@ -76,7 +77,7 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero() && getHome().isProductionEnabled()) {
                 if (getHome().getAmount(WATER) > 0 && getHome().getAmount(WHEAT) > 0) {
@@ -155,7 +156,7 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception, InvalidRouteException {
+    public void onArrival() throws InvalidRouteException {
         if (state == GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
@@ -214,7 +215,7 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, PIG_BREEDER);
 
         if (storage != null) {
@@ -240,7 +241,7 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -265,7 +266,7 @@ public class PigBreeder extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = PigBreeder.State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

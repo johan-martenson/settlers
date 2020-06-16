@@ -20,8 +20,10 @@ public class Stonemason extends Worker {
     private final static int TIME_TO_REST = 99;
     private final static int TIME_TO_GET_STONE = 49;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
+
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+
     private State state;
     private Point stoneTarget;
 
@@ -65,7 +67,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.hasReachedZero()) {
                 Point accessPoint = null;
@@ -197,7 +199,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    public void onArrival() throws Exception, InvalidRouteException {
+    public void onArrival() throws InvalidRouteException {
         if (state == State.GOING_OUT_TO_PUT_CARGO) {
             Cargo cargo = getCargo();
 
@@ -254,7 +256,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, STONEMASON);
 
         if (storage != null) {
@@ -280,7 +282,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&
@@ -305,7 +307,7 @@ public class Stonemason extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

@@ -73,7 +73,7 @@ public class CatapultWorker extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception {
+    protected void onArrival() {
         if (state == State.RETURNING_TO_STORAGE) {
             Storehouse storehouse = (Storehouse)map.getBuildingAtPoint(getPosition());
 
@@ -87,7 +87,7 @@ public class CatapultWorker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoads(getPosition(), getPlayer());
 
         if (storage != null) {
@@ -139,7 +139,7 @@ public class CatapultWorker extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&

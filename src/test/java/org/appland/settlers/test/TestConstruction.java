@@ -70,7 +70,8 @@ public class TestConstruction {
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         Cargo plankCargo = new Cargo(PLANK, null);
@@ -79,15 +80,15 @@ public class TestConstruction {
 
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         /* Verify that construction can finish when all material is delivered */
         sawmill0.putCargo(plankCargo);
-        sawmill0.stepTime();
+        map.stepTime();
 
         assertTrue(sawmill0.isReady());
-
         assertFalse(sawmill0.isMilitaryBuilding());
 
         /* Verify that all material was consumed by the construction */
@@ -105,7 +106,8 @@ public class TestConstruction {
 
         for (int i = 0; i < 50; i++) {
             assertTrue(sawmill0.isBurningDown());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         assertTrue(sawmill0.isDestroyed());
@@ -169,7 +171,8 @@ public class TestConstruction {
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         Cargo plankCargo = new Cargo(PLANK, null);
@@ -186,14 +189,15 @@ public class TestConstruction {
 
         for (int i = 0; i < 1000; i++) {
             assertTrue(sawmill0.isUnderConstruction());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         /* Verify that construction can finish when all material is delivered */
         sawmill0.promiseDelivery(STONE);
         sawmill0.putCargo(stoneCargo);
 
-        sawmill0.stepTime();
+        map.stepTime();
 
         assertTrue(sawmill0.isReady());
 
@@ -210,7 +214,8 @@ public class TestConstruction {
 
         for (int i = 0; i < 50; i++) {
             assertTrue(sawmill0.isBurningDown());
-            sawmill0.stepTime();
+
+            map.stepTime();
         }
 
         assertTrue(sawmill0.isDestroyed());
@@ -238,7 +243,8 @@ public class TestConstruction {
         /* Verify that construction doesn't finish before material is delivered */
         for (int i = 0; i < 1000; i++) {
             assertTrue(farm.isUnderConstruction());
-            farm.stepTime();
+
+            map.stepTime();
         }
 
         Cargo plankCargo = new Cargo(PLANK, null);
@@ -251,12 +257,13 @@ public class TestConstruction {
 
         for (int i = 0; i < 1000; i++) {
             assertTrue(farm.isUnderConstruction());
-            farm.stepTime();
+
+            map.stepTime();
         }
 
         /* Verify that construction can finish when all material is delivered */
         farm.putCargo(stoneCargo);
-        farm.stepTime();
+        map.stepTime();
 
         assertTrue(farm.isReady());
 
@@ -268,7 +275,8 @@ public class TestConstruction {
 
         for (int i = 0; i < 50; i++) {
             assertTrue(farm.isBurningDown());
-            farm.stepTime();
+
+            map.stepTime();
         }
 
         assertTrue(farm.isDestroyed());

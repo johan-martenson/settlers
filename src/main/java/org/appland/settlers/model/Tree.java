@@ -14,7 +14,7 @@ import static org.appland.settlers.model.Size.SMALL;
  *
  * @author johan
  */
-public class Tree implements Actor {
+public class Tree {
     private Size size;
 
     private final Countdown countdown;
@@ -30,7 +30,6 @@ public class Tree implements Actor {
         countdown.countFrom(200);
     }
 
-    @Override
     public void stepTime() {
         if (size == LARGE) {
             return;

@@ -16,7 +16,7 @@ import static org.appland.settlers.model.Material.WHEAT;
  *
  * @author johan
  */
-public class Crop implements Actor {
+public class Crop {
 
     public enum GrowthState {
         JUST_PLANTED, HALFWAY, FULL_GROWN, HARVESTED
@@ -39,7 +39,6 @@ public class Crop implements Actor {
         growthCountdown.countFrom(TIME_TO_GROW);
     }
 
-    @Override
     public void stepTime() {
         if (state == FULL_GROWN) {
             return;

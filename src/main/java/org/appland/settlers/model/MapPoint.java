@@ -29,7 +29,7 @@ class MapPoint {
     private Stone    stone;
     private Crop     crop;
     private Sign     sign;
-    private int height;
+    private int      height;
 
     public MapPoint(Point point) {
         this.point                 = point;
@@ -47,21 +47,21 @@ class MapPoint {
         height = Constants.DEFAULT_HEIGHT;
     }
 
-    void setBuilding(Building building) throws Exception {
+    void setBuilding(Building building) {
         if (flag != null) {
-            throw new Exception(this + " is already occupied by flag " + flag);
+            throw new InvalidGameLogicException(this + " is already occupied by flag " + flag);
         }
 
         if (this.building != null) {
-            throw new Exception(this + " is already occupied by building " + this.building);
+            throw new InvalidGameLogicException(this + " is already occupied by building " + this.building);
         }
 
         this.building = building;
     }
 
-    void setFlag(Flag flag) throws Exception {
+    void setFlag(Flag flag) {
         if (isOccupied()) {
-            throw new Exception(this + " is already occupied");
+            throw new InvalidGameLogicException(this + " is already occupied");
         }
 
         this.flag = flag;
@@ -96,10 +96,10 @@ class MapPoint {
         }
     }
 
-    void removeConnectingRoad(Road road) throws Exception {
-        if (!connectedRoads.contains(road)) {
-            throw new Exception(road + " is not connected to " + this);
-        }
+    void removeConnectingRoad(Road road) {
+//        if (!connectedRoads.contains(road)) {
+//            throw new Exception(road + " is not connected to " + this);
+//        }
 
         connectedRoads.remove(road);
 

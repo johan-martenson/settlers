@@ -1,6 +1,5 @@
 package org.appland.settlers.test;
 
-import org.appland.settlers.model.Actor;
 import org.appland.settlers.model.Barracks;
 import org.appland.settlers.model.Building;
 import org.appland.settlers.model.Cargo;
@@ -89,19 +88,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class Utils {
-
-    public static void fastForward(int time, Actor actor) throws Exception {
-
-        for (int i = 0; i < time; i++) {
-            actor.stepTime();
-        }
-    }
-
-    public static void fastForward(int time, List<Actor> actors) throws Exception {
-        for (Actor actor : actors) {
-            fastForward(time, actor);
-        }
-    }
 
     public static void fastForward(int time, GameMap map) throws Exception {
 

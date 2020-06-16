@@ -59,7 +59,7 @@ public class Hunter extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
 
         if (state == State.RESTING_IN_HOUSE && getHome().isProductionEnabled()) {
             if (countdown.hasReachedZero()) {
@@ -133,7 +133,7 @@ public class Hunter extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception, InvalidRouteException {
+    protected void onArrival() throws InvalidRouteException {
         if (state == State.TRACKING) {
 
             /* Keep tracking if the prey is too far away to shoot */
@@ -218,7 +218,7 @@ public class Hunter extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, HUNTER);
 
         if (storage != null) {
@@ -252,7 +252,7 @@ public class Hunter extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == State.WALKING_TO_TARGET &&
@@ -277,7 +277,7 @@ public class Hunter extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = State.GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

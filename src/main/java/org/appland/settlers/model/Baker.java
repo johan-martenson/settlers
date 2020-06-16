@@ -55,7 +55,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onEnterBuilding(Building building) throws Exception {
+    protected void onEnterBuilding(Building building) throws InvalidRouteException {
         if (building.isReady()) {
 
             if (building instanceof Bakery) {
@@ -72,7 +72,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == RESTING_IN_HOUSE) {
             if (countdown.hasReachedZero()) {
                 state = BAKING_BREAD;
@@ -141,7 +141,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception, InvalidRouteException {
+    protected void onArrival() throws InvalidRouteException {
         if (state == GOING_TO_FLAG_WITH_CARGO) {
             Flag flag = map.getFlagAtPoint(getPosition());
 
@@ -194,7 +194,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = GameUtils.getClosestStorageConnectedByRoadsWhereDeliveryIsPossible(getPosition(), null, map, BAKER);
 
         if (storage != null) {
@@ -225,7 +225,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -250,7 +250,7 @@ public class Baker extends Worker {
     }
 
     @Override
-    public void goToOtherStorage(Building building) throws Exception {
+    public void goToOtherStorage(Building building) throws InvalidRouteException {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());

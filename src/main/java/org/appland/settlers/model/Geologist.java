@@ -58,7 +58,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onIdle() throws Exception {
+    protected void onIdle() throws InvalidRouteException {
         if (state == INVESTIGATING) {
             if (countdown.hasReachedZero()) {
                 Material foundMaterial = placeSignWithResult(getPosition());
@@ -97,7 +97,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onArrival() throws Exception, InvalidRouteException {
+    protected void onArrival() throws InvalidRouteException, InvalidMaterialException, InvalidStateForProduction, DeliveryNotPossibleException {
         if (state == WALKING_TO_TARGET) {
             flagPoint = getPosition();
 
@@ -225,7 +225,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onWalkingAndAtFixedPoint() throws Exception {
+    protected void onWalkingAndAtFixedPoint() throws InvalidRouteException {
 
         /* Return to storage if the planned path no longer exists */
         if (state == WALKING_TO_TARGET &&
@@ -236,7 +236,7 @@ public class Geologist extends Worker {
     }
 
     @Override
-    protected void onReturnToStorage() throws Exception, InvalidRouteException {
+    protected void onReturnToStorage() throws InvalidRouteException {
         Building storage = getPlayer().getClosestStorage(getPosition(), getHome());
 
         state = RETURNING_TO_STORAGE;

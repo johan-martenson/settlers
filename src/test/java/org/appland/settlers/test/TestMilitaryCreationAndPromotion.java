@@ -61,7 +61,7 @@ public class TestMilitaryCreationAndPromotion {
         assertEquals(storehouse0.getAmount(Material.SWORD), 2);
         assertEquals(storehouse0.getAmount(Material.SHIELD), 3);
 
-        Utils.fastForward(110, storehouse0);
+        Utils.fastForward(110, map);
 
         assertEquals(storehouse0.getAmount(PRIVATE), numberOfPrivates + 1);
         assertEquals(storehouse0.getAmount(Material.BEER), 0);
