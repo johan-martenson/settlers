@@ -17,6 +17,7 @@ public class Forester extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
+
     private State state;
 
     private boolean spotIsClearForTree(Point point) {

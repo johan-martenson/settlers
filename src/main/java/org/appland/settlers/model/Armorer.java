@@ -29,9 +29,10 @@ import static org.appland.settlers.model.Material.SWORD;
 @Walker(speed = 10)
 public class Armorer extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private final Countdown countdown;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
+
+    private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
 
     private Material nextWeapon = SWORD;

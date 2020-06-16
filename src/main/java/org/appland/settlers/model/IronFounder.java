@@ -25,10 +25,11 @@ import static org.appland.settlers.model.Material.IRON_FOUNDER;
 @Walker(speed = 10)
 public class IronFounder extends Worker {
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private final Countdown countdown;
-    private final ProductivityMeasurer productivityMeasurer;
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME    = 99;
+
+    private final Countdown countdown;
+    private final ProductivityMeasurer productivityMeasurer;
 
     protected enum State {
         WALKING_TO_TARGET,

@@ -32,9 +32,10 @@ public class DonkeyBreeder extends Worker {
     private static final int TIME_TO_PREPARE_DONKEY = 19;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
-    private State state;
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+
+    private State state;
 
     protected enum State {
         WALKING_TO_TARGET,

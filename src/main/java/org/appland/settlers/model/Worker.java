@@ -18,7 +18,6 @@ import static org.appland.settlers.model.Worker.States.WALKING_BETWEEN_POINTS;
  * @author johan
  */
 public abstract class Worker {
-    private final Player player;
 
     enum States {
         WALKING_AND_EXACTLY_AT_POINT,
@@ -32,9 +31,8 @@ public abstract class Worker {
 
     private final static int SPEED_ADJUST = 1;
 
+    private final Player player;
     private final Countdown walkCountdown;
-
-    GameMap map;
 
     private boolean     dead;
     private List<Point> path;
@@ -44,6 +42,8 @@ public abstract class Worker {
     private Point       position;
     private Point       target;
     private Building    home;
+
+    GameMap map;
 
     static class ProductivityMeasurer {
         private final int   cycleLength;

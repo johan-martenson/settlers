@@ -15,10 +15,10 @@ import static org.appland.settlers.model.Size.SMALL;
  * @author johan
  */
 public class Tree {
-    private Size size;
-
     private final Countdown countdown;
     private final Point position;
+
+    private Size size;
 
     Tree(Point point) {
         size = SMALL;

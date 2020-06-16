@@ -23,13 +23,13 @@ import static org.appland.settlers.model.SawmillWorker.State.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class SawmillWorker extends Worker {
+
+    private final static int PRODUCTION_TIME = 49;
+    private final static int RESTING_TIME    = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
-
-    private final static int PRODUCTION_TIME = 49;
-    private final static int RESTING_TIME    = 99;
 
     private State state;
 

@@ -30,6 +30,10 @@ import static org.appland.settlers.model.Tile.Vegetation.MOUNTAIN;
 
 public class GameMap {
 
+    private static final String theLeader = "Anh Mai Mårtensson";
+    private static final int MINIMUM_WIDTH  = 5;
+    private static final int MINIMUM_HEIGHT = 5;
+    private static final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
     private static final int MAX_HEIGHT_DIFFERENCE_FOR_LARGE_HOUSE = 3;
 
     private final List<Worker>         workers;
@@ -60,16 +64,9 @@ public class GameMap {
     private final List<Point>          startingPoints;
     private final ConnectionsProvider  pathOnExistingRoadsProvider;
     private final ConnectionsProvider  connectedFlagsAndBuildingsProvider;
+    private final int                  statisticsCollectionPeriod;
 
-    private static final String theLeader = "Anh Mai Mårtensson";
-    private static final int MINIMUM_WIDTH  = 5;
-    private static final int MINIMUM_HEIGHT = 5;
-    private static final int LOOKUP_RANGE_FOR_FREE_ACTOR = 10;
-    private final int statisticsCollectionPeriod;
-
-    private Player winner;
     private final StatisticsManager statisticsManager;
-    private long time;
     private final Set<Worker> workersWithNewTargets;
     private final Set<Building> newBuildings;
     private final List<Building> changedBuildings;
@@ -87,54 +84,10 @@ public class GameMap {
     private final Set<Crop> newCrops;
     private final Set<Crop> removedCrops;
     private final Set<Road> promotedRoads;
+
+    private Player winner;
+    private long time;
     private boolean winnerReported;
-
-    PointInformation whatIsAtPoint(Point point) {
-        MapPoint mp = getMapPoint(point);
-
-        if (mp == null) {
-            return PointInformation.OUTSIDE_MAP;
-        }
-
-        if (mp.isTree()) {
-            return PointInformation.TREE;
-        }
-
-        if (mp.isStone()) {
-            return PointInformation.STONE;
-        }
-
-        if (mp.isFlag()) {
-
-            if (mp.isRoad()) {
-                return PointInformation.FLAG_AND_ROADS;
-            }
-
-            return PointInformation.FLAG;
-        }
-
-        if (mp.isBuilding()) {
-            return PointInformation.BUILDING;
-        }
-
-        if (mp.isRoad()) {
-            return PointInformation.ROAD;
-        }
-
-        if (mp.isSign()) {
-            return PointInformation.SIGN;
-        }
-
-        if (mp.isCrop()) {
-            return PointInformation.CROP;
-        }
-
-        return PointInformation.NONE;
-    }
-
-    public void reportPromotedRoad(Road road) {
-        promotedRoads.add(road);
-    }
 
     enum PointInformation {
         NONE,
@@ -3092,5 +3045,52 @@ public class GameMap {
 
     void reportWorkerEnteredBuilding(Worker worker) {
         removedWorkers.add(worker);
+    }
+
+    PointInformation whatIsAtPoint(Point point) {
+        MapPoint mp = getMapPoint(point);
+
+        if (mp == null) {
+            return PointInformation.OUTSIDE_MAP;
+        }
+
+        if (mp.isTree()) {
+            return PointInformation.TREE;
+        }
+
+        if (mp.isStone()) {
+            return PointInformation.STONE;
+        }
+
+        if (mp.isFlag()) {
+
+            if (mp.isRoad()) {
+                return PointInformation.FLAG_AND_ROADS;
+            }
+
+            return PointInformation.FLAG;
+        }
+
+        if (mp.isBuilding()) {
+            return PointInformation.BUILDING;
+        }
+
+        if (mp.isRoad()) {
+            return PointInformation.ROAD;
+        }
+
+        if (mp.isSign()) {
+            return PointInformation.SIGN;
+        }
+
+        if (mp.isCrop()) {
+            return PointInformation.CROP;
+        }
+
+        return PointInformation.NONE;
+    }
+
+    public void reportPromotedRoad(Road road) {
+        promotedRoads.add(road);
     }
 }

@@ -9,7 +9,7 @@ LARGER CHANGES
 
 * Add ability to configure military parameters
 
-* Add metalworks
+* Make production quotas of different tools configurable
 
 * Improve available construction compared to map information through analytical regression
 
@@ -645,4 +645,6 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 * Make the tree conservation program configurable - DONE
 
 * Add game message and monitoring for when a player wins or loses - DONE
+
+* Add metalworks - DONE
 

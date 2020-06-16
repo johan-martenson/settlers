@@ -11,13 +11,13 @@ public class Road {
     private final EndPoint    end;
     private final List<Point> steps;
 
-    private int         usage;
-    private Courier     courier;
-    private Donkey      donkey;
-    private boolean     needsCourier;
-    private Player      player;
-    private boolean     isMainRoad;
-    private GameMap     map;
+    private int     usage;
+    private Courier courier;
+    private Donkey  donkey;
+    private boolean needsCourier;
+    private Player  player;
+    private boolean isMainRoad;
+    private GameMap map;
 
     protected Road(EndPoint start, List<Point> wayPoints, EndPoint end) {
         if (areRoadStepsTooLong(wayPoints)) {

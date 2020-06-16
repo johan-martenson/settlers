@@ -46,81 +46,8 @@ public class Farmer extends Worker {
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
+
     private State state;
-
-    private Iterable<Point> getSurroundingSpotsForCrops() {
-        Point hutPoint = getHome().getPosition();
-
-        Set<Point> possibleSpotsToPlant = new HashSet<>();
-
-        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.getAdjacentPoints()));
-        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.upLeft().getAdjacentPoints()));
-        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.upRight().getAdjacentPoints()));
-
-        possibleSpotsToPlant.remove(hutPoint);
-        possibleSpotsToPlant.remove(hutPoint.upLeft());
-        possibleSpotsToPlant.remove(hutPoint.upRight());
-
-        return possibleSpotsToPlant;
-    }
-
-    private Point getFreeSpotToPlant() {
-        Point chosenPoint = null;
-
-        for (Point point : getSurroundingSpotsForCrops()) {
-
-            /* Filter points that's not possible to plant on */
-            if (map.isBuildingAtPoint(point) ||
-                map.isFlagAtPoint(point)     ||
-                map.isRoadAtPoint(point)     ||
-                map.isTreeAtPoint(point)) {
-                continue;
-            }
-
-            /* Filter previous crops that aren't harvested yet. It is possible
-               to plant on harvested crops.
-               */
-            if (map.isCropAtPoint(point)) {
-                Crop crop = map.getCropAtPoint(point);
-
-                if (crop.getGrowthState() != HARVESTED) {
-                    continue;
-                }
-            }
-
-            /* Filter points the farmer can't walk to */
-            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
-                continue;
-            }
-
-            chosenPoint = point;
-            break;
-        }
-
-        return chosenPoint;
-    }
-
-    private Crop findCropToHarvest() {
-        for (Point point : getSurroundingSpotsForCrops()) {
-            if (map.isCropAtPoint(point)) {
-                Crop crop = map.getCropAtPoint(point);
-
-                /* Filter crops that aren't full grown */
-                if (crop.getGrowthState() != FULL_GROWN) {
-                    continue;
-                }
-
-                /* Filter crops that can't be reached */
-                if (map.findWayOffroad(crop.getPosition(), getPosition(), null) == null) {
-                    continue;
-                }
-
-                return crop;
-            }
-        }
-
-        return null;
-    }
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -396,5 +323,79 @@ public class Farmer extends Worker {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    private Iterable<Point> getSurroundingSpotsForCrops() {
+        Point hutPoint = getHome().getPosition();
+
+        Set<Point> possibleSpotsToPlant = new HashSet<>();
+
+        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.getAdjacentPoints()));
+        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.upLeft().getAdjacentPoints()));
+        possibleSpotsToPlant.addAll(Arrays.asList(hutPoint.upRight().getAdjacentPoints()));
+
+        possibleSpotsToPlant.remove(hutPoint);
+        possibleSpotsToPlant.remove(hutPoint.upLeft());
+        possibleSpotsToPlant.remove(hutPoint.upRight());
+
+        return possibleSpotsToPlant;
+    }
+
+    private Point getFreeSpotToPlant() {
+        Point chosenPoint = null;
+
+        for (Point point : getSurroundingSpotsForCrops()) {
+
+            /* Filter points that's not possible to plant on */
+            if (map.isBuildingAtPoint(point) ||
+                    map.isFlagAtPoint(point)     ||
+                    map.isRoadAtPoint(point)     ||
+                    map.isTreeAtPoint(point)) {
+                continue;
+            }
+
+            /* Filter previous crops that aren't harvested yet. It is possible
+               to plant on harvested crops.
+               */
+            if (map.isCropAtPoint(point)) {
+                Crop crop = map.getCropAtPoint(point);
+
+                if (crop.getGrowthState() != HARVESTED) {
+                    continue;
+                }
+            }
+
+            /* Filter points the farmer can't walk to */
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+                continue;
+            }
+
+            chosenPoint = point;
+            break;
+        }
+
+        return chosenPoint;
+    }
+
+    private Crop findCropToHarvest() {
+        for (Point point : getSurroundingSpotsForCrops()) {
+            if (map.isCropAtPoint(point)) {
+                Crop crop = map.getCropAtPoint(point);
+
+                /* Filter crops that aren't full grown */
+                if (crop.getGrowthState() != FULL_GROWN) {
+                    continue;
+                }
+
+                /* Filter crops that can't be reached */
+                if (map.findWayOffroad(crop.getPosition(), getPosition(), null) == null) {
+                    continue;
+                }
+
+                return crop;
+            }
+        }
+
+        return null;
     }
 }

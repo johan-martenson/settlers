@@ -21,18 +21,21 @@ import static org.appland.settlers.model.Material.PLANK;
 public class Player {
 
     private static final int PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM = 10;
-    private GameMap map;
-    private Color   color;
-    private String  name;
-    private boolean treeConservationProgramActive;
 
-    private final List<Building>          buildings;
-    private final Set<Point>              discoveredLand;
-    private final List<Material>          transportPriorities;
-    private final Collection<Point>       ownedLand;
+    private GameMap            map;
+    private Color              color;
+    private String             name;
+    private boolean            treeConservationProgramActive;
+    private List<BorderChange> changedBorders;
+    private boolean            treeConservationProgramEnabled;
+
+    private final List<Building> buildings;
+    private final Set<Point> discoveredLand;
+    private final List<Material> transportPriorities;
+    private final Collection<Point> ownedLand;
     private final Map<Class<? extends Building>, Integer> foodQuota;
     private final Map<Class<? extends Building>, Integer> coalQuota;
-    private final Map<Material, Integer>  producedMaterials;
+    private final Map<Material, Integer> producedMaterials;
     private final List<Message> messages;
     private final Set<PlayerGameViewMonitor> gameViewMonitors;
     private final List<Worker> workersWithNewTargets;
@@ -55,8 +58,6 @@ public class Player {
     private final List<Point> newBorder;
     private final List<Point> removedBorder;
     private final List<Stone> newStones;
-
-    private List<BorderChange> changedBorders;
     private final Set<Point> borderPoints;
     private final List<Worker> newWorkers;
     private final Set<Point> changedAvailableConstruction;
@@ -64,7 +65,6 @@ public class Player {
     private final List<Point> newLostLand;
     private final List<Message> newMessages;
     private final List<Road> promotedRoads;
-    private boolean treeConservationProgramEnabled;
 
     public Player(String name, Color color) {
         this.name           = name;

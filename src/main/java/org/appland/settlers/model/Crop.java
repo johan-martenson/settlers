@@ -25,10 +25,11 @@ public class Crop {
     private final static int TIME_TO_GROW = 199;
     private final static int TIME_TO_WITHER = 199;
 
-    private GrowthState state;
     private final Countdown growthCountdown;
     private final Point     position;
     private final GameMap   map;
+
+    private GrowthState state;
 
     public Crop(Point point, GameMap map) {
         position = point;

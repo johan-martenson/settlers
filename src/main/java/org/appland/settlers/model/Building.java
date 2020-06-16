@@ -21,9 +21,6 @@ import static org.appland.settlers.model.Military.Rank.GENERAL_RANK;
 import static org.appland.settlers.policy.ProductionDelays.PROMOTION_DELAY;
 
 public class Building implements EndPoint {
-    private Military ownDefender;
-    private Military primaryAttacker;
-    private boolean  outOfResources;
 
     private enum State {
         UNDER_CONSTRUCTION, UNOCCUPIED, OCCUPIED, BURNING, DESTROYED
@@ -36,17 +33,20 @@ public class Building implements EndPoint {
     private static final int TIME_FOR_DESTROYED_HOUSE_TO_DISAPPEAR = 99;
     private static final int TIME_TO_UPGRADE                       = 99;
 
-    private GameMap        map;
-    private Player         player;
-    private State          state;
-    private Worker         worker;
-    private Worker         promisedWorker;
-    private Point          position;
-    private Flag           flag;
-    private boolean        enablePromotions;
-    private boolean        evacuated;
-    private boolean        productionEnabled;
-    private boolean        upgrading;
+    private GameMap  map;
+    private Player   player;
+    private State    state;
+    private Worker   worker;
+    private Worker   promisedWorker;
+    private Point    position;
+    private Flag     flag;
+    private boolean  enablePromotions;
+    private boolean  evacuated;
+    private boolean  productionEnabled;
+    private boolean  upgrading;
+    private Military ownDefender;
+    private Military primaryAttacker;
+    private boolean  outOfResources;
 
     private final Map<Material, Integer> requiredGoodsForProduction;
     private final List<Military>         attackers;

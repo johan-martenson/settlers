@@ -21,32 +21,6 @@ public class Courier extends Worker {
     private States state;
     private Point  idlePoint;
 
-    private Point findIdlePointAtRoad(Road road) {
-        List<Point> wayPoints = road.getWayPoints();
-
-        return wayPoints.get(wayPoints.size() / 2);
-    }
-
-    public boolean isWalkingToIdlePoint() {
-        return state == RETURNING_TO_IDLE_SPOT;
-    }
-
-    public boolean isWalkingToRoad() {
-        return state == WALKING_TO_ROAD;
-    }
-
-    public boolean isIdle() {
-        return state == IDLE_AT_ROAD;
-    }
-
-    private EndPoint getEndPointAtPoint(Point currentPosition) {
-        if (map.isFlagAtPoint(currentPosition)) {
-            return map.getFlagAtPoint(currentPosition);
-        }
-
-        return map.getBuildingAtPoint(currentPosition);
-    }
-
     protected enum States {
 
         WALKING_TO_ROAD, IDLE_AT_ROAD, GOING_TO_FLAG_TO_PICK_UP_CARGO,
@@ -405,5 +379,31 @@ public class Courier extends Worker {
 
             setTarget(assignedRoad.getOtherPoint(getPosition()));
         }
+    }
+
+    private Point findIdlePointAtRoad(Road road) {
+        List<Point> wayPoints = road.getWayPoints();
+
+        return wayPoints.get(wayPoints.size() / 2);
+    }
+
+    public boolean isWalkingToIdlePoint() {
+        return state == RETURNING_TO_IDLE_SPOT;
+    }
+
+    public boolean isWalkingToRoad() {
+        return state == WALKING_TO_ROAD;
+    }
+
+    public boolean isIdle() {
+        return state == IDLE_AT_ROAD;
+    }
+
+    private EndPoint getEndPointAtPoint(Point currentPosition) {
+        if (map.isFlagAtPoint(currentPosition)) {
+            return map.getFlagAtPoint(currentPosition);
+        }
+
+        return map.getBuildingAtPoint(currentPosition);
     }
 }

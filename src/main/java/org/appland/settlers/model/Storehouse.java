@@ -60,12 +60,12 @@ import static org.appland.settlers.model.Size.MEDIUM;
 @RequiresWorker(workerType = STORAGE_WORKER)
 public class Storehouse extends Building {
 
-    final Map<Material, Integer> inventory;
-
     private final Countdown draftCountdown;
     private final Map<Material, Material> workerToToolMap;
     private final Set<Material> materialToPushOut;
     private final Set<Material> materialBlockedForDelivery;
+
+    final Map<Material, Integer> inventory;
 
     public Storehouse(Player player) {
         super(player);

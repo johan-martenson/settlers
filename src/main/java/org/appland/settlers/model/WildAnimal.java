@@ -22,6 +22,7 @@ public class WildAnimal extends Worker {
     private final static int TIME_TO_STAND = 9;
     private final static int MAX_TRIES = 5;
     private final static int RANGE = 10;
+
     private final Random random;
     private final Countdown countdown;
 

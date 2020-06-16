@@ -28,10 +28,10 @@ import static org.appland.settlers.model.Scout.State.WORKING_IN_LOOKOUT_TOWER;
 @Walker(speed = 10)
 public class Scout extends Worker {
 
+    private static final int DISCOVERY_RADIUS = 4;
+    private static final int LENGTH_TO_PLAN_HEAD = 4;
     private static final int LOOKOUT_TOWER_DISCOVER_RADIUS = 9;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-
-    private final Countdown countdown;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -40,9 +40,7 @@ public class Scout extends Worker {
         WALKING_TO_ASSIGNED_LOOKOUT_TOWER, WORKING_IN_LOOKOUT_TOWER, GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, RETURNING_TO_STORAGE
     }
 
-    private static final int DISCOVERY_RADIUS = 4;
-    private static final int LENGTH_TO_PLAN_HEAD = 4;
-
+    private final Countdown countdown;
     private final Random random;
 
     private State state;

@@ -12,8 +12,9 @@ package org.appland.settlers.model;
  */
 public class Stone {
 
-    private int amount;
     private final Point position;
+
+    private int amount;
 
     public Stone(Point point) {
         amount = 10;

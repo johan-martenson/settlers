@@ -27,8 +27,6 @@ import static org.appland.settlers.model.Military.State.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Military extends Worker {
-    private Building defendedBuilding;
-
     public enum Rank {
         PRIVATE_RANK,
         SERGEANT_RANK,
@@ -72,6 +70,7 @@ public class Military extends Worker {
     private Rank      rank;
     private State     state;
     private int       health;
+    private Building  defendedBuilding;
 
     public Military(Player player, Rank rank, GameMap map) {
         super(player, map);

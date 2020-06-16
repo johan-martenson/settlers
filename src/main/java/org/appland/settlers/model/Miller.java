@@ -23,6 +23,17 @@ import static org.appland.settlers.model.Miller.State.WALKING_TO_TARGET;
  */
 @Walker(speed = 10)
 public class Miller extends Worker {
+
+    protected enum State {
+        WALKING_TO_TARGET,
+        RESTING_IN_HOUSE,
+        GRINDING_WHEAT,
+        GOING_TO_FLAG_WITH_CARGO,
+        GOING_BACK_TO_HOUSE,
+        RETURNING_TO_STORAGE,
+        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, WAITING_FOR_SPACE_ON_FLAG
+    }
+
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
@@ -38,16 +49,6 @@ public class Miller extends Worker {
         state = WALKING_TO_TARGET;
 
         productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
-    }
-
-    protected enum State {
-        WALKING_TO_TARGET,
-        RESTING_IN_HOUSE,
-        GRINDING_WHEAT,
-        GOING_TO_FLAG_WITH_CARGO,
-        GOING_BACK_TO_HOUSE,
-        RETURNING_TO_STORAGE,
-        GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE, GOING_TO_DIE, DEAD, WAITING_FOR_SPACE_ON_FLAG
     }
 
     @Override

@@ -35,37 +35,6 @@ public class Fisherman extends Worker {
 
     private State  state;
 
-    private Point getFishingSpot() {
-        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
-
-        for (Point point : adjacentPoints) {
-            if (map.isBuildingAtPoint(point)) {
-                continue;
-            }
-
-            if (map.isStoneAtPoint(point)) {
-                continue;
-            }
-
-            if (map.getAmountFishAtPoint(point) == 0) {
-                continue;
-            }
-
-            if (!map.getTerrain().isNextToWater(point)) {
-                continue;
-            }
-
-            /* Filter out points that the fisherman can't reach */
-            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
-                continue;
-            }
-
-            return point;
-        }
-
-        return null;
-    }
-
     protected enum State {
         WALKING_TO_TARGET,
         RESTING_IN_HOUSE,
@@ -291,5 +260,36 @@ public class Fisherman extends Worker {
         state = GOING_TO_FLAG_THEN_GOING_TO_OTHER_STORAGE;
 
         setTarget(building.getFlag().getPosition());
+    }
+
+    private Point getFishingSpot() {
+        Iterable<Point> adjacentPoints = map.getPointsWithinRadius(getHome().getPosition(), 4);
+
+        for (Point point : adjacentPoints) {
+            if (map.isBuildingAtPoint(point)) {
+                continue;
+            }
+
+            if (map.isStoneAtPoint(point)) {
+                continue;
+            }
+
+            if (map.getAmountFishAtPoint(point) == 0) {
+                continue;
+            }
+
+            if (!map.getTerrain().isNextToWater(point)) {
+                continue;
+            }
+
+            /* Filter out points that the fisherman can't reach */
+            if (map.findWayOffroad(getHome().getFlag().getPosition(), point, null) == null) {
+                continue;
+            }
+
+            return point;
+        }
+
+        return null;
     }
 }

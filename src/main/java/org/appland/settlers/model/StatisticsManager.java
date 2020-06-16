@@ -31,7 +31,7 @@ public class StatisticsManager {
         SHIELD,
         COIN,
         PRIVATE,
-            PRIVATE_FIRST_CLASS,
+        PRIVATE_FIRST_CLASS,
         SERGEANT,
         OFFICER,
         GENERAL,
