@@ -25,7 +25,6 @@ import org.appland.settlers.model.Tree;
 import org.appland.settlers.model.Woodcutter;
 import org.junit.Test;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -2449,21 +2448,6 @@ public class TestPlacement {
 
     @Test
     public void testSizeComparisons() {
-        assertTrue(Size.contains(LARGE, LARGE));
-        assertTrue(Size.contains(LARGE, MEDIUM));
-        assertTrue(Size.contains(LARGE, SMALL));
-
-        assertFalse(Size.contains(MEDIUM, LARGE));
-        assertTrue(Size.contains(MEDIUM, MEDIUM));
-        assertTrue(Size.contains(MEDIUM, SMALL));
-
-        assertFalse(Size.contains(SMALL, LARGE));
-        assertFalse(Size.contains(SMALL, MEDIUM));
-        assertTrue(Size.contains(SMALL, SMALL));
-
-        assertFalse(Size.contains(null, LARGE));
-        assertFalse(Size.contains(null, MEDIUM));
-        assertFalse(Size.contains(null, SMALL));
 
         assertTrue(LARGE.contains(LARGE));
         assertTrue(LARGE.contains(MEDIUM));

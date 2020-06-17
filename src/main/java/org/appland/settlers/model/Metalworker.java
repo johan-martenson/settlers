@@ -1,22 +1,12 @@
 package org.appland.settlers.model;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.EnumMap;
+import java.util.Map;
 
-import static org.appland.settlers.model.Material.AXE;
-import static org.appland.settlers.model.Material.BOW;
-import static org.appland.settlers.model.Material.CLEAVER;
-import static org.appland.settlers.model.Material.CRUCIBLE;
-import static org.appland.settlers.model.Material.FISHING_ROD;
 import static org.appland.settlers.model.Material.IRON_BAR;
 import static org.appland.settlers.model.Material.METALWORKER;
-import static org.appland.settlers.model.Material.PICK_AXE;
 import static org.appland.settlers.model.Material.PLANK;
-import static org.appland.settlers.model.Material.ROLLING_PIN;
-import static org.appland.settlers.model.Material.SAW;
-import static org.appland.settlers.model.Material.SCYTHE;
-import static org.appland.settlers.model.Material.SHOVEL;
-import static org.appland.settlers.model.Material.TONGS;
+import static org.appland.settlers.model.Material.TOOLS;
 import static org.appland.settlers.model.Metalworker.State.DEAD;
 import static org.appland.settlers.model.Metalworker.State.GOING_BACK_TO_HOUSE;
 import static org.appland.settlers.model.Metalworker.State.GOING_TO_DIE;
@@ -34,24 +24,13 @@ public class Metalworker extends Worker {
     private final static int PRODUCTION_TIME = 49;
     private final static int RESTING_TIME = 99;
     private static final int TIME_FOR_SKELETON_TO_DISAPPEAR = 99;
-    private static final List<Material> TOOLS = Arrays.asList(
-            AXE,
-            SHOVEL,
-            PICK_AXE,
-            FISHING_ROD,
-            BOW,
-            SAW,
-            CLEAVER,
-            ROLLING_PIN,
-            CRUCIBLE,
-            TONGS,
-            SCYTHE);
 
     private final Countdown countdown;
     private final ProductivityMeasurer productivityMeasurer;
 
     private State state;
-    private Material currentTool;
+    private int currentToolIndex;
+    private final Map<Material, Integer> producedDuringPeriod;
 
     protected enum State {
         WALKING_TO_TARGET,
@@ -74,17 +53,60 @@ public class Metalworker extends Worker {
 
         productivityMeasurer = new ProductivityMeasurer(RESTING_TIME + PRODUCTION_TIME);
 
-        currentTool = TOOLS.get(TOOLS.size() - 1);
+        currentToolIndex = 0;
+        producedDuringPeriod = new EnumMap<>(Material.class);
     }
 
-    private Material getNextTool(Material currentMaterial) {
-        int index = TOOLS.indexOf(currentMaterial);
+    private Material getNextTool() {
 
-        if (index < TOOLS.size() - 1) {
-            return TOOLS.get(index + 1);
-        } else {
-            return TOOLS.get(0);
+        /* Reset the production period if needed */
+        boolean quotaLeft = false;
+        for (int i = 0; i < TOOLS.size(); i++) {
+            Material tool = TOOLS.get(i);
+
+            if (getPlayer().getProductionQuotaForTool(tool) > producedDuringPeriod.getOrDefault(tool, 0)) {
+                quotaLeft = true;
+
+                break;
+            }
         }
+
+        if (!quotaLeft) {
+            currentToolIndex = 0;
+
+            producedDuringPeriod.clear();
+        }
+
+        /* Find the next tool to produce */
+        for (int i = 0; i < TOOLS.size(); i++) {
+            int toolIndex = (currentToolIndex + i) % TOOLS.size();
+
+            Material tool = TOOLS.get(toolIndex);
+
+            int quotaForTool = getPlayer().getProductionQuotaForTool(tool);
+            int amountProducedForTool = producedDuringPeriod.getOrDefault(tool, 0);
+
+            if (amountProducedForTool < quotaForTool) {
+                producedDuringPeriod.put(tool, amountProducedForTool + 1);
+
+                currentToolIndex = toolIndex + 1;
+
+                return tool;
+            }
+        }
+
+        /* Return null if there is no quota configured for any tool */
+        return null;
+    }
+
+    private boolean anyToolHasQuotaAssigned() {
+        for (Material tool : TOOLS) {
+            if (getPlayer().getProductionQuotaForTool(tool) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -111,8 +133,7 @@ public class Metalworker extends Worker {
         } else if (state == WAITING_FOR_SPACE_ON_FLAG) {
 
             if (getHome().getFlag().hasPlaceForMoreCargo()) {
-                Material nextTool = getNextTool(currentTool);
-                currentTool = nextTool;
+                Material nextTool = getNextTool();
 
                 Cargo cargo = new Cargo(nextTool, map);
                 setCargo(cargo);
@@ -140,8 +161,7 @@ public class Metalworker extends Worker {
                     if (!getHome().getFlag().hasPlaceForMoreCargo()) {
                         state = WAITING_FOR_SPACE_ON_FLAG;
                     } else {
-                        Material nextTool = getNextTool(currentTool);
-                        currentTool = nextTool;
+                        Material nextTool = getNextTool();
 
                         Cargo cargo = new Cargo(nextTool, map);
                         setCargo(cargo);

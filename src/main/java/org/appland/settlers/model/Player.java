@@ -21,6 +21,8 @@ import static org.appland.settlers.model.Material.PLANK;
 public class Player {
 
     private static final int PLANKS_THRESHOLD_FOR_TREE_CONSERVATION_PROGRAM = 10;
+    private static final int MAX_PRODUCTION_QUOTA = 10;
+    private static final int MIN_PRODUCTION_QUOTA = 0;
 
     private GameMap            map;
     private Color              color;
@@ -65,6 +67,7 @@ public class Player {
     private final List<Point> newLostLand;
     private final List<Message> newMessages;
     private final List<Road> promotedRoads;
+    private final Map<Material, Integer> toolProductionQuotas;
 
     public Player(String name, Color color) {
         this.name           = name;
@@ -133,6 +136,12 @@ public class Player {
         newLostLand = new ArrayList<>();
         newMessages = new ArrayList<>();
         promotedRoads = new ArrayList<>();
+        toolProductionQuotas = new EnumMap<>(Material.class);
+
+        /* Set default production of all tools */
+        for (Material tool : Material.TOOLS) {
+            toolProductionQuotas.put(tool, MAX_PRODUCTION_QUOTA);
+        }
     }
 
     public String getName() {
@@ -1257,5 +1266,26 @@ public class Player {
 
     public void reportHitByCatapult(Catapult catapult, Building hitBuilding) {
         messages.add(new BombardedByCatapultMessage(catapult, hitBuilding));
+    }
+
+    public void setProductionQuotaForTool(Material tool, int quota) throws InvalidUserActionException {
+
+        if (quota > MAX_PRODUCTION_QUOTA) {
+            throw new InvalidUserActionException("Cannot set quota " + quota + " above max quota at " + MAX_PRODUCTION_QUOTA);
+        }
+
+        if (quota < MIN_PRODUCTION_QUOTA) {
+            throw new InvalidUserActionException("Cannot set quota " + quota + " below min quota at " + MIN_PRODUCTION_QUOTA);
+        }
+
+        if (!Material.isTool(tool)) {
+            throw new InvalidUserActionException("Cannot set quota for material that is not a tool: " + tool);
+        }
+
+        toolProductionQuotas.put(tool, quota);
+    }
+
+    public int getProductionQuotaForTool(Material tool) {
+        return toolProductionQuotas.getOrDefault(tool, 0);
     }
 }

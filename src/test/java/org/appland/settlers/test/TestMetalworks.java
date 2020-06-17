@@ -7,6 +7,7 @@ import org.appland.settlers.model.Flag;
 import org.appland.settlers.model.Fortress;
 import org.appland.settlers.model.GameMap;
 import org.appland.settlers.model.Headquarter;
+import org.appland.settlers.model.InvalidUserActionException;
 import org.appland.settlers.model.Material;
 import org.appland.settlers.model.Metalworker;
 import org.appland.settlers.model.Metalworks;
@@ -51,6 +52,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class TestMetalworks {
 
@@ -639,6 +641,321 @@ public class TestMetalworks {
         /* Verify that the metalworker has produced the same amount of each tool */
         for (Material tool : TOOLS) {
             assertEquals((int)toolCount.get(tool), 2);
+        }
+    }
+
+    @Test
+    public void testSelectOnlyProducingSaws() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Select to only product saws */
+        for (Material tool : TOOLS) {
+            player0.setProductionQuotaForTool(tool, 0);
+
+            assertEquals(player0.getProductionQuotaForTool(tool), 0);
+        }
+
+        player0.setProductionQuotaForTool(SAW, 10);
+
+        assertEquals(player0.getProductionQuotaForTool(SAW), 10);
+
+        /* Occupy the metalworks */
+        Worker metalworker0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+
+        assertTrue(metalworker0.isInsideBuilding());
+        assertEquals(metalworker0.getHome(), metalworks);
+        assertEquals(metalworks.getWorker(), metalworker0);
+
+        /* Deliver plank and iron bar to the metalworks */
+        Map<Material, Integer> toolCount = new EnumMap<>(Material.class);
+
+        for (int i = 0; i < TOOLS.size() * 2; i++) {
+            metalworks.putCargo(new Cargo(PLANK, map));
+            metalworks.putCargo(new Cargo(IRON_BAR, map));
+
+            /* Wait until the metalworks produces tool */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+
+            Utils.verifyWorkerCarriesTool(metalworker0);
+
+            assertTrue(metalworks.getFlag().getStackedCargo().size() < 8);
+
+            int amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
+
+            toolCount.put(metalworker0.getCargo().getMaterial(), amount + 1);
+
+            /* Wait for the metalworks worker to leave the cargo at the flag */
+            assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+
+            assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
+            assertNull(metalworker0.getCargo());
+            assertEquals(metalworker0.getTarget(), metalworks.getPosition());
+
+            /* Wait for the metalworks worker to go back to the house */
+            Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+
+            assertTrue(metalworker0.isInsideBuilding());
+        }
+
+        /* Verify that the metalworker has only produced saws */
+        for (Material tool : TOOLS) {
+            if (tool != SAW) {
+                assertEquals((int) toolCount.getOrDefault(tool, 0), 0);
+            }
+        }
+
+        assertEquals((int)toolCount.get(SAW), TOOLS.size() * 2);
+    }
+
+    @Test
+    public void testSelectOnlyProducingTwoAxesAndOneFishingRod() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Select to only product saws */
+        for (Material tool : TOOLS) {
+            player0.setProductionQuotaForTool(tool, 0);
+
+            assertEquals(player0.getProductionQuotaForTool(tool), 0);
+        }
+
+        player0.setProductionQuotaForTool(AXE, 10);
+        player0.setProductionQuotaForTool(FISHING_ROD, 5);
+
+        assertEquals(player0.getProductionQuotaForTool(AXE), 10);
+        assertEquals(player0.getProductionQuotaForTool(FISHING_ROD), 5);
+
+        /* Occupy the metalworks */
+        Worker metalworker0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+
+        assertTrue(metalworker0.isInsideBuilding());
+        assertEquals(metalworker0.getHome(), metalworks);
+        assertEquals(metalworks.getWorker(), metalworker0);
+
+        /* Deliver plank and iron bar to the metalworks */
+        Map<Material, Integer> toolCount = new EnumMap<>(Material.class);
+
+        for (int i = 0; i < 15; i++) {
+            metalworks.putCargo(new Cargo(PLANK, map));
+            metalworks.putCargo(new Cargo(IRON_BAR, map));
+
+            /* Wait until the metalworks produces tool */
+            Utils.fastForwardUntilWorkerCarriesCargo(map, metalworker0);
+
+            Utils.verifyWorkerCarriesTool(metalworker0);
+
+            assertTrue(metalworks.getFlag().getStackedCargo().size() < 8);
+
+            int amount = toolCount.getOrDefault(metalworker0.getCargo().getMaterial(), 0);
+
+            toolCount.put(metalworker0.getCargo().getMaterial(), amount + 1);
+
+            /* Wait for the metalworks worker to leave the cargo at the flag */
+            assertEquals(metalworker0.getTarget(), metalworks.getFlag().getPosition());
+
+            Utils.fastForwardUntilWorkerReachesPoint(map, metalworker0, metalworks.getFlag().getPosition());
+
+            assertFalse(metalworks.getFlag().getStackedCargo().isEmpty());
+            assertNull(metalworker0.getCargo());
+            assertEquals(metalworker0.getTarget(), metalworks.getPosition());
+
+            /* Wait for the metalworks worker to go back to the house */
+            Utils.fastForwardUntilWorkersReachTarget(map, metalworker0);
+
+            assertTrue(metalworker0.isInsideBuilding());
+        }
+
+        /* Verify that the metalworker has only produced saws */
+        for (Material tool : TOOLS) {
+            if (tool != AXE && tool != FISHING_ROD) {
+                assertEquals((int) toolCount.getOrDefault(tool, 0), 0);
+            }
+        }
+
+        System.out.println(toolCount);
+
+        assertEquals((int)toolCount.get(AXE), 10);
+        assertEquals((int)toolCount.get(FISHING_ROD), 5);
+    }
+
+    @Test
+    public void testCannotSetTooHighProductionQuota() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Verify that it's not possible to set too high production quota for a tool */
+        try {
+            player0.setProductionQuotaForTool(AXE, 11);
+
+            fail();
+        } catch (InvalidUserActionException e) {
+
+        }
+    }
+
+    @Test
+    public void testCannotSetTooLowProductionQuota() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Verify that it's not possible to set too high production quota for a tool */
+        try {
+            player0.setProductionQuotaForTool(AXE, -1);
+
+            fail();
+        } catch (InvalidUserActionException e) {
+
+        }
+    }
+
+    @Test
+    public void testCannotSetProductionQuotaForAllTools() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Verify that it's not possible to set  production quota for anything else than a tool */
+        for (Material tool : TOOLS) {
+            player0.setProductionQuotaForTool(tool, 5);
+
+            assertEquals(player0.getProductionQuotaForTool(tool), 5);
+        }
+    }
+
+    @Test
+    public void testCannotSetProductionQuotaForNonTools() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Verify that it's not possible to set  production quota for anything else than a tool */
+        for (Material material : Material.values()) {
+            if (TOOLS.contains(material)) {
+                continue;
+            }
+
+            try {
+                player0.setProductionQuotaForTool(material, 5);
+
+                fail();
+            } catch (InvalidUserActionException e) {
+
+            }
         }
     }
 

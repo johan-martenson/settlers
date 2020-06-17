@@ -2,7 +2,9 @@ package org.appland.settlers.model;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public enum Material {
 
@@ -56,6 +58,22 @@ public enum Material {
     PRIVATE_FIRST_CLASS, AXE, SHOVEL, PICK_AXE, FISHING_ROD, BOW, SAW, CLEAVER, ROLLING_PIN, CRUCIBLE, TONGS, SCYTHE, METALWORKER;
 
     private final static List<Material> minerals = Arrays.asList(GOLD, IRON, COAL, STONE);
+
+    static final List<Material> TOOLS = Arrays.asList(
+            AXE,
+            SHOVEL,
+            PICK_AXE,
+            FISHING_ROD,
+            BOW,
+            SAW,
+            CLEAVER,
+            ROLLING_PIN,
+            CRUCIBLE,
+            TONGS,
+            SCYTHE);
+
+    static final Set<Material> TOOLS_SET = new HashSet<>(TOOLS);
+
     private final static List<Material> transportableItems = Collections.unmodifiableList(Arrays.asList(
         SWORD,
         SHIELD,
@@ -83,6 +101,10 @@ public enum Material {
 
     static Iterable<Material> getMinerals() {
         return minerals;
+    }
+
+    public static boolean isTool(Material tool) {
+        return TOOLS_SET.contains(tool);
     }
 
     public boolean isWorker() {
