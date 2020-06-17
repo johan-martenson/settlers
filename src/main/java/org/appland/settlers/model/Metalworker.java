@@ -150,6 +150,20 @@ public class Metalworker extends Worker {
             if (getHome().getAmount(PLANK) > 0 && getHome().getAmount(IRON_BAR) > 0 && getHome().isProductionEnabled()) {
                 if (countdown.hasReachedZero()) {
 
+                    /* Wait if all tool quotas are zero */
+                    boolean anyToolQuotaAboveZero = false;
+                    for (Material tool : TOOLS) {
+                        if (getPlayer().getProductionQuotaForTool(tool) > 0) {
+                            anyToolQuotaAboveZero = true;
+
+                            break;
+                        }
+                    }
+
+                    if (!anyToolQuotaAboveZero) {
+                        return;
+                    }
+
                     /* Consume the ingredients */
                     getHome().consumeOne(PLANK);
                     getHome().consumeOne(IRON_BAR);

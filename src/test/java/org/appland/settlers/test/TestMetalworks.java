@@ -730,6 +730,56 @@ public class TestMetalworks {
     }
 
     @Test
+    public void testNoProductionWhenAllSelectionsAreZero() throws Exception {
+
+        /* Create single player game */
+        Player player0 = new Player("Player 0", BLUE);
+        List<Player> players = new ArrayList<>();
+        players.add(player0);
+
+        GameMap map = new GameMap(players, 40, 40);
+
+        /* Place headquarter */
+        Point point0 = new Point(5, 5);
+        Headquarter headquarter = map.placeBuilding(new Headquarter(player0), point0);
+
+        /* Place metalworks */
+        Point point3 = new Point(7, 9);
+        Building metalworks = map.placeBuilding(new Metalworks(player0), point3);
+
+        /* Place a road between the headquarter and the metalworks */
+        Road road0 = map.placeAutoSelectedRoad(player0, metalworks.getFlag(), headquarter.getFlag());
+
+        /* Finish construction of the metalworks */
+        Utils.constructHouse(metalworks);
+
+        /* Select to only product saws */
+        for (Material tool : TOOLS) {
+            player0.setProductionQuotaForTool(tool, 0);
+
+            assertEquals(player0.getProductionQuotaForTool(tool), 0);
+        }
+
+        /* Occupy the metalworks */
+        Worker metalworker0 = Utils.occupyBuilding(new Metalworker(player0, map), metalworks);
+
+        assertTrue(metalworker0.isInsideBuilding());
+        assertEquals(metalworker0.getHome(), metalworks);
+        assertEquals(metalworks.getWorker(), metalworker0);
+
+        /* Deliver plank and iron bar to the metalworks */
+        metalworks.putCargo(new Cargo(PLANK, map));
+        metalworks.putCargo(new Cargo(IRON_BAR, map));
+
+        /* Verify that no tools are produced */
+        for (int i = 0; i < 500; i++) {
+            assertNull(metalworker0.getCargo());
+
+            map.stepTime();
+        }
+    }
+
+    @Test
     public void testSelectOnlyProducingTwoAxesAndOneFishingRod() throws Exception {
 
         /* Create single player game */
