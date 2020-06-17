@@ -9,8 +9,6 @@ LARGER CHANGES
 
 * Add ability to configure military parameters
 
-* Make production quotas of different tools configurable
-
 * Improve available construction compared to map information through analytical regression
 
 * Correct the production times for buildings
@@ -648,3 +646,4 @@ aug 24, 2014 12:59:19 EM org.appland.settlers.model.GameMap findWayWithExistingR
 
 * Add metalworks - DONE
 
+* Make production quotas of different tools configurable - DONE
