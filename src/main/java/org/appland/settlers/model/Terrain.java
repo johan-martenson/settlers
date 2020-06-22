@@ -267,9 +267,9 @@ public class Terrain {
         /* Go through the surrounding tiles and verify that they contain at least on matching and one non-matching */
         for (Tile tile : getSurroundingTiles(point)) {
 
-            if (tile.getVegetationType().equals(vegetation)) {
+            if (tile.getVegetationType() == vegetation) {
                 matchFound = true;
-            } else if (!tile.getVegetationType().equals(vegetation)) {
+            } else if (tile.getVegetationType() != vegetation) {
                 nonMatchFound = true;
             }
         }

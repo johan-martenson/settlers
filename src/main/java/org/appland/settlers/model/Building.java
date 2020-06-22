@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +59,8 @@ public class Building implements EndPoint {
     private final Map<Material, Integer> receivedMaterial;
 
     public Building(Player player) {
-        receivedMaterial      = new HashMap<>();
-        promisedDeliveries    = new HashMap<>();
+        receivedMaterial      = new EnumMap<>(Material.class);
+        promisedDeliveries    = new EnumMap<>(Material.class);
         countdown             = new Countdown();
         upgradeCountdown      = new Countdown();
         hostedMilitary        = new ArrayList<>();
@@ -90,7 +89,7 @@ public class Building implements EndPoint {
         /* Initialize goods required for production if the building does any
            any production
         */
-        requiredGoodsForProduction = new HashMap<>();
+        requiredGoodsForProduction = new EnumMap<>(Material.class);
         Production production = getClass().getAnnotation(Production.class);
 
         if (production != null) {

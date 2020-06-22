@@ -76,7 +76,7 @@ public class Player {
         discoveredLand      = new HashSet<>();
         transportPriorities = new LinkedList<>();
         ownedLand           = new ArrayList<>();
-        producedMaterials   = new HashMap<>();
+        producedMaterials   = new EnumMap<>(Material.class);
 
         /* Create the food quota and set it to equal distribution */
         foodQuota = new HashMap<>();

@@ -2,7 +2,7 @@ package org.appland.settlers.model;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,7 +72,7 @@ public enum Material {
             TONGS,
             SCYTHE);
 
-    static final Set<Material> TOOLS_SET = new HashSet<>(TOOLS);
+    static final Set<Material> TOOLS_SET = EnumSet.copyOf(TOOLS); //new HashSet<>(TOOLS);
 
     private final static List<Material> transportableItems = Collections.unmodifiableList(Arrays.asList(
         SWORD,

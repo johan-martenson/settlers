@@ -1,7 +1,7 @@
 package org.appland.settlers.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class StatisticsManager {
     private final LandStatistics landStatistics;
 
     public StatisticsManager() {
-        productionStatistics = new HashMap<>();
+        productionStatistics = new EnumMap<>(Material.class);
         landStatistics = new LandStatistics();
 
         /* Create collectors for each material to collect */

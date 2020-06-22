@@ -2,8 +2,8 @@ package org.appland.settlers.model;
 
 import org.appland.settlers.policy.ProductionDelays;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,10 +70,10 @@ public class Storehouse extends Building {
     public Storehouse(Player player) {
         super(player);
 
-        inventory = new HashMap<>();
+        inventory = new EnumMap<>(Material.class);
 
         draftCountdown = new Countdown();
-        workerToToolMap = new HashMap<>();
+        workerToToolMap = new EnumMap<>(Material.class);
 
         /* Set up the mapping between workers and tools */
         workerToToolMap.put(WOODCUTTER_WORKER, AXE);
@@ -91,8 +91,8 @@ public class Storehouse extends Building {
         workerToToolMap.put(MINER, PICK_AXE);
         workerToToolMap.put(FARMER, SCYTHE);
 
-        materialToPushOut = new HashSet<>();
-        materialBlockedForDelivery = new HashSet<>();
+        materialToPushOut = EnumSet.noneOf(Material.class);
+        materialBlockedForDelivery = EnumSet.noneOf(Material.class);
     }
 
     /* This method updates the inventory as a side effect, without any locking */
